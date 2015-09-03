@@ -1,0 +1,25 @@
+<div class="sidebar-pane-stack audit-result-view fill visible" ng-controller="HintController">
+
+  <div></div>
+
+  <div class="sidebar-pane-title expanded"
+       ng-repeat-start="(groupName, group) in groupedHints">{{groupName}}
+    <div class="sidebar-pane-toolbar"></div>
+  </div>
+
+  <div class="sidebar-pane visible"
+       ng-repeat-end
+       ng-repeat="(summary, hints) in group">
+    <div class="body audit-result-tree">
+      <ol>
+        <li class="parent audit-result">
+          <div class="severity-warning"></div>{{summary}} ({{hints.length}})
+        </li>
+        <ol class="children expanded">
+          <li class="selected" ng-repeat="hint in hints" bat-code="hint.data"></li>
+        </ol>
+      </ol>
+    </div>
+  </div>
+
+</div>

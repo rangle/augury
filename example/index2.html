@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>yo</title>
+</head>
+<body ng-app="myApp">
+  <div ng-controller="myKontroller">
+    <h1>name: {{name}}</h1>
+    <input ng-model="name">
+    <h1>complex.a.b.c: {{complex.a.b.c}}</h1>
+    <input ng-model="complex.a.b.c">
+    <p>scope: {{$id}}</p>
+    <ul>
+      <li ng-repeat="num in items">{{num}}</li>
+    </ul>
+  </div>
+  <script src="../node_modules/angular/angular.js"></script>
+  <script>
+  angular.module('myApp', []).
+    controller('myKontroller', function ($scope) {
+      $scope.name = 'hey';
+      $scope.items = [1, 2, 3];
+      $scope.complex = { a: { b: { c: 'yo' }}};
+      var thing = 'document';
+    });
+  </script>
+</body>
+</html>
