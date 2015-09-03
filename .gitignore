@@ -1,0 +1,4 @@
+node_modules
+example-app/js/*
+example-app/node_modules/*
+example-app/typings/*

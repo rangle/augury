@@ -1,0 +1,25 @@
+{
+  "name": "batarangle",
+  "version": "0.0.1",
+  "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rangle/batarangle.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "chrome",
+    "extension"
+  ],
+  "bugs": {
+    "url": "https://github.com/rangle/batarangle/issues"
+  },
+  "homepage": "https://github.com/rangle/batarangle",
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
