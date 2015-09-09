@@ -1,7 +1,3 @@
-/// <reference path="../typings/node-uuid/node-uuid.d.ts" />
-/// <reference path="../typings/storejs/storejs.d.ts" />
-/// <reference path="../typings/angular2/angular2.d.ts" />
-
 import {Injectable} from 'angular2/angular2';
 import * as uuid from 'node-uuid';
 

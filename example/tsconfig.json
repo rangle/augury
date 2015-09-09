@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "module": "amd",
+    "sourceMap": true
+  },
+  "files": [
+    "typings/tsd.d.ts",
+    "app.ts",
+    "services/store.ts"
+  ]
+}

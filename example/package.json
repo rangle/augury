@@ -9,8 +9,11 @@
     "typescript": "^1.5.0-beta"
   },
   "dependencies": {
+    "angular2": "^2.0.0-alpha.36",
     "bower-traceur-runtime": "git://github.com/jmcriffey/bower-traceur-runtime#0.0.87",
     "node-uuid": "^1.4.3",
+    "reflect-metadata": "^0.1.1",
+    "rx": "^3.1.2",
     "store.js": "^1.0.4",
     "systemjs": "^0.16.11",
     "todomvc-app-css": "^2.0.0",
