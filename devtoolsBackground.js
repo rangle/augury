@@ -3,49 +3,52 @@ var panels = chrome && chrome.devtools && chrome.devtools.panels;
 // The function below is executed in the context of the inspected page.
 
 var getPanelContents = function () {
-  if (window.angular && $0) {
+  if (ng && ng.probe && $0) {
     //TODO: can we move this scope export into updateElementProperties
-    var scope = getScope($0);
-
-    // Export $scope to the console
-    window.$scope = scope;
-    return (function (scope) {
+    var debugElement = getDebugElement($0);
+    
+    // Export debugElement to the console
+    window.$debugElement = debugElement;
+    
+    return (function (debugElement) {
       var panelContents = {
         __private__: {}
       };
 
-      for (prop in scope) {
-        if (scope.hasOwnProperty(prop)) {
-          if (prop.substr(0, 2) === '$$') {
-            panelContents.__private__[prop] = scope[prop];
-          } else {
-            panelContents[prop] = scope[prop];
-          }
+      for (prop in debugElement) {
+        if (debugElement.hasOwnProperty(prop)) {
+          // if (prop.substr(0, 2) === '$$') {
+          //   panelContents.__private__[prop] = debugElement[prop];
+          // } else {
+          //   panelContents[prop] = debugElement[prop];
+          // }
+          
+          panelContents[prop] = debugElement[prop];
         }
       }
       return panelContents;
-    }(scope));
+    }(debugElement));
   } else {
     return {};
   }
 
-  function getScope(node) {
-    var scope = window.angular.element(node).scope();
+  function getDebugElement(node) {
+    var scope = ng.probe(node)
+
     if (!scope) {
       // Might be a child of a DocumentFragment...
       while (node && node.nodeType === 1) node = node.parentNode;
       if (node && node.nodeType === 11) node = (node.parentNode || node.host);
-      return getScope(node);
+      return getDebugElement(node);
     }
     return scope;
   }
 };
 
 panels && panels.elements.createSidebarPane(
-  "$scope",
+  "Component Inspector",
   function (sidebar) {
     panels.elements.onSelectionChanged.addListener(function updateElementProperties() {
-      //sidebar.setExpression('(console.log(HAHA!))()');
       sidebar.setExpression("(" + getPanelContents.toString() + ")()");
     });
 
