@@ -8,18 +8,6 @@
     "es6-promise/es6-promise.d.ts": {
       "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
     },
-    "angular2/angular2.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
-    },
-    "rx/rx-lite.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
-    },
-    "angular2/router.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
-    },
-    "rx/rx.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
-    },
     "storejs/storejs.d.ts": {
       "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
     },
