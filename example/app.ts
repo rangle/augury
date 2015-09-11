@@ -14,29 +14,31 @@ const ENTER_KEY = 13;
   properties: ['todo: todo-obj']
 })
 @View({
+  directives: [NgIf],
   template: `
       <div class="view">
         <input class="toggle" type="checkbox" (click)="toggleCompletion(todo.uid)" [checked]="todo.completed">
         <label (dblclick)="editTodo(todo)">{{todo.title}}</label>
         <button class="destroy" (click)="remove(todo.uid)"></button>
       </div>
-      <input class="edit" *ng-if="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(todo, editedtodo)" (keyup.enter)="updateEditingTodo(editedtodo, todo)" (keyup.escape)="cancelEditingTodo(todo)">
-  `,
-  directives: [NgIf]
+      <input class="edit" *ng-if="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(todo, editedtodo)" (keyup.enter)="updateEditingTodo(editedtodo, todo)" (keyup.escape)="cancelEditingTodo(todo)">`
 })
 class TodoItem {
   
-  private todo: Todo;
+	// private todo: Todo;
   
-  constructor(@Inject(TodoStore) private todoStore) {
-  }
+	constructor(todoStore: TodoStore) {
+  		this.todoStore = todoStore;
+	}
   
-  stopEditing(todo: Todo, editedTitle) {
+	stopEditing(todo: Todo, editedTitle) {
 		todo.setTitle(editedTitle.value);
 		todo.editing = false;
 	}
   
-	cancelEditingTodo(todo: Todo) { todo.editing = false; }
+	cancelEditingTodo(todo: Todo) { 
+		todo.editing = false; 
+	}
   
 	updateEditingTodo(editedTitle, todo: Todo) {
 		editedTitle = editedTitle.value.trim();
@@ -83,7 +85,7 @@ class TodoItem {
 				<ul class="todo-list">
 					<li *ng-for="#todo of todoStore.todos" [class.completed]="todo.completed" [class.editing]="todo.editing">
 					   <todo-item [todo-obj]="todo" ></todo-item>
-          </li>
+          			</li>
 				</ul>
 			</section>
 			<footer class="footer" *ng-if="todoStore.todos.length > 0">
@@ -94,12 +96,19 @@ class TodoItem {
 })
 class TodoApp {
   
-	constructor(@Inject(TodoStore) private todoStore) {
-		//this.todoStore = new TodoStore();
+	constructor(todoStore: TodoStore) {
+		this.todoStore = todoStore;
 	}
   
 	removeCompleted() {
 		this.todoStore.removeCompleted();
+	}
+
+	addTodo($event, newtodo) {
+		if ($event.which === ENTER_KEY && newtodo.value.trim().length) {
+			this.todoStore.add(newtodo.value);
+			newtodo.value = '';
+		}
 	}
 }
 
