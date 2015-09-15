@@ -1,7 +1,7 @@
 import {Component, View, bootstrap, NgIf, NgFor, Inject, bind} from 'angular2/angular2';
 
 import { AppViewListener } from 'angular2/src/core/compiler/view_listener';
-// import { DebugElementViewListener } from 'angular2/src/core/debug/debug_element_view_listener';
+import { DebugElementViewListener } from 'node_modules/angular2/src/core/debug/debug_element_view_listener';
 
 
 import {TodoStore, Todo} from 'services/store';
@@ -11,61 +11,61 @@ const ENTER_KEY = 13;
 
 @Component({
   selector: 'todo-item',
-  properties: ['todo: todo-obj']
+  properties: ['todo']
 })
 @View({
   directives: [NgIf],
   template: `
       <div class="view">
-        <input class="toggle" type="checkbox" (click)="toggleCompletion(todo.uid)" [checked]="todo.completed">
-        <label (dblclick)="editTodo(todo)">{{todo.title}}</label>
-        <button class="destroy" (click)="remove(todo.uid)"></button>
+        <input class="toggle" type="checkbox" (click)="toggleCompletion()" [checked]="todo.completed">
+        <label (dblclick)="editTodo()">{{todo.title}}</label>
+        <button class="destroy" (click)="remove()"></button>
       </div>
-      <input class="edit" *ng-if="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(todo, editedtodo)" (keyup.enter)="updateEditingTodo(editedtodo, todo)" (keyup.escape)="cancelEditingTodo(todo)">`
+      <input class="edit" *ng-if="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(editedtodo)" (keyup.enter)="updateEditingTodo(editedtodo)" (keyup.escape)="cancelEditingTodo()">`
 })
 class TodoItem {
   
-	// private todo: Todo;
+	private todo: Todo;
   
 	constructor(todoStore: TodoStore) {
-  		this.todoStore = todoStore;
+  	this.todoStore = todoStore;
 	}
   
-	stopEditing(todo: Todo, editedTitle) {
-		todo.setTitle(editedTitle.value);
-		todo.editing = false;
+	stopEditing(editedTitle) {
+		this.todo.setTitle(editedTitle.value);
+		this.todo.editing = false;
 	}
   
-	cancelEditingTodo(todo: Todo) { 
-		todo.editing = false; 
+	cancelEditingTodo() { 
+		this.todo.editing = false; 
 	}
   
-	updateEditingTodo(editedTitle, todo: Todo) {
+	updateEditingTodo(editedTitle) {
 		editedTitle = editedTitle.value.trim();
-		todo.editing = false;
+		this.todo.editing = false;
 
 		if (editedTitle.length === 0) {
-			return this.todoStore.remove(todo.uid);
+			return this.todoStore.remove(this.todo.uid);
 		}
 
-		todo.setTitle(editedTitle);
+		this.todo.setTitle(editedTitle);
 	}
   
-	editTodo(todo: Todo) {
-		todo.editing = true;
+	editTodo() {
+		this.todo.editing = true;
 	}
   
 	removeCompleted() {
 		this.todoStore.removeCompleted();
 	}
   
-	toggleCompletion(uid: String) {
-		this.todoStore.toggleCompletion(uid);
+	toggleCompletion() {
+		this.todoStore.toggleCompletion(this.todo.uid);
 	}
   
-	remove(uid: String){
-		this.todoStore.remove(uid);
-	}
+	remove(){
+    this.todoStore.remove(this.todo.uid);
+  }
 }
 
 @Component({
@@ -84,7 +84,7 @@ class TodoItem {
 				<input class="toggle-all" type="checkbox" *ng-if="todoStore.todos.length" #toggleall [checked]="todoStore.allCompleted()" (click)="todoStore.setAllTo(toggleall)">
 				<ul class="todo-list">
 					<li *ng-for="#todo of todoStore.todos" [class.completed]="todo.completed" [class.editing]="todo.editing">
-					   <todo-item [todo-obj]="todo" ></todo-item>
+					   <todo-item [todo]="todo" ></todo-item>
           			</li>
 				</ul>
 			</section>
@@ -113,7 +113,7 @@ class TodoApp {
 }
 
 let appRefPromise = bootstrap(TodoApp, [
-    // bind(AppViewListener).toClass(DebugElementViewListener),
+    bind(AppViewListener).toClass(DebugElementViewListener),
     bind(TodoStore).toClass(TodoStore)
   ]);
 //let appRefPromise = bootstrap(TodoApp);
