@@ -1,7 +1,7 @@
 import {Component, View, bootstrap, NgIf, NgFor, Inject, bind} from 'angular2/angular2';
 
 import { AppViewListener } from 'angular2/src/core/compiler/view_listener';
-import { DebugElementViewListener } from 'angular2/src/core/debug/debug_element_view_listener';
+// import { DebugElementViewListener } from 'angular2/src/core/debug/debug_element_view_listener';
 
 
 import {TodoStore, Todo} from 'services/store';
@@ -113,7 +113,7 @@ class TodoApp {
 }
 
 let appRefPromise = bootstrap(TodoApp, [
-    bind(AppViewListener).toClass(DebugElementViewListener),
+    // bind(AppViewListener).toClass(DebugElementViewListener),
     bind(TodoStore).toClass(TodoStore)
   ]);
 //let appRefPromise = bootstrap(TodoApp);

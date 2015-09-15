@@ -9,7 +9,7 @@
     "typescript": "^1.5.0-beta"
   },
   "dependencies": {
-    "angular2": "^2.0.0-alpha.36",
+    "angular2": "^2.0.0-alpha.37",
     "bower-traceur-runtime": "git://github.com/jmcriffey/bower-traceur-runtime#0.0.87",
     "node-uuid": "^1.4.3",
     "reflect-metadata": "^0.1.1",
