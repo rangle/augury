@@ -8,11 +8,10 @@
     
 		<script src="node_modules/bower-traceur-runtime/traceur-runtime.js"></script>
 		<script src="node_modules/systemjs/dist/system.js"></script>
-		<script src="node_modules/store.js/store.js"></script>
     <script src="node_modules/reflect-metadata/Reflect.js"></script>
 	</head>
 	<body>
-		<todo-app></todo-app>
+		<todo-list></todo-list>
 		<footer class="info">
 			<p>Double-click to edit a todo</p>
 			<p>
@@ -22,9 +21,13 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 		<script>
+      System.defaultJSExtensions = true;
 			System.paths['node-uuid'] = 'node_modules/node-uuid/uuid.js';
-      System.paths['angular2/*'] = 'node_modules/angular2/bundles/angular2.dev.js';
-			System.import('app');
+      System.paths['immutable'] = 'node_modules/immutable/dist/immutable.js';
+      System.paths['rx'] = 'node_modules/rx/dist/rx.js';
+      System.paths['angular2/*'] = 'node_modules/angular2/*';
+      //System.paths['angular2/*'] = 'node_modules/angular2/bundles/angular2.dev.js';
+			System.import('js/app');
 		</script>
 	</body>
 </html>

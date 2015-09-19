@@ -8,7 +8,4 @@ coverage/
 package/
 dist/
 typings
-example/*.js
-example/*.js.map
-example/services/*.js
-example/services/*.js.map
+example/js/*

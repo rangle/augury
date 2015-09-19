@@ -11,22 +11,31 @@ var getPanelContents = function () {
     window.$debugElement = debugElement;
     
     return (function (debugElement) {
-      var panelContents = {
-        __private__: {}
+      // var panelContents = {
+      //   __private__: {}
+      // };
+
+      // for (prop in debugElement) {
+      //   if (debugElement.hasOwnProperty(prop)) {
+      //     // if (prop.substr(0, 2) === '$$') {
+      //     //   panelContents.__private__[prop] = debugElement[prop];
+      //     // } else {
+      //     //   panelContents[prop] = debugElement[prop];
+      //     // }
+          
+      //     panelContents[prop] = debugElement[prop];
+      //   }
+      // }
+      // return panelContents;
+      return {
+        debugElement: debugElement,
+        cmpChildren: debugElement.componentViewChildren,
+        cmpInstance: debugElement.componentInstance,
+        elementReference: debugElement.elementRef,
+        nativeElement: debugElement.nativeElement,
+        parentView: debugElement._parentView
       };
 
-      for (prop in debugElement) {
-        if (debugElement.hasOwnProperty(prop)) {
-          // if (prop.substr(0, 2) === '$$') {
-          //   panelContents.__private__[prop] = debugElement[prop];
-          // } else {
-          //   panelContents[prop] = debugElement[prop];
-          // }
-          
-          panelContents[prop] = debugElement[prop];
-        }
-      }
-      return panelContents;
     }(debugElement));
   } else {
     return {};

@@ -3,11 +3,18 @@
     "target": "ES5",
     "experimentalDecorators": true,
     "module": "amd",
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "js/"
   },
   "files": [
-    "typings/tsd.d.ts",
-    "app.ts",
-    "services/store.ts"
+    "./typings/tsd.d.ts",
+    
+    "./ts/app.ts",
+    "./ts/constants.ts",
+    "./ts/components/todo-item.ts",
+    "./ts/components/todo-list.ts",
+    "./ts/stores/todo-store.ts",
+    "./ts/domain/todo.ts"
+    
   ]
 }

@@ -5,17 +5,11 @@
   "path": "typings",
   "bundle": "typings/tsd.d.ts",
   "installed": {
-    "es6-promise/es6-promise.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
-    },
-    "storejs/storejs.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
-    },
     "node-uuid/node-uuid.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
+      "commit": "6f6e5c7dd9effe21fee14eb65fe340ecbbc8580a"
     },
     "node/node.d.ts": {
-      "commit": "7f07bd88d1083e995a0dae317a333c9641320cc8"
+      "commit": "6f6e5c7dd9effe21fee14eb65fe340ecbbc8580a"
     }
   }
 }
