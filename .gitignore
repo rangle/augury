@@ -1,11 +1,4 @@
-batarang-release-*.zip
-*.build.js
-hint.bundle.js
-.idea
-bower_components
 node_modules
-coverage/
-package/
-dist/
-typings
-example/js/*
+example-app/js/*
+example-app/node_modules/*
+example-app/typings/*
