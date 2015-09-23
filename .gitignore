@@ -1,4 +1,6 @@
-node_modules
+app/js
+app/typings
 example-app/js/*
 example-app/node_modules/*
 example-app/typings/*
+node_modules

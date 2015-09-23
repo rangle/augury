@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "module": "amd",
+    "outDir": "./app/js/"
+  },
+  "files": [
+    "./app/typings/tsd.d.ts",
+    
+    "./app/ts/devtools.ts"
+    
+  ]
+}

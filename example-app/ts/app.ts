@@ -7,7 +7,6 @@ import {TodoStore} from './stores/todo-store';
 var AppViewListener = require('angular2/src/core/compiler/view_listener').AppViewListener;
 var DebugElementViewListener = require('angular2/src/core/debug/debug_element_view_listener').DebugElementViewListener;
 
-
 let appRefPromise = bootstrap(TodoList, [
   bind(TodoStore).toClass(TodoStore),
   bind(AppViewListener).toClass(DebugElementViewListener)
