@@ -19,7 +19,10 @@
   "scripts": {
     "postinstall": "tsd install && tsd link"
   },
-  "dependencies": {},
+  "dependencies": {
+    "immutable": "^3.7.5",
+    "systemjs": "^0.19.3"
+  },
   "devDependencies": {
     "del": "^2.0.2",
     "gulp": "^3.9.0",
