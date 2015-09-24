@@ -59,6 +59,6 @@ gulp.task('flow', ['build'], function () {
   // gulp.watch('source/**/*.html', ['html']);
   // gulp.watch('source/images/**/*', ['images']);
   // gulp.watch('source/manifest.json', ['manifest']);
-  gulp.watch('source/ts/**/*.ts', ['compile']);
+  gulp.watch('./app/ts/**/*.ts', ['compile']);
 });
 

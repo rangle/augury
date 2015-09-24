@@ -2,11 +2,11 @@
   "name": "Angular 2.0 Batarangle",
   "version": "0.1.0",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
-  "devtools_page": "devtools.html",
+  "devtools_page": "app/index.html",
   "manifest_version": 2,
   "icons": {
-    "16": "images/webstore-icon.png",
-    "48": "images/webstore-icon.png",
-    "128": "images/webstore-icon.png"
+    "16": "app/images/webstore-icon.png",
+    "48": "app/images/webstore-icon.png",
+    "128": "app/images/webstore-icon.png"
   }
 }

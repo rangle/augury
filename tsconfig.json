@@ -8,7 +8,8 @@
   "files": [
     "./app/typings/tsd.d.ts",
     
-    "./app/ts/devtools.ts"
+    "./app/ts/devtools.ts",
+    "./app/ts/component-inspector/component-inspector.ts"
     
   ]
 }
