@@ -8,9 +8,9 @@ let list = List<String>();
 export function getComponentContents(): Object {
   
   function getDebugElement(node) {
-    let debugElement = ng.probe(node);
+    let $a = ng.probe(node);
   
-    if (!debugElement) {
+    if (!$a) {
       // Might be a child of a DocumentFragment...
       while (node && node.nodeType === 1) { 
         node = node.parentNode; 
@@ -23,26 +23,25 @@ export function getComponentContents(): Object {
       return getDebugElement(node);
     }
     
-    return debugElement;
+    return $a;
   }
 
   if (ng && ng.probe && $0) {
     // TODO: can we move this scope export into updateElementProperties
-    let debugElement = getDebugElement($0);
+    let $a = getDebugElement($0);
     
     // Export debugElement to the console
-    Object.defineProperty(window, '$debugElement', {
+    Object.defineProperty(window, '$a', {
       configurable: true,
-      value: debugElement
+      value: $a
     });
 
     return {
-      debugElement: debugElement,
-      cmpChildren: debugElement.componentViewChildren,
-      cmpInstance: debugElement.componentInstance,
-      elementReference: debugElement.elementRef,
-      nativeElement: debugElement.nativeElement,
-      parentView: debugElement._parentView
+      componentInstance: $a.componentInstance,
+      componentViewChildren: $a.componentViewChildren,
+      elementRef: $a.elementRef,
+      nativeElement: $a.nativeElement,
+      $a: $a
     };
 
   } else {
