@@ -20,7 +20,9 @@
     "postinstall": "tsd install && tsd link"
   },
   "dependencies": {
+    "crypto": "0.0.3",
     "immutable": "^3.7.5",
+    "rx": "^4.0.0",
     "systemjs": "^0.19.3"
   },
   "devDependencies": {

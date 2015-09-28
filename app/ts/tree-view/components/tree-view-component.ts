@@ -1,11 +1,11 @@
 import {bootstrap, Component, View} from 'angular2/angular2';
 
 @Component({
-  selector: 'tree-view',
+  selector: 'tree-view'
 })
 @View({
   template: `
-		<span>{{ message }}</span>
+    <span>{{ message }}</span>
     `
 })
 export class TreeView {
