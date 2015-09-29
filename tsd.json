@@ -12,7 +12,22 @@
       "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "rx/rx.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "angular2/angular2.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "rx/rx-lite.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "angular2/http.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
+    },
+    "angular2/router.d.ts": {
+      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
     }
   }
 }

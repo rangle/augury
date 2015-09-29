@@ -17,9 +17,10 @@
   },
   "homepage": "https://github.com/rangle/batarangle",
   "scripts": {
-    "postinstall": "tsd install && tsd link"
+    "postinstall": "tsd install"
   },
   "dependencies": {
+    "angular2": "^2.0.0-alpha.37",
     "crypto": "0.0.3",
     "immutable": "^3.7.5",
     "rx": "^4.0.0",
