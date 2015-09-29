@@ -4,6 +4,7 @@
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
   "devtools_page": "app/index.html",
   "manifest_version": 2,
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "icons": {
     "16": "app/images/webstore-icon.png",
     "48": "app/images/webstore-icon.png",

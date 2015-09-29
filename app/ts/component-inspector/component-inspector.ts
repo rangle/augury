@@ -1,12 +1,8 @@
-import {List} from 'immutable';
-
 declare let $0: HTMLElement;
 declare let ng: { probe: Function };
 
-let list = List<String>();
-
 export function getComponentContents(): Object {
-  
+
   function getDebugElement(node) {
     let $a = ng.probe(node);
   
