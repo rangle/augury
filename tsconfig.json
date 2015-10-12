@@ -10,7 +10,9 @@
     
     "./app/ts/devtools.ts",
     "./app/ts/component-inspector/component-inspector.ts",
-    "./app/ts/tree-view/components/tree-view-component.ts"
+    "./app/ts/tree-view/components/tree-view-component.ts",
+    "./app/ts/tree-view/components/tree-view-app-component.ts",
+    "./app/ts/tree-view/core/tree-view-api.ts"
     
   ]
 }

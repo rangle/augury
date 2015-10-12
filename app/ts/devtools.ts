@@ -20,7 +20,7 @@ chrome.devtools.panels.elements.createSidebarPane(
 chrome.devtools.panels.create(
   'Angular', 
   'app/images/angular.png', 
-  'app/ts/tree-view/tree-view-panel.html', 
+  'app/js/tree-view/tree-view-panel.html', 
   panel => {
 
     panel.onShown.addListener(function(window) {

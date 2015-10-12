@@ -34,5 +34,24 @@
     "gulp-typescript": "^2.9.0",
     "tsd": "^0.6.4",
     "typescript": "^1.6.2"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "todo-mvc-example"
+    },
+    "dependencies": {
+      "@reactivex/rxjs": "npm:@reactivex/rxjs@^5.0.0-alpha.2",
+      "angular2": "npm:angular2@2.0.0-alpha.40",
+      "es6-shim": "github:es-shims/es6-shim@^0.33.6",
+      "immutable": "npm:immutable@^3.7.5",
+      "node-uuid": "npm:node-uuid@^1.4.3",
+      "reflect-metadata": "npm:reflect-metadata@^0.1.2",
+      "todomvc-app-css": "npm:todomvc-app-css@^2.0.1",
+      "todomvc-common": "npm:todomvc-common@^1.0.2",
+      "zone.js": "npm:zone.js@^0.5.8"
+    },
+    "devDependencies": {
+      "typescript": "npm:typescript@^1.6.2"
+    }
   }
 }

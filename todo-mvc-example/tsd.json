@@ -1,0 +1,27 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "source/typings",
+  "bundle": "source/typings/tsd.d.ts",
+  "installed": {
+    "es6-shim/es6-shim.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "angular2/angular2.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "jasmine/jasmine.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "angular2/http.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "angular2/router.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "angular2/test_lib.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    }
+  }
+}

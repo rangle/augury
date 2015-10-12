@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "module": "amd",
+    "sourceMap": true,
+    "outDir": "js/"
+    
+  },
+  "files": [
+    "./source/typings/tsd.d.ts",
+    
+    "./source/app.ts",
+    "./source/components/todo-item.ts",
+    "./source/components/todo-list.ts",
+    "./source/stores/todo-store.ts",
+    "./source/domain/todo.ts"
+    
+  ]
+}

@@ -1,0 +1,11 @@
+<div *ng-if="node.children.size > 0">
+    <span *ng-for="#node of node.children">
+      {{node.name}}
+      <tree-view [node]="node"></tree-view>
+      end: {{node.name}}
+    </span>
+</div>
+
+<div *ng-if="node.children.size == 0">
+  {{node.name}}-{{node.name}}
+</div>
