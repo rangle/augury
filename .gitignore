@@ -1,9 +1,6 @@
 app/js
 app/typings/*
 !app/typings/tsd.d.ts
-example-app/js/*
-example-app/node_modules/*
-example-app/typings/*
-todo-mvc-example/jspm_packages/*
-todo-mvc-example/typings/*
+example-apps/todo-mvc-example/jspm_packages/*
+example-apps/todo-mvc-example/typings/*
 node_modules

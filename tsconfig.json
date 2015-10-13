@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES5",
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "amd",
     "outDir": "./app/js/"
   },
@@ -9,10 +10,19 @@
     "./app/typings/tsd.d.ts",
     
     "./app/ts/devtools.ts",
-    "./app/ts/component-inspector/component-inspector.ts",
-    "./app/ts/tree-view/components/tree-view-component.ts",
-    "./app/ts/tree-view/components/tree-view-app-component.ts",
-    "./app/ts/tree-view/core/tree-view-api.ts"
     
+    "./app/ts/batarangle-panel/app.ts",
+    "./app/ts/batarangle-panel/components/tree-view/tree-view-component.ts",
+    
+    "./app/ts/batarangle-panel/actions/action-constants.ts",
+    "./app/ts/batarangle-panel/actions/backend-actions/backend-actions.ts",
+    "./app/ts/batarangle-panel/actions/user-actions/user-actions.ts",
+    
+    "./app/ts/batarangle-panel/dispatcher/dispatcher.ts",
+    
+    "./app/ts/batarangle-panel/stores/abstract-store.ts",
+    "./app/ts/batarangle-panel/stores/tree-view/tree-view-store.ts",
+
+    "./app/ts/batarangle-panel/core/tree-view/tree-view-api.ts"
   ]
 }
