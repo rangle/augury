@@ -8,7 +8,7 @@ var tslint = require('gulp-tslint');
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['clean', 'compile']);
+gulp.task('build', ['clean', 'compile', 'libs', 'config', 'html']);
 
 gulp.task('clean', function () {
   del.sync([
@@ -17,10 +17,20 @@ gulp.task('clean', function () {
   ]);
 });
 
-// gulp.task('html', function () {
-//   return gulp.src('source/**/*.html', { base: 'source' })
-//     .pipe(gulp.dest('package/'));
-// });
+gulp.task('html', function () {
+  return gulp.src('app/ts/**/*.html', { base: 'app/ts/' })
+    .pipe(gulp.dest('app/js/'));
+});
+
+gulp.task('libs', function () {
+  return gulp.src('app/ts/batarangle/frontend/libs/**/*.js', { base: 'app/ts/batarangle/frontend/libs/' })
+    .pipe(gulp.dest('app/js/batarangle/frontend/libs'));
+});
+
+gulp.task('config', function () {
+  return gulp.src('app/ts/batarangle/frontend/batarangle.config.js', { base: 'app/ts/batarangle/frontend/' })
+    .pipe(gulp.dest('app/js/batarangle/frontend/'));
+});
 
 // gulp.task('images', function () {
 //   return gulp.src('source/images/**/*', { base: 'source' })
@@ -56,9 +66,11 @@ gulp.task('compile', ['lint'], function (done) {
 });
 
 gulp.task('flow', ['build'], function () {
-  // gulp.watch('source/**/*.html', ['html']);
+  gulp.watch('./app/ts/**/*.html', ['html']);
+  gulp.watch('./app/ts/batarangle/frontend/batarangle.config.js', ['config']);
+  gulp.watch('./app/ts/**/*.ts', ['compile']);
+  
   // gulp.watch('source/images/**/*', ['images']);
   // gulp.watch('source/manifest.json', ['manifest']);
-  gulp.watch('./app/ts/**/*.ts', ['compile']);
 });
 

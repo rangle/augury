@@ -5,15 +5,16 @@
     "module": "amd",
     "sourceMap": true,
     "outDir": "js/"
+    
   },
   "files": [
     "./typings/tsd.d.ts",
     
-    "./ts/app.ts",
-    "./ts/components/todo-item.ts",
-    "./ts/components/todo-list.ts",
-    "./ts/stores/todo-store.ts",
-    "./ts/domain/todo.ts"
+    "./source/app.ts",
+    "./source/components/todo-item.ts",
+    "./source/components/todo-list.ts",
+    "./source/stores/todo-store.ts",
+    "./source/domain/todo.ts"
     
   ]
 }
