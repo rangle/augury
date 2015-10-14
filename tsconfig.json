@@ -3,7 +3,7 @@
     "target": "ES5",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "amd",
+    "module": "umd",
     "outDir": "./app/js/"
   },
   "files": [
@@ -11,18 +11,33 @@
     
     "./app/ts/devtools.ts",
     
-    "./app/ts/batarangle-panel/app.ts",
-    "./app/ts/batarangle-panel/components/tree-view/tree-view-component.ts",
+    "./app/ts/batarangle/frontend/batarangle.ts",
+    "./app/ts/batarangle/frontend/components/tree-view/tree-view-component.ts",
     
-    "./app/ts/batarangle-panel/actions/action-constants.ts",
-    "./app/ts/batarangle-panel/actions/backend-actions/backend-actions.ts",
-    "./app/ts/batarangle-panel/actions/user-actions/user-actions.ts",
+    "./app/ts/batarangle/frontend/actions/action-constants.ts",
+    "./app/ts/batarangle/frontend/actions/backend-actions/backend-actions.ts",
+    "./app/ts/batarangle/frontend/actions/user-actions/user-actions.ts",
     
-    "./app/ts/batarangle-panel/dispatcher/dispatcher.ts",
+    "./app/ts/batarangle/frontend/dispatcher/dispatcher.ts",
     
-    "./app/ts/batarangle-panel/stores/abstract-store.ts",
-    "./app/ts/batarangle-panel/stores/tree-view/tree-view-store.ts",
+    "./app/ts/batarangle/frontend/stores/abstract-store.ts",
+    "./app/ts/batarangle/frontend/stores/component-data/component-data-store.ts",
 
-    "./app/ts/batarangle-panel/core/tree-view/tree-view-api.ts"
+    "./app/ts/batarangle/frontend/channel/backend-messaging-service.ts",
+    
+    "./app/ts/batarangle/channel/channel.ts",
+    
+    "./app/ts/batarangle/backend/batarangle-backend.ts",
+    "./app/ts/batarangle/backend/channel/frontend-messaging-service.ts",
+    "./app/ts/batarangle/backend/core/mock-api.ts",
+    
+    
+    "./app/ts/batarangle/backend/adapters/angular2.ts",
+    "./app/ts/batarangle/backend/adapters/base.ts",
+    "./app/ts/batarangle/backend/adapters/event_types.ts",
+    
+    "./app/ts/batarangle/backend/controllers/base.ts",
+    "./app/ts/batarangle/backend/controllers/dom.ts",
+    "./app/ts/batarangle/backend/entry.ts"
   ]
 }

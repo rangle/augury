@@ -23,13 +23,16 @@ gulp.task('html', function () {
 });
 
 gulp.task('libs', function () {
-  return gulp.src('app/ts/batarangle-panel/libs/**/*.js', { base: 'app/ts/batarangle-panel/libs/' })
-    .pipe(gulp.dest('app/js/batarangle-panel/libs'));
+  return gulp.src('app/ts/batarangle/frontend/libs/**/*.js', { base: 'app/ts/batarangle/frontend/libs/' })
+    .pipe(gulp.dest('app/js/batarangle/frontend/libs'));
 });
 
 gulp.task('config', function () {
-  return gulp.src('app/ts/batarangle-panel/batarangle.config.js', { base: 'app/ts/batarangle-panel/' })
-    .pipe(gulp.dest('app/js/batarangle-panel/'));
+  return gulp.src([
+    'app/ts/batarangle/frontend/batarangle.config.js',
+    'app/ts/batarangle/backend/batarangle-backend.config.js'
+    ], { base: 'app/ts/' })
+    .pipe(gulp.dest('app/js/'));
 });
 
 // gulp.task('images', function () {
@@ -67,7 +70,10 @@ gulp.task('compile', ['lint'], function (done) {
 
 gulp.task('flow', ['build'], function () {
   gulp.watch('./app/ts/**/*.html', ['html']);
-  gulp.watch('./app/ts/batarangle-panel/batarangle.config.js', ['config']);
+  gulp.watch([
+    'app/ts/batarangle/frontend/batarangle.config.js',
+    'app/ts/batarangle/backend/batarangle-backend.config.js'
+    ], ['config']);
   gulp.watch('./app/ts/**/*.ts', ['compile']);
   
   // gulp.watch('source/images/**/*', ['images']);

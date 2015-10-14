@@ -5,7 +5,7 @@
 chrome.devtools.panels.create(
   'Angular', 
   'app/images/angular.png', 
-  'app/js/batarangle-panel/batarangle.html', 
+  'app/js/batarangle/frontend/batarangle.html', 
   panel => {
 
     panel.onShown.addListener(function(window) {
