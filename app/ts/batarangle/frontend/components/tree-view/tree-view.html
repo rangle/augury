@@ -1,0 +1,36 @@
+<div class="flex flex-column vh-100">
+
+  <header class="py3 px1 bg-blue">
+
+    <h4 class="mt0"
+      style="color: #B3DBFF;">
+      <img src="/app/images/batarangle.svg"
+        style="width: 1em; height: 1em;">Batarangle
+    </h4>
+
+    <!-- SEARCH -->
+    <input class="field bg-white block col-12"
+      placeholder="Search"
+      type="text"
+      #query
+      (keyup)="onChange(query.value)">
+
+  </header>
+
+  <div class="flex flex-auto overflow-scroll">
+
+    <!-- BLOCK VIEW -->
+    <main class="p2 flex-auto">
+      <bt-node-item *ng-for="#node of tree"
+        [node]="node">
+      </bt-node-item>
+    </main>
+
+    <!-- INFO PANEL -->
+    <aside class="border-left col-4 clearfix">
+      <bt-info-panel></bt-info-panel>
+    </aside>
+
+  </div>
+
+</div>

@@ -1,34 +1,54 @@
-import {Component, View, Inject, bootstrap, bind} from 'angular2/angular2';
-import {ComponentTree} from './core/tree-view/tree-view-api';
-import {TreeView} from './components/tree-view/tree-view-component';
+import {Component, View, Inject, bootstrap, bind, LifeCycle}
+  from 'angular2/angular2';
+import {TreeView} from './components/tree-view/tree-view';
 import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
-import {TreeViewStore} from './stores/tree-view/tree-view-store';
+import {UserActions} from './actions/user-actions/user-actions';
+import {ComponentDataStore}
+  from './stores/component-data/component-data-store';
+import {BackendMessagingService} from './channel/backend-messaging-service';
 
 @Component({
   selector: 'bt-app'
 })
 @View({
   directives: [TreeView],
-  template: '<bt-tree-view [node]="node"></bt-tree-view>'
+  template: '<bt-tree-view [tree]="tree"></bt-tree-view>'
 })
+/**
+ * Batarangle App
+ */
 class App {
-  private node;
 
+  private tree: any;
   constructor(
     private backendAction: BackendActions,
-    private treeViewStore: TreeViewStore) {
+    private userActions: UserActions,
+    private componentDataStore: ComponentDataStore,
+    @Inject(LifeCycle) private lifeCycle: LifeCycle
+  ) {
 
-    this.backendAction.rootFound();
-    
-    this.treeViewStore.dataStream.subscribe(
-      data => {
-        this.node = data;
-        console.log('Application Root Received: ', this.node);
+    Rx.Observable.interval(1000).take(1).subscribe(() => {
+      this.userActions.getComponentData();
+    });
+
+    this.componentDataStore.dataStream
+      .pluck('componentData')
+      .subscribe(componentData => {
+        console.log('Application Root Received: ', componentData);
+        this.tree = componentData;
+        this.lifeCycle.tick();
       }
     );
-    
+
   }
+
 }
 
-bootstrap(App, [ComponentTree, BackendActions, Dispatcher, TreeViewStore]);
+bootstrap(App, [
+  BackendActions,
+  UserActions,
+  Dispatcher,
+  ComponentDataStore,
+  BackendMessagingService
+]);
