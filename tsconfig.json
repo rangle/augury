@@ -11,18 +11,18 @@
     
     "./app/ts/devtools.ts",
     
-    "./app/ts/batarangle-panel/app.ts",
-    "./app/ts/batarangle-panel/components/tree-view/tree-view-component.ts",
+    "./app/ts/batarangle/frontend/batarangle.ts",
+    "./app/ts/batarangle/frontend/components/tree-view/tree-view-component.ts",
     
-    "./app/ts/batarangle-panel/actions/action-constants.ts",
-    "./app/ts/batarangle-panel/actions/backend-actions/backend-actions.ts",
-    "./app/ts/batarangle-panel/actions/user-actions/user-actions.ts",
+    "./app/ts/batarangle/frontend/actions/action-constants.ts",
+    "./app/ts/batarangle/frontend/actions/backend-actions/backend-actions.ts",
+    "./app/ts/batarangle/frontend/actions/user-actions/user-actions.ts",
     
-    "./app/ts/batarangle-panel/dispatcher/dispatcher.ts",
+    "./app/ts/batarangle/frontend/dispatcher/dispatcher.ts",
     
-    "./app/ts/batarangle-panel/stores/abstract-store.ts",
-    "./app/ts/batarangle-panel/stores/tree-view/tree-view-store.ts",
+    "./app/ts/batarangle/frontend/stores/abstract-store.ts",
+    "./app/ts/batarangle/frontend/stores/tree-view/tree-view-store.ts",
 
-    "./app/ts/batarangle-panel/core/tree-view/tree-view-api.ts"
+    "./app/ts/batarangle/frontend/core/tree-view/tree-view-api.ts"
   ]
 }
