@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/angular2';
 
 import {Dispatcher} from '../../dispatcher/dispatcher';
-import {ActionType} from '../action-constants';
+import {BackendActionType} from '../action-constants';
 
 @Injectable()
 export class BackendActions {
@@ -9,9 +9,10 @@ export class BackendActions {
   constructor(private dispatcher: Dispatcher) {
   }
 
-  rootFound() {
+  componentDataChanged(componentData) {
     this.dispatcher.messageBus.onNext({
-      actionType: ActionType.ROOT_FOUND
+      actionType: BackendActionType.COMPONENT_DATA_CHANGED,
+      componentData: componentData
     });
   }
 }

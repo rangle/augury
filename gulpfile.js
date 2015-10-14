@@ -28,8 +28,11 @@ gulp.task('libs', function () {
 });
 
 gulp.task('config', function () {
-  return gulp.src('app/ts/batarangle/frontend/batarangle.config.js', { base: 'app/ts/batarangle/frontend/' })
-    .pipe(gulp.dest('app/js/batarangle/frontend/'));
+  return gulp.src([
+    'app/ts/batarangle/frontend/batarangle.config.js',
+    'app/ts/batarangle/backend/batarangle-backend.config.js'
+    ], { base: 'app/ts/' })
+    .pipe(gulp.dest('app/js/'));
 });
 
 // gulp.task('images', function () {
@@ -55,7 +58,7 @@ gulp.task('compile', ['lint'], function (done) {
   var tsProject = ts.createProject('tsconfig.json', {
     typescript: require('typescript')
   });
-  
+
   return tsProject.src()
     .pipe(ts(tsProject))
     .js
@@ -67,10 +70,11 @@ gulp.task('compile', ['lint'], function (done) {
 
 gulp.task('flow', ['build'], function () {
   gulp.watch('./app/ts/**/*.html', ['html']);
-  gulp.watch('./app/ts/batarangle/frontend/batarangle.config.js', ['config']);
+  gulp.watch([
+    'app/ts/batarangle/frontend/batarangle.config.js'
+    ], ['config']);
   gulp.watch('./app/ts/**/*.ts', ['compile']);
-  
+
   // gulp.watch('source/images/**/*', ['images']);
   // gulp.watch('source/manifest.json', ['manifest']);
 });
-
