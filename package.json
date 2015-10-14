@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.0.0-alpha.3",
-    "angular2": "^2.0.0-alpha.41",
+    "angular2": "^2.0.0-alpha.44",
     "crypto": "0.0.3",
     "es6-shim": "^0.33.6",
     "immutable": "^3.7.5",

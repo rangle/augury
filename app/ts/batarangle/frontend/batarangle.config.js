@@ -18,5 +18,5 @@ System.meta = {
     ]
   }
 }
-  
+
 System.import('../../../js/batarangle/frontend/batarangle');

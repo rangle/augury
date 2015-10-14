@@ -1,10 +1,11 @@
-import {Component, View, Inject, bootstrap, bind} from 'angular2/angular2';
-
-import {TreeView} from './components/tree-view/tree-view-component';
+import {Component, View, Inject, bootstrap, bind, LifeCycle}
+  from 'angular2/angular2';
+import {TreeView} from './components/tree-view/tree-view';
 import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
-import {ComponentDataStore} from './stores/component-data/component-data-store';
+import {ComponentDataStore}
+  from './stores/component-data/component-data-store';
 import {BackendMessagingService} from './channel/backend-messaging-service';
 
 @Component({
@@ -12,40 +13,36 @@ import {BackendMessagingService} from './channel/backend-messaging-service';
 })
 @View({
   directives: [TreeView],
-  template: '<bt-tree-view [node]="node"></bt-tree-view>'
+  template: '<bt-tree-view [tree]="tree"></bt-tree-view>'
 })
+/**
+ * Batarangle App
+ */
 class App {
-  private node;
 
+  private tree: any;
   constructor(
     private backendAction: BackendActions,
     private userActions: UserActions,
-    private componentDataStore: ComponentDataStore) {
+    private componentDataStore: ComponentDataStore,
+    private lifeCycle: LifeCycle
+  ) {
 
     Rx.Observable.interval(1000).take(1).subscribe(() => {
       this.userActions.getComponentData();
     });
 
-    chrome.devtools.inspectedWindow.eval(
-      "ng.probe",
-      function(result, isException) {
-        if (isException)
-          console.log("the page is not using ng.probe");
-        else
-          console.log("The page is using ng.probe v" + result);
-      }
-    );
-    
-    this.node = { name: 'hello' }
-    
-    this.componentDataStore.dataStream.subscribe(
-      componentData => {
-        //this.node = { name: 'hello' };//componentData;
+    this.componentDataStore.dataStream
+      .pluck('componentData')
+      .subscribe(componentData => {
         console.log('Application Root Received: ', componentData);
+        this.tree = componentData;
+        this.lifeCycle.tick();
       }
     );
 
   }
+
 }
 
 bootstrap(App, [
