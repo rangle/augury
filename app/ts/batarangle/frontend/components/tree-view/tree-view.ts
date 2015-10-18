@@ -1,4 +1,4 @@
-import {Component, View, NgFor, LifeCycle} from 'angular2/angular2';
+import {Component, View, NgFor, LifeCycle, Inject} from 'angular2/angular2';
 import {NodeItem} from '../node-item/node-item';
 import {InfoPanel} from '../info-panel/info-panel';
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -19,7 +19,7 @@ export class TreeView {
   private tree: any;
   constructor(
     private userActions: UserActions,
-    private lifeCycle: LifeCycle
+    @Inject(LifeCycle) private lifeCycle: LifeCycle
   ) {
   }
 

@@ -1,4 +1,4 @@
-import {Component, View, NgIf, NgFor, NgStyle, LifeCycle}
+import {Component, View, NgIf, NgFor, NgStyle, LifeCycle, Inject}
   from 'angular2/angular2';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
@@ -25,7 +25,7 @@ export class NodeItem {
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    private lifeCycle: LifeCycle
+    @Inject(LifeCycle) private lifeCycle: LifeCycle
   ) {
 
     this.borderColor = 'rgba(0, 0, 0, 0.125)';
@@ -34,10 +34,10 @@ export class NodeItem {
     // Listen for changes to selected node
     this.componentDataStore.dataStream
       .pluck('selectedNode')
-      .distinctUntilChanged(selectedNode => {
+      .distinctUntilChanged((selectedNode: any) => {
         return selectedNode ? selectedNode.name : '';
       })
-      .subscribe(selectedNode => {
+      .subscribe((selectedNode: any) => {
         const isSelected = this.node && selectedNode &&
           selectedNode.name === this.node.name;
         this.update(isSelected);
