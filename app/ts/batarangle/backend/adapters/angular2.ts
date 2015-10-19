@@ -201,7 +201,12 @@ export class Angular2Adapter extends BaseAdapter {
   _getComponentName(compEl: DebugElement): string {
     const constructor =  <any>this._getComponentInstance(compEl)
                                   .constructor
-    return constructor.name;
+    const constructorName = constructor.name;
+
+    // Cover components not backed by a custom class.
+    return constructorName !== 'Object' ?
+           constructorName :
+           this._getComponentRef(compEl).tagName;
   }
 
   _isSerializable(val: any) {
