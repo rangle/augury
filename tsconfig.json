@@ -11,6 +11,8 @@
 
     "./app/ts/devtools.ts",
 
+    "./app/ts/batarangle/component-inspector/component-inspector.ts",
+
     "./app/ts/batarangle/frontend/batarangle.ts",
 
     "./app/ts/batarangle/frontend/components/tree-view/tree-view.ts",
