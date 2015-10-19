@@ -35,7 +35,7 @@ import { AdapterEventType as EventType } from './event_types';
 
 export interface AdapterEvent {
   type: string,   // AdapterEventType
-  node: Node,
+  node?: Node,
 }
 
 export interface TreeNode {
@@ -83,12 +83,12 @@ export class BaseAdapter {
   }
 
   removeRoot(el: Element): void {
-    const childEvt: AdapterEvent = {
+    const rootEvt: AdapterEvent = {
       type: EventType.REMOVE,
       node: el,
     };
 
-    this._stream.onNext(childEvt);
+    this._stream.onNext(rootEvt);
   }
 
   removeChild(el: Element): void {
@@ -98,6 +98,14 @@ export class BaseAdapter {
     };
 
     this._stream.onNext(childEvt);
+  }
+
+  reset(): void {
+    const evt: AdapterEvent = {
+      type: EventType.CLEAR,
+    }
+
+    this._stream.onNext(evt);
   }
 
   subscribe(next?: Function, err?: Function, done?: Function): void {

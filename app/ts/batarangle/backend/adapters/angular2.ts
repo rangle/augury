@@ -53,13 +53,9 @@ export class Angular2Adapter extends BaseAdapter {
     const roots = this._findRoots();
 
     roots.forEach((root, idx) => {
-      this._traverseTree(ng.probe(root), this._emitNativeElement, true, String(idx)); // fix, looks like the last arg was missing
+      this._traverseTree(ng.probe(root), this._emitNativeElement, true, String(idx));
     }, true);
-    // roots.forEach(root => this._trackChanges(root));
-    // roots.forEach(root => this._listenToChanges(root));
-    roots.forEach((root, idx) => this.__listenToChanges(root, () => {
-      this._traverseTree(ng.probe(root), this._emitNativeElement, false, String(idx));
-    }));
+    roots.forEach(root => this._trackChanges(root));
   }
 
   serializeComponent(el: Element, event: string): TreeNode {
@@ -105,7 +101,6 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _traverseTree(compEl: DebugElement, cb: Function, isRoot: boolean, idx: string): void {
-    console.log('__trackChanges');
     cb(compEl, isRoot, idx);
 
     const children = this._getComponentChildren(compEl);
@@ -117,18 +112,42 @@ export class Angular2Adapter extends BaseAdapter {
     });
   }
 
+  _trackChanges(el: Element): void {
+    this._observer = new MutationObserver(this._handleChanges);
+
+    this._observer.observe(el, {
+      attributes: true,
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  }
+
+  _handleChanges = (mutations: MutationRecord[]): void => {
+    this.reset();
+
+    // Our handling of the change events will, in turn, cause DOM mutations
+    // (e.g setting)
+    this._observer.disconnect();
+
+    const roots = this._findRoots();
+
+    roots.forEach((root, idx) => {
+      this._traverseTree(ng.probe(root), this._emitNativeElement, true, String(idx));
+    }, true);
+
+    roots.forEach(root => this._trackChanges(root));
+  }
+
   _getComponentChildren(compEl: DebugElement): DebugElement[] {
     return compEl.componentViewChildren;
   }
 
-  // fix
   _emitNativeElement = (compEl: DebugElement, isRoot: boolean, idx: string): void => {
-    
-    console.log('__trackChanges');
     const nativeElement = this._getNativeElement(compEl);
-    
+
     (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
-    
+
     if (isRoot) return this.addRoot(this._getNativeElement(compEl));
 
     this.addChild(this._getNativeElement(compEl));
@@ -140,106 +159,6 @@ export class Angular2Adapter extends BaseAdapter {
 
   _removeAllListeners(): void {
     this._observer.disconnect();
-  }
-
-  _trackChanges(el: Element): void {
-    
-    
-    this._observer = new MutationObserver(this._handleChanges);
-
-    this._observer.observe(el, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
-  }
-  
-  __trackChanges(el: Element, cb: MutationCallback): void {
-    
-    console.log('__trackChanges');
-    this._observer = new MutationObserver(cb);
-
-    this._observer.observe(el, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
-  }
-  
-  // fix the context of this
-  _handleChanges = (mutations: MutationRecord[]): void => {
-    mutations.forEach(mutation => {
-      const target = <HTMLElement>mutation.target;
-      
-      if (!target.dataset || !target.dataset['ngid']) return;
-      
-      switch(mutation.type) {
-        case 'attributes':
-          this.changeComponent(target);
-
-          break;
-        case 'childList':
-
-          if (mutation.addedNodes.length) {
-            this._handleNodeAddition(target);
-          } else if (mutation.removedNodes.length) {
-            this._handleNodeRemoval(target);
-          }
-          
-          // const additions = Array.prototype.slice.call(mutation.addedNodes);
-          // const removals = Array.prototype.slice.call(mutation.removedNodes);
-
-          // additions.filter((el) => <HTMLElement>el.dataset['ngid']).forEach(this._handleNodeAddition);
-          // removals.filter((el) => <HTMLElement>el.dataset['ngid']).forEach(this._handleNodeRemoval);
-          break;
-        case 'characterData':
-        default:
-          return;
-      }
-    });
-  }
-  
-  _listenToChanges = (el) => {
-    // TODO(bertrandk): Move to Mutation Events API
-    el.addEventListener("DOMNodeInserted", (e) => {
-      this._handleNodeAddition(e.target);
-    }, false);
-
-    el.addEventListener("DOMNodeRemoved", (e) => {
-      this._handleNodeRemoval(e.target);
-    }, false);
-
-    el.addEventListener("DOMAttrModified", (e) => {
-      this.changeComponent(e.target);
-    }, false);
-  }
-  
-  __listenToChanges = (el, cb: Function) => {
-    // TODO(bertrandk): Move to Mutation Events API
-    el.addEventListener("DOMNodeInserted", cb, false);
-
-    el.addEventListener("DOMNodeRemoved", cb, false);
-
-    el.addEventListener("DOMAttrModified", cb, false);
-  }
-  
-  // fix the context of this
-  _handleNodeAddition = (node: Node): void => {
-    const el = <Element>node;
-
-    if (this._isRootNode(el)) return this.addRoot(el);
-
-    this.addChild(el);
-  }
-
-  _handleNodeRemoval = (node: Node): void => {
-    const el = <Element>node;
-
-    if (this._isRootNode(el)) return this.removeRoot(el);
-
-    this.removeChild(el);
   }
 
   _isRootNode(el: Element): boolean {
@@ -284,29 +203,29 @@ export class Angular2Adapter extends BaseAdapter {
                                   .constructor
     return constructor.name;
   }
-  
+
   _isSerializable(val: any) {
     try {
       JSON.stringify(val);
     } catch (error) {
       return false;
     }
-    
+
     return true;
   }
 
   _getComponentState(compEl: DebugElement): Object {
     const ret = {};
     const instance = this._getComponentInstance(compEl);
-    
+
     Object.keys(instance).forEach((key) => {
       const val = instance[key];
-      
+
       if (!this._isSerializable(val)) return;
-      
+
       ret[key] = val;
     })
-    
+
     return ret;
   }
 
