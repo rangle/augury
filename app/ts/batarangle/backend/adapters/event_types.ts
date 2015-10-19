@@ -15,6 +15,7 @@
  * - 'add': A new child component has been added to the view.
  * - 'change': A component in the view has changed.
  * - 'remove': A component has been removed from the view.
+ * - 'clear': Reset component view.
  */
 
 // window.postMessage({ type: "BATARANGLE_INSPECTED_APP", text: "Loaded adapters/event_types.js" }, "*");
@@ -24,6 +25,7 @@ enum _AdapterEventType {
   ADD,
   CHANGE,
   REMOVE,
+  CLEAR,
 }
 
 // TSFIXME(bertrandk): There doesn't seem to be much better ways of creating
@@ -55,5 +57,9 @@ export class AdapterEventType {
 
   static get REMOVE(): string {
     return AdapterEventType._get('REMOVE');
+  }
+
+  static get CLEAR(): string {
+    return AdapterEventType._get('CLEAR');
   }
 }

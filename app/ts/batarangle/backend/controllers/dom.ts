@@ -44,7 +44,7 @@ export class DomController extends BaseController {
     this.model = [];
     this.adapter = adapter;
     this.channel = channel;
-    
+
     //channel.sendMessage({ text: 'TEST MESSAGE' });
     //window.postMessage({ type: "BATARANGLE_INSPECTED_APP", message: 'DomController constructor' }, "*");
   }
@@ -71,6 +71,9 @@ export class DomController extends BaseController {
       case EventType.REMOVE:
         this._handleRemovals(evt.node);
         break;
+      case EventType.CLEAR:
+        this._handleReset();
+        break;
       default:
         throw Error('Unknown adapter event.');
     }
@@ -91,12 +94,9 @@ export class DomController extends BaseController {
     const idxParts = childNode.id.split('.');
     const rootIdx = idxParts[0];
     const childIdx = idxParts[1];
-    
-    // fixed??? No
-    if (this.model[rootIdx] ) {
-      this.model[rootIdx].children = this.model[rootIdx].children || [];
-      this.model[rootIdx].children[childIdx] = childNode;
-    }
+
+    this.model[rootIdx].children = this.model[rootIdx].children || [];
+    this.model[rootIdx].children[childIdx] = childNode;
   }
 
   _handleComponentChanges(node: Node) {
@@ -131,6 +131,10 @@ export class DomController extends BaseController {
       this.model.splice(rootIdx, 1);
     }
 
-    this.model[rootIdx].children.splice(childIdx, 1); // fix typo childrens
+    this.model[rootIdx].children.splice(childIdx, 1);
+  }
+
+  _handleReset() {
+    this.model = [];
   }
 }
