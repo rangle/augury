@@ -35,21 +35,11 @@ export class NodeItem {
     this.componentDataStore.dataStream
       .pluck('selectedNode')
       .distinctUntilChanged((selectedNode: any) => {
-        return selectedNode ? selectedNode.name : '';
+        return selectedNode ? selectedNode.id : '';
       })
       .subscribe((selectedNode: any) => {
         const isSelected = this.node && selectedNode &&
-          selectedNode.name === this.node.name;
-        this.update(isSelected);
-      });
-
-    // Listen for changes to node search query
-    this.componentDataStore.dataStream
-      .pluck('query')
-      .distinctUntilChanged()
-      .subscribe(query => {
-        const isSelected = this.node &&
-          this.node.name.toLocaleLowerCase().includes(query);
+          selectedNode.id === this.node.id;
         this.update(isSelected);
       });
 
@@ -67,10 +57,10 @@ export class NodeItem {
   }
 
   /**
-   * Select a node on hover
+   * Select a node on click
    * @param  {Object} $event
    */
-  onHover($event) {
+  onClick($event) {
 
     this.userActions.selectNode({ node: this.node });
     this.lifeCycle.tick();

@@ -71,11 +71,19 @@ export class ComponentDataStore extends AbstractStore {
    */
   private searchNode({ query }) {
 
-    if (query.length > 2) {
-      this.emitChange({
-        query: query,
-        componentData: this._componentData
+    const recursiveFunction = (collection) => {
+      collection.forEach((node) => {
+        console.log(node.name);
+        if (node.name.toLocaleLowerCase().includes(query)) {
+          return this.selectNode({ node });
+        } else if (node.children) {
+          recursiveFunction(node.children);
+        }
       });
+    }
+
+    if (query.length > 1) {
+      recursiveFunction(this._componentData);
     }
 
   }

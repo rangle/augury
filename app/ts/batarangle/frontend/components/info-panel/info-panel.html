@@ -1,26 +1,7 @@
-<div class="p2 bg-silver"
+<div class="p2 mb1 bg-silver"
   *ng-if="node">
   <h3 class="m0">{{ node.name || 'No node selected' }}</h3>
 </div>
 
-<div class="px1" *ng-if="node">
-  <h5 class="caps">State</h5>
-  <pre class="gray">
-{{ prettify(node.state) }}
-  </pre>
-
-  <h5 class="caps">Inputs</h5>
-  <pre class="gray">
-{{ prettify(node.inputs) }}
-  </pre>
-
-  <h5 class="caps">Outputs</h5>
-  <pre class="gray">
-{{ prettify(node.outputs) }}
-  </pre>
-
-  <h5 class="caps">Meta</h5>
-  <div class="gray">
-    {{ prettify(node.__meta) }}
-  </div>
+<div class="px1 h5">
 </div>
