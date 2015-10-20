@@ -262,13 +262,14 @@ export class Angular2Adapter extends BaseAdapter {
 
   _normalizeNgIf(state: any): Object {
     return {
-      prevCondition: state._prevCondition
+      condition: state._prevCondition
     };
   }
 
   _normalizeNgFor(state: any): Object {
     return {
-      iterableDiffers: state._iterableDiffers,
+      // TODO: needs investigation on what this is/does
+      // iterableDiffers: state._iterableDiffers,
       length: state._ngForOf.length,
       items: state._ngForOf
     };
