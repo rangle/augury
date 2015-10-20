@@ -1,4 +1,4 @@
-<div class="flex flex-column vh-100">
+<div class="flex flex-column flex-stretch vh-100">
 
   <header class="py3 px1 bg-blue">
 
@@ -17,17 +17,17 @@
 
   </header>
 
-  <div class="flex flex-auto overflow-scroll">
+  <div class="flex flex-auto">
 
     <!-- BLOCK VIEW -->
-    <main class="p2 flex-auto">
+    <main class="p2 flex-auto border-right">
       <bt-node-item *ng-for="#node of tree"
         [node]="node">
       </bt-node-item>
     </main>
 
     <!-- INFO PANEL -->
-    <aside class="border-left col-4 clearfix">
+    <aside class="border-left col-6 clearfix overflow-scroll">
       <bt-info-panel></bt-info-panel>
     </aside>
 

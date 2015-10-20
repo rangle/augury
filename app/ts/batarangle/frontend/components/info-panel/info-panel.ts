@@ -1,4 +1,5 @@
-import {Component, View, NgIf, LifeCycle}
+declare var JSONFormatter: any;
+import {Component, View, NgIf, LifeCycle, ElementRef}
   from 'angular2/angular2';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
@@ -19,13 +20,26 @@ export class InfoPanel {
 
   private node: any;
   constructor(
-    private componentDataStore: ComponentDataStore
+    private componentDataStore: ComponentDataStore,
+    private elementRef: ElementRef
   ) {
 
     // Listen for changes to selected node
     this.componentDataStore.dataStream
       .subscribe(({ selectedNode }) => {
         this.node = selectedNode;
+        const container = this.elementRef.nativeElement.lastChild;
+
+        if (container && selectedNode) {
+          const formatter = new JSONFormatter(selectedNode);
+
+          while (container.firstChild) {
+            container.removeChild(container.firstChild);
+          }
+
+          container.appendChild(formatter.render());
+        }
+
       });
 
   }
@@ -37,7 +51,7 @@ export class InfoPanel {
    */
   prettify(object) {
 
-    return JSON.stringify(object, null, 2);
+    return JSON.stringify(object, null, 1);
 
   }
 
