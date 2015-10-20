@@ -91,48 +91,59 @@ export class DomController extends BaseController {
 
   _handleChildAdd(node: Node) {
     const childNode = this.adapter.serializeComponent(node, EventType.ADD);
-    const idxParts = childNode.id.split('.');
-    const rootIdx = idxParts[0];
-    const childIdx = idxParts[1];
+    const [rootIdx, ...childIdx] = childNode.id.split('.');
+    const modelRoot = this.model[rootIdx];
+    let modelChild = modelRoot;
 
-    this.model[rootIdx].children = this.model[rootIdx].children || [];
-    this.model[rootIdx].children[childIdx] = childNode;
-  }
+    for (let index = 0; index < childIdx.length; index++) {
+      var nextPath = childIdx[index];
 
-  _handleComponentChanges(node: Node) {
-    const componentNode = this.adapter.serializeComponent(node, EventType.CHANGE);
-    const idxParts = componentNode.id.split('.');
-    const rootIdx = idxParts[0];
-    const childIdx = idxParts[1];
+      modelChild.children = modelChild.children || [];
 
-    if (!childIdx) {
-      const oldChildren = this.model[rootIdx].children || [];
+      if (index === (childIdx.length - 1)) {
+        modelChild.children[nextPath] = childNode;
+        return;
+      }
 
-      this.model[rootIdx] = componentNode;
-      this.model[rootIdx].children = oldChildren;
-
-      return;
+      modelChild = modelChild.children[nextPath] || {};
     }
-
-    this.model[rootIdx].children = this.model[rootIdx].children || [];
-    const oldChildren = this.model[rootIdx].children || [];
-
-    this.model[rootIdx].children[childIdx] = componentNode;
-    this.model[rootIdx].children[childIdx].children = oldChildren;
   }
 
-  _handleRemovals(node: Node) {
-    const componentNode = this.adapter.serializeComponent(node, EventType.REMOVE);
-    const idxParts = componentNode.id.split('.');
-    const rootIdx = idxParts[0];
-    const childIdx = idxParts[1];
+  // TODO(bertrandk): Reform or delete methods below...
+  // _handleComponentChanges(node: Node) {
+  //   const componentNode = this.adapter.serializeComponent(node, EventType.CHANGE);
+  //   const idxParts = componentNode.id.split('.');
+  //   const rootIdx = idxParts[0];
+  //   const childIdx = idxParts[1];
 
-    if (!childIdx) {
-      this.model.splice(rootIdx, 1);
-    }
+  //   if (!childIdx) {
+  //     const oldChildren = this.model[rootIdx].children || [];
 
-    this.model[rootIdx].children.splice(childIdx, 1);
-  }
+  //     this.model[rootIdx] = componentNode;
+  //     this.model[rootIdx].children = oldChildren;
+
+  //     return;
+  //   }
+
+  //   this.model[rootIdx].children = this.model[rootIdx].children || [];
+  //   const oldChildren = this.model[rootIdx].children || [];
+
+  //   this.model[rootIdx].children[childIdx] = componentNode;
+  //   this.model[rootIdx].children[childIdx].children = oldChildren;
+  // }
+
+  // _handleRemovals(node: Node) {
+  //   const componentNode = this.adapter.serializeComponent(node, EventType.REMOVE);
+  //   const idxParts = componentNode.id.split('.');
+  //   const rootIdx = idxParts[0];
+  //   const childIdx = idxParts[1];
+
+  //   if (!childIdx) {
+  //     this.model.splice(rootIdx, 1);
+  //   }
+
+  //   this.model[rootIdx].children.splice(childIdx, 1);
+  // }
 
   _handleReset() {
     this.model = [];
