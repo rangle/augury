@@ -62,7 +62,7 @@ export class Angular2Adapter extends BaseAdapter {
     const debugEl = ng.probe(el);
     const id = this._getComponentID(debugEl);
     const name = this._getComponentName(debugEl);
-    const state = this._getComponentState(debugEl);
+    const state = this._normalizeState(name, this._getComponentState(debugEl));
     const inputs = this._getComponentInputs(debugEl);
     const outputs = this._getComponentOutputs(debugEl);
     const lastTickTime = this._getComponentPerf(debugEl);
@@ -244,5 +244,34 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentPerf(compEl: DebugElement): number {
     return 0;
+  }
+
+  _normalizeState(name: string, state: Object): Object {
+    switch (name) {
+      case "NgFor":
+        return this._normalizeNgFor(state);
+        break;
+      case "NgIf":
+        return this._normalizeNgIf(state);
+        break;
+      default:
+        return state;
+        break;
+    }
+  }
+
+  _normalizeNgIf(state: any): Object {
+    return {
+      condition: state._prevCondition
+    };
+  }
+
+  _normalizeNgFor(state: any): Object {
+    return {
+      // TODO: needs investigation on what this is/does
+      // iterableDiffers: state._iterableDiffers,
+      length: state._ngForOf.length,
+      items: state._ngForOf
+    };
   }
 }
