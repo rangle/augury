@@ -53,7 +53,10 @@ export class Angular2Adapter extends BaseAdapter {
     const roots = this._findRoots();
 
     roots.forEach((root, idx) => {
-      this._traverseTree(ng.probe(root), this._emitNativeElement, true, String(idx));
+      this._traverseTree(ng.probe(root),
+                         this._emitNativeElement,
+                         true,
+                         String(idx));
     }, true);
     roots.forEach(root => this._trackChanges(root));
   }
@@ -103,13 +106,30 @@ export class Angular2Adapter extends BaseAdapter {
   _traverseTree(compEl: DebugElement, cb: Function, isRoot: boolean, idx: string): void {
     cb(compEl, isRoot, idx);
 
-    const children = this._getComponentChildren(compEl);
+    const lightDOMChildren = this._getComponentNestedChildren(compEl);
+    const rootChildren = this._getComponentChildren(compEl);
 
-    if (!children.length) return;
+    if (!lightDOMChildren.length && !rootChildren.length) return;
+
+    const children = lightDOMChildren.length && lightDOMChildren ||
+                     rootChildren.length && rootChildren;
 
     children.forEach((child: DebugElement, childIdx: number) => {
-      this._traverseTree(child, cb, false, [idx, childIdx].join('.'));
+      this._traverseTree(child,
+                         cb,
+                         false,
+                         [idx, childIdx].join('.'));
     });
+  }
+
+  _emitNativeElement = (compEl: DebugElement, isRoot: boolean, idx: string): void => {
+    const nativeElement = this._getNativeElement(compEl);
+
+    (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
+
+    if (isRoot) return this.addRoot(this._getNativeElement(compEl));
+
+    this.addChild(this._getNativeElement(compEl));
   }
 
   _trackChanges(el: Element): void {
@@ -143,14 +163,8 @@ export class Angular2Adapter extends BaseAdapter {
     return compEl.componentViewChildren;
   }
 
-  _emitNativeElement = (compEl: DebugElement, isRoot: boolean, idx: string): void => {
-    const nativeElement = this._getNativeElement(compEl);
-
-    (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
-
-    if (isRoot) return this.addRoot(this._getNativeElement(compEl));
-
-    this.addChild(this._getNativeElement(compEl));
+  _getComponentNestedChildren(compEl: DebugElement): DebugElement[] {
+    return compEl.children;
   }
 
   _getNativeElement(compEl: DebugElement): Element {
