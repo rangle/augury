@@ -1,5 +1,5 @@
 declare var JSONFormatter: any;
-import {Component, View, NgIf, LifeCycle, ElementRef}
+import {Component, View, NgIf, LifeCycle, ElementRef, Inject}
   from 'angular2/angular2';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
@@ -21,7 +21,7 @@ export class InfoPanel {
   private node: any;
   constructor(
     private componentDataStore: ComponentDataStore,
-    private elementRef: ElementRef
+    @Inject(ElementRef) private elementRef: ElementRef
   ) {
 
     // Listen for changes to selected node

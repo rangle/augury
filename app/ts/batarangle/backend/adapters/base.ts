@@ -27,8 +27,6 @@
  * (../controller/dom.ts).
  */
 
-// window.postMessage({ type: "BATARANGLE_INSPECTED_APP", text: "Loaded adapters/base.js" }, "*");
-
 //import { Subject } from 'rx';
 import { AdapterEventType as EventType } from './event_types';
 

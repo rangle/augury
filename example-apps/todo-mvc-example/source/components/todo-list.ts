@@ -29,10 +29,6 @@ export class TodoList {
     this.todoStore = todoStore;
   }
 
-  removeCompleted() {
-    //this.todoStore.removeCompleted();
-  }
-
   addTodo($event, newtodo) {
     if ($event.which === 13 && newtodo.value.trim().length) {
       this.todoStore.add(newtodo.value);

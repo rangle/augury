@@ -26,11 +26,19 @@ export class Todo {
     return this._editing;
   }
   
+  set editing(editing) {
+    this._editing = editing;
+  }
+  
   get uid() {
     return this._uid;
   }
   
   get completed() {
     return this._completed;
+  }
+  
+  set completed(completed) {
+    this._completed = completed;
   }
 }

@@ -14,13 +14,10 @@
  * The DOM controller manages the backend mediation for the browser DOM.
  */
 
-// window.postMessage({ type: "BATARANGLE_INSPECTED_APP", text: "Loaded controllers/dom.js" }, "*");
-
 import { AdapterEventType as EventType } from '../adapters/event_types';
 import { AdapterEvent } from '../adapters/base';
 import { Angular2Adapter } from '../adapters/angular2';
 import { BaseController } from './base';
-import { FrontendMessagingService } from '../channel/frontend-messaging-service';
 
 interface sendable {
   sendMessage: Function,
@@ -44,15 +41,10 @@ export class DomController extends BaseController {
     this.model = [];
     this.adapter = adapter;
     this.channel = channel;
-
-    //channel.sendMessage({ text: 'TEST MESSAGE' });
-    //window.postMessage({ type: "BATARANGLE_INSPECTED_APP", message: 'DomController constructor' }, "*");
   }
 
   hookIntoBackend(): void {
-    // window.postMessage({ type: "BATARANGLE_INSPECTED_APP", message: 'DomController hookIntoBackend' }, "*");
     this.adapter.subscribe((e: AdapterEvent) => {
-      // window.postMessage({ type: "BATARANGLE_INSPECTED_APP", message: 'DomController hookIntoBackend.subscribe' }, "*");
       this._onViewChange(e, this.channel);
     });
   }
@@ -66,10 +58,10 @@ export class DomController extends BaseController {
         this._handleChildAdd(evt.node);
         break;
       case EventType.CHANGE:
-        this._handleComponentChanges(evt.node);
+        //this._handleComponentChanges(evt.node);
         break
       case EventType.REMOVE:
-        this._handleRemovals(evt.node);
+        //this._handleRemovals(evt.node);
         break;
       case EventType.CLEAR:
         this._handleReset();
