@@ -18,8 +18,6 @@
  * - 'clear': Reset component view.
  */
 
-// window.postMessage({ type: "BATARANGLE_INSPECTED_APP", text: "Loaded adapters/event_types.js" }, "*");
-
 enum _AdapterEventType {
   ROOT,
   ADD,

@@ -24,8 +24,6 @@
  * Supports up to 2.0.0-alpha.40
  */
 
-// window.postMessage({ type: "BATARANGLE_INSPECTED_APP", text: "Loaded adapters/angular2.js" }, "*");
-
 interface DebugElement {
   componentInstance: any,
   nativeElement: any,

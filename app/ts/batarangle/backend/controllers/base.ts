@@ -12,8 +12,6 @@
  * Communications occur over the channels.
  */
 
-// window.postMessage({ type: "BATARANGLE_INSPECTED_APP", text: "Loaded controllers/base.js" }, "*");
-
 import { BaseAdapter } from '../adapters/base';
 
 function notYetImplemented() {
