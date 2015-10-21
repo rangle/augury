@@ -42,19 +42,17 @@ export class TodoItem {
     }
 
     this.todo.title = editedTitle;
+    this.todoStore.update(this.todo);
   }
 
   editTodo() {
     this.todo.editing = true;
   }
   
-  // removeCompleted() {
-  // 	this.todoStore.removeCompleted();
-  // }
-  
-  // toggleCompletion() {
-  // 	this.todoStore.toggleCompletion(this.todo.uid);
-  // }
+  toggleCompletion() {
+    this.todo.completed = !this.todo.completed;
+  	this.todoStore.update(this.todo);
+  }
   
   remove() {
     this.todoStore.delete(this.todo.uid);

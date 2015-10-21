@@ -1,5 +1,4 @@
 import {bootstrap, bind} from 'angular2/angular2';
-import {enableDebugTools} from 'angular2/tools';
 import {TodoList} from './components/todo-list';
 import {TodoStore} from './stores/todo-store';
 
@@ -10,7 +9,6 @@ bootstrap(TodoList, [
   TodoStore,
   bind(AppViewListener).toClass(DebugElementViewListener)
 ])
-  .then(applicationReference => {
-    enableDebugTools(applicationReference);
-    window['ng']['probe'] = inspectNativeElement; 
-  });
+.then(applicationReference => {
+  window['ng']['probe'] = inspectNativeElement; 
+});
