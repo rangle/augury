@@ -63,7 +63,7 @@ gulp.task('compile', ['lint'], function (done) {
     .pipe(ts(tsProject))
     .js
     .pipe(rename(function (path) {
-      path.dirname = path.dirname.replace('app/ts', 'js');
+      path.dirname = path.dirname.replace('app/ts', 'js').replace('app\\ts', 'js');
     }))
     .pipe(gulp.dest('app'));
 });
