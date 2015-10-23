@@ -5,6 +5,7 @@ var gulp = require('gulp');
 var rename = require('gulp-rename');
 var ts = require('gulp-typescript');
 var tslint = require('gulp-tslint');
+var path = require('path');
 
 gulp.task('default', ['build']);
 
@@ -62,8 +63,8 @@ gulp.task('compile', ['lint'], function (done) {
   return tsProject.src()
     .pipe(ts(tsProject))
     .js
-    .pipe(rename(function (path) {
-      path.dirname = path.dirname.replace('app/ts', 'js').replace('app\\ts', 'js');
+    .pipe(rename(function (pathInstance) {
+      pathInstance.dirname = pathInstance.dirname.replace(path.join('app', 'ts'), 'js');
     }))
     .pipe(gulp.dest('app'));
 });
