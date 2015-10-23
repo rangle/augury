@@ -36,6 +36,7 @@
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^3.2.0",
     "gulp-typescript": "^2.9.0",
     "tsd": "^0.6.4",
