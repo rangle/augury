@@ -11,7 +11,7 @@ If you want to contribute or need help getting started, join us on Slack by fill
 To develop this extension the following environment is used
 
 * Node v0.12.7
-* npm 2.11.3
+* NPM 2.11.3
 * TypeScript 1.6.2
 * tsd 0.6.5
 
@@ -22,7 +22,7 @@ The build process for the extension will transition to jspm as well in future it
 
 1. Clone this repository: `git clone git://github.com/rangle/batarangle`.
 2. Run `npm install`.
-3. Run `gulp build` (errors related to typing files conflicts can be ignore for now).
+3. Run `npm build` (errors related to typing files conflicts can be ignore for now).
 4. Navigate to chrome://extensions and enable Developer Mode.
 5. Choose "Load unpacked extension".
 6. In the dialog, open the directory you just cloned.

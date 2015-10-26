@@ -2,89 +2,23 @@
   "version": "v4",
   "repo": "borisyankov/DefinitelyTyped",
   "ref": "master",
-  "path": "app/typings",
-  "bundle": "app/typings/tsd.d.ts",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
   "installed": {
-    "chrome/chrome.d.ts": {
-      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
-    },
     "webrtc/MediaStream.d.ts": {
-      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+    },
+    "filewriter/filewriter.d.ts": {
+      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+    },
+    "filesystem/filesystem.d.ts": {
+      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+    },
+    "chrome/chrome.d.ts": {
+      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "ffceea9dd124d277c4597c7bd12930666ec074c5"
-    },
-    "rx/rx.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "angular2/angular2.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx-lite.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "angular2/http.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "angular2/router.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "es6-shim/es6-shim.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "jasmine/jasmine.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "angular2/test_lib.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.all.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.aggregates.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.async.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.async-lite.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.binding.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.time-lite.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.binding-lite.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.coincidence.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.experimental.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.coincidence-lite.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.joinpatterns.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.virtualtime.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.backpressure.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.time.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.testing.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
-    },
-    "rx/rx.backpressure-lite.d.ts": {
-      "commit": "14ab703f435375194360cdba3abab61afc879c18"
+      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
     }
   }
 }
