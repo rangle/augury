@@ -5,6 +5,7 @@ var gulp = require('gulp');
 var rename = require('gulp-rename');
 var ts = require('gulp-typescript');
 var tslint = require('gulp-tslint');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('default', ['build']);
 
@@ -59,12 +60,15 @@ gulp.task('compile', ['lint'], function (done) {
     typescript: require('typescript')
   });
 
-  return tsProject.src()
-    .pipe(ts(tsProject))
-    .js
+  var tsResult = tsProject.src()
+    .pipe(sourcemaps.init( { debug: true } ))
+    .pipe(ts(tsProject));
+    
+  return tsResult.js
     .pipe(rename(function (path) {
       path.dirname = path.dirname.replace('app/ts', 'js');
     }))
+    .pipe(sourcemaps.write( { sourceRoot: '/' } ))
     .pipe(gulp.dest('app'));
 });
 
