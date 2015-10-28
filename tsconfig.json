@@ -1,43 +1,19 @@
 {
+  "version": "1.6.2",
   "compilerOptions": {
-    "target": "ES5",
-    "experimentalDecorators": true,
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
     "emitDecoratorMetadata": true,
-    "module": "umd",
-    "outDir": "./app/js/"
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "listFiles": false
   },
   "files": [
-    "./app/typings/tsd.d.ts",
-
-    "./app/ts/devtools.ts",
-
-    "./app/ts/batarangle/component-inspector/component-inspector.ts",
-
-    "./app/ts/batarangle/frontend/batarangle.ts",
-
-    "./app/ts/batarangle/frontend/components/tree-view/tree-view.ts",
-    "./app/ts/batarangle/frontend/components/node-item/node-item.ts",
-    "./app/ts/batarangle/frontend/components/info-panel/info-panel.ts",
-
-    "./app/ts/batarangle/frontend/actions/action-constants.ts",
-    "./app/ts/batarangle/frontend/actions/backend-actions/backend-actions.ts",
-    "./app/ts/batarangle/frontend/actions/user-actions/user-actions.ts",
-
-    "./app/ts/batarangle/frontend/dispatcher/dispatcher.ts",
-    "./app/ts/batarangle/frontend/stores/abstract-store.ts",
-    "./app/ts/batarangle/frontend/stores/component-data/component-data-store.ts",
-    "./app/ts/batarangle/frontend/channel/backend-messaging-service.ts",
-
-    "./app/ts/batarangle/channel/channel.ts",
-
-    "./app/ts/batarangle/backend/adapters/angular2.ts",
-    "./app/ts/batarangle/backend/adapters/base.ts",
-    "./app/ts/batarangle/backend/adapters/event_types.ts",
-    
-    "./app/ts/batarangle/backend/controllers/base.ts",
-    "./app/ts/batarangle/backend/controllers/dom.ts",
-    
-    "./app/ts/batarangle/backend/batarangle-backend.ts",
-    "./app/ts/batarangle/backend/entry.ts"
+    "typings/tsd.d.ts",
+    "frontend/batarangle.ts"
   ]
 }

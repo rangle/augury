@@ -6,27 +6,27 @@
     "tabs",
     "<all_urls>"
   ],
-  "devtools_page": "app/index.html",
+  "devtools_page": "index.html",
   "background": {
-    "scripts": ["app/js/batarangle/channel/channel.js"],
+    "scripts": ["build/channel.js"],
     "persistent": false
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
     "js": [
-      "app/js/batarangle/backend/batarangle-backend.js"
+      "build/backend.js"
     ],
     "run_at": "document_end"
   }],
   "web_accessible_resources": [
-    "node_modules/*", 
-    "app/js/batarangle/backend/*"
+    "node_modules/*",
+    "build/*"
   ],
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "icons": {
-    "16": "app/images/webstore-icon.png",
-    "48": "app/images/webstore-icon.png",
-    "128": "app/images/webstore-icon.png"
+    "16": "images/webstore-icon.png",
+    "48": "images/webstore-icon.png",
+    "128": "images/webstore-icon.png"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "batarangle",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
   "repository": {
     "type": "git",
@@ -17,10 +17,16 @@
   },
   "homepage": "https://github.com/rangle/batarangle",
   "scripts": {
-    "postinstall": "tsd install"
+    "build": "npm run webpack --colors --display-error-details --display-cached",
+    "webpack": "webpack",
+    "clean": "rimraf node_modules typings",
+    "remove-tsd-loader-typings": "rimraf node_modules/typescript-simple-loader/typescript-simple-loader.d.ts",
+    "tsd-update": "npm run remove-tsd-loader-typings && tsd reinstall --overwrite",
+    "postinstall": "npm run tsd-update && tsd install && tsd link",
+    "start": "rimraf build && webpack --watch"
   },
   "dependencies": {
-    "@reactivex/rxjs": "5.0.0-alpha.4",
+    "@reactivex/rxjs": "5.0.0-alpha.6",
     "angular2": "2.0.0-alpha.44",
     "basscss": "^7.0.4",
     "crypto": "0.0.3",
@@ -28,17 +34,16 @@
     "immutable": "^3.7.5",
     "json-formatter-js": "^0.2.0",
     "reflect-metadata": "0.1.1",
-    "rx": "^4.0.0",
-    "systemjs": "^0.19.3",
     "zone.js": "^0.5.8"
   },
   "devDependencies": {
-    "del": "^2.0.2",
-    "gulp": "^3.9.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-tslint": "^3.2.0",
-    "gulp-typescript": "^2.9.0",
-    "tsd": "^0.6.4",
-    "typescript": "^1.6.2"
+    "object-assign": "4.0.1",
+    "rimraf": "2.4.3",
+    "ts-loader": "0.5.6",
+    "tsd": "^0.6.5",
+    "typescript": "1.6.2",
+    "url-loader": "^0.5.6",
+    "webpack": "1.12.2",
+    "webpack-dev-server": "1.12.0"
   }
 }
