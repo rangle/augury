@@ -10,8 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
-    "listFiles": false,
-    "outDir": "dist"
+    "listFiles": false
   },
   "files": [
     "typings/tsd.d.ts",

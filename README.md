@@ -15,8 +15,7 @@ To develop this extension the following environment is used
 * TypeScript 1.6.2
 * tsd 0.6.5
 
-In addition, example applications all run with a globablly installed version of jspm 0.16.12.
-The build process for the extension will transition to jspm as well in future iterations.
+In addition, example applications all run with a globablly installed version of jspm 0.16.12.j
 
 ## Trying out the extension
 
@@ -28,6 +27,16 @@ The build process for the extension will transition to jspm as well in future it
 6. In the dialog, open the directory you just cloned.
 
 To try out with an example application, refer to instructions in [README](./example-apps/todo-mvc-example/README.md)
+
+## Available NPM Scripts
+
+- `build` Build the extension
+- `webpack` Run webpack
+- `clean` Clean `node_modules` and `typings`,
+- `remove-tsd-loader-typings` Remove tsd loader typings
+- `tsd-update` Update tsd
+- `postinstall` Update tsd and install/link typings
+- `start` Clean build and run webpack in watch mode
 
 ## Developer Information
 

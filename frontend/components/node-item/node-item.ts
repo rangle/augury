@@ -35,7 +35,6 @@ export class NodeItem {
     this.componentDataStore.dataStream
       .map(({ selectedNode }: any) => selectedNode)
       .filter((selectedNode: any) => selectedNode && selectedNode.id)
-      .distinctUntilKeyChanged('id')
       .subscribe((selectedNode: any) => {
         const isSelected = this.node && selectedNode &&
           selectedNode.id === this.node.id;

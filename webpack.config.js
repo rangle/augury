@@ -78,16 +78,15 @@ module.exports = {
 
   resolve: {
     root: __dirname,
-    extensions: ['','.ts','.js','.json'],
-    alias: {
-      'rx': '@reactivex/rxjs'
-    }
+    extensions: ['','.ts','.js','.json']
   },
 
   module: {
     loaders: [
       // Support for .ts files.
-      { test: /\.ts$/,    loader: 'ts',
+      {
+        test: /\.ts$/,
+        loader: 'ts',
         query: {
           'ignoreDiagnostics': [
             // 2300, // 2300 -> Duplicate identifier
