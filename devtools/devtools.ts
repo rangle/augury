@@ -28,7 +28,7 @@ chrome.devtools.panels.create(
     });
 
     panel.onHidden.addListener(function() {
-      //console.log('i\'m gone');
+      // console.log('i\'m gone');
     });
 
   }

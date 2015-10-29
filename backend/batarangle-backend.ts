@@ -6,10 +6,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 window.addEventListener('message', function(event) {
   // We only accept messages from ourselves
-  if (event.source != window)
+  if (event.source !== window) {
     return;
+  }
 
-  if (event.data.type && (event.data.type == 'BATARANGLE_INSPECTED_APP')) {
+  if (event.data.type && (event.data.type === 'BATARANGLE_INSPECTED_APP')) {
     console.log('Content script received: ', event.data);
     chrome.runtime.sendMessage({
       name: 'message',
@@ -18,7 +19,7 @@ window.addEventListener('message', function(event) {
   }
 }, false);
 
-var script = document.createElement('script');
+let script = document.createElement('script');
 script.src = chrome.extension.getURL('build/entry.js');
 document.documentElement.appendChild(script);
 script.parentNode.removeChild(script);

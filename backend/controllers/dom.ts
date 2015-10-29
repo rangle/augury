@@ -19,13 +19,13 @@ import { AdapterEvent } from '../adapters/base';
 import { Angular2Adapter } from '../adapters/angular2';
 import { BaseController } from './base';
 
-interface sendable {
-  sendMessage: Function,
+interface Sendable {
+  sendMessage: Function;
 }
 
 export class DomController extends BaseController {
   private adapter: any;
-  private channel: sendable;
+  private channel: Sendable;
   private model: Array<any>;
 
   static detectFramework(): Angular2Adapter {
@@ -36,7 +36,7 @@ export class DomController extends BaseController {
     return null;
   }
 
-  constructor(adapter: any, channel: sendable) {
+  constructor(adapter: any, channel: Sendable) {
     super();
     this.model = [];
     this.adapter = adapter;
@@ -49,8 +49,8 @@ export class DomController extends BaseController {
     });
   }
 
-  _onViewChange(evt: AdapterEvent, ch?: sendable): void {
-    switch(evt.type) {
+  _onViewChange(evt: AdapterEvent, ch?: Sendable): void {
+    switch (evt.type) {
       case EventType.ROOT:
         this._handleRootAdd(evt.node);
         break;
@@ -58,10 +58,10 @@ export class DomController extends BaseController {
         this._handleChildAdd(evt.node);
         break;
       case EventType.CHANGE:
-        //this._handleComponentChanges(evt.node);
-        break
+        // this._handleComponentChanges(evt.node);
+        break;
       case EventType.REMOVE:
-        //this._handleRemovals(evt.node);
+        // this._handleRemovals(evt.node);
         break;
       case EventType.CLEAR:
         this._handleReset();
@@ -88,7 +88,7 @@ export class DomController extends BaseController {
     let modelChild = modelRoot;
 
     for (let index = 0; index < childIdx.length; index++) {
-      var nextPath = childIdx[index];
+      let nextPath = childIdx[index];
 
       modelChild.children = modelChild.children || [];
 
@@ -103,7 +103,8 @@ export class DomController extends BaseController {
 
   // TODO(bertrandk): Reform or delete methods below...
   // _handleComponentChanges(node: Node) {
-  //   const componentNode = this.adapter.serializeComponent(node, EventType.CHANGE);
+  //   const componentNode = this.adapter.serializeComponent(node,
+  //      EventType.CHANGE);
   //   const idxParts = componentNode.id.split('.');
   //   const rootIdx = idxParts[0];
   //   const childIdx = idxParts[1];
@@ -125,7 +126,8 @@ export class DomController extends BaseController {
   // }
 
   // _handleRemovals(node: Node) {
-  //   const componentNode = this.adapter.serializeComponent(node, EventType.REMOVE);
+  //   const componentNode = this.adapter.serializeComponent(node,
+  //      EventType.REMOVE);
   //   const idxParts = componentNode.id.split('.');
   //   const rootIdx = idxParts[0];
   //   const childIdx = idxParts[1];

@@ -27,26 +27,26 @@
  * (../controller/dom.ts).
  */
 
-//import { Subject } from 'rx';
-import * as Rx from '@reactiveX/rxjs';
+// import { Subject } from 'rx';
+import * as Rx from '@reactivex/rxjs';
 import { AdapterEventType as EventType } from './event_types';
 
 
 export interface AdapterEvent {
-  type: string,   // AdapterEventType
-  node?: Node,
+  type: string; // AdapterEventType
+  node?: Node;
 }
 
 export interface TreeNode {
-  id: string,
-  name: string,
-  state: Object,
-  inputs: Object,
-  outputs: Object,
-  lastTickTime: number,
+  id: string;
+  name: string;
+  state: Object;
+  inputs: Object;
+  outputs: Object;
+  lastTickTime: number;
   __meta: {
-    event: string,    // AdapterEventType
-  },
+    event: string // AdapterEventType
+  };
 }
 
 // TSFIXME(bertrandk): This would be much nicer if we could actually extend
@@ -57,7 +57,7 @@ export class BaseAdapter {
   addRoot(rootEl: Element): void {
     const rootEvt: AdapterEvent = {
       type: EventType.ROOT,
-      node: rootEl,
+      node: rootEl
     };
 
     this._stream.next(rootEvt);
@@ -66,7 +66,7 @@ export class BaseAdapter {
   addChild(childEl: Element): void {
     const childEvt: AdapterEvent = {
       type: EventType.ADD,
-      node: childEl,
+      node: childEl
     };
 
     this._stream.next(childEvt);
@@ -75,7 +75,7 @@ export class BaseAdapter {
   changeComponent(el: Element): void {
     const childEvt: AdapterEvent = {
       type: EventType.CHANGE,
-      node: el,
+      node: el
     };
 
     this._stream.next(childEvt);
@@ -84,7 +84,7 @@ export class BaseAdapter {
   removeRoot(el: Element): void {
     const rootEvt: AdapterEvent = {
       type: EventType.REMOVE,
-      node: el,
+      node: el
     };
 
     this._stream.next(rootEvt);
@@ -93,7 +93,7 @@ export class BaseAdapter {
   removeChild(el: Element): void {
     const childEvt: AdapterEvent = {
       type: EventType.REMOVE,
-      node: el,
+      node: el
     };
 
     this._stream.next(childEvt);
@@ -101,8 +101,8 @@ export class BaseAdapter {
 
   reset(): void {
     const evt: AdapterEvent = {
-      type: EventType.CLEAR,
-    }
+      type: EventType.CLEAR
+    };
 
     this._stream.next(evt);
   }
