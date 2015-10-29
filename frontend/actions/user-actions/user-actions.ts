@@ -16,12 +16,12 @@ export class UserActions {
   }
 
   /**
-   * Get the component data from back-end
+   * Get the component tree data from back-end
    */
-  getComponentData() {
+  startComponentTreeInspection() {
 
     this.messagingService.sendMessageToBackend({
-      actionType: UserActionType.GET_COMPONENT_DATA
+      actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
 
     // This is not strictly needed for now.
@@ -29,7 +29,7 @@ export class UserActions {
     // But, we might want to listen to this in the future.
     // For example: show indication that request has been sent on the UI
     this.dispatcher.messageBus.next({
-      actionType: UserActionType.GET_COMPONENT_DATA
+      actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
 
   }

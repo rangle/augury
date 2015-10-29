@@ -1,13 +1,13 @@
-import * as Rx from '@reactivex/rxjs';
+import {ReplaySubject} from '@reactivex/rxjs';
 
 export abstract class AbstractStore {
 
-  protected _dataStream: Rx.ReplaySubject<any>;
-  protected _errorStream: Rx.ReplaySubject<any>;
+  protected _dataStream: ReplaySubject<any>;
+  protected _errorStream: ReplaySubject<any>;
 
   constructor() {
-    this._dataStream = new Rx.ReplaySubject(1);
-    this._errorStream = new Rx.ReplaySubject(1);
+    this._dataStream = new ReplaySubject(1);
+    this._errorStream = new ReplaySubject(1);
   }
 
   get dataStream() {

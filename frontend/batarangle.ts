@@ -7,7 +7,6 @@ import {UserActions} from './actions/user-actions/user-actions';
 import {ComponentDataStore}
   from './stores/component-data/component-data-store';
 import {BackendMessagingService} from './channel/backend-messaging-service';
-import * as Rx from '@reactivex/rxjs';
 
 @Component({
   selector: 'bt-app'
@@ -29,9 +28,7 @@ class App {
     @Inject(LifeCycle) private lifeCycle: LifeCycle
   ) {
 
-    Rx.Observable.interval(1000).take(1).subscribe(() => {
-      this.userActions.getComponentData();
-    });
+    this.userActions.startComponentTreeInspection();
 
     this.componentDataStore.dataStream
       .map(({ componentData }: any) => componentData)

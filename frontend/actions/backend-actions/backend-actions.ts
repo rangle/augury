@@ -18,11 +18,11 @@ export class BackendActions {
    * Component Data Changed
    * @param  {Array} componentData
    */
-  componentDataChanged(componentData) {
+  componentTreeChanged(componentData) {
 
     console.log('BackendActions', componentData);
     this.dispatcher.messageBus.next({
-      actionType: BackendActionType.COMPONENT_DATA_CHANGED,
+      actionType: BackendActionType.COMPONENT_TREE_CHANGED,
       componentData: componentData
     });
 

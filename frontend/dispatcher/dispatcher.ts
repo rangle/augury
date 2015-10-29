@@ -1,11 +1,11 @@
-import * as Rx from '@reactivex/rxjs';
+import {Subject} from '@reactivex/rxjs';
 
 export class Dispatcher {
 
-  private _messageBus: Rx.Subject<any>;
+  private _messageBus: Subject<any>;
 
   constructor() {
-    this._messageBus = new Rx.Subject<any>();
+    this._messageBus = new Subject<any>();
   }
 
   onAction(actionType, next: (action: any) => void) {

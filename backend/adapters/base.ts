@@ -27,13 +27,11 @@
  * (../controller/dom.ts).
  */
 
-// import { Subject } from 'rx';
-import * as Rx from '@reactivex/rxjs';
+import {Subject} from '@reactivex/rxjs';
 import { AdapterEventType as EventType } from './event_types';
 
-
 export interface AdapterEvent {
-  type: string; // AdapterEventType
+  type: string;   // AdapterEventType
   node?: Node;
 }
 
@@ -45,14 +43,14 @@ export interface TreeNode {
   outputs: Object;
   lastTickTime: number;
   __meta: {
-    event: string // AdapterEventType
+    event: string;    // AdapterEventType
   };
 }
 
 // TSFIXME(bertrandk): This would be much nicer if we could actually extend
 // 'Subject'.
-export class BaseAdapter {
-  private _stream: Rx.Subject<any> = new Rx.Subject();
+export abstract class BaseAdapter {
+  private _stream: Subject<any> = new Subject();
 
   addRoot(rootEl: Element): void {
     const rootEvt: AdapterEvent = {
@@ -115,16 +113,9 @@ export class BaseAdapter {
     this._stream.complete();
   }
 
-  // TODO(bertrandk): Make below functions abstract.
-  setup(): void {
-    throw new Error('Not yet implemented.');
-  }
+  abstract setup(): void;
 
-  serializeComponent(el: Element, event: string): TreeNode {
-    throw new Error('Not yet implemented.');
-  }
+  abstract serializeComponent(el: Element, event: string): TreeNode;
 
-  cleanup(): void {
-    throw new Error('Not yet implemented.');
-  }
+  abstract cleanup(): void;
 }

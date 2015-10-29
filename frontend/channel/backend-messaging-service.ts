@@ -8,13 +8,12 @@ import {BackendActions} from '../actions/backend-actions/backend-actions';
 export class BackendMessagingService {
 
   private backgroundPageConnection: chrome.runtime.Port;
+
   constructor(
     private backendActions: BackendActions
   ) {
 
-    this.backgroundPageConnection = chrome.runtime.connect({
-      name: 'batarangle_frontend_port'
-    });
+    this.backgroundPageConnection = chrome.runtime.connect();
 
     this.backgroundPageConnection.postMessage({
       name: 'init',
@@ -23,7 +22,7 @@ export class BackendMessagingService {
 
     this.backgroundPageConnection.onMessage.addListener((message: any) => {
       console.log('Frontend: Received message from Backend: ', message);
-      this.backendActions.componentDataChanged(message.data.message.payload);
+      this.backendActions.componentTreeChanged(message.data.message.payload);
     });
 
   }
