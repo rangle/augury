@@ -46,7 +46,7 @@ import { TreeNode, BaseAdapter } from './base';
 //   from 'angular2/src/core/debug/debug_element_view_listener';
 
 export class Angular2Adapter extends BaseAdapter {
-  private _observer: MutationObserver;
+  _observer: MutationObserver;
 
   setup(): void {
     const roots = this._findRoots();

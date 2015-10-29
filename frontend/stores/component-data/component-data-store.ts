@@ -1,5 +1,4 @@
 import {Injectable} from 'angular2/angular2';
-import * as Rx from '@reactivex/rxjs';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {BackendActionType, UserActionType}
   from '../../actions/action-constants';
@@ -23,7 +22,7 @@ export class ComponentDataStore extends AbstractStore {
 
     // Attach listeners to the dispatcher
     this.dispatcher.onAction(
-      BackendActionType.COMPONENT_DATA_CHANGED,
+      BackendActionType.COMPONENT_TREE_CHANGED,
       action => this.componentDataChanged(action.componentData));
 
     this.dispatcher.onAction(

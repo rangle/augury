@@ -12,8 +12,9 @@
     "sourceMap": true,
     "listFiles": false
   },
-  "files": [
-    "typings/tsd.d.ts",
-    "frontend/batarangle.ts"
-  ]
+  "exclude": [
+       "node_modules",
+       "example-apps",
+       "build"
+     ]
 }

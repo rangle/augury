@@ -9,47 +9,52 @@ chrome.runtime.onConnect.addListener(port => {
       console.log('Channel: Got init message from Frontend',
         message, sender, port);
       connections.set(message.tabId, port);
-      return;
+      // return;
     }
 
     if (connections.has(message.tabId)) {
-      chrome.tabs.sendMessage(message.tabId, message);
+      // chrome.tabs.sendMessage(message.tabId, message);
       console.log('Channel: Got Message from Frontend', message, sender, port);
       // console.log(connections);
-      return;
+      // return;
     }
+
+    chrome.tabs.sendMessage(message.tabId, message);
     // other message handling
   };
 
   // Listen to messages sent from the DevTools page
   port.onMessage.addListener(frontendListener);
+
   port.onDisconnect.addListener(_port => {
+
+    console.log('Closing Connection: ', _port);
+
     _port.onMessage.removeListener(frontendListener);
-    for (let key in connections.keys) {
-      if (connections.has(key) === _port) {
-        console.log('Deleting Key: ', key);
-        delete connections[key];
-        break;
+    connections.forEach((value, key, map) => {
+      if (value === port) {
+        map.delete(key);
       }
-    }
+    });
   });
 
 });
 
-// Receive message from content script and
+// Receive message from content script and 
 // relay to the devTools page for the current tab
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Messages from content scripts should have sender.tab set
-  if (sender.tab) {
-    if (connections.has(sender.tab.id)) {
-      console.log('Channel: Sending message to Frontend',
-        message, sender, sendResponse);
-      connections.get(sender.tab.id).postMessage(message);
+chrome.runtime.onMessage.addListener(
+  (message, sender, sendResponse) => {
+    // Messages from content scripts should have sender.tab set
+    if (sender.tab) {
+      if (connections.has(sender.tab.id)) {
+        console.log('Channel: Sending message to Frontend', message, sender);
+        connections.get(sender.tab.id).postMessage(message);
+      } else {
+        console.log('Tab not found in connection list.');
+      }
     } else {
-      console.log('Tab not found in connection list.');
+      console.log('sender.tab not defined.');
     }
-  } else {
-    console.log('sender.tab not defined.');
-  }
-  return true;
-});
+
+    return true;
+  });
