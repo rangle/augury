@@ -7,7 +7,7 @@ import {UserActions} from './actions/user-actions/user-actions';
 import {ComponentDataStore}
   from './stores/component-data/component-data-store';
 import {BackendMessagingService} from './channel/backend-messaging-service';
-import * as Rx from '@reactiveX/rxjs';
+import * as Rx from '@reactivex/rxjs';
 
 @Component({
   selector: 'bt-app'

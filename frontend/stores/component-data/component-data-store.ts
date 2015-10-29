@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/angular2';
-import * as Rx from '@reactiveX/rxjs';
+import * as Rx from '@reactivex/rxjs';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {BackendActionType, UserActionType}
   from '../../actions/action-constants';
@@ -118,7 +118,7 @@ export class ComponentDataStore extends AbstractStore {
    */
   private searchNode({ query }: Query) {
 
-    const findNode = this.findNodeBuilder(query, false)
+    const findNode = this.findNodeBuilder(query, false);
     const fuzzyFindNode = this.findNodeBuilder(query, true);
     const flattenedData = this.flatten(this._componentData);
 

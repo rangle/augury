@@ -82,27 +82,29 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    preLoaders: [{
+      test: /\.ts$/,
+      loader: 'tslint'
+    }],
+    loaders: [{
       // Support for .ts files.
-      {
-        test: /\.ts$/,
-        loader: 'ts',
-        query: {
-          'ignoreDiagnostics': [
-            // 2300, // 2300 -> Duplicate identifier
-            // 2309 // 2309 -> An export assignment cannot be used in a module with other exported elements.
-          ]
-        },
-        exclude: [
-          /\.min\.js$/,
-          /\.spec\.ts$/,
-          /\.e2e\.ts$/,
-          /web_modules/,
-          /test/,
-          /node_modules/
+      test: /\.ts$/,
+      loader: 'ts',
+      query: {
+        'ignoreDiagnostics': [
+          // 2300, // 2300 -> Duplicate identifier
+          // 2309 // 2309 -> An export assignment cannot be used in a module with other exported elements.
         ]
-      }
-    ],
+      },
+      exclude: [
+        /\.min\.js$/,
+        /\.spec\.ts$/,
+        /\.e2e\.ts$/,
+        /web_modules/,
+        /test/,
+        /node_modules/
+      ]
+    }],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,
       /reflect-metadata/

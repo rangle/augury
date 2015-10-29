@@ -25,24 +25,25 @@
  */
 
 interface DebugElement {
-  componentInstance: any,
-  nativeElement: any,
-  elementRef: Object,
+  componentInstance: any;
+  nativeElement: any;
+  elementRef: Object;
   getDirectiveInstance: Function;
-  children: DebugElement[],
-  componentViewChildren: DebugElement[],
-  triggerEventHandler(eventName: string, eventObj: Event): void,
+  children: DebugElement[];
+  componentViewChildren: DebugElement[];
+  triggerEventHandler(eventName: string, eventObj: Event): void;
   hasDirective(type: any): boolean;
   inject(type: any): any;
   getLocal(name: string): any;
-  query(p: any, s: Function): DebugElement
-  queryAll(p: any, s: Function): DebugElement[]
+  query(p: any, s: Function): DebugElement;
+  queryAll(p: any, s: Function): DebugElement[];
 }
 declare var ng: { probe: Function };
 
 
 import { TreeNode, BaseAdapter } from './base';
-//import { inspectNativeElement } from 'angular2/src/core/debug/debug_element_view_listener';
+// import { inspectNativeElement }
+//   from 'angular2/src/core/debug/debug_element_view_listener';
 
 export class Angular2Adapter extends BaseAdapter {
   private _observer: MutationObserver;
@@ -76,7 +77,7 @@ export class Angular2Adapter extends BaseAdapter {
       outputs,
       lastTickTime,
       __meta: {
-        event,
+        event
       }
     };
   }
@@ -101,13 +102,16 @@ export class Angular2Adapter extends BaseAdapter {
     return Array.prototype.slice.call(roots);
   }
 
-  _traverseTree(compEl: DebugElement, cb: Function, isRoot: boolean, idx: string): void {
+  _traverseTree(compEl: DebugElement, cb: Function, isRoot: boolean,
+    idx: string): void {
     cb(compEl, isRoot, idx);
 
     const lightDOMChildren = this._getComponentNestedChildren(compEl);
     const rootChildren = this._getComponentChildren(compEl);
 
-    if (!lightDOMChildren.length && !rootChildren.length) return;
+    if (!lightDOMChildren.length && !rootChildren.length) {
+      return;
+    }
 
     const children = lightDOMChildren.length && lightDOMChildren ||
                      rootChildren.length && rootChildren;
@@ -120,15 +124,18 @@ export class Angular2Adapter extends BaseAdapter {
     });
   }
 
-  _emitNativeElement = (compEl: DebugElement, isRoot: boolean, idx: string): void => {
+  _emitNativeElement = (compEl: DebugElement, isRoot: boolean,
+    idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
 
     (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
 
-    if (isRoot) return this.addRoot(this._getNativeElement(compEl));
+    if (isRoot) {
+      return this.addRoot(this._getNativeElement(compEl));
+    }
 
     this.addChild(this._getNativeElement(compEl));
-  }
+  };
 
   _trackChanges(el: Element): void {
     this._observer = new MutationObserver(this._handleChanges);
@@ -151,11 +158,16 @@ export class Angular2Adapter extends BaseAdapter {
     const roots = this._findRoots();
 
     roots.forEach((root, idx) => {
-      this._traverseTree(ng.probe(root), this._emitNativeElement, true, String(idx));
+      this._traverseTree(
+        ng.probe(root),
+        this._emitNativeElement,
+        true,
+        String(idx)
+      );
     }, true);
 
     roots.forEach(root => this._trackChanges(root));
-  }
+  };
 
   _getComponentChildren(compEl: DebugElement): DebugElement[] {
     return compEl.componentViewChildren;
@@ -174,9 +186,11 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _isRootNode(el: Element): boolean {
-    var id = el.getAttribute('ngid');
+    let id = el.getAttribute('ngid');
 
-    if (!id) return false;
+    if (!id) {
+      return false;
+    }
 
     return this._selectorMatches(el, this._rootSelector());
   }
@@ -197,7 +211,8 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentInstance(compEl: DebugElement): Object {
-    return compEl.componentInstance || {}; //fix could be undefined (are we grabbing the right element?)
+    // fix could be undefined (are we grabbing the right element?)
+    return compEl.componentInstance || {};
   }
 
   _getComponentRef(compEl: DebugElement): Element {
@@ -212,7 +227,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentName(compEl: DebugElement): string {
     const constructor =  <any>this._getComponentInstance(compEl)
-                                  .constructor
+                                  .constructor;
     const constructorName = constructor.name;
 
     // Cover components not backed by a custom class.
@@ -238,10 +253,12 @@ export class Angular2Adapter extends BaseAdapter {
     Object.keys(instance).forEach((key) => {
       const val = instance[key];
 
-      if (!this._isSerializable(val)) return;
+      if (!this._isSerializable(val)) {
+        return;
+      }
 
       ret[key] = val;
-    })
+    });
 
     return ret;
   }
@@ -260,15 +277,12 @@ export class Angular2Adapter extends BaseAdapter {
 
   _normalizeState(name: string, state: Object): Object {
     switch (name) {
-      case "NgFor":
+      case 'NgFor':
         return this._normalizeNgFor(state);
-        break;
-      case "NgIf":
+      case 'NgIf':
         return this._normalizeNgIf(state);
-        break;
       default:
         return state;
-        break;
     }
   }
 
