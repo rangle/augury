@@ -279,10 +279,22 @@ export class Angular2Adapter extends BaseAdapter {
     switch (name) {
       case 'NgFor':
         return this._normalizeNgFor(state);
+        break;
       case 'NgIf':
         return this._normalizeNgIf(state);
+        break;
+      case "NgClass":
+        return this._normalizeNgClass(state);
+        break;
+      case "NgSwitch":
+        return this._normalizeNgSwitch(state);
+        break;
+      case "NgStyle":
+        return this._normalizeNgStyle(state);
+        break;
       default:
         return state;
+        break;
     }
   }
 
@@ -299,5 +311,33 @@ export class Angular2Adapter extends BaseAdapter {
       length: state._ngForOf.length,
       items: state._ngForOf
     };
+  }
+  
+  _normalizeNgClass(state: any): Object {
+    return {
+      // TODO: needs investigation on what these are
+      // iterableDiffers: state._iterableDiffers,
+      // keyValueDiffers: state._keyValueDiffers,
+      // differ: state._differ,
+      evaluationMode: state._mode,
+      initialClasses: state._initialClasses,
+      evaluatedClasses: state._rawClass
+    };
+  }
+  
+  _normalizeNgSwitch(state: any): Object {
+    return {
+      activeViews: state._activeViews,
+      switchValue: state._switchValue,
+      useDefault: state._useDefault,
+      views: state._valueViews
+    };
+  }
+  
+  _normalizeNgStyle(state: any): Object {
+    return {
+      styles: state._rawStyle,
+      // differ: state._differ
+    }
   }
 }

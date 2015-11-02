@@ -4,10 +4,10 @@ import {Angular2Adapter} from './adapters/angular2';
 let channel = {
   sendMessage: (message) => {
     console.log('Inspected script sending: ', message);
-    return window.postMessage({
+    return window.postMessage(JSON.parse(JSON.stringify({
       type: 'BATARANGLE_INSPECTED_APP',
       message
-    }, '*');
+    })), '*');
   }
 };
 

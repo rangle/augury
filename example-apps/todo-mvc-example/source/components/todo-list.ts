@@ -17,7 +17,7 @@ import {TodoItem} from './todo-item';
 			<section class="main" *ng-if="todoStore.todos.length > 0">
 				<ul class="todo-list">
 					<li *ng-for="#todo of todoStore.todos" [class.completed]="todo.completed" [class.editing]="todo.editing">
-					   <todo-item [todo]="todo" ></todo-item>
+             <todo-item [todo]="todo"></todo-item>
           </li>
 				</ul>
 			</section>
