@@ -287,7 +287,7 @@ export class Angular2Adapter extends BaseAdapter {
     }
     return events;
   }
-  
+
   _getComponentPerf(compEl: DebugElement): number {
     return 0;
   }
@@ -296,22 +296,16 @@ export class Angular2Adapter extends BaseAdapter {
     switch (name) {
       case 'NgFor':
         return this._normalizeNgFor(state);
-        break;
       case 'NgIf':
         return this._normalizeNgIf(state);
-        break;
-      case "NgClass":
+      case 'NgClass':
         return this._normalizeNgClass(state);
-        break;
-      case "NgSwitch":
+      case 'NgSwitch':
         return this._normalizeNgSwitch(state);
-        break;
-      case "NgStyle":
+      case 'NgStyle':
         return this._normalizeNgStyle(state);
-        break;
       default:
         return state;
-        break;
     }
   }
 
@@ -329,7 +323,7 @@ export class Angular2Adapter extends BaseAdapter {
       items: state._ngForOf
     };
   }
-  
+
   _normalizeNgClass(state: any): Object {
     return {
       // TODO: needs investigation on what these are
@@ -341,7 +335,7 @@ export class Angular2Adapter extends BaseAdapter {
       evaluatedClasses: state._rawClass
     };
   }
-  
+
   _normalizeNgSwitch(state: any): Object {
     return {
       activeViews: state._activeViews,
@@ -350,11 +344,11 @@ export class Angular2Adapter extends BaseAdapter {
       views: state._valueViews
     };
   }
-  
+
   _normalizeNgStyle(state: any): Object {
     return {
-      styles: state._rawStyle,
+      styles: state._rawStyle
       // differ: state._differ
-    }
+    };
   }
 }

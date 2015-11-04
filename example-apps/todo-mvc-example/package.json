@@ -8,7 +8,7 @@
   "jspm": {
     "dependencies": {
       "@reactivex/rxjs": "npm:@reactivex/rxjs@5.0.0-alpha.4",
-      "angular2": "npm:angular2@2.0.0-alpha.44",
+      "angular2": "npm:angular2@^2.0.0-alpha.45",
       "es6-shim": "github:es-shims/es6-shim@^0.33.6",
       "immutable": "npm:immutable@^3.7.5",
       "node-uuid": "npm:node-uuid@^1.4.3",
