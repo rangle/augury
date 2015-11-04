@@ -31,6 +31,7 @@ interface DebugElement {
   getDirectiveInstance: Function;
   children: DebugElement[];
   componentViewChildren: DebugElement[];
+  _elementInjector: any;
   triggerEventHandler(eventName: string, eventObj: Event): void;
   hasDirective(type: any): boolean;
   inject(type: any): any;
@@ -65,16 +66,16 @@ export class Angular2Adapter extends BaseAdapter {
     const id = this._getComponentID(debugEl);
     const name = this._getComponentName(debugEl);
     const state = this._normalizeState(name, this._getComponentState(debugEl));
-    const inputs = this._getComponentInputs(debugEl);
-    const outputs = this._getComponentOutputs(debugEl);
+    const properties = this._getComponentProperties(debugEl);
+    const events = this._getComponentEvents(debugEl);
     const lastTickTime = this._getComponentPerf(debugEl);
 
     return {
       id,
       name,
       state,
-      inputs,
-      outputs,
+      properties,
+      events,
       lastTickTime,
       __meta: {
         event
@@ -263,14 +264,30 @@ export class Angular2Adapter extends BaseAdapter {
     return ret;
   }
 
-  _getComponentInputs(compEl: DebugElement): Object {
-    return {};
+  _getComponentProperties(compEl: DebugElement): Object {
+    const props = {};
+    if (compEl._elementInjector) {
+      const protoInjector = compEl._elementInjector._injector._proto;
+      for (let i = 0; i < protoInjector.numberOfProviders; i++) {
+        let provider = protoInjector.getProviderAtIndex(i);
+        props[provider.displayName] = provider.metadata.properties;
+      }
+    }
+    return props;
   }
 
-  _getComponentOutputs(compEl: DebugElement): Object {
-    return {};
+  _getComponentEvents(compEl: DebugElement): Object {
+    const events = {};
+    if (compEl._elementInjector) {
+      const protoInjector = compEl._elementInjector._injector._proto;
+      for (let i = 0; i < protoInjector.numberOfProviders; i++) {
+        let provider = protoInjector.getProviderAtIndex(i);
+        events[provider.displayName] = provider.metadata.events;
+      }
+    }
+    return events;
   }
-
+  
   _getComponentPerf(compEl: DebugElement): number {
     return 0;
   }
