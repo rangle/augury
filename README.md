@@ -10,12 +10,12 @@ If you want to contribute or need help getting started, join us on Slack by fill
 
 To develop this extension the following environment is used
 
-* Node v0.12.7
-* NPM 2.11.3
+* Node v4.2.1
+* NPM 3.3.10
 * TypeScript 1.6.2
 * tsd 0.6.5
 
-In addition, example applications all run with a globablly installed version of jspm 0.16.12.j
+In addition, example applications all run with a globablly installed version of jspm 0.16.12
 
 ## Trying out the extension
 
