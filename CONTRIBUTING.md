@@ -4,7 +4,7 @@
 it takes a lot of time and effort. Everything in this document is meant
 to provide you with as much insight as possible with regards to our
 contribution standards. As you read it, it is important to remember that
-these are just **guidelines** and not rules. Please use your best
+these are just __guidelines__ and not rules. Please use your best
 judgement when applying them.*
 
 #### Table of Contents
