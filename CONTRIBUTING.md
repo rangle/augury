@@ -10,10 +10,10 @@ judgement when applying them.*
 #### Table of Contents
 [table-of-contents]: #table-of-contents
 
-[I'm new. Anything I should know?](#newcomer)
-  * [The manual](#readme)
-  * [The textbook](#developer-readme)
-  * [The chat room](#slack)
+[I'm new. Anything I should know?](#im-new-anything-i-should-know)
+  * [The manual](#the-manual)
+  * [The textbook](#the-textbook)
+  * [The chat room](#the-chat-room)
 
 [Before you begin](#preamble)
   * [Behaving yourself](#code-of-conduct)
@@ -39,13 +39,11 @@ judgement when applying them.*
 
 
 ## I'm new. Anything I should know?
-[newcomer]: #newcomer
 
 :wave:Hello and welcome. The answer to that question is yes, a lot. To
 help, here are few resources we thought you might find useful.
 
 ### The manual
-[readme]: #readme
 
 The first thing you should do is _read_ the [README](./README.md).
 We've put a lot of love and care in writing it and it should provide
@@ -56,7 +54,6 @@ part where we talk about our hopes and dreams for the future of the
 project](./README.md#future-plans).
 
 ### The textbook
-[developer-readme]: #developer-readme
 
 If you want to get technical, we've got you covered too. We have [a
 README just for developers](./DEVELOPER.md). Jumping into a new codebase
@@ -66,7 +63,6 @@ glimpse into our heads, if you will. We're not yet sure that's a good
 thing but we can assure you it's a useful one.
 
 ### The chat room
-[slack]: #slack
 
 Okay, [manuals](./README.md) and [textbooks](./DEVELOPER.md) are great
 and all but they make for poor conversation. Feel free to [join us on
