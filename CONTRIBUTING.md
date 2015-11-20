@@ -45,6 +45,8 @@ help, here are few resources we thought you might find useful.
 
 ### The manual
 
+* [README](./README.md)
+
 The first thing you should do is _read_ the [README](./README.md).
 We've put a lot of love and care in writing it and it should provide
 you with the context you need for contributing to this project. Really,
@@ -55,6 +57,8 @@ project](./README.md#future-plans).
 
 ### The textbook
 
+* [Developer README](./DEVELOPER.md)
+
 If you want to get technical, we've got you covered too. We have [a
 README just for developers](./DEVELOPER.md). Jumping into a new codebase
 can be daunting so we've tried, as best as we could, to give you an
@@ -63,6 +67,8 @@ glimpse into our heads, if you will. We're not yet sure that's a good
 thing but we can assure you it's a useful one.
 
 ### The chat room
+
+* [Slack](http://batarangle-slack.herokuapp.com/)
 
 Okay, [manuals](./README.md) and [textbooks](./DEVELOPER.md) are great
 and all but they make for poor conversation. Feel free to [join us on
