@@ -15,12 +15,15 @@ judgement when applying them.*
   * [The textbook](#the-textbook)
   * [The chat room](#the-chat-room)
 
-[Before you begin](#preamble)
-  * [Behaving yourself](#code-of-conduct)
+[Before you begin](#before-you-begin)
+  * [Behaving yourself](#behaving-yourself)
   * [Styleguides](#styleguides)
 
 [Getting started](#getting-started)
   * [Batarangle's most wanted](#help-wanted)
+  * [Ask around](#ask-around)
+    * [On issues](#on-issues)
+    * [On chat](#on-chat)
 
 [How do I actually contribute?](#how-to)
   * [Reporting a bug](#bug-report)
