@@ -85,6 +85,23 @@ wait to hear from you.
 > typos...they're the worst.
 
 
+## Before you begin
+
+:checkered_flag:Before you get started, it's worth looking over these
+resources to make sure you're going the right thing. We'll update these
+from time to time so make sure you regularly skim this section, even if
+you've been contributing for a while.
+
+### Behaving yourself
+
+* [Code of Conduct](./CODE_OF_CONDUCT.md)
+
+In the interest of making the Batarangle project a safe and friendly
+place for people from diverse backgrounds, we'll be adhering to a [Code
+of Conduct](./CODE_OF_CONDUCT). As a contributor, you'll be expected to
+uphold this code as well as report unacceptable behaviour to
+[batarangle@rangle.io](mailto:atom@github.com).
+
 ### Pull Requests
 
 The core team will be monitoring for pull requests.
