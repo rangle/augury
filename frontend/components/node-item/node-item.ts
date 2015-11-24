@@ -14,6 +14,8 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 })
 /**
  * Node Item
+ * Renders a node in the Component Tree View
+ * (see ../tree-view.ts)
  */
 export class NodeItem {
 
@@ -31,7 +33,7 @@ export class NodeItem {
     this.borderColor = 'rgba(0, 0, 0, 0.125)';
     this.color = '#666';
 
-    // Listen for changes to selected node
+    // Listen for changes in selected node
     this.componentDataStore.dataStream
       .map(({ selectedNode }: any) => selectedNode)
       .filter((selectedNode: any) => selectedNode && selectedNode.id)
@@ -55,12 +57,14 @@ export class NodeItem {
   }
 
   /**
-   * Select a node on click
+   * Select this node on click
    * @param  {Object} $event
    */
   onClick($event) {
 
     this.userActions.selectNode({ node: this.node });
+    // TODO(vanessayuenn): Figure out why a manual `#tick` is needed for CD to
+    //                     pick up changes.
     this.lifeCycle.tick();
     event.stopPropagation();
 

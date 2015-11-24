@@ -24,7 +24,7 @@ chrome.devtools.panels.create(
   panel => {
 
     panel.onShown.addListener(function(window) {
-      console.log('🤖 i\'m here');
+      // console.log('🤖 i\'m here');
     });
 
     panel.onHidden.addListener(function() {

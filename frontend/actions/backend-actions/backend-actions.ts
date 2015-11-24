@@ -16,11 +16,13 @@ export class BackendActions {
 
   /**
    * Component Data Changed
+   * 
+   * Fired from the backend signals when the component tree has changed.
+   * 
    * @param  {Array} componentData
    */
   componentTreeChanged(componentData) {
 
-    console.log('BackendActions', componentData);
     this.dispatcher.messageBus.next({
       actionType: BackendActionType.COMPONENT_TREE_CHANGED,
       componentData: componentData

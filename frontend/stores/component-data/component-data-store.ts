@@ -68,9 +68,9 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
-   * [fuzzyFindNode description]
-   * @param  {String} query [description]
-   * @param  {Boolean} fuzzy [description]
+   * Build a matcher for a node search query
+   * @param  {String} query search term
+   * @param  {Boolean} fuzzy whether or not to use strict matching
    * @return {Function}
    */
   private findNodeBuilder(query: string, fuzzy: boolean) {
@@ -86,8 +86,7 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
-   * Copy the an object while stripping
-   * out the children list
+   * Copy the object while stripping out the children list
    * @param  {Object} p
    * @return {Object}
    */
