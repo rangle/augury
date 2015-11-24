@@ -1,5 +1,7 @@
 # Angular 2.0 Batarangle
 
+[![Circle CI](https://circleci.com/gh/rangle/batarangle.svg?style=svg&circle-token=7df1edad916fdc18b7bfddc60ff694871570359c)](https://circleci.com/gh/rangle/batarangle)
+
 Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". We expect to release the first version soon after Angular 2 beta is out. Until then, please follow instructions below to build the tool locally and install it from source. It's actually quite easy.
 
 ## Join Our Slack Team
