@@ -101,44 +101,6 @@ export class DomController extends BaseController {
     }
   }
 
-  // TODO(bertrandk): Reform or delete methods below...
-  // _handleComponentChanges(node: Node) {
-  //   const componentNode = this.adapter.serializeComponent(node,
-  //      EventType.CHANGE);
-  //   const idxParts = componentNode.id.split('.');
-  //   const rootIdx = idxParts[0];
-  //   const childIdx = idxParts[1];
-
-  //   if (!childIdx) {
-  //     const oldChildren = this.model[rootIdx].children || [];
-
-  //     this.model[rootIdx] = componentNode;
-  //     this.model[rootIdx].children = oldChildren;
-
-  //     return;
-  //   }
-
-  //   this.model[rootIdx].children = this.model[rootIdx].children || [];
-  //   const oldChildren = this.model[rootIdx].children || [];
-
-  //   this.model[rootIdx].children[childIdx] = componentNode;
-  //   this.model[rootIdx].children[childIdx].children = oldChildren;
-  // }
-
-  // _handleRemovals(node: Node) {
-  //   const componentNode = this.adapter.serializeComponent(node,
-  //      EventType.REMOVE);
-  //   const idxParts = componentNode.id.split('.');
-  //   const rootIdx = idxParts[0];
-  //   const childIdx = idxParts[1];
-
-  //   if (!childIdx) {
-  //     this.model.splice(rootIdx, 1);
-  //   }
-
-  //   this.model[rootIdx].children.splice(childIdx, 1);
-  // }
-
   _handleReset() {
     this.model = [];
   }

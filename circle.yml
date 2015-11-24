@@ -1,0 +1,3 @@
+test:
+  pre:
+    - git grep --color TODO | cat

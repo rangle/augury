@@ -15,13 +15,13 @@ export class BackendMessagingService {
 
     this.backgroundPageConnection = chrome.runtime.connect();
 
+    // This is used to start the extension only when Angular is on the page
     this.backgroundPageConnection.postMessage({
       name: 'init',
       tabId: chrome.devtools.inspectedWindow.tabId
     });
 
     this.backgroundPageConnection.onMessage.addListener((message: any) => {
-      console.log('Frontend: Received message from Backend: ', message);
       this.backendActions.componentTreeChanged(message.data.message.payload);
     });
 
@@ -33,7 +33,6 @@ export class BackendMessagingService {
    */
   sendMessageToBackend(message) {
 
-    console.log('Frontend: sending message to Backend: ', message);
     this.backgroundPageConnection.postMessage({
       name: 'message',
       tabId: chrome.devtools.inspectedWindow.tabId,

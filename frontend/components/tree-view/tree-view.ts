@@ -13,6 +13,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 })
 /**
  * The Tree View
+ * Displays the components' hierarchy
  */
 export class TreeView {
 
@@ -29,6 +30,8 @@ export class TreeView {
    */
   onChange(query) {
     this.userActions.searchNode({ query });
+    // TODO(vanessayuenn): Figure out why a manual `#tick` is needed for CD to
+    //                     pick up changes.
     this.lifeCycle.tick();
   }
 
