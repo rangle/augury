@@ -71,6 +71,7 @@ You can also take a look at [how it's done in the example app](./example-apps/to
 
 ## Future Plans
 
+We are working hard towards [the official release](https://github.com/rangle/batarangle/releases). But at the mean time, you can take a look at our [milestones](github.com/rangle/batarangle/milestones) to see what new features are in place.
 
 ## License
 [MIT](LICENSE)
