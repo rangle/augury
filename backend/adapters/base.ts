@@ -39,8 +39,8 @@ export interface TreeNode {
   id: string;
   name: string;
   state: Object;
-  properties: Object;
-  events: Object;
+  input: Object;
+  output: Object;
   lastTickTime: number;
   __meta: {
     event: string;    // AdapterEventType
