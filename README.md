@@ -12,14 +12,14 @@ If you want to contribute or need help getting started, [join us on Slack](https
 
 ## Development Environment
 
-To develop this extension the following environment is used
+To develop this extension, the following environment is used:
 
 * Node v4.2.1
 * NPM 3.3.10
 * TypeScript 1.6.2
 * tsd 0.6.5
 
-In addition, example applications all run with a globablly installed version of jspm 0.16.12
+In addition, example applications all run with a globablly installed version of jspm 0.16.12.
 
 ## Trying out the extension
 
@@ -32,9 +32,10 @@ In addition, example applications all run with a globablly installed version of 
 
 To try out with an example application, refer to instructions in [README](./example-apps/todo-mvc-example/README.md).
 
-In order to use this extension with your own application, you will need to make a slight modificatioin to your code. See section [Current Limitation](#current-limitations) below for more detailed instruction. 
+In order to use this extension with your own application, you will need to make a slight modification to your code. See section [Current Limitation](#current-limitations) below for more detailed instructions. 
 
 ## Running Tests
+
 To execute all unit tests, run `npm test`. It bundles up all files that match `*.test.ts` into `build/test.js`, then runs it through tape-run in a headless Electron browser.
 
 ## Available NPM Scripts
@@ -70,6 +71,7 @@ You can also take a look at [how it's done in the example app](./example-apps/to
 
 ## Future Plans
 
+We are working hard towards [the official release](https://github.com/rangle/batarangle/releases). But at the mean time, you can take a look at our [milestones](github.com/rangle/batarangle/milestones) to see what new features are in place.
 
 ## License
 [MIT](LICENSE)
