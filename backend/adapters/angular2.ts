@@ -43,6 +43,7 @@ declare var ng: { probe: Function };
 
 
 import { TreeNode, BaseAdapter } from './base';
+import {DirectiveProvider} from 'angular2/src/core/linker/element_injector';
 // import { inspectNativeElement }
 //   from 'angular2/src/core/debug/debug_element_view_listener';
 
@@ -66,16 +67,16 @@ export class Angular2Adapter extends BaseAdapter {
     const id = this._getComponentID(debugEl);
     const name = this._getComponentName(debugEl);
     const state = this._normalizeState(name, this._getComponentState(debugEl));
-    const properties = this._getComponentProperties(debugEl);
-    const events = this._getComponentEvents(debugEl);
+    const input = this._getComponentInput(debugEl);
+    const output = this._getComponentOutput(debugEl);
     const lastTickTime = this._getComponentPerf(debugEl);
 
     return {
       id,
       name,
       state,
-      properties,
-      events,
+      input,
+      output,
       lastTickTime,
       __meta: {
         event
@@ -264,25 +265,29 @@ export class Angular2Adapter extends BaseAdapter {
     return ret;
   }
 
-  _getComponentProperties(compEl: DebugElement): Object {
+  _getComponentInput(compEl: DebugElement): Object {
     const props = {};
     if (compEl._elementInjector) {
       const protoInjector = compEl._elementInjector._injector._proto;
       for (let i = 0; i < protoInjector.numberOfProviders; i++) {
         let provider = protoInjector.getProviderAtIndex(i);
-        props[provider.displayName] = provider.metadata.properties;
+        if (provider instanceof DirectiveProvider) {
+          props[provider.displayName] = provider.metadata.events;
+        }
       }
     }
     return props;
   }
 
-  _getComponentEvents(compEl: DebugElement): Object {
+  _getComponentOutput(compEl: DebugElement): Object {
     const events = {};
     if (compEl._elementInjector) {
       const protoInjector = compEl._elementInjector._injector._proto;
       for (let i = 0; i < protoInjector.numberOfProviders; i++) {
         let provider = protoInjector.getProviderAtIndex(i);
-        events[provider.displayName] = provider.metadata.events;
+        if (provider instanceof DirectiveProvider) {
+          events[provider.displayName] = provider.metadata.events;
+        }
       }
     }
     return events;
