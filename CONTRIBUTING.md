@@ -15,7 +15,7 @@ The core team will be monitoring for pull requests.
 
 ### Where to Find Known Issues
 
-We are using GitHub Issues for our public bugs. We will keep track on this and will to make it clear when we have an internal fix in progress. Before filing a new task, try to make sure your problem doesn't already exist. 
+We are using GitHub Issues for our public bugs. We will keep track on this and will to make it clear when we have an internal fix in progress. Before filing a new task, try to make sure your problem doesn't already exist.
 
 We are using [ZenHub](https://www.zenhub.io/) to manage our sprints and milestones. Add it to your GitHub account to see what is in the current sprint/milestone.
 
@@ -41,4 +41,4 @@ TypeScript linter is part of our build task and will run in either `npm run buil
 
 ## License
 
-TBD
+[MIT](LICENSE)
