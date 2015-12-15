@@ -32,7 +32,7 @@ In addition, example applications all run with a globablly installed version of 
 
 To try out with an example application, refer to instructions in [README](./example-apps/todo-mvc-example/README.md).
 
-In order to use this extension with your own application, you will need to make a slight modification to your code. See section [Current Limitation](#current-limitations) below for more detailed instructions. 
+In order to use this extension with your own application, you will need to make a slight modification to your code. See section [Current Limitation](#current-limitations) below for more detailed instructions.
 
 ## Running Tests
 
@@ -71,7 +71,7 @@ You can also take a look at [how it's done in the example app](./example-apps/to
 
 ## Future Plans
 
-We are working hard towards [the official release](https://github.com/rangle/batarangle/releases). But at the mean time, you can take a look at our [milestones](github.com/rangle/batarangle/milestones) to see what new features are in place.
+We are working hard towards [the official release](https://github.com/rangle/batarangle/releases). But at the mean time, you can take a look at our [milestones](https://github.com/rangle/batarangle/milestones) to see what new features are in place.
 
 ## License
 [MIT](LICENSE)
