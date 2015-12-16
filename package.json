@@ -27,16 +27,17 @@
     "test": "webpack --config webpack.test.config.js && browserify build/test.js | tape-run | tap-spec"
   },
   "dependencies": {
-    "@reactivex/rxjs": "5.0.0-alpha.6",
-    "angular2": "2.0.0-alpha.45",
+    "@reactivex/rxjs": "^5.0.0-beta.0",
+    "angular2": "^2.0.0-beta.0",
     "basscss": "^7.0.4",
     "browserify": "^12.0.1",
     "crypto": "0.0.3",
+    "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.6",
     "immutable": "^3.7.5",
-    "json-formatter-js": "^0.2.0",
-    "reflect-metadata": "0.1.1",
-    "zone.js": "^0.5.8"
+    "json-formatter-js": "^0.3.0",
+    "reflect-metadata": "0.1.2",
+    "zone.js": "^0.5.10"
   },
   "devDependencies": {
     "object-assign": "4.0.1",
