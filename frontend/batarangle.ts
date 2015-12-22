@@ -1,5 +1,5 @@
-import {Component, View, Inject, bootstrap, bind, LifeCycle}
-  from 'angular2/angular2';
+import {Component, View, Inject, bind, NgZone} from 'angular2/core';
+import {bootstrap} from 'angular2/bootstrap';
 import {TreeView} from './components/tree-view/tree-view';
 import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
@@ -25,7 +25,7 @@ class App {
     private backendAction: BackendActions,
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    @Inject(LifeCycle) private lifeCycle: LifeCycle
+    private _ngZone: NgZone
   ) {
 
     this.userActions.startComponentTreeInspection();
@@ -35,7 +35,7 @@ class App {
       .subscribe(componentData => {
         console.log('Application Root Received: ', componentData);
         this.tree = componentData;
-        this.lifeCycle.tick();
+        this._ngZone.run(() => undefined);
       }
     );
 

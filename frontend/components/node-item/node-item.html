@@ -1,5 +1,5 @@
 <div class="border rounded p1 mb1 bg-darken-1"
-  [ng-style]="{
+  [ngStyle]="{
     color: color,
     cursor: 'pointer',
     'border-width': '2px',
@@ -9,12 +9,12 @@
   (click)="onClick($event)">
 
   <h4 class="mt0"
-    [ng-style]="{
+    [ngStyle]="{
       'margin-bottom': node.children ? '1rem' : 0
     }">{{ node.name }}</h4>
 
   <bt-node-item
-    *ng-for="#node of node.children"
+    *ngFor="#node of node.children"
     [node]="node">
   </bt-node-item>
 

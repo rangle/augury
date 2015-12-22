@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/angular2';
+import {Injectable} from 'angular2/core';
 import {BackendActions} from '../actions/backend-actions/backend-actions';
 
 @Injectable()

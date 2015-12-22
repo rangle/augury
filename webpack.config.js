@@ -47,18 +47,7 @@ module.exports = {
 
   entry: {
     'app': [
-      // Angular 2 Deps
-      '@reactivex/rxjs',
-      'zone.js',
-      'reflect-metadata',
-      // To ensure these modules are grouped together in one file
-      'angular2/angular2',
-      'angular2/router',
-      'angular2/http',
-      'json-formatter-js',
-      // Angular 2 ES6 browser shim
-      'es6-shim',
-      // Frontend
+      'webpack.vendor.ts',
       './frontend/batarangle'
     ],
     'devtools': ['./devtools/devtools'],
@@ -91,8 +80,10 @@ module.exports = {
       loader: 'ts',
       query: {
         'ignoreDiagnostics': [
-          // 2300, // 2300 -> Duplicate identifier
-          // 2309 // 2309 -> An export assignment cannot be used in a module with other exported elements.
+          2403, // 2403 -> Subsequent variable declarations
+          2300, // 2300 -> Duplicate identifier
+          2374, // 2374 -> Duplicate number index signature
+          2375  // 2375 -> Duplicate string index signature
         ]
       },
       exclude: [
@@ -101,12 +92,14 @@ module.exports = {
         /\.e2e\.ts$/,
         /web_modules/,
         /test/,
-        /node_modules/
+        /node_modules\/(?!(ng2-.+))/
       ]
     }],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/
+      /reflect-metadata/,
+      /.+zone\.js\/dist\/.+/,
+      /.+angular2\/bundles\/.+/
     ]
   },
 

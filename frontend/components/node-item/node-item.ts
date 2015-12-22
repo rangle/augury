@@ -1,5 +1,5 @@
-import {Component, View, NgIf, NgFor, NgStyle, LifeCycle, Inject}
-  from 'angular2/angular2';
+import {Component, View, Inject, NgZone} from 'angular2/core';
+import {NgIf, NgFor, NgStyle} from 'angular2/common';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -27,7 +27,7 @@ export class NodeItem {
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    @Inject(LifeCycle) private lifeCycle: LifeCycle
+    private _ngZone: NgZone
   ) {
 
     this.borderColor = 'rgba(0, 0, 0, 0.125)';
@@ -63,9 +63,7 @@ export class NodeItem {
   onClick($event) {
 
     this.userActions.selectNode({ node: this.node });
-    // TODO(vanessayuenn): Figure out why a manual `#tick` is needed for CD to
-    //                     pick up changes.
-    this.lifeCycle.tick();
+    this._ngZone.run(() => undefined);
     event.stopPropagation();
 
   }

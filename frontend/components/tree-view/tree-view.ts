@@ -1,4 +1,5 @@
-import {Component, View, NgFor, LifeCycle, Inject} from 'angular2/angular2';
+import {Component, View, Inject, NgZone} from 'angular2/core';
+import {NgFor} from 'angular2/common';
 import {NodeItem} from '../node-item/node-item';
 import {InfoPanel} from '../info-panel/info-panel';
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -20,7 +21,7 @@ export class TreeView {
   private tree: any;
   constructor(
     private userActions: UserActions,
-    @Inject(LifeCycle) private lifeCycle: LifeCycle
+    private _ngZone: NgZone
   ) {
   }
 
@@ -30,9 +31,7 @@ export class TreeView {
    */
   onChange(query) {
     this.userActions.searchNode({ query });
-    // TODO(vanessayuenn): Figure out why a manual `#tick` is needed for CD to
-    //                     pick up changes.
-    this.lifeCycle.tick();
+    this._ngZone.run(() => undefined);
   }
 
 }

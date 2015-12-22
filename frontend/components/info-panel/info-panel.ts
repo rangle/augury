@@ -1,6 +1,6 @@
 declare var JSONFormatter: any;
-import {Component, View, NgIf, LifeCycle, ElementRef, Inject}
-  from 'angular2/angular2';
+import {Component, View, ElementRef, Inject} from 'angular2/core';
+import {NgIf} from 'angular2/common';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
