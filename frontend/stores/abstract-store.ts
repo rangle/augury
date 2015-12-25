@@ -1,4 +1,4 @@
-import {ReplaySubject} from '@reactivex/rxjs';
+import {ReplaySubject} from 'rxjs';
 
 export abstract class AbstractStore {
 
