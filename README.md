@@ -60,6 +60,10 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 As of the latest release, if you would like to use this extension to debug your application, you will need to bind the default `AppViewListener` to `DebugElementViewListener` during the bootstrapping of your app. It should look something like this:
 
 ```
+import { AppViewListener } from 'angular2/src/core/linker/view_listener';
+import { DebugElementViewListener } from 'angular2/platform/common_dom';
+import { bind } from 'angular2/core';
+
 bootstrap(App, [
   bind(AppViewListener).toClass(DebugElementViewListener),
   ...
@@ -67,6 +71,7 @@ bootstrap(App, [
   ...
 ]);
 ```
+
 You can also take a look at [how it's done in the example app](./example-apps/todo-mvc-example/source/app.ts#L10). This issue will be resolved at official release.
 
 ## Future Plans
