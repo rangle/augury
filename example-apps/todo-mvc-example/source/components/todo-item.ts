@@ -1,4 +1,5 @@
-import {Component, View, NgIf, NgFor, Inject} from 'angular2/angular2';
+import {Component, View, Inject} from 'angular2/core';
+import {NgIf} from 'angular2/common';
 import {TodoStore} from '../stores/todo-store';
 import {Todo} from '../domain/todo';
 
@@ -10,11 +11,21 @@ import {Todo} from '../domain/todo';
   directives: [NgIf],
   template: `
       <div class="view">
-        <input class="toggle" type="checkbox" (click)="toggleCompletion()" [checked]="todo.completed">
+        <input class="toggle"
+          type="checkbox"
+          (click)="toggleCompletion()"
+          [checked]="todo.completed">
         <label (dblclick)="editTodo()">{{todo.title}}</label>
         <button class="destroy" (click)="remove()"></button>
       </div>
-      <input class="edit" *ng-if="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(editedtodo)" (keyup.enter)="updateEditingTodo(editedtodo)" (keyup.escape)="cancelEditingTodo()">`
+      <input
+        class="edit"
+        *ngIf="todo.editing"
+        [value]="todo.title"
+        #editedtodo
+        (blur)="stopEditing(editedtodo)"
+        (keyup.enter)="updateEditingTodo(editedtodo)"
+        (keyup.escape)="cancelEditingTodo()">`
 })
 export class TodoItem {
 
@@ -48,12 +59,12 @@ export class TodoItem {
   editTodo() {
     this.todo.editing = true;
   }
-  
+
   toggleCompletion() {
     this.todo.completed = !this.todo.completed;
-  	this.todoStore.update(this.todo);
+    this.todoStore.update(this.todo);
   }
-  
+
   remove() {
     this.todoStore.delete(this.todo.uid);
   }

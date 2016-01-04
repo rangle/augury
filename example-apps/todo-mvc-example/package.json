@@ -1,24 +1,33 @@
 {
   "name": "todo-mvc-example",
   "scripts": {
-    "postinstall": "jspm install && tsd install"
+    "postinstall": "npm run typings",
+    "typings": "rimraf typings && tsd install && tsd link",
+    "start": "webpack-dev-server --display-error-details --display-cached"
   },
   "dependencies": {},
-  "devDependencies": {},
-  "jspm": {
-    "dependencies": {
-      "@reactivex/rxjs": "npm:@reactivex/rxjs@5.0.0-alpha.4",
-      "angular2": "npm:angular2@^2.0.0-alpha.45",
-      "es6-shim": "github:es-shims/es6-shim@^0.33.6",
-      "immutable": "npm:immutable@^3.7.5",
-      "node-uuid": "npm:node-uuid@^1.4.3",
-      "reflect-metadata": "npm:reflect-metadata@^0.1.2",
-      "todomvc-app-css": "npm:todomvc-app-css@^2.0.1",
-      "todomvc-common": "npm:todomvc-common@^1.0.2",
-      "zone.js": "npm:zone.js@^0.5.8"
-    },
-    "devDependencies": {
-      "typescript": "npm:typescript@^1.6.2"
-    }
+  "devDependencies": {
+    "angular2": "2.0.0-beta.0",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "immutable": "^3.7.6",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "todomvc-app-css": "^2.0.3",
+    "todomvc-common": "^1.0.2",
+    "zone.js": "0.5.10",
+    "css-loader": "^0.21.0",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.2",
+    "raw-loader": "^0.5.1",
+    "rimraf": "^2.4.3",
+    "style-loader": "^0.13.0",
+    "ts-loader": "^0.7.2",
+    "tsd": "^0.6.5",
+    "tslint-loader": "^1.0.2",
+    "typescript": "^1.7.3",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
   }
 }
