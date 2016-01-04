@@ -1,4 +1,4 @@
-import {Subject} from '@reactivex/rxjs';
+import {Subject} from 'rxjs';
 
 export class Dispatcher {
 

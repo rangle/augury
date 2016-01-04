@@ -27,7 +27,7 @@
  * (../controller/dom.ts).
  */
 
-import {Subject} from '@reactivex/rxjs';
+import {Subject} from 'rxjs';
 import { AdapterEventType as EventType } from './event_types';
 
 export interface AdapterEvent {
