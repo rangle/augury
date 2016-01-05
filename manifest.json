@@ -1,6 +1,6 @@
 {
   "name": "Angular 2.0 Batarangle",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
   "permissions": [
     "tabs",
