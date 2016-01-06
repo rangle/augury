@@ -24,7 +24,9 @@
     "tsd-update": "npm run remove-tsd-loader-typings && tsd reinstall --overwrite",
     "postinstall": "npm run tsd-update && tsd install && tsd link",
     "start": "rimraf build && webpack --watch",
-    "test": "webpack --config webpack.test.config.js && browserify build/test.js | tape-run | tap-spec"
+    "test": "webpack --config webpack.test.config.js && browserify build/test.js | tape-run | tap-spec",
+    "prepack": "npm test", 
+    "pack": "./crxmake.sh"
   },
   "dependencies": {
     "rxjs": "^5.0.0-beta.0",
