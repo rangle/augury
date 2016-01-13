@@ -49,3 +49,4 @@ example-apps/todo-mvc-example/typings/*
 
 key.pem
 *.crx
+.vscode/

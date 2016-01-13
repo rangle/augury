@@ -43,7 +43,7 @@ declare var ng: { probe: Function };
 
 
 import { TreeNode, BaseAdapter } from './base';
-import {DirectiveProvider} from 'angular2/src/core/linker/element_injector';
+import { DirectiveProvider } from 'angular2/src/core/linker/element';
 // import { inspectNativeElement }
 //   from 'angular2/src/core/debug/debug_element_view_listener';
 
@@ -62,8 +62,8 @@ export class Angular2Adapter extends BaseAdapter {
     roots.forEach(root => this._trackChanges(root));
   }
 
-  serializeComponent(el: Element, event: string): TreeNode {
-    const debugEl = ng.probe(el);
+  serializeComponent(el: DebugElement, event: string): TreeNode {
+    const debugEl = el;
     const id = this._getComponentID(debugEl);
     const name = this._getComponentName(debugEl);
     const state = this._normalizeState(name, this._getComponentState(debugEl));
@@ -130,13 +130,22 @@ export class Angular2Adapter extends BaseAdapter {
     idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
 
-    (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
-
-    if (isRoot) {
-      return this.addRoot(this._getNativeElement(compEl));
+    // When encounter a template comment, insert another comment with 
+    // batarangle-id above it.
+    if (nativeElement.nodeType === Node.COMMENT_NODE) {
+      const commentNode = document.createComment(`{"batarangle-id": "${idx}"}`);
+      if (!nativeElement.previousSibling.isEqualNode(commentNode)) {
+        nativeElement.parentNode.insertBefore(commentNode, nativeElement);
+      }
+    } else {
+      (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
     }
 
-    this.addChild(this._getNativeElement(compEl));
+    if (isRoot) {
+      return this.addRoot(compEl);
+    }
+
+    this.addChild(compEl);
   };
 
   _trackChanges(el: Element): void {
@@ -222,9 +231,16 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentID(compEl: DebugElement): string {
-    return this._getComponentRef(compEl).getAttribute('batarangle-id');
-    // return this._getComponentRef(compEl).getAttribute('data-ngid')
-    //                                     .replace(/#/g, '.');
+    const nativeElement = this._getComponentRef(compEl);
+    let id;
+    if (nativeElement.nodeType !== Node.COMMENT_NODE) {
+      id = nativeElement.getAttribute('batarangle-id');
+    } else {
+      const comment = JSON.parse((<any>nativeElement.previousSibling).data);
+      id = comment['batarangle-id'];
+    }
+    // console.log('batarangle-id is ', id);
+    return id;
   }
 
   _getComponentName(compEl: DebugElement): string {

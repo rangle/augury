@@ -52,7 +52,7 @@ export interface TreeNode {
 export abstract class BaseAdapter {
   private _stream: Subject<any> = new Subject();
 
-  addRoot(rootEl: Element): void {
+  addRoot(rootEl: any): void {
     const rootEvt: AdapterEvent = {
       type: EventType.ROOT,
       node: rootEl
@@ -61,7 +61,7 @@ export abstract class BaseAdapter {
     this._stream.next(rootEvt);
   }
 
-  addChild(childEl: Element): void {
+  addChild(childEl: any): void {
     const childEvt: AdapterEvent = {
       type: EventType.ADD,
       node: childEl
@@ -70,7 +70,7 @@ export abstract class BaseAdapter {
     this._stream.next(childEvt);
   }
 
-  changeComponent(el: Element): void {
+  changeComponent(el: any): void {
     const childEvt: AdapterEvent = {
       type: EventType.CHANGE,
       node: el
@@ -79,7 +79,7 @@ export abstract class BaseAdapter {
     this._stream.next(childEvt);
   }
 
-  removeRoot(el: Element): void {
+  removeRoot(el: any): void {
     const rootEvt: AdapterEvent = {
       type: EventType.REMOVE,
       node: el
@@ -88,7 +88,7 @@ export abstract class BaseAdapter {
     this._stream.next(rootEvt);
   }
 
-  removeChild(el: Element): void {
+  removeChild(el: any): void {
     const childEvt: AdapterEvent = {
       type: EventType.REMOVE,
       node: el
@@ -115,7 +115,7 @@ export abstract class BaseAdapter {
 
   abstract setup(): void;
 
-  abstract serializeComponent(el: Element, event: string): TreeNode;
+  abstract serializeComponent(el: any, event: string): TreeNode;
 
   abstract cleanup(): void;
 }
