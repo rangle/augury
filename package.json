@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "rxjs": "^5.0.0-beta.0",
-    "angular2": "^2.0.0-beta.0",
+    "angular2": "^2.0.0-beta.1",
     "basscss": "^7.0.4",
     "browserify": "^12.0.1",
     "crypto": "0.0.3",
