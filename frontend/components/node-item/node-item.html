@@ -1,21 +1,24 @@
-<div class="border rounded p1 mb1 bg-darken-1"
-  [ngStyle]="{
-    color: color,
-    cursor: 'pointer',
-    'border-width': '2px',
-    'border-style': 'solid',
-    'border-color': borderColor
-  }"
+<div 
+  (dblclick) = onDblClick($event)
   (click)="onClick($event)">
 
-  <h4 class="mt0"
-    [ngStyle]="{
-      'margin-bottom': node.children ? '1rem' : 0
-    }">{{ node.name }}</h4>
+  <div class="node-item pl4 rounded"
+       [ngClass]="{'node-item-selected':isSelected}"
+    >
+    <img src="../images/Triangle.svg"
+         style="width: 0.8em; height: 0.8em;"
+         [hidden]="node.children ? false : true"
+         [ngClass]="{rotate90: !showChildren}"
+         (click)="expandTree($event)">
 
-  <bt-node-item
-    *ngFor="#node of node.children"
-    [node]="node">
-  </bt-node-item>
+    <p class="inline-block mt0 pl1">{{ node.name }}</p>
+  </div>
 
+  <div class="pl4">
+    <bt-node-item
+      [hidden]="!showChildren"
+      *ngFor="#node of node.children"
+      [node]="node">
+    </bt-node-item>
+  </div>
 </div>

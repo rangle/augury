@@ -1,0 +1,36 @@
+/**
+ * Custom Properties
+ */
+
+:root {
+  --blue-light: #ebf2fc;
+  --blue: #3879d9;
+  --blue-dark: #2b3199;
+  --grey-light: #eeeeee;​
+  --grey: #888;
+  --grey-medium: #dadada;
+  --grey-dark: #a3a3a3;
+  --grey-darkest: #333;
+  --red-lightest: #ffefef;
+  --red-light: #ffe5e5;
+  --red: #f05057;
+  --red-dark: #C80000;
+  --green: #236E25;
+  --light: #fff;
+  --primary-color: var(--grey-darkest);
+  --secondary-color: var(--blue-dark);
+  --tetriary-color: var(--green);
+  --quaternary-color: var(--red-dark);
+  --bg-primary-color: var(--light);
+  --body-color: var(--primary-color);
+  --body-background-color: var(--bg-primary-color);
+  --space-1: 0.1818rem;
+  --space-2: 0.3636rem;
+  --space-3: 0.7273rem;
+  --space-4: 1.455rem;
+  --form-field-height: 19px;
+  --form-field-padding-y: var(--space-2);
+  --form-field-padding-x: var(--space-2);
+  --bg-dark-1: var(--grey-medium);
+  --pannel-tab-header: 12px;
+}
