@@ -21,7 +21,7 @@
  * - subscribe
  * - serializeComponent
  *
- * Supports up to 2.0.0-alpha.40
+ * Supports up to 2.0.0-beta-1
  */
 
 interface DebugElement {
@@ -51,15 +51,13 @@ export class Angular2Adapter extends BaseAdapter {
   _observer: MutationObserver;
 
   setup(): void {
-    const roots = this._findRoots();
-
-    roots.forEach((root, idx) => {
-      this._traverseTree(ng.probe(root),
-                         this._emitNativeElement,
-                         true,
-                         String(idx));
-    }, true);
-    roots.forEach(root => this._trackChanges(root));
+    // only supports applications with single root for now
+    const root = this._findRoot();
+    this._traverseTree(ng.probe(root),
+                       this._emitNativeElement,
+                       true,
+                       '0');
+    this._trackChanges(root);
   }
 
   serializeComponent(el: DebugElement, event: string): TreeNode {
@@ -89,19 +87,8 @@ export class Angular2Adapter extends BaseAdapter {
     this.unsubscribe();
   }
 
-  _rootSelector(): string {
-    // Taken from debug_element_view_listener.ts
-    const NG_ID_PROPERTY = 'ngid';
-    const NG_ID_SEPARATOR = '#';
-
-
-    return `[data-${ NG_ID_PROPERTY }='0${ NG_ID_SEPARATOR }0']`;
-  }
-
-  _findRoots(): Element[] {
-    const roots = document.body.querySelectorAll(this._rootSelector());
-
-    return Array.prototype.slice.call(roots);
+  _findRoot(): Element {
+    return document.body.querySelector('[data-ngid]');
   }
 
   _traverseTree(compEl: DebugElement, cb: Function, isRoot: boolean,
@@ -166,18 +153,12 @@ export class Angular2Adapter extends BaseAdapter {
     // (e.g setting)
     this._observer.disconnect();
 
-    const roots = this._findRoots();
-
-    roots.forEach((root, idx) => {
-      this._traverseTree(
-        ng.probe(root),
-        this._emitNativeElement,
-        true,
-        String(idx)
-      );
-    }, true);
-
-    roots.forEach(root => this._trackChanges(root));
+    const root = this._findRoot();
+    this._traverseTree(ng.probe(root),
+                       this._emitNativeElement,
+                       true,
+                       '0');
+    this._trackChanges(root);
   };
 
   _getComponentChildren(compEl: DebugElement): DebugElement[] {
@@ -194,16 +175,6 @@ export class Angular2Adapter extends BaseAdapter {
 
   _removeAllListeners(): void {
     this._observer.disconnect();
-  }
-
-  _isRootNode(el: Element): boolean {
-    let id = el.getAttribute('ngid');
-
-    if (!id) {
-      return false;
-    }
-
-    return this._selectorMatches(el, this._rootSelector());
   }
 
   _selectorMatches(el: Element, selector: string): boolean {
