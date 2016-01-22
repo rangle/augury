@@ -25,23 +25,25 @@
     "postinstall": "npm run tsd-update && tsd install && tsd link",
     "start": "rimraf build && webpack --watch",
     "test": "webpack --config webpack.test.config.js && browserify build/test.js | tape-run | tap-spec",
-    "prepack": "npm test", 
+    "prepack": "npm test",
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "rxjs": "^5.0.0-beta.0",
     "angular2": "^2.0.0-beta.1",
     "basscss": "^7.0.4",
     "browserify": "^12.0.1",
     "crypto": "0.0.3",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.6",
+    "file-loader": "^0.8.5",
     "immutable": "^3.7.5",
     "json-formatter-js": "^0.3.0",
     "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
     "zone.js": "^0.5.10"
   },
   "devDependencies": {
+    "file-loader": "^0.8.5",
     "object-assign": "4.0.1",
     "rimraf": "2.4.3",
     "tape": "^4.2.2",
