@@ -94,6 +94,9 @@ module.exports = {
         /test/,
         /node_modules\/(?!(ng2-.+))/
       ]
+    }, { 
+      test: /\.css$/, 
+      loader: 'css!postcss'
     }],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,
@@ -101,6 +104,14 @@ module.exports = {
       /.+zone\.js\/dist\/.+/,
       /.+angular2\/bundles\/.+/
     ]
+  },
+
+  postcss: function() {
+    return [
+      require('postcss-import'),
+      require('postcss-cssnext'),
+      require('autoprefixer')
+    ];
   },
 
   plugins: [

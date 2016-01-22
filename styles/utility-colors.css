@@ -1,0 +1,19 @@
+.primary-color {
+  color: var(--primary-color);
+}
+​
+.secondary-color {
+  color: var(--secondary-color);
+}
+​
+.tetriary-color {
+  color: var(--tetriary-color);
+}
+​
+.quaternary-color {
+  color: var(--quaternary-color);
+}
+
+.border-color-dark {
+  border-color: var(--grey-dark);
+}

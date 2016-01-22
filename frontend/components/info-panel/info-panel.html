@@ -1,7 +1,11 @@
-<div class="p2 mb1 bg-silver"
-  *ngIf="node">
-  <h3 class="m0">{{ node.name || 'No node selected' }}</h3>
+<div class="flex px3 pt2 bg-darken-1 border-bottom">
+    <div class="flex pannel-tab-header regular center px2 py1 m0 bg-white border-top border-right border-left">
+      Properties
+    </div>
 </div>
 
-<div class="px1 h5">
+<div class="pt3 pl4 pb3 mb1 bg-darken-1" *ngIf="node">
+  <h3 class="regular m0">{{ node.name || 'No node selected' }}</h3>
 </div>
+
+<div id="tree-container" class="px1 h5 tree-container"></div>

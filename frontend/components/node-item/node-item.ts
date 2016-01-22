@@ -19,11 +19,13 @@ import {UserActions} from '../../actions/user-actions/user-actions';
  */
 export class NodeItem {
 
-  private node: any;
+  public node: any;
   private collapsed: any;
   private color: any;
   private borderColor: any;
   private isSelected: boolean;
+  private showChildren: boolean = true;
+
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
@@ -60,12 +62,31 @@ export class NodeItem {
    * Select this node on click
    * @param  {Object} $event
    */
-  onClick($event) {
+  onDblClick($event) {
+    let evalStr = 'inspect($$(\'body [batarangle-id=\"' +
+      this.node.id + '\"]\')[0])';
 
+    chrome.devtools.inspectedWindow.eval(
+      evalStr,
+      function(result, isException) {
+        console.log(result, isException);
+      }
+    );
+
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+
+  onClick($event) {
     this.userActions.selectNode({ node: this.node });
     this._ngZone.run(() => undefined);
-    event.stopPropagation();
+    $event.stopPropagation();
+  }
 
+  expandTree($event) {
+    this.showChildren = !this.showChildren;
+    $event.preventDefault();
+    $event.stopPropagation();
   }
 
 }
