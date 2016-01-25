@@ -30,6 +30,7 @@ export class TreeView {
    * @param  {String} query
    */
   onChange(query) {
+    query = query.toLocaleLowerCase();
     this.userActions.searchNode({ query });
     this._ngZone.run(() => undefined);
   }
