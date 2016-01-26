@@ -1,5 +1,5 @@
 {
-  "name": "todo-mvc-example",
+  "name": "kitchen-sink-example",
   "scripts": {
     "postinstall": "npm run typings",
     "typings": "rimraf typings && tsd install && tsd link",
