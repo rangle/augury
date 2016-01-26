@@ -59,5 +59,12 @@ export class UserActions {
     });
 
   }
+  
+  highlight({node}) {
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.HIGHLIGHT_NODE,
+      node
+    });
+  }
 
 }

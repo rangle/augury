@@ -80,7 +80,12 @@ export class NodeItem {
   onClick($event) {
     this.userActions.selectNode({ node: this.node });
     this._ngZone.run(() => undefined);
+    $event.preventDefault();
     $event.stopPropagation();
+  }
+  
+  onMouseOver($event) {
+    this.userActions.highlight({ node: this.node });
   }
 
   expandTree($event) {

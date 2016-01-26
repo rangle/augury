@@ -1,5 +1,6 @@
 import {DomController} from './controllers/dom';
 import {Angular2Adapter} from './adapters/angular2';
+import Highlighter from './utils/Highlighter';
 
 let channel = {
   sendMessage: (message) => {
@@ -42,6 +43,13 @@ window.addEventListener('message', function(event) {
       dom.hookIntoBackend();
       adapter.setup();
       // adapter._handleChanges([]);
+    } else if (event.data.message.message.actionType ===
+      'HIGHLIGHT_NODE' && event.data.message.message.node.id != '0') {
+      let highlightStr = '[batarangle-id=\"' +
+        event.data.message.message.node.id + '\"]';
+      console.log(document.querySelector(highlightStr));
+      Highlighter.clear();
+      Highlighter.highlight(document.querySelector(highlightStr), '');
     }
 
     return true;
