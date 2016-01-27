@@ -59,7 +59,20 @@ export class UserActions {
     });
 
   }
-  
+
+  /**
+   * Clear the highlight from the web page
+   */
+  clearHighlight() {
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.CLEAR_HIGHLIGHT
+    });
+  }
+
+  /**
+   * Highlight the element on web page
+   * @param  {Node} current element node
+   */
   highlight({node}) {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.HIGHLIGHT_NODE,
