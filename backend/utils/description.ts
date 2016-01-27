@@ -4,10 +4,12 @@ import { DebugElement_ as DebugElement }
 export abstract class Description {
 
   public static getComponentDescription(compEl: DebugElement): Object[] {
-    const constructor =  compEl.componentInstance.constructor;
+
+    const componentInstance = compEl.componentInstance || {};
+    const constructor =  componentInstance.constructor;
     const constructorName = constructor.name;
     let componentName = constructorName !== 'Object' ?
-    constructorName : compEl.nativeElement.tagName;
+      constructorName : compEl.nativeElement.tagName;
     let description = [];
     // console.log(componentName);
     switch (componentName) {
