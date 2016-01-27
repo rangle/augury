@@ -64,6 +64,7 @@ export class Angular2Adapter extends BaseAdapter {
     const debugEl = el;
     const id = this._getComponentID(debugEl);
     const name = this._getComponentName(debugEl);
+    const description = this._getDescription(debugEl);
     const state = this._normalizeState(name, this._getComponentState(debugEl));
     const input = this._getComponentInput(debugEl);
     const output = this._getComponentOutput(debugEl);
@@ -72,6 +73,7 @@ export class Angular2Adapter extends BaseAdapter {
     return {
       id,
       name,
+      description,
       state,
       input,
       output,
@@ -342,5 +344,9 @@ export class Angular2Adapter extends BaseAdapter {
       styles: state._rawStyle
       // differ: state._differ
     };
+  }
+
+  _getDescription(compEl: DebugElement): string {
+    return '';
   }
 }

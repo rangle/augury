@@ -11,7 +11,7 @@
          [ngClass]="{rotate90: !showChildren}"
          (click)="expandTree($event)">
 
-    <p class="inline-block mt0 pl1">{{ node.name }}</p>
+    <p class="inline-block mt0 pl1">{{ node.name + (node.description ? ' <' + node.description + '>' : '') }}</p>
   </div>
 
   <div class="pl4">
