@@ -33,6 +33,7 @@ import { DebugElement_ as DebugElement }
        from 'angular2/src/core/debug/debug_element';
 // import { inspectNativeElement }
 //   from 'angular2/src/core/debug/debug_element_view_listener';
+import { Description } from '../utils/description';
 
 export class Angular2Adapter extends BaseAdapter {
   _observer: MutationObserver;
@@ -106,7 +107,7 @@ export class Angular2Adapter extends BaseAdapter {
     idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
 
-    // When encounter a template comment, insert another comment with 
+    // When encounter a template comment, insert another comment with
     // batarangle-id above it.
     if (nativeElement.nodeType === Node.COMMENT_NODE) {
       const commentNode = document.createComment(`{"batarangle-id": "${idx}"}`);
@@ -336,6 +337,11 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getDescription(compEl: DebugElement): string {
-    return '';
+    const constructor =  <any>this._getComponentInstance(compEl).constructor;
+    const constructorName = constructor.name;
+    let conmponentName = constructorName !== 'Object' ?
+           constructorName : this._getComponentRef(compEl).tagName;
+
+    return  Description.getComponentDescription(compEl, conmponentName);
   }
 }

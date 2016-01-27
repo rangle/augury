@@ -1,4 +1,4 @@
-<div 
+<div
   (dblclick) = onDblClick($event)
   (click)="onClick($event)">
 
@@ -11,7 +11,7 @@
          [ngClass]="{rotate90: !showChildren}"
          (click)="expandTree($event)">
 
-    <p class="inline-block mt0 pl1">{{ node.name + (node.description ? ' <' + node.description + '>' : '') }}</p>
+    <div [innerHTML]="node.description"></div>
   </div>
 
   <div class="pl4">
