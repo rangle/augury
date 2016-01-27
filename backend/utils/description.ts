@@ -9,9 +9,13 @@ export abstract class Description {
     let componentName = constructorName !== 'Object' ?
     constructorName : compEl.nativeElement.tagName;
     let description = [];
+    // console.log(componentName);
     switch (componentName) {
       case 'RouterLink':
         description =  Description._getRouterLinkDesc(compEl);
+        break;
+      case 'NgSelectOption':
+        description = Description._getSelectOptionDesc(compEl);
         break;
       default:
         break;
@@ -31,4 +35,13 @@ export abstract class Description {
       val: htmlText
     }];
   }
+
+  private static _getSelectOptionDesc(compEl: DebugElement): Object[] {
+    const elem = <HTMLElement>compEl.nativeElement;
+    return [{
+      key: 'value',
+      val: elem.getAttribute('value')
+    }];
+  }
+
 }
