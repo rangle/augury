@@ -24,26 +24,13 @@
  * Supports up to 2.0.0-beta-1
  */
 
-interface DebugElement {
-  componentInstance: any;
-  nativeElement: any;
-  elementRef: Object;
-  getDirectiveInstance: Function;
-  children: DebugElement[];
-  componentViewChildren: DebugElement[];
-  _elementInjector: any;
-  triggerEventHandler(eventName: string, eventObj: Event): void;
-  hasDirective(type: any): boolean;
-  inject(type: any): any;
-  getLocal(name: string): any;
-  query(p: any, s: Function): DebugElement;
-  queryAll(p: any, s: Function): DebugElement[];
-}
 declare var ng: { probe: Function };
 
 
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
+import { DebugElement_ as DebugElement }
+       from 'angular2/src/core/debug/debug_element';
 // import { inspectNativeElement }
 //   from 'angular2/src/core/debug/debug_element_view_listener';
 
@@ -164,11 +151,11 @@ export class Angular2Adapter extends BaseAdapter {
   };
 
   _getComponentChildren(compEl: DebugElement): DebugElement[] {
-    return compEl.componentViewChildren;
+    return <DebugElement[]>compEl.componentViewChildren;
   }
 
   _getComponentNestedChildren(compEl: DebugElement): DebugElement[] {
-    return compEl.children;
+    return <DebugElement[]>compEl.children;
   }
 
   _getNativeElement(compEl: DebugElement): Element {
@@ -256,29 +243,31 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentInput(compEl: DebugElement): Object {
     const props = {};
-    if (compEl._elementInjector) {
-      const protoInjector = compEl._elementInjector._injector._proto;
-      for (let i = 0; i < protoInjector.numberOfProviders; i++) {
-        let provider = protoInjector.getProviderAtIndex(i);
-        if (provider instanceof DirectiveProvider) {
-          props[provider.displayName] = provider.metadata.events;
-        }
-      }
-    }
+    // TODO: replace this logic with one that works
+    // if (compEl._elementInjector) {
+    //   const protoInjector = compEl._elementInjector._injector._proto;
+    //   for (let i = 0; i < protoInjector.numberOfProviders; i++) {
+    //     let provider = protoInjector.getProviderAtIndex(i);
+    //     if (provider instanceof DirectiveProvider) {
+    //       props[provider.displayName] = provider.metadata.events;
+    //     }
+    //   }
+    // }
     return props;
   }
 
   _getComponentOutput(compEl: DebugElement): Object {
     const events = {};
-    if (compEl._elementInjector) {
-      const protoInjector = compEl._elementInjector._injector._proto;
-      for (let i = 0; i < protoInjector.numberOfProviders; i++) {
-        let provider = protoInjector.getProviderAtIndex(i);
-        if (provider instanceof DirectiveProvider) {
-          events[provider.displayName] = provider.metadata.events;
-        }
-      }
-    }
+    // TODO: replace this logic with one that works
+    // if (compEl._elementInjector) {
+    //   const protoInjector = compEl._elementInjector._injector._proto;
+    //   for (let i = 0; i < protoInjector.numberOfProviders; i++) {
+    //     let provider = protoInjector.getProviderAtIndex(i);
+    //     if (provider instanceof DirectiveProvider) {
+    //       events[provider.displayName] = provider.metadata.events;
+    //     }
+    //   }
+    // }
     return events;
   }
 
