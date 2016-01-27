@@ -336,12 +336,7 @@ export class Angular2Adapter extends BaseAdapter {
     };
   }
 
-  _getDescription(compEl: DebugElement): string {
-    const constructor =  <any>this._getComponentInstance(compEl).constructor;
-    const constructorName = constructor.name;
-    let conmponentName = constructorName !== 'Object' ?
-           constructorName : this._getComponentRef(compEl).tagName;
-
-    return  Description.getComponentDescription(compEl, conmponentName);
+  _getDescription(compEl: DebugElement): Object[] {
+    return  Description.getComponentDescription(compEl);
   }
 }

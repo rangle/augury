@@ -38,7 +38,7 @@ export interface AdapterEvent {
 export interface TreeNode {
   id: string;
   name: string;
-  description: string;
+  description: Object[];
   state: Object;
   input: Object;
   output: Object;

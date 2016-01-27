@@ -11,7 +11,12 @@
          [ngClass]="{rotate90: !showChildren}"
          (click)="expandTree($event)">
 
-    <div [innerHTML]="node.description"></div>
+    <div>
+      <p class="node-item-name">{{node.name}}</p>
+      ( <div class="node-item-description" *ngFor="#desc of node.description">
+        <p class="node-item-property">{{desc.key}}=</p><p class="node-item-value">"{{desc.val}}"</p>
+      </div> )
+    </div>
   </div>
 
   <div class="pl4">
