@@ -1,8 +1,8 @@
-<div 
+<div
   (dblclick) = onDblClick($event)
   (click)="onClick($event)">
 
-  <div class="node-item pl4 rounded"
+  <div class="node-item pl4 rounded border-box"
        [ngClass]="{'node-item-selected':isSelected}"
     >
     <img src="../images/Triangle.svg"
@@ -14,7 +14,7 @@
     <p class="inline-block mt0 pl1">{{ node.name }}</p>
   </div>
 
-  <div class="pl4">
+  <div class="pl4 border-box">
     <bt-node-item
       [hidden]="!showChildren"
       *ngFor="#node of node.children"
