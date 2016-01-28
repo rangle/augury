@@ -255,11 +255,11 @@ export class Angular2Adapter extends BaseAdapter {
   _getComponentInput(compEl: DebugElement): Object {
     const props = {};
     if (compEl._elementInjector) {
-      const protoInjector = compEl._elementInjector._injector._proto;
+      const protoInjector = compEl._elementInjector._proto.protoInjector;
       for (let i = 0; i < protoInjector.numberOfProviders; i++) {
         let provider = protoInjector.getProviderAtIndex(i);
-        if (provider instanceof DirectiveProvider) {
-          props[provider.displayName] = provider.metadata.events;
+        if (provider.metadata) {
+          props[provider.displayName] = provider.metadata.inputs;
         }
       }
     }
@@ -269,11 +269,11 @@ export class Angular2Adapter extends BaseAdapter {
   _getComponentOutput(compEl: DebugElement): Object {
     const events = {};
     if (compEl._elementInjector) {
-      const protoInjector = compEl._elementInjector._injector._proto;
+      const protoInjector = compEl._elementInjector._proto.protoInjector;
       for (let i = 0; i < protoInjector.numberOfProviders; i++) {
         let provider = protoInjector.getProviderAtIndex(i);
-        if (provider instanceof DirectiveProvider) {
-          events[provider.displayName] = provider.metadata.events;
+        if (provider.metadata) {
+          events[provider.displayName] = provider.metadata.outputs;
         }
       }
     }
