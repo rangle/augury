@@ -20,6 +20,10 @@
   background-color: var(--blue);
 }
 
+.node-item-container {
+  display: inline;
+}
+
 .node-item-name {
   color: rgb(136, 18, 128);
   display: inline;
