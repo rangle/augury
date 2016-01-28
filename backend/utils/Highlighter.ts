@@ -29,8 +29,10 @@ export default class Highlighter {
     return vals;
   }
 
-  static highlight(node: any, label: string): any {
-    if (!node) return;
+  static highlight(node: any, label: string): void {
+    if (!node) {
+      return;
+    };
 
     let box = document.createElement('div');
     box.setAttribute('style', this.CSS_STYLE);
@@ -44,7 +46,6 @@ export default class Highlighter {
     box.style.height = pos.h + 'px';
     document.body.appendChild(box);
     this.hls.push(box);
-    return box;
   }
 
   static clear(): void {
