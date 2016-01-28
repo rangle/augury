@@ -59,7 +59,7 @@ export class NodeItem {
   }
 
   /**
-   * Select this node on click
+   * Select the element in inspect window on double click
    * @param  {Object} $event
    */
   onDblClick($event) {
@@ -77,12 +77,41 @@ export class NodeItem {
     $event.stopPropagation();
   }
 
+  /**
+   * Select this node on click
+   * @param  {Object} $event
+   */
   onClick($event) {
     this.userActions.selectNode({ node: this.node });
     this._ngZone.run(() => undefined);
+    $event.preventDefault();
     $event.stopPropagation();
   }
 
+  /**
+   * Dispatch clear highlight action on node mouse out
+   * @param  {Object} $event
+   */
+  onMouseOut($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.userActions.clearHighlight();
+  }
+
+  /**
+   * Dispatch element highlight action on node mouse over
+   * @param  {Object} $event
+   */
+  onMouseOver($event) {
+    this.userActions.highlight({ node: this.node });
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+
+  /**
+   * Expand or Collapse tree based on current state on click
+   * @param  {Object} $event
+   */
   expandTree($event) {
     this.showChildren = !this.showChildren;
     $event.preventDefault();

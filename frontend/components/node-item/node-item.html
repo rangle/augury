@@ -1,8 +1,10 @@
 <div
-  (dblclick) = onDblClick($event)
+  (mouseout)=onMouseOut($event)
+  (mouseover)=onMouseOver($event)
+  (dblclick)=onDblClick($event)
   (click)="onClick($event)">
 
-  <div class="node-item pl4 rounded"
+  <div class="node-item pl4 rounded border-box"
        [ngClass]="{'node-item-selected':isSelected}"
     >
     <img src="../images/Triangle.svg"
@@ -23,7 +25,7 @@
     </div>
   </div>
 
-  <div class="pl4">
+  <div class="pl4 border-box">
     <bt-node-item
       [hidden]="!showChildren"
       *ngFor="#node of node.children"
