@@ -337,6 +337,10 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getDescription(compEl: DebugElement): Object[] {
-    return  Description.getComponentDescription(compEl);
+    if (compEl.componentInstance) {
+      return Description.getComponentDescription(compEl); 
+    } else {
+      return [];
+    }
   }
 }

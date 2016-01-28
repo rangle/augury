@@ -1,6 +1,10 @@
 import { DebugElement_ as DebugElement }
        from 'angular2/src/core/debug/debug_element';
 
+export interface descriptor {
+  
+}
+
 export abstract class Description {
 
   public static getComponentDescription(compEl: DebugElement): Object[] {
@@ -18,6 +22,9 @@ export abstract class Description {
         break;
       case 'NgSelectOption':
         description = Description._getSelectOptionDesc(compEl);
+        break;
+      case 'NgClass':
+        description = Description._getClassDesc(compEl);
         break;
       default:
         break;
@@ -43,6 +50,21 @@ export abstract class Description {
     return [{
       key: 'value',
       val: elem.getAttribute('value')
+    }];
+  }
+
+  private static _getClassDesc(compEl:DebugElement): Object[] {
+    const rawClasses = compEl.componentInstance._rawClass;
+    const appliedClasses = [];
+    for (let key in rawClasses) {
+      if (rawClasses[key]) {
+        appliedClasses.push(key);
+      }
+    }
+    console.log(appliedClasses);
+    return [{
+      key: 'applied',
+      val: appliedClasses
     }];
   }
 

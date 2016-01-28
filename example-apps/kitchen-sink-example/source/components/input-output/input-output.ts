@@ -1,5 +1,6 @@
 import {Component, Input} from 'angular2/core';
 import Counter from './counter';
+import {NgClass} from 'angular2/common';
 
 @Component({
   selector: 'input-output',
@@ -11,12 +12,32 @@ import Counter from './counter';
         (result)="onChange($event)">
       </counter>
     </div>
+    <div class="button" [ngClass]="{active: isOn, disabled: isDisabled}"
+      (click)="toggle(!isOn)">
+      Click me!
+    </div>
   `,
-  directives: [Counter]
+   styles: [`
+    .button {
+      margin: 20px 0;
+      width: 120px;
+      border: medium solid black;
+    }
+    .active {
+      background-color: red;
+    }
+    .disabled {
+      color: gray;
+      border: medium solid gray;
+    }
+  `],
+  directives: [Counter, NgClass]
 })
 export default class InputOutput {
   num: number;
   parentCount: number;
+  isOn = false;
+  isDisabled = false;
 
   constructor() {
     this.num = 0;
@@ -25,5 +46,11 @@ export default class InputOutput {
 
   onChange(val: any) {
     this.parentCount = val;
+  }
+
+  toggle(newState) {
+    if (!this.isDisabled) {
+      this.isOn = newState;
+    }
   }
 }
