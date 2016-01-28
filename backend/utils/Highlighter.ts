@@ -1,8 +1,21 @@
 export default class Highlighter {
 
   private static hls = [];
+  private static  CSS_STYLE: string = `
+    padding: 5px;
+    font-size: 11px;
+    line-height: 11px;
+    position: absolute;
+    text-align: right;
+    z-index: 9999999999999 !important;
+    pointer-events: none;
+    min-height: 5px;
+    background: rgba(126, 183, 253, 0.3);
+    border: 1px solid rgba(126, 183, 253, 0.7) !important;
+    color: #6da9d7 !important;
+  `;
 
-  static offsets(node: any): any {
+  private static offsets(node: any): any {
     let vals = {
       x: node.offsetLeft,
       y: node.offsetTop,
@@ -16,9 +29,11 @@ export default class Highlighter {
     return vals;
   }
 
-  public static highlight(node: any, label: string): any {
+  static highlight(node: any, label: string): any {
+    if (!node) return;
+
     let box = document.createElement('div');
-    box.className = 'ngi-hl ngi-hl-scope';
+    box.setAttribute('style', this.CSS_STYLE);
     if (label) {
       box.textContent = label;
     }
@@ -32,7 +47,7 @@ export default class Highlighter {
     return box;
   }
 
-  public static clear(): void {
+  static clear(): void {
     let box;
     while (box = this.hls.pop()) {
       box.parentNode.removeChild(box);

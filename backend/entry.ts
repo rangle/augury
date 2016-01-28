@@ -47,7 +47,7 @@ window.addEventListener('message', function(event) {
       let highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
       Highlighter.clear();
-      Highlighter.highlight(document.querySelector(highlightStr), '');
+      Highlighter.highlight(document.querySelector(highlightStr), event.data.message.message.node.name);
     } else if (event.data.message.message.actionType === 'CLEAR_HIGHLIGHT') {
       Highlighter.clear();
     }
