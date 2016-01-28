@@ -9,6 +9,7 @@
 html {
   font-size: 11px;
   font-family: Menlo, monospace;
+  letter-spacing: 0.7px;
 }
 
 .vh-100 {
