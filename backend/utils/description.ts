@@ -27,6 +27,9 @@ export abstract class Description {
       case 'NgSelectOption':
         description = Description._getSelectOptionDesc(compEl);
         break;
+      case 'NgIf':
+        description = Description._getNgIfDesc(compEl);
+        break;
       case 'NgClass':
         description = Description._getClassDesc(compEl);
         break;
@@ -143,6 +146,13 @@ export abstract class Description {
       { key: 'controlStatus', value: componentInstance._control.status },
       { key: 'dirty', value: componentInstance.dirty }
     ];
+  }
+  
+  private static _getNgIfDesc(compEl: DebugElement): Array<Property> {
+    const componentInstance = compEl.componentInstance;
+    return [{
+      key: 'condition', value: componentInstance._prevCondition
+    }]
   }
 
 }
