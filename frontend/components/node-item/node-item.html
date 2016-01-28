@@ -14,8 +14,10 @@
     <div>
       <p class="node-item-name">{{node.name}}</p>
       <span *ngIf="node.description.length > 0">
-      (<span class="node-item-description" *ngFor="#desc of node.description">
-          <p class="node-item-property">{{desc.key}}=</p><p class="node-item-value">"{{desc.val}}"</p>
+      (<span class="node-item-description" *ngFor="#desc of node.description; #i = index">
+          <p class="node-item-property">{{desc.key}}=</p>
+          <p class="node-item-value">"{{desc.value}}"</p>
+          <span [hidden]="i == node.description.length - 1 ">,</span>
       </span>)
       </span>
     </div>
