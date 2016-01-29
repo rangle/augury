@@ -18,7 +18,10 @@ test('controllers/doms', t => {
 
   const adapter = DomController.detectFramework();
   const controller = new DomController(adapter, {
-    sendMessage: (msg: Object) => console.log(msg)
+    sendMessage: (msg: Object) => {
+      // console.log(msg)
+      return;
+    }
   });
 
   adapter.addRoot(rootDiv);

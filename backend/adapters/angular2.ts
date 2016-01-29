@@ -339,7 +339,9 @@ export class Angular2Adapter extends BaseAdapter {
     if (compEl.componentInstance) {
       return Description.getComponentDescription(compEl);
     } else {
-      return [];
+      return [
+        { key:'name', value: this._getComponentName(compEl) }
+      ];
     }
   }
 }

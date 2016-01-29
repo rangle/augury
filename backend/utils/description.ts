@@ -52,7 +52,7 @@ export abstract class Description {
         break;
       case 'NgFormModel':
         description = Description._getNgFormModelDesc(componentInstance);
-        return;
+        break;
       case 'NgSwitch':
         description = Description._getNgSwitchDesc(componentInstance);
         break;

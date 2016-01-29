@@ -49,7 +49,7 @@ class App {
     this.componentDataStore.dataStream
       .map(({ componentData }: any) => componentData)
       .subscribe(componentData => {
-        console.log('Application Root Received: ', componentData);
+        // console.log('Application Root Received: ', componentData);
         this.tree = componentData;
         this._ngZone.run(() => undefined);
       }
