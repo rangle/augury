@@ -10,46 +10,57 @@ export abstract class Description {
 
   public static getComponentDescription(compEl: DebugElement): Object[] {
 
-    const componentInstance = compEl.componentInstance || {};
-    const constructor =  componentInstance.constructor;
-    const constructorName = constructor.name;
-    const componentName = constructorName !== 'Object' ?
+    const componentInstance: any = compEl.componentInstance || {};
+    const constructor: any =  componentInstance.constructor;
+    const constructorName: string = constructor.name;
+    const componentName: string = constructorName !== 'Object' ?
       constructorName : compEl.nativeElement.tagName;
+    const element: HTMLElement = <HTMLElement>compEl.nativeElement;
+
     let description: Array<Property> = new Array<Property>();
 
     switch (componentName) {
       case 'RouterLink':
-        description =  Description._getRouterLinkDesc(compEl);
+        description =  Description._getRouterLinkDesc(element);
         break;
       case 'RouterOutlet':
-        description =  Description._getRouterOutletDesc(compEl);
+        description =  Description._getRouterOutletDesc(componentInstance);
         break;
       case 'NgSelectOption':
-        description = Description._getSelectOptionDesc(compEl);
+        description = Description._getSelectOptionDesc(element);
         break;
       case 'NgIf':
-        description = Description._getNgIfDesc(compEl);
+        description = Description._getNgIfDesc(componentInstance);
         break;
       case 'NgClass':
-        description = Description._getClassDesc(compEl);
+        description = Description._getClassDesc(componentInstance);
         break;
       case 'NgControlName':
-        description = Description._getControlNameDesc(compEl);
+        description = Description._getControlNameDesc(componentInstance);
+        break;
+      case 'NgFormControl':
+        description = Description._getFormControlDesc(componentInstance);
+        break;
+      case 'ControlForm':
+        description = Description._getFormControlDesc(componentInstance);
         break;
       case 'NgModel':
-        description = Description._getNgModelDesc(compEl);
+        description = Description._getNgModelDesc(componentInstance);
         break;
       case 'NgForm':
-        description = Description._getNgFormDesc(compEl);
+        description = Description._getNgFormDesc(componentInstance);
         break;
+      case 'NgFormModel':
+        description = Description._getNgFormModelDesc(componentInstance);
+        return;
       case 'NgSwitch':
-        description = Description._getNgSwitchDesc(compEl);
+        description = Description._getNgSwitchDesc(componentInstance);
         break;
       case 'NgSwitchWhen':
-        description = Description._getNgSwitchWhenDesc(compEl);
+        description = Description._getNgSwitchWhenDesc(componentInstance);
         break;
       case 'NgSwitchDefault':
-        description = Description._getNgSwitchWhenDesc(compEl);
+        description = Description._getNgSwitchWhenDesc(componentInstance);
         break;
       default:
         description = [
@@ -60,99 +71,101 @@ export abstract class Description {
     return description;
   }
 
-  private static _getRouterLinkDesc(compEl: DebugElement): Array<Property> {
-    const element: HTMLElement = <HTMLElement>(compEl.nativeElement);
-    const href: string = element.getAttribute('href');
-    const htmlText: string = element.innerText;
-
+  private static _getRouterLinkDesc(element: HTMLElement): Array<Property> {
     return [
-      { key: 'href', value: href },
-      { key: 'htmlText', value: htmlText }
+      { key: 'href', value: element.getAttribute('href') },
+      { key: 'htmlText', value: element.innerText }
     ];
   }
 
-  private static _getSelectOptionDesc(compEl: DebugElement): Array<Property> {
-    const elem = <HTMLElement>compEl.nativeElement;
+  private static _getSelectOptionDesc(element: HTMLElement): Array<Property> {
     return [
-      { key: 'label', value: elem.innerText },
-      { key: 'value', value: elem.getAttribute('value') }
+      { key: 'label', value: element.innerText },
+      { key: 'value', value: element.getAttribute('value') }
     ];
   }
 
-  private static _getControlNameDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
+  private static _getControlNameDesc(instance: any): Array<Property> {
     return [
-      { key: 'name', value: componentInstance.name },
-      { key: 'value', value: componentInstance.value },
-      { key: 'valid', value: componentInstance.valid }
+      { key: 'name', value: instance.name },
+      { key: 'value', value: instance.value },
+      { key: 'valid', value: instance.valid }
     ];
   }
 
-  private static _getNgFormDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
+  private static _getNgFormDesc(instance: any): Array<Property> {
     return [
-      { key: 'status', value: componentInstance.form.status },
-      { key: 'dirty', value: componentInstance.form.dirty }
+      { key: 'status', value: instance.form.status },
+      { key: 'dirty', value: instance.form.dirty }
     ];
   }
 
-  private static _getRouterOutletDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
+  private static _getRouterOutletDesc(instance: any): Array<Property> {
     return [
-      { key: 'name', value: componentInstance.name || ''},
+      { key: 'name', value: instance.name || ''},
       { key: 'hostComponent',
-      value: componentInstance._componentRef.componentType.name },
+      value: instance._componentRef.componentType.name },
     ];
   }
 
-  private static _getNgSwitchDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
+  private static _getNgSwitchDesc(instance: any): Array<Property> {
     return [
-      { key: 'useDefault', value: componentInstance._useDefault },
-      { key: 'switchValue', value: componentInstance._switchValue },
-      { key: 'valuesCount', value: componentInstance._valueViews.size }
+      { key: 'useDefault', value: instance._useDefault },
+      { key: 'switchValue', value: instance._switchValue },
+      { key: 'valuesCount', value: instance._valueViews.size }
     ];
   }
 
-  private static _getNgSwitchWhenDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
-    console.log(componentInstance);
+  private static _getNgSwitchWhenDesc(instance: any): Array<Property> {
     return [
-      { key: 'value', value: componentInstance._value }
+      { key: 'value', value: instance._value }
     ];
   }
 
-  private static _getClassDesc(compEl:DebugElement): Array<Property> {
-    const rawClasses = compEl.componentInstance._rawClass;
+  private static _getClassDesc(instance: any): Array<Property> {
+    const rawClasses = instance._rawClass;
     const appliedClasses = [];
     for (let key in rawClasses) {
       if (rawClasses[key]) {
         appliedClasses.push(key);
       }
     }
-    console.log(appliedClasses);
     return [{
       key: 'applied',
       value: appliedClasses.map(String).join(',')
     }];
   }
 
-  private static _getNgModelDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
+  private static _getFormControlDesc(instance: any): Array<Property> {
     return [
-      { key: 'model', value: componentInstance.name },
-      { key: 'value', value: componentInstance.value },
-      { key: 'viewModel', value: componentInstance.viewModel },
-      { key: 'controlStatus', value: componentInstance._control.status },
-      { key: 'dirty', value: componentInstance.dirty }
+      { key: 'model', value: instance.name },
+      { key: 'value', value: instance.value },
+      { key: 'viewModel', value: instance.viewModel },
+      { key: 'dirty', value: instance.dirty }
     ];
   }
-  
-  private static _getNgIfDesc(compEl: DebugElement): Array<Property> {
-    const componentInstance = compEl.componentInstance;
-    return [{
-      key: 'condition', value: componentInstance._prevCondition
-    }]
+
+  private static _getNgModelDesc(instance: any): Array<Property> {
+    return [
+      { key: 'model', value: instance.name },
+      { key: 'value', value: instance.value },
+      { key: 'viewModel', value: instance.viewModel },
+      { key: 'controlStatus', value: instance.control.status },
+      { key: 'dirty', value: instance.dirty }
+    ];
   }
 
+  private static _getNgFormModelDesc(instance: any): Array<Property> {
+    return [
+      { key: 'status', value: instance.form.status },
+      { key: 'dirty', value: instance.form.dirty },
+      { key: 'value', value: JSON.stringify(instance.value) }
+    ];
+  }
+
+  private static _getNgIfDesc(instance: any): Array<Property> {
+    return [
+      { key: 'condition', value: instance._prevCondition }
+    ];
+  }
 }
