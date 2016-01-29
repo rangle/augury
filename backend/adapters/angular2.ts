@@ -200,7 +200,6 @@ export class Angular2Adapter extends BaseAdapter {
       const comment = JSON.parse((<any>nativeElement.previousSibling).data);
       id = comment['batarangle-id'];
     }
-    // console.log('batarangle-id is ', id);
     return id;
   }
 
@@ -338,7 +337,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getDescription(compEl: DebugElement): Object[] {
     if (compEl.componentInstance) {
-      return Description.getComponentDescription(compEl); 
+      return Description.getComponentDescription(compEl);
     } else {
       return [];
     }
