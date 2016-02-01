@@ -3,9 +3,8 @@ test:
     - git grep --color TODO | cat
 
 deployment:
-  release:
-    tag: /release-.*/
-    owner: circleci  
+  master:
     branch: master
     commands:
       - ./crxmake.sh
+      - ls
