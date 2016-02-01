@@ -7,7 +7,7 @@
 dir="temp"
 key="key.pem"
 name="batarangle-packaged"
-files="build frontend images node_modules index.html manifest.json"
+files="build frontend images index.html manifest.json"
 
 crx="$name.crx"
 pub="$name.pub"
