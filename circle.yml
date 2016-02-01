@@ -4,6 +4,8 @@ test:
 
 deployment:
   release:
+    tag: /release-.*/
+    owner: circleci  
     branch: master
     commands:
       - ./crxmake.sh
