@@ -3,7 +3,7 @@ test:
     - git grep --color TODO | cat
 
 deployment:
-  master:
+  release:
     branch: master
     commands:
       - ./crxmake.sh
