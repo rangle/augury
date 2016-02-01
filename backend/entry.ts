@@ -2,6 +2,10 @@ import {DomController} from './controllers/dom';
 import {Angular2Adapter} from './adapters/angular2';
 import Highlighter from './utils/highlighter';
 
+const ERROR_MESSAGE = 'Please bind the default AppViewListener to'
+  + 'DebugElementViewListener during the bootstrapping of your app refer:'
+  + 'https://github.com/rangle/batarangle#current-limitations';
+
 let channel = {
   sendMessage: (message) => {
     console.log('Inspected script sending: ', message);
@@ -17,7 +21,12 @@ let channel = {
 let adapter = new Angular2Adapter();
 let dom = new DomController(adapter, channel);
 dom.hookIntoBackend();
-adapter.setup();
+try {
+  adapter.setup();
+} catch (error) {
+  console.log(ERROR_MESSAGE);
+}
+
 
 window.addEventListener('message', function(event) {
   // We only accept messages from ourselves
