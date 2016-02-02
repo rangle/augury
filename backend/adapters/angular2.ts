@@ -121,7 +121,7 @@ export class Angular2Adapter extends BaseAdapter {
     // batarangle-id above it.
     if (nativeElement.nodeType === Node.COMMENT_NODE) {
       const commentNode = document.createComment(`{"batarangle-id": "${idx}"}`);
-      if (!nativeElement.previousSibling.isEqualNode(commentNode)) {
+      if (nativeElement.previousSibling === null || !nativeElement.previousSibling.isEqualNode(commentNode)) {
         nativeElement.parentNode.insertBefore(commentNode, nativeElement);
       }
     } else {
