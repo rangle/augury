@@ -4,8 +4,7 @@ test:
 
 deployment:
   release:
-    branch: [master, release-build]
-    owner: circleci
+    branch: release-build
     commands:
-      - ./build.sh
+      - ./crxmake.sh
       - ./s3-upload.sh
