@@ -1,4 +1,5 @@
-import {Component, DynamicComponentLoader, ElementRef, Injector} from 'angular2/core';
+import {Component, DynamicComponentLoader, ElementRef, Injector}
+ from 'angular2/core';
 import DynamicComponent from './dynamic-component';
 import Hello from './hello';
 

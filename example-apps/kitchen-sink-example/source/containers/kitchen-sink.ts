@@ -16,7 +16,8 @@ import DynamicControls from '../components/dynamic-controls/dynamic-controls';
   { path: '/my-form', component: MyForm, as: 'MyForm' },
   { path: '/form2', component: Form2, as: 'Form2' },
   { path: '/start/...', component: Start, as: 'Start' },
-  { path: '/dynamic-controls', component: DynamicControls, as: 'DynamicControls' },
+  { path: '/dynamic-controls', component: DynamicControls,
+    as: 'DynamicControls' },
 ])
 @Component({
   selector: 'kitchen-sink',
@@ -41,7 +42,8 @@ import DynamicControls from '../components/dynamic-controls/dynamic-controls';
         <a [routerLink]="['./Start', 'StartMain']">Router</a>
       </li>
       <li role="presentation">
-        <a [routerLink]="['./DynamicControls', 'DynamicControls']">DynamicControls</a>
+        <a [routerLink]="['./DynamicControls',
+          'DynamicControls']">DynamicControls</a>
       </li>
       </ul>
     </div>
