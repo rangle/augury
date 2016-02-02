@@ -19,3 +19,22 @@
 .node-item-selected:hover {
   background-color: var(--blue);
 }
+
+.node-item-container {
+  display: inline;
+}
+
+.node-item-name {
+  color: rgb(136, 18, 128);
+  display: inline;
+}
+
+.node-item-property {
+  color: brown;
+  display: inline;
+}
+
+.node-item-value {
+  color: rgb(26, 26, 166);
+  display: inline;
+}
