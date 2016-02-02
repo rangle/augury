@@ -1,9 +1,11 @@
 test:
   pre:
     - git grep --color TODO | cat
+
 deployment:
   release:
-    branch: release-build
+    branch: [master, release-build]
+    owner: circleci
     commands:
       - ./build.sh
       - ./s3-upload.sh
