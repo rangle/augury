@@ -25,8 +25,8 @@
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "icons": {
-    "16": "images/webstore-icon.png",
-    "48": "images/webstore-icon.png",
-    "128": "images/webstore-icon.png"
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
   }
 }
