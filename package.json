@@ -29,7 +29,7 @@
     "postinstall": "npm run tsd-update && tsd install && tsd link",
     "start": "rimraf build && webpack --watch",
     "test": "webpack --config webpack.test.config.js && browserify build/test.js | tape-run | tap-spec",
-    "prepack": "npm test",
+    "prepack": "npm run build",
     "pack": "./crxmake.sh"
   },
   "dependencies": {

@@ -10,7 +10,7 @@ test:
 
 deployment:
   release:
-    branch: release-build
+    branch: master
     commands:
-      - ./crxmake.sh
+      - npm run pack
       - ./s3-upload.sh

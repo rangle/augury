@@ -7,8 +7,6 @@
 node -v
 npm -v
 
-npm run build
-
 dir="temp"
 key="key.pem"
 name="batarangle-packaged"
