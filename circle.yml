@@ -1,3 +1,16 @@
+machine:
+  node:
+    version: 4.2.3
+  post:
+    - npm install -g npm@3.x.x
+
 test:
   pre:
     - git grep --color TODO | cat
+
+deployment:
+  release:
+    branch: release-build
+    commands:
+      - ./crxmake.sh
+      - ./s3-upload.sh

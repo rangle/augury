@@ -12,6 +12,10 @@
     "chrome",
     "extension"
   ],
+  "engines": {
+    "node": ">= 4.2.3 < 6",
+    "npm": ">= 3.5.3"
+  },
   "bugs": {
     "url": "https://github.com/rangle/batarangle/issues"
   },
@@ -29,7 +33,7 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "^2.0.0-beta.1",
+    "angular2": "^2.0.0-beta.2",
     "basscss": "^7.0.4",
     "browserify": "^12.0.1",
     "crypto": "0.0.3",
@@ -40,7 +44,7 @@
     "json-formatter-js": "^0.3.0",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.0",
-    "zone.js": "^0.5.10"
+    "zone.js": "0.5.10"
   },
   "devDependencies": {
     "postcss-cssnext": "^2.4.0",
