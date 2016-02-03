@@ -6,11 +6,9 @@
 let count = 0;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('Backend: Message Received:', message, sender);
-
-  // Need to investigate why when moving the injection block 
+  // Need to investigate why when moving the injection block
   // out of the addListener scope does not work.
-  // I would think that having the commented out block at the top of this 
+  // I would think that having the commented out block at the top of this
   // file is all we need to kick start the messaging process.
   if (message.name === 'init') {
 
@@ -38,7 +36,6 @@ window.addEventListener('message', function(event) {
   }
 
   if (event.data.type && (event.data.type === 'BATARANGLE_INSPECTED_APP')) {
-    console.log('Content script received: ', event.data);
     chrome.runtime.sendMessage({
       name: 'message',
       data: event.data

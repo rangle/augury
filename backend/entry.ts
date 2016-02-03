@@ -8,7 +8,6 @@ const ERROR_MESSAGE = 'Please bind the default AppViewListener to'
 
 let channel = {
   sendMessage: (message) => {
-    console.log('Inspected script sending: ', message);
     return window.postMessage(JSON.parse(JSON.stringify({
       type: 'BATARANGLE_INSPECTED_APP',
       message
@@ -35,10 +34,6 @@ window.addEventListener('message', function(event) {
   }
 
   if (event.data.type && (event.data.type === 'BATARANGLE_CONTENT_SCRIPT')) {
-    console.log('Inspected script received: ', event.data);
-
-    console.log('event.data.message.message.actionType: ',
-      event.data.message.message.actionType);
 
     if (event.data.message.message.actionType ===
       'START_COMPONENT_TREE_INSPECTION') {

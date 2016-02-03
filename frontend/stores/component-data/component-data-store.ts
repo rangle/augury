@@ -73,8 +73,7 @@ export class ComponentDataStore extends AbstractStore {
    * @param  {Boolean} fuzzy whether or not to use strict matching
    * @return {Function}
    */
-  private findNodeBuilder(query: string, fuzzy: boolean) {
-
+  private findNodeByNameBuilder(query: string, fuzzy: boolean) {
     if (fuzzy) {
       return node => node.name &&
       node.name.toLocaleLowerCase().includes(query);
@@ -82,7 +81,33 @@ export class ComponentDataStore extends AbstractStore {
       return node => node.name &&
         new RegExp('^' + query + '$').test(node.name.toLocaleLowerCase());
     }
+  }
 
+  /**
+   * Build a matcher for a node search query for node description array
+   * @param  {String} query search term
+   * @param  {Boolean} fuzzy whether or not to use strict matching
+   * @return {Function}
+   */
+  private findNodeByDescription(query: string, fuzzy: boolean) {
+    if (fuzzy) {
+      return node => node.description && node.description.length > 0
+        &&  node.description.filter((value) => {
+          return value.key && value.key.toLocaleLowerCase().includes(query)
+          || value.value &&
+              value.value.toString().toLocaleLowerCase().includes(query);
+        }).length > 0;
+    } else {
+      return node => node.description && node.description.length > 0
+        && node.description.filter((value) => {
+          return value.key &&
+            (new RegExp('^' + query + '$')
+              .test(value.key.toLocaleLowerCase()))
+          || value.value &&
+            (new RegExp('^' + query + '$')
+              .test(value.value.toString().toLocaleLowerCase()));
+        }).length > 0;
+    }
   }
 
   /**
@@ -116,12 +141,16 @@ export class ComponentDataStore extends AbstractStore {
    */
   private searchNode({ query }: Query) {
 
-    const findNode = this.findNodeBuilder(query, false);
-    const fuzzyFindNode = this.findNodeBuilder(query, true);
+    const findNode = this.findNodeByNameBuilder(query, false);
+    const fuzzyFindNode = this.findNodeByNameBuilder(query, true);
+    const findNodeByDescription = this.findNodeByDescription(query, false);
+    const fuzzyFindNodeByDescription = this.findNodeByDescription(query, true);
     const flattenedData = this.flatten(this._componentData);
 
     const node = flattenedData.find(findNode) ||
-      flattenedData.find(fuzzyFindNode);
+      flattenedData.find(fuzzyFindNode) ||
+      flattenedData.find(findNodeByDescription) ||
+      flattenedData.find(fuzzyFindNodeByDescription);
 
     if (node) {
       this.selectNode({ node });

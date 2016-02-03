@@ -9,12 +9,14 @@ import InputOutput from '../components/input-output/input-output';
 import MyForm from '../components/form-controls/my-form';
 import Form2 from '../components/form-controls/form2';
 import DynamicControls from '../components/dynamic-controls/dynamic-controls';
+import ControlForm from '../components/form-controls/control-form';
 
 @RouteConfig([
   { path: '/', component: Home, as: 'Home' },
   { path: '/input-output', component: InputOutput, as: 'InputOutput' },
   { path: '/my-form', component: MyForm, as: 'MyForm' },
   { path: '/form2', component: Form2, as: 'Form2' },
+  { path: '/control-form', component: ControlForm, as: 'ControlForm' },
   { path: '/start/...', component: Start, as: 'Start' },
   { path: '/dynamic-controls', component: DynamicControls,
     as: 'DynamicControls' },
@@ -28,6 +30,9 @@ import DynamicControls from '../components/dynamic-controls/dynamic-controls';
       <ul class="nav nav-pills nav-stacked">
       <li role="presentation">
         <a [routerLink]="['./Home']">Home</a>
+      </li>
+      <li role="presentation">
+        <a [routerLink]="['./ControlForm']">ControlForm</a>
       </li>
       <li role="presentation">
         <a [routerLink]="['./MyForm']">Form Component</a>
