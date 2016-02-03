@@ -4,6 +4,9 @@
 # (This will not be needed for official distribution)
 # Based on https://developer.chrome.com/extensions/crx#scripts
 
+node -v
+npm -v
+
 dir="temp"
 key="key.pem"
 name="batarangle-packaged"
