@@ -8,6 +8,7 @@ import Start from '../components/router/start';
 import InputOutput from '../components/input-output/input-output';
 import MyForm from '../components/form-controls/my-form';
 import Form2 from '../components/form-controls/form2';
+import DynamicControls from '../components/dynamic-controls/dynamic-controls';
 import ControlForm from '../components/form-controls/control-form';
 
 @RouteConfig([
@@ -17,6 +18,8 @@ import ControlForm from '../components/form-controls/control-form';
   { path: '/form2', component: Form2, as: 'Form2' },
   { path: '/control-form', component: ControlForm, as: 'ControlForm' },
   { path: '/start/...', component: Start, as: 'Start' },
+  { path: '/dynamic-controls', component: DynamicControls,
+    as: 'DynamicControls' },
 ])
 @Component({
   selector: 'kitchen-sink',
@@ -42,6 +45,10 @@ import ControlForm from '../components/form-controls/control-form';
       </li>
       <li role="presentation">
         <a [routerLink]="['./Start', 'StartMain']">Router</a>
+      </li>
+      <li role="presentation">
+        <a [routerLink]="['./DynamicControls',
+          'DynamicControls']">DynamicControls</a>
       </li>
       </ul>
     </div>
