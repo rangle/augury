@@ -8,7 +8,9 @@ import LoadNextToComponent from './load-next-to-component';
   template: `
     <div>
       <load-into-component></load-into-component>
+      <hr/>
       <load-next-to-component></load-next-to-component>
+      <hr/>
       <load-as-root-component></load-as-root-component>
     </div>
   `,

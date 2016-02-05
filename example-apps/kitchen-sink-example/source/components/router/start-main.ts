@@ -6,7 +6,9 @@ import {Component, View} from 'angular2/core';
 @View({
   template: `
   <div>
-    Router Start main component
+    <h4>
+      <span class="label label-default">Router Start main component</span>
+    </h4>
   </div>
   `
 })

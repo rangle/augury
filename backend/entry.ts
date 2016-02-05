@@ -20,11 +20,12 @@ let channel = {
 let adapter = new Angular2Adapter();
 let dom = new DomController(adapter, channel);
 dom.hookIntoBackend();
-try {
+// try {
   adapter.setup();
-} catch (error) {
-  console.log(ERROR_MESSAGE);
-}
+// } catch (error) {
+//   console.log(error);
+//   console.log(ERROR_MESSAGE);
+// }
 
 
 window.addEventListener('message', function(event) {

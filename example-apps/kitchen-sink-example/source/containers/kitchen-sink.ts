@@ -1,6 +1,7 @@
 import { Component, View, Inject, OnInit, OnDestroy }
  from 'angular2/core';
-import { ROUTER_DIRECTIVES, RouteConfig, RouterLink, RouterOutlet}
+import { ROUTER_DIRECTIVES, RouteConfig, RouterLink, RouterOutlet,
+  Router}
  from 'angular2/router';
 
 import Home from '../components/home';
@@ -26,36 +27,49 @@ import ControlForm from '../components/form-controls/control-form';
   directives: [RouterLink, ROUTER_DIRECTIVES],
   template: `
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-md-3">
       <ul class="nav nav-pills nav-stacked">
-      <li role="presentation">
+      <li [ngClass]="{active: path==''}">
         <a [routerLink]="['./Home']">Home</a>
       </li>
-      <li role="presentation">
+      <li [ngClass]="{active: path=='control-form'}">
         <a [routerLink]="['./ControlForm']">ControlForm</a>
       </li>
-      <li role="presentation">
+      <li [ngClass]="{active: path=='my-form'}">
         <a [routerLink]="['./MyForm']">Form Component</a>
       </li>
-      <li role="presentation">
+      <li [ngClass]="{active: path=='form2'}">
         <a [routerLink]="['./Form2']">NgModel Form</a>
       </li>
-      <li role="presentation">
+      <li [ngClass]="{active: path=='input-output'}">
         <a [routerLink]="['./InputOutput']">InputOutput</a>
       </li>
-      <li role="presentation">
+      <li [ngClass]="{active: path=='start' || path=='start/child'}">
         <a [routerLink]="['./Start', 'StartMain']">Router</a>
       </li>
-      <li role="presentation">
-        <a [routerLink]="['./DynamicControls',
-          'DynamicControls']">DynamicControls</a>
+      <li [ngClass]="{active: path=='dynamic-controls'}">
+        <a [routerLink]="['./DynamicControls']">DynamicControls</a>
       </li>
       </ul>
     </div>
-    <div class="col-sm-9">
-      <router-outlet></router-outlet>
+    <div class="col-md-9">
+      <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4>{{path || 'home'}}</h4>
+      </div>
+      <div class="panel-body">
+        <router-outlet></router-outlet>
+      </div>
+      </div>
     </div>
   </div>
   `
 })
-export default class KitchenSink { }
+export default class KitchenSink {
+  public path: string = '';
+
+  constructor(private router: Router) {
+    router.subscribe((val) => this.path = val);
+  }
+
+}

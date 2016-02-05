@@ -6,23 +6,23 @@ import {NgClass, NgIf} from 'angular2/common';
   selector: 'input-output',
   template: `
     <div>
-      Parent Num: {{ num }} <br />
-      Parent Count: {{ parentCount }}
-      <counter [count]="num" 
-        (result)="onChange($event)">
-      </counter>
+        <h4>Parent Num: {{ num }}</h4>
+        <h4>Parent Count: {{ parentCount }}</h4>
+        <counter [count]="num" (result)="onChange($event)"></counter>
     </div>
+    <br/>
     <div class="button" [ngClass]="{active: isOn, disabled: isDisabled}"
       (click)="toggle(!isOn)">
-      Click me!
+        Click me!
     </div>
+    <br/>
     <div *ngIf="turn">
-      it's true
+        <h4>it's true</h4>
     </div>
   `,
    styles: [`
     .button {
-      margin: 20px 0;
+      padding: 5px;
       width: 120px;
       border: medium solid black;
     }

@@ -29,26 +29,64 @@ declare var ng: { probe: Function };
 
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
-import { DebugElement_ as DebugElement }
-       from 'angular2/src/core/debug/debug_element';
-// import { inspectNativeElement }
-//   from 'angular2/src/core/debug/debug_element_view_listener';
 import { Description } from '../utils/description';
+
+import {DirectiveResolver} from '../directive-resolver';
 
 export class Angular2Adapter extends BaseAdapter {
   _observer: MutationObserver;
 
+  _tree: any = {};
+
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
-    this._traverseTree(ng.probe(root),
-                       this._emitNativeElement,
-                       true,
-                       '0');
+
+    // this._traverseTree(ng.probe(root),
+    //                     this._emitNativeElement,
+    //                     true,
+    //                    '0');
+
+    this._traverseElements(ng.probe(root),
+      true,
+      '0',
+      this._emitNativeElement);
+
     this._trackChanges(root);
   }
 
-  serializeComponent(el: DebugElement, event: string): TreeNode {
+  _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
+
+    if (compEl.componentInstance) {
+      this._tree[idx] = 0;
+      cb(compEl, isRoot, idx);
+    }
+
+    if (compEl.children.length > 0) {
+      compEl
+      .children
+      .forEach((child: any, childIdx: number) => {
+
+        let index: string = idx;
+        if (child.componentInstance) {
+          index = [idx, this._tree[idx]].join('.');
+          this._tree[idx]++;
+        }
+
+        this._traverseElements(child,
+          false,
+          index,
+          cb);
+      });
+
+    }
+  }
+
+  getClassName(type: any): boolean {
+    return type.constructor.toString().match(/\w+/g)[1] === 'DebugElement';
+  }
+
+  serializeComponent(el: any, event: string): TreeNode {
     const debugEl = el;
     const id = this._getComponentID(debugEl);
     const name = this._getComponentName(debugEl);
@@ -56,7 +94,6 @@ export class Angular2Adapter extends BaseAdapter {
     const state = this._normalizeState(name, this._getComponentState(debugEl));
     const input = this._getComponentInput(debugEl);
     const output = this._getComponentOutput(debugEl);
-    const lastTickTime = this._getComponentPerf(debugEl);
 
     return {
       id,
@@ -64,11 +101,7 @@ export class Angular2Adapter extends BaseAdapter {
       description,
       state,
       input,
-      output,
-      lastTickTime,
-      __meta: {
-        event
-      }
+      output
     };
   }
 
@@ -78,24 +111,36 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _findRoot(): Element {
-    return document.body.querySelector('[data-ngid]');
+    let elements: any = document.querySelectorAll('body *');
+    for (let i = 0; i < elements.length; i++) {
+      let debugElement = ng.probe(elements[i]);
+      if (debugElement && debugElement.componentInstance) {
+        return elements[i];
+      }
+    }
+    throw new Error('Not able to find root node');
   }
 
-  _traverseTree(compEl: DebugElement, cb: Function, isRoot: boolean,
-    idx: string): void {
+  _traverseTree(compEl: any, cb: Function, isRoot: boolean, idx: string): void {
     cb(compEl, isRoot, idx);
 
     const lightDOMChildren = this._getComponentNestedChildren(compEl);
     const rootChildren = this._getComponentChildren(compEl);
 
-    if (!lightDOMChildren.length && !rootChildren.length) {
+    if (!lightDOMChildren.length && (rootChildren && !rootChildren.length)) {
       return;
     }
 
-    const children = lightDOMChildren.length && lightDOMChildren ||
-                     rootChildren.length && rootChildren;
+    let children = [];
+    if (lightDOMChildren.length && lightDOMChildren) {
+      children = lightDOMChildren;
+    }
 
-    children.forEach((child: DebugElement, childIdx: number) => {
+    if (rootChildren && rootChildren.length) {
+      children = rootChildren;
+    }
+
+    children.forEach((child: any, childIdx: number) => {
       this._traverseTree(child,
                          cb,
                          false,
@@ -103,7 +148,7 @@ export class Angular2Adapter extends BaseAdapter {
     });
   }
 
-  _emitNativeElement = (compEl: DebugElement, isRoot: boolean,
+  _emitNativeElement = (compEl: any, isRoot: boolean,
     idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
 
@@ -111,7 +156,8 @@ export class Angular2Adapter extends BaseAdapter {
     // batarangle-id above it.
     if (nativeElement.nodeType === Node.COMMENT_NODE) {
       const commentNode = document.createComment(`{"batarangle-id": "${idx}"}`);
-      if (nativeElement.previousSibling === null || !nativeElement.previousSibling.isEqualNode(commentNode)) {
+      if (nativeElement.previousSibling === null
+        || !nativeElement.previousSibling.isEqualNode(commentNode)) {
         nativeElement.parentNode.insertBefore(commentNode, nativeElement);
       }
     } else {
@@ -144,22 +190,27 @@ export class Angular2Adapter extends BaseAdapter {
     this._observer.disconnect();
 
     const root = this._findRoot();
-    this._traverseTree(ng.probe(root),
-                       this._emitNativeElement,
-                       true,
-                       '0');
+    // this._traverseTree(ng.probe(root),
+    //                    this._emitNativeElement,
+    //                    true,
+    //                    '0');
+    this._tree = {};
+    this._traverseElements(ng.probe(root),
+      true,
+      '0',
+      this._emitNativeElement);
     this._trackChanges(root);
   };
 
-  _getComponentChildren(compEl: DebugElement): DebugElement[] {
-    return <DebugElement[]>compEl.componentViewChildren;
+  _getComponentChildren(compEl: any): any[] {
+    return <any[]>compEl.componentViewChildren;
   }
 
-  _getComponentNestedChildren(compEl: DebugElement): DebugElement[] {
-    return <DebugElement[]>compEl.children;
+  _getComponentNestedChildren(compEl: any): any[] {
+    return <any[]>compEl.children;
   }
 
-  _getNativeElement(compEl: DebugElement): Element {
+  _getNativeElement(compEl: any): Element {
     return compEl.nativeElement;
   }
 
@@ -182,16 +233,16 @@ export class Angular2Adapter extends BaseAdapter {
     return f.call(el, selector);
   }
 
-  _getComponentInstance(compEl: DebugElement): Object {
+  _getComponentInstance(compEl: any): Object {
     // fix could be undefined (are we grabbing the right element?)
     return compEl.componentInstance || {};
   }
 
-  _getComponentRef(compEl: DebugElement): Element {
+  _getComponentRef(compEl: any): Element {
     return compEl.nativeElement;
   }
 
-  _getComponentID(compEl: DebugElement): string {
+  _getComponentID(compEl: any): string {
     const nativeElement = this._getComponentRef(compEl);
     let id;
     if (nativeElement.nodeType !== Node.COMMENT_NODE) {
@@ -203,7 +254,7 @@ export class Angular2Adapter extends BaseAdapter {
     return id;
   }
 
-  _getComponentName(compEl: DebugElement): string {
+  _getComponentName(compEl: any): string {
     const constructor =  <any>this._getComponentInstance(compEl)
                                   .constructor;
     const constructorName = constructor.name;
@@ -224,7 +275,7 @@ export class Angular2Adapter extends BaseAdapter {
     return true;
   }
 
-  _getComponentState(compEl: DebugElement): Object {
+  _getComponentState(compEl: any): Object {
     const ret = {};
     const instance = this._getComponentInstance(compEl);
 
@@ -241,37 +292,35 @@ export class Angular2Adapter extends BaseAdapter {
     return ret;
   }
 
-  _getComponentInput(compEl: DebugElement): Object {
-    const props = {};
-    // TODO: replace this logic with one that works
-    // if (compEl._elementInjector) {
-    //   const protoInjector = compEl._elementInjector._injector._proto;
-    //   for (let i = 0; i < protoInjector.numberOfProviders; i++) {
-    //     let provider = protoInjector.getProviderAtIndex(i);
-    //     if (provider instanceof DirectiveProvider) {
-    //       props[provider.displayName] = provider.metadata.events;
-    //     }
-    //   }
-    // }
+  _getComponentInput(compEl: any): Object {
+    let props = [];
+    if (compEl.providerTokens.length > 0) {
+      try {
+        const directiveResolver: DirectiveResolver = new DirectiveResolver();
+        let metadata = directiveResolver.resolve(compEl.providerTokens[0]);
+        props = metadata.inputs;
+      } catch (ex) {
+        console.log(ex.message);
+      }
+    }
     return props;
   }
 
-  _getComponentOutput(compEl: DebugElement): Object {
-    const events = {};
-    // TODO: replace this logic with one that works
-    // if (compEl._elementInjector) {
-    //   const protoInjector = compEl._elementInjector._injector._proto;
-    //   for (let i = 0; i < protoInjector.numberOfProviders; i++) {
-    //     let provider = protoInjector.getProviderAtIndex(i);
-    //     if (provider instanceof DirectiveProvider) {
-    //       events[provider.displayName] = provider.metadata.events;
-    //     }
-    //   }
-    // }
+  _getComponentOutput(compEl: any): Object {
+    let events = {};
+    if (compEl.providerTokens.length > 0) {
+      try {
+        const directiveResolver: DirectiveResolver = new DirectiveResolver();
+        let metadata = directiveResolver.resolve(compEl.providerTokens[0]);
+        events = metadata.outputs;
+      } catch (ex) {
+        console.log(ex.message);
+      }
+    }
     return events;
   }
 
-  _getComponentPerf(compEl: DebugElement): number {
+  _getComponentPerf(compEl: any): number {
     return 0;
   }
 
@@ -335,12 +384,12 @@ export class Angular2Adapter extends BaseAdapter {
     };
   }
 
-  _getDescription(compEl: DebugElement): Object[] {
+  _getDescription(compEl: any): Object[] {
     if (compEl.componentInstance) {
       return Description.getComponentDescription(compEl);
     } else {
       return [
-        { key:'name', value: this._getComponentName(compEl) }
+        { key: 'name', value: this._getComponentName(compEl) }
       ];
     }
   }
