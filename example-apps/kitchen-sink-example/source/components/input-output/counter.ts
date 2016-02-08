@@ -6,7 +6,7 @@ import {Component, EventEmitter} from 'angular2/core';
   outputs: ['result'],
   template: `
     <div>
-      <p>Count: {{ count }}</p>
+      <h4>Count: {{ count }}</h4>
       <button class="btn btn-primary" (click)="increment()">Increment</button>
     </div>
   `

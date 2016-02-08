@@ -20,9 +20,13 @@ import StartMain from './start-main';
   directives: [RouterLink, ROUTER_DIRECTIVES],
   template: `
   <div>
-    Start Component
-    <li><a [routerLink]="['./StartMain']">StartMain</a></li>
-    <li><a [routerLink]="['./StartChild']">StartChild</a></li>
+    <h3>Start Component</h3>
+    <h4>
+      <ul>
+        <li><a [routerLink]="['./StartMain']">StartMain</a></li>
+        <li><a [routerLink]="['./StartChild']">StartChild</a></li>
+      </ul>
+    </h4>
     <router-outlet></router-outlet>
   </div>
   `

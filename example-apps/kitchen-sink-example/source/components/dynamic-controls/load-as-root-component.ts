@@ -10,7 +10,7 @@ import Hello from './hello';
   ],
   template: `
     <div class="wrapper">
-      <h4>LoadAsRoot Component</h4>
+      <h3>LoadAsRoot Component</h3>
       <div id="anchor"></div>
     </div>`
 })
