@@ -9,8 +9,10 @@ import Hello from './hello';
   ],
   template: `
     <div class="wrapper">
-      <h4>LoadIntoLocation Component</h4>
-      <button (click)="loadComponent()">Load Component</button>
+      <h3>LoadIntoLocation Component</h3>
+      <button class="btn btn-primary" (click)="loadComponent()">
+        Load Component
+      </button>
       <div #anchor></div>
     </div>`
 })

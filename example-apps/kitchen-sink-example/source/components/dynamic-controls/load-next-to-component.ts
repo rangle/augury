@@ -8,7 +8,7 @@ import Hello from './hello';
     Hello
   ],
   template: `
-    <h4>LoadNextToLocation Component</h4>`
+    <h3>LoadNextToLocation Component</h3>`
 })
 export default class LoadNextToComponent {
   constructor(dcl: DynamicComponentLoader,

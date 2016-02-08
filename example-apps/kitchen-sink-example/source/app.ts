@@ -1,6 +1,6 @@
 // Load Global Styles
 import {ROUTER_PROVIDERS, LocationStrategy,
-    PathLocationStrategy, APP_BASE_HREF} from 'angular2/router';
+  HashLocationStrategy, APP_BASE_HREF} from 'angular2/router';
 import {provide} from 'angular2/core';
 import {FORM_DIRECTIVES} from 'angular2/common';
 
@@ -17,7 +17,7 @@ import {bind} from 'angular2/core';
 bootstrap(KitchenSink, [
   ROUTER_PROVIDERS,
   FORM_DIRECTIVES,
-  provide(LocationStrategy, { useClass: PathLocationStrategy }),
+  provide(LocationStrategy, { useClass: HashLocationStrategy }),
   provide(APP_BASE_HREF, {useValue: '/'}),
   bind(AppViewListener).toClass(DebugElementViewListener)
 ])

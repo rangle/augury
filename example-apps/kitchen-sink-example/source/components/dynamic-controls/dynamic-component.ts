@@ -8,7 +8,7 @@ import Hello from './hello';
   ],
   template: `
     <div class="wrapper">
-      <h5>Dynamically loaded component</h5>
+      <h4>Dynamically loaded component</h4>
       <hello></hello>
     </div>`
 })
