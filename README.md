@@ -10,6 +10,12 @@ Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applic
 
 If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
 
+## Getting Extension
+
+* To download the latest build go to [Batarangle.io](http://batarangle.io) and click install
+* After download is complete go to Chrome Extensions `chrome://extensions` in the Chrome
+* Drag and Drop the bownloaded package to install the extension
+
 ## Development Environment
 
 To develop this extension, the following environment is used:
