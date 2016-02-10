@@ -44,7 +44,7 @@ import ControlForm from '../components/form-controls/control-form';
       <li [ngClass]="{active: path=='input-output'}">
         <a [routerLink]="['./InputOutput']">InputOutput</a>
       </li>
-      <li [ngClass]="{active: path=='start'}">
+      <li [ngClass]="{active: path=='start' || path=='start/child'}">
         <a [routerLink]="['./Start', 'StartMain']">Router</a>
       </li>
       <li [ngClass]="{active: path=='dynamic-controls'}">

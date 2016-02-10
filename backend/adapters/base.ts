@@ -42,10 +42,6 @@ export interface TreeNode {
   state: Object;
   input: Object;
   output: Object;
-  lastTickTime: number;
-  __meta: {
-    event: string;    // AdapterEventType
-  };
 }
 
 // TSFIXME(bertrandk): This would be much nicer if we could actually extend
