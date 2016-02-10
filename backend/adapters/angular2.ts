@@ -42,11 +42,6 @@ export class Angular2Adapter extends BaseAdapter {
     // only supports applications with single root for now
     const root = this._findRoot();
 
-    // this._traverseTree(ng.probe(root),
-    //                     this._emitNativeElement,
-    //                     true,
-    //                    '0');
-
     this._traverseElements(ng.probe(root),
       true,
       '0',
@@ -111,41 +106,14 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _findRoot(): Element {
-    let elements: any = document.querySelectorAll('body *');
+    const elements: any = document.querySelectorAll('body *');
     for (let i = 0; i < elements.length; i++) {
-      let debugElement = ng.probe(elements[i]);
+      const debugElement = ng.probe(elements[i]);
       if (debugElement && debugElement.componentInstance) {
         return elements[i];
       }
     }
     throw new Error('Not able to find root node');
-  }
-
-  _traverseTree(compEl: any, cb: Function, isRoot: boolean, idx: string): void {
-    cb(compEl, isRoot, idx);
-
-    const lightDOMChildren = this._getComponentNestedChildren(compEl);
-    const rootChildren = this._getComponentChildren(compEl);
-
-    if (!lightDOMChildren.length && (rootChildren && !rootChildren.length)) {
-      return;
-    }
-
-    let children = [];
-    if (lightDOMChildren.length && lightDOMChildren) {
-      children = lightDOMChildren;
-    }
-
-    if (rootChildren && rootChildren.length) {
-      children = rootChildren;
-    }
-
-    children.forEach((child: any, childIdx: number) => {
-      this._traverseTree(child,
-                         cb,
-                         false,
-                         [idx, childIdx].join('.'));
-    });
   }
 
   _emitNativeElement = (compEl: any, isRoot: boolean,
@@ -190,10 +158,6 @@ export class Angular2Adapter extends BaseAdapter {
     this._observer.disconnect();
 
     const root = this._findRoot();
-    // this._traverseTree(ng.probe(root),
-    //                    this._emitNativeElement,
-    //                    true,
-    //                    '0');
     this._tree = {};
     this._traverseElements(ng.probe(root),
       true,
@@ -297,7 +261,7 @@ export class Angular2Adapter extends BaseAdapter {
     if (compEl.providerTokens.length > 0) {
       try {
         const directiveResolver: DirectiveResolver = new DirectiveResolver();
-        let metadata = directiveResolver.resolve(compEl.providerTokens[0]);
+        const metadata = directiveResolver.resolve(compEl.providerTokens[0]);
         props = metadata.inputs;
       } catch (ex) {
         console.log(ex.message);
@@ -311,7 +275,7 @@ export class Angular2Adapter extends BaseAdapter {
     if (compEl.providerTokens.length > 0) {
       try {
         const directiveResolver: DirectiveResolver = new DirectiveResolver();
-        let metadata = directiveResolver.resolve(compEl.providerTokens[0]);
+        const metadata = directiveResolver.resolve(compEl.providerTokens[0]);
         events = metadata.outputs;
       } catch (ex) {
         console.log(ex.message);
