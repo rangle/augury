@@ -48,8 +48,6 @@ In addition, example applications all run with a globablly installed version of 
 
 To try out with an example application, refer to instructions in [README](./example-apps/todo-mvc-example/README.md).
 
-In order to use this extension with your own application, you will need to make a slight modification to your code. See section [Current Limitation](#current-limitations) below for more detailed instructions.
-
 ## Running Tests
 
 To execute all unit tests, run `npm test`. It bundles up all files that match `*.test.ts` into `build/test.js`, then runs it through tape-run in a headless Electron browser.
