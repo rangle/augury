@@ -7,12 +7,6 @@ chrome.runtime.onConnect.addListener(port => {
     // DevTools page, so we need to send it explicitly.
     if (message.name === 'init') {
       connections.set(message.tabId, port);
-      // return;
-    }
-
-    if (connections.has(message.tabId)) {
-      // chrome.tabs.sendMessage(message.tabId, message);
-      // return;
     }
 
     chrome.tabs.sendMessage(message.tabId, message);
@@ -23,7 +17,6 @@ chrome.runtime.onConnect.addListener(port => {
   port.onMessage.addListener(frontendListener);
 
   port.onDisconnect.addListener(_port => {
-
 
     _port.onMessage.removeListener(frontendListener);
     connections.forEach((value, key, map) => {
@@ -40,15 +33,11 @@ chrome.runtime.onConnect.addListener(port => {
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
     // Messages from content scripts should have sender.tab set
-    if (sender.tab) {
-      if (connections.has(sender.tab.id)) {
-        console.log('Channel: Sending message to Frontend', message, sender);
-        connections.get(sender.tab.id).postMessage(message);
-      } else {
-        console.log('Tab not found in connection list.');
+    if (sender.tab && connections.has(sender.tab.id)) {
+      if (message.from === 'content-script') {
+        sendResponse({connection: true});
       }
-    } else {
-      console.log('sender.tab not defined.');
+      connections.get(sender.tab.id).postMessage(message);
     }
 
     return true;
