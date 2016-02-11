@@ -30,13 +30,15 @@ export class InfoPanel {
         this.node = selectedNode;
         const container = this.elementRef.nativeElement.lastChild;
 
-        if (container && selectedNode) {
-          const formatter = new JSONFormatter(selectedNode);
-
+        if (container) {
           while (container.firstChild) {
             container.removeChild(container.firstChild);
           }
 
+          if (!selectedNode) {
+            selectedNode = {};
+          }
+          const formatter = new JSONFormatter(selectedNode);
           container.appendChild(formatter.render());
         }
 
