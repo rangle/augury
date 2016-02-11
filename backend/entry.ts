@@ -20,12 +20,7 @@ let channel = {
 let adapter = new Angular2Adapter();
 let dom = new DomController(adapter, channel);
 dom.hookIntoBackend();
-// try {
   adapter.setup();
-// } catch (error) {
-//   console.log(error);
-//   console.log(ERROR_MESSAGE);
-// }
 
 
 window.addEventListener('message', function(event) {
@@ -42,12 +37,10 @@ window.addEventListener('message', function(event) {
       adapter._observer.disconnect();
       adapter.cleanup();
 
-      // adapter.reset();
       adapter = new Angular2Adapter();
       dom = new DomController(adapter, channel);
       dom.hookIntoBackend();
       adapter.setup();
-      // adapter._handleChanges([]);
     } else if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
       let highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
