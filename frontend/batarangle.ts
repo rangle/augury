@@ -13,6 +13,7 @@ import {BackendMessagingService} from './channel/backend-messaging-service';
 
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
+import * as Rx from 'rxjs';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
@@ -48,8 +49,10 @@ class App {
 
     this.componentDataStore.dataStream
       .map(({ componentData }: any) => componentData)
+      .debounce((x) => {
+        return Rx.Observable.timer(500);
+      })
       .subscribe(componentData => {
-        // console.log('Application Root Received: ', componentData);
         this.tree = componentData;
         this._ngZone.run(() => undefined);
       }
