@@ -40,15 +40,14 @@ chrome.runtime.onConnect.addListener(port => {
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
     // Messages from content scripts should have sender.tab set
-    if (sender.tab) {
-      if (connections.has(sender.tab.id)) {
-        console.log('Channel: Sending message to Frontend', message, sender);
-        connections.get(sender.tab.id).postMessage(message);
-      } else {
-        console.log('Tab not found in connection list.');
+    console.log('message', message);
+    if (sender.tab && connections.has(sender.tab.id)) {
+      console.log('tabID', sender.tab.id);
+      if (message.from === 'content-script') {
+        sendResponse({connection: true});
       }
-    } else {
-      console.log('sender.tab not defined.');
+      console.log('Channel: Sending message to Frontend', message, sender);
+      connections.get(sender.tab.id).postMessage(message);
     }
 
     return true;

@@ -1,27 +1,29 @@
-// var script = document.createElement('script');
-// script.src = chrome.extension.getURL('build/entry.js');
-// document.documentElement.appendChild(script);
-// script.parentNode.removeChild(script);
-
 let count = 0;
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Need to investigate why when moving the injection block
-  // out of the addListener scope does not work.
-  // I would think that having the commented out block at the top of this
-  // file is all we need to kick start the messaging process.
-  if (message.name === 'init') {
+const injectEntry = () => {
+  if (count === 0) {
 
-    if (count === 0) {
+    let script = document.createElement('script');
+    script.src = chrome.extension.getURL('build/entry.js');
+    document.documentElement.appendChild(script);
+    // script.parentNode.removeChild(script);
 
-      let script = document.createElement('script');
-      script.src = chrome.extension.getURL('build/entry.js');
-      document.documentElement.appendChild(script);
-      script.parentNode.removeChild(script);
+    count++;
+  }
+}
 
-      count++;
+chrome.runtime.sendMessage({
+    from: 'content-script'
+  }, (response) => {
+    console.log('recived msg from bg page', response);
+    if (response.connection) {
+      injectEntry();
     }
+  });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.name === 'init') {
+    injectEntry();
     return;
   }
 
