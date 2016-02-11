@@ -8,12 +8,19 @@ import Hello from './hello';
     Hello
   ],
   template: `
-    <h3>LoadNextToLocation Component</h3>`
+    <h3>LoadNextToLocation Component</h3>
+    <button class="btn btn-success" (click)="loadComponent()">
+      Load Component
+    </button>
+  `
 })
 export default class LoadNextToComponent {
-  constructor(dcl: DynamicComponentLoader,
-    elementRef: ElementRef) {
-    dcl.loadNextToLocation(DynamicComponent, elementRef)
+  constructor(
+    private dcl: DynamicComponentLoader,
+    private elementRef: ElementRef) { }
+
+  loadComponent() {
+    this.dcl.loadNextToLocation(DynamicComponent, this.elementRef)
       .then(componentRef => console.log('loadNextToLocation', componentRef));
   }
 }

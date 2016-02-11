@@ -17,10 +17,10 @@ import Hello from './hello';
     </div>`
 })
 export default class LoadIntoComponent {
-  constructor(private dcl: DynamicComponentLoader,
-    private elementRef: ElementRef) {
-
-  }
+  constructor(
+    private dcl: DynamicComponentLoader,
+    private elementRef: ElementRef
+  ) { }
 
   loadComponent() {
     this.dcl.loadIntoLocation(DynamicComponent, this.elementRef, 'anchor')

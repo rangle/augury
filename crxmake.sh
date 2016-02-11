@@ -9,7 +9,7 @@ npm -v
 
 dir="temp"
 key="key.pem"
-name="batarangle-packaged"
+name="batarangle"
 files="build frontend styles images index.html manifest.json"
 
 crx="$name.crx"

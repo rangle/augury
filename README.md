@@ -10,6 +10,22 @@ Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applic
 
 If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
 
+## Getting Extension
+
+You can get the extension in two ways:-
+
+If you just want to use the extension you can get the latest master build, which is packaged and hosted on every successful build of master branch on CircleCI
+* To download the latest build go to [Batarangle.io](http://batarangle.io) and click install
+* After download is complete go to Chrome Extensions `chrome://extensions` in the Chrome
+* Drag and Drop the downloaded package to install the extension
+
+If you want to download the source code and build it manually
+* Clone the repo and install all the dependencies required
+* Run command `npm run pack`
+* This will generate `batarangle.crx` in the source folder
+* Then go to Chrome Extensions `chrome://extensions` in the Chrome
+* Drag and Drop the bundled package to install the extension
+
 ## Development Environment
 
 To develop this extension, the following environment is used:
@@ -32,8 +48,6 @@ In addition, example applications all run with a globablly installed version of 
 
 To try out with an example application, refer to instructions in [README](./example-apps/todo-mvc-example/README.md).
 
-In order to use this extension with your own application, you will need to make a slight modification to your code. See section [Current Limitation](#current-limitations) below for more detailed instructions.
-
 ## Running Tests
 
 To execute all unit tests, run `npm test`. It bundles up all files that match `*.test.ts` into `build/test.js`, then runs it through tape-run in a headless Electron browser.
@@ -48,31 +62,14 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 - `postinstall` Update tsd and install/link typings
 - `start` Clean build and run webpack in watch mode
 - `test` Bundle all *.test.ts and run it through a headless browser
+- `prepack` Run npm build before running npm pack
+- `pack` Packages the extension and create chrome build batarangle.crx
 
 ## Developer Information
 
 - [Developer guide](https://github.com/rangle/batarangle/wiki)
 - [Contributing guidelines](CONTRIBUTING.md)
 - [Architecture of this extension](./docs/ARCHITECTURE.md)
-
-## Current Limitations
-
-As of the latest release, if you would like to use this extension to debug your application, you will need to bind the default `AppViewListener` to `DebugElementViewListener` during the bootstrapping of your app. It should look something like this:
-
-```
-import { AppViewListener } from 'angular2/src/core/linker/view_listener';
-import { DebugElementViewListener } from 'angular2/platform/common_dom';
-import { bind } from 'angular2/core';
-
-bootstrap(App, [
-  bind(AppViewListener).toClass(DebugElementViewListener),
-  ...
-  <other dependencies>
-  ...
-]);
-```
-
-You can also take a look at [how it's done in the example app](./example-apps/todo-mvc-example/source/app.ts#L10). This issue will be resolved at official release.
 
 ## Future Plans
 

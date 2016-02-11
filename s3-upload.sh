@@ -5,7 +5,7 @@
 echo "Start"
 
 # filename generated using circleci
-file=batarangle-packaged.crx
+file=batarangle.crx
 
 # bucket name
 bucket=batarangle

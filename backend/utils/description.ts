@@ -1,5 +1,5 @@
-import { DebugElement_ as DebugElement }
-       from 'angular2/src/core/debug/debug_element';
+// import { DebugElement_ as DebugElement }
+//        from 'angular2/src/core/debug/debug_element';
 
 export interface Property {
   key: string;
@@ -8,7 +8,7 @@ export interface Property {
 
 export abstract class Description {
 
-  public static getComponentDescription(compEl: DebugElement): Object[] {
+  public static getComponentDescription(compEl: any): Object[] {
 
     const componentInstance: any = compEl.componentInstance || {};
     const constructor: any =  componentInstance.constructor;
