@@ -6,16 +6,17 @@ const injectEntry = () => {
     let script = document.createElement('script');
     script.src = chrome.extension.getURL('build/entry.js');
     document.documentElement.appendChild(script);
-    // script.parentNode.removeChild(script);
+    script.parentNode.removeChild(script);
 
     count++;
   }
-}
+};
 
+// Check with background script to see if the current tab was
+// already registered. If so, then this is a reload.
 chrome.runtime.sendMessage({
     from: 'content-script'
   }, (response) => {
-    console.log('recived msg from bg page', response);
     if (response.connection) {
       injectEntry();
     }
