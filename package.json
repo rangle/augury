@@ -33,7 +33,7 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "2.0.0-beta.3",
+    "angular2": "2.0.0-beta.6",
     "basscss": "^7.0.4",
     "browserify": "^12.0.1",
     "crypto": "0.0.3",
