@@ -59,10 +59,10 @@
     "tap-spec": "^4.1.0",
     "tape": "^4.2.2",
     "tape-run": "^2.1.0",
-    "ts-loader": "0.5.6",
+    "ts-loader": "^0.8.1",
     "tsd": "^0.6.5",
     "tslint-loader": "^1.0.2",
-    "typescript": "1.6.2",
+    "typescript": "^1.7.5",
     "url-loader": "^0.5.6",
     "webpack": "1.12.2",
     "webpack-dev-server": "1.12.0"
