@@ -41,7 +41,7 @@ export class DirectiveResolver {
    * Return {@link DirectiveMetadata} for a given `Type`.
    */
   resolve(type: Type): DirectiveMetadata {
-    let typeMetadata = reflector.annotations(resolveForwardRef(type));
+    let typeMetadata: any = reflector.annotations(resolveForwardRef(type));
 
     if (isPresent(typeMetadata)) {
       let metadata = typeMetadata.find(_isDirectiveMetadata) ||
