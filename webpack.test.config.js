@@ -5,8 +5,8 @@ module.exports = {
   entry: {
     'test': [
       'rxjs',
-      'zone.js/lib/browser/zone-microtask',
-      'zone.js/lib/zones/long-stack-trace',
+      'zone.js/dist/zone-microtask',
+      'zone.js/dist/long-stack-trace-zone',
       'reflect-metadata',
       path.join(__dirname, 'webpack.test.bootstrap.ts')
     ]
