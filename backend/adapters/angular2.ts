@@ -96,7 +96,9 @@ export class Angular2Adapter extends BaseAdapter {
       description,
       state,
       input,
-      output
+      output,
+      isSelected: false,
+      isOpen: true
     };
   }
 

@@ -52,6 +52,7 @@ export class NodeItem {
    * @param  {Boolean} isSelected
    */
   update(isSelected) {
+    this.node.isSelected = isSelected;
     this.isSelected = isSelected;
     this.borderColor = isSelected ? '#0074D9' :
       'rgba(0, 0, 0, 0.125)';

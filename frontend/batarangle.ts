@@ -38,6 +38,14 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 class App {
 
   private tree: any;
+  private previousTree: any;
+  private selectedNode: any;
+
+  // selectPreviousNode() {
+  //   this.userActions.selectNode({ node: this.selectedNode });
+  //   this._ngZone.run(() => undefined);
+  // }
+
   constructor(
     private backendAction: BackendActions,
     private userActions: UserActions,
@@ -47,13 +55,30 @@ class App {
 
     this.userActions.startComponentTreeInspection();
 
+    // Listen for changes in selected node
     this.componentDataStore.dataStream
+      .filter((data: any) => data.action && data.action === 'NODE_SELECTED')
+      .subscribe((data: any) => {
+        this.selectedNode = data.selectedNode;
+      });
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => data.action && data.action === 'TREE_CHANGED')
       .map(({ componentData }: any) => componentData)
       .debounce((x) => {
         return Rx.Observable.timer(500);
       })
       .subscribe(componentData => {
-        this.tree = componentData;
+        console.log(componentData);
+        if (!this.tree) {
+          this.tree = componentData;
+        } else {
+          this.previousTree = this.tree;
+          this.tree = componentData;
+        }
+
+        console.log(this.tree, this.previousTree, this.selectedNode);
+
         this._ngZone.run(() => undefined);
       }
     );

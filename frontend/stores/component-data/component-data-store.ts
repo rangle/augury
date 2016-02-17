@@ -50,7 +50,10 @@ export class ComponentDataStore extends AbstractStore {
   private componentDataChanged(componentData: Array<Object>) {
 
     this._componentData = componentData;
-    this.emitChange({ componentData });
+    this.emitChange({
+      componentData,
+      action: 'TREE_CHANGED'
+    });
 
   }
 
@@ -62,7 +65,8 @@ export class ComponentDataStore extends AbstractStore {
 
     this.emitChange({
       selectedNode: node,
-      componentData: this._componentData
+      componentData: this._componentData,
+      action: 'NODE_SELECTED'
     });
 
   }
