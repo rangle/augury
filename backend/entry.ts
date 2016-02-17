@@ -2,6 +2,8 @@ import {DomController} from './controllers/dom';
 import {Angular2Adapter} from './adapters/angular2';
 import Highlighter from './utils/highlighter';
 
+declare var ng: { probe: Function };
+
 const ERROR_MESSAGE = 'Please bind the default AppViewListener to'
   + 'DebugElementViewListener during the bootstrapping of your app refer:'
   + 'https://github.com/rangle/batarangle#current-limitations';
@@ -49,6 +51,14 @@ window.addEventListener('message', function(event) {
         event.data.message.message.node.name);
     } else if (event.data.message.message.actionType === 'CLEAR_HIGHLIGHT') {
       Highlighter.clear();
+    } else if (event.data.message.message.actionType === 'SELECT_NODE') {
+      let highlightStr = '[batarangle-id=\"' +
+        event.data.message.message.node.id + '\"]';
+
+      Object.defineProperty(window, '$a', {
+        configurable: true,
+        value: ng.probe(document.querySelector(highlightStr))
+      });
     }
 
     return true;

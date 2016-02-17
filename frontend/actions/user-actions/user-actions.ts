@@ -45,6 +45,11 @@ export class UserActions {
       node
     });
 
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.SELECT_NODE,
+      node
+    });
+
   }
 
   /**
