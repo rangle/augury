@@ -2,8 +2,8 @@
 import 'es6-shim';
 import 'es6-promise';
 import 'reflect-metadata';
-import 'zone.js/lib/browser/zone-microtask';
-import 'zone.js/lib/zones/long-stack-trace'; // remove this for prod
+import 'zone.js/dist/zone-microtask';
+import 'zone.js/dist/long-stack-trace-zone'; // remove this for prod
 
 // Angular 2
 import 'angular2/platform/browser';
