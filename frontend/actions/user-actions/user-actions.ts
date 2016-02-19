@@ -23,15 +23,7 @@ export class UserActions {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
-
-    // This is not strictly needed for now.
-    // Just a broadcast that this was sent.
-    // But, we might want to listen to this in the future.
-    // For example: show indication that request has been sent on the UI
-    this.dispatcher.messageBus.next({
-      actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
-    });
-
+    
   }
 
   /**
