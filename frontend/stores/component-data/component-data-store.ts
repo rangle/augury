@@ -14,6 +14,8 @@ interface Query { query: string; }
 export class ComponentDataStore extends AbstractStore {
 
   private _componentData;
+  private _openedNodes = [];
+
   constructor(
     private dispatcher: Dispatcher
   ) {
@@ -32,6 +34,15 @@ export class ComponentDataStore extends AbstractStore {
     this.dispatcher.onAction(
       UserActionType.SEARCH_NODE,
       action => this.searchNode(action));
+
+    this.dispatcher.onAction(
+      UserActionType.OPEN_CLOSE_TREE,
+      action => this.openCloseNode(action));
+
+    this.dispatcher.onAction(
+      UserActionType.UPDATE_NODE_STATE,
+      action => this.updateNodeState(action));
+
   }
 
   /**
@@ -52,6 +63,7 @@ export class ComponentDataStore extends AbstractStore {
     this._componentData = componentData;
     this.emitChange({
       componentData,
+      openedNodes: this._openedNodes,
       action: 'TREE_CHANGED'
     });
 
@@ -62,13 +74,19 @@ export class ComponentDataStore extends AbstractStore {
    * @param  {Object} options.node Node name
    */
   private selectNode({ node }: Node) {
-
     this.emitChange({
       selectedNode: node,
       componentData: this._componentData,
       action: 'NODE_SELECTED'
     });
+  }
 
+  private updateNodeState({openedNodes}) {
+    console.log(openedNodes);
+    this.emitChange({
+      openedNodes,
+      action: 'OPEN_CLOSE_TREE'
+    });
   }
 
   /**
@@ -160,6 +178,17 @@ export class ComponentDataStore extends AbstractStore {
       this.selectNode({ node });
     }
 
+  }
+
+  private openCloseNode({node}) {
+    if (!node.isOpen) {
+      this._openedNodes.push(node.id);
+    } else {
+      const index = this._openedNodes.indexOf(node.id);
+      if (index > -1) {
+        this._openedNodes.splice(index, 1);
+      }
+    }
   }
 
 }

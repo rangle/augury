@@ -85,4 +85,18 @@ export class UserActions {
     });
   }
 
+  openCloseNode({node}) {
+    this.dispatcher.messageBus.next({
+      actionType: UserActionType.OPEN_CLOSE_TREE,
+      node
+    });
+  }
+
+  updateNodeState({openedNodes}) {
+    this.dispatcher.messageBus.next({
+      actionType: UserActionType.UPDATE_NODE_STATE,
+      openedNodes
+    });
+  }
+
 }

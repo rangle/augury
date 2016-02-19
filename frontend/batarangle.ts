@@ -64,27 +64,31 @@ class App {
 
     this.componentDataStore.dataStream
       .filter((data: any) => data.action && data.action === 'TREE_CHANGED')
-      .map(({ componentData }: any) => componentData)
       .debounce((x) => {
         return Rx.Observable.timer(500);
       })
-      .subscribe(componentData => {
-        console.log(componentData);
+      .subscribe(data => {
         if (!this.tree) {
-          this.tree = componentData;
+          this.tree = data.componentData;
         } else {
           this.previousTree = this.tree;
-          this.tree = componentData;
+          this.tree = data.componentData;
+        }
+        this._ngZone.run(() => undefined);
+
+        if (this.selectedNode) {
+          this.userActions.selectNode({ node: this.selectedNode });
         }
 
-        console.log(this.tree, this.previousTree, this.selectedNode);
+        if(data.openedNodes.length > 0) {
+          this.userActions.updateNodeState({
+            openedNodes: data.openedNodes
+          })
+        }
 
-        this._ngZone.run(() => undefined);
       }
     );
-
   }
-
 }
 
 bootstrap(App, [
