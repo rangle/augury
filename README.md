@@ -32,10 +32,8 @@ To develop this extension, the following environment is used:
 
 * Node v4.2.1
 * NPM 3.3.10
-* TypeScript 1.6.2
-* tsd 0.6.5
-
-In addition, example applications all run with a globablly installed version of jspm 0.16.12.
+* TypeScript 1.7.5
+* typings 0.6.8
 
 ## Trying out the extension
 
@@ -57,9 +55,7 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 - `build` Build the extension
 - `webpack` Run webpack
 - `clean` Clean `node_modules` and `typings`,
-- `remove-tsd-loader-typings` Remove tsd loader typings
-- `tsd-update` Update tsd
-- `postinstall` Update tsd and install/link typings
+- `postinstall` install typings
 - `start` Clean build and run webpack in watch mode
 - `test` Bundle all *.test.ts and run it through a headless browser
 - `prepack` Run npm build before running npm pack
