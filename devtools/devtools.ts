@@ -20,16 +20,5 @@ chrome.devtools.panels.elements.createSidebarPane(
 chrome.devtools.panels.create(
   'Angular2',
   'images/angular.png',
-  'frontend/batarangle.html',
-  panel => {
-
-    panel.onShown.addListener(function(window) {
-      // console.log('🤖 i\'m here');
-    });
-
-    panel.onHidden.addListener(function() {
-      // console.log('i\'m gone');
-    });
-
-  }
+  'frontend/batarangle.html'
 );
