@@ -6,6 +6,9 @@ import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
 
+import {UserActionType}
+  from './actions/action-constants';
+
 import {ComponentDataStore}
   from './stores/component-data/component-data-store';
 
@@ -39,12 +42,6 @@ class App {
 
   private tree: any;
   private previousTree: any;
-  private selectedNode: any;
-
-  // selectPreviousNode() {
-  //   this.userActions.selectNode({ node: this.selectedNode });
-  //   this._ngZone.run(() => undefined);
-  // }
 
   constructor(
     private backendAction: BackendActions,
@@ -57,16 +54,10 @@ class App {
 
     // Listen for changes in selected node
     this.componentDataStore.dataStream
-      .filter((data: any) => data.action && data.action === 'NODE_SELECTED')
-      .subscribe((data: any) => {
-        this.selectedNode = data.selectedNode;
-      });
-
-    this.componentDataStore.dataStream
-      .filter((data: any) => data.action && data.action === 'TREE_CHANGED')
       .debounce((x) => {
         return Rx.Observable.timer(500);
       })
+      .filter((data: any) => data.action && data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
       .subscribe(data => {
         if (!this.tree) {
           this.tree = data.componentData;
@@ -76,14 +67,11 @@ class App {
         }
         this._ngZone.run(() => undefined);
 
-        if (this.selectedNode) {
-          this.userActions.selectNode({ node: this.selectedNode });
-        }
-
-        if(data.openedNodes.length > 0) {
+        if(data.openedNodes.length > 0 || data.selectedNode) {
           this.userActions.updateNodeState({
-            openedNodes: data.openedNodes
-          })
+            openedNodes: data.openedNodes,
+            selectedNode: data.selectedNode
+          });
         }
 
       }

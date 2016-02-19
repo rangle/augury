@@ -4,6 +4,8 @@ import * as Rx from 'rxjs';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
+import {UserActionType}
+  from '../../actions/action-constants';
 
 @Component({
   selector: 'bt-node-item',
@@ -36,22 +38,34 @@ export class NodeItem {
 
     // Listen for changes in selected node
     this.componentDataStore.dataStream
-      .map(({ selectedNode }: any) => selectedNode)
-      .filter((selectedNode: any) => selectedNode && selectedNode.id)
-      .subscribe((selectedNode: any) => {
-        const isSelected = this.node && selectedNode &&
-          selectedNode.id === this.node.id;
-        this.update(isSelected);
-      });
+      .filter((data) => {
+        return  data.action && data.action === UserActionType.SELECT_NODE &&
+          data.selectedNode && data.selectedNode.id;
+        })
+        .map(({ selectedNode }: any) => selectedNode)
+        .subscribe((selectedNode: any) => {
+            const isSelected = this.node && selectedNode &&
+              selectedNode.id === this.node.id;
+            this.update(isSelected);
+        });
 
     this.componentDataStore.dataStream
       .filter((data: any) => {
-        return data.action && data.action === 'OPEN_CLOSE_TREE' &&
+        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
           data.openedNodes.indexOf(this.node.id) > -1;
       })
       .subscribe((data) => {
         this.node.isOpen = false;
         this._ngZone.run(() => undefined);
+      })
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => {
+        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
+          data.selectedNode.id === this.node.id;
+      })
+      .subscribe((data) => {
+        this.userActions.selectNode({ node: this.node });
       })
   }
 
