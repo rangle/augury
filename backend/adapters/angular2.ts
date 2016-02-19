@@ -284,10 +284,6 @@ export class Angular2Adapter extends BaseAdapter {
     return events;
   }
 
-  _getComponentPerf(compEl: any): number {
-    return 0;
-  }
-
   _normalizeState(name: string, state: Object): Object {
     switch (name) {
       case 'NgFor':
@@ -313,8 +309,6 @@ export class Angular2Adapter extends BaseAdapter {
 
   _normalizeNgFor(state: any): Object {
     return {
-      // TODO: needs investigation on what this is/does
-      // iterableDiffers: state._iterableDiffers,
       length: state._ngForOf.length,
       items: state._ngForOf
     };
@@ -322,10 +316,6 @@ export class Angular2Adapter extends BaseAdapter {
 
   _normalizeNgClass(state: any): Object {
     return {
-      // TODO: needs investigation on what these are
-      // iterableDiffers: state._iterableDiffers,
-      // keyValueDiffers: state._keyValueDiffers,
-      // differ: state._differ,
       evaluationMode: state._mode,
       initialClasses: state._initialClasses,
       evaluatedClasses: state._rawClass
@@ -344,7 +334,6 @@ export class Angular2Adapter extends BaseAdapter {
   _normalizeNgStyle(state: any): Object {
     return {
       styles: state._rawStyle
-      // differ: state._differ
     };
   }
 

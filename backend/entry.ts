@@ -4,10 +4,6 @@ import Highlighter from './utils/highlighter';
 
 declare var ng: { probe: Function };
 
-const ERROR_MESSAGE = 'Please bind the default AppViewListener to'
-  + 'DebugElementViewListener during the bootstrapping of your app refer:'
-  + 'https://github.com/rangle/batarangle#current-limitations';
-
 let channel = {
   sendMessage: (message) => {
     return window.postMessage(JSON.parse(JSON.stringify({
@@ -17,12 +13,10 @@ let channel = {
   }
 };
 
-// TODO: Look into starting this in one place
-// i.e. in the code processing START_COMPONENT_TREE_INSPECTION action
 let adapter = new Angular2Adapter();
 let dom = new DomController(adapter, channel);
 dom.hookIntoBackend();
-  adapter.setup();
+adapter.setup();
 
 
 window.addEventListener('message', function(event) {
@@ -33,17 +27,7 @@ window.addEventListener('message', function(event) {
 
   if (event.data.type && (event.data.type === 'BATARANGLE_CONTENT_SCRIPT')) {
 
-    if (event.data.message.message.actionType ===
-      'START_COMPONENT_TREE_INSPECTION') {
-
-      adapter._observer.disconnect();
-      adapter.cleanup();
-
-      adapter = new Angular2Adapter();
-      dom = new DomController(adapter, channel);
-      dom.hookIntoBackend();
-      adapter.setup();
-    } else if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
+    if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
       let highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
       Highlighter.clear();
