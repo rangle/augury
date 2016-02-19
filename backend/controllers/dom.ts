@@ -58,10 +58,8 @@ export class DomController extends BaseController {
         this._handleChildAdd(evt.node);
         break;
       case EventType.CHANGE:
-        // this._handleComponentChanges(evt.node);
         break;
       case EventType.REMOVE:
-        // this._handleRemovals(evt.node);
         break;
       case EventType.CLEAR:
         this._handleReset();

@@ -42,10 +42,7 @@ keys.md
 ref
 NOTES.md
 
-typings/*
-!typings/tsd.d.ts
-example-apps/todo-mvc-example/jspm_packages/*
-example-apps/todo-mvc-example/typings/*
+typings
 
 key.pem
 *.crx
