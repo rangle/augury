@@ -39,6 +39,8 @@ window.addEventListener('message', function(event) {
       let highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
 
+      (<HTMLElement>document.querySelector(highlightStr)).scrollIntoView();
+
       Object.defineProperty(window, '$a', {
         configurable: true,
         value: ng.probe(document.querySelector(highlightStr))
