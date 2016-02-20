@@ -2,19 +2,27 @@
 
   <header class="py2 px3 bg-darken-1 border-bottom">
 
-    <div class="col col-8 flex flex-center primary-color">
+    <div class="col col-7 flex flex-center primary-color">
       <img src="../images/batarangle.svg"
         class="mr2"
         style="width: 18px; height: 18px;">Batarangle
     </div>
 
     <!-- SEARCH -->
-    <input class="col-4 bg-white border rounded border-color-dark"
+    <input class="col col-4 bg-white border rounded border-color-dark"
       placeholder="Search"
       type="text"
       #query
-      (keyup)="onChange(query.value)">
+      (keyup)="onChange($event, query.value)">
 
+    <div class="col col-1">
+      <img src="../images/Triangle.svg"
+           (click)="previousClick()"
+           style="width: 0.8em; height: 0.8em;">
+      <img src="../images/Triangle.svg" class="rotate180"
+           (click)="nextClick()"
+           style="width: 0.8em; height: 0.8em;">
+    </div>
   </header>
 
   <div class="flex">

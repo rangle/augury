@@ -23,7 +23,7 @@ export class UserActions {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
-    
+
   }
 
   /**
@@ -48,11 +48,12 @@ export class UserActions {
    * Search for a node to be highlighted
    * @param  {String} options.query
    */
-  searchNode({ query }) {
+  searchNode({ query, index }) {
 
     this.dispatcher.messageBus.next({
       actionType: UserActionType.SEARCH_NODE,
-      query
+      query,
+      index
     });
 
   }

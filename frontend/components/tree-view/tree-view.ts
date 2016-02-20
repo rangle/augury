@@ -19,6 +19,8 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 export class TreeView {
 
   private tree: any;
+  private _searchIndex: number = 1;
+
   constructor(
     private userActions: UserActions,
     private _ngZone: NgZone
@@ -29,9 +31,16 @@ export class TreeView {
    * Query for a node
    * @param  {String} query
    */
-  onChange(query) {
+  onChange(event, query) {
+
+    if (event.keyCode === 13) {
+      this._searchIndex++;
+    } else {
+      this._searchIndex = 1;
+    }
     query = query.toLocaleLowerCase();
-    this.userActions.searchNode({ query });
+
+    this.userActions.searchNode({ query, index: this._searchIndex });
     this._ngZone.run(() => undefined);
   }
 

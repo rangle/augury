@@ -5,7 +5,7 @@ import {BackendActionType, UserActionType}
 import {AbstractStore} from '../abstract-store';
 
 interface Node { node: Object; }
-interface Query { query: string; }
+interface SearchCriteria { query: string; index: number }
 
 @Injectable()
 /**
@@ -139,7 +139,7 @@ export class ComponentDataStore extends AbstractStore {
    * Search for a node
    * @param  {String} options.query
    */
-  private searchNode({ query }: Query) {
+  private searchNode({ query, index }: SearchCriteria) {
 
     const findNode = this.findNodeByNameBuilder(query, false);
     const fuzzyFindNode = this.findNodeByNameBuilder(query, true);
@@ -147,10 +147,15 @@ export class ComponentDataStore extends AbstractStore {
     const fuzzyFindNodeByDescription = this.findNodeByDescription(query, true);
     const flattenedData = this.flatten(this._componentData);
 
-    const node = flattenedData.find(findNode) ||
-      flattenedData.find(fuzzyFindNode) ||
-      flattenedData.find(findNodeByDescription) ||
-      flattenedData.find(fuzzyFindNodeByDescription);
+    const filtered = flattenedData.filter(fuzzyFindNode);
+    let node;
+    if (filtered.length > 0) {
+      node = filtered[index];
+    }
+    // const node = flattenedData.find(findNode) ||
+    //   flattenedData.find(fuzzyFindNode) ||
+    //   flattenedData.find(findNodeByDescription) ||
+    //   flattenedData.find(fuzzyFindNodeByDescription);
 
     if (node) {
       this.selectNode({ node });
