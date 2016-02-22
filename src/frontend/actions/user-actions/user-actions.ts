@@ -23,7 +23,7 @@ export class UserActions {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
-    
+
   }
 
   /**

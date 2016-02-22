@@ -4,7 +4,7 @@ const injectEntry = () => {
   if (count === 0) {
 
     let script = document.createElement('script');
-    script.src = chrome.extension.getURL('build/entry.js');
+    script.src = chrome.extension.getURL('build/backend.js');
     document.documentElement.appendChild(script);
     script.parentNode.removeChild(script);
 
