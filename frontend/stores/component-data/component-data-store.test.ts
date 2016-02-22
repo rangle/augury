@@ -26,7 +26,10 @@ test('frontend/component-data-store: component changes', t => {
 
   componentStore.dataStream.subscribe((data: any) => {
     t.deepEqual(data, {
-      componentData: mockData
+      action: 'START_COMPONENT_TREE_INSPECTION',
+      componentData: mockData,
+      openedNodes: [],
+      selectedNode: undefined
     }, 'emits component tree change event');
   });
 
