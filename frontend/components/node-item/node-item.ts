@@ -38,7 +38,6 @@ export class NodeItem {
     // Listen for changes in selected node
     this.componentDataStore.dataStream
       .map(({ selectedNode }: any) => selectedNode)
-      .filter((selectedNode: any) => selectedNode && selectedNode.id)
       .subscribe((selectedNode: any) => {
         const isSelected = this.node && selectedNode &&
           selectedNode.id === this.node.id;

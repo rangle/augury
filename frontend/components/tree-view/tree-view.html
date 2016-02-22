@@ -2,10 +2,31 @@
 
   <header class="py2 px3 bg-darken-1 border-bottom">
 
-    <div class="col col-7 flex flex-center primary-color">
+    <div class="col col-4 flex flex-center primary-color">
       <img src="../images/batarangle.svg"
         class="mr2"
         style="width: 18px; height: 18px;">Batarangle
+    </div>
+
+    <div class="col col-4">
+      <div *ngIf="!(totalSearchCount > 0 && query.value.length > 0)">
+        &nbsp;
+      </div>
+      <div *ngIf="totalSearchCount > 0 && query.value.length > 0" class="right-align mx3">
+        <span>
+          {{searchIndex + 1}} of {{totalSearchCount}}
+        </span>
+        <button class="btn btn-primary mb1 black bg-silver"
+          style="padding: 2px 4px;" (click)="onChange($event, query.value, true)">
+          <img src="../images/Triangle.svg"
+               style="width: 0.8em; height: 0.8em;">
+        </button>
+        <button class="btn btn-primary mb1 black bg-silver"
+          style="padding: 2px 4px;" (click)="onChange($event, query.value, false)">
+          <img src="../images/Triangle.svg" class="rotate180"
+               style="width: 0.8em; height: 0.8em;">
+        </button>
+      </div>
     </div>
 
     <!-- SEARCH -->
@@ -15,14 +36,6 @@
       #query
       (keyup)="onChange($event, query.value)">
 
-    <div class="col col-1">
-      <img src="../images/Triangle.svg"
-           (click)="previousClick()"
-           style="width: 0.8em; height: 0.8em;">
-      <img src="../images/Triangle.svg" class="rotate180"
-           (click)="nextClick()"
-           style="width: 0.8em; height: 0.8em;">
-    </div>
   </header>
 
   <div class="flex">

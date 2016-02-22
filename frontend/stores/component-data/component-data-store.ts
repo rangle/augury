@@ -58,10 +58,12 @@ export class ComponentDataStore extends AbstractStore {
    * Select a node to be highlighted
    * @param  {Object} options.node Node name
    */
-  private selectNode({ node }: Node) {
+  private selectNode(node: Node, searchIndex: number = -1, totalSearchCount: number = 0) {
 
     this.emitChange({
       selectedNode: node,
+      searchIndex: searchIndex,
+      totalSearchCount: totalSearchCount,
       componentData: this._componentData
     });
 
@@ -147,19 +149,24 @@ export class ComponentDataStore extends AbstractStore {
     const fuzzyFindNodeByDescription = this.findNodeByDescription(query, true);
     const flattenedData = this.flatten(this._componentData);
 
-    const filtered = flattenedData.filter(fuzzyFindNode);
-    let node;
-    if (filtered.length > 0) {
-      node = filtered[index];
-    }
-    // const node = flattenedData.find(findNode) ||
-    //   flattenedData.find(fuzzyFindNode) ||
-    //   flattenedData.find(findNodeByDescription) ||
-    //   flattenedData.find(fuzzyFindNodeByDescription);
+    const searched = flattenedData.filter(findNode).concat(
+      flattenedData.filter(fuzzyFindNode),
+      flattenedData.filter(findNodeByDescription),
+      flattenedData.filter(fuzzyFindNodeByDescription));
 
-    if (node) {
-      this.selectNode({ node });
-    }
+    const filtered = [];
+    const filteredMap = {};
+
+    searched.forEach((searchItem) => {
+      if (!filteredMap[searchItem.id]) {
+        filtered.push(searchItem);
+        filteredMap[searchItem.id] = true;
+      }
+    });
+
+    const node = filtered.length > 0 ? filtered[index] : undefined;
+
+    this.selectNode(node, index, filtered.length);
 
   }
 
