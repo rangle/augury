@@ -27,7 +27,17 @@ window.addEventListener('message', function(event) {
 
   if (event.data.type && (event.data.type === 'BATARANGLE_CONTENT_SCRIPT')) {
 
-    if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
+    if (event.data.message.message.actionType ===
+      'START_COMPONENT_TREE_INSPECTION') {
+
+      adapter._observer.disconnect();
+      adapter.cleanup();
+
+      adapter = new Angular2Adapter();
+      dom = new DomController(adapter, channel);
+      dom.hookIntoBackend();
+      adapter.setup();
+    } else if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
       let highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
       Highlighter.clear();
