@@ -5,7 +5,7 @@ import {BackendActionType, UserActionType}
 import {AbstractStore} from '../abstract-store';
 
 interface Node { node: Object; }
-interface Query { query: string; }
+interface SearchCriteria { query: string; index: number }
 
 @Injectable()
 /**
@@ -34,7 +34,7 @@ export class ComponentDataStore extends AbstractStore {
 
     this.dispatcher.onAction(
       UserActionType.SELECT_NODE,
-      action => this.selectNode(action));
+      action => this.selectNodeAction(action));
 
     this.dispatcher.onAction(
       UserActionType.SEARCH_NODE,
@@ -71,14 +71,20 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  private selectNodeAction({ node }: Node) {
+    this.selectNode(node);
+  }
+
   /**
    * Select a node to be highlighted
    * @param  {Object} options.node Node name
    */
-  private selectNode({ node }: Node) {
+  private selectNode(node: any, searchIndex: number = -1, totalSearchCount: number = 0) {
     this._selectedNode = node;
     this.emitChange({
-      selectedNode: node,
+      selectedNode: this._selectedNode,
+      searchIndex: searchIndex,
+      totalSearchCount: totalSearchCount,
       componentData: this._componentData,
       action: UserActionType.SELECT_NODE
     });
@@ -169,7 +175,7 @@ export class ComponentDataStore extends AbstractStore {
    * Search for a node
    * @param  {String} options.query
    */
-  private searchNode({ query }: Query) {
+  private searchNode({ query, index }: SearchCriteria) {
 
     const findNode = this.findNodeByNameBuilder(query, false);
     const fuzzyFindNode = this.findNodeByNameBuilder(query, true);
@@ -177,14 +183,24 @@ export class ComponentDataStore extends AbstractStore {
     const fuzzyFindNodeByDescription = this.findNodeByDescription(query, true);
     const flattenedData = this.flatten(this._componentData);
 
-    const node = flattenedData.find(findNode) ||
-      flattenedData.find(fuzzyFindNode) ||
-      flattenedData.find(findNodeByDescription) ||
-      flattenedData.find(fuzzyFindNodeByDescription);
+    const searched = flattenedData.filter(findNode).concat(
+      flattenedData.filter(fuzzyFindNode),
+      flattenedData.filter(findNodeByDescription),
+      flattenedData.filter(fuzzyFindNodeByDescription));
 
-    if (node) {
-      this.selectNode({ node });
-    }
+    const filtered = [];
+    const filteredMap = {};
+
+    searched.forEach((searchItem) => {
+      if (!filteredMap[searchItem.id]) {
+        filtered.push(searchItem);
+        filteredMap[searchItem.id] = true;
+      }
+    });
+
+    const node = filtered.length > 0 ? filtered[index] : undefined;
+
+    this.selectNode(node, index, filtered.length);
 
   }
 
