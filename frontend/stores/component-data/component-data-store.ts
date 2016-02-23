@@ -75,13 +75,15 @@ export class ComponentDataStore extends AbstractStore {
    * Select a node to be highlighted
    * @param  {Object} options.node Node name
    */
-  private selectNode(node: Node, searchIndex: number = -1, totalSearchCount: number = 0) {
+  private selectNode(data: any, searchIndex: number = -1, totalSearchCount: number = 0) {
 
+    this._selectedNode = data.actionType ? data.node : data;
     this.emitChange({
-      selectedNode: node,
+      selectedNode: this._selectedNode,
       searchIndex: searchIndex,
       totalSearchCount: totalSearchCount,
-      componentData: this._componentData
+      componentData: this._componentData,
+      action: UserActionType.SELECT_NODE
     });
   }
 
