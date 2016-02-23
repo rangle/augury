@@ -10,21 +10,25 @@ Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applic
 
 If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
 
+## Supported Version
+
+Currently works with applications built in [Angular 2.0.0-beta.6](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta6-2016-02-11) with _limited backwards compatibility_, which will change once Angular 2 stabilizes. 
+
 ## Getting Extension
 
-You can get the extension in two ways:-
+You can get the extension in two ways:
 
-If you just want to use the extension you can get the latest master build, which is packaged and hosted on every successful build of master branch on CircleCI
-* To download the latest build go to [Batarangle.io](http://batarangle.io) and click install
-* After download is complete go to Chrome Extensions `chrome://extensions` in the Chrome
-* Drag and Drop the downloaded package to install the extension
+1. If you just want to use the extension you can get the latest master build, which is packaged and hosted on every successful build of master branch on CircleCI
+ * To download the latest build go to [Batarangle.io](http://batarangle.io) and click install
+ * After download is complete go to Chrome Extensions `chrome://extensions` in the Chrome
+ * Drag and Drop the downloaded package to install the extension
 
-If you want to download the source code and build it manually
-* Clone the repo and install all the dependencies required
-* Run command `npm run pack`
-* This will generate `batarangle.crx` in the source folder
-* Then go to Chrome Extensions `chrome://extensions` in the Chrome
-* Drag and Drop the bundled package to install the extension
+2. If you want to download the source code and build it manually
+ * Clone the repo and install all the dependencies required
+ * Run command `npm run pack`
+ * This will generate `batarangle.crx` in the source folder
+ * Then go to Chrome Extensions `chrome://extensions` in the Chrome
+ * Drag and Drop the bundled package to install the extension
 
 ## Development Environment
 
