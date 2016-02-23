@@ -57,11 +57,8 @@ test('frontend/component-data-store: user selects tree node', t => {
   };
 
   componentStore.dataStream.subscribe((data: any) => {
-    t.deepEqual(data.selectedNode,
-    {
-      actionType: 'SELECT_NODE',
-      node: mockData
-    }, 'emits user selects node event');
+    t.deepEqual(data.selectedNode, mockData,
+      'emits user selects node event');
   });
 
   mockDispatcher.messageBus.next({
