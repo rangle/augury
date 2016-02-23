@@ -1,8 +1,11 @@
 import {Component, View, Inject, NgZone} from 'angular2/core';
 import {NgIf, NgFor, NgStyle} from 'angular2/common';
+import * as Rx from 'rxjs';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
+import {UserActionType}
+  from '../../actions/action-constants';
 
 @Component({
   selector: 'bt-node-item',
@@ -23,8 +26,6 @@ export class NodeItem {
   private collapsed: any;
   private color: any;
   private borderColor: any;
-  private isSelected: boolean;
-  private showChildren: boolean = true;
 
   constructor(
     private userActions: UserActions,
@@ -37,13 +38,35 @@ export class NodeItem {
 
     // Listen for changes in selected node
     this.componentDataStore.dataStream
-      .map(({ selectedNode }: any) => selectedNode)
-      .subscribe((selectedNode: any) => {
-        const isSelected = this.node && selectedNode &&
-          selectedNode.id === this.node.id;
-        this.update(isSelected);
-      });
+      .filter((data) => {
+        return  data.action && data.action === UserActionType.SELECT_NODE &&
+          data.selectedNode && data.selectedNode.id;
+        })
+        .map(({ selectedNode }: any) => selectedNode)
+        .subscribe((selectedNode: any) => {
+            const isSelected = this.node && selectedNode &&
+              selectedNode.id === this.node.id;
+            this.update(isSelected);
+        });
 
+    this.componentDataStore.dataStream
+      .filter((data: any) => {
+        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
+          data.openedNodes.indexOf(this.node.id) > -1;
+      })
+      .subscribe((data) => {
+        this.node.isOpen = false;
+        this._ngZone.run(() => undefined);
+      })
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => {
+        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
+          data.selectedNode.id === this.node.id;
+      })
+      .subscribe((data) => {
+        this.userActions.selectNode({ node: this.node });
+      })
   }
 
   /**
@@ -51,10 +74,11 @@ export class NodeItem {
    * @param  {Boolean} isSelected
    */
   update(isSelected) {
-    this.isSelected = isSelected;
-    this.borderColor = isSelected ? '#0074D9' :
+    this.node.isSelected = isSelected;
+    this.borderColor = this.node.isSelected ? '#0074D9' :
       'rgba(0, 0, 0, 0.125)';
-    this.color = isSelected ? '#222' : '#888';
+    this.color = this.node.isSelected ? '#222' : '#888';
+    this._ngZone.run(() => undefined);
   }
 
   /**
@@ -107,12 +131,17 @@ export class NodeItem {
     $event.stopPropagation();
   }
 
+  showChildren() {
+    return !this.node.isOpen;
+  }
+
   /**
    * Expand or Collapse tree based on current state on click
    * @param  {Object} $event
    */
   expandTree($event) {
-    this.showChildren = !this.showChildren;
+    this.node.isOpen = !this.node.isOpen;
+    this.userActions.openCloseNode({ node: this.node });
     $event.preventDefault();
     $event.stopPropagation();
   }

@@ -5,16 +5,20 @@
   (click)="onClick($event)">
 
   <div class="node-item pl4 rounded border-box"
-       [ngClass]="{'node-item-selected':isSelected}"
-    >
+       [ngClass]="{'node-item-selected':node.isSelected}">
+
     <img src="../images/Triangle.svg"
          style="width: 0.8em; height: 0.8em;"
          [hidden]="node.children ? false : true"
-         [ngClass]="{rotate90: !showChildren}"
+         [ngClass]="{rotate90: showChildren()}"
          (click)="expandTree($event)">
 
     <div class="node-item-container">
-      <p class="node-item-name">{{node.name}}</p>
+
+      <p class="node-item-name">
+        {{node.name}}
+      </p>
+
       <span *ngIf="node.description && node.description.length > 0">
       (<span class="node-item-description" *ngFor="#desc of node.description; #i = index">
           <p class="node-item-property">{{desc.key}}=</p>
@@ -27,7 +31,7 @@
 
   <div class="pl4 border-box">
     <bt-node-item
-      [hidden]="!showChildren"
+      [hidden]="showChildren()"
       *ngFor="#node of node.children"
       [node]="node">
     </bt-node-item>
