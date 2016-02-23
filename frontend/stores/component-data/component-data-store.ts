@@ -14,6 +14,9 @@ interface Query { query: string; }
 export class ComponentDataStore extends AbstractStore {
 
   private _componentData;
+  private _openedNodes = [];
+  private _selectedNode;
+
   constructor(
     private dispatcher: Dispatcher
   ) {
@@ -26,21 +29,32 @@ export class ComponentDataStore extends AbstractStore {
       action => this.componentDataChanged(action.componentData));
 
     this.dispatcher.onAction(
+      BackendActionType.CLEAR_SELECTIONS,
+      action => this.clearSelections(action));
+
+    this.dispatcher.onAction(
       UserActionType.SELECT_NODE,
       action => this.selectNode(action));
 
     this.dispatcher.onAction(
       UserActionType.SEARCH_NODE,
       action => this.searchNode(action));
+
+    this.dispatcher.onAction(
+      UserActionType.OPEN_CLOSE_TREE,
+      action => this.openCloseNode(action));
+
+    this.dispatcher.onAction(
+      UserActionType.UPDATE_NODE_STATE,
+      action => this.updateNodeState(action));
+
   }
 
   /**
    * Get component data
    */
   get componentData() {
-
     return this._componentData;
-
   }
 
   /**
@@ -48,10 +62,13 @@ export class ComponentDataStore extends AbstractStore {
    * @param  {Object} componentData
    */
   private componentDataChanged(componentData: Array<Object>) {
-
     this._componentData = componentData;
-    this.emitChange({ componentData });
-
+    this.emitChange({
+      componentData,
+      selectedNode: this._selectedNode,
+      openedNodes: this._openedNodes,
+      action: UserActionType.START_COMPONENT_TREE_INSPECTION
+    });
   }
 
   /**
@@ -59,12 +76,25 @@ export class ComponentDataStore extends AbstractStore {
    * @param  {Object} options.node Node name
    */
   private selectNode({ node }: Node) {
-
+    this._selectedNode = node;
     this.emitChange({
       selectedNode: node,
-      componentData: this._componentData
+      componentData: this._componentData,
+      action: UserActionType.SELECT_NODE
     });
+  }
 
+  private updateNodeState({openedNodes, selectedNode}) {
+    this.emitChange({
+      openedNodes,
+      selectedNode,
+      action: UserActionType.OPEN_CLOSE_TREE
+    });
+  }
+
+  private clearSelections(action) {
+    this._openedNodes = [];
+    this._selectedNode = undefined;
   }
 
   /**
@@ -156,6 +186,17 @@ export class ComponentDataStore extends AbstractStore {
       this.selectNode({ node });
     }
 
+  }
+
+  private openCloseNode({node}) {
+    if (!node.isOpen) {
+      this._openedNodes.push(node.id);
+    } else {
+      const index = this._openedNodes.indexOf(node.id);
+      if (index > -1) {
+        this._openedNodes.splice(index, 1);
+      }
+    }
   }
 
 }

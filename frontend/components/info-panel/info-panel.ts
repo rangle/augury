@@ -1,6 +1,7 @@
 declare var JSONFormatter: any;
 import {Component, View, ElementRef, Inject} from 'angular2/core';
 import {NgIf} from 'angular2/common';
+import * as Rx from 'rxjs';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -26,6 +27,9 @@ export class InfoPanel {
 
     // Listen for changes to selected node
     this.componentDataStore.dataStream
+      .debounce((x) => {
+        return Rx.Observable.timer(100);
+      })
       .subscribe(({ selectedNode }) => {
         this.node = selectedNode;
         const container = this.elementRef.nativeElement.lastChild;
@@ -52,9 +56,7 @@ export class InfoPanel {
    * @param  {Objecy} object
    */
   prettify(object) {
-
     return JSON.stringify(object, null, 1);
-
   }
 
 }
