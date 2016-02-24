@@ -4,8 +4,13 @@ import {BackendActionType, UserActionType}
   from '../../actions/action-constants';
 import {AbstractStore} from '../abstract-store';
 
-interface Node { node: Object; }
-interface SearchCriteria { query: string; index: number }
+interface Node {
+  node: Object;
+}
+interface SearchCriteria {
+  query: string;
+  index: number;
+}
 
 @Injectable()
 /**
@@ -79,7 +84,8 @@ export class ComponentDataStore extends AbstractStore {
    * Select a node to be highlighted
    * @param  {Object} options.node Node name
    */
-  private selectNode(node: any, searchIndex: number = -1, totalSearchCount: number = 0) {
+  private selectNode(node: any, searchIndex: number = -1,
+                     totalSearchCount: number = 0) {
     this._selectedNode = node;
     this.emitChange({
       selectedNode: this._selectedNode,

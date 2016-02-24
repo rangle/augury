@@ -10,7 +10,7 @@ npm -v
 dir="temp"
 key="key.pem"
 name="batarangle"
-files="build frontend styles images index.html manifest.json"
+files="manifest.json build src images index.html frontend.html"
 
 crx="$name.crx"
 pub="$name.pub"

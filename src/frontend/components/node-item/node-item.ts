@@ -57,7 +57,7 @@ export class NodeItem {
       .subscribe((data) => {
         this.node.isOpen = false;
         this._ngZone.run(() => undefined);
-      })
+      });
 
     this.componentDataStore.dataStream
       .filter((data: any) => {
@@ -66,7 +66,7 @@ export class NodeItem {
       })
       .subscribe((data) => {
         this.userActions.selectNode({ node: this.node });
-      })
+      });
   }
 
   /**
