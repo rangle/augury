@@ -46,14 +46,14 @@ module.exports = {
   },
 
   entry: {
-    'app': [
+    'frontend': [
       'webpack.vendor.ts',
-      './frontend/batarangle'
+      './src/frontend/frontend'
     ],
-    'devtools': ['./devtools/devtools'],
-    'backend': ['./backend/batarangle-backend'],
-    'entry': ['./backend/entry'],
-    'channel': ['./channel/channel']
+    'backend': ['./src/backend/backend'],
+    'devtools': ['./src/devtools/devtools'],
+    'content-script': ['./src/content-script'],
+    'channel': ['./src/channel/channel']
   },
 
   // Config for our build files

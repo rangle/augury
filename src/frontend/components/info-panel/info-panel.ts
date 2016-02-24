@@ -10,7 +10,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
   selector: 'bt-info-panel'
 })
 @View({
-  templateUrl: 'components/info-panel/info-panel.html',
+  templateUrl: '/src/frontend/components/info-panel/info-panel.html',
   directives: [NgIf]
 })
 /**

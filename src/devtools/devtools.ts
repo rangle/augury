@@ -19,6 +19,6 @@ chrome.devtools.panels.elements.createSidebarPane(
 */
 chrome.devtools.panels.create(
   'Angular2',
-  'images/angular.png',
-  'frontend/batarangle.html'
+  '../images/angular.png',
+  '../frontend.html'
 );

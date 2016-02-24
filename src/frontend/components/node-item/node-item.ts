@@ -12,7 +12,7 @@ import {UserActionType}
   properties: ['node: node', 'collapsed: collapsed']
 })
 @View({
-  templateUrl: 'components/node-item/node-item.html',
+  templateUrl: 'src/frontend/components/node-item/node-item.html',
   directives: [NgIf, NgFor, NodeItem, NgStyle]
 })
 /**
