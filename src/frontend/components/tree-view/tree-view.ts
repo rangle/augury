@@ -43,7 +43,9 @@ export class TreeView {
    */
   onChange(event, query, isNext) {
 
-    if (query.length === 0) return;
+    if (query.length === 0) {
+      return;
+    }
 
     if (isNext === undefined && event.keyCode === 13) {
       this.searchIndex++;
@@ -51,7 +53,7 @@ export class TreeView {
       this.searchIndex = 0;
     } else if (isNext) {
       this.searchIndex++;
-    } else if(!isNext) {
+    } else if (!isNext) {
       this.searchIndex--;
     }
 

@@ -57,7 +57,8 @@ class App {
       .debounce((x) => {
         return Rx.Observable.timer(500);
       })
-      .filter((data: any) => data.action && data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
+      .filter((data: any) => data.action &&
+              data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
       .subscribe(data => {
         if (!this.tree) {
           this.tree = data.componentData;
@@ -67,7 +68,7 @@ class App {
         }
         this._ngZone.run(() => undefined);
 
-        if(data.openedNodes.length > 0 || data.selectedNode) {
+        if (data.openedNodes.length > 0 || data.selectedNode) {
           this.userActions.updateNodeState({
             openedNodes: data.openedNodes,
             selectedNode: data.selectedNode
