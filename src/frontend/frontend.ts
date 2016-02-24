@@ -6,6 +6,9 @@ import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
 
+import {UserActionType}
+  from './actions/action-constants';
+
 import {ComponentDataStore}
   from './stores/component-data/component-data-store';
 
@@ -38,6 +41,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 class App {
 
   private tree: any;
+  private previousTree: any;
+
   constructor(
     private backendAction: BackendActions,
     private userActions: UserActions,
@@ -47,19 +52,31 @@ class App {
 
     this.userActions.startComponentTreeInspection();
 
+    // Listen for changes in selected node
     this.componentDataStore.dataStream
-      .map(({ componentData }: any) => componentData)
       .debounce((x) => {
         return Rx.Observable.timer(500);
       })
-      .subscribe(componentData => {
-        this.tree = componentData;
+      .filter((data: any) => data.action && data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
+      .subscribe(data => {
+        if (!this.tree) {
+          this.tree = data.componentData;
+        } else {
+          this.previousTree = this.tree;
+          this.tree = data.componentData;
+        }
         this._ngZone.run(() => undefined);
+
+        if(data.openedNodes.length > 0 || data.selectedNode) {
+          this.userActions.updateNodeState({
+            openedNodes: data.openedNodes,
+            selectedNode: data.selectedNode
+          });
+        }
+
       }
     );
-
   }
-
 }
 
 bootstrap(App, [

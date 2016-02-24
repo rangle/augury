@@ -26,7 +26,10 @@ test('frontend/component-data-store: component changes', t => {
 
   componentStore.dataStream.subscribe((data: any) => {
     t.deepEqual(data, {
-      componentData: mockData
+      action: 'START_COMPONENT_TREE_INSPECTION',
+      componentData: mockData,
+      openedNodes: [],
+      selectedNode: undefined
     }, 'emits component tree change event');
   });
 
@@ -54,8 +57,8 @@ test('frontend/component-data-store: user selects tree node', t => {
   };
 
   componentStore.dataStream.subscribe((data: any) => {
-    t.deepEqual(data.selectedNode,
-    mockData, 'emits user selects node event');
+    t.deepEqual(data.selectedNode, mockData,
+      'emits user selects node event');
   });
 
   mockDispatcher.messageBus.next({

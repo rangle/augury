@@ -5,7 +5,7 @@ import {BackendActionType, UserActionType}
 import {AbstractStore} from '../abstract-store';
 
 interface Node { node: Object; }
-interface Query { query: string; }
+interface SearchCriteria { query: string; index: number }
 
 @Injectable()
 /**
@@ -14,6 +14,9 @@ interface Query { query: string; }
 export class ComponentDataStore extends AbstractStore {
 
   private _componentData;
+  private _openedNodes = [];
+  private _selectedNode;
+
   constructor(
     private dispatcher: Dispatcher
   ) {
@@ -26,21 +29,32 @@ export class ComponentDataStore extends AbstractStore {
       action => this.componentDataChanged(action.componentData));
 
     this.dispatcher.onAction(
+      BackendActionType.CLEAR_SELECTIONS,
+      action => this.clearSelections(action));
+
+    this.dispatcher.onAction(
       UserActionType.SELECT_NODE,
-      action => this.selectNode(action));
+      action => this.selectNodeAction(action));
 
     this.dispatcher.onAction(
       UserActionType.SEARCH_NODE,
       action => this.searchNode(action));
+
+    this.dispatcher.onAction(
+      UserActionType.OPEN_CLOSE_TREE,
+      action => this.openCloseNode(action));
+
+    this.dispatcher.onAction(
+      UserActionType.UPDATE_NODE_STATE,
+      action => this.updateNodeState(action));
+
   }
 
   /**
    * Get component data
    */
   get componentData() {
-
     return this._componentData;
-
   }
 
   /**
@@ -48,23 +62,45 @@ export class ComponentDataStore extends AbstractStore {
    * @param  {Object} componentData
    */
   private componentDataChanged(componentData: Array<Object>) {
-
     this._componentData = componentData;
-    this.emitChange({ componentData });
+    this.emitChange({
+      componentData,
+      selectedNode: this._selectedNode,
+      openedNodes: this._openedNodes,
+      action: UserActionType.START_COMPONENT_TREE_INSPECTION
+    });
+  }
 
+  private selectNodeAction({ node }: Node) {
+    this.selectNode(node);
   }
 
   /**
    * Select a node to be highlighted
    * @param  {Object} options.node Node name
    */
-  private selectNode({ node }: Node) {
-
+  private selectNode(node: any, searchIndex: number = -1, totalSearchCount: number = 0) {
+    this._selectedNode = node;
     this.emitChange({
-      selectedNode: node,
-      componentData: this._componentData
+      selectedNode: this._selectedNode,
+      searchIndex: searchIndex,
+      totalSearchCount: totalSearchCount,
+      componentData: this._componentData,
+      action: UserActionType.SELECT_NODE
     });
+  }
 
+  private updateNodeState({openedNodes, selectedNode}) {
+    this.emitChange({
+      openedNodes,
+      selectedNode,
+      action: UserActionType.OPEN_CLOSE_TREE
+    });
+  }
+
+  private clearSelections(action) {
+    this._openedNodes = [];
+    this._selectedNode = undefined;
   }
 
   /**
@@ -139,7 +175,7 @@ export class ComponentDataStore extends AbstractStore {
    * Search for a node
    * @param  {String} options.query
    */
-  private searchNode({ query }: Query) {
+  private searchNode({ query, index }: SearchCriteria) {
 
     const findNode = this.findNodeByNameBuilder(query, false);
     const fuzzyFindNode = this.findNodeByNameBuilder(query, true);
@@ -147,15 +183,36 @@ export class ComponentDataStore extends AbstractStore {
     const fuzzyFindNodeByDescription = this.findNodeByDescription(query, true);
     const flattenedData = this.flatten(this._componentData);
 
-    const node = flattenedData.find(findNode) ||
-      flattenedData.find(fuzzyFindNode) ||
-      flattenedData.find(findNodeByDescription) ||
-      flattenedData.find(fuzzyFindNodeByDescription);
+    const searched = flattenedData.filter(findNode).concat(
+      flattenedData.filter(fuzzyFindNode),
+      flattenedData.filter(findNodeByDescription),
+      flattenedData.filter(fuzzyFindNodeByDescription));
 
-    if (node) {
-      this.selectNode({ node });
+    const filtered = [];
+    const filteredMap = {};
+
+    searched.forEach((searchItem) => {
+      if (!filteredMap[searchItem.id]) {
+        filtered.push(searchItem);
+        filteredMap[searchItem.id] = true;
+      }
+    });
+
+    const node = filtered.length > 0 ? filtered[index] : undefined;
+
+    this.selectNode(node, index, filtered.length);
+
+  }
+
+  private openCloseNode({node}) {
+    if (!node.isOpen) {
+      this._openedNodes.push(node.id);
+    } else {
+      const index = this._openedNodes.indexOf(node.id);
+      if (index > -1) {
+        this._openedNodes.splice(index, 1);
+      }
     }
-
   }
 
 }

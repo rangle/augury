@@ -19,11 +19,9 @@ export class UserActions {
    * Get the component tree data from back-end
    */
   startComponentTreeInspection() {
-
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
-
   }
 
   /**
@@ -31,7 +29,6 @@ export class UserActions {
    * @param  {Object} options.node
    */
   selectNode({ node }) {
-
     this.dispatcher.messageBus.next({
       actionType: UserActionType.SELECT_NODE,
       node
@@ -41,20 +38,19 @@ export class UserActions {
       actionType: UserActionType.SELECT_NODE,
       node
     });
-
   }
 
   /**
    * Search for a node to be highlighted
    * @param  {String} options.query
    */
-  searchNode({ query }) {
+  searchNode({ query, index }) {
 
     this.dispatcher.messageBus.next({
       actionType: UserActionType.SEARCH_NODE,
-      query
+      query,
+      index
     });
-
   }
 
   /**
@@ -74,6 +70,21 @@ export class UserActions {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.HIGHLIGHT_NODE,
       node
+    });
+  }
+
+  openCloseNode({node}) {
+    this.dispatcher.messageBus.next({
+      actionType: UserActionType.OPEN_CLOSE_TREE,
+      node
+    });
+  }
+
+  updateNodeState({openedNodes, selectedNode}) {
+    this.dispatcher.messageBus.next({
+      actionType: UserActionType.UPDATE_NODE_STATE,
+      openedNodes,
+      selectedNode
     });
   }
 
