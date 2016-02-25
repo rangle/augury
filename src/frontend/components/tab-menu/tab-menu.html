@@ -1,0 +1,9 @@
+<div class="flex px3 pt2 bg-darken-1 border-bottom">
+    <div class="flex pannel-tab-header regular center px2 py1 m0"
+          [ngClass]=
+            "{'bg-white border-top border-right border-left': t.selected}"
+          *ngFor="#t of tabs; #i = index"
+          (click)="tabClick(i)">
+      {{t.title}}
+    </div>
+</div>

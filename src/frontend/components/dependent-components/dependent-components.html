@@ -1,0 +1,17 @@
+<div class="pt3 pl4 pb3 mb1 bg-darken-1">
+    <h3 class="regular m0">{{ dependency || 'No node selected' }}</h3>
+</div>
+<ul *ngIf="components.length > 0">
+    <li *ngFor="#component of components">
+        <a href="#" class="node-item-property"
+           (click)="selectComponent(component)">{{component.name}}</a>
+        <ul>
+          <li *ngFor="#dependency of component.dependencies">
+              <a href="#" class="node-item-value"
+                 (click)="findDependencies(dependency)">
+                {{dependency}}
+              </a>
+          </li>
+        </ul>
+    </li>
+</ul>

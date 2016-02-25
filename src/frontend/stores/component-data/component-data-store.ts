@@ -53,6 +53,10 @@ export class ComponentDataStore extends AbstractStore {
       UserActionType.UPDATE_NODE_STATE,
       action => this.updateNodeState(action));
 
+    this.dispatcher.onAction(
+      UserActionType.GET_DEPENDENCIES,
+      action => this.getDependencies(action));
+
   }
 
   /**
@@ -219,6 +223,18 @@ export class ComponentDataStore extends AbstractStore {
         this._openedNodes.splice(index, 1);
       }
     }
+  }
+
+  private getDependencies({dependency}) {
+    const flattenedData = this.flatten(this._componentData);
+    const dependentComponents = flattenedData.filter((comp) =>
+      comp.dependencies.indexOf(dependency) > -1);
+
+    this.emitChange({
+      selectedDependency: dependency,
+      dependentComponents: dependentComponents,
+      action: UserActionType.GET_DEPENDENCIES
+    });
   }
 
 }
