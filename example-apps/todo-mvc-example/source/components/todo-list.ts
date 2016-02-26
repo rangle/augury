@@ -6,9 +6,7 @@ import {Todo} from '../domain/todo';
 import {Subscription} from 'rxjs';
 
 @Component({
-  selector: 'todo-list'
-})
-@View({
+  selector: 'todo-list',
   directives: [NgIf, NgFor, TodoItem],
   template: `
     <section class="todoapp">
