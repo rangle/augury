@@ -3,9 +3,7 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {TodoService, TodoModel, FormatService} from './todo-service';
 
 @Component({
-  selector: 'todo-input'
-})
-@View({
+  selector: 'todo-input',
   directives: [FORM_DIRECTIVES],
   template: `
   <div>
@@ -27,10 +25,7 @@ export class TodoInput {
   constructor(
     public todoService: TodoService,
     public formatService: FormatService
-  ) {
-    console.log(todoService);
-    console.log(formatService);
-  }
+  ) { }
 
   onSubmit() {
     this.todoService.addTodo(this.todoModel);
