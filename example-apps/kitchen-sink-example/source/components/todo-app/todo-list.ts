@@ -22,7 +22,5 @@ export class TodoList {
 
   constructor(
     public todoService: TodoService
-  ) {
-    console.log(todoService);
-  }
+  ) {}
 }
