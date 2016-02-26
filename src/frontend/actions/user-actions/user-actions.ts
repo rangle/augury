@@ -95,4 +95,10 @@ export class UserActions {
     });
   }
 
+  updateProperty({property}) {
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.UPDATE_PROPERTY,
+      property
+    });
+  }
 }
