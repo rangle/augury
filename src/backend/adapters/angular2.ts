@@ -91,6 +91,11 @@ export class Angular2Adapter extends BaseAdapter {
     const output = this._getComponentOutput(debugEl);
     const dependencies = this._getComponentDependencies(debugEl);
 
+    description.unshift({
+      key: 'batarangle-id',
+      value: id
+    });
+
     return {
       id,
       name,

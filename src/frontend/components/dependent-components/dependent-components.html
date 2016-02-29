@@ -4,7 +4,8 @@
 <ul *ngIf="components.length > 0">
     <li *ngFor="#component of components">
         <a href="#" class="node-item-property"
-           (click)="selectComponent(component)">{{component.name}}</a>
+           (click)="selectComponent(component)">{{component.name}}
+           (<p class="node-item-property">batarangle-id=</p><p class="node-item-value">{{component.id}}</p>)</a>
         <ul>
           <li *ngFor="#dependency of component.dependencies">
               <a href="#" class="node-item-value"
