@@ -11,6 +11,7 @@ import MyForm from '../components/form-controls/my-form';
 import Form2 from '../components/form-controls/form2';
 import DynamicControls from '../components/dynamic-controls/dynamic-controls';
 import ControlForm from '../components/form-controls/control-form';
+import TodoApp from '../components/todo-app/todo-app';
 
 @RouteConfig([
   { path: '/', component: Home, as: 'Home' },
@@ -21,6 +22,7 @@ import ControlForm from '../components/form-controls/control-form';
   { path: '/start/...', component: Start, as: 'Start' },
   { path: '/dynamic-controls', component: DynamicControls,
     as: 'DynamicControls' },
+  { path: '/todo-app', component: TodoApp, as: 'TodoApp'},
 ])
 @Component({
   selector: 'kitchen-sink',
@@ -49,6 +51,9 @@ import ControlForm from '../components/form-controls/control-form';
       </li>
       <li [ngClass]="{active: path=='dynamic-controls'}">
         <a [routerLink]="['./DynamicControls']">DynamicControls</a>
+      </li>
+      <li [ngClass]="{active: path=='todo-app'}">
+        <a [routerLink]="['./TodoApp']">TodoApp</a>
       </li>
       </ul>
     </div>
