@@ -3,6 +3,7 @@ import {Component, ElementRef, Inject, OnChanges, EventEmitter, NgZone}
   from 'angular2/core';
 
 import ParseData from '../../utils/parse-data';
+import RenderState from '../render-state/render-state';
 
 const NATIVE_COMPONENTS = [
   'NgClass',
@@ -15,7 +16,8 @@ const NATIVE_COMPONENTS = [
   selector: 'bt-component-info',
   templateUrl: '/src/frontend/components/component-info/component-info.html',
   inputs: ['node'],
-  outputs: ['selectDependency', 'updateProperty']
+  outputs: ['selectDependency', 'updateProperty'],
+  directives: [RenderState]
 })
 export default class ComponentInfo {
   private node: any;
@@ -102,11 +104,11 @@ export default class ComponentInfo {
       .elementRef.nativeElement
       .querySelector('#tree-children');
 
-      while (stateContainer.firstChild) {
-        stateContainer.removeChild(stateContainer.firstChild);
-      }
-      const formatter = new JSONFormatter(this.node.state);
-      stateContainer.appendChild(formatter.render());
+      // while (stateContainer.firstChild) {
+      //   stateContainer.removeChild(stateContainer.firstChild);
+      // }
+      // const formatter = new JSONFormatter(this.node.state);
+      // stateContainer.appendChild(formatter.render());
 
       while (childrenContainer.firstChild) {
         childrenContainer.removeChild(childrenContainer.firstChild);

@@ -38,7 +38,10 @@
 </ul>
 
 <h4 *ngIf="node && node.state" class="m3 bold">State</h4>
-<div id="tree-state" class="px4 tree-container"
+<div style="padding-left: 15px;">
+    <bt-render-state *ngIf="node && node.state" [state]="node.state"></bt-render-state>
+</div>
+<!-- <div id="tree-state" class="px4 tree-container"
     [hidden]="!isAngular2Component(node)"></div>
 <ul [hidden]="isAngular2Component(node)">
     <li *ngFor="#state of stateValues">
@@ -50,7 +53,7 @@
         <input *ngIf="state.editable" #property value="{{state.value}}"
             (keyup)="propertyChange($event, state, property.value)" />
     </li>
-</ul>
+</ul> -->
 
 <h4 *ngIf="node && node.children" class="m3 bold">Children</h4>
 <div id="tree-children" class="px4 tree-container"></div>
