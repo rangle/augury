@@ -1,11 +1,12 @@
 import {Component, EventEmitter} from 'angular2/core';
+import StateValues from '../state-values/state-values';
 
 @Component({
   selector: 'bt-render-state',
   templateUrl:
   '/src/frontend/components/render-state/render-state.html',
-  inputs: ['state'],
-  directives: [RenderState]
+  inputs: ['id', 'state'],
+  directives: [RenderState, StateValues]
 })
 export default class RenderState {
 
@@ -13,7 +14,6 @@ export default class RenderState {
 
   expandTree(key, $event) {
     this.expanded[key] = !this.expanded[key];
-
     $event.preventDefault();
     $event.stopPropagation();
   }

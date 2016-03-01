@@ -32,4 +32,8 @@ export default class ParseData {
   public static checkType(state: any, key: string, value: any): boolean {
     return (typeof state[key]) === (typeof value);
   }
+
+  public static getTypeByValue(value: any): string {
+    return typeof value;
+  }
 }

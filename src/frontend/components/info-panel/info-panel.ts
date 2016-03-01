@@ -64,8 +64,4 @@ export class InfoPanel {
     this.userActions.selectNode({ node: node });
   }
 
-  updateProperty(property: any): void {
-    this.userActions.updateProperty({ property });
-  }
-
 }
