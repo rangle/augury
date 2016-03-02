@@ -1,5 +1,5 @@
 declare var JSONFormatter: any;
-import {Component, ElementRef, Inject, EventEmitter}
+import {Component, ElementRef, Inject, EventEmitter, OnChanges}
   from 'angular2/core';
 
 import ParseData from '../../utils/parse-data';
@@ -22,6 +22,12 @@ export default class ComponentInfo {
 
   findDependencies(dependency: string) : void {
     this.selectDependency.emit(dependency);
+  }
+
+  ngOnChanges(change: any) {
+    if (this.node) {
+      this.displayTree();
+    }
   }
 
   displayTree(): void {
