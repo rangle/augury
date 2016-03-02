@@ -104,7 +104,9 @@ export abstract class Description {
     return [
       { key: 'name', value: instance.name || ''},
       { key: 'hostComponent',
-      value: instance._componentRef.componentType.name },
+        value: instance._componentRef
+           && instance._componentRef.componentType
+           && instance._componentRef.componentType.name }
     ];
   }
 
