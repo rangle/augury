@@ -16,6 +16,8 @@ import {BackendMessagingService} from './channel/backend-messaging-service';
 
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
+import AppTrees from './components/app-trees/app-trees';
+
 import * as Rx from 'rxjs';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
@@ -24,11 +26,11 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   selector: 'bt-app'
 })
 @View({
-  directives: [TreeView, InfoPanel],
+  directives: [TreeView, InfoPanel, AppTrees],
   template: `
     <div class="clearfix">
       <div class="col col-6 overflow-scroll">
-        <bt-tree-view [tree]="tree"></bt-tree-view>
+        <bt-app-trees [tree]="tree"></bt-app-trees>
       </div>
       <div class="col col-6 overflow-scroll">
         <bt-info-panel></bt-info-panel>

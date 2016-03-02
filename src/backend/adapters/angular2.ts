@@ -30,6 +30,7 @@ declare var ng: { probe: Function };
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Description } from '../utils/description';
+import { ParseRouter } from '../utils/parse-router';
 
 import {DirectiveResolver} from '../directive-resolver';
 
@@ -41,6 +42,8 @@ export class Angular2Adapter extends BaseAdapter {
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
+    console.log(ParseRouter.parseRoutes(
+      ng.probe(root).componentInstance.router.registry));
 
     this._traverseElements(ng.probe(root),
       true,

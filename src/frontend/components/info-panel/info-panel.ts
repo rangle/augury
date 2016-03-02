@@ -24,6 +24,14 @@ export class InfoPanel {
   private dependentComponents = [];
   private selectedDependency: string;
 
+  private tabs = [{
+    title: 'Properties',
+    selected: false
+  }, {
+      title: 'Dependent Components',
+      selected: false
+    }];
+
   constructor(
     private componentDataStore: ComponentDataStore,
     private userActions: UserActions,

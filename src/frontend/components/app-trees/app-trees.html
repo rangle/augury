@@ -1,0 +1,14 @@
+<bt-tab-menu
+  [tabs]="tabs"
+  (tabChange)="tabChange($event)"
+  [selectedTabIndex]="selectedTabIndex">
+</bt-tab-menu>
+
+<bt-tree-view
+  [hidden]="selectedTabIndex != 0"
+  [tree]="tree">
+</bt-tree-view>
+
+<bt-router-tree
+  [hidden]="selectedTabIndex != 1">
+</bt-router-tree>
