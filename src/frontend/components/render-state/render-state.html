@@ -1,0 +1,20 @@
+<div style="padding-left:10px;" *ngFor="#k of keys(state)">
+    <span class="node-item-name" *ngIf="type(state[k]) =='object'">
+      <img src="../images/Triangle.svg" style="width: 0.8em; height: 0.8em;"
+         [ngClass]="{rotate90: expanded[k]}"
+         (click)="expandTree(k, $event)"> {{k}}
+    </span>
+
+    <bt-state-values *ngIf="type(state[k]) !='object'"
+      [id]="id"
+      [key]="k"
+      [value]="state[k]">
+    </bt-state-values>
+
+    <bt-render-state
+      [id]="id"
+      [hidden]="expanded[k]"
+      *ngIf="type(state[k]) =='object'" [state]="state[k]">
+    </bt-render-state>
+
+</div>

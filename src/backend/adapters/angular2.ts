@@ -89,6 +89,12 @@ export class Angular2Adapter extends BaseAdapter {
     const state = this._normalizeState(name, this._getComponentState(debugEl));
     const input = this._getComponentInput(debugEl);
     const output = this._getComponentOutput(debugEl);
+    const dependencies = this._getComponentDependencies(debugEl);
+
+    description.unshift({
+      key: 'b-id',
+      value: id
+    });
 
     return {
       id,
@@ -98,7 +104,8 @@ export class Angular2Adapter extends BaseAdapter {
       input,
       output,
       isSelected: false,
-      isOpen: true
+      isOpen: true,
+      dependencies
     };
   }
 
@@ -197,6 +204,13 @@ export class Angular2Adapter extends BaseAdapter {
               genericMatch;
 
     return f.call(el, selector);
+  }
+
+  _getComponentDependencies(compEl: any) {
+    const dependencies = compEl.injector._proto._strategy
+      .provider0.resolvedFactory.dependencies;
+
+    return dependencies.map((d) => d.key.displayName);
   }
 
   _getComponentInstance(compEl: any): Object {

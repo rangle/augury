@@ -1,0 +1,48 @@
+<div class="pt3 pl4 pb3 mb1 bg-darken-1" *ngIf="node">
+    <h3 class="col regular m0">{{ node.name || 'No node selected' }}</h3>
+    &nbsp;
+    <span class="right regular mr4">($a in Console)</span>
+</div>
+
+<h4 *ngIf="node && node.description" class="m3 bold">Properties</h4>
+<ul *ngIf="node && node.description">
+    <li *ngFor="#property of node.description">
+        <p class="node-item-property">{{property.key}}: </p>
+        <p class="node-item-value">{{property.value}}</p>
+    </li>
+</ul>
+
+<h4 *ngIf="node && node.dependencies && node.dependencies.length > 0"
+    class="m3 bold">Dependencies</h4>
+<ul *ngIf="node && node.dependencies && node.dependencies.length > 0">
+    <li *ngFor="#dependency of node.dependencies">
+        <a href="#" class="node-item-property"
+            (click)="findDependencies(dependency)">
+          {{dependency}}
+        </a>
+    </li>
+</ul>
+
+<h4 *ngIf="node && node.input && node.input.length > 0"
+    class="m3 bold">Input</h4>
+<ul *ngIf="node && node.input && node.input.length > 0">
+    <li *ngFor="#input of node.input" [innerHTML]="formatInput(input)"></li>
+</ul>
+
+<h4 *ngIf="node && node.output && node.output.length > 0"
+    class="m3 bold">Output</h4>
+<ul *ngIf="node && node.output && node.output.length > 0">
+    <li *ngFor="#output of node.output">
+        <p class="node-item-property">{{output}}</p>
+    </li>
+</ul>
+
+<h4 *ngIf="node && node.state" class="m3 bold">State</h4>
+<div style="padding-left: 15px;">
+    <bt-render-state *ngIf="node && node.state"
+        [id]="node.id"
+        [state]="node.state"></bt-render-state>
+</div>
+
+<h4 *ngIf="node && node.children" class="m3 bold">Children</h4>
+<div id="tree-children" class="px4 tree-container"></div>

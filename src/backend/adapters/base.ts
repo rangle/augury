@@ -44,6 +44,7 @@ export interface TreeNode {
   output: Object;
   isSelected: boolean;
   isOpen: boolean;
+  dependencies: any;
 }
 
 // TSFIXME(bertrandk): This would be much nicer if we could actually extend

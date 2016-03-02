@@ -1,0 +1,9 @@
+<div>
+    <p class="node-item-property">{{key}}=</p>
+    <p class="node-item-value"
+      *ngIf="!editable"
+      (dblclick)="onDblClick($event)" >{{value}}</p>
+    <input *ngIf="editable" #property
+      value="{{value}}"
+      (keyup)="propertyChange($event, property.value)" />
+</div>
