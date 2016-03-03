@@ -14,7 +14,7 @@ import * as d3 from 'd3';
     .node circle {
       fill: #fff;
       stroke: #CB5142;
-      stroke-width: 2px;
+      stroke-width: 1.5px;
     }
     .node text {
       font: 12px sans-serif;
@@ -34,29 +34,24 @@ export default class RouterTree implements OnChanges {
   selectedNodeId: number;
   constructor(@Inject(ElementRef) elementRef: ElementRef) {
 
-    const width = 700;
-    const height = 650;
-    const maxLabel = 150;
-    const nodeRadius = 8;
-
-    const tree = d3.layout.tree().size([height, width]);
+    const tree = d3.layout.tree();
 
     const diagonal = d3.svg.diagonal()
       .projection((d) => {
         return [d.y, d.x];
       });
 
-    const svg = d3.select(elementRef.nativeElement).append('svg')
-      .attr('width', width)
-      .attr('height', height)
+    const svg = d3.select(elementRef.nativeElement)
+      .append('svg')
+      .attr('height', 1000)
+      .attr('width', 1000)
       .append('g')
-      .attr('transform', 'translate(' + maxLabel + ',0)');
+      .attr('transform', 'translate(100, 200)');
 
     this.treeConfig = {
       tree,
       diagonal,
-      svg,
-      nodeRadius
+      svg
     };
 
   }
@@ -72,41 +67,40 @@ export default class RouterTree implements OnChanges {
     }
 
     const tree = this.treeConfig.tree;
-    const root = this.routerTree[0];
+    const data = this.routerTree;
     let i = 0;
 
     // Compute the new tree layout.
-    const nodes = tree.nodes(root).reverse();
+    tree.nodeSize([50, 5]);
+    const nodes = tree.nodes(data).reverse();
     const links = tree.links(nodes);
 
     // Normalize for fixed-depth.
     nodes.forEach((d) => {
-      d.y = d.depth * 180;
+      d.y = d.depth * 120;
     });
-	  console.log(nodes);
 
     // Declare the nodes
     const node = this.treeConfig.svg.selectAll('g.node')
       .data(nodes, (d) => {
         return d.id || (d.id = ++i);
       });
-	  console.log('node', node);
+
     // Enter the nodes
     const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
       .attr('transform', (d) => 'translate(' + d.y + ',' + d.x + ')')
       .on('click', (d) => {
-        console.log('clicked node', d);
+        console.log('selected node ', d);
         this.selectedNodeId = d.id;
         this.render();
       });
-	  console.log('nodeEnter', nodeEnter);
+
     nodeEnter.append('circle')
-      .attr('r', this.treeConfig.nodeRadius)
-      .style('fill', (d) => {
-        console.log('fill ', d);
-        return d.id === this.selectedNodeId ? 'red': '#fff'
-      });
+      .attr('r', 6)
+      .style('fill', (d) =>
+        d.id === this.selectedNodeId ? '#F19B90' : '#FFF'
+      );
 
     nodeEnter.append('text')
       .attr('x', (d) => d.children || d._children ? -13 : 13)
@@ -114,6 +108,13 @@ export default class RouterTree implements OnChanges {
       .attr('text-anchor', (d) => d.children || d._children ? 'end' : 'start')
       .text((d) => d.name)
       .style('fill-opacity', 1);
+
+    // Update the nodes fill
+    const nodeUpdate = node.transition()
+      .select('circle')
+      .style('fill', (d) =>
+        d.id === this.selectedNodeId ? '#F19B90' : '#FFF'
+      );
 
     // Declare the links
     const link = this.treeConfig.svg.selectAll('path.link')
