@@ -59,7 +59,7 @@ export class Angular2Adapter extends BaseAdapter {
         ng.probe(root).componentInstance.router.registry);
 
       this.showRoutes(routes);
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
