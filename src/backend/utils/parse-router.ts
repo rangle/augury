@@ -8,39 +8,58 @@ export interface Route {
   specificity: string;
   handler: string;
   data: any;
+  children?: Array<Route>;
 }
 
 export interface MainRoute {
   name: string;
-  routes: Array<Route>;
+  children: Array<Route>;
 }
 
 export class ParseRouter {
 
   private static NAME_REGEX = /function ([^\(]*)/;
 
-  public static parseRoutes(registry: any): Array<MainRoute> {
+  public static parseRoutes(registry: any): MainRoute {
     const routes: Array<MainRoute> = new Array<MainRoute>();
     const rules = registry._rules;
 
     rules.forEach((key, value) => {
       routes.push(this.getMainRoute(key, value));
     });
+    return this.flattenRoutes(routes);
+  }
 
-    return routes;
+  private static mapRoutes(routes: any, subRoutes: any): void {
+    routes.map((r) => {
+      const e = subRoutes.filter(sr => sr.name === r.name);
+      if (e.length > 0) {
+        r.children = e[0].children;
+        this.mapRoutes(r.children, subRoutes);
+      }
+      return r;
+    });
+  }
+
+  private static flattenRoutes(routes: Array<MainRoute>): MainRoute {
+    const appRoute: MainRoute = routes[0];
+    const subRoutes: any = routes.slice(1);
+
+    this.mapRoutes(appRoute.children, subRoutes);
+    return appRoute;
   }
 
   private static getMainRoute(key: ComponentRecognizer, value: any): MainRoute {
     const name: string = this.NAME_REGEX.exec(value)[1];
-    const routes: Array<Route> = new Array<Route>();
+    const children: Array<Route> = new Array<Route>();
 
     key.names.forEach((obj, route_name) => {
-      routes.push(this.getRoute(obj, route_name));
+      children.push(this.getRoute(obj, route_name));
     });
 
     return {
       name,
-      routes
+      children
     };
   }
 
