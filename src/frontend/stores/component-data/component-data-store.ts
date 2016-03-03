@@ -38,6 +38,10 @@ export class ComponentDataStore extends AbstractStore {
       action => this.clearSelections(action));
 
     this.dispatcher.onAction(
+      BackendActionType.RENDER_ROUTER_TREE,
+      action => this.renderRouterTree(action));
+
+    this.dispatcher.onAction(
       UserActionType.SELECT_NODE,
       action => this.selectNodeAction(action));
 
@@ -234,6 +238,13 @@ export class ComponentDataStore extends AbstractStore {
       selectedDependency: dependency,
       dependentComponents: dependentComponents,
       action: UserActionType.GET_DEPENDENCIES
+    });
+  }
+
+  private renderRouterTree(tree: any) {
+    this.emitChange({
+      tree: tree,
+      action: UserActionType.RENDER_ROUTER_TREE
     });
   }
 

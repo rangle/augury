@@ -30,7 +30,11 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   template: `
     <div class="clearfix">
       <div class="col col-6 overflow-scroll">
-        <bt-app-trees [tree]="tree"></bt-app-trees>
+        <bt-app-trees
+          [routerTree]="routerTree"
+          [tree]="tree"
+          (fetchRouterTree)="fetchRouterTree($event)">
+        </bt-app-trees>
       </div>
       <div class="col col-6 overflow-scroll">
         <bt-info-panel></bt-info-panel>
@@ -44,6 +48,7 @@ class App {
 
   private tree: any;
   private previousTree: any;
+  private routerTree: any;
 
   constructor(
     private backendAction: BackendActions,
@@ -76,9 +81,23 @@ class App {
             selectedNode: data.selectedNode
           });
         }
-
       }
     );
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => data.action &&
+              data.action === UserActionType.RENDER_ROUTER_TREE)
+      .subscribe(data => {
+        this.routerTree = data.tree.tree;
+      }
+    );
+
+  }
+
+  fetchRouterTree(index: number) {
+    if (index) {
+      this.userActions.renderRouterTree();
+    }
   }
 }
 

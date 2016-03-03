@@ -42,8 +42,6 @@ export class Angular2Adapter extends BaseAdapter {
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
-    console.log(ParseRouter.parseRoutes(
-      ng.probe(root).componentInstance.router.registry));
 
     this._traverseElements(ng.probe(root),
       true,
@@ -51,6 +49,19 @@ export class Angular2Adapter extends BaseAdapter {
       this._emitNativeElement);
 
     this._trackChanges(root);
+
+  }
+
+  showAppRoutes(): void {
+    const root = this._findRoot();
+    try {
+      const routes = ParseRouter.parseRoutes(
+        ng.probe(root).componentInstance.router.registry);
+
+      this.showRoutes(routes);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {

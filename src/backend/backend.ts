@@ -81,6 +81,8 @@ window.addEventListener('message', function(event) {
           newValue;
         dE.injector._depProvider.componentView.changeDetector.detectChanges();
       }
+    } else if (event.data.message.message.actionType === 'RENDER_ROUTER_TREE') {
+      adapter.showAppRoutes();
     }
 
     return true;
