@@ -31,7 +31,7 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "2.0.0-beta.6",
+    "angular2": "2.0.0-beta.7",
     "basscss": "^7.0.4",
     "browserify": "^12.0.1",
     "crypto": "0.0.3",
@@ -41,8 +41,8 @@
     "immutable": "^3.7.5",
     "json-formatter-js": "^0.3.0",
     "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.0",
-    "zone.js": "0.5.14"
+    "rxjs": "5.0.0-beta.2",
+    "zone.js": "0.5.15"
   },
   "devDependencies": {
     "postcss-cssnext": "^2.4.0",

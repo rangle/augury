@@ -12,7 +12,7 @@ If you want to contribute or need help getting started, [join us on Slack](https
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-beta.6](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta6-2016-02-11) with _limited backwards compatibility_, which will change once Angular 2 stabilizes. 
+Currently works with applications built in [Angular 2.0.0-beta.7](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta7-2016-02-18) with _limited backwards compatibility_, which will change once Angular 2 stabilizes.
 
 ## Getting Extension
 
