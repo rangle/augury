@@ -8,15 +8,14 @@ import {TreeView} from '../tree-view/tree-view';
 @Component({
   selector: 'bt-app-trees',
   directives: [TabMenu, RouterTree, TreeView, InjectorTree],
-  inputs: ['tree', 'routerTree'],
+  inputs: ['tree', 'routerTree', 'selectedTabIndex'],
   templateUrl:
     '/src/frontend/components/app-trees/app-trees.html'
 })
 export default class AppTrees {
 
-  @Output() fetchRouterTree: EventEmitter<number> = new EventEmitter<number>();
+  @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
 
-  private selectedTabIndex: number = 0;
   private tabs = [{
     title: 'Component Tree',
     selected: false
@@ -28,9 +27,8 @@ export default class AppTrees {
       selected: false
     }];
 
-  tabChange(index: number): void {
-    this.selectedTabIndex = index;
-    this.fetchRouterTree.emit(index);
+  tabClicked(index: number): void {
+    this.tabChange.emit(index);
   }
 
 }
