@@ -2,11 +2,12 @@ import {Component, Output, EventEmitter} from 'angular2/core';
 
 import TabMenu from '../tab-menu/tab-menu';
 import RouterTree from '../router-tree/router-tree';
+import InjectorTree from '../injector-tree/injector-tree';
 import {TreeView} from '../tree-view/tree-view';
 
 @Component({
   selector: 'bt-app-trees',
-  directives: [TabMenu, RouterTree, TreeView],
+  directives: [TabMenu, RouterTree, TreeView, InjectorTree],
   inputs: ['tree', 'routerTree'],
   templateUrl:
     '/src/frontend/components/app-trees/app-trees.html'
@@ -21,6 +22,9 @@ export default class AppTrees {
     selected: false
   }, {
       title: 'Router Tree',
+      selected: false
+    }, {
+      title: 'Injector Tree',
       selected: false
     }];
 

@@ -23,6 +23,16 @@
     </li>
 </ul>
 
+<h4 *ngIf="node && node.injectors && node.injectors.length > 0"
+    class="m3 bold">Injectors</h4>
+<ul *ngIf="node && node.injectors && node.injectors.length > 0">
+    <li *ngFor="#injector of node.injectors">
+        <a href="#" class="node-item-property">
+          {{injector}}
+        </a>
+    </li>
+</ul>
+
 <h4 *ngIf="node && node.input && node.input.length > 0"
     class="m3 bold">Input</h4>
 <ul *ngIf="node && node.input && node.input.length > 0">

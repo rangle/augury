@@ -104,6 +104,7 @@ export class Angular2Adapter extends BaseAdapter {
     const input = this._getComponentInput(debugEl);
     const output = this._getComponentOutput(debugEl);
     const dependencies = this._getComponentDependencies(debugEl);
+    const injectors = this._getComponentInjectors(debugEl, dependencies);
 
     description.unshift({
       key: 'b-id',
@@ -119,7 +120,8 @@ export class Angular2Adapter extends BaseAdapter {
       output,
       isSelected: false,
       isOpen: true,
-      dependencies
+      dependencies,
+      injectors
     };
   }
 
@@ -225,6 +227,21 @@ export class Angular2Adapter extends BaseAdapter {
       .provider0.resolvedFactory.dependencies;
 
     return dependencies.map((d) => d.key.displayName);
+  }
+
+  _getComponentInjectors(compEl: any, dependencies: any) {
+
+    const injectors = [];
+    const proto = compEl.injector._proto;
+    const numberOfProviders: number = proto.numberOfProviders;
+
+   for (let i = 0; i < numberOfProviders; i++) {
+     const name: string = proto.getProviderAtIndex(i).key.displayName;
+     // if (dependencies.indexOf(name) < 0) {
+      injectors.push(name);
+     // }
+   }
+   return injectors;
   }
 
   _getComponentInstance(compEl: any): Object {

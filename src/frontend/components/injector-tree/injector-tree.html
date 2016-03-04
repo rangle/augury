@@ -1,0 +1,15 @@
+<h1>Injector Tree</h1>
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Injectors</th>
+    <th>Dependencies</th>
+  </thead>
+  <tr *ngFor="#component of flattenedTree">
+    <td>{{component.id}}</td>
+    <td>{{component.name}}</td>
+    <td>{{component.injectors}}</td>
+    <td>{{component.dependencies}}</td>
+  </tr>
+</table>
