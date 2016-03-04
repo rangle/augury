@@ -28,15 +28,18 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 @View({
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
-    <div class="clearfix">
-      <div class="col col-6 overflow-scroll">
+    <div class="clearfix overflow-hidden flex flex-stretch" style="height:100%;">
+      <div class="col col-8 overflow-scroll border-right"
+        [ngClass]="{'col-12': selectedTabIndex > 0}">
         <bt-app-trees
+          [selectedTabIndex]="selectedTabIndex"
           [routerTree]="routerTree"
           [tree]="tree"
-          (fetchRouterTree)="fetchRouterTree($event)">
+          (tabChange)="tabChange($event)">
         </bt-app-trees>
       </div>
-      <div class="col col-6 overflow-scroll">
+      <div class="col col-4 overflow-scroll"
+        [hidden]="selectedTabIndex > 0">
         <bt-info-panel></bt-info-panel>
       </div>
     </div>`
@@ -49,6 +52,7 @@ class App {
   private tree: any;
   private previousTree: any;
   private routerTree: any;
+  private selectedTabIndex = 0;
 
   constructor(
     private backendAction: BackendActions,
@@ -94,8 +98,9 @@ class App {
 
   }
 
-  fetchRouterTree(index: number) {
-    if (index) {
+  tabChange(index: number) {
+    this.selectedTabIndex = index;
+    if (index === 1) {
       this.userActions.renderRouterTree();
     }
   }
