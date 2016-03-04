@@ -72,7 +72,7 @@ export default class RouterTree implements OnChanges {
     }
 
     const tree = this.treeConfig.tree;
-    const root = this.routerTree[0];
+    const root = this.routerTree;
     let i = 0;
 
     // Compute the new tree layout.

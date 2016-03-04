@@ -28,15 +28,15 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 @View({
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
-    <div class="clearfix">
-      <div class="col col-6 overflow-scroll">
+    <div class="clearfix overflow-hidden flex flex-stretch" style="height:100%;">
+      <div class="col col-8 overflow-scroll border-right">
         <bt-app-trees
           [routerTree]="routerTree"
           [tree]="tree"
           (fetchRouterTree)="fetchRouterTree($event)">
         </bt-app-trees>
       </div>
-      <div class="col col-6 overflow-scroll">
+      <div class="col col-4 overflow-scroll">
         <bt-info-panel></bt-info-panel>
       </div>
     </div>`
@@ -95,7 +95,7 @@ class App {
   }
 
   fetchRouterTree(index: number) {
-    if (index) {
+    if (index === 1) {
       this.userActions.renderRouterTree();
     }
   }
