@@ -12,22 +12,22 @@ import * as d3 from 'd3';
 export default class InjectorTree implements OnChanges {
 
   @Input() tree: any;
+  showTable: boolean = true;
+
   treeConfig: any;
   selectedNodeId: number;
   svg: any;
 
+  nodes: any;
+  injectors: any;
   componentIndex: number = 0;
 
   constructor(
-    @Inject(ElementRef) elementRef: ElementRef
-  ) {
+    @Inject(ElementRef) private elementRef: ElementRef
+  ) { }
 
-     this.svg = d3.select(elementRef.nativeElement)
-      .append('svg')
-      .attr('height', 1000)
-      .attr('width', 1000)
-      .append('g')
-      .attr('transform', 'translate(100, 200)');
+  showTableClick(showTable: boolean) : void {
+    this.showTable = showTable;
   }
 
   private flattenedTree: any;
@@ -64,8 +64,49 @@ export default class InjectorTree implements OnChanges {
   private displayTree() {
     const tree = JSON.parse(JSON.stringify(this.tree));
     this.filterChildren(tree);
-    this.flattenedTree = tree; // this.flatten(tree);
+    this.flattenedTree = this.flatten(tree);
+
+    this.nodes = [];
+    this.injectors = [];
+    this.addNode(this.tree[0]);
+
+    console.log(this.flattenedTree);
+
+    const graphContainer = this.elementRef.nativeElement
+      .querySelector('#graphContainer');
+
+    while (graphContainer.firstChild) {
+      graphContainer.removeChild(graphContainer.firstChild);
+    }
+
+    this.svg = d3.select(graphContainer)
+      .append('svg')
+      .attr('height', 500)
+      .attr('width', 500)
+      .append('g')
+      .attr('transform', 'translate(100, 200)');
+
     this.render();
+  }
+
+  private addNode(node: any) {
+    this.nodes.push({
+      name: node.name,
+      isComponent: true
+    });
+
+    if(node.injectors && node.injectors.length > 0) {
+      node.injectors.forEach((injector) => {
+        this.injectors.push({
+          name: injector,
+          isComponent: false
+        });
+      });
+    }
+
+    if (node.children && node.children.length > 0) {
+      node.children.forEach((node) => this.addNode(node));
+    }
   }
 
   private filterChildren(components: any) {
@@ -85,52 +126,6 @@ export default class InjectorTree implements OnChanges {
     });
   }
 
-  private renderInjector(injector: any) {
-    this.svg.append('rect')
-      .attr("rx", 6)
-      .attr("ry", 6)
-      .attr("x", -25)
-      .attr("y", -15)
-      .attr("width", 50)
-      .attr("height", 30)
-      .style('fill', '#DDD');
-
-    this.svg.append('text')
-      .attr('x', -40)
-      .attr('y', -40)
-      .text(injector)
-      .style('fill-opacity', 1);
-  }
-
-  private renderComponent(component: any, index: number) {
-
-    console.log(component, index);
-
-    this.svg.append('rect')
-      .attr("rx", 6)
-      .attr("ry", 6)
-      .attr("x", -50)
-      .attr("y", -25 + 70 * this.componentIndex)
-      .attr("width", 100 + (component.name.length - 13) * 6)
-      .attr("height", 50)
-      .style('fill', '#F19B90');
-
-    this.svg.append('text')
-      .attr('x', -43)
-      .attr('y', -10 + 70 * this.componentIndex)
-      .text(component.name)
-      .style('fill-opacity', 1);
-
-    if (component.injectors) {
-      component.injectors.forEach((injector) => this.renderInjector(injector));
-    }
-
-    if (component.children) {
-      component.children.forEach((comp, index) => this.renderComponent(comp, index));
-    }
-    this.componentIndex++;
-  }
-
   private render() {
     if (!this.flattenedTree) {
       return;
@@ -140,98 +135,104 @@ export default class InjectorTree implements OnChanges {
     const force = d3.layout.force()
       .charge(-120)
       .linkDistance(80)
-      .size([1000, 1000]);
+      .size([500, 500]);
 
     const graph = {
-      "nodes": [{
-        "name": "Myriel",
-        "group": 1
-      }, {
-          "name": "Napoleon",
-          "group": 2
-        }, {
-          "name": "Mlle.Baptistine",
-          "group": 3
-        }, {
-          "name": "Mme.Magloire",
-          "group": 4
-        }, {
-          "name": "CountessdeLo",
-          "group": 5
-        }, {
-          "name": "Geborand",
-          "group": 6
-        }, {
-          "name": "Champtercier",
-          "group": 7
-        }, {
-          "name": "Mme.Hucheloup",
-          "group": 8
-        }],
-      "links": [{
-        "source": 1,
-        "target": 0,
-        "value": 1
-      }, {
-          "source": 2,
-          "target": 0,
-          "value": 7
-        }, {
-          "source": 3,
-          "target": 0,
-          "value": 2
-        }, {
-          "source": 3,
-          "target": 2,
-          "value": 6
-        }, {
-          "source": 4,
-          "target": 0,
-          "value": 1
-        }, {
-          "source": 5,
-          "target": 0,
-          "value": 1
-        }, {
-          "source": 6,
-          "target": 0,
-          "value": 1
-        }, {
-          "source": 7,
-          "target": 0,
-          "value": 1
-        }, {
-          "source": 6,
-          "target": 0,
-          "value": 2
-        }, {
-          "source": 4,
-          "target": 7,
-          "value": 1
-        }]
+      nodes: this.nodes.concat(this.injectors),
+      links: []
     };
 
-    //Creates the graph data structure out of the json data
+    console.log(graph);
+
+    // const graph = {
+    //   "nodes": [{
+    //     "name": "Myriel",
+    //     "group": 1
+    //   }, {
+    //       "name": "Napoleon",
+    //       "group": 2
+    //     }, {
+    //       "name": "Mlle.Baptistine",
+    //       "group": 3
+    //     }, {
+    //       "name": "Mme.Magloire",
+    //       "group": 4
+    //     }, {
+    //       "name": "CountessdeLo",
+    //       "group": 5
+    //     }, {
+    //       "name": "Geborand",
+    //       "group": 6
+    //     }, {
+    //       "name": "Champtercier",
+    //       "group": 7
+    //     }, {
+    //       "name": "Mme.Hucheloup",
+    //       "group": 8
+    //     }],
+    //   "links": [{
+    //     "source": 1,
+    //     "target": 0,
+    //     "value": 1
+    //   }, {
+    //       "source": 2,
+    //       "target": 0,
+    //       "value": 7
+    //     }, {
+    //       "source": 3,
+    //       "target": 0,
+    //       "value": 2
+    //     }, {
+    //       "source": 3,
+    //       "target": 2,
+    //       "value": 6
+    //     }, {
+    //       "source": 4,
+    //       "target": 0,
+    //       "value": 1
+    //     }, {
+    //       "source": 5,
+    //       "target": 0,
+    //       "value": 1
+    //     }, {
+    //       "source": 6,
+    //       "target": 0,
+    //       "value": 1
+    //     }, {
+    //       "source": 7,
+    //       "target": 0,
+    //       "value": 1
+    //     }, {
+    //       "source": 6,
+    //       "target": 0,
+    //       "value": 2
+    //     }, {
+    //       "source": 4,
+    //       "target": 7,
+    //       "value": 1
+    //     }]
+    // };
+
     force.nodes(graph.nodes)
       .links(graph.links)
       .start();
 
-    //Create all the line svgs but without locations yet
     var link = this.svg.selectAll(".link")
       .data(graph.links)
       .enter().append("line")
       .attr("class", "link")
-      .style("marker-end", "url(#suit)") //Added
-      ;
+      .style("marker-end", "url(#suit)");
 
-    //Do the same with the circles for the nodes - no
     var node = this.svg.selectAll(".node")
       .data(graph.nodes)
       .enter().append("circle")
       .attr("class", "node")
       .attr("r", 8)
       .style("fill", function(d) {
-        return color(d.group);
+        if (d.isComponent) {
+          return color('1');
+        }
+        return color('2');
       })
       .call(force.drag);
 
@@ -272,7 +273,6 @@ export default class InjectorTree implements OnChanges {
       });
     });
 
-    //---Insert-------
     this.svg.append("defs").selectAll("marker")
       .data(["suit", "licensing", "resolved"])
       .enter().append("marker")

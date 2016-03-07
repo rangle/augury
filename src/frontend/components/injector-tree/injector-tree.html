@@ -1,5 +1,15 @@
-<!-- <div class="flex flex-column flex-stretch vh-100 border-right border-color-dark"> -->
-<!-- <table>
+<div class="flex flex-column flex-stretch vh-100 m4">
+
+<div class="inline-block clearfix">
+  <button class="btn btn-primary mb1 bg-gray"
+    [ngClass]="{'bg-aqua': showTable}"
+    (click)="showTableClick(true)">Table</button>
+  <button class="btn btn-primary mb1 bg-gray"
+    [ngClass]="{'bg-aqua': !showTable}"
+    (click)="showTableClick(false)">Graph</button>
+</div>
+
+<table class="mt4 table-light" [hidden]="!showTable">
   <thead>
     <th>ID</th>
     <th>Name</th>
@@ -13,4 +23,8 @@
     <td>{{component.dependencies}}</td>
   </tr>
 </table>
-</div> -->
+
+<div id="graphContainer" [hidden]="showTable">
+</div>
+
+</div>
