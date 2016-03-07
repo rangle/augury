@@ -1,6 +1,7 @@
-import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
+import {Component, ViewEncapsulation, OnChanges, Inject,
   ElementRef, Input} from 'angular2/core';
 import {UserActions} from '../../actions/user-actions/user-actions';
+import RouterInfo from './router-info';
 import * as d3 from 'd3';
 
 @Component({
@@ -25,13 +26,14 @@ import * as d3 from 'd3';
       stroke-width: 1px;
     }
   `],
+  directives: [RouterInfo],
   encapsulation: ViewEncapsulation.None
 })
 
 export default class RouterTree implements OnChanges {
   @Input() routerTree: Array<any>;
   treeConfig: any;
-  selectedNodeId: number;
+  selectedNode: any;
   constructor(@Inject(ElementRef) elementRef: ElementRef) {
 
     const tree = d3.layout.tree();
@@ -90,16 +92,15 @@ export default class RouterTree implements OnChanges {
     const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
       .attr('transform', (d) => 'translate(' + d.y + ',' + d.x + ')')
-      .on('click', (d) => {
-        console.log('selected node ', d);
-        this.selectedNodeId = d.id;
+      .on('mouseover', (d) => {
+        this.selectedNode = d;
         this.render();
       });
 
     nodeEnter.append('circle')
       .attr('r', 6)
       .style('fill', (d) =>
-        d.id === this.selectedNodeId ? '#F19B90' : '#FFF'
+        this.selectedNode && (d.id === this.selectedNode.id) ? '#F19B90' : '#FFF'
       );
 
     nodeEnter.append('text')
@@ -113,7 +114,7 @@ export default class RouterTree implements OnChanges {
     const nodeUpdate = node.transition()
       .select('circle')
       .style('fill', (d) =>
-        d.id === this.selectedNodeId ? '#F19B90' : '#FFF'
+        this.selectedNode && (d.id === this.selectedNode.id) ? '#F19B90' : '#FFF'
       );
 
     // Declare the links
