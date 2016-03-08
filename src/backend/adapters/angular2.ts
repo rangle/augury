@@ -231,15 +231,16 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentInjectors(compEl: any, dependencies: any) {
 
+    const componentName = this._getComponentName(compEl);
     const injectors = [];
     const proto = compEl.injector._proto;
     const numberOfProviders: number = proto.numberOfProviders;
 
    for (let i = 0; i < numberOfProviders; i++) {
      const name: string = proto.getProviderAtIndex(i).key.displayName;
-     // if (dependencies.indexOf(name) < 0) {
+     if (name !== componentName) {
       injectors.push(name);
-     // }
+     }
    }
    return injectors;
   }
