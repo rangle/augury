@@ -81,12 +81,13 @@ export default class InjectorTree implements OnChanges {
 
   private displayTree() {
     const tree = JSON.parse(JSON.stringify(this.tree));
-    this.filterChildren(tree);
+    // this.filterChildren(tree);
+
     this.flattenedTree = this.flatten(tree);
 
     this.nodes = [];
     this.links = [];
-    this.addNode(this.tree[0]);
+    this.addNode(tree[0]);
 
     const graphContainer = this.elementRef.nativeElement
       .querySelector('#graphContainer');
