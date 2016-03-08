@@ -24,7 +24,7 @@
  * Supports up to 2.0.0-beta-1
  */
 
-declare var ng: { probe: Function };
+declare var ng: { probe: Function, coreTokens: any };
 declare var getAllAngularRootElements: Function;
 
 import { TreeNode, BaseAdapter } from './base';
@@ -32,22 +32,50 @@ import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Description } from '../utils/description';
 
 import {DirectiveResolver} from '../directive-resolver';
+import * as Rx from 'rxjs';
 
 export class Angular2Adapter extends BaseAdapter {
   _observer: MutationObserver;
-
   _tree: any = {};
+  _onEventDone: any;
+
+  constructor() {
+    super();
+    this._onEventDone = new Rx.Subject();
+
+    this._onEventDone
+      .debounce((x) => {
+        return Rx.Observable.timer(250);
+      })
+      .subscribe(this.renderTree.bind(this));
+  }
+
+  renderTree() {
+    this.reset();
+    const root = this._findRoot();
+    this._tree = {};
+    this._traverseElements(ng.probe(root),
+      true,
+      '0',
+      this._emitNativeElement);
+  }
 
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
-
+    this._tree = {};
     this._traverseElements(ng.probe(root),
       true,
       '0',
       this._emitNativeElement);
 
-    this._trackChanges(root);
+    this._trackAngularChanges(ng.probe(root));
+    // this._trackChanges(root);
+  }
+
+  _trackAngularChanges(rootNgProbe: any) {
+    const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
+    ngZone.onEventDone.subscribe(() => { this._onEventDone.next();});
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
