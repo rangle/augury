@@ -25,7 +25,7 @@
  */
 
 declare var ng: { probe: Function };
-
+declare var getAllAngularRootElements: Function;
 
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
@@ -115,13 +115,12 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _findRoot(): Element {
-    const elements: any = document.querySelectorAll('body *');
-    for (let i = 0; i < elements.length; i++) {
-      const debugElement = ng.probe(elements[i]);
-      if (debugElement && debugElement.componentInstance) {
-        return elements[i];
-      }
+    const ngRootEl = getAllAngularRootElements()[0];
+
+    if (ngRootEl) {
+      return ngRootEl;
     }
+
     throw new Error('Not able to find root node');
   }
 
