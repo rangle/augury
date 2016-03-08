@@ -3,7 +3,7 @@ import {Angular2Adapter} from './adapters/angular2';
 import Highlighter from './utils/highlighter';
 import ParseData from '../frontend/utils/parse-data';
 
-declare var ng: { probe: Function };
+declare var ng: { probe: Function, coreTokens: any };
 
 let channel = {
   sendMessage: (message) => {
@@ -79,7 +79,9 @@ window.addEventListener('message', function(event) {
 
         dE.componentInstance[event.data.message.message.property.key] =
           newValue;
-        dE.injector._depProvider.componentView.changeDetector.detectChanges();
+
+        const appRef = dE.inject(ng.coreTokens.ApplicationRef);
+        appRef.tick();
       }
     }
 
