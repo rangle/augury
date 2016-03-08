@@ -7,7 +7,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "angular2": "2.0.0-beta.7",
+    "angular2": "2.0.0-beta.8",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.3",
     "immutable": "^3.7.6",
