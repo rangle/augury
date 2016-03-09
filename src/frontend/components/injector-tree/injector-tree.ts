@@ -195,10 +195,57 @@ export default class InjectorTree implements OnChanges {
     });
   }
 
+  private addText(x: number, y: number, text: string) {
+    this.svg
+        .append('text')
+        .attr('x', x)
+        .attr('y', y)
+        .text(text);
+  }
+
+  private addCircle(x: number, y: number, r: number, fill: string) {
+    this.svg
+        .append('circle')
+        .attr('cx', x)
+        .attr('cy', y)
+        .style('fill', fill)
+        .attr('r', r);
+  }
+
+  private addLine(x1: number, y1: number,
+    x2: number, y2: number, style: string) {
+    this.svg
+      .append('line')
+      .attr('x1', x1)
+      .attr('y1', y1)
+      .attr('x2', x2)
+      .attr('y2', y2)
+      .attr('class', 'link')
+      .attr('style', style);
+  }
+
+  private addLegends() {
+
+    this.addCircle(8, 12, 8, NODE_COLORS[0]);
+    this.addCircle(8, 36, 8, NODE_COLORS[1]);
+
+    this.addText(20, 16, 'Component');
+    this.addText(20, 40, 'Service');
+    this.addText(20, 64, 'Component to Component');
+    this.addText(20, 88, 'Component to Service');
+    this.addText(20, 112, 'Component to Dependency');
+
+    this.addLine(0, 60, 16, 60, '');
+    this.addLine(0, 84, 16, 84, 'stroke: #2CA02C;');
+    this.addLine(0, 108, 16, 108, 'stroke-dasharray:3px, 3px;');
+  }
+
   private render() {
     if (!this.flattenedTree) {
       return;
     }
+
+    this.addLegends();
 
     const force = d3.layout.force()
       .charge(-500)
