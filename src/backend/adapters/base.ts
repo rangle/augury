@@ -117,5 +117,5 @@ export abstract class BaseAdapter {
 
   abstract serializeComponent(el: any, event: string): TreeNode;
 
-  abstract cleanup(): void;
+  // abstract cleanup(): void;
 }
