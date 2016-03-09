@@ -233,15 +233,13 @@ export class Angular2Adapter extends BaseAdapter {
 
     const componentName = this._getComponentName(compEl);
     const injectors = [];
-    const proto = compEl.injector._proto;
-    const numberOfProviders: number = proto.numberOfProviders;
-
-   for (let i = 0; i < numberOfProviders; i++) {
-     const name: string = proto.getProviderAtIndex(i).key.displayName;
-     if (name !== componentName) {
-      injectors.push(name);
-     }
-   }
+    for (let i = 0; i < compEl.providerTokens.length; i++) {
+      const provider: any = compEl.providerTokens[i];
+      const name: string = this.getFunctionName(provider);
+      if (name !== componentName) {
+        injectors.push(name);
+      }
+    }
    return injectors;
   }
 
@@ -393,5 +391,12 @@ export class Angular2Adapter extends BaseAdapter {
         { key: 'name', value: this._getComponentName(compEl) }
       ];
     }
+  }
+
+  getFunctionName(value: string) {
+    let name = value.toString();
+    name = name.substr('function '.length);
+    name = name.substr(0, name.indexOf('('));
+    return name;
   }
 }
