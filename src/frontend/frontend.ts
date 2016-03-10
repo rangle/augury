@@ -28,7 +28,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 @View({
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
-    <div class="clearfix overflow-hidden flex flex-stretch" style="height:100%;">
+    <div class="clearfix overflow-hidden flex
+      flex-stretch" style="height:100%;">
       <div class="col col-8 overflow-scroll border-right"
         [ngClass]="{'col-12': selectedTabIndex > 0}">
         <bt-app-trees
