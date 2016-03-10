@@ -9,6 +9,7 @@ export interface Route {
   handler: string;
   data: any;
   children?: Array<Route>;
+  isAux: boolean;
 }
 
 export interface MainRoute {
@@ -50,8 +51,13 @@ export class ParseRouter {
   }
 
   private static getMainRoute(key: ComponentRecognizer, value: any): MainRoute {
+
     const name: string = this.NAME_REGEX.exec(value)[1];
     const children: Array<Route> = new Array<Route>();
+
+    key.auxRoutes.forEach((obj, route_name) => {
+      children.push(this.getRoute(obj, route_name, true));
+    });
 
     key.names.forEach((obj, route_name) => {
       children.push(this.getRoute(obj, route_name));
@@ -63,7 +69,8 @@ export class ParseRouter {
     };
   }
 
-  private static getRoute(value: RouteRecognizer, name: string): Route {
+  private static getRoute
+    (value: RouteRecognizer, name: string, isAux: boolean = false): Route {
     const handler: string =
       this.NAME_REGEX.exec(value.handler.componentType + '')[1];
 
@@ -73,7 +80,8 @@ export class ParseRouter {
       hash: value.hash,
       path: value.path,
       specificity: value.specificity,
-      data: value.handler.data
+      data: value.handler.data,
+      isAux
     };
   }
 }
