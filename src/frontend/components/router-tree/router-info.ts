@@ -1,15 +1,15 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input, ViewEncapsulation} from 'angular2/core';
 
 @Component({
   selector: 'bt-router-info',
   inputs: ['selectedNode'],
   template: `
   <div *ngIf="selectedNode">
-    name: {{selectedNode.name}}
-    path: {{selectedNode.name}}
-    specificity: {{selectedNode.specificity}}
-    handler: {{selectedNode.handler}}
-    data: {{selectedNode.data}}
+    <p>name: {{selectedNode.name}}</p>
+    <p>path: {{selectedNode.name}}</p>
+    <p>specificity: {{selectedNode.specificity}}</p>
+    <p>handler: {{selectedNode.handler}}</p>
+    <p>isAuxiliary: {{selectedNode.isAux ? 'true' : 'false'}}</p>
   </div>
   `,
   directives: [RouterInfo]
