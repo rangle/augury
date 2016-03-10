@@ -8,7 +8,7 @@ echo "Start"
 file=batarangle.crx
 
 # bucket name
-bucket=batarangle
+bucket=batarangle.io
 resource="/${bucket}/${file}"
 contentType="application/x-compressed-tar"
 dateValue=$(date -u +'%Y%m%dT%H%M%SZ')
@@ -29,6 +29,6 @@ curl -X PUT -T "${file}" \
   -H "Date: ${dateValue}" \
   -H "Content-Type: ${contentType}" \
   -H "Authorization: AWS ${s3Key}:${signature}" \
-  https://${bucket}.s3.amazonaws.com/${file}
+  http://${bucket}.s3.amazonaws.com/${file}
 
 echo "Finish"
