@@ -249,15 +249,14 @@ export default class InjectorTree implements OnChanges {
 
     const force = d3.layout.force()
       .charge(-500)
-      .linkDistance(100)
+      .gravity(.10)
+      .linkDistance(80)
       .size([1000, 1000]);
 
     const graph = {
       nodes: this.nodes,
       links: this.links
     };
-
-    console.log(graph);
 
     force.nodes(graph.nodes)
       .links(graph.links)
@@ -280,7 +279,7 @@ export default class InjectorTree implements OnChanges {
     const node = this.svg.selectAll('.node')
       .data(graph.nodes)
       .enter().append('circle')
-      .attr('r', 8)
+      .attr('r', 5)
       .style('fill', (d) => {
         return NODE_COLORS[d.type];
       })
