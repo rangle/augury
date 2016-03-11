@@ -47,9 +47,7 @@ export class DomController extends BaseController {
 
     this.callToRenderTree = new Rx.Subject();
     this.callToRenderTree
-      .debounce((x) => {
-        return Rx.Observable.timer(250);
-      })
+      .debounce(() => Rx.Observable.timer(250))
       .subscribe(this.callFrontend.bind(this));
   }
 
@@ -87,7 +85,6 @@ export class DomController extends BaseController {
         channel: ch,
         message: { type: 'model_change', payload: this.model }
       });
-      // ch.sendMessage({ type: 'model_change', payload: this.model});
     }
   }
 

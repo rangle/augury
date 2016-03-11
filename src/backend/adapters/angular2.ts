@@ -43,9 +43,7 @@ export class Angular2Adapter extends BaseAdapter {
     this._onEventDone = new Rx.Subject();
 
     this._onEventDone
-      .debounce((x) => {
-        return Rx.Observable.timer(250);
-      })
+      .debounce((x) => Rx.Observable.timer(250))
       .subscribe(this.renderTree.bind(this));
   }
 
@@ -73,7 +71,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _trackAngularChanges(rootNgProbe: any) {
     const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
-    ngZone.onEventDone.subscribe(() => { this._onEventDone.next();});
+    ngZone.onEventDone.subscribe(this._onEventDone.next);
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {

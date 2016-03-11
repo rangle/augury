@@ -43,7 +43,8 @@ window.addEventListener('message', function(event) {
       const highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
 
-      const element: any = <HTMLElement>document.querySelector(highlightStr);
+      const element: HTMLElement =
+        <HTMLElement>document.querySelector(highlightStr);
       if (element) {
         element.scrollIntoView();
 
