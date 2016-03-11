@@ -42,6 +42,9 @@ const ANGULAR_COMPONENTS = [
       stroke-opacity: .8;
       stroke-width: 1px;
     }
+    .circle-injector-tree {
+      stroke: none;
+    }
   `]
 })
 export default class InjectorTree implements OnChanges {
@@ -206,6 +209,7 @@ export default class InjectorTree implements OnChanges {
   private addCircle(x: number, y: number, r: number, fill: string) {
     this.svg
         .append('circle')
+        .attr('class', 'circle-injector-tree')
         .attr('cx', x)
         .attr('cy', y)
         .style('fill', fill)
@@ -279,10 +283,9 @@ export default class InjectorTree implements OnChanges {
     const node = this.svg.selectAll('.node')
       .data(graph.nodes)
       .enter().append('circle')
+      .attr('class', 'circle-injector-tree')
       .attr('r', 5)
-      .style('fill', (d) => {
-        return NODE_COLORS[d.type];
-      })
+      .style('fill', (d) => NODE_COLORS[d.type])
       .call(force.drag);
 
     const text = this.svg.append('svg:g')
