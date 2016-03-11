@@ -10,9 +10,14 @@ import * as d3 from 'd3';
     .node {
       cursor: pointer;
     }
-    .node circle {
-      fill: #fff;
+    circle {
       stroke: #CB5142;
+      fill: #F19B90;
+      stroke-width: 1.5px;
+    }
+    circle.aux {
+      stroke: #4283CB;
+      fill: #7EA7D4;
     }
     .node text {
       font: 12px sans-serif;
@@ -27,8 +32,9 @@ import * as d3 from 'd3';
       right: 20px;
       top: 50px;
       padding: 10px;
-      border: solid 2px #CB5142;
-      background-color: rgba(241, 155, 144, 0.7);
+      border: solid 2px #777;
+      background-color: #ccc;
+      min-width: 150px;
     }
   `],
   directives: [RouterInfo],
@@ -63,7 +69,6 @@ export default class RouterTree implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log('routerTree', this.routerTree);
     // this.collapse(this.routerTree);
     this.render(this.routerTree);
   }
@@ -100,10 +105,10 @@ export default class RouterTree implements OnChanges {
       // .on('click', this.click.bind(this));
 
     nodeEnter.append('circle')
+      .attr('class', (d) => d.isAux ? 'aux' : '')
       .attr('r', 5)
-      .attr('stroke-width', '1.5px')
       .style('fill', (d) =>
-        this.selectedNode && (d.id === this.selectedNode.id) ? '#F19B90' : '#FFF'
+        this.selectedNode && (d.id === this.selectedNode.id) ? '' : '#FFF'
       );
 
     nodeEnter.append('text')
@@ -115,16 +120,15 @@ export default class RouterTree implements OnChanges {
 
     // Update the nodes
     const nodeUpdate = node.transition()
-      .duration(this.treeConfig.duration)
       .attr('transform', (d) => `translate(${d.y},${d.x})`);
 
     nodeUpdate.select('circle')
       .style('fill', (d) =>
-        this.selectedNode && (d.id === this.selectedNode.id) ? '#F19B90' : '#FFF'
+        this.selectedNode && (d.id === this.selectedNode.id) ? '' : '#FFF'
       );
 
-    nodeUpdate.select("text")
-      .style("fill-opacity", 1);
+    nodeUpdate.select('text')
+      .style('fill-opacity', 1);
 
     // Exit the nodes
     const nodeExit = node.exit().transition()
@@ -144,7 +148,7 @@ export default class RouterTree implements OnChanges {
 
     // Enter any new links at the parent's previous position.
     link.enter().insert('path', 'g')
-      .attr('class', 'link')
+      .attr('class', 'link');
       // .attr('d', (d) => {
       //   let o = {x: source.x0, y: source.y0};
       //   return this.treeConfig.diagonal({source: o, target: o});
@@ -182,7 +186,7 @@ export default class RouterTree implements OnChanges {
 
   rollover(d) {
     if (this.selectedNode) {
-      this.selectedNode = null
+      this.selectedNode = null;
     } else {
       this.selectedNode = d;
     }
