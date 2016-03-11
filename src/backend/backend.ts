@@ -3,7 +3,7 @@ import {Angular2Adapter} from './adapters/angular2';
 import Highlighter from './utils/highlighter';
 import ParseData from '../frontend/utils/parse-data';
 
-declare var ng: { probe: Function };
+declare var ng: { probe: Function, coreTokens: any };
 
 let channel = {
   sendMessage: (message) => {
@@ -30,13 +30,6 @@ window.addEventListener('message', function(event) {
 
     if (event.data.message.message.actionType ===
       'START_COMPONENT_TREE_INSPECTION') {
-
-      adapter._observer.disconnect();
-      adapter.cleanup();
-
-      adapter = new Angular2Adapter();
-      dom = new DomController(adapter, channel);
-      dom.hookIntoBackend();
       adapter.setup();
     } else if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
       const highlightStr = '[batarangle-id=\"' +
@@ -50,12 +43,17 @@ window.addEventListener('message', function(event) {
       const highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
 
-      (<HTMLElement>document.querySelector(highlightStr)).scrollIntoView();
+      const element: HTMLElement =
+        <HTMLElement>document.querySelector(highlightStr);
+      if (element) {
+        element.scrollIntoView();
 
-      Object.defineProperty(window, '$a', {
-        configurable: true,
-        value: ng.probe(document.querySelector(highlightStr))
-      });
+        Object.defineProperty(window, '$a', {
+          configurable: true,
+          value: ng.probe(document.querySelector(highlightStr))
+        });
+      }
+
     } else if (event.data.message.message.actionType === 'UPDATE_PROPERTY') {
       const highlightStr = '[batarangle-id=\"' +
         event.data.message.message.property.id + '\"]';
@@ -79,7 +77,9 @@ window.addEventListener('message', function(event) {
 
         dE.componentInstance[event.data.message.message.property.key] =
           newValue;
-        dE.injector._depProvider.componentView.changeDetector.detectChanges();
+
+        const appRef = dE.inject(ng.coreTokens.ApplicationRef);
+        appRef.tick();
       }
     }
 
