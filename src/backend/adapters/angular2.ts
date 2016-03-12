@@ -32,7 +32,8 @@ import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Description } from '../utils/description';
 
 import {DirectiveResolver} from '../directive-resolver';
-import * as Rx from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 
 export class Angular2Adapter extends BaseAdapter {
   _tree: any = {};
@@ -40,10 +41,10 @@ export class Angular2Adapter extends BaseAdapter {
 
   constructor() {
     super();
-    this._onEventDone = new Rx.Subject();
+    this._onEventDone = new Subject();
 
     this._onEventDone
-      .debounce((x) => Rx.Observable.timer(250))
+      .debounce((x) => Observable.timer(250))
       .subscribe(this.renderTree.bind(this));
   }
 
@@ -71,7 +72,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _trackAngularChanges(rootNgProbe: any) {
     const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
-    ngZone.onEventDone.subscribe(this._onEventDone.next);
+    ngZone.onEventDone.subscribe(() => this._onEventDone.next());
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
