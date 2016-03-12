@@ -19,7 +19,8 @@ import { AdapterEvent } from '../adapters/base';
 import { Angular2Adapter } from '../adapters/angular2';
 import { BaseController } from './base';
 
-import * as Rx from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 
 interface Sendable {
   sendMessage: Function;
@@ -45,9 +46,9 @@ export class DomController extends BaseController {
     this.adapter = adapter;
     this.channel = channel;
 
-    this.callToRenderTree = new Rx.Subject();
+    this.callToRenderTree = new Subject();
     this.callToRenderTree
-      .debounce(() => Rx.Observable.timer(250))
+      .debounce(() => Observable.timer(250))
       .subscribe(this.callFrontend.bind(this));
   }
 
