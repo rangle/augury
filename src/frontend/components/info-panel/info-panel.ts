@@ -1,4 +1,4 @@
-import {Component, View, ElementRef, Inject} from 'angular2/core';
+import {Component, View, ElementRef, Inject, NgZone} from 'angular2/core';
 import {NgIf} from 'angular2/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
@@ -27,18 +27,20 @@ export class InfoPanel {
   constructor(
     private componentDataStore: ComponentDataStore,
     private userActions: UserActions,
+    private _ngZone: NgZone,
     @Inject(ElementRef) private elementRef: ElementRef
   ) {
 
     this.componentDataStore.dataStream
-      .filter((data: any) => data.action &&
-        data.action !== UserActionType.GET_DEPENDENCIES)
-      .debounce((x) => {
-        return Rx.Observable.timer(100);
+      .filter((data: any) => {
+        return (data.action &&
+          data.action !== UserActionType.GET_DEPENDENCIES &&
+          data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
       })
       .subscribe(({ selectedNode }) => {
         this.selectedTabIndex = 0;
         this.node = selectedNode;
+        this._ngZone.run(() => undefined);
       });
 
     this.componentDataStore.dataStream

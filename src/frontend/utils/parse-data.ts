@@ -10,7 +10,7 @@ export default class ParseData {
   }
 
   public static parseBoolean(data: any): boolean {
-    return this.BOOLEAN_CONSTANTS[data.toLowerCase()];
+    return this.BOOLEAN_CONSTANTS[data.toString().toLowerCase()];
   }
 
   public static convertToNumber(data: any, oldValue: number): number {
