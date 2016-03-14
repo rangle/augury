@@ -56,7 +56,7 @@ export class Angular2Adapter extends BaseAdapter {
     const root = this._findRoot();
     try {
       const routes = ParseRouter.parseRoutes(
-        ng.probe(root).componentInstance.router.registry);
+        ng.probe(root).componentInstance.router.root.registry);
 
       this.showRoutes(routes);
     } catch (error) {

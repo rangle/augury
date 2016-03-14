@@ -50,16 +50,16 @@ export class ParseRouter {
     return appRoute;
   }
 
-  private static getMainRoute(key: ComponentRecognizer, value: any): MainRoute {
+  private static getMainRoute(key: any, value: any): MainRoute {
 
     const name: string = this.NAME_REGEX.exec(value)[1];
     const children: Array<Route> = new Array<Route>();
 
-    key.auxRoutes.forEach((obj, route_name) => {
+    key.auxRulesByName.forEach((obj, route_name) => {
       children.push(this.getRoute(obj, route_name, true));
     });
 
-    key.names.forEach((obj, route_name) => {
+    key.rulesByName.forEach((obj, route_name) => {
       children.push(this.getRoute(obj, route_name));
     });
 
