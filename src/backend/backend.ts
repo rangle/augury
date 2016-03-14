@@ -80,6 +80,7 @@ window.addEventListener('message', function(event) {
 
         const appRef = dE.inject(ng.coreTokens.ApplicationRef);
         appRef.tick();
+        adapter.renderTree();
       }
     }
 

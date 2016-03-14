@@ -100,7 +100,15 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  private getUpdatedNode(selectedNode: any) {
+    const flattenedData = this.flatten(this._componentData);
+    const filtered = flattenedData.filter((node) =>
+      node.id === selectedNode.id);
+    return filtered.length > 0 ? filtered[0] : selectedNode;
+  }
+
   private updateNodeState({openedNodes, selectedNode}) {
+    selectedNode = this.getUpdatedNode(selectedNode);
     this.emitChange({
       openedNodes,
       selectedNode,
