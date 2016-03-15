@@ -22,16 +22,15 @@ export class BackendMessagingService {
     });
 
     this.backgroundPageConnection.onMessage.addListener((message: any) => {
-      console.log(message);
       if (message.from && message.from === 'content-script') {
         this.backendActions.clearSelections();
       }
 
       if (message.data.message.type === 'render_routes') {
         this.backendActions.renderRouterTree(message.data.message.payload);
+      } else {
+        this.backendActions.componentTreeChanged(message.data.message.payload);
       }
-
-      this.backendActions.componentTreeChanged(message.data.message.payload);
     });
 
   }

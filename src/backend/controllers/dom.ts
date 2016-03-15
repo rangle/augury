@@ -87,7 +87,7 @@ export class DomController extends BaseController {
       if (evt.type === EventType.ROUTES) {
         this.callToRenderTree.next({
           channel: ch,
-          message: { type: 'render_routes', payload: this.model }
+          message: { type: 'render_routes', payload: evt.routes }
         });
       } else {
         this.callToRenderTree.next({
