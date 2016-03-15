@@ -1,14 +1,16 @@
-import {Component, EventEmitter} from 'angular2/core';
+import {Component, EventEmitter, Input} from 'angular2/core';
 import StateValues from '../state-values/state-values';
 
 @Component({
   selector: 'bt-render-state',
   templateUrl:
   '/src/frontend/components/render-state/render-state.html',
-  inputs: ['id', 'state'],
   directives: [RenderState, StateValues]
 })
 export default class RenderState {
+  @Input() id: string;
+  @Input() state: any;
+  @Input() propertyTree: string;
 
   private expanded = {};
 

@@ -1,5 +1,5 @@
 <div>
-    <p class="node-item-property">{{key}}=</p>
+    <p class="node-item-property">{{getPropertyKey(propertyTree)}}=</p>
     <p class="node-item-value"
       *ngIf="!editable"
       (dblclick)="onDblClick($event)" >{{value}}</p>

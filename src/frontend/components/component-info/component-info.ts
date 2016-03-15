@@ -15,6 +15,7 @@ import RenderState from '../render-state/render-state';
 export default class ComponentInfo {
   private node: any;
   private selectDependency: EventEmitter<string> = new EventEmitter<string>();
+  private propertyTree: string = '';
 
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef

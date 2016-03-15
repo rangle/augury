@@ -40,6 +40,7 @@
 <h4 *ngIf="node && node.state" class="m3 bold">State</h4>
 <div style="padding-left: 15px;">
     <bt-render-state *ngIf="node && node.state"
+        [propertyTree]="propertyTree"
         [id]="node.id"
         [state]="node.state"></bt-render-state>
 </div>
