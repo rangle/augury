@@ -1,6 +1,6 @@
 {
   "name": "batarangle",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
   "repository": {
     "type": "git",
