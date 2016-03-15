@@ -10,14 +10,19 @@ import ParseData from '../../utils/parse-data';
 export default class StateValues {
 
   @Input() id: any;
-  @Input() key: any;
   @Input() value: any;
+  @Input() propertyTree: string;
 
   private editable: boolean = false;
 
   constructor(
     private userActions: UserActions
   ) { }
+  
+  getPropertyKey(tree: any): string {
+    tree = tree.split(',');
+    return tree[tree.length - 1] || '';
+  }
 
   onDblClick($event) {
     this.editable = true;
@@ -39,10 +44,11 @@ export default class StateValues {
       } else {
         newValue = value;
       }
+
       if (newValue !== this.value) {
 
         const property = {
-          'key': this.key,
+          'propertyTree': this.propertyTree.substr(1),
           'value': newValue,
           'id': this.id,
           'type': type

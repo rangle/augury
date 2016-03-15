@@ -55,13 +55,17 @@ window.addEventListener('message', function(event) {
       }
 
     } else if (event.data.message.message.actionType === 'UPDATE_PROPERTY') {
+
       const highlightStr = '[batarangle-id=\"' +
         event.data.message.message.property.id + '\"]';
-
       const dE = ng.probe(document.querySelector(highlightStr));
-      if (dE.componentInstance[event.data.message.message.property.key]
-          !== undefined) {
+      const propertyTree: Array<string> =
+        event.data.message.message.property.propertyTree.split(',');
+      const property = propertyTree.pop();
+      const value = propertyTree.reduce((previousValue, currentValue) =>
+        previousValue[currentValue], dE.componentInstance);
 
+      if (value !== undefined) {
         const type: string = event.data.message.message.property.type;
         let newValue: any;
 
@@ -75,8 +79,7 @@ window.addEventListener('message', function(event) {
           newValue = event.data.message.message.property.value;
         }
 
-        dE.componentInstance[event.data.message.message.property.key] =
-          newValue;
+        value[property] = newValue;
 
         const appRef = dE.inject(ng.coreTokens.ApplicationRef);
         appRef.tick();
