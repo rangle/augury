@@ -26,6 +26,7 @@
 
 declare var ng: { probe: Function, coreTokens: any };
 declare var getAllAngularRootElements: Function;
+declare var Reflect: { getOwnMetadata: Function };
 
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
@@ -196,10 +197,14 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentDependencies(compEl: any) {
-    const dependencies = compEl.injector._proto._strategy
-      .provider0.resolvedFactory.dependencies;
 
-    return dependencies.map((d) => d.key.displayName);
+    const dependencies = [];
+    const parameters = Reflect.getOwnMetadata('design:paramtypes',
+      compEl.componentInstance.constructor);
+
+    parameters.forEach((param) => dependencies.push(param.name));
+
+    return dependencies;
   }
 
   _getComponentInstance(compEl: any): Object {
@@ -262,31 +267,19 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentInput(compEl: any): Object {
-    let props = [];
-    if (compEl.providerTokens.length > 0) {
-      try {
-        const directiveResolver: DirectiveResolver = new DirectiveResolver();
-        const metadata = directiveResolver.resolve(compEl.providerTokens[0]);
-        props = metadata.inputs;
-      } catch (ex) {
-        console.log(ex.message);
-      }
-    }
-    return props;
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+
+    return (metadata && metadata.length > 0) ?
+      metadata[0].inputs : [];
   }
 
   _getComponentOutput(compEl: any): Object {
-    let events = {};
-    if (compEl.providerTokens.length > 0) {
-      try {
-        const directiveResolver: DirectiveResolver = new DirectiveResolver();
-        const metadata = directiveResolver.resolve(compEl.providerTokens[0]);
-        events = metadata.outputs;
-      } catch (ex) {
-        console.log(ex.message);
-      }
-    }
-    return events;
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+
+    return (metadata && metadata.length > 0) ?
+      metadata[0].outputs : [];
   }
 
   _normalizeState(name: string, state: Object): Object {
