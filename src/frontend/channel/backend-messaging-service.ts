@@ -22,6 +22,7 @@ export class BackendMessagingService {
     });
 
     this.backgroundPageConnection.onMessage.addListener((message: any) => {
+      console.log(message);
       if (message.from && message.from === 'content-script') {
         this.backendActions.clearSelections();
       }

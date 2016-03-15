@@ -1,6 +1,3 @@
-// import { DebugElement_ as DebugElement }
-//        from 'angular2/src/core/debug/debug_element';
-
 export interface Property {
   key: string;
   value: string;
@@ -9,6 +6,10 @@ export interface Property {
 export abstract class Description {
 
   public static getComponentDescription(compEl: any): Object[] {
+    let description: Array<Property> = new Array<Property>();
+    if (!compEl) {
+      return description;
+    }
 
     const componentInstance: any = compEl.componentInstance || {};
     const constructor: any =  componentInstance.constructor;
@@ -16,8 +17,6 @@ export abstract class Description {
     const componentName: string = constructorName !== 'Object' ?
       constructorName : compEl.nativeElement.tagName;
     const element: HTMLElement = <HTMLElement>compEl.nativeElement;
-
-    let description: Array<Property> = new Array<Property>();
 
     switch (componentName) {
       case 'RouterLink':

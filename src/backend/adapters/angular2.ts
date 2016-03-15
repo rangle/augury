@@ -24,7 +24,7 @@
  * Supports up to 2.0.0-beta-1
  */
 
-declare var ng: { probe: Function };
+declare var ng: { probe: Function, coreTokens: any };
 declare var getAllAngularRootElements: Function;
 
 import { TreeNode, BaseAdapter } from './base';
@@ -33,22 +33,42 @@ import { Description } from '../utils/description';
 import { ParseRouter } from '../utils/parse-router';
 
 import {DirectiveResolver} from '../directive-resolver';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 
 export class Angular2Adapter extends BaseAdapter {
-  _observer: MutationObserver;
-
   _tree: any = {};
+  _onEventDone: any;
+
+  constructor() {
+    super();
+    this._onEventDone = new Subject();
+
+    this._onEventDone
+      .debounce((x) => Observable.timer(250))
+      .subscribe(this.renderTree.bind(this));
+  }
+
+  renderTree() {
+    this.reset();
+    const root = this._findRoot();
+    this._tree = {};
+    this._traverseElements(ng.probe(root),
+      true,
+      '0',
+      this._emitNativeElement);
+  }
 
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
-
+    this._tree = {};
     this._traverseElements(ng.probe(root),
       true,
       '0',
       this._emitNativeElement);
 
-    this._trackChanges(root);
+    this._trackAngularChanges(ng.probe(root));
 
   }
 
@@ -62,6 +82,11 @@ export class Angular2Adapter extends BaseAdapter {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  _trackAngularChanges(rootNgProbe: any) {
+    const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
+    ngZone.onEventDone.subscribe(() => this._onEventDone.next());
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
@@ -125,11 +150,6 @@ export class Angular2Adapter extends BaseAdapter {
     };
   }
 
-  cleanup(): void {
-    this._removeAllListeners();
-    this.unsubscribe();
-  }
-
   _findRoot(): Element {
     const ngRootEl = getAllAngularRootElements()[0];
 
@@ -163,32 +183,6 @@ export class Angular2Adapter extends BaseAdapter {
     this.addChild(compEl);
   };
 
-  _trackChanges(el: Element): void {
-    this._observer = new MutationObserver(this._handleChanges);
-
-    this._observer.observe(el, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
-  }
-
-  _handleChanges = (mutations: MutationRecord[]): void => {
-    this.reset();
-
-    // Our handling of the change events will, in turn, cause DOM mutations
-    // (e.g setting)
-    this._observer.disconnect();
-
-    const root = this._findRoot();
-    this._tree = {};
-    this._traverseElements(ng.probe(root),
-      true,
-      '0',
-      this._emitNativeElement);
-    this._trackChanges(root);
-  };
 
   _getComponentChildren(compEl: any): any[] {
     return <any[]>compEl.componentViewChildren;
@@ -200,10 +194,6 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getNativeElement(compEl: any): Element {
     return compEl.nativeElement;
-  }
-
-  _removeAllListeners(): void {
-    this._observer.disconnect();
   }
 
   _selectorMatches(el: Element, selector: string): boolean {
