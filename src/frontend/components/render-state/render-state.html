@@ -6,12 +6,13 @@
     </span>
 
     <bt-state-values *ngIf="type(state[k]) !='object'"
+      [propertyTree]="propertyTree + ',' + k"
       [id]="id"
-      [key]="k"
       [value]="state[k]">
     </bt-state-values>
 
     <bt-render-state
+      [propertyTree]="propertyTree + ',' + k"
       [id]="id"
       [hidden]="expanded[k]"
       *ngIf="type(state[k]) =='object'" [state]="state[k]">
