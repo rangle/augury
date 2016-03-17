@@ -12,6 +12,8 @@
     </li>
 </ul>
 
+<h4 *ngIf="node && node.changeDetection" class="m3 bold">Change Detection: {{node.changeDetection}}</h4>
+
 <h4 *ngIf="node && node.dependencies && node.dependencies.length > 0"
     class="m3 bold">Dependencies</h4>
 <ul *ngIf="node && node.dependencies && node.dependencies.length > 0">
