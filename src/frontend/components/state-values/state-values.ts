@@ -18,7 +18,7 @@ export default class StateValues {
   constructor(
     private userActions: UserActions
   ) { }
-  
+
   getPropertyKey(tree: any): string {
     tree = tree.split(',');
     return tree[tree.length - 1] || '';
