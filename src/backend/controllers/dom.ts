@@ -19,6 +19,9 @@ import { AdapterEvent } from '../adapters/base';
 import { Angular2Adapter } from '../adapters/angular2';
 import { BaseController } from './base';
 
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+
 interface Sendable {
   sendMessage: Function;
 }
@@ -27,6 +30,7 @@ export class DomController extends BaseController {
   private adapter: any;
   private channel: Sendable;
   private model: Array<any>;
+  private callToRenderTree: any;
 
   static detectFramework(): Angular2Adapter {
     return new Angular2Adapter;
@@ -41,6 +45,15 @@ export class DomController extends BaseController {
     this.model = [];
     this.adapter = adapter;
     this.channel = channel;
+
+    this.callToRenderTree = new Subject();
+    this.callToRenderTree
+      .debounce(() => Observable.timer(250))
+      .subscribe(this.callFrontend.bind(this));
+  }
+
+  callFrontend(data) {
+    data.channel.sendMessage(data.message);
   }
 
   hookIntoBackend(): void {
@@ -69,7 +82,10 @@ export class DomController extends BaseController {
     }
 
     if (ch) {
-      ch.sendMessage({ type: 'model_change', payload: this.model});
+      this.callToRenderTree.next({
+        channel: ch,
+        message: { type: 'model_change', payload: this.model }
+      });
     }
   }
 

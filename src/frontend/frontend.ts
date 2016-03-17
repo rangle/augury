@@ -54,9 +54,6 @@ class App {
 
     // Listen for changes in selected node
     this.componentDataStore.dataStream
-      .debounce((x) => {
-        return Rx.Observable.timer(500);
-      })
       .filter((data: any) => data.action &&
               data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
       .subscribe(data => {

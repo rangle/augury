@@ -88,4 +88,17 @@ export class UserActions {
     });
   }
 
+  getDependencies(dependency: string) {
+    this.dispatcher.messageBus.next({
+      actionType: UserActionType.GET_DEPENDENCIES,
+      dependency
+    });
+  }
+
+  updateProperty({property}) {
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.UPDATE_PROPERTY,
+      property
+    });
+  }
 }

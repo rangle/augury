@@ -24,30 +24,58 @@
  * Supports up to 2.0.0-beta-1
  */
 
-declare var ng: { probe: Function };
-
+declare var ng: { probe: Function, coreTokens: any };
+declare var getAllAngularRootElements: Function;
+declare var Reflect: { getOwnMetadata: Function };
 
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Description } from '../utils/description';
 
 import {DirectiveResolver} from '../directive-resolver';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+
+import {ChangeDetectionStrategy} from 'angular2/core';
 
 export class Angular2Adapter extends BaseAdapter {
-  _observer: MutationObserver;
-
   _tree: any = {};
+  _onEventDone: any;
+
+  constructor() {
+    super();
+    this._onEventDone = new Subject();
+
+    this._onEventDone
+      .debounce((x) => Observable.timer(250))
+      .subscribe(this.renderTree.bind(this));
+  }
+
+  renderTree() {
+    this.reset();
+    const root = this._findRoot();
+    this._tree = {};
+    this._traverseElements(ng.probe(root),
+      true,
+      '0',
+      this._emitNativeElement);
+  }
 
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
-
+    this._tree = {};
     this._traverseElements(ng.probe(root),
       true,
       '0',
       this._emitNativeElement);
 
-    this._trackChanges(root);
+    this._trackAngularChanges(ng.probe(root));
+  }
+
+  _trackAngularChanges(rootNgProbe: any) {
+    const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
+    ngZone.onEventDone.subscribe(() => this._onEventDone.next());
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
@@ -89,6 +117,13 @@ export class Angular2Adapter extends BaseAdapter {
     const state = this._normalizeState(name, this._getComponentState(debugEl));
     const input = this._getComponentInput(debugEl);
     const output = this._getComponentOutput(debugEl);
+    const dependencies = this._getComponentDependencies(debugEl);
+    const changeDetection = this._getComponentCD(debugEl);
+
+    description.unshift({
+      key: 'b-id',
+      value: id
+    });
 
     return {
       id,
@@ -98,23 +133,19 @@ export class Angular2Adapter extends BaseAdapter {
       input,
       output,
       isSelected: false,
-      isOpen: true
+      isOpen: true,
+      dependencies,
+      changeDetection
     };
   }
 
-  cleanup(): void {
-    this._removeAllListeners();
-    this.unsubscribe();
-  }
-
   _findRoot(): Element {
-    const elements: any = document.querySelectorAll('body *');
-    for (let i = 0; i < elements.length; i++) {
-      const debugElement = ng.probe(elements[i]);
-      if (debugElement && debugElement.componentInstance) {
-        return elements[i];
-      }
+    const ngRootEl = getAllAngularRootElements()[0];
+
+    if (ngRootEl) {
+      return ngRootEl;
     }
+
     throw new Error('Not able to find root node');
   }
 
@@ -141,32 +172,6 @@ export class Angular2Adapter extends BaseAdapter {
     this.addChild(compEl);
   };
 
-  _trackChanges(el: Element): void {
-    this._observer = new MutationObserver(this._handleChanges);
-
-    this._observer.observe(el, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
-  }
-
-  _handleChanges = (mutations: MutationRecord[]): void => {
-    this.reset();
-
-    // Our handling of the change events will, in turn, cause DOM mutations
-    // (e.g setting)
-    this._observer.disconnect();
-
-    const root = this._findRoot();
-    this._tree = {};
-    this._traverseElements(ng.probe(root),
-      true,
-      '0',
-      this._emitNativeElement);
-    this._trackChanges(root);
-  };
 
   _getComponentChildren(compEl: any): any[] {
     return <any[]>compEl.componentViewChildren;
@@ -178,10 +183,6 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getNativeElement(compEl: any): Element {
     return compEl.nativeElement;
-  }
-
-  _removeAllListeners(): void {
-    this._observer.disconnect();
   }
 
   _selectorMatches(el: Element, selector: string): boolean {
@@ -197,6 +198,27 @@ export class Angular2Adapter extends BaseAdapter {
               genericMatch;
 
     return f.call(el, selector);
+  }
+
+  _getComponentCD(compEl: any) {
+    let changeDetection;
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+    if (metadata && metadata.length > 0) {
+      changeDetection = metadata[0].changeDetection;
+    }
+    return ChangeDetectionStrategy[changeDetection];
+  }
+
+  _getComponentDependencies(compEl: any) {
+
+    const dependencies = [];
+    const parameters = Reflect.getOwnMetadata('design:paramtypes',
+      compEl.componentInstance.constructor);
+
+    parameters.forEach((param) => dependencies.push(param.name));
+
+    return dependencies;
   }
 
   _getComponentInstance(compEl: any): Object {
@@ -259,31 +281,19 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentInput(compEl: any): Object {
-    let props = [];
-    if (compEl.providerTokens.length > 0) {
-      try {
-        const directiveResolver: DirectiveResolver = new DirectiveResolver();
-        const metadata = directiveResolver.resolve(compEl.providerTokens[0]);
-        props = metadata.inputs;
-      } catch (ex) {
-        console.log(ex.message);
-      }
-    }
-    return props;
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+
+    return (metadata && metadata.length > 0) ?
+      metadata[0].inputs : [];
   }
 
   _getComponentOutput(compEl: any): Object {
-    let events = {};
-    if (compEl.providerTokens.length > 0) {
-      try {
-        const directiveResolver: DirectiveResolver = new DirectiveResolver();
-        const metadata = directiveResolver.resolve(compEl.providerTokens[0]);
-        events = metadata.outputs;
-      } catch (ex) {
-        console.log(ex.message);
-      }
-    }
-    return events;
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+
+    return (metadata && metadata.length > 0) ?
+      metadata[0].outputs : [];
   }
 
   _normalizeState(name: string, state: Object): Object {

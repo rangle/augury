@@ -1,11 +1,18 @@
-<div class="flex px3 pt2 bg-darken-1 border-bottom">
-    <div class="flex pannel-tab-header regular center px2 py1 m0 bg-white border-top border-right border-left">
-      Properties
-    </div>
-</div>
+<bt-tab-menu
+  (tabChange)="tabChange($event)"
+  [selectedTabIndex]="selectedTabIndex">
+</bt-tab-menu>
 
-<div class="pt3 pl4 pb3 mb1 bg-darken-1" *ngIf="node">
-  <h3 class="regular m0">{{ node.name || 'No node selected' }}</h3>
-</div>
+<bt-component-info
+  (selectDependency)="selectDependency($event)"
+  [node]="node"
+  [hidden]="selectedTabIndex != 0">
+</bt-component-info>
 
-<div id="tree-container" class="px1 h5 tree-container"></div>
+<bt-dependent-components
+  (selectNode)="selectNode($event)"
+  (selectDependency)="selectDependency($event)"
+  [dependency]="selectedDependency"
+  [components]="dependentComponents"
+  [hidden]="selectedTabIndex != 1">
+</bt-dependent-components>

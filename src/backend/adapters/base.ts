@@ -44,6 +44,8 @@ export interface TreeNode {
   output: Object;
   isSelected: boolean;
   isOpen: boolean;
+  dependencies: any;
+  changeDetection: any;
 }
 
 // TSFIXME(bertrandk): This would be much nicer if we could actually extend
@@ -116,5 +118,4 @@ export abstract class BaseAdapter {
 
   abstract serializeComponent(el: any, event: string): TreeNode;
 
-  abstract cleanup(): void;
 }

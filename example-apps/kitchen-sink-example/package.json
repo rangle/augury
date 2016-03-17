@@ -2,18 +2,18 @@
   "name": "kitchen-sink-example",
   "scripts": {
     "postinstall": "npm run typings",
-    "typings": "rimraf typings && tsd install && tsd link",
+    "typings": "rimraf typings && typings install",
     "start": "webpack-dev-server --display-error-details --display-cached"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "angular2": "2.0.0-beta.6",
+  "devDependencies": {},
+  "dependencies": {
+    "angular2": "2.0.0-beta.9",
+    "rxjs": "5.0.0-beta.0",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.3",
     "immutable": "^3.7.6",
     "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.0",
-    "zone.js": "^0.5.11",
+    "zone.js": "^0.5.15",
     "css-loader": "^0.21.0",
     "file-loader": "^0.8.4",
     "html-webpack-plugin": "^1.6.2",
@@ -21,9 +21,9 @@
     "rimraf": "^2.4.3",
     "style-loader": "^0.13.0",
     "ts-loader": "^0.7.2",
-    "tsd": "^0.6.5",
     "tslint-loader": "^1.0.2",
-    "typescript": "^1.7.3",
+    "typescript": "^1.8.9",
+    "typings": "^0.7.7",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"

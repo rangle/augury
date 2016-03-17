@@ -1,8 +1,9 @@
 import {DomController} from './controllers/dom';
 import {Angular2Adapter} from './adapters/angular2';
 import Highlighter from './utils/highlighter';
+import ParseData from '../frontend/utils/parse-data';
 
-declare var ng: { probe: Function };
+declare var ng: { probe: Function, coreTokens: any };
 
 let channel = {
   sendMessage: (message) => {
@@ -29,16 +30,9 @@ window.addEventListener('message', function(event) {
 
     if (event.data.message.message.actionType ===
       'START_COMPONENT_TREE_INSPECTION') {
-
-      adapter._observer.disconnect();
-      adapter.cleanup();
-
-      adapter = new Angular2Adapter();
-      dom = new DomController(adapter, channel);
-      dom.hookIntoBackend();
       adapter.setup();
     } else if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
-      let highlightStr = '[batarangle-id=\"' +
+      const highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
       Highlighter.clear();
       Highlighter.highlight(document.querySelector(highlightStr),
@@ -46,15 +40,51 @@ window.addEventListener('message', function(event) {
     } else if (event.data.message.message.actionType === 'CLEAR_HIGHLIGHT') {
       Highlighter.clear();
     } else if (event.data.message.message.actionType === 'SELECT_NODE') {
-      let highlightStr = '[batarangle-id=\"' +
+      const highlightStr = '[batarangle-id=\"' +
         event.data.message.message.node.id + '\"]';
 
-      (<HTMLElement>document.querySelector(highlightStr)).scrollIntoView();
+      const element: HTMLElement =
+        <HTMLElement>document.querySelector(highlightStr);
+      if (element) {
+        element.scrollIntoView();
 
-      Object.defineProperty(window, '$a', {
-        configurable: true,
-        value: ng.probe(document.querySelector(highlightStr))
-      });
+        Object.defineProperty(window, '$a', {
+          configurable: true,
+          value: ng.probe(document.querySelector(highlightStr))
+        });
+      }
+
+    } else if (event.data.message.message.actionType === 'UPDATE_PROPERTY') {
+
+      const highlightStr = '[batarangle-id=\"' +
+        event.data.message.message.property.id + '\"]';
+      const dE = ng.probe(document.querySelector(highlightStr));
+      const propertyTree: Array<string> =
+        event.data.message.message.property.propertyTree.split(',');
+      const property = propertyTree.pop();
+      const value = propertyTree.reduce((previousValue, currentValue) =>
+        previousValue[currentValue], dE.componentInstance);
+
+      if (value !== undefined) {
+        const type: string = event.data.message.message.property.type;
+        let newValue: any;
+
+        if (type === 'number') {
+          newValue =
+            ParseData.parseNumber(event.data.message.message.property.value);
+        } else if (type === 'boolean') {
+          newValue =
+            ParseData.parseBoolean(event.data.message.message.property.value);
+        } else {
+          newValue = event.data.message.message.property.value;
+        }
+
+        value[property] = newValue;
+
+        const appRef = dE.inject(ng.coreTokens.ApplicationRef);
+        appRef.tick();
+        adapter.renderTree();
+      }
     }
 
     return true;

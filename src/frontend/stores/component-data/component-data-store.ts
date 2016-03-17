@@ -53,6 +53,10 @@ export class ComponentDataStore extends AbstractStore {
       UserActionType.UPDATE_NODE_STATE,
       action => this.updateNodeState(action));
 
+    this.dispatcher.onAction(
+      UserActionType.GET_DEPENDENCIES,
+      action => this.getDependencies(action));
+
   }
 
   /**
@@ -96,7 +100,15 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  private getUpdatedNode(selectedNode: any) {
+    const flattenedData = this.flatten(this._componentData);
+    const filtered = flattenedData.filter((node) =>
+      node.id === selectedNode.id);
+    return filtered.length > 0 ? filtered[0] : selectedNode;
+  }
+
   private updateNodeState({openedNodes, selectedNode}) {
+    selectedNode = this.getUpdatedNode(selectedNode);
     this.emitChange({
       openedNodes,
       selectedNode,
@@ -219,6 +231,18 @@ export class ComponentDataStore extends AbstractStore {
         this._openedNodes.splice(index, 1);
       }
     }
+  }
+
+  private getDependencies({dependency}) {
+    const flattenedData = this.flatten(this._componentData);
+    const dependentComponents = flattenedData.filter((comp) =>
+      comp.dependencies.indexOf(dependency) > -1);
+
+    this.emitChange({
+      selectedDependency: dependency,
+      dependentComponents: dependentComponents,
+      action: UserActionType.GET_DEPENDENCIES
+    });
   }
 
 }

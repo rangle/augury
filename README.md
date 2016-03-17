@@ -1,18 +1,20 @@
 # Angular 2.0 Batarangle
 
 [![Circle CI](https://circleci.com/gh/rangle/batarangle.svg?style=svg&circle-token=7df1edad916fdc18b7bfddc60ff694871570359c)](https://circleci.com/gh/rangle/batarangle) [![Slack Status](https://batarangle-slack.herokuapp.com/badge.svg)](https://batarangle-slack.herokuapp.com)
+[![Stories in Ready](https://badge.waffle.io/rangle/batarangle.svg?label=ready&title=Ready)](http://waffle.io/rangle/batarangle)
 
 Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions below to build the tool locally and install it from source. It's actually quite easy.
 
 ![Screenshot of Batarangle](images/screenloop.gif)
 
-## Join Our Slack Team
-
-If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-beta.6](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta6-2016-02-11) with _limited backwards compatibility_, which will change once Angular 2 stabilizes. 
+Currently works with applications built in [Angular 2.0.0-beta.9](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta9-2016-03-09) with _limited backwards compatibility_, which will change once Angular 2 stabilizes.
+
+## Join Our Slack Team
+
+If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
 
 ## Getting Extension
 
