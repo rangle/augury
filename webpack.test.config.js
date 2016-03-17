@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: {
@@ -16,7 +17,10 @@ module.exports = {
     path: path.join(__dirname, './build'),
     filename: '[name].js'
   },
-
+  stats: {
+    colors: true,
+    reasons: true
+  },
   module: {
     loaders: [{
       // Support for .ts files.
@@ -35,7 +39,6 @@ module.exports = {
       ]
     }]
   },
-
   resolve: {
     extensions: ['', '.ts', '.js', '.jsx'],
     modulesDirectories: ['src', 'node_modules']
