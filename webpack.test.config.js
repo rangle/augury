@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require('path');
-var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: {
