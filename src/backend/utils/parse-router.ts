@@ -1,5 +1,4 @@
-import {ComponentRecognizer} from 'angular2/src/router/component_recognizer';
-import {RouteRecognizer} from 'angular2/src/router/route_recognizer';
+import {RouteRule} from 'angular2/src/router/rules/rules';
 
 export interface Route {
   name: string;
@@ -70,7 +69,7 @@ export class ParseRouter {
   }
 
   private static getRoute
-    (value: RouteRecognizer, name: string, isAux: boolean = false): Route {
+    (value: RouteRule, name: string, isAux: boolean = false): Route {
     const handler: string =
       this.NAME_REGEX.exec(value.handler.componentType + '')[1];
 
