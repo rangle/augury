@@ -10,13 +10,15 @@ enum ARROW_TYPES {
 };
 
 enum NODE_TYPES {
+  ROOT,
   COMPONENT,
   SERVICE
 };
 
 const NODE_COLORS = {
-  0: '#1f77b4', // NODE_TYPES.COMPONENT
-  1: '#ff7f0e'  // NODE_TYPES.SERVICE
+  0: '#000000',  // NODE_TYPES.ROOT
+  1: '#1f77b4', // NODE_TYPES.COMPONENT
+  2: '#ff7f0e'  // NODE_TYPES.SERVICE,
 };
 
 const ANGULAR_COMPONENTS = [
@@ -50,8 +52,9 @@ const ANGULAR_COMPONENTS = [
 export default class InjectorTree implements OnChanges {
 
   @Input() tree: any;
-  showTable: boolean = true;
+  @Input() selectedNode: any;
 
+  showTable: boolean = false;
   svg: any;
   nodes: any;
   links: any;
@@ -66,7 +69,7 @@ export default class InjectorTree implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.tree) {
+    if (this.tree && this.selectedNode) {
       this.displayTree();
     }
   }
@@ -90,7 +93,8 @@ export default class InjectorTree implements OnChanges {
 
     this.nodes = [];
     this.links = [];
-    this.addNode(tree[0]);
+    // this.addNode(tree[0]);
+    this.addNode(this.selectedNode);
 
     const graphContainer = this.elementRef.nativeElement
       .querySelector('#graphContainer');
@@ -101,8 +105,8 @@ export default class InjectorTree implements OnChanges {
 
     this.svg = d3.select(graphContainer)
       .append('svg')
-      .attr('height', 1000)
-      .attr('width', 1000);
+      .attr('height', 400)
+      .attr('width', 400);
 
     this.render();
   }
@@ -132,20 +136,8 @@ export default class InjectorTree implements OnChanges {
     return node;
   }
 
-  private addNode(node: any, parent?: any) {
-
-    const obj = {
-      node: node,
-      name: node.name,
-      type: NODE_TYPES.COMPONENT,
-      index: this.nodes.length
-    };
-    this.nodes.push(obj);
-
-    if (parent) {
-      this.addLink(parent, obj, ARROW_TYPES.COMPONENT);
-    }
-
+  private addInjectors(node: any, parent: any,
+    dependency?: string, root?: any) {
     if (node.injectors && node.injectors.length > 0) {
       node.injectors.forEach((injector) => {
         const inj = {
@@ -155,28 +147,44 @@ export default class InjectorTree implements OnChanges {
           index: this.nodes.length
         };
         this.nodes.push(inj);
-        this.addLink(obj, inj, ARROW_TYPES.INJECTOR);
+        this.addLink(parent, inj, ARROW_TYPES.INJECTOR);
+
+        if (injector === dependency) {
+          this.addLink(root, inj, ARROW_TYPES.DEPENDENCY);
+        }
       });
     }
+  }
+
+  private addNode(node: any, parent?: any) {
+
+    const obj = {
+      node: node,
+      name: node.name,
+      type: NODE_TYPES.ROOT,
+      index: this.nodes.length
+    };
+    this.nodes.push(obj);
+    this.addInjectors(node, obj);
 
     if (node.dependencies && node.dependencies.length > 0) {
       node.dependencies.forEach((dependency) => {
 
         if (node.injectors.indexOf(dependency) === -1) {
+
           const linkedNode = this.getDependencyLink(node.id, dependency);
           if (linkedNode) {
-            const filteredNodes = this.nodes.filter((n) =>
-              n.name === dependency && n.node.id === linkedNode.id);
-            if (filteredNodes.length > 0) {
-              this.addLink(obj, filteredNodes[0], ARROW_TYPES.DEPENDENCY);
-            }
+            const linkedNodeObj = {
+              node: linkedNode,
+              name: linkedNode.name,
+              type: NODE_TYPES.COMPONENT,
+              index: this.nodes.length
+            };
+            this.nodes.push(linkedNodeObj);
+            this.addInjectors(linkedNode, linkedNodeObj, dependency, obj);
           }
         }
       });
-    }
-
-    if (node.children && node.children.length > 0) {
-      node.children.forEach((childNode) => this.addNode(childNode, obj));
     }
   }
 
@@ -249,13 +257,11 @@ export default class InjectorTree implements OnChanges {
       return;
     }
 
-    this.addLegends();
-
     const force = d3.layout.force()
       .charge(-500)
       .gravity(.10)
       .linkDistance(80)
-      .size([1000, 1000]);
+      .size([400, 400]);
 
     const graph = {
       nodes: this.nodes,
@@ -265,6 +271,8 @@ export default class InjectorTree implements OnChanges {
     force.nodes(graph.nodes)
       .links(graph.links)
       .start();
+
+    console.log('graph', graph);
 
     const link = this.svg.selectAll('.link')
       .data(graph.links)
@@ -327,6 +335,9 @@ export default class InjectorTree implements OnChanges {
       .attr('d', 'M0,-5L10,0L0,5 L10,0 L0, -5')
       .style('stroke', '#4679BD')
       .style('opacity', '0.6');
+
+    // this.addLegends();
   }
+
 
 }

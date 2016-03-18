@@ -1,4 +1,5 @@
-import {Component, View, ElementRef, Inject, NgZone} from 'angular2/core';
+import {Component, View, ElementRef, Inject, NgZone, Input}
+  from 'angular2/core';
 import {NgIf} from 'angular2/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
@@ -9,15 +10,18 @@ import {UserActionType} from '../../actions/action-constants';
 import TabMenu from '../tab-menu/tab-menu';
 import ComponentInfo from '../component-info/component-info';
 import DependentComponents from '../dependent-components/dependent-components';
+import InjectorTree from '../injector-tree/injector-tree';
 
 @Component({
   selector: 'bt-info-panel'
 })
 @View({
   templateUrl: '/src/frontend/components/info-panel/info-panel.html',
-  directives: [NgIf, TabMenu, ComponentInfo, DependentComponents]
+  directives: [NgIf, TabMenu, ComponentInfo, DependentComponents, InjectorTree]
 })
 export class InfoPanel {
+
+  @Input() tree;
 
   private node: any;
   private selectedTabIndex: number = 0;
@@ -29,6 +33,9 @@ export class InfoPanel {
     selected: false
   }, {
       title: 'Dependent Components',
+      selected: false
+    }, {
+      title: 'Injector Tree',
       selected: false
     }];
 
@@ -46,7 +53,7 @@ export class InfoPanel {
           data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
       })
       .subscribe(({ selectedNode }) => {
-        this.selectedTabIndex = 0;
+        // this.selectedTabIndex = 0;
         this.node = selectedNode;
         this._ngZone.run(() => undefined);
       });

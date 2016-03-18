@@ -243,9 +243,9 @@ export class Angular2Adapter extends BaseAdapter {
     for (let i = 0; i < compEl.providerTokens.length; i++) {
       const provider: any = compEl.providerTokens[i];
       const name: string = this.getFunctionName(provider);
-      if (name !== componentName) {
-        injectors.push(name);
-      }
+      // if (name !== componentName) {
+      injectors.push(name);
+      // }
     }
    return injectors;
   }

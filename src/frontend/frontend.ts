@@ -34,6 +34,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
         [ngClass]="{'col-12': selectedTabIndex > 0}">
         <bt-app-trees
           [selectedTabIndex]="selectedTabIndex"
+          [selectedNode]="selectedNode"
           [routerTree]="routerTree"
           [tree]="tree"
           (tabChange)="tabChange($event)">
@@ -41,7 +42,9 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
       </div>
       <div class="col col-4 overflow-scroll"
         [hidden]="selectedTabIndex > 0">
-        <bt-info-panel></bt-info-panel>
+        <bt-info-panel
+          [tree]="tree">
+        </bt-info-panel>
       </div>
     </div>`
 })
@@ -54,6 +57,7 @@ class App {
   private previousTree: any;
   private routerTree: any;
   private selectedTabIndex = 0;
+  private selectedNode: any;
 
   constructor(
     private backendAction: BackendActions,
@@ -93,6 +97,16 @@ class App {
         this.routerTree = data.tree.tree;
       }
     );
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => {
+        return (data.action &&
+          data.action !== UserActionType.GET_DEPENDENCIES &&
+          data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
+      })
+      .subscribe(({ selectedNode }) => {
+        this.selectedNode = selectedNode;
+      });
 
   }
 

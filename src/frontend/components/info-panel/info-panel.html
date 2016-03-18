@@ -17,3 +17,9 @@
   [components]="dependentComponents"
   [hidden]="selectedTabIndex != 1">
 </bt-dependent-components>
+
+<bt-injector-tree
+  [hidden]="selectedTabIndex != 2"
+  [tree]="tree"
+  [selectedNode]="node">
+</bt-injector-tree>
