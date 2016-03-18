@@ -37,6 +37,8 @@ import {DirectiveResolver} from '../directive-resolver';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 
+import {ChangeDetectionStrategy} from 'angular2/core';
+
 export class Angular2Adapter extends BaseAdapter {
   _tree: any = {};
   _onEventDone: any;
@@ -130,6 +132,7 @@ export class Angular2Adapter extends BaseAdapter {
     const output = this._getComponentOutput(debugEl);
     const dependencies = this._getComponentDependencies(debugEl);
     const injectors = this._getComponentInjectors(debugEl, dependencies);
+    const changeDetection = this._getComponentCD(debugEl);
 
     description.unshift({
       key: 'b-id',
@@ -146,7 +149,8 @@ export class Angular2Adapter extends BaseAdapter {
       isSelected: false,
       isOpen: true,
       dependencies,
-      injectors
+      injectors,
+      changeDetection
     };
   }
 
@@ -209,6 +213,16 @@ export class Angular2Adapter extends BaseAdapter {
               genericMatch;
 
     return f.call(el, selector);
+  }
+
+  _getComponentCD(compEl: any) {
+    let changeDetection;
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+    if (metadata && metadata.length > 0) {
+      changeDetection = metadata[0].changeDetection;
+    }
+    return ChangeDetectionStrategy[changeDetection];
   }
 
   _getComponentDependencies(compEl: any) {
