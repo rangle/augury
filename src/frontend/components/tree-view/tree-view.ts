@@ -1,4 +1,4 @@
-import {Component, View, Inject, NgZone} from 'angular2/core';
+import {Component, Inject, NgZone} from 'angular2/core';
 import {NgFor} from 'angular2/common';
 import {NodeItem} from '../node-item/node-item';
 import {InfoPanel} from '../info-panel/info-panel';
@@ -10,9 +10,7 @@ import {UserActionType}
 
 @Component({
   selector: 'bt-tree-view',
-  properties: ['tree: tree']
-})
-@View({
+  properties: ['tree: tree'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
   directives: [NgFor, NodeItem, InfoPanel]
 })
