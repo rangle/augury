@@ -1,4 +1,4 @@
-import {Component, View, Inject, NgZone} from 'angular2/core';
+import {Component, Inject, NgZone} from 'angular2/core';
 import {NgIf, NgFor, NgStyle} from 'angular2/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
@@ -9,9 +9,7 @@ import {UserActionType}
 
 @Component({
   selector: 'bt-node-item',
-  properties: ['node: node', 'collapsed: collapsed']
-})
-@View({
+  properties: ['node: node', 'collapsed: collapsed'],
   templateUrl: 'src/frontend/components/node-item/node-item.html',
   directives: [NgIf, NgFor, NodeItem, NgStyle]
 })
