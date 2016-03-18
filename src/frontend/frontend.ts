@@ -1,4 +1,4 @@
-import {Component, View, Inject, bind, NgZone} from 'angular2/core';
+import {Component, Inject, bind, NgZone} from 'angular2/core';
 import {bootstrap} from 'angular2/bootstrap';
 
 import {Dispatcher} from './dispatcher/dispatcher';
@@ -21,9 +21,7 @@ import * as Rx from 'rxjs';
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 @Component({
-  selector: 'bt-app'
-})
-@View({
+  selector: 'bt-app',
   directives: [TreeView, InfoPanel],
   template: `
     <div class="clearfix">

@@ -4,10 +4,7 @@ var path = require('path');
 module.exports = {
   entry: {
     'test': [
-      'rxjs',
-      'zone.js/dist/zone-microtask',
-      'zone.js/dist/long-stack-trace-zone',
-      'reflect-metadata',
+      path.join(__dirname, 'webpack.vendor.ts'),
       path.join(__dirname, 'webpack.test.bootstrap.ts')
     ]
   },
