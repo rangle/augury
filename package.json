@@ -31,12 +31,12 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "2.0.0-beta.10",
+    "angular2": "^2.0.0-beta.11",
     "basscss": "^7.0.4",
     "core-js": "^2.2.0",
     "crypto": "0.0.3",
     "es6-promise": "^3.0.2",
-    "es6-shim": "^0.33.6",
+    "es6-shim": "^0.33.13",
     "file-loader": "^0.8.5",
     "immutable": "^3.7.5",
     "json-formatter-js": "^0.3.0",

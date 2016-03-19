@@ -1,4 +1,4 @@
-import { Component, View, Inject, OnInit, OnDestroy }
+import { Component, Inject, OnInit, OnDestroy }
  from 'angular2/core';
 import { ROUTER_DIRECTIVES, RouteConfig, RouterLink, RouterOutlet,
   Router}

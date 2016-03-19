@@ -1,11 +1,8 @@
-/// <reference path="node_modules/zone.js/dist/zone.js.d.ts" />
-
 // Polyfills
 import 'reflect-metadata';
 import 'core-js';
-// import 'zone.js';
-// ng2 beta-10 issue with zone.js
-// track https://github.com/angular/angular/issues/7660
+import 'zone.js/dist/zone';
+import 'zone.js/dist/long-stack-trace-zone';
 
 // Angular 2
 import 'angular2/platform/browser';
