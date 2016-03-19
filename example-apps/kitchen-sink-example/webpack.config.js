@@ -9,12 +9,12 @@ module.exports = {
     colors: true,
     reasons: true
   },
-  
+
   entry: {
     app: './source/app.ts',
     vendor: [
+      'core-js',
       'reflect-metadata',
-      'es6-shim',
       'angular2/bundles/angular2-polyfills',
       'angular2/bootstrap',
       'angular2/platform/browser',
@@ -24,7 +24,7 @@ module.exports = {
       'angular2/http'
      ]
   },
-  
+
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[hash].bundle.js',
@@ -32,13 +32,13 @@ module.exports = {
     sourceMapFilename: '[name].[hash].bundle.js.map',
     chunkFilename: '[id].chunk.js'
   },
-  
+
   devtool: 'source-map',
-  
+
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
   },
-  
+
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', '[name].[hash].bundle.js'),
     new HtmlWebpackPlugin({
@@ -65,7 +65,7 @@ module.exports = {
     ],
     noParse: [ /zone\.js\/dist\/.+/, /angular2\/bundles\/.+/ ]
   },
-  
+
   devServer: {
     inline: true,
     colors: true,

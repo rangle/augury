@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {
   ROUTER_DIRECTIVES,
   RouteConfig,
@@ -10,14 +10,8 @@ import StartChild from './start-child';
 import StartMain from './start-main';
 
 @Component({
-  selector: 'start'
-})
-@RouteConfig([
-  {path: '/', component: StartMain, as: 'StartMain'  },
-  {path: '/child', component: StartChild, as: 'StartChild'  }
-])
-@View({
-  directives: [RouterLink, ROUTER_DIRECTIVES],
+  selector: 'start',
+    directives: [RouterLink, ROUTER_DIRECTIVES],
   template: `
   <div>
     <h3>Start Component</h3>
@@ -31,4 +25,8 @@ import StartMain from './start-main';
   </div>
   `
 })
+@RouteConfig([
+  {path: '/', component: StartMain, as: 'StartMain'  },
+  {path: '/child', component: StartChild, as: 'StartChild'  }
+])
 export default class Start { }
