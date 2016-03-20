@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {
   ROUTER_DIRECTIVES,
   RouteConfig,
@@ -9,14 +9,12 @@ import {
 import InnerChild2 from './inner-child2';
 import InnerChildMain from './inner-child-main';
 
-@Component({
-  selector: 'inner-child'
-})
 @RouteConfig([
   {path: '/', component: InnerChildMain, as: 'InnerChildMain'  },
   {path: '/child2', component: InnerChild2, as: 'InnerChild2'  }
 ])
-@View({
+@Component({
+  selector: 'inner-child',
   directives: [RouterLink, ROUTER_DIRECTIVES],
   template: `
   <div>

@@ -63,8 +63,4 @@ import RouterData2 from './router-data2';
   </div>
   `
 })
-@RouteConfig([
-  {path: '/', component: StartMain, as: 'StartMain'  },
-  {path: '/child', component: StartChild, as: 'StartChild'  }
-])
 export default class Start { }

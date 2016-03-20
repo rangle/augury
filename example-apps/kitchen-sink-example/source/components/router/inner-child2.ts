@@ -1,9 +1,7 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 
 @Component({
-  selector: 'inner-child2'
-})
-@View({
+  selector: 'inner-child2',
   template: `
   <div>
     <h4>
