@@ -24,7 +24,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
-  directives: [TreeView, InfoPanel],
+  directives: [TreeView, InfoPanel, AppTrees],
   template: `
     <div class="clearfix overflow-hidden flex
       flex-stretch" style="height:100%;">
