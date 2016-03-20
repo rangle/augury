@@ -1,11 +1,9 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {NgFor} from 'angular2/common';
 import {TodoService} from './todo-service';
 
 @Component({
-  selector: 'todo-list'
-})
-@View({
+  selector: 'todo-list',
   directives: [NgFor],
   template: `
   <div>

@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {
   ROUTER_DIRECTIVES,
   RouteConfig,
@@ -14,9 +14,6 @@ import AuxComp from './aux-comp';
 import RouterData1 from './router-data1';
 import RouterData2 from './router-data2';
 
-@Component({
-  selector: 'start'
-})
 @RouteConfig([
   { aux: '/auxcomp', component: AuxComp, as: 'AuxComp' },
   { path: '/', component: StartMain, as: 'StartMain'  },
@@ -27,7 +24,8 @@ import RouterData2 from './router-data2';
     as: 'RouterData2'},
   { path: '/inner-child/...', component: InnerChild, as: 'InnerChild' },
 ])
-@View({
+@Component({
+  selector: 'start',
   directives: [RouterLink, ROUTER_DIRECTIVES],
   template: `
   <div>
@@ -65,4 +63,8 @@ import RouterData2 from './router-data2';
   </div>
   `
 })
+@RouteConfig([
+  {path: '/', component: StartMain, as: 'StartMain'  },
+  {path: '/child', component: StartChild, as: 'StartChild'  }
+])
 export default class Start { }

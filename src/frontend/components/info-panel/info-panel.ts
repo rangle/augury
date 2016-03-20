@@ -1,5 +1,4 @@
-import {Component, View, ElementRef, Inject, NgZone, Input}
-  from 'angular2/core';
+import {Component, ElementRef, Inject, NgZone, Input} from 'angular2/core';
 import {NgIf} from 'angular2/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
@@ -13,9 +12,7 @@ import DependentComponents from '../dependent-components/dependent-components';
 import InjectorTree from '../injector-tree/injector-tree';
 
 @Component({
-  selector: 'bt-info-panel'
-})
-@View({
+  selector: 'bt-info-panel',
   templateUrl: '/src/frontend/components/info-panel/info-panel.html',
   directives: [NgIf, TabMenu, ComponentInfo, DependentComponents, InjectorTree]
 })

@@ -1,9 +1,8 @@
 // Polyfills
-import 'es6-shim';
-import 'es6-promise';
 import 'reflect-metadata';
-import 'zone.js/dist/zone-microtask';
-import 'zone.js/dist/long-stack-trace-zone'; // remove this for prod
+import 'core-js';
+import 'zone.js/dist/zone';
+import 'zone.js/dist/long-stack-trace-zone';
 
 // Angular 2
 import 'angular2/platform/browser';

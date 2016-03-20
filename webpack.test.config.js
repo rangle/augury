@@ -4,10 +4,7 @@ var path = require('path');
 module.exports = {
   entry: {
     'test': [
-      'rxjs',
-      'zone.js/dist/zone-microtask',
-      'zone.js/dist/long-stack-trace-zone',
-      'reflect-metadata',
+      path.join(__dirname, 'webpack.vendor.ts'),
       path.join(__dirname, 'webpack.test.bootstrap.ts')
     ]
   },
@@ -16,7 +13,10 @@ module.exports = {
     path: path.join(__dirname, './build'),
     filename: '[name].js'
   },
-
+  stats: {
+    colors: true,
+    reasons: true
+  },
   module: {
     loaders: [{
       // Support for .ts files.
@@ -35,7 +35,6 @@ module.exports = {
       ]
     }]
   },
-
   resolve: {
     extensions: ['', '.ts', '.js', '.jsx'],
     modulesDirectories: ['src', 'node_modules']

@@ -88,7 +88,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _trackAngularChanges(rootNgProbe: any) {
     const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
-    ngZone.onEventDone.subscribe(() => this._onEventDone.next());
+    ngZone.onStable.subscribe(() => this._onEventDone.next());
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
