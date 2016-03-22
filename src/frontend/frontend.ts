@@ -25,10 +25,10 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   directives: [TreeView, InfoPanel],
   template: `
     <div class="clearfix">
-      <div class="col col-6 overflow-scroll">
+      <div class="col col-6 overflow-hidden vh-100">
         <bt-tree-view [tree]="tree"></bt-tree-view>
       </div>
-      <div class="col col-6 overflow-scroll">
+      <div class="col col-6 overflow-hidden vh-100">
         <bt-info-panel></bt-info-panel>
       </div>
     </div>`
