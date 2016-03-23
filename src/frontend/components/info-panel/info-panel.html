@@ -1,5 +1,6 @@
 <div class="flex flex-column flex-stretch vh-100 border-right border-color-dark">
   <bt-tab-menu
+    [tabs]="tabs"
     (tabChange)="tabChange($event)"
     [selectedTabIndex]="selectedTabIndex">
   </bt-tab-menu>
