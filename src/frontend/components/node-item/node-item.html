@@ -5,7 +5,8 @@
   (click)="onClick($event)">
 
   <div class="node-item pl4 rounded border-box"
-       [ngClass]="{'node-item-selected':node.isSelected}">
+       [ngClass]="{'node-item-selected':node.isSelected, 
+       'changed': isUpdated}">
 
     <img src="../images/Triangle.svg"
          style="width: 0.8em; height: 0.8em;"
@@ -31,6 +32,7 @@
 
   <div class="pl4 border-box">
     <bt-node-item
+      [changedNodes]="changedNodes"
       [hidden]="showChildren()"
       *ngFor="#node of node.children"
       [node]="node">

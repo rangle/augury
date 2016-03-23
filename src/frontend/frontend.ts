@@ -18,15 +18,20 @@ import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
 import * as Rx from 'rxjs';
 
+import {ParseUtils} from './utils/parse-utils';
+
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
   directives: [TreeView, InfoPanel],
+  providers: [ParseUtils],
   template: `
     <div class="clearfix">
       <div class="col col-6 overflow-hidden vh-100">
-        <bt-tree-view [tree]="tree"></bt-tree-view>
+        <bt-tree-view
+          [changedNodes]="changedNodes"
+          [tree]="tree"></bt-tree-view>
       </div>
       <div class="col col-6 overflow-hidden vh-100">
         <bt-info-panel [tree]="tree"></bt-info-panel>
@@ -40,12 +45,14 @@ class App {
 
   private tree: any;
   private previousTree: any;
+  private changedNodes: any = [];
 
   constructor(
     private backendAction: BackendActions,
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private parseUtils: ParseUtils
   ) {
 
     this.userActions.startComponentTreeInspection();
@@ -60,6 +67,8 @@ class App {
         } else {
           this.previousTree = this.tree;
           this.tree = data.componentData;
+          this.changedNodes =
+            parseUtils.getChangedNodes(this.previousTree, this.tree);
         }
         this._ngZone.run(() => undefined);
 
