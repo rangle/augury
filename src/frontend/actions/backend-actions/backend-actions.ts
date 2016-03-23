@@ -31,4 +31,11 @@ export class BackendActions {
     });
   }
 
+  renderRouterTree(tree) {
+    this.dispatcher.messageBus.next({
+      actionType: BackendActionType.RENDER_ROUTER_TREE,
+      tree: tree
+    });
+  }
+
 }

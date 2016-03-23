@@ -77,15 +77,24 @@ export class DomController extends BaseController {
       case EventType.CLEAR:
         this._handleReset();
         break;
+      case EventType.ROUTES:
+        break;
       default:
         throw Error('Unknown adapter event.');
     }
 
     if (ch) {
-      this.callToRenderTree.next({
-        channel: ch,
-        message: { type: 'model_change', payload: this.model }
-      });
+      if (evt.type === EventType.ROUTES) {
+        this.callToRenderTree.next({
+          channel: ch,
+          message: { type: 'render_routes', payload: evt.routes }
+        });
+      } else {
+        this.callToRenderTree.next({
+          channel: ch,
+          message: { type: 'model_change', payload: this.model }
+        });
+      }
     }
   }
 

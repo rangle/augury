@@ -31,6 +31,7 @@ declare var Reflect: { getOwnMetadata: Function };
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Description } from '../utils/description';
+import { ParseRouter } from '../utils/parse-router';
 
 import {DirectiveResolver} from '../directive-resolver';
 import {Observable} from 'rxjs/Observable';
@@ -71,6 +72,18 @@ export class Angular2Adapter extends BaseAdapter {
       this._emitNativeElement);
 
     this._trackAngularChanges(ng.probe(root));
+  }
+
+  showAppRoutes(): void {
+    const root = this._findRoot();
+    try {
+      const routes = ParseRouter.parseRoutes(
+        ng.probe(root).componentInstance.router.root.registry);
+
+      this.showRoutes(routes);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   _trackAngularChanges(rootNgProbe: any) {
@@ -118,6 +131,7 @@ export class Angular2Adapter extends BaseAdapter {
     const input = this._getComponentInput(debugEl);
     const output = this._getComponentOutput(debugEl);
     const dependencies = this._getComponentDependencies(debugEl);
+    const injectors = this._getComponentInjectors(debugEl, dependencies);
     const changeDetection = this._getComponentCD(debugEl);
 
     description.unshift({
@@ -135,6 +149,7 @@ export class Angular2Adapter extends BaseAdapter {
       isSelected: false,
       isOpen: true,
       dependencies,
+      injectors,
       changeDetection
     };
   }
@@ -219,6 +234,20 @@ export class Angular2Adapter extends BaseAdapter {
     parameters.forEach((param) => dependencies.push(param.name));
 
     return dependencies;
+  }
+
+  _getComponentInjectors(compEl: any, dependencies: any) {
+
+    const componentName = this._getComponentName(compEl);
+    const injectors = [];
+    for (let i = 0; i < compEl.providerTokens.length; i++) {
+      const provider: any = compEl.providerTokens[i];
+      const name: string = this.getFunctionName(provider);
+      // if (name !== componentName) {
+      injectors.push(name);
+      // }
+    }
+   return injectors;
   }
 
   _getComponentInstance(compEl: any): Object {
@@ -357,5 +386,12 @@ export class Angular2Adapter extends BaseAdapter {
         { key: 'name', value: this._getComponentName(compEl) }
       ];
     }
+  }
+
+  getFunctionName(value: string) {
+    let name = value.toString();
+    name = name.substr('function '.length);
+    name = name.substr(0, name.indexOf('('));
+    return name;
   }
 }

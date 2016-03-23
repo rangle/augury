@@ -16,20 +16,37 @@ import {BackendMessagingService} from './channel/backend-messaging-service';
 
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
+import AppTrees from './components/app-trees/app-trees';
+
+import {ParseUtils} from './utils/parse-utils';
+
 import * as Rx from 'rxjs';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
-  directives: [TreeView, InfoPanel],
+  providers: [ParseUtils],
+  directives: [TreeView, InfoPanel, AppTrees],
   template: `
-    <div class="clearfix">
-      <div class="col col-6 overflow-hidden vh-100">
-        <bt-tree-view [tree]="tree"></bt-tree-view>
+    <div class="clearfix overflow-hidden flex
+      flex-stretch" style="height:100%;">
+      <div class="col col-8 overflow-scroll border-right"
+        [ngClass]="{'col-12': selectedTabIndex > 0}">
+        <bt-app-trees
+          [selectedTabIndex]="selectedTabIndex"
+          [selectedNode]="selectedNode"
+          [routerTree]="routerTree"
+          [tree]="tree"
+          [changedNodes]="changedNodes"
+          (tabChange)="tabChange($event)">
+        </bt-app-trees>
       </div>
-      <div class="col col-6 overflow-hidden vh-100">
-        <bt-info-panel></bt-info-panel>
+      <div class="col col-4 overflow-scroll"
+        [hidden]="selectedTabIndex > 0">
+        <bt-info-panel
+          [tree]="tree">
+        </bt-info-panel>
       </div>
     </div>`
 })
@@ -40,12 +57,17 @@ class App {
 
   private tree: any;
   private previousTree: any;
+  private routerTree: any;
+  private selectedTabIndex = 0;
+  private selectedNode: any;
+  private changedNodes: any = [];
 
   constructor(
     private backendAction: BackendActions,
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private parseUtils: ParseUtils
   ) {
 
     this.userActions.startComponentTreeInspection();
@@ -60,7 +82,27 @@ class App {
         } else {
           this.previousTree = this.tree;
           this.tree = data.componentData;
+
+          const f2 = {};
+          const flattenedOld = parseUtils
+            .flatten(this.previousTree)
+            .forEach((n) => {
+              f2[n.id] = JSON.stringify(n);
+            });
+
+          this.changedNodes = parseUtils
+            .flatten(this.tree)
+            .reduce((x, n) => {
+              if (!f2[n.id]) {
+                x.push(n.id);
+              } else if (f2[n.id] !== JSON.stringify(n)) {
+                console.log(n.id);
+                x.push(n.id);
+              }
+              return x;
+            }, []);
         }
+
         this._ngZone.run(() => undefined);
 
         if (data.openedNodes.length > 0 || data.selectedNode) {
@@ -69,9 +111,36 @@ class App {
             selectedNode: data.selectedNode
           });
         }
-
       }
     );
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => data.action &&
+              data.action === UserActionType.RENDER_ROUTER_TREE)
+      .subscribe(data => {
+        this.routerTree = data.tree.tree;
+        this._ngZone.run(() => undefined);
+      }
+    );
+
+    this.componentDataStore.dataStream
+      .filter((data: any) => {
+        return (data.action &&
+          data.action !== UserActionType.GET_DEPENDENCIES &&
+          data.action !== UserActionType.RENDER_ROUTER_TREE &&
+          data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
+      })
+      .subscribe(({ selectedNode }) => {
+        this.selectedNode = selectedNode;
+      });
+
+  }
+
+  tabChange(index: number) {
+    this.selectedTabIndex = index;
+    if (index === 1) {
+      this.userActions.renderRouterTree();
+    }
   }
 }
 

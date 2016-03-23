@@ -25,7 +25,12 @@ export class BackendMessagingService {
       if (message.from && message.from === 'content-script') {
         this.backendActions.clearSelections();
       }
-      this.backendActions.componentTreeChanged(message.data.message.payload);
+
+      if (message.data.message.type === 'render_routes') {
+        this.backendActions.renderRouterTree(message.data.message.payload);
+      } else {
+        this.backendActions.componentTreeChanged(message.data.message.payload);
+      }
     });
 
   }
