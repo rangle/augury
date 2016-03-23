@@ -1,9 +1,9 @@
 <div class="flex flex-column overflow-scroll col-12">
 
-  <div class="pt3 pl4 pb3 mb1 bg-darken-1" *ngIf="node">
-      <h3 class="col regular m0">{{ node.name || 'No node selected' }}</h3>
+  <div class="pt3 pl4 pb3 mb1 bg-darken-1">
+      <h3 class="col regular m0">{{ node && node.name || 'No Component Selected' }}</h3>
       &nbsp;
-      <span class="right regular mr4">($a in Console)</span>
+      <span class="right regular mr4" *ngIf="node">($a in Console)</span>
   </div>
 
   <h4 *ngIf="node && node.description" class="m3 bold">Properties</h4>
