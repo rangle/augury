@@ -19,12 +19,12 @@
         <button class="btn btn-primary mb1 black bg-silver"
           style="padding: 2px 4px;" (click)="onChange($event, query.value, true)">
           <img src="../images/Triangle.svg"
-               style="width: 0.8em; height: 0.8em;">
+                style="width: 0.8em; height: 0.8em;">
         </button>
         <button class="btn btn-primary mb1 black bg-silver"
           style="padding: 2px 4px;" (click)="onChange($event, query.value, false)">
           <img src="../images/Triangle.svg" class="rotate180"
-               style="width: 0.8em; height: 0.8em;">
+                style="width: 0.8em; height: 0.8em;">
         </button>
       </div>
     </div>
@@ -38,15 +38,6 @@
 
   </header>
 
-  <div class="flex">
-
-    <!-- BLOCK VIEW -->
-    <main class="p1 col-12">
-      <bt-node-item *ngFor="#node of tree"
-        [node]="node">
-      </bt-node-item>
-    </main>
-
-  </div>
+  <component-tree [tree]="tree"></component-tree>
 
 </div>

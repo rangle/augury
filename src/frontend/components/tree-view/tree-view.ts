@@ -1,18 +1,18 @@
-import {Component, Inject, NgZone} from 'angular2/core';
+import {Component, Inject, NgZone, ElementRef} from 'angular2/core';
 import {NgFor} from 'angular2/common';
 import {NodeItem} from '../node-item/node-item';
-import {InfoPanel} from '../info-panel/info-panel';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActionType}
   from '../../actions/action-constants';
+import {ComponentTree} from '../component-tree/component-tree';
 
 @Component({
   selector: 'bt-tree-view',
-  properties: ['tree: tree'],
+  inputs: ['tree'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
-  directives: [NgFor, NodeItem, InfoPanel]
+  directives: [NgFor, NodeItem, ComponentTree]
 })
 /**
  * The Tree View
@@ -27,13 +27,17 @@ export class TreeView {
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
+    private element: ElementRef,
     private _ngZone: NgZone
   ) {
+
     this.componentDataStore.dataStream
       .subscribe((data: any) => {
         this.totalSearchCount = data.totalSearchCount;
       });
+
   }
+
 
   /**
    * Query for a node
