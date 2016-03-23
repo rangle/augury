@@ -8,7 +8,8 @@ import {TreeView} from '../tree-view/tree-view';
 @Component({
   selector: 'bt-app-trees',
   directives: [TabMenu, RouterTree, TreeView, InjectorTree],
-  inputs: ['tree', 'routerTree', 'selectedTabIndex', 'selectedNode'],
+  inputs: ['tree', 'routerTree', 'selectedTabIndex',
+    'selectedNode', 'changedNodes'],
   templateUrl:
     '/src/frontend/components/app-trees/app-trees.html'
 })

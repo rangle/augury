@@ -33,7 +33,7 @@ export class InfoPanel {
       title: 'Dependent Components',
       selected: false
     }, {
-      title: 'Injector Tree',
+      title: 'Injector Graph',
       selected: false
     }];
 
@@ -48,6 +48,7 @@ export class InfoPanel {
       .filter((data: any) => {
         return (data.action &&
           data.action !== UserActionType.GET_DEPENDENCIES &&
+          data.action !== UserActionType.RENDER_ROUTER_TREE &&
           data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
       })
       .subscribe(({ selectedNode }) => {

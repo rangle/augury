@@ -70,7 +70,7 @@ export default class RouterTree implements OnChanges {
 
   ngOnChanges() {
     // this.collapse(this.routerTree);
-    this.render(this.routerTree);
+    // this.render(this.routerTree);
   }
 
   render(source) {

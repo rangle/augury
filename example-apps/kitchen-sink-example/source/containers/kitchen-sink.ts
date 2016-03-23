@@ -51,9 +51,6 @@ import ChangeDetection from '../components/change-detection/change-detection';
       <li [ngClass]="{active: path=='input-output'}">
         <a [routerLink]="['./InputOutput']">InputOutput</a>
       </li>
-      <li [ngClass]="{active: path=='start' || path=='start/child'}">
-        <a [routerLink]="['./Start', 'StartMain']">Router</a>
-      </li>
       <li [ngClass]="{active: path=='dynamic-controls'}">
         <a [routerLink]="['./DynamicControls']">DynamicControls</a>
       </li>

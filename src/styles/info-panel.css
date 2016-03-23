@@ -1,3 +1,7 @@
 .tree-container {
   font-size: 11px;
 }
+
+.changed {
+  background-color: yellow;
+}

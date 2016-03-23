@@ -1,48 +1,26 @@
 import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
-  ElementRef, Input} from 'angular2/core';
+  ElementRef, Input, EventEmitter} from 'angular2/core';
 
 import * as d3 from 'd3';
 
-enum ARROW_TYPES {
-  COMPONENT,
-  INJECTOR,
-  DEPENDENCY
-};
+import {ARROW_TYPES, NODE_TYPES, NODE_COLORS, ANGULAR_COMPONENTS, GraphUtils}
+  from '../../utils/graph-utils';
 
-enum NODE_TYPES {
-  ROOT,
-  COMPONENT,
-  SERVICE
-};
-
-const NODE_COLORS = {
-  0: '#000000',  // NODE_TYPES.ROOT
-  1: '#1f77b4', // NODE_TYPES.COMPONENT
-  2: '#ff7f0e'  // NODE_TYPES.SERVICE,
-};
-
-const ANGULAR_COMPONENTS = [
-  'NgClass',
-  'RouterLink',
-  'RouterOutlet',
-  'LoadIntoComponent',
-  'LoadNextToComponent',
-  'LoadAsRootComponent',
-  'NgForm',
-  'NgModel',
-  'NgControlName'
-];
+import {ParseUtils} from '../../utils/parse-utils';
 
 @Component({
   selector: 'bt-injector-tree',
   encapsulation: ViewEncapsulation.None,
+  outputs: ['selectNode'],
+  providers: [GraphUtils, ParseUtils],
   templateUrl:
     '/src/frontend/components/injector-tree/injector-tree.html',
   styles: [`
     .link {
       stroke: #000;
-      stroke-opacity: .8;
-      stroke-width: 1px;
+      stroke-width: 1.5px;
+      z-index: -1;
+      stroke-opacity: 0.7;
     }
     .circle-injector-tree {
       stroke: none;
@@ -54,18 +32,20 @@ export default class InjectorTree implements OnChanges {
   @Input() tree: any;
   @Input() selectedNode: any;
 
-  showTable: boolean = false;
-  svg: any;
-  nodes: any;
-  links: any;
-  flattenedTree: any;
+  private parentHierarchy;
+  private parentHierarchyDisplay;
+  private selectNode: EventEmitter<any> = new EventEmitter<any>();
+  private svg: any;
+  private flattenedTree: any;
 
   constructor(
-    @Inject(ElementRef) private elementRef: ElementRef
+    @Inject(ElementRef) private elementRef: ElementRef,
+    private graphUtils: GraphUtils,
+    private parseUtils: ParseUtils
   ) { }
 
-  showTableClick(showTable: boolean) : void {
-    this.showTable = showTable;
+  selectComponent(component: any): void {
+    this.selectNode.emit(component);
   }
 
   ngOnChanges() {
@@ -74,27 +54,27 @@ export default class InjectorTree implements OnChanges {
     }
   }
 
-  private flatten(list: Array<any>) {
-    return list.reduce((a, b) => {
-      return a.concat(Array.isArray(b.children) ?
-        [this.copyParent(b), ...this.flatten(b.children)] : b);
-    }, []);
-  }
-
-  private copyParent(p: Object) {
-    return Object.assign({}, p, { children: undefined });
+  private addRootDependencies() {
+    this.selectedNode.dependencies.forEach((dependency) => {
+      if (this.selectedNode.injectors.indexOf(dependency) === -1) {
+        const parent = this.parseUtils.getDependencyLink
+          (this.flattenedTree, this.selectedNode.id, dependency);
+        if (!parent) {
+          this.flattenedTree[0].injectors.push(dependency);
+        }
+      }
+    });
   }
 
   private displayTree() {
     const tree = JSON.parse(JSON.stringify(this.tree));
-    // this.filterChildren(tree);
 
-    this.flattenedTree = this.flatten(tree);
-
-    this.nodes = [];
-    this.links = [];
-    // this.addNode(tree[0]);
-    this.addNode(this.selectedNode);
+    this.flattenedTree = this.parseUtils.flatten(tree);
+    this.parentHierarchy =
+      this.parseUtils.getParentHierarchy(this.flattenedTree, this.selectedNode);
+    this.parentHierarchyDisplay =
+      this.parentHierarchy.concat([this.selectedNode]);
+    this.addRootDependencies();
 
     const graphContainer = this.elementRef.nativeElement
       .querySelector('#graphContainer');
@@ -105,220 +85,149 @@ export default class InjectorTree implements OnChanges {
 
     this.svg = d3.select(graphContainer)
       .append('svg')
-      .attr('height', 400)
+      .attr('height', this.parentHierarchy.length * 120)
       .attr('width', 400);
 
     this.render();
   }
 
-  private addLink(source: any, target: any, type: ARROW_TYPES) {
-    this.links.push({
-      'source': source.index,
-      'target': target.index,
-      'value': 5,
-      'type': type
-    });
-  }
-
-  private getDependencyLink(nodeId: string, dependency: string) {
-    let searchId, searchedNodes, node;
-
-    for (let i: number = nodeId.length - 2; i > -1; i = i - 2) {
-       searchId =  nodeId.substr(0, i);
-       searchedNodes = this.flattenedTree.filter((n) => n.id === searchId);
-
-       if (searchedNodes.length > 0 &&
-           searchedNodes[0].injectors.indexOf(dependency) > -1) {
-         node = searchedNodes[0];
-         break;
-       }
-    }
-    return node;
-  }
-
-  private addInjectors(node: any, parent: any,
-    dependency?: string, root?: any) {
-    if (node.injectors && node.injectors.length > 0) {
-      node.injectors.forEach((injector) => {
-        const inj = {
-          node: node,
-          name: injector,
-          type: NODE_TYPES.SERVICE,
-          index: this.nodes.length
-        };
-        this.nodes.push(inj);
-        this.addLink(parent, inj, ARROW_TYPES.INJECTOR);
-
-        if (injector === dependency) {
-          this.addLink(root, inj, ARROW_TYPES.DEPENDENCY);
-        }
-      });
-    }
-  }
-
-  private addNode(node: any, parent?: any) {
-
-    const obj = {
-      node: node,
-      name: node.name,
-      type: NODE_TYPES.ROOT,
-      index: this.nodes.length
-    };
-    this.nodes.push(obj);
-    this.addInjectors(node, obj);
-
-    if (node.dependencies && node.dependencies.length > 0) {
-      node.dependencies.forEach((dependency) => {
-
-        if (node.injectors.indexOf(dependency) === -1) {
-
-          const linkedNode = this.getDependencyLink(node.id, dependency);
-          if (linkedNode) {
-            const linkedNodeObj = {
-              node: linkedNode,
-              name: linkedNode.name,
-              type: NODE_TYPES.COMPONENT,
-              index: this.nodes.length
-            };
-            this.nodes.push(linkedNodeObj);
-            this.addInjectors(linkedNode, linkedNodeObj, dependency, obj);
-          }
-        }
-      });
-    }
-  }
-
-  private filterChildren(components: any) {
-    components
-      .filter((component) => component.children &&
-        component.children.length > 0)
-      .map((component) => {
-        component.children = component
-          .children
-          .filter((comp) => {
-            const exists = ANGULAR_COMPONENTS.indexOf(comp.name) === -1;
-            if (exists && comp.children) {
-              this.filterChildren(comp.children);
-            }
-            return exists;
-          });
-        return component;
-    });
-  }
-
-  private addText(x: number, y: number, text: string) {
-    this.svg
-        .append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .text(text);
-  }
-
-  private addCircle(x: number, y: number, r: number, fill: string) {
-    this.svg
-        .append('circle')
-        .attr('class', 'circle-injector-tree')
-        .attr('cx', x)
-        .attr('cy', y)
-        .style('fill', fill)
-        .attr('r', r);
-  }
-
-  private addLine(x1: number, y1: number,
-    x2: number, y2: number, style: string) {
-    this.svg
-      .append('line')
-      .attr('x1', x1)
-      .attr('y1', y1)
-      .attr('x2', x2)
-      .attr('y2', y2)
-      .attr('class', 'link')
-      .attr('style', style);
-  }
-
   private addLegends() {
+    this.graphUtils.addCircle(this.svg, 8, 12, 8, NODE_COLORS[0]);
+    this.graphUtils.addCircle(this.svg, 8, 36, 8, NODE_COLORS[1]);
 
-    this.addCircle(8, 12, 8, NODE_COLORS[0]);
-    this.addCircle(8, 36, 8, NODE_COLORS[1]);
+    this.graphUtils.addText(this.svg, 20, 16, 'Component');
+    this.graphUtils.addText(this.svg, 20, 40, 'Service');
+    this.graphUtils.addText(this.svg, 20, 64, 'Component to Component');
+    this.graphUtils.addText(this.svg, 20, 88, 'Component to Service');
+    this.graphUtils.addText(this.svg, 20, 112, 'Component to Dependency');
 
-    this.addText(20, 16, 'Component');
-    this.addText(20, 40, 'Service');
-    this.addText(20, 64, 'Component to Component');
-    this.addText(20, 88, 'Component to Service');
-    this.addText(20, 112, 'Component to Dependency');
+    this.graphUtils.addLine(this.svg, 0, 60, 16, 60, '');
+    this.graphUtils.addLine(this.svg, 0, 84, 16, 84, 'stroke: #2CA02C;');
+    this.graphUtils.addLine(this.svg, 0, 108, 16, 108,
+      'stroke-dasharray:3px, 3px;');
+  }
 
-    this.addLine(0, 60, 16, 60, '');
-    this.addLine(0, 84, 16, 84, 'stroke: #2CA02C;');
-    this.addLine(0, 108, 16, 108, 'stroke-dasharray:3px, 3px;');
+  private addPosition(positions: any, posX: number, posY: number,
+    node: any, injector?: any) {
+    if (injector) {
+          positions[node.id].injectors[injector] = {
+            'x': posX,
+            'y': posY,
+            'injector': injector
+          };
+    } else {
+        positions[node.id] = {
+          'x': posX,
+          'y': posY,
+          'node': node,
+          'injectors': {}
+        };
+      }
+  }
+
+  private addNodeAndText(posX: number, posY: number,
+    title: any, positions: any, color: string) {
+      this.graphUtils.addCircle(this.svg, posX, posY, 8, color);
+      this.graphUtils.addText(this.svg, posX - 6, posY - 15, title);
   }
 
   private render() {
     if (!this.flattenedTree) {
       return;
     }
+    let posX, posY, x1, y1, x2, y2;
+    const positions = {};
 
-    const force = d3.layout.force()
-      .charge(-500)
-      .gravity(.10)
-      .linkDistance(80)
-      .size([400, 400]);
+    const START_X: number = 20;
+    const START_Y: number = 30;
+    const NODE_INCREMENT_X: number = 100;
+    const NODE_INCREMENT_Y: number = 100;
 
-    const graph = {
-      nodes: this.nodes,
-      links: this.links
-    };
+    let i: number = 0;
+    this.parentHierarchy.forEach((node) => {
+      posX = START_X;
+      posY = START_Y + NODE_INCREMENT_Y * i;
+      this.addNodeAndText(posX, posY, node.name, positions, NODE_COLORS[1]);
+      this.addPosition(positions, posX, posY, node);
 
-    force.nodes(graph.nodes)
-      .links(graph.links)
-      .start();
+      if (i > 0) {
+          x1 = START_X;
+          y1 = START_Y + NODE_INCREMENT_Y * (i - 1) + 10;
+          x2 = START_X;
+          y2 = posY - 30;
+          this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
+            'marker-end: url(#suit);');
+      }
 
-    console.log('graph', graph);
+      let j: number = 0;
+      node.injectors.forEach((injector) => {
+        if (injector !== node.name) {
 
-    const link = this.svg.selectAll('.link')
-      .data(graph.links)
-      .enter().append('line')
-      .attr('class', 'link')
-      .attr('style', (d) => {
-        let style = 'marker-end: url(#suit);';
-        if (d.type === ARROW_TYPES.INJECTOR) {
-          style = style + 'stroke: #2CA02C;';
-        } else if (d.type === ARROW_TYPES.DEPENDENCY) {
-          style = style + 'stroke-dasharray:3px, 3px;';
+          posX = START_X + NODE_INCREMENT_X + NODE_INCREMENT_X * j;
+          posY = START_Y + NODE_INCREMENT_Y * i;
+          this.addNodeAndText(posX, posY, injector, positions, NODE_COLORS[2]);
+          this.addPosition(positions, posX, posY, node, injector);
+
+          x1 = posX - NODE_INCREMENT_X + 10;
+          y1 = posY;
+          x2 = posX - 10;
+          y2 = posY;
+          this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
+            'stroke: #CC0000;marker-end: url(#suit);');
+
+          j++;
         }
-        return style;
       });
+      i++;
+    });
 
-    const node = this.svg.selectAll('.node')
-      .data(graph.nodes)
-      .enter().append('circle')
-      .attr('class', 'circle-injector-tree')
-      .attr('r', 5)
-      .style('fill', (d) => NODE_COLORS[d.type])
-      .call(force.drag);
+    posX = START_X;
+    posY = START_Y + NODE_INCREMENT_Y * i;
+    this.addNodeAndText(posX, posY, this.selectedNode.name,
+      positions, NODE_COLORS[0]);
+    this.addPosition(positions, posX, posY, this.selectedNode);
 
-    const text = this.svg.append('svg:g')
-      .selectAll('g')
-      .data(graph.nodes)
-      .enter().append('svg:g');
+    x1 = START_X;
+    y1 = START_Y + NODE_INCREMENT_Y * (i - 1) + 10;
+    x2 = START_X;
+    y2 = posY - 30;
+    this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
+      'marker-end: url(#suit);');
 
-    text.append('svg:text')
-      .attr('x', 8)
-      .attr('y', '.31em')
-      .attr('class', 'shadow')
-      .text((d) => d.name);
+    let j: number = 0;
+    this.selectedNode.injectors.forEach((injector) => {
+      if (injector !== this.selectedNode.name) {
 
-    force.on('tick', () => {
-      link
-        .attr('x1', (d) => d.source.x)
-        .attr('y1', (d) => d.source.y)
-        .attr('x2', (d) => d.target.x)
-        .attr('y2', (d) => d.target.y);
+        posX = START_X + NODE_INCREMENT_X + NODE_INCREMENT_X * j;
+        posY = START_Y + NODE_INCREMENT_Y * i;
+        this.graphUtils.addCircle(this.svg, posX, posY, 8, NODE_COLORS[2]);
+        this.graphUtils.addText(this.svg, posX - 6, posY - 15, injector);
 
-      node
-        .attr('cx', (d) => d.x)
-        .attr('cy', (d) => d.y);
+        x1 = posX - NODE_INCREMENT_X + 10;
+        y1 = posY;
+        x2 = posX - 10;
+        y2 = posY;
+        this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
+          'stroke: #CC0000;marker-end: url(#suit);');
 
-      text.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')');
+        j++;
+      }
+    });
+
+    this.selectedNode.dependencies.forEach((dependency) => {
+      const parent = this.parseUtils.getDependencyLink
+        (this.flattenedTree, this.selectedNode.id, dependency);
+      if (parent) {
+        const service = positions[parent.id].injectors[dependency];
+        if (service) {
+          x1 = positions[this.selectedNode.id].x + 5;
+          y1 = positions[this.selectedNode.id].y - 10;
+          x2 = service.x - 10;
+          y2 = service.y;
+          this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
+           'stroke-dasharray:3px, 3px;marker-end: url(#suit);');
+        }
+      }
     });
 
     this.svg.append('defs').selectAll('marker')
@@ -326,15 +235,15 @@ export default class InjectorTree implements OnChanges {
       .enter().append('marker')
       .attr('id', (d) => d)
       .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 25)
+      .attr('refX', 10)
       .attr('refY', 0)
       .attr('markerWidth', 6)
       .attr('markerHeight', 6)
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M0,-5L10,0L0,5 L10,0 L0, -5')
-      .style('stroke', '#4679BD')
-      .style('opacity', '0.6');
+      .style('stroke', '#000')
+      .style('opacity', '0.8');
 
     // this.addLegends();
   }
