@@ -1,5 +1,6 @@
 <div class="flex flex-column flex-stretch vh-100 border-right border-color-dark">
   <bt-tab-menu
+    [tabs]="tabs"
     (tabChange)="tabChange($event)"
     [selectedTabIndex]="selectedTabIndex">
   </bt-tab-menu>
@@ -19,4 +20,12 @@
     [hidden]="selectedTabIndex != 1"
     [ngClass]="{flex: selectedTabIndex == 1}">
   </bt-dependent-components>
+
+  <bt-injector-tree
+    (selectNode)="selectNode($event)"
+    [hidden]="selectedTabIndex != 2"
+    [tree]="tree"
+    [selectedNode]="node">
+  </bt-injector-tree>
+
 </div>

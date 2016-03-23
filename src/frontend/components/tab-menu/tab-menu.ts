@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnChanges} from 'angular2/core';
+import {Component, EventEmitter, OnChanges, Input} from 'angular2/core';
 
 @Component({
   selector: 'bt-tab-menu',
@@ -8,15 +8,9 @@ import {Component, EventEmitter, OnChanges} from 'angular2/core';
 })
 export default class TabMenu {
 
+  @Input() tabs: any;
   private selectedTabIndex: number = 0;
   private tabChange: EventEmitter<number> = new EventEmitter<number>();
-  private tabs = [{
-    title: 'Properties',
-    selected: false
-  }, {
-      title: 'Dependent Components',
-      selected: false
-    }];
 
   ngOnChanges(changes): void {
     this.tabClick(this.selectedTabIndex);

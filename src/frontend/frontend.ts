@@ -29,7 +29,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
         <bt-tree-view [tree]="tree"></bt-tree-view>
       </div>
       <div class="col col-6 overflow-hidden vh-100">
-        <bt-info-panel></bt-info-panel>
+        <bt-info-panel [tree]="tree"></bt-info-panel>
       </div>
     </div>`
 })
