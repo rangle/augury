@@ -1,25 +1,24 @@
-<bt-tab-menu
-  [tabs]="tabs"
-  (tabChange)="tabChange($event)"
-  [selectedTabIndex]="selectedTabIndex">
-</bt-tab-menu>
+<div class="flex flex-column flex-stretch vh-100 border-right border-color-dark">
+  <bt-tab-menu
+    (tabChange)="tabChange($event)"
+    [selectedTabIndex]="selectedTabIndex">
+  </bt-tab-menu>
 
-<bt-component-info
-  (selectDependency)="selectDependency($event)"
-  [node]="node"
-  [hidden]="selectedTabIndex != 0">
-</bt-component-info>
+  <bt-component-info
+    (selectDependency)="selectDependency($event)"
+    [node]="node"
+    [hidden]="selectedTabIndex != 0"
+    [ngClass]="{flex: selectedTabIndex == 0}">
+  </bt-component-info>
 
 <bt-dependent-components
   (selectNode)="selectNode($event)"
   (selectDependency)="selectDependency($event)"
   [dependency]="selectedDependency"
   [components]="dependentComponents"
-  [hidden]="selectedTabIndex != 1">
+  [hidden]="selectedTabIndex != 1"
+  [ngClass]="{flex: selectedTabIndex == 1}">
 </bt-dependent-components>
 
-<bt-injector-tree
-  [hidden]="selectedTabIndex != 2"
-  [tree]="tree"
-  [selectedNode]="node">
-</bt-injector-tree>
+</div>
+

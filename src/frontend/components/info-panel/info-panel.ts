@@ -1,5 +1,6 @@
-import {Component, ElementRef, Inject, NgZone, Input} from 'angular2/core';
-import {NgIf} from 'angular2/common';
+import {Component, ElementRef, Inject,Input, NgZone} from 'angular2/core';
+import {NgIf, NgClass} from 'angular2/common';
+
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
