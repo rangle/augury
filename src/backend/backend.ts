@@ -85,6 +85,8 @@ window.addEventListener('message', function(event) {
         appRef.tick();
         adapter.renderTree();
       }
+    } else if (event.data.message.message.actionType === 'RENDER_ROUTER_TREE') {
+      adapter.showAppRoutes();
     }
 
     return true;

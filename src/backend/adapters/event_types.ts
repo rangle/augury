@@ -24,6 +24,7 @@ enum _AdapterEventType {
   CHANGE,
   REMOVE,
   CLEAR,
+  ROUTES
 }
 
 // TSFIXME(bertrandk): There doesn't seem to be much better ways of creating
@@ -60,4 +61,9 @@ export class AdapterEventType {
   static get CLEAR(): string {
     return AdapterEventType._get('CLEAR');
   }
+
+  static get ROUTES(): string {
+    return AdapterEventType._get('ROUTES');
+  }
+
 }
