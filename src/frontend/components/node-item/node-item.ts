@@ -1,4 +1,4 @@
-import {Component, Inject, NgZone, ElementRef} from 'angular2/core';
+import {Component, Inject, NgZone} from 'angular2/core';
 import {NgIf, NgFor, NgStyle} from 'angular2/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
@@ -24,10 +24,8 @@ export class NodeItem {
   private collapsed: any;
   private color: any;
   private borderColor: any;
-  private nativeElement: any;
 
   constructor(
-    private elem: ElementRef,
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
     private _ngZone: NgZone
@@ -35,7 +33,6 @@ export class NodeItem {
 
     this.borderColor = 'rgba(0, 0, 0, 0.125)';
     this.color = '#666';
-    this.nativeElement = elem.nativeElement;
 
     // Listen for changes in selected node
     this.componentDataStore.dataStream
@@ -68,10 +65,6 @@ export class NodeItem {
       .subscribe((data) => {
         this.userActions.selectNode({ node: this.node });
       });
-  }
-
-  ngOnInit() {
-    this.node.nativeElement = this.nativeElement;
   }
 
   /**

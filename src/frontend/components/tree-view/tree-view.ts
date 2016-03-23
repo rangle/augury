@@ -6,12 +6,13 @@ import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActionType}
   from '../../actions/action-constants';
+import {ComponentTree} from '../component-tree/component-tree';
 
 @Component({
   selector: 'bt-tree-view',
-  properties: ['tree: tree'],
+  inputs: ['tree'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
-  directives: [NgFor, NodeItem]
+  directives: [NgFor, NodeItem, ComponentTree]
 })
 /**
  * The Tree View
@@ -20,7 +21,6 @@ import {UserActionType}
 export class TreeView {
 
   private tree: any;
-  private nativeElement: HTMLElement;
   private searchIndex: number = 0;
   private totalSearchCount: number = 0;
 
@@ -30,22 +30,12 @@ export class TreeView {
     private element: ElementRef,
     private _ngZone: NgZone
   ) {
-    this.nativeElement = element.nativeElement;
 
     this.componentDataStore.dataStream
       .subscribe((data: any) => {
         this.totalSearchCount = data.totalSearchCount;
       });
 
-    this.componentDataStore.dataStream
-      .filter((data) => {
-        return  data.action && data.action === UserActionType.SELECT_NODE &&
-          data.selectedNode && data.selectedNode.id;
-        })
-        .map(({ selectedNode }: any) => selectedNode)
-        .subscribe((selectedNode: any) => {
-          this.scrollToViewIfNeeded(selectedNode.nativeElement);
-        });
   }
 
 
@@ -80,24 +70,6 @@ export class TreeView {
 
     this.userActions.searchNode({ query, index: this.searchIndex });
     this._ngZone.run(() => undefined);
-  }
-
-  scrollToViewIfNeeded(elem: HTMLElement) {
-    const selectedNodeBound = elem.getBoundingClientRect();
-    const treeViewBound = this.nativeElement.getBoundingClientRect();
-    console.log('node ', selectedNodeBound);
-    console.log('tree ', treeViewBound);
-    if (treeViewBound.height - treeViewBound.top < selectedNodeBound.bottom) {
-      console.log('not visible');
-    }
-    // const elemBottomY = elem.getBoundingClientRect().top
-    //                   + elem.getBoundingClientRect().height
-    //                   - this.nativeElement.getBoundingClientRect().height;
-    // // console.log('window', window);
-    // console.log('elemBottomY', elemBottomY);
-    // if (this.nativeElement.scrollTop < elemBottomY) {
-    //   this.nativeElement.scrollTop = elemBottomY;
-    // }
   }
 
 }
