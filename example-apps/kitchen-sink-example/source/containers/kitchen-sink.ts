@@ -13,6 +13,7 @@ import DynamicControls from '../components/dynamic-controls/dynamic-controls';
 import ControlForm from '../components/form-controls/control-form';
 import TodoApp from '../components/todo-app/todo-app';
 import DITree from '../components/di-tree/di-tree';
+import ChangeDetection from '../components/change-detection/change-detection';
 
 @RouteConfig([
   { path: '/', component: Home, as: 'Home' },
@@ -25,6 +26,8 @@ import DITree from '../components/di-tree/di-tree';
     as: 'DynamicControls' },
   { path: '/todo-app', component: TodoApp, as: 'TodoApp'},
   { path: '/di-tree', component: DITree, as: 'DITree' },
+  { path: '/change-detection', component: ChangeDetection,
+    as: 'ChangeDetection' },
 ])
 @Component({
   selector: 'kitchen-sink',
@@ -59,6 +62,9 @@ import DITree from '../components/di-tree/di-tree';
       </li>
       <li [ngClass]="{active: path=='di-tree'}">
         <a [routerLink]="['./DITree']">DITree</a>
+      </li>
+      <li [ngClass]="{active: path=='change-detection'}">
+        <a [routerLink]="['./ChangeDetection']">ChangeDetection</a>
       </li>
       </ul>
     </div>
