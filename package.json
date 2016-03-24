@@ -31,18 +31,18 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "^2.0.0-beta.11",
+    "angular2": "^2.0.0-beta.12",
     "basscss": "^7.0.4",
     "core-js": "^2.2.0",
     "crypto": "0.0.3",
     "es6-promise": "^3.0.2",
-    "es6-shim": "^0.33.13",
+    "es6-shim": "^0.35.0",
     "file-loader": "^0.8.5",
     "immutable": "^3.7.5",
     "json-formatter-js": "^0.3.0",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
-    "zone.js": "0.6.5"
+    "zone.js": "0.6.6"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.1",
