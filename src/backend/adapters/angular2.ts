@@ -167,6 +167,7 @@ export class Angular2Adapter extends BaseAdapter {
   _emitNativeElement = (compEl: any, isRoot: boolean,
     idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
+    const nodeName = this._getComponentName(compEl);
 
     // When encounter a template comment, insert another comment with
     // batarangle-id above it.
@@ -182,9 +183,11 @@ export class Angular2Adapter extends BaseAdapter {
 
     if (isRoot) {
       return this.addRoot(compEl);
+    } else if (nodeName !== 'NgSelectOption ') {
+      // skipping the NgSelectOption to imporove performance 
+      // It adds no value displaying node elements
+      this.addChild(compEl);
     }
-
-    this.addChild(compEl);
   };
 
   _getComponentInjectors(compEl: any, dependencies: any) {
