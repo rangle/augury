@@ -149,7 +149,6 @@ export class NodeItem {
   ngOnChanges() {
     if (this.changedNodes && this.node) {
       this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
-      console.log(this.isUpdated);
       setTimeout(() => {
         this.isUpdated = false;
       }, 2000);
