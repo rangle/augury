@@ -50,8 +50,6 @@ export interface TreeNode {
   injectors: any;
 }
 
-// TSFIXME(bertrandk): This would be much nicer if we could actually extend
-// 'Subject'.
 export abstract class BaseAdapter {
   private _stream: Subject<any> = new Subject();
 
@@ -60,6 +58,7 @@ export abstract class BaseAdapter {
       type: EventType.ROUTES,
       routes: routes
     };
+
     this._stream.next(routesEvt);
   }
 
