@@ -132,6 +132,7 @@ export class Angular2Adapter extends BaseAdapter {
     const output = this._getComponentOutput(debugEl);
     const dependencies = this._getComponentDependencies(debugEl);
     const changeDetection = this._getComponentCD(debugEl);
+    const injectors = this._getComponentInjectors(debugEl, dependencies);
 
     description.unshift({
       key: 'b-id',
@@ -148,7 +149,8 @@ export class Angular2Adapter extends BaseAdapter {
       isSelected: false,
       isOpen: true,
       dependencies,
-      changeDetection
+      changeDetection,
+      injectors
     };
   }
 
@@ -185,6 +187,17 @@ export class Angular2Adapter extends BaseAdapter {
     this.addChild(compEl);
   };
 
+  _getComponentInjectors(compEl: any, dependencies: any) {
+
+    const componentName = this._getComponentName(compEl);
+    const injectors = [];
+    for (let i = 0; i < compEl.providerTokens.length; i++) {
+      const provider: any = compEl.providerTokens[i];
+      const name: string = this.getFunctionName(provider);
+      injectors.push(name);
+    }
+   return injectors;
+  }
 
   _getComponentChildren(compEl: any): any[] {
     return <any[]>compEl.componentViewChildren;
@@ -370,5 +383,12 @@ export class Angular2Adapter extends BaseAdapter {
         { key: 'name', value: this._getComponentName(compEl) }
       ];
     }
+  }
+
+  getFunctionName(value: string) {
+    let name = value.toString();
+    name = name.substr('function '.length);
+    name = name.substr(0, name.indexOf('('));
+    return name;
   }
 }
