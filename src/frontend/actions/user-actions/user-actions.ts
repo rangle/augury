@@ -101,4 +101,11 @@ export class UserActions {
       property
     });
   }
+
+  renderRouterTree() {
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.RENDER_ROUTER_TREE
+    });
+  }
+
 }

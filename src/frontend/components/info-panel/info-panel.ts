@@ -24,17 +24,16 @@ export class InfoPanel {
   private selectedTabIndex: number = 0;
   private dependentComponents = [];
   private selectedDependency: string;
-
- private tabs = [{
-    title: 'Properties',
-    selected: false
-  }, {
-      title: 'Dependent Components',
+  private tabs = [{
+      title: 'Properties',
       selected: false
     }, {
-      title: 'Injector Graph',
-      selected: false
-  }];
+        title: 'Dependent Components',
+        selected: false
+      }, {
+        title: 'Injector Graph',
+        selected: false
+    }];
 
   constructor(
     private componentDataStore: ComponentDataStore,
@@ -47,6 +46,7 @@ export class InfoPanel {
       .filter((data: any) => {
         return (data.action &&
           data.action !== UserActionType.GET_DEPENDENCIES &&
+          data.action !== UserActionType.RENDER_ROUTER_TREE &&
           data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
       })
       .subscribe(({ selectedNode }) => {

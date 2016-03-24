@@ -31,8 +31,9 @@ import {Subject} from 'rxjs';
 import { AdapterEventType as EventType } from './event_types';
 
 export interface AdapterEvent {
-  type: string;   // AdapterEventType
+  type: string;
   node?: Node;
+  routes?: string;
 }
 
 export interface TreeNode {
@@ -53,6 +54,14 @@ export interface TreeNode {
 // 'Subject'.
 export abstract class BaseAdapter {
   private _stream: Subject<any> = new Subject();
+
+  showRoutes(routes: any): void {
+    const routesEvt: AdapterEvent = {
+      type: EventType.ROUTES,
+      routes: routes
+    };
+    this._stream.next(routesEvt);
+  }
 
   addRoot(rootEl: any): void {
     const rootEvt: AdapterEvent = {
