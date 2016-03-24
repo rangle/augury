@@ -59,7 +59,7 @@ export class ComponentDataStore extends AbstractStore {
 
     this.dispatcher.onAction(
       BackendActionType.RENDER_ROUTER_TREE,
-      action => this.renderRouterTree(action))
+      action => this.renderRouterTree(action));
 
   }
 
