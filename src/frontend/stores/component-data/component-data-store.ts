@@ -57,6 +57,10 @@ export class ComponentDataStore extends AbstractStore {
       UserActionType.GET_DEPENDENCIES,
       action => this.getDependencies(action));
 
+    this.dispatcher.onAction(
+      BackendActionType.RENDER_ROUTER_TREE,
+      action => this.renderRouterTree(action))
+
   }
 
   /**
@@ -242,6 +246,13 @@ export class ComponentDataStore extends AbstractStore {
       selectedDependency: dependency,
       dependentComponents: dependentComponents,
       action: UserActionType.GET_DEPENDENCIES
+    });
+  }
+
+  private renderRouterTree(tree: any) {
+    this.emitChange({
+      tree: tree,
+      action: UserActionType.RENDER_ROUTER_TREE
     });
   }
 

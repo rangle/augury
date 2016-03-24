@@ -31,6 +31,7 @@ declare var Reflect: { getOwnMetadata: Function };
 import { TreeNode, BaseAdapter } from './base';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Description } from '../utils/description';
+import { ParseRouter } from '../utils/parse-router';
 
 import {DirectiveResolver} from '../directive-resolver';
 import {Observable} from 'rxjs/Observable';
@@ -76,6 +77,18 @@ export class Angular2Adapter extends BaseAdapter {
   _trackAngularChanges(rootNgProbe: any) {
     const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
     ngZone.onStable.subscribe(() => this._onEventDone.next());
+  }
+
+  showAppRoutes(): void {
+    const root = this._findRoot();
+    try {
+      const routes = ParseRouter.parseRoutes(
+        ng.probe(root).componentInstance.router.root.registry);
+
+      this.showRoutes(routes);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
