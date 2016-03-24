@@ -2,6 +2,7 @@ import {Component, Inject} from 'angular2/core';
 
 import Service1 from '../../services/service1';
 import Service2 from '../../services/service2';
+import {FormatService} from '../todo-app/todo-service';
 
 @Component({
   selector: 'component6',
@@ -19,7 +20,8 @@ export default class Component6 {
 
   constructor(
     private s1: Service1,
-    private s2: Service2
+    private s2: Service2,
+    private fs: FormatService
   ) {
     this.service1Value = s1.value;
     this.service2Value = s2.value;

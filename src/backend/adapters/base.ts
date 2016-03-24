@@ -47,6 +47,7 @@ export interface TreeNode {
   isOpen: boolean;
   dependencies: any;
   changeDetection: any;
+  injectors: any;
 }
 
 // TSFIXME(bertrandk): This would be much nicer if we could actually extend
