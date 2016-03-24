@@ -18,30 +18,22 @@ import InjectorTree from '../injector-tree/injector-tree';
 })
 export class InfoPanel {
 
-  @Input() tree;
+  @Input() tree: any;
 
   private node: any;
   private selectedTabIndex: number = 0;
   private dependentComponents = [];
   private selectedDependency: string;
   private tabs = [{
-    title: 'Properties',
-    selected: false
-  }, {
-      title: 'Dependent Components',
-      selected: false
-    }];
-
- private tabs = [{
-    title: 'Properties',
-    selected: false
-  }, {
-      title: 'Dependent Components',
+      title: 'Properties',
       selected: false
     }, {
-      title: 'Injector Graph',
-      selected: false
-  }];
+        title: 'Dependent Components',
+        selected: false
+      }, {
+        title: 'Injector Graph',
+        selected: false
+    }];
 
   constructor(
     private componentDataStore: ComponentDataStore,

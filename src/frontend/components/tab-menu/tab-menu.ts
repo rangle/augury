@@ -7,8 +7,6 @@ import {Component, EventEmitter, OnChanges, Input} from 'angular2/core';
   outputs: ['tabChange']
 })
 export default class TabMenu {
-  @Input() tabs;
-
   @Input() tabs: any;
   private selectedTabIndex: number = 0;
   private tabChange: EventEmitter<number> = new EventEmitter<number>();
