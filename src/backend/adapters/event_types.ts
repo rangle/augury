@@ -21,10 +21,10 @@
  */
 
 export abstract class AdapterEventType {
-  static ROOT: string = 'ROOT';
-  static ADD: string = 'ADD';
-  static CHANGE: string = 'CHANGE';
-  static REMOVE: string = 'REMOVE';
-  static CLEAR: string = 'CLEAR';
-  static ROUTES: string = 'ROUTES';
+  static ROOT: string = 'root';
+  static ADD: string = 'add';
+  static CHANGE: string = 'change';
+  static REMOVE: string = 'remove';
+  static CLEAR: string = 'clear';
+  static ROUTES: string = 'routes';
 }
