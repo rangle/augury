@@ -84,13 +84,19 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  /**
+   * Call the node select function from current selected node
+   * @param  {Object} node
+   */
   private selectNodeAction({ node }: Node) {
     this.selectNode(node);
   }
 
   /**
-   * Select a node to be highlighted
-   * @param  {Object} options.node Node name
+   * Select a node to be highlighted after search 
+   * @param  {Object} node Current selected Node
+   * @param  {number} searchIndex Current search Index
+   * @param  {number} totalSearchCount Total Search Count
    */
   private selectNode(node: any, searchIndex: number = -1,
                      totalSearchCount: number = 0) {
@@ -104,6 +110,12 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  /**
+   * Select a node to be highlighted after search 
+   * @param  {Object} node Current selected Node
+   * @param  {number} searchIndex Current search Index
+   * @param  {number} totalSearchCount Total Search Count
+   */
   private getUpdatedNode(selectedNode: any) {
     const flattenedData = this.flatten(this._componentData);
     const filtered = flattenedData.filter((node) =>
@@ -111,6 +123,11 @@ export class ComponentDataStore extends AbstractStore {
     return filtered.length > 0 ? filtered[0] : selectedNode;
   }
 
+  /**
+   * Update node state of current openedNodes and selectedNode
+   * @param  {Object} openedNodes Currently closed Nodes
+   * @param  {Object} selectedNode Current selected Node
+   */
   private updateNodeState({openedNodes, selectedNode}) {
     selectedNode = this.getUpdatedNode(selectedNode);
     this.emitChange({
@@ -120,6 +137,9 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  /**
+   * Clear the selection of previously selectedNode and openedNodes
+   */
   private clearSelections(action) {
     this._openedNodes = [];
     this._selectedNode = undefined;
@@ -226,6 +246,9 @@ export class ComponentDataStore extends AbstractStore {
 
   }
 
+  /**
+   * Save the node id to openedNodes array on clicking expand and collapse
+   */
   private openCloseNode({node}) {
     if (!node.isOpen) {
       this._openedNodes.push(node.id);
@@ -237,6 +260,9 @@ export class ComponentDataStore extends AbstractStore {
     }
   }
 
+  /**
+   * Filter the Components for a particular dependency and dispatch select event
+   */
   private getDependencies({dependency}) {
     const flattenedData = this.flatten(this._componentData);
     const dependentComponents = flattenedData.filter((comp) =>
@@ -249,6 +275,9 @@ export class ComponentDataStore extends AbstractStore {
     });
   }
 
+  /**
+   * Emit the render router event with router tree data
+   */
   private renderRouterTree(tree: any) {
     this.emitChange({
       tree: tree,

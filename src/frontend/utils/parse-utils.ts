@@ -38,7 +38,6 @@ export class ParseUtils {
 
   getParentHierarchy(flattenedTree: any, node: any) {
     const nodeIds = this.getParentNodeIds(node.id);
-    console.log(nodeIds);
 
     const hierarchy = nodeIds.reduce((data, id) => {
       const searchNodes = flattenedTree.filter((n) => n.id === id);

@@ -12,8 +12,7 @@ export class UserActions {
   constructor(
     private dispatcher: Dispatcher,
     private messagingService: BackendMessagingService
-  ) {
-  }
+  ) { }
 
   /**
    * Get the component tree data from back-end
@@ -73,6 +72,10 @@ export class UserActions {
     });
   }
 
+  /**
+   * On clicking expand and collapse of Component store the values in store
+   * @param  {Object} options.node
+   */
   openCloseNode({node}) {
     this.dispatcher.messageBus.next({
       actionType: UserActionType.OPEN_CLOSE_TREE,
@@ -80,6 +83,13 @@ export class UserActions {
     });
   }
 
+  /**
+   * Update the node state after re rendering the tree.
+   * Select the previously selected node and
+   * Preserve state of previously Closed Component.
+   * @param  {Object} options.openedNodes list of opened Nodes id's
+   * @param  {Object} options.selectedNode currently selectedNode
+   */
   updateNodeState({openedNodes, selectedNode}) {
     this.dispatcher.messageBus.next({
       actionType: UserActionType.UPDATE_NODE_STATE,
@@ -88,6 +98,10 @@ export class UserActions {
     });
   }
 
+  /**
+   * Get the list of dependent Components when clicking on dependency
+   * @param  {String} dependency Name of the dependency
+   */
   getDependencies(dependency: string) {
     this.dispatcher.messageBus.next({
       actionType: UserActionType.GET_DEPENDENCIES,
@@ -95,6 +109,10 @@ export class UserActions {
     });
   }
 
+  /**
+   * Update the Component property when updating from info panel
+   * @param  {Object} options.property
+   */
   updateProperty({property}) {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.UPDATE_PROPERTY,
@@ -102,6 +120,9 @@ export class UserActions {
     });
   }
 
+  /**
+   * Dispatch the event to render router tree
+   */
   renderRouterTree() {
     this.messagingService.sendMessageToBackend({
       actionType: UserActionType.RENDER_ROUTER_TREE
