@@ -7,37 +7,27 @@
  *
  * For more information, see the Base Adapater (./base.ts).
  *
- * NOTE: This is (definitely) a work in progress. Currently, for the adapter to
- *       function properly, the root of the application must be bound to a
- *       DebugElementViewListener.
- *
- * We infer the root element of our application by finding the first DOM element
- * with an `ngid` attribute (put there by DebugElementViewListener). Component
- * events are indicated by DOM mutations.
- *
  * Interface:
  * - setup
  * - cleanup
  * - subscribe
  * - serializeComponent
  *
- * Supports up to 2.0.0-beta-1
  */
 
 declare var ng: { probe: Function, coreTokens: any };
 declare var getAllAngularRootElements: Function;
 declare var Reflect: { getOwnMetadata: Function };
 
-import { TreeNode, BaseAdapter } from './base';
+import { ChangeDetectionStrategy } from 'angular2/core';
 import { DirectiveProvider } from 'angular2/src/core/linker/element';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
+import { TreeNode, BaseAdapter } from './base';
 import { Description } from '../utils/description';
 import { ParseRouter } from '../utils/parse-router';
-
-import {DirectiveResolver} from '../directive-resolver';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-
-import {ChangeDetectionStrategy} from 'angular2/core';
+import { DirectiveResolver } from '../directive-resolver';
 
 export class Angular2Adapter extends BaseAdapter {
   _tree: any = {};
@@ -118,10 +108,6 @@ export class Angular2Adapter extends BaseAdapter {
     }
   }
 
-  getClassName(type: any): boolean {
-    return type.constructor.toString().match(/\w+/g)[1] === 'DebugElement';
-  }
-
   serializeComponent(el: any, event: string): TreeNode {
     const debugEl = el;
     const id = this._getComponentID(debugEl);
@@ -167,6 +153,7 @@ export class Angular2Adapter extends BaseAdapter {
   _emitNativeElement = (compEl: any, isRoot: boolean,
     idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
+    const nodeName = this._getComponentName(compEl);
 
     // When encounter a template comment, insert another comment with
     // batarangle-id above it.
@@ -182,9 +169,11 @@ export class Angular2Adapter extends BaseAdapter {
 
     if (isRoot) {
       return this.addRoot(compEl);
+    } else if (nodeName !== 'NgSelectOption ') {
+      // skipping the NgSelectOption to imporove performance 
+      // It adds no value displaying node elements
+      this.addChild(compEl);
     }
-
-    this.addChild(compEl);
   };
 
   _getComponentInjectors(compEl: any, dependencies: any) {
@@ -199,31 +188,8 @@ export class Angular2Adapter extends BaseAdapter {
    return injectors;
   }
 
-  _getComponentChildren(compEl: any): any[] {
-    return <any[]>compEl.componentViewChildren;
-  }
-
-  _getComponentNestedChildren(compEl: any): any[] {
-    return <any[]>compEl.children;
-  }
-
   _getNativeElement(compEl: any): Element {
     return compEl.nativeElement;
-  }
-
-  _selectorMatches(el: Element, selector: string): boolean {
-    function genericMatch(s: string): boolean {
-      return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
-    }
-
-    const p = <any>Element.prototype;
-    const f = p.matches ||
-              p.webkitMatchesSelector ||
-              p.mozMatchesSelector ||
-              p.msMatchesSelector ||
-              genericMatch;
-
-    return f.call(el, selector);
   }
 
   _getComponentCD(compEl: any) {

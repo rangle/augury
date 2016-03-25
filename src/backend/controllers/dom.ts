@@ -36,10 +36,6 @@ export class DomController extends BaseController {
     return new Angular2Adapter;
   }
 
-  static detectChannel(): any {
-    return null;
-  }
-
   constructor(adapter: any, channel: Sendable) {
     super();
     this.model = [];

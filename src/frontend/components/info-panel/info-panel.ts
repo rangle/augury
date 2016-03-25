@@ -18,7 +18,7 @@ import InjectorTree from '../injector-tree/injector-tree';
 })
 export class InfoPanel {
 
-  @Input() tree;
+  @Input() tree: any;
 
   private node: any;
   private selectedTabIndex: number = 0;

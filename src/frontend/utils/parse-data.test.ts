@@ -10,7 +10,7 @@ test('utils/parse-data: parse number', t => {
   t.deepEqual(type, 'number', 'should be of type number');
   t.deepEqual(parsedValue + '', value, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: parse boolean true', t => {
   t.plan(2);
@@ -21,7 +21,7 @@ test('utils/parse-data: parse boolean true', t => {
   t.deepEqual(type, 'boolean', 'should be of type boolean');
   t.deepEqual(parsedValue, true, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: parse boolean false', t => {
   t.plan(2);
@@ -32,7 +32,7 @@ test('utils/parse-data: parse boolean false', t => {
   t.deepEqual(type, 'boolean', 'should be of type boolean');
   t.deepEqual(parsedValue, false, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: convertToNumber with correct values', t => {
   t.plan(2);
@@ -43,7 +43,7 @@ test('utils/parse-data: convertToNumber with correct values', t => {
   t.deepEqual(type, 'number', 'should be of type number');
   t.deepEqual(parsedValue + '', value, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: convertToNumber with wrong values', t => {
   t.plan(2);
@@ -55,7 +55,7 @@ test('utils/parse-data: convertToNumber with wrong values', t => {
   t.deepEqual(type, 'number', 'should be of type number');
   t.deepEqual(parsedValue, oldValue, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: convertToBoolean with correct values', t => {
   t.plan(2);
@@ -66,7 +66,7 @@ test('utils/parse-data: convertToBoolean with correct values', t => {
   t.deepEqual(type, 'boolean', 'should be of type boolean');
   t.deepEqual(parsedValue, true, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: convertToBoolean with wrong values', t => {
   t.plan(2);
@@ -77,7 +77,7 @@ test('utils/parse-data: convertToBoolean with wrong values', t => {
   t.deepEqual(type, 'boolean', 'should be of type boolean');
   t.deepEqual(parsedValue, false, 'values should be same');
   t.end();
-})
+});
 
 test('utils/parse-data: getTypeByValue', t => {
   t.plan(2);
@@ -92,7 +92,7 @@ test('utils/parse-data: getTypeByValue', t => {
   t.deepEqual(type2, 'boolean', 'should be of type boolean');
 
   t.end();
-})
+});
 
 test('utils/parse-data: checkType', t => {
   t.plan(1);
@@ -105,7 +105,7 @@ test('utils/parse-data: checkType', t => {
   t.deepEqual(typeCheck, true, 'should be of type boolean');
 
   t.end();
-})
+});
 
 test('utils/parse-data: getType', t => {
   t.plan(1);
@@ -117,4 +117,4 @@ test('utils/parse-data: getType', t => {
   t.deepEqual(typeCheck, 'string', 'should be of type boolean');
 
   t.end();
-})
+});

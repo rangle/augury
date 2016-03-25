@@ -10,8 +10,7 @@ export class BackendActions {
 
   constructor(
     private dispatcher: Dispatcher
-  ) {
-  }
+  ) { }
 
   /**
    * Component Data Changed
@@ -25,12 +24,19 @@ export class BackendActions {
     });
   }
 
+  /**
+   * Fired to the backend to clear the rollover selection for the Component. 
+   */
   clearSelections() {
     this.dispatcher.messageBus.next({
       actionType: BackendActionType.CLEAR_SELECTIONS
     });
   }
 
+  /**
+   * Fired from the backend signals to render the router tree.
+   * @param  {Array} tree
+   */
   renderRouterTree(tree) {
     this.dispatcher.messageBus.next({
       actionType: BackendActionType.RENDER_ROUTER_TREE,
