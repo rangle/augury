@@ -78,10 +78,12 @@ class App {
         this._ngZone.run(() => undefined);
 
         if (data.openedNodes.length > 0 || data.selectedNode) {
-          this.userActions.updateNodeState({
-            openedNodes: data.openedNodes,
-            selectedNode: data.selectedNode
-          });
+          setTimeout(() => {
+            this.userActions.updateNodeState({
+              openedNodes: data.openedNodes,
+              selectedNode: data.selectedNode
+            });
+          }, 250);
         }
       }
     );

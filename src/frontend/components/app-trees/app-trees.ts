@@ -1,9 +1,11 @@
-import {Component, Output, EventEmitter} from 'angular2/core';
+import {Component, Output, EventEmitter, ChangeDetectionStrategy}
+  from 'angular2/core';
 
 import TabMenu from '../tab-menu/tab-menu';
 import {TreeView} from '../tree-view/tree-view';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'bt-app-trees',
   directives: [TabMenu, TreeView],
   inputs: ['tree', 'routerTree', 'selectedTabIndex',
