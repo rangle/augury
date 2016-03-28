@@ -12,6 +12,7 @@ import {ComponentTree} from '../component-tree/component-tree';
   selector: 'bt-tree-view',
   inputs: ['tree'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
+  host: {'class': 'flex'},
   directives: [NgFor, NodeItem, ComponentTree]
 })
 /**
