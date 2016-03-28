@@ -1,6 +1,7 @@
-import {Component, EventEmitter} from 'angular2/core';
+import {Component, EventEmitter, ChangeDetectionStrategy} from 'angular2/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'bt-dependent-components',
   templateUrl:
     '/src/frontend/components/dependent-components/dependent-components.html',
