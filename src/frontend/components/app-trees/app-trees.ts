@@ -3,11 +3,11 @@ import {Component, Output, EventEmitter, ChangeDetectionStrategy}
 
 import TabMenu from '../tab-menu/tab-menu';
 import {TreeView} from '../tree-view/tree-view';
+import {RouterTree} from '../router-tree/router-tree';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'bt-app-trees',
-  directives: [TabMenu, TreeView],
+  directives: [TabMenu, TreeView, RouterTree],
   inputs: ['tree', 'routerTree', 'selectedTabIndex',
     'selectedNode', 'changedNodes'],
   templateUrl:
@@ -21,9 +21,9 @@ export default class AppTrees {
     title: 'Component Tree',
     selected: false
   }, {
-      title: 'Router Tree',
-      selected: false
-    }];
+    title: 'Router Tree',
+    selected: false
+  }];
 
   tabClicked(index: number): void {
     this.tabChange.emit(index);

@@ -10,8 +10,7 @@
   [tree]="tree">
 </bt-tree-view>
 
-<div
-  [hidden]="selectedTabIndex != 1">
-  {{routerTree | json }}
-</div>
-
+<bt-router-tree
+  [hidden]="selectedTabIndex != 1"
+  [routerTree]="routerTree">
+</bt-router-tree>

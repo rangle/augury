@@ -28,11 +28,11 @@ export class InfoPanel {
       title: 'Properties',
       selected: false
     }, {
-        title: 'Dependent Components',
-        selected: false
-      }, {
-        title: 'Injector Graph',
-        selected: false
+      title: 'Dependent Components',
+      selected: false
+    }, {
+      title: 'Injector Graph',
+      selected: false
     }];
 
   constructor(
