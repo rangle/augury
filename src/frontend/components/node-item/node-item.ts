@@ -81,6 +81,26 @@ export class NodeItem {
     this._ngZone.run(() => undefined);
   }
 
+  getNodeDetails(node) {
+
+    let html = '';
+    html += '<p class="node-item-name">' + node.name + '</p>';
+    if (node.description && node.description.length) {
+      html += '<span class="node-item-description">( ';
+      for (let i = 0; i < node.description.length; i++) {
+        const desc = node.description[i];
+        html += '<p class="node-item-property">' + desc.key + '=</p>';
+        html += '<p class="node-item-value">"' + desc.value + '"</p>';
+        if (i < node.description.length - 1) {
+          html += '<span>, </span>';
+        }
+      }
+      html += ')</span>';
+    }
+
+    return html;
+  }
+
   /**
    * Select the element in inspect window on double click
    * @param  {Object} $event

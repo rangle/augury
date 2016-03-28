@@ -30,7 +30,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
     <div class="clearfix">
-      <div class="col col-6 overflow-hidden vh-100">
+      <div class="col col-6 overflow-hidden vh-100"
+      [ngClass]="{'col-12 overflow-scroll': selectedTabIndex > 0}">
         <bt-app-trees
           [selectedTabIndex]="selectedTabIndex"
           [selectedNode]="selectedNode"
@@ -40,7 +41,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           (tabChange)="tabChange($event)">
         </bt-app-trees>
       </div>
-      <div class="col col-6 overflow-hidden vh-100">
+      <div class="col col-6 overflow-hidden vh-100"
+      [hidden]="selectedTabIndex > 0">
         <bt-info-panel [tree]="tree"></bt-info-panel>
       </div>
     </div>`
@@ -84,10 +86,12 @@ class App {
         this._ngZone.run(() => undefined);
 
         if (data.openedNodes.length > 0 || data.selectedNode) {
-          this.userActions.updateNodeState({
-            openedNodes: data.openedNodes,
-            selectedNode: data.selectedNode
-          });
+          setTimeout(() => {
+            this.userActions.updateNodeState({
+              openedNodes: data.openedNodes,
+              selectedNode: data.selectedNode
+            });
+          }, 250);
         }
       }
     );
