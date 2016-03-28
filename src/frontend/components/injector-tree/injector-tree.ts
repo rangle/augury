@@ -1,5 +1,5 @@
 import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
-  ElementRef, Input, EventEmitter, ChangeDetectionStrategy}
+  ElementRef, Input, EventEmitter}
   from 'angular2/core';
 
 import * as d3 from 'd3';
@@ -11,7 +11,6 @@ import {ParseUtils} from '../../utils/parse-utils';
 
 @Component({
   selector: 'bt-injector-tree',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   outputs: ['selectNode'],
   providers: [GraphUtils, ParseUtils],
