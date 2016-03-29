@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, ChangeDetectionStrategy}
+import {Component, Output, EventEmitter}
   from 'angular2/core';
 
 import TabMenu from '../tab-menu/tab-menu';
