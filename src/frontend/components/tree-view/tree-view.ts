@@ -12,7 +12,6 @@ import {ComponentTree} from '../component-tree/component-tree';
   selector: 'bt-tree-view',
   inputs: ['tree', 'changedNodes'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
-  host: {'class': 'flex'},
   directives: [NgFor, NodeItem, ComponentTree]
 })
 /**
