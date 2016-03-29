@@ -43,6 +43,7 @@ export class InfoPanel {
   ) {
 
     this.componentDataStore.dataStream
+      .debounce(() => Rx.Observable.timer(250))
       .filter((data: any) => {
         return (data.action &&
           data.action !== UserActionType.GET_DEPENDENCIES &&
