@@ -6,6 +6,7 @@
 
 <bt-tree-view
   [hidden]="selectedTabIndex != 0"
+  [ngClass]="{flex: selectedTabIndex == 0}"
   [changedNodes]="changedNodes"
   [tree]="tree">
 </bt-tree-view>
