@@ -3,7 +3,7 @@ import {NgPlural, NgPluralCase, NgLocalization} from 'angular2/common';
 
 class MyLocalization extends NgLocalization {
    getPluralCategory(value: any) {
-      if(value < 5) {
+      if (value < 5) {
          return 'few';
       }
    }
