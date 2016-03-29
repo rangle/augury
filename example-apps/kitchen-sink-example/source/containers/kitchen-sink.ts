@@ -14,6 +14,8 @@ import ControlForm from '../components/form-controls/control-form';
 import TodoApp from '../components/todo-app/todo-app';
 import DITree from '../components/di-tree/di-tree';
 import ChangeDetection from '../components/change-detection/change-detection';
+import AngularDirectives from
+  '../components/angular-directives/angular-directives';
 
 @RouteConfig([
   { path: '/', component: Home, as: 'Home' },
@@ -26,6 +28,8 @@ import ChangeDetection from '../components/change-detection/change-detection';
     as: 'DynamicControls' },
   { path: '/todo-app', component: TodoApp, as: 'TodoApp'},
   { path: '/di-tree', component: DITree, as: 'DITree' },
+  { path: '/angular-directives', component: AngularDirectives,
+    as: 'AngularDirectives' },
   { path: '/change-detection', component: ChangeDetection,
     as: 'ChangeDetection' },
 ])
@@ -62,6 +66,9 @@ import ChangeDetection from '../components/change-detection/change-detection';
       </li>
       <li [ngClass]="{active: path=='di-tree'}">
         <a [routerLink]="['./DITree']">DITree</a>
+      </li>
+      <li [ngClass]="{active: path=='angular-directives'}">
+        <a [routerLink]="['./AngularDirectives']">AngularDirectives</a>
       </li>
       <li [ngClass]="{active: path=='change-detection'}">
         <a [routerLink]="['./ChangeDetection']">ChangeDetection</a>
