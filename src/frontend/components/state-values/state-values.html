@@ -1,4 +1,4 @@
-<div>
+<div [ngClass]="{'changed': isUpdated}">
     <p class="node-item-property">{{getPropertyKey(propertyTree)}}=</p>
     <p class="node-item-value"
       *ngIf="!editable"

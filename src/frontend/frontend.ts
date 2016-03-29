@@ -20,10 +20,13 @@ import AppTrees from './components/app-trees/app-trees';
 
 import * as Rx from 'rxjs';
 
+import {ParseUtils} from './utils/parse-utils';
+
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
+  providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
     <div class="clearfix">
@@ -60,7 +63,8 @@ class App {
     private backendAction: BackendActions,
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private parseUtils: ParseUtils
   ) {
 
     this.userActions.startComponentTreeInspection();
@@ -75,6 +79,8 @@ class App {
         } else {
           this.previousTree = this.tree;
           this.tree = data.componentData;
+          this.changedNodes =
+            parseUtils.getChangedNodes(this.previousTree, this.tree);
         }
 
         this._ngZone.run(() => undefined);

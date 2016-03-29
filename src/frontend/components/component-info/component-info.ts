@@ -1,13 +1,12 @@
 declare var JSONFormatter: any;
 import {Component, ElementRef, Inject, EventEmitter,
-  OnChanges, ChangeDetectionStrategy}
+  OnChanges}
   from 'angular2/core';
 
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'bt-component-info',
   templateUrl: '/src/frontend/components/component-info/component-info.html',
   inputs: ['node'],

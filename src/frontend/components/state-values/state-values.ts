@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input} from 'angular2/core';
+import {Component, EventEmitter, Input, OnChanges, NgZone}
+  from 'angular2/core';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import ParseData from '../../utils/parse-data';
 
@@ -7,17 +8,32 @@ import ParseData from '../../utils/parse-data';
   templateUrl:
   '/src/frontend/components/state-values/state-values.html'
 })
-export default class StateValues {
+export default class StateValues implements OnChanges {
 
   @Input() id: any;
   @Input() value: any;
   @Input() propertyTree: string;
 
   private editable: boolean = false;
+  private isUpdated: boolean = false;
 
   constructor(
-    private userActions: UserActions
+    private userActions: UserActions,
+    private _ngZone: NgZone
   ) { }
+
+  ngOnChanges(changes: any) {
+    if (changes &&
+      changes.value &&
+      typeof changes.value.previousValue !== 'object' &&
+      changes.value.currentValue !== changes.value.previousValue) {
+      this.isUpdated = true;
+      setTimeout(() => {
+        this.isUpdated = false;
+        this._ngZone.run(() => undefined);
+      }, 1750);
+    }
+  }
 
   getPropertyKey(tree: any): string {
     tree = tree.split(',');
@@ -33,7 +49,6 @@ export default class StateValues {
   propertyChange($event, value) {
     if ($event.keyCode === 13) {
       this.editable = false;
-
       const type: string = ParseData.getTypeByValue(this.value);
 
       let newValue: any;
