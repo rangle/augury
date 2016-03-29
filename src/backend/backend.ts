@@ -1,5 +1,3 @@
-import {DomController} from './controllers/dom';
-import {Angular2Adapter} from './adapters/angular2';
 import Highlighter from './utils/highlighter';
 import ParseData from '../frontend/utils/parse-data';
 
@@ -14,10 +12,20 @@ let channel = {
   }
 };
 
-let adapter = new Angular2Adapter();
-let dom = new DomController(adapter, channel);
-dom.hookIntoBackend();
-adapter.setup();
+let adapter, dom;
+
+if (window.hasOwnProperty('ng')) {
+  const {Angular2Adapter} = require('./adapters/angular2');
+  const {DomController} = require('./controllers/dom');
+
+  adapter = new Angular2Adapter();
+  dom = new DomController(adapter, channel);
+}
+
+if(adapter && dom) {
+  dom.hookIntoBackend();
+  adapter.setup();
+}  
 
 
 window.addEventListener('message', function(event) {
