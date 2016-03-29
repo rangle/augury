@@ -1,4 +1,4 @@
-import {Component, Inject, NgZone} from 'angular2/core';
+import {Component, Inject, NgZone, Input} from 'angular2/core';
 import {NgIf, NgFor, NgStyle} from 'angular2/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
@@ -9,7 +9,6 @@ import {UserActionType}
 
 @Component({
   selector: 'bt-node-item',
-  properties: ['node: node', 'collapsed: collapsed'],
   templateUrl: 'src/frontend/components/node-item/node-item.html',
   directives: [NgIf, NgFor, NodeItem, NgStyle]
 })
@@ -20,10 +19,13 @@ import {UserActionType}
  */
 export class NodeItem {
 
-  public node: any;
+  @Input() node: any;
+  @Input() changedNodes: any;
+
   private collapsed: any;
   private color: any;
   private borderColor: any;
+  private isUpdated: boolean = false;
 
   constructor(
     private userActions: UserActions,
@@ -162,6 +164,15 @@ export class NodeItem {
     this.userActions.openCloseNode({ node: this.node });
     $event.preventDefault();
     $event.stopPropagation();
+  }
+
+  ngOnChanges() {
+    if (this.changedNodes && this.node) {
+      this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
+      setTimeout(() => {
+        this.isUpdated = false;
+      }, 2000);
+    }
   }
 
 }
