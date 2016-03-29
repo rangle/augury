@@ -17,7 +17,7 @@ const injectEntry = () => {
 chrome.runtime.sendMessage({
     from: 'content-script'
   }, (response) => {
-    if (response.connection) {
+    if (response && response.connection) {
       injectEntry();
     }
   });
