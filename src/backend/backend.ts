@@ -14,19 +14,20 @@ let channel = {
 
 let adapter, dom;
 
+/*
+ * We only hook batarangle to the DOM if "ng" is a variable
+ * on the window. This signifies that the app is likely to be Angular 2
+ */
 if (window.hasOwnProperty('ng')) {
   const {Angular2Adapter} = require('./adapters/angular2');
   const {DomController} = require('./controllers/dom');
 
   adapter = new Angular2Adapter();
   dom = new DomController(adapter, channel);
-}
 
-if(adapter && dom) {
   dom.hookIntoBackend();
   adapter.setup();
-}  
-
+}
 
 window.addEventListener('message', function(event) {
   // We only accept messages from ourselves
