@@ -40,10 +40,6 @@ window.addEventListener('message', function(event) {
   }
 
   if (event.data.type && (event.data.type === 'BATARANGLE_NG_VALID')) {
-    // chrome.tabs.getCurrent(function(tab) {
-    //   chrome.pageAction.show(tab.id)
-    // });
-    console.log(chrome)
     injectScript('build/backend.js');
   }
 
