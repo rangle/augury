@@ -17,8 +17,8 @@ contentType="application/x-compressed-tar"
 stringToSign="PUT\n\n${contentType}\n${dateValue}\n${resource}"
 
 # fetch aws credentials from env variables
-s3Key=AKIAJYULXJICIOUFRZ7Q
-s3Secret=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
+s3Key=$AWS_ACCESS_KEY_ID
+s3Secret=$AWS_SECRET_ACCESS_KEY
 
 # create hmac signature
 signature=`echo -en ${stringToSign} | openssl sha1 -hmac ${s3Secret} -binary | base64`
