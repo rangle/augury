@@ -5,7 +5,7 @@
 echo "Start"
 
 # filename generated using circleci
-file=batarangle.crx
+file="batarangle-$CIRCLE_BUILD_NUM.crx"
 
 # bucket name
 bucket=batarangle.io
@@ -15,9 +15,6 @@ dateValue=$(date -u +'%Y%m%dT%H%M%SZ')
 
 # create signed token
 stringToSign="PUT\n\n${contentType}\n${dateValue}\n${resource}"
-
-echo $CIRCLE_BUILD_NUM
-echo $AWS_ACCESS_KEY_ID
 
 # fetch aws credentials from env variables
 s3Key=$AWS_ACCESS_KEY_ID

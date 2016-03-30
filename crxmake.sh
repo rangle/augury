@@ -12,7 +12,7 @@ key="key.pem"
 name="batarangle"
 files="manifest.json build src images index.html frontend.html"
 
-crx="$name.crx"
+crx="$name-$CIRCLE_BUILD_NUM.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
