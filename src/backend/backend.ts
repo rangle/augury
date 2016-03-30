@@ -62,6 +62,12 @@ window.addEventListener('message', function(event) {
       const propertyTree: Array<string> =
         event.data.message.message.property.propertyTree.split(',');
       const property = propertyTree.pop();
+
+      // replace with existing property as we normalized data initally
+      if (dE.componentInstance.constructor.name === 'NgStyle') {
+        propertyTree[0] = '_rawStyle';
+      }
+
       const value = propertyTree.reduce((previousValue, currentValue) =>
         previousValue[currentValue], dE.componentInstance);
 
