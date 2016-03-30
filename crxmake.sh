@@ -55,6 +55,9 @@ sig_len_hex=$(byte_swap $(printf '%08x\n' $(ls -l "$sig" | awk '{print $5}')))
 
 echo "Wrote $crx"
 
+echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
+echo "Wrote file"
+
 # clean up
 rm -rf $dir
 echo "Fin."
