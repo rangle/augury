@@ -16,6 +16,9 @@ dateValue=$(date -u +'%Y%m%dT%H%M%SZ')
 # create signed token
 stringToSign="PUT\n\n${contentType}\n${dateValue}\n${resource}"
 
+echo $CIRCLE_BUILD_NUM
+echo $AWS_ACCESS_KEY_ID
+
 # fetch aws credentials from env variables
 s3Key=$AWS_ACCESS_KEY_ID
 s3Secret=$AWS_SECRET_ACCESS_KEY
