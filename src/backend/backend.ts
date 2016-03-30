@@ -68,6 +68,8 @@ window.addEventListener('message', function(event) {
         propertyTree[0] = '_rawStyle';
       } else if (dE.componentInstance.constructor.name === 'NgSwitch') {
         property = '_' + property;
+      } else if (dE.componentInstance.constructor.name === 'NgClass') {
+        propertyTree[0] = '_' + propertyTree[0];
       }
 
       const value = propertyTree.reduce((previousValue, currentValue) =>
