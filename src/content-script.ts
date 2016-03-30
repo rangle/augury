@@ -1,14 +1,15 @@
-let count = 0;
+// keeps track of what script got injected
+let scriptInjection = new Map<string, boolean>();
 
-const injectEntry = () => {
-  if (count === 0) {
+const injectScript = (path: string) => {
+  if (!scriptInjection.get(path)) {
 
     let script = document.createElement('script');
-    script.src = chrome.extension.getURL('build/backend.js');
+    script.src = chrome.extension.getURL(path);
     document.documentElement.appendChild(script);
     script.parentNode.removeChild(script);
 
-    count++;
+    scriptInjection.set(path, true);
   }
 };
 
@@ -18,13 +19,13 @@ chrome.runtime.sendMessage({
     from: 'content-script'
   }, (response) => {
     if (response && response.connection) {
-      injectEntry();
+      injectScript('build/backend.js');
     }
   });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.name === 'init') {
-    injectEntry();
+    injectScript('build/backend.js');
     return;
   }
 
