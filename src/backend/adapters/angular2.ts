@@ -320,9 +320,9 @@ export class Angular2Adapter extends BaseAdapter {
 
   _normalizeNgClass(state: any): Object {
     return {
-      evaluationMode: state._mode,
+      mode: state._mode,
       initialClasses: state._initialClasses,
-      evaluatedClasses: state._rawClass
+      rawClass: state._rawClass
     };
   }
 
