@@ -25,7 +25,7 @@ export class BackendActions {
   }
 
   /**
-   * Fired to the backend to clear the rollover selection for the Component. 
+   * Fired to the backend to clear the rollover selection for the Component.
    */
   clearSelections() {
     this.dispatcher.messageBus.next({
@@ -41,6 +41,15 @@ export class BackendActions {
     this.dispatcher.messageBus.next({
       actionType: BackendActionType.RENDER_ROUTER_TREE,
       tree: tree
+    });
+  }
+
+  /**
+   * Send message to clear component tree data
+   */
+  clearTree() {
+    this.dispatcher.messageBus.next({
+      actionType: BackendActionType.CLEAR_TREE
     });
   }
 }
