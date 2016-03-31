@@ -8,16 +8,22 @@
   ],
   "devtools_page": "index.html",
   "background": {
-    "scripts": ["build/channel.js"],
+    "scripts": [
+      "build/channel.js"
+    ],
     "persistent": false
   },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": [
-      "build/content-script.js"
-    ],
-    "run_at": "document_end"
-  }],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "build/content-script.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
   "web_accessible_resources": [
     "node_modules/*",
     "build/*"

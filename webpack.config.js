@@ -51,6 +51,7 @@ module.exports = {
       './src/frontend/frontend'
     ],
     'backend': ['./src/backend/backend'],
+    'ng-validate': ['./src/utils/ng-validate'],
     'devtools': ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
     'channel': ['./src/channel/channel']

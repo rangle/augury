@@ -1,30 +1,31 @@
-let count = 0;
+// keeps track of what script got injected
+let scriptInjection = new Map<string, boolean>();
 
-const injectEntry = () => {
-  if (count === 0) {
+const injectScript = (path: string) => {
+  if (!scriptInjection.get(path)) {
 
     let script = document.createElement('script');
-    script.src = chrome.extension.getURL('build/backend.js');
+    script.src = chrome.extension.getURL(path);
     document.documentElement.appendChild(script);
     script.parentNode.removeChild(script);
 
-    count++;
+    scriptInjection.set(path, true);
   }
 };
 
 // Check with background script to see if the current tab was
 // already registered. If so, then this is a reload.
 chrome.runtime.sendMessage({
-    from: 'content-script'
-  }, (response) => {
-    if (response && response.connection) {
-      injectEntry();
-    }
-  });
+  from: 'content-script'
+}, (response) => {
+  if (response && response.connection) {
+    injectScript('build/ng-validate.js');
+  }
+});
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.name === 'init') {
-    injectEntry();
+    injectScript('build/ng-validate.js');
     return;
   }
 
@@ -36,6 +37,10 @@ window.addEventListener('message', function(event) {
   // We only accept messages from ourselves
   if (event.source !== window) {
     return;
+  }
+
+  if (event.data.type && (event.data.type === 'BATARANGLE_NG_VALID')) {
+    injectScript('build/backend.js');
   }
 
   if (event.data.type && (event.data.type === 'BATARANGLE_INSPECTED_APP')) {
