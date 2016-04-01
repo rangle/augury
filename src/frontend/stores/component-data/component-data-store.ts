@@ -38,6 +38,10 @@ export class ComponentDataStore extends AbstractStore {
       action => this.clearSelections(action));
 
     this.dispatcher.onAction(
+      BackendActionType.CLEAR_TREE,
+      action => this.componentDataChanged([]));
+
+    this.dispatcher.onAction(
       UserActionType.SELECT_NODE,
       action => this.selectNodeAction(action));
 
@@ -93,7 +97,7 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
-   * Select a node to be highlighted after search 
+   * Select a node to be highlighted after search
    * @param  {Object} node Current selected Node
    * @param  {number} searchIndex Current search Index
    * @param  {number} totalSearchCount Total Search Count
@@ -111,7 +115,7 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
-   * Select a node to be highlighted after search 
+   * Select a node to be highlighted after search
    * @param  {Object} node Current selected Node
    * @param  {number} searchIndex Current search Index
    * @param  {number} totalSearchCount Total Search Count

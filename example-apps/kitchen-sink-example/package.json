@@ -7,7 +7,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "angular2": "^2.0.0-beta.12",
+    "angular2": "^2.0.0-beta.13",
     "core-js": "^2.2.1",
     "css-loader": "^0.21.0",
     "d3": "^3.5.16",
@@ -24,10 +24,10 @@
     "ts-loader": "^0.7.2",
     "tslint-loader": "^1.0.2",
     "typescript": "^1.8.9",
-    "typings": "^0.7.7",
+    "typings": "^0.7.11",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0",
-    "zone.js": "^0.6.6"
+    "zone.js": "^0.6.8"
   }
 }

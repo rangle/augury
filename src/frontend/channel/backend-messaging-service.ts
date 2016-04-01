@@ -22,8 +22,10 @@ export class BackendMessagingService {
     });
 
     this.backgroundPageConnection.onMessage.addListener((message: any) => {
+      // if this is a reload, clear selections then tree
       if (message.from && message.from === 'content-script') {
         this.backendActions.clearSelections();
+        this.backendActions.clearTree();
       }
 
       if (message.data.message.type === 'render_routes') {
