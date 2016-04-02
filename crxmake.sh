@@ -12,7 +12,7 @@ key="key.pem"
 name="batarangle"
 files="manifest.json build src images index.html frontend.html"
 
-crx="$name.crx"
+crx="$name-$CIRCLE_BUILD_NUM.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
@@ -54,6 +54,9 @@ sig_len_hex=$(byte_swap $(printf '%08x\n' $(ls -l "$sig" | awk '{print $5}')))
 ) > "$crx"
 
 echo "Wrote $crx"
+
+echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
+echo "Wrote file"
 
 # clean up
 rm -rf $dir
