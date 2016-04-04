@@ -30,7 +30,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
     <div class="clearfix">
-      <div class="col col-6 overflow-hidden vh-100 border-right border-color-dark"
+      <div class="col col-6 overflow-hidden vh-100 
+      border-right border-color-dark"
       [ngClass]="{'col-12 overflow-scroll': selectedTabIndex > 0}">
         <bt-app-trees
           [selectedTabIndex]="selectedTabIndex"
