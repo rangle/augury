@@ -4,3 +4,6 @@
 .changed {
   background-color: yellow;
 }
+.source-color {
+  color: red;
+}
