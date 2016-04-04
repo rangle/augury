@@ -1,8 +1,11 @@
 <div class="flex flex-column overflow-scroll col-12">
 
   <div class="pt3 pl4 pb3 mb1 bg-darken-1">
-      <h3 class="col regular m0">{{ node && node.name || 'No Component Selected' }}</h3>
-      &nbsp;
+      <h3 class="col regular m0">
+        {{ node && node.name || 'No Component Selected' }}
+        &nbsp;<a href="" class="source-color" *ngIf="node && node.name" 
+          (click)="viewComponentSource($event)">(View Source)</a>
+      </h3>
       <span class="right regular mr4" *ngIf="node">($a in Console)</span>
   </div>
 

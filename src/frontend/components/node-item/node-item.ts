@@ -112,7 +112,9 @@ export class NodeItem {
     chrome.devtools.inspectedWindow.eval(
       evalStr,
       function(result, isException) {
-        console.log(result, isException);
+        if (isException) {
+          console.log(isException);
+        }
       }
     );
 

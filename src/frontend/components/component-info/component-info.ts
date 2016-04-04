@@ -32,6 +32,25 @@ export default class ComponentInfo {
     }
   }
 
+  viewComponentSource($event) {
+    const highlightStr = '[batarangle-id=\"' + this.node.id + '\"]';
+
+    let evalStr = `inspect(ng.probe(document.querySelector('${highlightStr}'))
+    .componentInstance.constructor)`;
+
+    chrome.devtools.inspectedWindow.eval(
+      evalStr,
+      function(result, isException) {
+        if (isException) {
+          console.log(isException);
+        }
+      }
+    );
+
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
+
   displayTree(): void {
 
     const childrenContainer = this
