@@ -10,7 +10,7 @@ Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applic
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-beta.12](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta12-2016-03-23) with _limited backwards compatibility_, which will change once Angular 2 stabilizes.
+Currently works with applications built in [Angular 2.0.0-beta.13](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta13-2016-03-31) with _limited backwards compatibility_, which will change once Angular 2 stabilizes.
 
 ## Join Our Slack Team
 
