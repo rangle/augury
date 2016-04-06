@@ -10,7 +10,7 @@
   </div>
 
   <div [hidden]="!(node && node.name)">
-    <accordian [sectionTitle]='"Properties"'>
+    <accordion [sectionTitle]='"Properties"'>
       <section-content>
         <ul *ngIf="node && node.description">
             <li *ngFor="#property of node.description">
@@ -19,15 +19,15 @@
             </li>
         </ul>
       </section-content>
-    </accordian>
+    </accordion>
 
-    <accordian *ngIf="node && node.changeDetection" [sectionTitle]='"Change Detection"'>
+    <accordion *ngIf="node && node.changeDetection" [sectionTitle]='"Change Detection"'>
       <section-content>
         {{node.changeDetection}}
       </section-content>
-    </accordian>
+    </accordion>
 
-    <accordian [sectionTitle]='"Dependencies"'>
+    <accordion [sectionTitle]='"Dependencies"'>
       <section-content>
         <ul *ngIf="node && node.dependencies && node.dependencies.length > 0">
           <li *ngFor="#dependency of node.dependencies">
@@ -38,9 +38,9 @@
           </li>
         </ul>
       </section-content>
-    </accordian>
+    </accordion>
 
-    <accordian [sectionTitle]='"Input &amp; Output"'>
+    <accordion [sectionTitle]='"Input &amp; Output"'>
       <section-content>
         <ul *ngIf="node && node.input && node.input.length > 0">
             <li *ngFor="#input of node.input" [innerHTML]="formatInput(input)"></li>
@@ -51,9 +51,9 @@
             </li>
         </ul>
       </section-content>
-    </accordian>
+    </accordion>
 
-    <accordian [sectionTitle]='"State"'>
+    <accordion [sectionTitle]='"State"'>
       <section-content>
         <div style="padding-left: 15px;">
             <bt-render-state *ngIf="node && node.state"
@@ -62,13 +62,13 @@
                 [state]="node.state"></bt-render-state>
         </div>
       </section-content>
-    </accordian>
+    </accordion>
 
-    <accordian [sectionTitle]='"Children"'>
+    <accordion [sectionTitle]='"Children"'>
       <section-content>
         <div id="tree-children" class="px4 tree-container"></div>
       </section-content>
-    </accordian>
+    </accordion>
 
   </div>
 </div>
