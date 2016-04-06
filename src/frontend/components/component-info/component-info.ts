@@ -3,6 +3,7 @@ import {Component, ElementRef, Inject, EventEmitter,
   OnChanges}
   from 'angular2/core';
 
+import Accordian from '../accordian/accordian';
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
 
@@ -11,7 +12,7 @@ import RenderState from '../render-state/render-state';
   templateUrl: '/src/frontend/components/component-info/component-info.html',
   inputs: ['node'],
   outputs: ['selectDependency'],
-  directives: [RenderState]
+  directives: [RenderState, Accordian]
 })
 export default class ComponentInfo {
   private node: any;

@@ -1,58 +1,74 @@
 <div class="flex flex-column overflow-scroll col-12">
 
-  <div class="pt3 pl4 pb3 mb1 bg-darken-1">
-      <h3 class="col regular m0">
+  <div class="py3 px3 m0 bg-darken-1 border-bottom">
+      <h4 class="col m0 header">
         {{ node && node.name || 'No Component Selected' }}
-        &nbsp;<a href="" class="source-color" *ngIf="node && node.name" 
+        &nbsp;<a href="" class="source-color" *ngIf="node && node.name"
           (click)="viewComponentSource($event)">(View Source)</a>
-      </h3>
+      </h4>
       <span class="right regular mr4" *ngIf="node">($a in Console)</span>
   </div>
 
-  <h4 *ngIf="node && node.description" class="m3 bold">Properties</h4>
-  <ul *ngIf="node && node.description">
-      <li *ngFor="#property of node.description">
-          <p class="node-item-property">{{property.key}}: </p>
-          <p class="node-item-value">{{property.value}}</p>
-      </li>
-  </ul>
+  <div [hidden]="!(node && node.name)">
+    <accordian [sectionTitle]='"Properties"'>
+      <section-content>
+        <ul *ngIf="node && node.description">
+            <li *ngFor="#property of node.description">
+                <p class="node-item-property">{{property.key}}: </p>
+                <p class="node-item-value">{{property.value}}</p>
+            </li>
+        </ul>
+      </section-content>
+    </accordian>
 
-  <h4 *ngIf="node && node.changeDetection" class="m3 bold">Change Detection: {{node.changeDetection}}</h4>
+    <accordian *ngIf="node && node.changeDetection" [sectionTitle]='"Change Detection"'>
+      <section-content>
+        {{node.changeDetection}}
+      </section-content>
+    </accordian>
 
-  <h4 *ngIf="node && node.dependencies && node.dependencies.length > 0"
-      class="m3 bold">Dependencies</h4>
-  <ul *ngIf="node && node.dependencies && node.dependencies.length > 0">
-      <li *ngFor="#dependency of node.dependencies">
-          <a href="#" class="node-item-property"
-              (click)="findDependencies(dependency)">
-            {{dependency}}
-          </a>
-      </li>
-  </ul>
+    <accordian [sectionTitle]='"Dependencies"'>
+      <section-content>
+        <ul *ngIf="node && node.dependencies && node.dependencies.length > 0">
+          <li *ngFor="#dependency of node.dependencies">
+              <a href="#" class="node-item-property"
+                  (click)="findDependencies(dependency)">
+                {{dependency}}
+              </a>
+          </li>
+        </ul>
+      </section-content>
+    </accordian>
 
-  <h4 *ngIf="node && node.input && node.input.length > 0"
-      class="m3 bold">Input</h4>
-  <ul *ngIf="node && node.input && node.input.length > 0">
-      <li *ngFor="#input of node.input" [innerHTML]="formatInput(input)"></li>
-  </ul>
+    <accordian [sectionTitle]='"Input &amp; Output"'>
+      <section-content>
+        <ul *ngIf="node && node.input && node.input.length > 0">
+            <li *ngFor="#input of node.input" [innerHTML]="formatInput(input)"></li>
+        </ul>
+        <ul *ngIf="node && node.output && node.output.length > 0">
+            <li *ngFor="#output of node.output">
+                <p class="node-item-property">{{output}}</p>
+            </li>
+        </ul>
+      </section-content>
+    </accordian>
 
-  <h4 *ngIf="node && node.output && node.output.length > 0"
-      class="m3 bold">Output</h4>
-  <ul *ngIf="node && node.output && node.output.length > 0">
-      <li *ngFor="#output of node.output">
-          <p class="node-item-property">{{output}}</p>
-      </li>
-  </ul>
+    <accordian [sectionTitle]='"State"'>
+      <section-content>
+        <div style="padding-left: 15px;">
+            <bt-render-state *ngIf="node && node.state"
+                [propertyTree]="propertyTree"
+                [id]="node.id"
+                [state]="node.state"></bt-render-state>
+        </div>
+      </section-content>
+    </accordian>
 
-  <h4 *ngIf="node && node.state" class="m3 bold">State</h4>
-  <div style="padding-left: 15px;">
-      <bt-render-state *ngIf="node && node.state"
-          [propertyTree]="propertyTree"
-          [id]="node.id"
-          [state]="node.state"></bt-render-state>
+    <accordian [sectionTitle]='"Children"'>
+      <section-content>
+        <div id="tree-children" class="px4 tree-container"></div>
+      </section-content>
+    </accordian>
+
   </div>
-
-  <h4 *ngIf="node && node.children" class="m3 bold">Children</h4>
-  <div id="tree-children" class="px4 tree-container"></div>
-
 </div>
