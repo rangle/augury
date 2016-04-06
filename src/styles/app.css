@@ -7,10 +7,13 @@
 @import './info-panel.css';
 @import './router-tree.css';
 
-html {
+html,body {
   font-size: 11px;
-  font-family: Menlo, monospace;
-  letter-spacing: 0.7px;
+  font-family: 'Lucida Grande', sans-serif;
+}
+
+.monospace {
+  font-family: 'Menlo', monospace;
 }
 
 .vh-100 {
