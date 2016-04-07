@@ -18,6 +18,7 @@ export default class ComponentInfo {
   private node: any;
   private selectDependency: EventEmitter<string> = new EventEmitter<string>();
   private propertyTree: string = '';
+  private _input: Array<any>;
 
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef
@@ -29,6 +30,7 @@ export default class ComponentInfo {
 
   ngOnChanges(change: any) {
     if (this.node) {
+      this.normalizeInput();
       this.displayTree();
     }
   }
@@ -52,29 +54,31 @@ export default class ComponentInfo {
     $event.stopPropagation();
   }
 
-  displayTree(): void {
+  normalizeInput(): void {
+    this._input = [];
+    if (this.node.input) {
+      this.node.input.forEach(elem => {
+        let [key, value] = elem.split(':');
+        this._input.push({
+          key: key,
+          value: (value ? value.trim() : '')
+        });
+      });
+    }
+  }
 
+  displayTree(): void {
     const childrenContainer = this
       .elementRef.nativeElement
       .querySelector('#tree-children');
 
+    if (childrenContainer && this.node.children) {
       while (childrenContainer.firstChild) {
         childrenContainer.removeChild(childrenContainer.firstChild);
       }
-
-      if (this.node.children) {
-        const formatter2 = new JSONFormatter(this.node.children);
-        childrenContainer.appendChild(formatter2.render());
-      }
-  }
-
-  formatInput(input: any): string {
-    let [key, value] = input.split(':');
-    let str = value ?
-      `<p class="node-item-property">${key}:</p>
-        <p class="node-item-value"> ${value}</p>` :
-      `<p class="node-item-property">${key}</p>`;
-    return str;
+      const formatter2 = new JSONFormatter(this.node.children);
+      childrenContainer.appendChild(formatter2.render());
+    }
   }
 
 }

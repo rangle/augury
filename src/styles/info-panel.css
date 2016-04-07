@@ -10,3 +10,9 @@
 h4.header {
   line-height: 19px;
 }
+.info-value {
+  color: var(--bt-type-color);
+}
+.info-key {
+  color: var(--bt-key-color);
+}
