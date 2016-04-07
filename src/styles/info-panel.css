@@ -16,3 +16,16 @@ h4.header {
 .info-key {
   color: var(--bt-key-color);
 }
+bt-component-info a,
+bt-component-info a:link,
+bt-component-info a:visited,
+bt-component-info a:active {
+  color: var(--bt-link-color);
+  text-decoration: none;
+}
+bt-component-info a:hover {
+  text-decoration: underline;
+}
+bt-dependency ul li:last-child {
+  border-bottom: none;
+}

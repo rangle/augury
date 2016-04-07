@@ -31,8 +31,7 @@
       <section-content>
         <ul class="list-reset m0">
               <li *ngFor="#input of _input">
-                <span class="info-key inline-block">{{input.key}}</span>
-                <span *ngIf="input.value !== ''" class="info-key inline-block">: </span>
+                <span class="info-key inline-block">{{input.key}}:</span>
                 <span *ngIf="input.value !== ''" class="info-value inline-block">{{input.value}}</span>
               </li>
           </ul>
@@ -62,14 +61,8 @@
 
     <accordion [sectionTitle]='"Dependencies"' *ngIf="node && node.dependencies && node.dependencies.length > 0">
       <section-content>
-        <ul class="list-reset m0">
-          <li *ngFor="#dependency of node.dependencies">
-              <a href="#" class="node-item-property"
-                  (click)="findDependencies(dependency)">
-                {{dependency}}
-              </a>
-          </li>
-        </ul>
+        <bt-dependency [dependencies]="node.dependencies">
+        </bt-dependency>
       </section-content>
     </accordion>
 

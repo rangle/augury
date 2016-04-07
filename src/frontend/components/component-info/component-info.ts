@@ -6,27 +6,22 @@ import {Component, ElementRef, Inject, EventEmitter,
 import Accordion from '../accordion/accordion';
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
+import Dependency from '../dependency/dependency';
 
 @Component({
   selector: 'bt-component-info',
   templateUrl: '/src/frontend/components/component-info/component-info.html',
   inputs: ['node'],
-  outputs: ['selectDependency'],
-  directives: [RenderState, Accordion]
+  directives: [RenderState, Accordion, Dependency]
 })
 export default class ComponentInfo {
   private node: any;
-  private selectDependency: EventEmitter<string> = new EventEmitter<string>();
   private propertyTree: string = '';
   private _input: Array<any>;
 
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef
   ) { }
-
-  findDependencies(dependency: string) : void {
-    this.selectDependency.emit(dependency);
-  }
 
   ngOnChanges(change: any) {
     if (this.node) {
