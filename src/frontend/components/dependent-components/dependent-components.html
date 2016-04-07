@@ -1,6 +1,6 @@
 <div class="flex flex-column overflow-scroll col-12">
-  <div class="pt3 pl4 pb3 mb1 bg-darken-1">
-      <h3 class="regular m0">{{ dependency || 'No Dependency Selected' }}</h3>
+  <div class="p3 mb1 bg-darken-1">
+      <h4 class="header m0">{{ dependency || 'No Dependency Selected' }}</h4>
   </div>
   <ul *ngIf="components.length > 0">
       <li *ngFor="#component of components">

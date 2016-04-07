@@ -39,3 +39,25 @@ html,body {
 .pannel-tab-header {
   font-size: var(--pannel-tab-header);
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.expand-arrow {
+  -webkit-mask-image: url(../../images/toolbarButtonGlyphs_2x.png);
+  -webkit-mask-size: 352px 168px;
+  -webkit-mask-position: -18px -96px;
+  background-color: var(--primary-color);
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  pointer-events: none;
+  margin: auto 5px;
+}
+
+.no-highlight {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
