@@ -90,9 +90,12 @@ module.exports = {
         /test/,
         /node_modules\/(?!(ng2-.+))/
       ]
-    }, { 
-      test: /\.css$/, 
+    }, {
+      test: /\.css$/,
       loader: 'css!postcss'
+    }, {
+      test: /\.png$/,
+      loader: "url-loader?mimetype=image/png"
     }],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,

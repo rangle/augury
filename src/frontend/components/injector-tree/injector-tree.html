@@ -1,5 +1,5 @@
-<div class="pt3 pl4 pb3 mb1 bg-darken-1" [hidden]="selectedNode">
-    <h3 class="regular m0">No Component Selected</h3>
+<div class="py3 px3 bg-darken-1 border-bottom" [hidden]="selectedNode">
+    <h4 class="m0 header" [hidden]="selectedNode">No Component Selected</h4>
 </div>
 
 <div class="flex flex-column flex-stretch vh-100 ml2 mr2 mb2">
@@ -9,9 +9,9 @@
         <a href="#" class="node-item-property"
           (click)="selectComponent(node)"
           style="font-size: 12px;">{{node.name}}</a>
-        <span *ngIf="i < parentHierarchyDisplay.length - 1" 
+        <span *ngIf="i < parentHierarchyDisplay.length - 1"
           style="font-size: 14px;font-weight: bold;">&#187;</span>
-      </span> 
+      </span>
   </div>
   <hr>
   <div [hidden]="!selectedNode">
