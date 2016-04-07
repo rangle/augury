@@ -1,11 +1,26 @@
-<ul class="route-info" *ngIf="selectedNode">
-  <li>name: {{selectedNode.name}}</li>
-  <li>path: {{selectedNode.path}}</li>
-  <li>specificity: {{selectedNode.specificity}}</li>
-  <li>handler: {{selectedNode.handler}}</li>
-  <li *ngIf="selectedNode._data && selectedNode._data.length > 0">data:
-    <ul>
-      <li *ngFor="#el of selectedNode._data">{{el.key}}: {{el.value}}</li>
-    </ul>
-  </li>
-</ul>
+<div class="route-info" *ngIf="selectedNode">
+  <p class="title">{{selectedNode.name}}</p>
+  <ul *ngIf="selectedNode">
+    <li>
+      <span class="text-property">path: </span>
+      <span class="text-type">{{selectedNode.path}}</span>
+    </li>
+    <li>
+      <span class="text-property">specificity: </span>
+      <span class="text-type">{{selectedNode.specificity}}</span>
+    </li>
+    <li>
+      <span class="text-property">handler: </span>
+      <span class="text-type">{{selectedNode.handler}}</span>
+    </li>
+    <li *ngIf="selectedNode._data && selectedNode._data.length > 0">
+      <span class="text-property">data: </span>
+      <ul>
+        <li *ngFor="#el of selectedNode._data">
+          <span class="text-property">{{el.key}}: </span>
+          <span class="text-type">{{el.value}}</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
