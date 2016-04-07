@@ -1,32 +1,191 @@
-<!doctype html>
 <html>
   <head>
-    <title>Batarange Info</title>
     <style>
-      #status {
-        padding: 10px;
-        overflow: hidden;
-        width: 300px;
+      /*------- Modal Structure -------*/
+      html, body {
+        padding: 0px;
+        margin: 0px;
+        min-height: 150px;
+        width: 400px;
       }
 
-      .desc {
-        width: 300px;
-        word-wrap: break-word; 
+      .modal_header {
+        align-items: center;
+        border-bottom: 0.5px solid #dadada;
+        display: flex;
+        height: 55px;
+        width: 100%;
       }
+
+      .modal_content {
+        padding: 20px 22px;
+      }
+
+      .modal_cta {
+        border-top: 0.5px solid #dadada;
+        height: 50px;
+        width: 100%;
+      }
+
+      /*------- Header Section -------*/
+      .logo {
+        align-items: center;
+        display: flex;
+        padding-left: 22px;
+        width: 60%;
+      }
+
+      .logo_icon {
+        display: inline-block;
+        float: left;
+        margin-right: 10px;
+      }
+
+      .logo_text {
+        float: left;
+      }
+
+      .close_btn {
+        background: url(images/close.svg) no-repeat center center;
+        border: none;
+        cursor: pointer;
+        height: 25px;
+        margin-left: auto;
+        margin-right: 12px;
+        outline: none;
+        opacity: 0.65;
+        transition: opacity 0.2s ease-in-out;
+        width: 25px;
+      }
+
+      .close_btn:hover {
+        opacity: 0.4;
+      }
+
+      /*------- CTA Section -------*/
+      .flex_container {
+        display: flex;
+        justify-content:space-between;
+        padding: 12px 22px;
+      }
+
+      .flex {
+        width: 120px;
+        opacity: 1;
+        transition: opacity 0.2s ease-in-out;
+      }
+
+      .flex:hover {
+        opacity: 0.4;
+      }
+
+      .icon {
+        display: inline-block;
+        position: relative;
+      }
+
+      .icon:before {
+        content: "";
+        display: inline-block;
+        height: 25px;
+        margin-right: 8px;
+        width: 25px;
+        vertical-align: middle;
+      }
+
+      .icon span {
+        display: inline-block;
+        margin-top: 3px;
+      }
+
+      .github {
+        background-image: url(images/github.svg);
+        background-repeat: no-repeat;
+      }
+
+      .website {
+        background-image: url(images/batarangle_bw.svg);
+        background-repeat: no-repeat;
+      }
+
+      .contribute {
+        background-image: url(images/contribute.svg);
+        background-repeat: no-repeat;
+      }
+
+      /*------- Content -------*/
+
+      a:link {
+        color: #000000;
+      }
+
+      a:visited {
+        color: #000000;
+      }
+
+      img {
+        width: 30px;
+      }
+
+      h1 {
+        font-family: 'Menlo', monospace;
+        font-size: 16px;
+        font-weight: 100;
+        margin: 0;
+      }
+
+      p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+        line-height: 24px;
+        margin: 0;
+      }
+
+      span {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+      }
+
     </style>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <div id="status">
-        <img src="images/icon48.png" />
-        <div class="desc">
-          Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions on github to build the tool locally and install it from source. It's actually quite easy.
+    <!--<div class="modal_container">-->
+      <div class="modal_header">
+        <div class="logo">
+          <div class="logo_icon">
+            <img src="images/batarangle.svg">
+          </div>
+          <div class="logo_text">
+            <h1>
+              Batarangle.io
+            </h1>
+          </div>
         </div>
-        <div>
-          <a target="_blank" href="http://batarangle.io/">Batarangle.io</a>
-          <a target="_blank" href="https://github.com/rangle/batarangle">Github</a>
-          <a target="_blank" href="https://github.com/rangle/batarangle">Instructions</a>
+        <!--<button class="close_btn">
+        </button>-->
+      </div>
+
+      <div class="modal_content">
+        <p>
+          Batarangle is a Google Chrome Dev Tool extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions on github to build the tool locally and instsall it from the source. It's actually quite easy!
+        </p>
+      </div>
+
+      <div class="modal_cta">
+        <div class="flex_container">
+          <div class="flex github">
+            <a href="https://github.com/rangle/batarangle" class="icon github"><span>Github</span></a>
+          </div>
+          <div class="flex website">
+            <a href="http://rangle.github.io/batarangle-io/" class="icon"><span>Website</span></a>
+          </div>
+          <div class="flex contribute">
+            <a href="https://github.com/rangle/batarangle" class="icon"><span>Contribute</span></a>
+          </div>
         </div>
-     </div>
+      </div>
+    <!--</div>-->
+
   </body>
 </html>
-
