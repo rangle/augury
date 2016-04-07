@@ -2,7 +2,7 @@
   font-size: 11px;
 }
 .changed {
-  background-color: yellow;
+  background-color: var(--bt-change-highlight-color);
 }
 .source-color {
   color: red;
