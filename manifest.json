@@ -6,6 +6,10 @@
     "tabs",
     "<all_urls>"
   ],
+  "browser_action": {
+     "default_icon": "images/icon48.png",
+    "default_popup": "popup.html"
+   },
   "devtools_page": "index.html",
   "background": {
     "scripts": [
