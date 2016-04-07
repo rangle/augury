@@ -1,6 +1,6 @@
 <div [ngClass]="{'changed': isUpdated}">
-    <p class="node-item-property">{{getPropertyKey(propertyTree)}}=</p>
-    <p class="node-item-value"
+    <p class="text-property">{{getPropertyKey(propertyTree)}}=</p>
+    <p class="text-value"
       *ngIf="!editable"
       (dblclick)="onDblClick($event)" >{{value}}</p>
     <input *ngIf="editable" #property
