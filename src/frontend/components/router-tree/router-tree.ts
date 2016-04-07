@@ -96,6 +96,7 @@ export class RouterTree {
       });
 
     nodeUpdate.select('text')
+      .attr('class', 'monospace')
       .style('fill-opacity', 1);
 
     // Declare the links

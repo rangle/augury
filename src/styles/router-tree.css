@@ -1,29 +1,21 @@
 bt-router-tree .node {
   cursor: pointer;
 }
-bt-router-tree circle {
-  stroke: #CB5142;
-  fill: #F19B90;
-  stroke-width: 1.5px;
-}
-bt-router-tree circle.aux {
-  stroke: #4283CB;
-  fill: #7EA7D4;
-}
+
 bt-router-tree .node text {
-  font: 12px monospace;
+  font: 12px;
 }
 bt-router-tree .link {
   fill: none;
-  stroke: #ccc;
+  stroke: var(--grey-medium);
   stroke-width: 1px;
 }
 bt-router-tree bt-router-info {
-  font: 12px monospace;
+  font: 12px;
   position: absolute;
   right: 20px;
   top: 50px;
-  border: solid 1px #9B9B9B;
+  border: solid 1px var(--grey-medium);
   min-width: 150px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -35,7 +27,7 @@ bt-router-info .title {
   line-height: 25px;
   text-align: left;
   font-size: 15px;
-  border-bottom: solid 1px #9B9B9B;
+  border-bottom: solid 1px var(--grey-medium);
 }
 
 bt-router-info .route-info ul {
@@ -53,12 +45,12 @@ bt-router-info .route-info ul ul {
 }
 
 .node-route {
-  fill: #FFF0F0;
+  fill: var(--bt-change-highlight-color);
   stroke-width: 1px;
-  stroke: #FF0202;
+  stroke: var(--bt-value-color);
 }
 .node-aux-route {
-  fill: #EBF2FC;
+  fill: var(--bt-editable-highlight-color);
   stroke-width: 1px;
-  stroke: #2828AB;
+  stroke: var(--bt-link-color);
 }
