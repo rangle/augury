@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 @Component({
   selector: 'bt-router-tree',
   templateUrl: '/src/frontend/components/router-tree/router-tree.html',
-  host: {'class': 'col col-12'},
+  host: { 'class': 'col col-12' },
   directives: [RouterInfo]
 })
 
@@ -73,11 +73,8 @@ export class RouterTree {
       .on('mouseout', this.rollover.bind(this));
 
     nodeEnter.append('circle')
-      .attr('class', (d) => d.isAux ? 'aux' : '')
-      .attr('r', 5)
-      .style('fill', (d) =>
-        this.selectedNode && (d.id === this.selectedNode.id) ? '' : '#FFF'
-      );
+      .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')
+      .attr('r', 6);
 
     nodeEnter.append('text')
       .attr('x', (d) => d.children || d._children ? -13 : 13)
@@ -91,11 +88,15 @@ export class RouterTree {
       .attr('transform', (d) => `translate(${d.y},${d.x})`);
 
     nodeUpdate.select('circle')
-      .style('fill', (d) =>
-        this.selectedNode && (d.id === this.selectedNode.id) ? '' : '#FFF'
-      );
+      .style('fill', (d) => {
+        if (this.selectedNode && (d.id === this.selectedNode.id)) {
+          return d.isAux ? '#2828AB' : '#FF0202';
+        }
+        return d.isAux ? '#EBF2FC' : '#FFF0F0';
+      });
 
     nodeUpdate.select('text')
+      .attr('class', 'monospace')
       .style('fill-opacity', 1);
 
     // Declare the links
@@ -103,7 +104,10 @@ export class RouterTree {
       .data(links, (d) => d.target.id);
 
     // Enter any new links at the parent's previous position.
-    link.enter().insert('path', 'g')
+    link
+      .enter()
+      .insert('path', 'g')
+      .attr('style', 'stroke: #9B9B9B; stroke-width: 1px;')
       .attr('class', 'link');
 
     // Transition links to their new position.

@@ -1,38 +1,56 @@
 bt-router-tree .node {
   cursor: pointer;
 }
-bt-router-tree circle {
-  stroke: #CB5142;
-  fill: #F19B90;
-  stroke-width: 1.5px;
-}
-bt-router-tree circle.aux {
-  stroke: #4283CB;
-  fill: #7EA7D4;
-}
+
 bt-router-tree .node text {
-  font: 12px sans-serif;
+  font: 12px;
 }
 bt-router-tree .link {
   fill: none;
-  stroke: #ccc;
+  stroke: var(--grey-medium);
   stroke-width: 1px;
 }
 bt-router-tree bt-router-info {
+  font: 12px;
   position: absolute;
   right: 20px;
   top: 50px;
-  padding: 10px;
-  border: solid 2px #777;
-  background-color: #ccc;
+  border: solid 1px var(--grey-medium);
   min-width: 150px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
-bt-router-info ul.route-info {
-  list-style: none;
-  padding: 0;
+bt-router-info .title {
+  padding-left: 10px;
+  line-height: 25px;
+  text-align: left;
+  font-size: 15px;
+  border-bottom: solid 1px var(--grey-medium);
 }
-bt-router-info ul.route-info ul {
+
+bt-router-info .route-info ul {
+  list-style: none;
+  padding: 8px;
+}
+
+bt-router-info .route-info li {
+  line-height: 15px;
+}
+
+bt-router-info .route-info ul ul {
   padding-left: 15px;
   list-style: none;
+}
+
+.node-route {
+  fill: var(--bt-change-highlight-color);
+  stroke-width: 1px;
+  stroke: var(--bt-value-color);
+}
+.node-aux-route {
+  fill: var(--bt-editable-highlight-color);
+  stroke-width: 1px;
+  stroke: var(--bt-link-color);
 }
