@@ -1,26 +1,34 @@
-<div class="route-info monospace" *ngIf="selectedNode">
-  <p class="title">{{selectedNode.name}}</p>
-  <ul *ngIf="selectedNode">
-    <li>
-      <span class="text-property">path: </span>
-      <span class="text-type">{{selectedNode.path}}</span>
-    </li>
-    <li>
-      <span class="text-property">specificity: </span>
-      <span class="text-type">{{selectedNode.specificity}}</span>
-    </li>
-    <li>
-      <span class="text-property">handler: </span>
-      <span class="text-type">{{selectedNode.handler}}</span>
-    </li>
-    <li *ngIf="selectedNode._data && selectedNode._data.length > 0">
-      <span class="text-property">data: </span>
-      <ul>
-        <li *ngFor="#el of selectedNode._data">
-          <span class="text-property">{{el.key}}: </span>
-          <span class="text-type">{{el.value}}</span>
-        </li>
-      </ul>
-    </li>
-  </ul>
+<div class="modal_container monospace border" *ngIf="selectedNode">
+      <div class="modal_header py3 px4 border-bottom">
+          <div class="logo">
+            <div class="logo_text monospace left-align">
+                {{selectedNode.name}}
+            </div>
+          </div>
+      </div>
+      <div class="modal_content py3 px4">
+        <ul *ngIf="selectedNode" class="list-reset m0">
+          <li>
+            <span class="info-key">path: </span>
+            <span class="info-value">{{selectedNode.path}}</span>
+          </li>
+          <li>
+            <span class="info-key">specificity: </span>
+            <span class="info-value">{{selectedNode.specificity}}</span>
+          </li>
+          <li>
+            <span class="info-key">handler: </span>
+            <span class="info-value">{{selectedNode.handler}}</span>
+          </li>
+          <li *ngIf="selectedNode._data && selectedNode._data.length > 0">
+            <span class="info-key">data: </span>
+            <ul class="list-reset">
+              <li *ngFor="#el of selectedNode._data">
+                <span class="info-key">{{el.key}}: </span>
+                <span class="info-value">{{el.value}}</span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    </div>
 </div>
