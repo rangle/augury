@@ -22,24 +22,30 @@ bt-router-tree bt-router-info {
   border-radius: 5px;
 }
 
-bt-router-info .title {
-  padding-left: 10px;
-  line-height: 25px;
-  text-align: left;
+bt-router-info .logo {
+  align-items: center;
+  display: flex;
+  padding-left: 22px;
+  width: 60%;
+}
+
+bt-router-info .logo_text {
+  float: left;
   font-size: 15px;
-  border-bottom: solid 1px var(--grey-medium);
 }
 
-bt-router-info .route-info ul {
+bt-router-info .modal_content ul {
   list-style: none;
-  padding: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-bt-router-info .route-info li {
-  line-height: 15px;
+bt-router-info .modal_content ul li {
+  line-height: 20px;
+  font-size: 13px;
 }
 
-bt-router-info .route-info ul ul {
+bt-router-info .modal_content ul ul {
   padding-left: 15px;
   list-style: none;
 }
@@ -53,4 +59,31 @@ bt-router-info .route-info ul ul {
   fill: var(--bt-editable-highlight-color);
   stroke-width: 1px;
   stroke: var(--bt-link-color);
+}
+
+/*------- Modal Structure -------*/
+.modal_container {
+  border: 0.5px solid #dadada;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);
+  min-height: 150px;
+  min-width: 200px;
+}
+
+.modal_header {
+  align-items: center;
+  border-bottom: 0.5px solid #dadada;
+  display: flex;
+  height: 55px;
+  width: 100%;
+}
+
+.modal_content {
+  padding: 5px;
+}
+
+.modal_cta {
+  border-top: 0.5px solid #dadada;
+  height: 50px;
+  width: 100%;
 }
