@@ -71,9 +71,9 @@ export default class ComponentInfo {
   formatInput(input: any): string {
     let [key, value] = input.split(':');
     let str = value ?
-      `<p class="node-item-property">${key}:</p>
-        <p class="node-item-value"> ${value}</p>` :
-      `<p class="node-item-property">${key}</p>`;
+      `<p class="text-property">${key}:</p>
+        <p class="text-type"> ${value}</p>` :
+      `<p class="text-property">${key}</p>`;
     return str;
   }
 

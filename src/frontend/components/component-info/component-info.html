@@ -8,7 +8,6 @@
       </h4>
       <span class="right regular mr4" *ngIf="node">($a in Console)</span>
   </div>
-
   <div [hidden]="!(node && node.name)">
     <accordion [sectionTitle]='"Properties"'>
       <section-content>
@@ -39,7 +38,6 @@
         </ul>
       </section-content>
     </accordion>
-
     <accordion [sectionTitle]='"Input &amp; Output"'>
       <section-content>
         <ul *ngIf="node && node.input && node.input.length > 0">
