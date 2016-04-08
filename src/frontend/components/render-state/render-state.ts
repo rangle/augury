@@ -21,7 +21,19 @@ export default class RenderState {
   }
 
   type(d: any): string {
-    return typeof d;
+    return typeof (d);
+  }
+
+  displayType(d: any): string {
+    let type = ': Object';
+    if (typeof d === 'object' &&
+      d.constructor.toString().indexOf('Array') > -1) {
+        type = ': Array[' + d.length + ']';
+    } else if (typeof d !== 'object') {
+      type = '';
+    }
+
+    return type;
   }
 
   keys(obj: any): any {
