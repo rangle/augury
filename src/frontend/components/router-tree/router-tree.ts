@@ -90,7 +90,7 @@ export class RouterTree {
     nodeUpdate.select('circle')
       .style('fill', (d) => {
         if (this.selectedNode && (d.id === this.selectedNode.id)) {
-          return d.isAux ? '#2828AB' : '#FF0202';
+          return d.isAux ? '#2828AB' : '#F05057';
         }
         return d.isAux ? '#EBF2FC' : '#FFF0F0';
       });

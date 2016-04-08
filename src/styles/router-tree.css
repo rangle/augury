@@ -2,88 +2,26 @@ bt-router-tree .node {
   cursor: pointer;
 }
 
-bt-router-tree .node text {
-  font: 12px;
-}
-bt-router-tree .link {
-  fill: none;
-  stroke: var(--grey-medium);
-  stroke-width: 1px;
-}
-bt-router-tree bt-router-info {
-  font: 12px;
-  position: absolute;
-  right: 20px;
-  top: 50px;
-  border: solid 1px var(--grey-medium);
-  min-width: 150px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
-
-bt-router-info .logo {
-  align-items: center;
-  display: flex;
-  padding-left: 22px;
-  width: 60%;
-}
-
-bt-router-info .logo_text {
-  float: left;
-  font-size: 15px;
-}
-
-bt-router-info .modal_content ul {
-  list-style: none;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-bt-router-info .modal_content ul li {
-  line-height: 20px;
-  font-size: 13px;
-}
-
-bt-router-info .modal_content ul ul {
-  padding-left: 15px;
-  list-style: none;
-}
-
 .node-route {
-  fill: var(--bt-change-highlight-color);
   stroke-width: 1px;
-  stroke: var(--bt-value-color);
+  stroke: var(--red);
 }
 .node-aux-route {
-  fill: var(--bt-editable-highlight-color);
   stroke-width: 1px;
   stroke: var(--bt-link-color);
 }
 
-/*------- Modal Structure -------*/
-.modal_container {
-  border: 0.5px solid #dadada;
-  border-radius: 4px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);
-  min-height: 150px;
+/*router info modal*/
+
+bt-router-info {
+  position: absolute;
+  right: 20px;
+  top: 50px;
   min-width: 200px;
-}
-
-.modal_header {
-  align-items: center;
-  border-bottom: 0.5px solid #dadada;
-  display: flex;
-  height: 55px;
-  width: 100%;
-}
-
-.modal_content {
-  padding: 5px;
-}
-
-.modal_cta {
-  border-top: 0.5px solid #dadada;
-  height: 50px;
-  width: 100%;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);
+  background: white;
+  z-index: 100;
 }
