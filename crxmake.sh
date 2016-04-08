@@ -10,7 +10,7 @@ npm -v
 dir="temp"
 key="key.pem"
 name="batarangle"
-files="manifest.json build src images index.html frontend.html"
+files="manifest.json build src images index.html frontend.html popup.html"
 
 crx="$name-$CIRCLE_BUILD_NUM.crx"
 pub="$name.pub"
