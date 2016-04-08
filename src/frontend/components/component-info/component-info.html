@@ -48,7 +48,7 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"State"' *ngIf="node && node.state && node.state.length > 0">
+    <accordion [sectionTitle]='"State"' *ngIf="node && node.state">
       <section-content>
         <div>
             <bt-render-state
