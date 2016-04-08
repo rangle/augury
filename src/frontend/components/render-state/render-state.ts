@@ -26,7 +26,7 @@ export default class RenderState {
 
   displayType(d: any): string {
     let type = ': Object';
-    if (typeof d === 'object' &&
+    if (typeof d === 'object' && d && d.constructor &&
       d.constructor.toString().indexOf('Array') > -1) {
         type = ': Array[' + d.length + ']';
     } else if (typeof d !== 'object') {
