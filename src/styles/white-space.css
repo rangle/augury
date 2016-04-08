@@ -62,3 +62,7 @@
 .pl4 {
   padding-left: var(--space-4);
 }
+.myn2{
+  margin-top: -var(--space-2);
+  margin-bottom: -var(--space-2);
+}

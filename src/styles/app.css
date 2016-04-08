@@ -45,15 +45,23 @@ html,body {
 }
 
 .expand-arrow {
-  -webkit-mask-image: url(../../images/toolbarButtonGlyphs_2x.png);
-  -webkit-mask-size: 352px 168px;
   -webkit-mask-position: -18px -96px;
   background-color: var(--primary-color);
-  width: 12px;
-  height: 12px;
-  display: inline-block;
   pointer-events: none;
   margin: auto 5px;
+}
+
+.icon {
+  -webkit-mask-image: url(../../images/toolbarButtonGlyphs_2x.png);
+  -webkit-mask-size: 352px 168px;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+}
+
+.double-arrow {
+  -webkit-mask-position: -74px 16px;
+  background-color: var(--bt-link-color);
 }
 
 .no-highlight {
