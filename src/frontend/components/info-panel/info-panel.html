@@ -15,7 +15,8 @@
     (selectNode)="selectNode($event)"
     [hidden]="selectedTabIndex != 1"
     [tree]="tree"
-    [selectedNode]="node">
+    [selectedNode]="node"
+    [ngClass]="{'flex flex-auto': selectedTabIndex == 1}">
   </bt-injector-tree>
 
 </div>
