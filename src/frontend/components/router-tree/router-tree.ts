@@ -107,7 +107,7 @@ export class RouterTree {
     link
       .enter()
       .insert('path', 'g')
-      .attr('style', 'stroke: #9B9B9B; stroke-width: 1px;')
+      .attr('style', 'stroke: #9B9B9B; stroke-width: 1px; fill: none;')
       .attr('class', 'link');
 
     // Transition links to their new position.

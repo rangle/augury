@@ -1,8 +1,8 @@
-<div style="padding-left:10px;" *ngFor="#k of keys(state)">
+<div class="pl4" *ngFor="#k of keys(state)">
     <span *ngIf="type(state[k]) =='object'">
-      <img src="../images/Triangle.svg" style="width: 0.8em; height: 0.8em;"
+      <img src="../images/Triangle.svg" style="width: 0.8rem; height: 0.8rem;"
          [ngClass]="{rotate90: expanded[k]}"
-         (click)="expandTree(k, $event)"> 
+         (click)="expandTree(k, $event)">
          <span class="info-key">{{k}}</span><span class="info-value">{{displayType(state[k])}}</span>
     </span>
 
