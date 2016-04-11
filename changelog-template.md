@@ -1,14 +1,13 @@
 <a name="release number"></a>
 # Release Number (Release Date)
 
-
-## Sections
+### Sections
 * Bug Fixes
 * Features
 * Performance Improvements
 * BREAKING CHANGES
 
-## Description of Issues
+### Description of Issues
 > **Name:** Description about the issue ([issue number](issue link))
 
 * **Issue number**: Github Issue number eg. `8db97b0`
