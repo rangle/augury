@@ -16,6 +16,16 @@ h4.header {
 .info-key {
   color: var(--bt-key-color);
 }
+.info-editable {
+  color: var(--bt-editable-color);
+  border-bottom: dashed blue 1px !important;
+  cursor: pointer;
+}
+input.info-editable {
+  background-color: var(--bt-editable-highlight-color);
+  border: 0;
+  display: inline-block;
+}
 bt-component-info a,
 bt-component-info a:link,
 bt-component-info a:visited,
