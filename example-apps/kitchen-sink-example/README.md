@@ -1,6 +1,6 @@
-# Kitchen Sink - Batarangle Example Application
+# Kitchen Sink - Augury Example Application
 
-Use this application to get familiar with Batarangle
+Use this application to get familiar with Augury
 
 ## Building and Serving
 

@@ -106,7 +106,7 @@ export class NodeItem {
    * @param  {Object} $event
    */
   onDblClick($event) {
-    let evalStr = 'inspect($$(\'body [batarangle-id=\"' +
+    let evalStr = 'inspect($$(\'body [augury-id=\"' +
       this.node.id + '\"]\')[0])';
 
     chrome.devtools.inspectedWindow.eval(

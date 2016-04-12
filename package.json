@@ -1,10 +1,10 @@
 {
-  "name": "batarangle",
+  "name": "augury",
   "version": "0.0.2",
   "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rangle/batarangle.git"
+    "url": "https://github.com/rangle/augury.git"
   },
   "keywords": [
     "angular",
@@ -17,9 +17,9 @@
     "npm": ">= 3.5.3"
   },
   "bugs": {
-    "url": "https://github.com/rangle/batarangle/issues"
+    "url": "https://github.com/rangle/augury/issues"
   },
-  "homepage": "https://github.com/rangle/batarangle",
+  "homepage": "https://github.com/rangle/augury",
   "scripts": {
     "build": "npm run webpack --colors --display-error-details --display-cached",
     "webpack": "webpack",

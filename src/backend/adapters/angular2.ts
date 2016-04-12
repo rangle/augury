@@ -121,7 +121,7 @@ export class Angular2Adapter extends BaseAdapter {
     const injectors = this._getComponentInjectors(debugEl, dependencies);
 
     description.unshift({
-      key: 'b-id',
+      key: 'a-id',
       value: id
     });
 
@@ -156,15 +156,15 @@ export class Angular2Adapter extends BaseAdapter {
     const nodeName = this._getComponentName(compEl);
 
     // When encounter a template comment, insert another comment with
-    // batarangle-id above it.
+    // augury-id above it.
     if (nativeElement.nodeType === Node.COMMENT_NODE) {
-      const commentNode = document.createComment(`{"batarangle-id": "${idx}"}`);
+      const commentNode = document.createComment(`{"augury-id": "${idx}"}`);
       if (nativeElement.previousSibling === null
         || !nativeElement.previousSibling.isEqualNode(commentNode)) {
         nativeElement.parentNode.insertBefore(commentNode, nativeElement);
       }
     } else {
-      (<HTMLElement>nativeElement).setAttribute('batarangle-id', idx);
+      (<HTMLElement>nativeElement).setAttribute('augury-id', idx);
     }
 
     if (isRoot) {
@@ -226,10 +226,10 @@ export class Angular2Adapter extends BaseAdapter {
     const nativeElement = this._getComponentRef(compEl);
     let id;
     if (nativeElement.nodeType !== Node.COMMENT_NODE) {
-      id = nativeElement.getAttribute('batarangle-id');
+      id = nativeElement.getAttribute('augury-id');
     } else {
       const comment = JSON.parse((<any>nativeElement.previousSibling).data);
-      id = comment['batarangle-id'];
+      id = comment['augury-id'];
     }
     return id;
   }
