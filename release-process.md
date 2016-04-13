@@ -2,7 +2,7 @@
 Document contains detailed description of Augury release process from merging to master, creating tags and publishing to chrome store. 
 
 ## Types of branches
-- **master**: Always contains the code for the latest release. Code from `dev` branch must be merged into master before release.
+- **master**: Always contains the code for the latest main release. Code from `dev` branch must be merged into master before release.
 - **dev**: Contains the code for the latest dev build. All development must occur in this branch and pushed to `master` before release. 
 
 ## All HEADs must pass Continuous Integration (CI)
@@ -11,9 +11,8 @@ Document contains detailed description of Augury release process from merging to
 
 ## Release Types
 
-* **Main** - a release (typically from master) with version tag
-  `vX.Y.Z` where Z is zero (e.g. `v2.1.0`)
-* **Hotfix** - a bugfix release (typically from a branch) with version tag `vX.Y.Z` where Z is non-zero (e.g `v2.1.1`)
+* **Main** - a release (typically from master) with version tag `vX.Y.Z` where Z is zero (e.g. `v2.1.0`)
+* **Hotfix** - a bugfix release (typically from a branch forked from main) with version tag `vX.Y.Z` where Z is non-zero (e.g `v2.1.1`) Once done hotfix should be merged to main and dev both.
 
 ## Release Steps
 
@@ -44,7 +43,7 @@ Next you must tag the changelog commit with `$TAG`
 
 #### Merge Dev
 
-Next merge the `dev` branch to `master` branch so `master` have to code for release
+Next merge the `dev` branch to `master` branch so `master` has the code for release
 
 #### Create Build
 
