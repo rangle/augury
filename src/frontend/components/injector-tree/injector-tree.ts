@@ -4,7 +4,8 @@ import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
 
 import * as d3 from 'd3';
 
-import {ARROW_TYPES, NODE_TYPES, NODE_COLORS, ANGULAR_COMPONENTS, GraphUtils}
+import {ARROW_TYPES, NODE_TYPES, NODE_COLORS, NODE_STROKE_COLORS,
+  ANGULAR_COMPONENTS, GraphUtils}
   from '../../utils/graph-utils';
 
 import {ParseUtils} from '../../utils/parse-utils';
@@ -18,10 +19,8 @@ import {ParseUtils} from '../../utils/parse-utils';
     '/src/frontend/components/injector-tree/injector-tree.html',
   styles: [`
     .link {
-      stroke: #000;
       stroke-width: 1.5px;
       z-index: -1;
-      stroke-opacity: 0.7;
     }
     .circle-injector-tree {
       stroke: none;
@@ -93,8 +92,11 @@ export default class InjectorTree implements OnChanges {
   }
 
   private addLegends() {
-    this.graphUtils.addCircle(this.svg, 8, 12, 8, NODE_COLORS[0]);
-    this.graphUtils.addCircle(this.svg, 8, 36, 8, NODE_COLORS[1]);
+    this.graphUtils.addCircle(this.svg, 8, 12, 8,
+      NODE_COLORS[0], NODE_STROKE_COLORS[0]);
+
+    this.graphUtils.addCircle(this.svg, 8, 36, 8,
+      NODE_COLORS[1], NODE_STROKE_COLORS[1]);
 
     this.graphUtils.addText(this.svg, 20, 16, 'Component');
     this.graphUtils.addText(this.svg, 20, 40, 'Service');
@@ -127,8 +129,8 @@ export default class InjectorTree implements OnChanges {
   }
 
   private addNodeAndText(posX: number, posY: number,
-    title: any, positions: any, color: string) {
-      this.graphUtils.addCircle(this.svg, posX, posY, 8, color);
+    title: any, positions: any, color: string, stroke: string) {
+      this.graphUtils.addCircle(this.svg, posX, posY, 8, color, stroke);
       this.graphUtils.addText(this.svg, posX - 6, posY - 15, title);
   }
 
@@ -148,7 +150,8 @@ export default class InjectorTree implements OnChanges {
     this.parentHierarchy.forEach((node) => {
       posX = START_X;
       posY = START_Y + NODE_INCREMENT_Y * i;
-      this.addNodeAndText(posX, posY, node.name, positions, NODE_COLORS[1]);
+      this.addNodeAndText(posX, posY, node.name, positions,
+        NODE_COLORS[1], NODE_STROKE_COLORS[1]);
       this.addPosition(positions, posX, posY, node);
 
       if (i > 0) {
@@ -157,7 +160,7 @@ export default class InjectorTree implements OnChanges {
           x2 = START_X;
           y2 = posY - 30;
           this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
-            'marker-end: url(#suit);');
+            'marker-end: url(#suit);stroke: ' + NODE_STROKE_COLORS[1]);
       }
 
       let j: number = 0;
@@ -166,7 +169,8 @@ export default class InjectorTree implements OnChanges {
 
           posX = START_X + NODE_INCREMENT_X + NODE_INCREMENT_X * j;
           posY = START_Y + NODE_INCREMENT_Y * i;
-          this.addNodeAndText(posX, posY, injector, positions, NODE_COLORS[2]);
+          this.addNodeAndText(posX, posY, injector, positions,
+            NODE_COLORS[2], NODE_STROKE_COLORS[2]);
           this.addPosition(positions, posX, posY, node, injector);
 
           x1 = posX - NODE_INCREMENT_X + 10;
@@ -174,7 +178,7 @@ export default class InjectorTree implements OnChanges {
           x2 = posX - 10;
           y2 = posY;
           this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
-            'stroke: #CC0000;marker-end: url(#suit);');
+            'stroke: ' + NODE_STROKE_COLORS[2]);
 
           j++;
         }
@@ -185,7 +189,7 @@ export default class InjectorTree implements OnChanges {
     posX = START_X;
     posY = START_Y + NODE_INCREMENT_Y * i;
     this.addNodeAndText(posX, posY, this.selectedNode.name,
-      positions, NODE_COLORS[0]);
+      positions, NODE_COLORS[0], NODE_STROKE_COLORS[0]);
     this.addPosition(positions, posX, posY, this.selectedNode);
 
     x1 = START_X;
@@ -193,7 +197,7 @@ export default class InjectorTree implements OnChanges {
     x2 = START_X;
     y2 = posY - 30;
     this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
-      'marker-end: url(#suit);');
+      'marker-end: url(#suit);stroke: ' + NODE_STROKE_COLORS[1]);
 
     let j: number = 0;
     this.selectedNode.injectors.forEach((injector) => {
@@ -201,15 +205,15 @@ export default class InjectorTree implements OnChanges {
 
         posX = START_X + NODE_INCREMENT_X + NODE_INCREMENT_X * j;
         posY = START_Y + NODE_INCREMENT_Y * i;
-        this.graphUtils.addCircle(this.svg, posX, posY, 8, NODE_COLORS[2]);
+        this.graphUtils.addCircle(this.svg, posX, posY, 8,
+          NODE_COLORS[2], NODE_STROKE_COLORS[2]);
         this.graphUtils.addText(this.svg, posX - 6, posY - 15, injector);
 
         x1 = posX - NODE_INCREMENT_X + 10;
         y1 = posY;
         x2 = posX - 10;
         y2 = posY;
-        this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
-          'stroke: #CC0000;marker-end: url(#suit);');
+        this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke: #FF0202;');
 
         j++;
       }
@@ -226,7 +230,8 @@ export default class InjectorTree implements OnChanges {
           x2 = service.x - 10;
           y2 = service.y;
           this.graphUtils.addLine(this.svg, x1, y1, x2, y2,
-           'stroke-dasharray:3px, 3px;marker-end: url(#suit);');
+            `stroke: #9B9B9B; stroke-dasharray:5px, 5px;
+           marker-end: url(#suit);`);
         }
       }
     });

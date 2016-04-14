@@ -1,21 +1,22 @@
-<div class="py3 px3 bg-darken-1 border-bottom" [hidden]="selectedNode">
-    <h4 class="m0 header" [hidden]="selectedNode">No Component Selected</h4>
-</div>
-
-<div class="flex flex-column flex-stretch vh-100 ml2 mr2 mb2">
-  <div *ngIf="parentHierarchyDisplay && parentHierarchyDisplay.length > 0" class="ml2 mr2">
-      <h3>Component Hierarchy</h3>
-      <span *ngFor="#node of parentHierarchyDisplay; #i = index">
-        <a href="#" class="node-item-property"
-          (click)="selectComponent(node)"
-          style="font-size: 12px;">{{node.name}}</a>
-        <span *ngIf="i < parentHierarchyDisplay.length - 1"
-          style="font-size: 14px;font-weight: bold;">&#187;</span>
-      </span>
+<div class="flex flex-column overflow-scroll col-12">
+  <div class="py3 px3 m0 bg-darken-1 border-bottom" [hidden]="selectedNode">
+      <h4 class="m0 header" [hidden]="selectedNode">No Component Selected</h4>
   </div>
-  <hr>
-  <div [hidden]="!selectedNode">
-    <h3>Injector Graph</h3>
-    <div id="graphContainer"></div>
+
+  <div class="flex flex-column monospace p3 pr0">
+    <div *ngIf="parentHierarchyDisplay && parentHierarchyDisplay.length > 0">
+        <h3 class="monospace">Component Hierarchy</h3>
+        <span *ngFor="#node of parentHierarchyDisplay; #i = index">
+          <a href="#" class="node-item-property"
+            (click)="selectComponent(node)">{{node.name}}</a>
+          <span *ngIf="i < parentHierarchyDisplay.length - 1"
+            style="font-size: 14px;font-weight: bold;">&#187;</span>
+        </span>
+    </div>
+    <hr>
+    <div [hidden]="!selectedNode">
+      <h3 class="monospace">Injector Graph</h3>
+      <div id="graphContainer"></div>
+    </div>
   </div>
 </div>

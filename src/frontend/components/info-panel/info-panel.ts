@@ -8,13 +8,12 @@ import {UserActionType} from '../../actions/action-constants';
 
 import TabMenu from '../tab-menu/tab-menu';
 import ComponentInfo from '../component-info/component-info';
-import DependentComponents from '../dependent-components/dependent-components';
 import InjectorTree from '../injector-tree/injector-tree';
 
 @Component({
   selector: 'bt-info-panel',
   templateUrl: '/src/frontend/components/info-panel/info-panel.html',
-  directives: [NgIf, TabMenu, ComponentInfo, DependentComponents, InjectorTree]
+  directives: [NgIf, TabMenu, ComponentInfo, InjectorTree]
 })
 export class InfoPanel {
 
@@ -22,13 +21,8 @@ export class InfoPanel {
 
   private node: any;
   private selectedTabIndex: number = 0;
-  private dependentComponents = [];
-  private selectedDependency: string;
   private tabs = [{
       title: 'Properties',
-      selected: false
-    }, {
-      title: 'Dependent Components',
       selected: false
     }, {
       title: 'Injector Graph',
@@ -55,23 +49,10 @@ export class InfoPanel {
         this._ngZone.run(() => undefined);
       });
 
-    this.componentDataStore.dataStream
-      .filter((data: any) => data.action &&
-        data.action === UserActionType.GET_DEPENDENCIES)
-      .subscribe(({ selectedDependency, dependentComponents }) => {
-        this.selectedTabIndex = 1;
-        this.selectedDependency = selectedDependency;
-        this.dependentComponents = dependentComponents;
-      });
-
   }
 
   tabChange(index: number): void {
     this.selectedTabIndex = index;
-  }
-
-  selectDependency(dependency: string): void {
-    this.userActions.getDependencies(dependency);
   }
 
   selectNode(node: any): void {

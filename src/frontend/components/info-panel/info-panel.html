@@ -6,26 +6,17 @@
   </bt-tab-menu>
 
   <bt-component-info
-    (selectDependency)="selectDependency($event)"
     [node]="node"
     [hidden]="selectedTabIndex != 0"
     [ngClass]="{flex: selectedTabIndex == 0}">
   </bt-component-info>
 
-  <bt-dependent-components
-    (selectNode)="selectNode($event)"
-    (selectDependency)="selectDependency($event)"
-    [dependency]="selectedDependency"
-    [components]="dependentComponents"
-    [hidden]="selectedTabIndex != 1"
-    [ngClass]="{flex: selectedTabIndex == 1}">
-  </bt-dependent-components>
-
   <bt-injector-tree
     (selectNode)="selectNode($event)"
-    [hidden]="selectedTabIndex != 2"
+    [hidden]="selectedTabIndex != 1"
     [tree]="tree"
-    [selectedNode]="node">
+    [selectedNode]="node"
+    [ngClass]="{'flex flex-auto': selectedTabIndex == 1}">
   </bt-injector-tree>
 
 </div>

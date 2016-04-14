@@ -1,38 +1,27 @@
 bt-router-tree .node {
   cursor: pointer;
 }
-bt-router-tree circle {
-  stroke: #CB5142;
-  fill: #F19B90;
-  stroke-width: 1.5px;
-}
-bt-router-tree circle.aux {
-  stroke: #4283CB;
-  fill: #7EA7D4;
-}
-bt-router-tree .node text {
-  font: 12px sans-serif;
-}
-bt-router-tree .link {
-  fill: none;
-  stroke: #ccc;
+
+.node-route {
   stroke-width: 1px;
+  stroke: var(--red);
 }
-bt-router-tree bt-router-info {
+.node-aux-route {
+  stroke-width: 1px;
+  stroke: var(--bt-link-color);
+}
+
+/*router info modal*/
+
+bt-router-info {
   position: absolute;
   right: 20px;
   top: 50px;
-  padding: 10px;
-  border: solid 2px #777;
-  background-color: #ccc;
-  min-width: 150px;
-}
-
-bt-router-info ul.route-info {
-  list-style: none;
-  padding: 0;
-}
-bt-router-info ul.route-info ul {
-  padding-left: 15px;
-  list-style: none;
+  min-width: 200px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);
+  background: white;
+  z-index: 100;
 }

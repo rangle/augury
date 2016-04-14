@@ -10,10 +10,16 @@ export enum NODE_TYPES {
   SERVICE
 };
 
+export const NODE_STROKE_COLORS = {
+  0: '#9B9B9B',  // NODE_TYPES.ROOT
+  1: '#2828AB', // NODE_TYPES.COMPONENT
+  2: '#FF0202'  // NODE_TYPES.SERVICE,
+};
+
 export const NODE_COLORS = {
-  0: '#000000',  // NODE_TYPES.ROOT
-  1: '#1f77b4', // NODE_TYPES.COMPONENT
-  2: '#ff7f0e'  // NODE_TYPES.SERVICE,
+  0: '#9B9B9B',  // NODE_TYPES.ROOT
+  1: '#EBF2FC', // NODE_TYPES.COMPONENT
+  2: '#FFF0F0'  // NODE_TYPES.SERVICE,
 };
 
 export const ANGULAR_COMPONENTS = [
@@ -38,14 +44,16 @@ export class GraphUtils {
       .text(text);
   }
 
-  addCircle(svg: any, x: number, y: number, r: number, fill: string) {
+  addCircle(svg: any, x: number, y: number, r: number,
+    fill: string, stroke: string) {
     svg
       .append('circle')
-      .attr('class', 'circle-injector-tree')
       .attr('cx', x)
       .attr('cy', y)
       .style('fill', fill)
-      .attr('r', r);
+      .attr('r', r)
+      .attr('stroke-width', 1)
+      .attr('stroke', stroke);
   }
 
   addLine(svg: any, x1: number, y1: number,
