@@ -41,8 +41,11 @@
     <accordion [sectionTitle]='"Output"' *ngIf="node && node.output && node.output.length > 0">
       <section-content>
         <ul class="list-reset m0">
-            <li *ngFor="#output of node.output">
-                <span class="info-key inline-block">{{output}}</span>
+            <li *ngFor="#output of node.output; ">
+                <span class="info-key inline-block">{{output}}
+                  <input type="text" #prop>
+                  <button (click)="fireEvent(output, prop.value)">Fire</button>
+                </span>
             </li>
         </ul>
       </section-content>

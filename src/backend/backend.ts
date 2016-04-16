@@ -97,6 +97,16 @@ window.addEventListener('message', function(event) {
       }
     } else if (event.data.message.message.actionType === 'RENDER_ROUTER_TREE') {
       adapter.showAppRoutes();
+    } else if (event.data.message.message.actionType === 'FIRE_EVENT') {
+      const highlightStr = '[augury-id=\"' +
+        event.data.message.message.data.id + '\"]';
+      const dE = ng.probe(document.querySelector(highlightStr));
+      dE.componentInstance[event.data.message.message.data.output]
+        .emit(event.data.message.message.data.data);
+
+      const appRef = dE.inject(ng.coreTokens.ApplicationRef);
+      appRef.tick();
+      adapter.renderTree();
     }
 
     return true;
