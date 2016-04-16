@@ -1,11 +1,11 @@
-# Angular 2.0 Batarangle
+# Augury
 
-[![Circle CI](https://circleci.com/gh/rangle/batarangle.svg?style=svg&circle-token=7df1edad916fdc18b7bfddc60ff694871570359c)](https://circleci.com/gh/rangle/batarangle) [![Slack Status](https://batarangle-slack.herokuapp.com/badge.svg)](https://batarangle-slack.herokuapp.com)
-[![Stories in Ready](https://badge.waffle.io/rangle/batarangle.svg?label=ready&title=Ready)](http://waffle.io/rangle/batarangle)
+[![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://batarangle-slack.herokuapp.com/badge.svg)](https://batarangle-slack.herokuapp.com)
+[![Stories in Ready](https://badge.waffle.io/rangle/augury.svg?label=ready&title=Ready)](https://waffle.io/rangle/augury)
 
-Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions below to build the tool locally and install it from source. It's actually quite easy.
+Augury is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions below to build the tool locally and install it from source. It's actually quite easy.
 
-![Screenshot of Batarangle](images/screenloop.gif)
+![Screenshot of Augury](images/screenloop.gif)
 
 
 ## Supported Version
@@ -43,7 +43,7 @@ To develop this extension, the following environment is used:
 
 ## Trying out the extension
 
-1. Clone this repository: `git clone git://github.com/rangle/batarangle`.
+1. Clone this repository: `git clone git://github.com/rangle/augury`.
 2. Run `npm install`.
 3. Run `npm run build` (errors related to typing files conflicts can be ignore for now).
 4. Navigate to chrome://extensions and enable Developer Mode.
@@ -69,13 +69,13 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 
 ## Developer Information
 
-- [Developer guide](https://github.com/rangle/batarangle/wiki)
+- [Developer guide](https://github.com/rangle/augury/wiki)
 - [Contributing guidelines](CONTRIBUTING.md)
 - [Architecture of this extension](./docs/ARCHITECTURE.md)
 
 ## Future Plans
 
-We are working hard towards [the official release](https://github.com/rangle/batarangle/releases). But at the mean time, you can take a look at our [milestones](https://github.com/rangle/batarangle/milestones) to see what new features are in place.
+We are working hard towards [the official release](https://github.com/rangle/augury/releases). But at the mean time, you can take a look at our [milestones](https://github.com/rangle/augury/milestones) to see what new features are in place.
 
 ## License
 [MIT](LICENSE)
