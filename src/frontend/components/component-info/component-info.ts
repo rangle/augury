@@ -31,7 +31,7 @@ export default class ComponentInfo {
   }
 
   viewComponentSource($event) {
-    const highlightStr = '[batarangle-id=\"' + this.node.id + '\"]';
+    const highlightStr = '[augury-id=\"' + this.node.id + '\"]';
 
     let evalStr = `inspect(ng.probe(document.querySelector('${highlightStr}'))
     .componentInstance.constructor)`;

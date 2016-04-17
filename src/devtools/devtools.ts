@@ -3,7 +3,7 @@
  * on Chrome Development Tools window.
 */
 chrome.devtools.panels.create(
-  'Angular2',
+  'Augury',
   '../images/angular.png',
   '../frontend.html'
 );
