@@ -49,7 +49,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
     </div>`
 })
 /**
- * Batarangle App
+ * Augury App
  */
 class App {
 

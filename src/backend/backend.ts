@@ -8,7 +8,7 @@ declare var ng: { probe: Function, coreTokens: any };
 let channel = {
   sendMessage: (message) => {
     return window.postMessage(JSON.parse(JSON.stringify({
-      type: 'BATARANGLE_INSPECTED_APP',
+      type: 'AUGURY_INSPECTED_APP',
       message
     })), '*');
   }
@@ -26,13 +26,13 @@ window.addEventListener('message', function(event) {
     return;
   }
 
-  if (event.data.type && (event.data.type === 'BATARANGLE_CONTENT_SCRIPT')) {
+  if (event.data.type && (event.data.type === 'AUGURY_CONTENT_SCRIPT')) {
 
     if (event.data.message.message.actionType ===
       'START_COMPONENT_TREE_INSPECTION') {
       adapter.renderTree();
     } else if (event.data.message.message.actionType === 'HIGHLIGHT_NODE') {
-      const highlightStr = '[batarangle-id=\"' +
+      const highlightStr = '[augury-id=\"' +
         event.data.message.message.node.id + '\"]';
       Highlighter.clear();
       Highlighter.highlight(document.querySelector(highlightStr),
@@ -40,7 +40,7 @@ window.addEventListener('message', function(event) {
     } else if (event.data.message.message.actionType === 'CLEAR_HIGHLIGHT') {
       Highlighter.clear();
     } else if (event.data.message.message.actionType === 'SELECT_NODE') {
-      const highlightStr = '[batarangle-id=\"' +
+      const highlightStr = '[augury-id=\"' +
         event.data.message.message.node.id + '\"]';
 
       const element: HTMLElement =
@@ -56,7 +56,7 @@ window.addEventListener('message', function(event) {
 
     } else if (event.data.message.message.actionType === 'UPDATE_PROPERTY') {
 
-      const highlightStr = '[batarangle-id=\"' +
+      const highlightStr = '[augury-id=\"' +
         event.data.message.message.property.id + '\"]';
       const dE = ng.probe(document.querySelector(highlightStr));
       const propertyTree: Array<string> =

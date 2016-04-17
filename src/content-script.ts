@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
 
-  window.postMessage({ type: 'BATARANGLE_CONTENT_SCRIPT', message }, '*');
+  window.postMessage({ type: 'AUGURY_CONTENT_SCRIPT', message }, '*');
   return true;
 });
 
@@ -39,11 +39,11 @@ window.addEventListener('message', function(event) {
     return;
   }
 
-  if (event.data.type && (event.data.type === 'BATARANGLE_NG_VALID')) {
+  if (event.data.type && (event.data.type === 'AUGURY_NG_VALID')) {
     injectScript('build/backend.js');
   }
 
-  if (event.data.type && (event.data.type === 'BATARANGLE_INSPECTED_APP')) {
+  if (event.data.type && (event.data.type === 'AUGURY_INSPECTED_APP')) {
     chrome.runtime.sendMessage({
       name: 'message',
       data: event.data
