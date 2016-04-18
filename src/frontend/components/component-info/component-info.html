@@ -43,8 +43,10 @@
         <ul class="list-reset m0">
             <li *ngFor="#output of node.output; ">
                 <span class="info-key inline-block">{{output}}
-                  <input type="text" #prop>
-                  <button (click)="fireEvent(output, prop.value)">Fire</button>
+                  <input type="text" #prop class="info-editable">
+                  <button
+                   class="btn btn-primary mb1 bg-olive"
+                   (click)="fireEvent(output, prop.value)">Fire</button>
                 </span>
             </li>
         </ul>

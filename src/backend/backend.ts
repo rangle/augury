@@ -104,9 +104,11 @@ window.addEventListener('message', function(event) {
       dE.componentInstance[event.data.message.message.data.output]
         .emit(event.data.message.message.data.data);
 
-      const appRef = dE.inject(ng.coreTokens.ApplicationRef);
-      appRef.tick();
-      adapter.renderTree();
+      setTimeout(() => {
+        const appRef = dE.inject(ng.coreTokens.ApplicationRef);
+        appRef.tick();
+        adapter.renderTree();
+      });
     }
 
     return true;
