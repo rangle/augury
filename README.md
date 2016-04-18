@@ -3,7 +3,7 @@
 [![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://batarangle-slack.herokuapp.com/badge.svg)](https://batarangle-slack.herokuapp.com)
 [![Stories in Ready](https://badge.waffle.io/rangle/augury.svg?label=ready&title=Ready)](https://waffle.io/rangle/augury)
 
-Augury is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions below to build the tool locally and install it from source. It's actually quite easy.
+Augury is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official Chrome Web Store release, please follow the [instructions below](#getting-the-extension) to install it. It's actually quite easy.
 
 ![Screenshot of Augury](images/screenloop.gif)
 
@@ -16,7 +16,7 @@ Currently works with applications built in [Angular 2.0.0-beta.15](https://githu
 
 If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
 
-## Getting Extension
+## Getting the Extension
 
 You can get the extension in two ways:
 
@@ -75,7 +75,7 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 
 ## Future Plans
 
-We are working hard towards [the official release](https://github.com/rangle/augury/releases). But at the mean time, you can take a look at our [milestones](https://github.com/rangle/augury/milestones) to see what new features are in place.
+We are working hard towards [the official release](https://github.com/rangle/augury/releases). But in the mean time, you can take a look at our [milestones](https://github.com/rangle/augury/milestones) to see what new features are in place.
 
 ## License
 [MIT](LICENSE)
