@@ -75,7 +75,7 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 
 ## Future Plans
 
-We are working hard towards [the official release](https://github.com/rangle/augury/releases). But in the mean time, you can take a look at our [milestones](https://github.com/rangle/augury/milestones) to see what new features are in place.
+We are working hard towards [the official release](https://github.com/rangle/augury/releases). But in the meantime, you can take a look at our [milestones](https://github.com/rangle/augury/milestones) to see what new features are in place.
 
 ## License
 [MIT](LICENSE)
