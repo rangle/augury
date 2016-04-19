@@ -7,14 +7,17 @@ import {TodoService, TodoModel, FormatService} from './todo-service';
   directives: [FORM_DIRECTIVES],
   template: `
   <div>
-    <h1>Without Model</h1>
-    <input type="text" #todo />
-    <button (click)="onClick(todo)">Add Todo</button>
-    <br/>
-    <br/>
-    <h2>With Model</h2>
-    <form (ngSubmit)="onSubmit()">
-      <input type="text" [(ngModel)]="todoModel.title" />
+    <h4>Without Model</h4>
+    <form (ngSubmit)="onClick(todo)" class="form-inline">
+      <input type="text" #todo required class="form-control" />
+      <button class="btn btn-success">Add Todo</button>
+    </form>
+    <hr/>
+    <h4>With Model</h4>
+    <form (ngSubmit)="onSubmit()"  class="form-inline">
+      <input type="text" [(ngModel)]="todoModel.title"
+       required class="form-control"  />
+      <button class="btn btn-success">Add Todo</button>
     </form>
   </div>
   `

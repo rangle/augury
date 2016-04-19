@@ -5,19 +5,22 @@ import {NgClass, NgIf} from 'angular2/common';
 @Component({
   selector: 'input-output',
   template: `
-    <div>
-        <h4>Parent Num: {{ num }}</h4>
-        <h4>Parent Count: {{ parentCount }}</h4>
-        <counter [count]="num" (result)="onChange($event)"></counter>
-    </div>
-    <br/>
+    <h4>Parent Num: {{ num }}</h4>
+    <h4>Parent Count: {{ parentCount }}</h4>
+    <counter [count]="num" 
+      (result)="onChange($event)"
+      (displayMessage)="displayMessage($event)">
+    </counter>
+ 
+    <h3 *ngIf="name && message">
+      <hr/>
+      {{name}}: {{message}}
+    </h3>
+ 
+    <hr/>
     <div class="button" [ngClass]="{active: isOn, disabled: isDisabled}"
       (click)="toggle(!isOn)">
-        Click me!
-    </div>
-    <br/>
-    <div *ngIf="turn">
-        <h4>it's true</h4>
+        <h4>Click me!</h4>
     </div>
   `,
    styles: [`
@@ -25,9 +28,15 @@ import {NgClass, NgIf} from 'angular2/common';
       padding: 5px;
       width: 120px;
       border: medium solid black;
+      color: white;
+      background-color: #e08600;
+    }
+    .button h4 {
+      color: #fff;
     }
     .active {
-      background-color: red;
+      background-color: #0d87e9;
+      color: white;
     }
     .disabled {
       color: gray;
@@ -41,7 +50,6 @@ export default class InputOutput {
   parentCount: number;
   isOn = false;
   isDisabled = false;
-  turn = true;
 
   constructor() {
     this.num = 0;

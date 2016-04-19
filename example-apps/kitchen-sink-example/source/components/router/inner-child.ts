@@ -19,12 +19,11 @@ import InnerChildMain from './inner-child-main';
   template: `
   <div>
     <h3>InnerChild Component</h3>
-    <h4>
-      <ul>
-        <li><a [routerLink]="['./InnerChildMain']">InnerChildMain</a></li>
-        <li><a [routerLink]="['./InnerChild2']">InnerChild2</a></li>
-      </ul>
-    </h4>
+    <ul class="nav nav-pills nav-inverse">
+      <li><a [routerLink]="['./InnerChildMain']">InnerChildMain</a></li>
+      <li><a [routerLink]="['./InnerChild2']">InnerChild2</a></li>
+    </ul>
+    <hr/>
     <router-outlet></router-outlet>
   </div>
   `

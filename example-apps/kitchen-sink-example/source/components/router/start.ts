@@ -4,7 +4,8 @@ import {
   RouteConfig,
   RouterLink,
   RouterOutlet,
-  AuxRoute
+  AuxRoute,
+  Router
 } from 'angular2/router';
 
 import StartChild from './start-child';
@@ -29,38 +30,46 @@ import RouterData2 from './router-data2';
   directives: [RouterLink, ROUTER_DIRECTIVES],
   template: `
   <div>
-      <h3>Start Component</h3>
-      <h4>
-        <ul>
-          <li>
-            <a [routerLink]="['./StartMain']">StartMain</a>
-          </li>
-          <li>
-            <a [routerLink]="['./StartChild']">StartChild</a>
-          </li>
-          <li>
-            <a [routerLink]="['./RouterData1',
-              {message: 'Message from router'}]">
-              RouterData1
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="['./RouterData2',
-              {message: 'Message from router', name:'Router Name'}]">
-              RouterData2
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="['./InnerChild', 'InnerChildMain']">InnerChild</a>
-          </li>
-          <li>
-            <a [routerLink]="['./', ['AuxComp']]">Open AuxComp</a>
-          </li>
-        </ul>
-      </h4>
-      <router-outlet></router-outlet>
-      <router-outlet name="auxcomp"></router-outlet>
+    <ul class="nav nav-pills">
+      <li>
+        <a [routerLink]="['./StartMain']">StartMain</a>
+      </li>
+      <li>
+        <a [routerLink]="['./StartChild']">StartChild</a>
+      </li>
+      <li>
+        <a [routerLink]="['./RouterData1',
+          {message: 'Message from router'}]">
+          RouterData1
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['./RouterData2',
+          {message: 'Message from router', name:'Router Name'}]">
+          RouterData2
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['./InnerChild', 'InnerChildMain']">InnerChild</a>
+      </li>
+      <li>
+        <a [routerLink]="['./', ['AuxComp']]">Open AuxComp</a>
+      </li>
+    </ul>
+    <hr/>
+    <router-outlet></router-outlet>
+    <router-outlet name="auxcomp"></router-outlet>
   </div>
   `
 })
-export default class Start { }
+export default class Start {
+
+  constructor(private router: Router) {
+    // injected Router on the component that defines the aux routes 
+    this.router.unregisterPrimaryOutlet = function(outlet) {
+        // does not throw
+        this._outlet = null;
+    };
+  }
+
+}

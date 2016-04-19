@@ -4,9 +4,9 @@ import {Component} from 'angular2/core';
   selector: 'hello',
   inputs: ['msg'],
   template: `
-  <p>
+  <h4>
     Message: {{msg}}
-  </p>
+  </h4>
   `
 })
 export default class Hello { }

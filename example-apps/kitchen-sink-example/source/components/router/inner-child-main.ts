@@ -3,11 +3,9 @@ import {Component} from 'angular2/core';
 @Component({
   selector: 'inner-child-main',
   template: `
-  <div>
-    <h4>
-      <span class="label label-default">Inner Child Main</span>
-    </h4>
-  </div>
+    <div class="alert alert-success">
+      <h4>Inner child main</h4>
+    </div>
   `
 })
 export default class InnerChildMain { }
