@@ -1,6 +1,6 @@
-# Batarangle Architecture
+# Augury Architecture
 
-The architecture of the Batarangle dev tools extensions can be broken down into 3 parts:
+The architecture of the Augury dev tools extensions can be broken down into 3 parts:
 
 1. **Front-end**: displays the component view of the inspected application and other debugging information.
 2. **Middleware**: communication between the inspected application and the dev tools.
@@ -38,8 +38,8 @@ Our event page (background script) acts as a bridge for that communication, it k
 
 Our inspected application load, our content script described above "injects" our backend (i.e. `/src/backend/`) into the context of an inspected application, by appending a `<script>` tag referencing the backend script to the DOM of the inspected application. This is possible due to the fact that our content script has access to the DOM of the inspected application.
 
-Once injected, the backend uses the [MutationObserver](https://developer.mozilla.org/en/docs/Web/API/MutationObserver) DOM API to listen on changes to elements with Angular 2.0 markers (more information below), process the changes, and send the information about the new state of the whole component tree to the front-end. As changes happen the backend uses the `inspectNativeElement` function (provided by the Angular 2.0 instance of the inspected application) to get the Angular 2.0 `DebugElement` object containing the information about the changed component.
+Once injected, the backend uses ngZone subscribe method to track for changes being done by Angular 2 within the application. Whenever change occurs backend traverses the node tree, process the changes, and send the information about the new state of the whole component tree to the front-end. As changes happen the backend uses the `inspectNativeElement` function (provided by the Angular 2.0 instance of the inspected application) to get the Angular 2.0 `DebugElement` object containing the information about the changed component.
 
 ## Summary
 
-![Batarangle Architecture Diagram](./architecture.png)
+![Augury Architecture Diagram](./anugury-architecture.png)
