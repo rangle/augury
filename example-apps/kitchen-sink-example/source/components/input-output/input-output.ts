@@ -18,6 +18,7 @@ import {NgClass, NgIf} from 'angular2/common';
     </h3>
  
     <hr/>
+
     <div class="button" [ngClass]="{active: isOn, disabled: isDisabled}"
       (click)="toggle(!isOn)">
         <h4>Click me!</h4>
@@ -46,6 +47,8 @@ import {NgClass, NgIf} from 'angular2/common';
   directives: [Counter, NgClass, NgIf]
 })
 export default class InputOutput {
+  message: string;
+  name: string;
   num: number;
   parentCount: number;
   isOn = false;
@@ -64,5 +67,10 @@ export default class InputOutput {
     if (!this.isDisabled) {
       this.isOn = newState;
     }
+  }
+
+  displayMessage(data: any) {
+    this.message = data.message;
+    this.name = data.name;
   }
 }
