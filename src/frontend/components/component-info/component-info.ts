@@ -26,7 +26,7 @@ export default class ComponentInfo {
   ngOnChanges(change: any) {
     if (this.node) {
       this.normalizeInput();
-      this.displayTree();
+      setTimeout(() => this.displayTree());
     }
   }
 

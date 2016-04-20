@@ -85,7 +85,7 @@ export default class InjectorTree implements OnChanges {
 
     this.svg = d3.select(graphContainer)
       .append('svg')
-      .attr('height', this.parentHierarchy.length * 120 + 30)
+      .attr('height', this.parentHierarchy.length * 120 + 50)
       .attr('width', 600);
 
     this.render();
