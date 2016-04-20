@@ -129,4 +129,11 @@ export class UserActions {
     });
   }
 
+  fireEvent(data: any) {
+    this.messagingService.sendMessageToBackend({
+      actionType: UserActionType.FIRE_EVENT,
+      data
+    });
+  }
+
 }

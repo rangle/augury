@@ -8,7 +8,11 @@ import {NgClass, NgIf} from 'angular2/common';
     <div>
         <h4>Parent Num: {{ num }}</h4>
         <h4>Parent Count: {{ parentCount }}</h4>
-        <counter [count]="num" (result)="onChange($event)"></counter>
+        <counter [count]="num" 
+          (result)="onChange($event)"
+          (displayMessage)="displayMessage($event)"
+        ></counter>
+        {{name}}: {{message}}
     </div>
     <br/>
     <div class="button" [ngClass]="{active: isOn, disabled: isDisabled}"
@@ -37,6 +41,8 @@ import {NgClass, NgIf} from 'angular2/common';
   directives: [Counter, NgClass, NgIf]
 })
 export default class InputOutput {
+  message: string;
+  name: string;
   num: number;
   parentCount: number;
   isOn = false;
@@ -56,5 +62,10 @@ export default class InputOutput {
     if (!this.isDisabled) {
       this.isOn = newState;
     }
+  }
+
+  displayMessage(data: any) {
+    this.message = data.message;
+    this.name = data.name;
   }
 }
