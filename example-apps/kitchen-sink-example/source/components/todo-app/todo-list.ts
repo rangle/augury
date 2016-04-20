@@ -6,14 +6,27 @@ import {TodoService} from './todo-service';
   selector: 'todo-list',
   directives: [NgFor],
   template: `
-  <div>
-    <p *ngFor="#todo of todoService.todos">
-    <span [contentEditable]="todo.status == 'completed'">
-      {{todo.title}}--{{todo.status}}
-    </span>
-    <button (click)="todo.toggle()">Toggle</button>
-    </p>
-  </div>
+  <table class="table table-bordered">
+    <tr>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="#todo of todoService.todos">
+      <td>{{todo.title}}</td>
+      <td>
+        <h4 [ngSwitch]="todo.status">
+            <p class="label label-success"
+             *ngSwitchWhen="'started'">Started</p>
+            <p class="label label-primary"
+             *ngSwitchWhen="'completed'">Completed</p>
+        </h4>
+      </td>
+      <td><button 
+         class="btn btn-warning"
+        (click)="todo.toggle()">Toggle</button></td>
+    </tr>
+  </table>
   `
 })
 export class TodoList {

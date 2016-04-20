@@ -5,9 +5,9 @@ import {RouteParams, RouteData} from 'angular2/router';
   selector: 'aux-comp',
   template: `
   <div>
-    <h4>Hello There!!</h4>
-    <p>Message: {{message}}</p>
-    <p>Data: {{data}}</p>
+    <h3>Hello There!!</h3>
+    <h4>Message: {{message}}</h4>
+    <h4>Data: {{data}}</h4>
   </div>
   `
 })

@@ -9,34 +9,33 @@ import { Component } from 'angular2/core'; import {
   directives: [FORM_DIRECTIVES],
   template: `
     <div>
-        <form [ngFormModel]="myForm2" (ngSubmit)="onSubmit(myForm2.value)"
+        <form [ngFormModel]="formControl" 
+           (ngSubmit)="onSubmit(formControl.value)"
            class="col-sm-8">
             <div class="form-group">
-                <label>SKU</label>
+                <label>Name</label>
+                <input type="text" id="name" placeholder="Name"
+                  class="form-control"
+                  [ngFormControl]="formControl.controls['name']">
             </div>
             <div class="form-group">
-                <input type="text" id="skuInput" placeholder="SKU"
+                <label>Email</label>
+                <input type="text" id="email" placeholder="Email"
                   class="form-control"
-                  [ngFormControl]="myForm2.controls['sku']">
-            </div>
-            <div class="form-group">
-                <input type="text" id="skuInput" placeholder="SKU"
-                  class="form-control"
-                  [ngFormControl]="myForm2.controls['sku2']">
+                  [ngFormControl]="formControl.controls['email']">
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
-
 `
 })
 export default class ControlForm {
-  myForm2: ControlGroup;
+  formControl: ControlGroup;
 
   constructor(fb: FormBuilder) {
-    this.myForm2 = fb.group({
-      'sku': ['ABC123'],
-      'sku2': 'sku2aa'
+    this.formControl = fb.group({
+      'name': ['John Doe'],
+      'email': 'johndoe@gmail.com'
     });
   }
 
