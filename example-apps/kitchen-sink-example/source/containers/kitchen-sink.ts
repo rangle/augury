@@ -4,6 +4,8 @@ import { ROUTER_DIRECTIVES, RouteConfig, RouterLink, RouterOutlet,
   Router}
  from 'angular2/router';
 
+import {CamelCasePipe} from '../pipes/camelcase';
+
 import Home from '../components/home';
 import Start from '../components/router/start';
 import InputOutput from '../components/input-output/input-output';
@@ -36,6 +38,7 @@ import AngularDirectives from
 @Component({
   selector: 'kitchen-sink',
   directives: [RouterLink, ROUTER_DIRECTIVES],
+  pipes: [CamelCasePipe],
   template: `
   <div class="row">
     <div class="col-md-3">
@@ -55,7 +58,7 @@ import AngularDirectives from
       <li [ngClass]="{active: path=='input-output'}">
         <a [routerLink]="['./InputOutput']">InputOutput</a>
       </li>
-      <li [ngClass]="{active: path=='start' || path=='start/child'}">
+      <li [ngClass]="{active: path.indexOf('start') > -1}">
         <a [routerLink]="['./Start', 'StartMain']">Router</a>
       </li>
       <li [ngClass]="{active: path=='dynamic-controls'}">
@@ -77,12 +80,12 @@ import AngularDirectives from
     </div>
     <div class="col-md-9">
       <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h4>{{path || 'home'}}</h4>
-      </div>
-      <div class="panel-body">
-        <router-outlet></router-outlet>
-      </div>
+        <div class="panel-heading">
+          <h3 class="panel-title">{{path || 'home' | camelcase }}</h3>
+        </div>
+        <div class="panel-body">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
   </div>

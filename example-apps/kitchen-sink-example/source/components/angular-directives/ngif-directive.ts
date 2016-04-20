@@ -10,7 +10,8 @@ import Hello from './hello';
     <hello [msg]='"Hello from John!!"' *ngIf="sayHello"></hello>
     <hello [msg]='"Hi from John!!"' *ngIf="!sayHello"></hello>
 
-    <button class="btn btn-primary" (click)="toggle()">
+    <button class="btn btn-primary"
+       (click)="toggle()">
       {{sayHello ? 'Say Hi': 'Say Hello'}}
     </button>
   </div>

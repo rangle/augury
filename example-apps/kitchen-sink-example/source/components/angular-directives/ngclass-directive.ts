@@ -4,13 +4,14 @@ import {Component} from 'angular2/core';
    selector: 'ngclass-directive',
    inputs: ['isDisabled'],
   template: `
-     <div class="button" [ngClass]="{active: isOn, disabled: isDisabled}" 
+     <div class="button" 
+       [ngClass]="{active: isOn, disabled: isDisabled}" 
          (click)="toggle(!isOn)">
-         Click me!
+         <h4>Click me!</h4>
      </div>`,
   styles: [`
     .button {
-      width: 120px;
+      padding: 10px;
       border: medium solid black;
     }
   

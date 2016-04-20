@@ -12,7 +12,7 @@ import {User} from './user';
   `],
   template: `
     <div [ngClass]="{'bg' : user.isOnline}">
-      <h2>User Info CheckOnce</h2>
+      <h4>User Info CheckOnce</h4>
       <p>
         <label>User Id: {{user.id}} {{user.isOnline}}</label>
       </p>

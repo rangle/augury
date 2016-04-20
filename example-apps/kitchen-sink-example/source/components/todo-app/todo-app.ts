@@ -10,6 +10,7 @@ import {TodoList} from './todo-list';
   template: `
   <div>
     <todo-input></todo-input>
+    <hr/>
     <todo-list></todo-list>
   </div>
   `

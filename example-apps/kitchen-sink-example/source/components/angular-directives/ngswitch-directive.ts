@@ -15,7 +15,7 @@ import Hello from './hello';
         <hello *ngSwitchWhen="'grey'" [msg]="'Color is Grey'"></hello>
         <hello *ngSwitchDefault [msg]="'No Color Selected'"></hello>
      </div>
-     <button class="btn btn-primary" (click)="switch()">Switch Color</button>
+     <button class="btn btn-success" (click)="switch()">Switch Color</button>
   </div>
   `
 })
@@ -34,7 +34,6 @@ export default class NgSwitchDirective {
 
   switch() {
     const random = parseInt(Math.random() * 6 + '', 10);
-    console.log(random);
     this.color = this.colors[random];
   }
 
