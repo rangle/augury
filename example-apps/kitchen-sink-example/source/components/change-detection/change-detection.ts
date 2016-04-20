@@ -10,9 +10,7 @@ import {UserInfoCheckOnce} from './user-info-checkonce';
   directives: [UserInfoDefault, UserInfoPush, UserInfoCheckOnce],
   template: `
   <div>
-    <h2>change-detection</h2>
-
-    <button type="button" class="btn btn-primary"
+    <button type="button" class="btn btn-danger"
       (click)="reset()">
       Reset
     </button>
@@ -22,7 +20,7 @@ import {UserInfoCheckOnce} from './user-info-checkonce';
       Make User Online (muttable)
     </button>
 
-    <button type="button" class="btn btn-primary"
+    <button type="button" class="btn btn-success"
       (click)="makeUserOnline(1)">
       Make User Online (imuttable)
     </button>

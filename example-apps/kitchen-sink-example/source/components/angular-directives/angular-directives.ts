@@ -14,7 +14,6 @@ import NgLocalizationDirective from './nglocalization-directive';
     NgLocalizationDirective],
   template: `
   <div>
-    <h1>Angular Directives</h1>
     <ngif-directive></ngif-directive>
     <hr/>
     <ngfor-directive></ngfor-directive>
