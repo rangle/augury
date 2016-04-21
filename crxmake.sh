@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# Package batarangle into crx format Chrome extension
+# Package Augury into crx format Chrome extension
 # (This will not be needed for official distribution)
 # Based on https://developer.chrome.com/extensions/crx#scripts
 
@@ -9,14 +9,14 @@ npm -v
 
 dir="temp"
 key="key.pem"
-name="batarangle"
+name="augury"
 files="manifest.json build src images index.html frontend.html popup.html"
 
 crx="$name-$CIRCLE_BUILD_NUM.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
-trap 'rm -f "$pub" "$sig" "$zip"' EXIT
+trap 'rm -f "$pub" "$sig"' EXIT
 
 # copy all the files we need
 rm -rf $dir

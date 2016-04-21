@@ -1,4 +1,4 @@
-# Contributing to Batarangle
+# Contributing to Augury
 
 :sparkling_heart: *First things first, thank you for contributing. :sparkling_heart: We know
 it takes a lot of time and effort. Everything in this document is meant
@@ -38,12 +38,12 @@ you should read it.
 
 ### The textbook
 
-:mag: [Developer wiki](https://github.com/rangle/batarangle/wiki)
+:mag: [Developer wiki](https://github.com/rangle/augury/wiki)
 
 If you want to get technical, we've got you covered too. We have [a
-README just for developers](https://github.com/rangle/batarangle/wiki). Jumping into a new codebase
+README just for developers](https://github.com/rangle/augury/wiki). Jumping into a new codebase
 can be daunting so we've tried, as best as we could, to give you an
-overview into the design of Batarangle and our intentions. It's a
+overview into the design of Augury and our intentions. It's a
 glimpse into our heads, if you will. We're not yet sure that's a good
 thing but we can assure you it's a useful one.
 
@@ -51,7 +51,7 @@ thing but we can assure you it's a useful one.
 
 :speech_balloon: [Slack](http://batarangle-slack.herokuapp.com/)
 
-Okay, [manuals](./README.md) and [textbooks](https://github.com/rangle/batarangle/wiki) are great
+Okay, [manuals](./README.md) and [textbooks](https://github.com/rangle/augury/wiki) are great
 and all but they make for poor conversation. Feel free to [join us on
 Slack](http://batarangle-slack.herokuapp.com/)! Whether you're looking
 for answers or just want to hang out and share funny pictures, there's a
@@ -62,7 +62,7 @@ wait to hear from you.
 
 :bangbang: [Code of Conduct](./CODE_OF_CONDUCT.md)
 
-In the interest of making the Batarangle project a safe and friendly
+In the interest of making the Augury project a safe and friendly
 place for people from diverse backgrounds, we'll be adhering to a [Contributor Code of Conduct](./CODE_OF_CONDUCT). As a contributor, you'll be expected to
 uphold this code as well as report unacceptable behaviour to
 [batarangle@rangle.io](mailto:batarangle@rangle.io).
@@ -77,7 +77,7 @@ uphold this code as well as report unacceptable behaviour to
 
 If you do find a new issue, the best way to get a bug fixed is to provide a test case with either one of the example apps bundled in the repo, or by making your own Angular 2.0 application illustrating the reduced use case. Don't forget to include the version of Angular 2.0 app you're using!
 
-*At the moment, we offer limited backwards compatibility until Angular 2.0 stabilizes. Please check [README](./README.md#supported-version) for the version Batarangle currently supports.*
+*At the moment, we offer limited backwards compatibility until Angular 2.0 stabilizes. Please check [README](./README.md#supported-version) for the version Augury currently supports.*
 
 
 ### Pull Requests

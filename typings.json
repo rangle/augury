@@ -1,5 +1,5 @@
 {
-  "name": "batarangle",
+  "name": "augury",
   "ambientDependencies": {
     "MediaStream": "github:DefinitelyTyped/DefinitelyTyped/webrtc/MediaStream.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "chrome": "github:DefinitelyTyped/DefinitelyTyped/chrome/chrome.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",

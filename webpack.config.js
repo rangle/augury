@@ -1,9 +1,3 @@
-/**
- * Webpack Config
- * Based on angular2-webpack-starter by AngularClass
- * https://github.com/angular-class/angular2-webpack-starter
- */
-
 /*
  * Helpers
  */

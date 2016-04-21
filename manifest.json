@@ -1,5 +1,6 @@
 {
   "name": "Augury",
+  "short_name": "Augury",
   "version": "0.0.2",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
   "permissions": [
@@ -7,9 +8,9 @@
     "<all_urls>"
   ],
   "browser_action": {
-     "default_icon": "images/icon48.png",
+    "default_icon": "images/icon48.png",
     "default_popup": "popup.html"
-   },
+  },
   "devtools_page": "index.html",
   "background": {
     "scripts": [
@@ -17,17 +18,15 @@
     ],
     "persistent": false
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "build/content-script.js"
-      ],
-      "run_at": "document_end"
-    }
-  ],
+  "content_scripts": [{
+    "matches": [
+      "<all_urls>"
+    ],
+    "js": [
+      "build/content-script.js"
+    ],
+    "run_at": "document_end"
+  }],
   "web_accessible_resources": [
     "node_modules/*",
     "build/*"
