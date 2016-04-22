@@ -5,7 +5,7 @@
  * the state of the components (e.g. mount ops/locations, state changes,
  * performance profile, etc...).
  *
- * For more information, see the Base Adapater (./base.ts).
+ * For more information, see the Base Adapter (./base.ts).
  *
  * Interface:
  * - setup
