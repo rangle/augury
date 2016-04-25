@@ -3,7 +3,9 @@
       <h4 class="m0 header" [hidden]="selectedNode">No Component Selected</h4>
   </div>
 
-  <div class="flex flex-column monospace p3 pr0">
+  <div class="flex-column monospace p3 pr0"
+    [hidden]="!selectedNode"
+    [ngClass]="{flex: selectedNode}">
     <div *ngIf="parentHierarchyDisplay && parentHierarchyDisplay.length > 0">
         <h3 class="monospace">Component Hierarchy</h3>
         <span *ngFor="#node of parentHierarchyDisplay; #i = index">
