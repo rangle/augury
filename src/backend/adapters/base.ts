@@ -48,6 +48,7 @@ export interface TreeNode {
   dependencies: any;
   changeDetection: any;
   injectors: any;
+  directives: any;
 }
 
 export abstract class BaseAdapter {

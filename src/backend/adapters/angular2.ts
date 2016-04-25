@@ -119,6 +119,7 @@ export class Angular2Adapter extends BaseAdapter {
     const dependencies = this._getComponentDependencies(debugEl);
     const changeDetection = this._getComponentCD(debugEl);
     const injectors = this._getComponentInjectors(debugEl, dependencies);
+    const directives = this._getComponentDirectives(debugEl);
 
     description.unshift({
       key: 'a-id',
@@ -136,7 +137,8 @@ export class Angular2Adapter extends BaseAdapter {
       isOpen: true,
       dependencies,
       changeDetection,
-      injectors
+      injectors,
+      directives
     };
   }
 
@@ -190,6 +192,18 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getNativeElement(compEl: any): Element {
     return compEl.nativeElement;
+  }
+
+  _getComponentDirectives(compEl: any) {
+    const metadata = Reflect.getOwnMetadata('annotations',
+      compEl.componentInstance.constructor);
+
+    const directives = [];
+    if (metadata && metadata.length > 0 && metadata[0].directives) {
+      metadata[0].directives.forEach((directive) =>
+        directives.push(this.getFunctionName(directive)));
+    }
+    return directives;
   }
 
   _getComponentCD(compEl: any) {
