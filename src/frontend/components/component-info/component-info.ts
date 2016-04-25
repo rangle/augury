@@ -65,17 +65,31 @@ export default class ComponentInfo {
     }
   }
 
-  fireEvent(output: string, param: any) {
-    try {
-      param = JSON.parse(param);
-      this.userActions.fireEvent({
-        'output': output,
-        'data': param,
-        'id': this.node.id
-      });
-    } catch (exception) {
-      console.log(exception);
+  isJson(data: string): boolean {
+    let isJson: boolean = false;
+    if (data.indexOf('{') !== 0) {
+      isJson = false;
+    } else {
+      try {
+        JSON.parse(data);
+        isJson = true;
+      } catch (ex) {
+        console.log(ex);
+      }
     }
+    return isJson;
+  }
+
+  fireEvent(output: string, param: any) {
+    if (this.isJson(param)) {
+      param = JSON.parse(param);
+    }
+
+    this.userActions.fireEvent({
+      'output': output,
+      'data': param,
+      'id': this.node.id
+    });
   }
 
   displayTree(): void {
