@@ -24,7 +24,8 @@ export default class StateValues implements OnChanges {
 
   ngOnChanges(changes: any) {
     if (changes &&
-      changes.value &&
+      changes.id === undefined &&
+      changes.value !== undefined &&
       typeof changes.value.previousValue !== 'object' &&
       changes.value.currentValue !== changes.value.previousValue) {
       this.isUpdated = true;
