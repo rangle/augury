@@ -14,7 +14,7 @@ Currently works with applications built in [Angular 2.0.0-beta.15](https://githu
 
 ## Join Our Slack Team
 
-If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
+If you want to contribute or need help getting started, [join us on Slack](https://augury-slack.herokuapp.com).
 
 ## Getting the Extension
 
