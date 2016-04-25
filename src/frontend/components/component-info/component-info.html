@@ -21,6 +21,16 @@
       </section-content>
     </accordion>
 
+    <accordion [sectionTitle]='"Directives"' *ngIf="node && node.directives && node.directives.length > 0">
+      <section-content>
+        <ul class="list-reset m0">
+            <li *ngFor="#directive of node.directives">
+                <span class="inline-block info-key">{{directive}}</span>
+            </li>
+        </ul>
+      </section-content>
+    </accordion>
+
     <accordion *ngIf="node && node.changeDetection" [sectionTitle]='"Change Detection"'>
       <section-content>
         {{node.changeDetection}}
