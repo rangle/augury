@@ -1,5 +1,5 @@
 {
-  "maxReviewers": 5, // Maximum  number of people to ping in the PR message, default is 3
+  "maxReviewers": 2, // Maximum  number of people to ping in the PR message, default is 3
   "numFilesToCheck": 10, // Number of files to check against, default is 5
   "message": "@pullRequester, thanks! @reviewers, please review this.",
              // custom message using @pullRequester and @reviewers
@@ -18,7 +18,7 @@
   "findPotentialReviewers": true, // mention-bot will try to find potential reviewers based on files history, if disabled, `alwaysNotifyForPaths` is used instead
   "fileBlacklist": ["*.md"], // mention-bot will ignore any files that match these file globs
   "userBlacklist": ["winkerVSbecks"], // users in this list will never be mentioned by mention-bot
-  "userBlacklistForPR": [], // PR made by users in this list will be ignored
+  "userBlacklistForPR": ["winkerVSbecks"], // PR made by users in this list will be ignored
   "requiredOrgs": [], // mention-bot will only mention user who are a member of one of these organizations
   "actions": ["opened"] // List of PR actions that mention-bot will listen to, default is "opened"
 }
