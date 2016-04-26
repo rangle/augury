@@ -35,11 +35,11 @@ export class ComponentDataStore extends AbstractStore {
 
     this.dispatcher.onAction(
       BackendActionType.CLEAR_SELECTIONS,
-      action => this.clearSelections(action));
+      action => this.clearSelections());
 
     this.dispatcher.onAction(
       BackendActionType.CLEAR_TREE,
-      action => this.componentDataChanged([]));
+      action => this.resetTree());
 
     this.dispatcher.onAction(
       UserActionType.SELECT_NODE,
@@ -144,7 +144,7 @@ export class ComponentDataStore extends AbstractStore {
   /**
    * Clear the selection of previously selectedNode and openedNodes
    */
-  private clearSelections(action) {
+  private clearSelections() {
     this._openedNodes = [];
     this._selectedNode = undefined;
   }
@@ -286,6 +286,17 @@ export class ComponentDataStore extends AbstractStore {
     this.emitChange({
       tree: tree,
       action: UserActionType.RENDER_ROUTER_TREE
+    });
+  }
+
+  /**
+   * Reset component tree and selected node
+   */
+  private resetTree() {
+    this.clearSelections();
+    this._componentData = [];
+    this.emitChange({
+      action: UserActionType.CLEAR_TREE
     });
   }
 

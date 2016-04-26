@@ -18,8 +18,8 @@ import InjectorTree from '../injector-tree/injector-tree';
 export class InfoPanel {
 
   @Input() tree: any;
+  @Input() node: any;
 
-  private node: any;
   private selectedTabIndex: number = 0;
   private tabs = [{
       title: 'Properties',
@@ -31,25 +31,8 @@ export class InfoPanel {
 
   constructor(
     private componentDataStore: ComponentDataStore,
-    private userActions: UserActions,
-    private _ngZone: NgZone,
-    @Inject(ElementRef) private elementRef: ElementRef
-  ) {
-
-    this.componentDataStore.dataStream
-      .debounce(() => Rx.Observable.timer(250))
-      .filter((data: any) => {
-        return (data.action &&
-          data.action !== UserActionType.GET_DEPENDENCIES &&
-          data.action !== UserActionType.RENDER_ROUTER_TREE &&
-          data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
-      })
-      .subscribe(({ selectedNode }) => {
-        this.node = selectedNode;
-        this._ngZone.run(() => undefined);
-      });
-
-  }
+    private userActions: UserActions
+  ) {}
 
   tabChange(index: number): void {
     this.selectedTabIndex = index;
