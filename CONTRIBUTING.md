@@ -49,11 +49,11 @@ thing but we can assure you it's a useful one.
 
 ### The chat room
 
-:speech_balloon: [Slack](http://batarangle-slack.herokuapp.com/)
+:speech_balloon: [Slack](https://augury-slack.herokuapp.com/)
 
 Okay, [manuals](./README.md) and [textbooks](https://github.com/rangle/augury/wiki) are great
 and all but they make for poor conversation. Feel free to [join us on
-Slack](http://batarangle-slack.herokuapp.com/)! Whether you're looking
+Slack](https://augury-slack.herokuapp.com/)! Whether you're looking
 for answers or just want to hang out and share funny pictures, there's a
 channel for that. You can also ask us questions in private. We can't
 wait to hear from you.
@@ -65,7 +65,7 @@ wait to hear from you.
 In the interest of making the Augury project a safe and friendly
 place for people from diverse backgrounds, we'll be adhering to a [Contributor Code of Conduct](./CODE_OF_CONDUCT). As a contributor, you'll be expected to
 uphold this code as well as report unacceptable behaviour to
-[batarangle@rangle.io](mailto:batarangle@rangle.io).
+[augury@rangle.io](mailto:augury@rangle.io).
 
 ## How do I actually contribute?
 
@@ -105,7 +105,7 @@ TypeScript linter is part of our build task and will run in either `npm run buil
 
 ## How to Get in Touch
 
-We are using a Slack for all of our communication. If you want to contribute or need help getting started, join us on [Slack](http://batarangle-slack.herokuapp.com/).
+We are using a Slack for all of our communication. If you want to contribute or need help getting started, join us on [Slack](https://augury-slack.herokuapp.com/).
 
 ## License
 
