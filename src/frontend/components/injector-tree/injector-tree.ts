@@ -60,7 +60,7 @@ export default class InjectorTree implements OnChanges {
       if (this.selectedNode.injectors.indexOf(dependency) === -1) {
         const parent = this.parseUtils.getDependencyLink
           (this.flattenedTree, this.selectedNode.id, dependency);
-        if (!parent) {
+        if (!parent && this.flattenedTree && this.flattenedTree.length > 0) {
           this.flattenedTree[0].injectors.push(dependency);
         }
       }
