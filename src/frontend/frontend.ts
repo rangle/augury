@@ -30,7 +30,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   directives: [TreeView, InfoPanel, AppTrees],
   template: `
     <div class="clearfix">
-      <div class="col col-6 overflow-hidden vh-100 
+      <div class="col col-6 overflow-hidden vh-100
       border-right border-color-dark"
       [ngClass]="{'col-12 overflow-scroll': selectedTabIndex > 0}">
         <bt-app-trees
@@ -44,7 +44,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
       </div>
       <div class="col col-6 overflow-hidden vh-100"
       [hidden]="selectedTabIndex > 0">
-        <bt-info-panel [tree]="tree"></bt-info-panel>
+        <bt-info-panel [tree]="tree" [node]="selectedNode"></bt-info-panel>
       </div>
     </div>`
 })
@@ -107,16 +107,30 @@ class App {
     );
 
     this.componentDataStore.dataStream
+      .debounce(() => Rx.Observable.timer(250))
       .filter((data: any) => {
         return (data.action &&
           data.action !== UserActionType.GET_DEPENDENCIES &&
           data.action !== UserActionType.RENDER_ROUTER_TREE &&
-          data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION);
+          data.action !== UserActionType.START_COMPONENT_TREE_INSPECTION &&
+          data.action !== UserActionType.CLEAR_TREE);
       })
       .subscribe(({ selectedNode }) => {
         this.selectedNode = selectedNode;
+        this._ngZone.run(() => undefined);
       });
 
+    this.componentDataStore.dataStream
+      .filter((data: any) => {
+        return (data.action &&
+          data.action === UserActionType.CLEAR_TREE);
+      })
+      .subscribe(() => {
+        this.tree = [];
+        this.previousTree = [];
+        this.selectedNode = undefined;
+        this._ngZone.run(() => undefined);
+      });
   }
 
   tabChange(index: number) {
