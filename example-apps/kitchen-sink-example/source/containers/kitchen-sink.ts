@@ -18,6 +18,7 @@ import DITree from '../components/di-tree/di-tree';
 import ChangeDetection from '../components/change-detection/change-detection';
 import AngularDirectives from
   '../components/angular-directives/angular-directives';
+import Demo from '../components/demo/demo';
 
 @RouteConfig([
   { path: '/', component: Home, as: 'Home' },
@@ -34,6 +35,7 @@ import AngularDirectives from
     as: 'AngularDirectives' },
   { path: '/change-detection', component: ChangeDetection,
     as: 'ChangeDetection' },
+  { path: '/demo', component: Demo, as: 'DemoForNgConf' }
 ])
 @Component({
   selector: 'kitchen-sink',
@@ -45,6 +47,9 @@ import AngularDirectives from
       <ul class="nav nav-pills nav-stacked">
       <li [ngClass]="{active: path==''}">
         <a [routerLink]="['./Home']">Home</a>
+      </li>
+      <li [ngClass]="{active: path=='demo'}">
+        <a [routerLink]="['./DemoForNgConf']">Demo</a>
       </li>
       <li [ngClass]="{active: path=='control-form'}">
         <a [routerLink]="['./ControlForm']">ControlForm</a>
