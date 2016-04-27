@@ -7,7 +7,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "angular2": "2.0.0-beta.15",
+    "angular2": "2.0.0-beta.16",
     "core-js": "^2.2.1",
     "css-loader": "^0.21.0",
     "d3": "^3.5.16",
@@ -21,13 +21,13 @@
     "rimraf": "^2.4.3",
     "rxjs": "^5.0.0-beta.2",
     "style-loader": "^0.13.0",
-    "ts-loader": "^0.7.2",
-    "tslint-loader": "^1.0.2",
+    "ts-loader": "^0.8.2",
+    "tslint-loader": "^2.1.4",
     "typescript": "^1.8.9",
     "typings": "^0.7.11",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.9",
-    "webpack-dev-server": "^1.14.0",
-    "zone.js": "^0.6.10"
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1",
+    "zone.js": "^0.6.12"
   }
 }

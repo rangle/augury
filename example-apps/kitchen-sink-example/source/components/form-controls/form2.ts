@@ -1,7 +1,9 @@
 import {Component} from 'angular2/core';
 import {FORM_DIRECTIVES} from 'angular2/common';
-import {ROUTER_DIRECTIVES, RouterLink, Location, RouteParams, Router}
+import {ROUTER_DIRECTIVES, RouterLink, RouteParams, Router}
 from 'angular2/router';
+
+import {Location} from 'angular2/platform/common';
 
 @Component({
   selector: 'form2',
