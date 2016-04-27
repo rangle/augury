@@ -20,14 +20,12 @@ declare var getAllAngularRootElements: Function;
 declare var Reflect: { getOwnMetadata: Function };
 
 import { ChangeDetectionStrategy } from 'angular2/core';
-import { DirectiveProvider } from 'angular2/src/core/linker/element';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import { TreeNode, BaseAdapter } from './base';
 import { Description } from '../utils/description';
 import { ParseRouter } from '../utils/parse-router';
-import { DirectiveResolver } from '../directive-resolver';
 
 export class Angular2Adapter extends BaseAdapter {
   _tree: any = {};

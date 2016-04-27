@@ -1,5 +1,5 @@
 import * as test from 'tape';
-import {Injector, provide} from 'angular2/core';
+import {ReflectiveInjector, provide} from 'angular2/core';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {BackendActions} from '../backend-actions/backend-actions';
 import {BackendActionType} from '../action-constants.ts';
@@ -7,7 +7,7 @@ import {BackendActionType} from '../action-constants.ts';
 test('frontend/backend-actions: component tree changed', t => {
 
   const mockDispatcher = new Dispatcher();
-  const injector = Injector.resolveAndCreate([
+  const injector = ReflectiveInjector.resolveAndCreate([
     BackendActions,
     provide(Dispatcher, {useValue: mockDispatcher})
   ]);
