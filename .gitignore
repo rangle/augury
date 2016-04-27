@@ -32,6 +32,7 @@ Thumbs.db
 build
 dist
 temp
+tmp
 node_modules
 bower_components
 
