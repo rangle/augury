@@ -10,7 +10,7 @@ Augury is a Google Chrome Dev Tools extension for debugging Angular 2 applicatio
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-beta.15](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta15-2016-04-13) with _limited backward compatibility_, which will change once Angular 2 stabilizes.
+Currently works with applications built in [Angular 2.0.0-beta.16](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta16-2016-04-26) with _limited backward compatibility_, which will change once Angular 2 stabilizes.
 
 ## Join Our Slack Team
 

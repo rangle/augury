@@ -31,7 +31,7 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "2.0.0-beta.15",
+    "angular2": "2.0.0-beta.16",
     "basscss": "^7.0.4",
     "core-js": "^2.2.2",
     "crypto": "0.0.3",
@@ -59,11 +59,11 @@
     "tape": "^4.2.2",
     "tape-run": "^2.1.3",
     "ts-loader": "^0.8.1",
-    "tslint-loader": "^1.0.2",
+    "tslint-loader": "^2.1.4",
     "typescript": "^1.8.9",
-    "typings": "^0.7.12",
+    "typings": "^0.8.1",
     "url-loader": "^0.5.7",
-    "webpack": "1.12.15",
+    "webpack": "1.13.0",
     "webpack-dev-server": "1.14.1"
   }
 }
