@@ -86,7 +86,7 @@ export class NodeItem {
     let html = '';
     html += '<p class="node-item-name">' + node.name + '</p>';
     if (node.description && node.description.length) {
-      html += '<span class="node-item-description">( ';
+      html += '<span class="node-item-description">(';
       for (let i = 0; i < node.description.length; i++) {
         const desc = node.description[i];
         html += '<p class="node-item-property">' + desc.key + '=</p>';
