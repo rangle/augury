@@ -1,4 +1,5 @@
-import {Component, DynamicComponentLoader, ElementRef} from 'angular2/core';
+import {Component, DynamicComponentLoader, ViewContainerRef}
+from 'angular2/core';
 import DynamicComponent from './dynamic-component';
 import Hello from './hello';
 
@@ -17,7 +18,7 @@ import Hello from './hello';
 export default class LoadNextToComponent {
   constructor(
     private dcl: DynamicComponentLoader,
-    private elementRef: ElementRef) { }
+    private elementRef: ViewContainerRef) { }
 
   loadComponent() {
     this.dcl.loadNextToLocation(DynamicComponent, this.elementRef)

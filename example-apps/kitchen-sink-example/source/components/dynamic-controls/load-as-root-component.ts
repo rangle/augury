@@ -24,7 +24,7 @@ export default class LoadAsRootComponent {
     private injector: Injector) { }
 
   loadComponent() {
-    this.dcl.loadAsRoot(DynamicComponent, '#anchor', null)
+    this.dcl.loadAsRoot(DynamicComponent, '#anchor', this.injector)
       .then(componentRef => console.log('loadAsRoot', componentRef));
   }
 }
