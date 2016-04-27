@@ -1,5 +1,5 @@
 import * as test from 'tape';
-import {Injector, provide} from 'angular2/core';
+import {ReflectiveInjector, provide} from 'angular2/core';
 import {ComponentDataStore} from '../component-data/component-data-store';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {BackendActionType, UserActionType} from '../../actions/action-constants';
@@ -7,7 +7,7 @@ import {BackendActionType, UserActionType} from '../../actions/action-constants'
 test('frontend/component-data-store: component changes', t => {
 
   const mockDispatcher = new Dispatcher();
-  const injector = Injector.resolveAndCreate([
+  const injector = ReflectiveInjector.resolveAndCreate([
     ComponentDataStore,
     provide(Dispatcher, {useValue: mockDispatcher})
   ]);
@@ -45,7 +45,7 @@ test('frontend/component-data-store: component changes', t => {
 test('frontend/component-data-store: user selects tree node', t => {
 
   const mockDispatcher = new Dispatcher();
-  const injector = Injector.resolveAndCreate([
+  const injector = ReflectiveInjector.resolveAndCreate([
     ComponentDataStore,
     provide(Dispatcher, {useValue: mockDispatcher})
   ]);
