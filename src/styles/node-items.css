@@ -13,7 +13,6 @@
 
 .node-item-selected {
   background-color: var(--blue);
-  color: white;
 }
 
 .node-item-selected:hover {
