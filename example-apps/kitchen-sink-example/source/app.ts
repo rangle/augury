@@ -1,11 +1,6 @@
 // Load Global Styles
-import {ROUTER_PROVIDERS} from 'angular2/router';
-
-import {
-  LocationStrategy,
-  HashLocationStrategy,
-  APP_BASE_HREF}
-from 'angular2/platform/common';
+import {ROUTER_PROVIDERS, LocationStrategy,
+ HashLocationStrategy, APP_BASE_HREF} from 'angular2/router';
 
 import {provide} from 'angular2/core';
 import {FORM_DIRECTIVES} from 'angular2/common';
