@@ -1,4 +1,4 @@
-import {Component, ChangeDetectorRef} from 'angular2/core';
+import {Component, ChangeDetectorRef} from '@angular/core';
 import Hello from './hello';
 
 @Component({

@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 
 @Component({
  selector: 'ngstyle-directive',
@@ -11,7 +11,7 @@ import {Component} from 'angular2/core';
    <hr>
    <label>Italic: <input type="checkbox" (change)="changeStyle($event)"></label>
    <label>Bold: <input type="checkbox" (change)="changeWeight($event)"></label>
-   <label>Size: <input type="text" [value]="size" 
+   <label>Size: <input type="text" [value]="size"
    (change)="size = $event.target.value"></label>
  `
 })

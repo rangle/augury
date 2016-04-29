@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {
   ROUTER_DIRECTIVES,
   RouteConfig,
@@ -6,7 +6,7 @@ import {
   RouterOutlet,
   AuxRoute,
   Router
-} from 'angular2/router';
+} from '@angular/router';
 
 import StartChild from './start-child';
 import StartMain from './start-main';
@@ -65,7 +65,7 @@ import RouterData2 from './router-data2';
 export default class Start {
 
   constructor(private router: Router) {
-    // injected Router on the component that defines the aux routes 
+    // injected Router on the component that defines the aux routes
     this.router.unregisterPrimaryOutlet = function(outlet) {
         // does not throw
         this._outlet = null;
