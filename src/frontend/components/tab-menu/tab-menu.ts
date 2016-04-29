@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnChanges, Input} from 'angular2/core';
+import {Component, EventEmitter, OnChanges, Input} from '@angular/core';
 
 @Component({
   selector: 'bt-tab-menu',

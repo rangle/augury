@@ -1,7 +1,7 @@
 import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
   ElementRef, Input, EventEmitter}
-  from 'angular2/core';
-import {NgClass} from 'angular2/common';
+  from '@angular/core';
+import {NgClass} from '@angular/common';
 
 import * as d3 from 'd3';
 

@@ -1,5 +1,5 @@
-import {Component} from 'angular2/core';
-import {NgClass} from 'angular2/common';
+import {Component} from '@angular/core';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'accordion',
