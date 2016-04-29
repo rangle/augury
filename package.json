@@ -1,6 +1,6 @@
 {
   "name": "augury",
-  "version": "0.0.2",
+  "version": "0.0.9",
   "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
     "pack": "./crxmake.sh"
   },
   "dependencies": {
-    "angular2": "2.0.0-beta.16",
+    "angular2": "2.0.0-beta.17",
     "basscss": "^7.0.4",
     "core-js": "^2.2.2",
     "crypto": "0.0.3",
