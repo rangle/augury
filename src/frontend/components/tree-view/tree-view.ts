@@ -10,7 +10,7 @@ import {ComponentTree} from '../component-tree/component-tree';
 
 @Component({
   selector: 'bt-tree-view',
-  inputs: ['tree', 'changedNodes'],
+  inputs: ['tree', 'changedNodes', 'selectedNode', 'openedNodes'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
   directives: [NgFor, NodeItem, ComponentTree]
 })

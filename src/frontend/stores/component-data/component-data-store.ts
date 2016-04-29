@@ -254,10 +254,10 @@ export class ComponentDataStore extends AbstractStore {
    * Save the node id to openedNodes array on clicking expand and collapse
    */
   private openCloseNode({node}) {
-    if (!node.isOpen) {
+    const index = this._openedNodes.indexOf(node.id);
+    if (!node.isOpen && index === -1) {
       this._openedNodes.push(node.id);
-    } else {
-      const index = this._openedNodes.indexOf(node.id);
+    } else if (node.isOpen) {
       if (index > -1) {
         this._openedNodes.splice(index, 1);
       }
