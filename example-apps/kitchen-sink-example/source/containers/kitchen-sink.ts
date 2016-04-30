@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, OnDestroy }
- from 'angular2/core';
+ from '@angular/core';
 import { ROUTER_DIRECTIVES, RouteConfig, RouterLink, RouterOutlet,
   Router}
- from 'angular2/router';
+ from '@angular/router';
 
 import {CamelCasePipe} from '../pipes/camelcase';
 

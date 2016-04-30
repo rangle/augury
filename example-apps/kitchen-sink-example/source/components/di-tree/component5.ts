@@ -1,4 +1,4 @@
-import {Component, Inject} from 'angular2/core';
+import {Component, Inject} from '@angular/core';
 
 import Service3 from '../../services/service3';
 import Service4 from '../../services/service4';
