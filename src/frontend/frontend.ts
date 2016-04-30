@@ -1,5 +1,5 @@
-import {Component, Inject, bind, NgZone} from 'angular2/core';
-import {bootstrap} from 'angular2/platform/browser';
+import {Component, Inject, bind, NgZone} from '@angular/core';
+import {bootstrap} from '@angular/platform-browser-dynamic';
 
 import {Dispatcher} from './dispatcher/dispatcher';
 

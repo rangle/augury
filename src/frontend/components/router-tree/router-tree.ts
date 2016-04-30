@@ -1,5 +1,5 @@
 import {Component, ViewEncapsulation, OnChanges, Inject,
-  ElementRef, Input} from 'angular2/core';
+  ElementRef, Input} from '@angular/core';
 import RouterInfo from '../router-info/router-info';
 import * as d3 from 'd3';
 

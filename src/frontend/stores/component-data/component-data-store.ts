@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {BackendActionType, UserActionType}
   from '../../actions/action-constants';
