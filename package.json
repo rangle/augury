@@ -52,7 +52,7 @@
     "object-assign": "4.0.1",
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^8.1.0",
-    "postcss-loader": "^0.8.2",
+    "postcss-loader": "^0.9.0",
     "rimraf": "2.5.2",
     "style-loader": "^0.13.1",
     "tap-spec": "^4.1.1",
