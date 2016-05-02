@@ -25,16 +25,16 @@ To develop this extension, the following environment is used:
 * TypeScript 1.7.5
 * typings 0.6.8
 
-## Trying out the extension
+## Building & Installing Locally
 
 1. Clone this repository: `git clone git://github.com/rangle/augury`.
 2. Run `npm install`.
-3. Run `npm run build` (errors related to typing files conflicts can be ignore for now).
+3. Run `npm run build`.
 4. Navigate to chrome://extensions and enable Developer Mode.
 5. Choose "Load unpacked extension".
 6. In the dialog, open the directory you just cloned.
 
-To try out with an example application, refer to instructions in [README](./example-apps/kitchen-sink-example/README.md).
+To try out the extension with an example application, refer to instructions in [README](./example-apps/kitchen-sink-example/README.md).
 
 ## Running Tests
 
