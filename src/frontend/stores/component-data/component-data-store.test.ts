@@ -1,5 +1,5 @@
 import * as test from 'tape';
-import {ReflectiveInjector, provide} from 'angular2/core';
+import {ReflectiveInjector, provide} from '@angular/core';
 import {ComponentDataStore} from '../component-data/component-data-store';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {BackendActionType, UserActionType} from '../../actions/action-constants';

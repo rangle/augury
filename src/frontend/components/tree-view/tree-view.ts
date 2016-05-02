@@ -1,5 +1,5 @@
-import {Component, Inject, NgZone, ElementRef} from 'angular2/core';
-import {NgFor} from 'angular2/common';
+import {Component, Inject, NgZone, ElementRef} from '@angular/core';
+import {NgFor} from '@angular/common';
 import {NodeItem} from '../node-item/node-item';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentDataStore}

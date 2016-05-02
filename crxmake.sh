@@ -12,7 +12,11 @@ key="key.pem"
 name="augury"
 files="manifest.json build src images index.html frontend.html popup.html"
 
-crx="$name-$CIRCLE_BUILD_NUM.crx"
+crx="$name.crx"
+if [ $CIRCLE_BUILD_NUM ]; then
+  crx="$name-$CIRCLE_BUILD_NUM.crx"
+fi
+
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
