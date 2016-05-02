@@ -2,6 +2,8 @@
 <main class="p1 col-12 monospace">
   <bt-node-item *ngFor="#node of tree"
     [changedNodes]="changedNodes"
-    [node]="node">
+    [node]="node"
+    [selectedNode]="selectedNode"
+    [openedNodes]="openedNodes">
   </bt-node-item>
 </main>

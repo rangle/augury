@@ -1,5 +1,5 @@
-import {Component, Inject, bind, NgZone} from 'angular2/core';
-import {bootstrap} from 'angular2/platform/browser';
+import {Component, Inject, bind, NgZone} from '@angular/core';
+import {bootstrap} from '@angular/platform-browser-dynamic';
 
 import {Dispatcher} from './dispatcher/dispatcher';
 
@@ -36,6 +36,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
         <bt-app-trees
           [selectedTabIndex]="selectedTabIndex"
           [selectedNode]="selectedNode"
+          [openedNodes]="openedNodes"
           [routerTree]="routerTree"
           [tree]="tree"
           [changedNodes]="changedNodes"
@@ -58,6 +59,7 @@ class App {
   private routerTree: any;
   private selectedTabIndex = 0;
   private selectedNode: any;
+  private openedNodes: Array<any> = [];
   private changedNodes: any = [];
 
   constructor(
@@ -83,17 +85,12 @@ class App {
           this.changedNodes =
             parseUtils.getChangedNodes(this.previousTree, this.tree);
         }
-
-        this._ngZone.run(() => undefined);
-
-        if (data.openedNodes.length > 0 || data.selectedNode) {
-          setTimeout(() => {
-            this.userActions.updateNodeState({
-              openedNodes: data.openedNodes,
-              selectedNode: data.selectedNode
-            });
-          }, 250);
+        if (data.selectedNode) {
+          const treeMap = this.parseUtils.getNodesMap(this.tree);
+          this.selectedNode = JSON.parse(treeMap[data.selectedNode.id]);
         }
+        this.openedNodes = data.openedNodes;
+        this._ngZone.run(() => undefined);
       }
     );
 
