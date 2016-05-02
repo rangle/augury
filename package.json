@@ -55,7 +55,7 @@
     "autoprefixer": "^6.3.6",
     "css-loader": "^0.21.0",
     "file-loader": "^0.8.5",
-    "object-assign": "4.0.1",
+    "object-assign": "4.1.0",
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^8.1.0",
     "postcss-loader": "^0.8.2",
