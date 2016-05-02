@@ -1,9 +1,10 @@
-import {resolveForwardRef, Injectable} from 'angular2/src/core/di';
-import {Type, isPresent, isBlank, stringify} from 'angular2/src/facade/lang';
-import {BaseException} from 'angular2/src/facade/exceptions';
-import {ListWrapper, StringMapWrapper} from 'angular2/src/facade/collection';
 
+import {Type, isPresent, isBlank, stringify} from '@angular/compiler/src/facade/lang';
+import {BaseException} from '@angular/compiler/src/facade/exceptions';
+import {ListWrapper, StringMapWrapper} from '@angular/compiler/src/facade/collection';
 import {
+resolveForwardRef,
+Injectable,
 DirectiveMetadata,
 ComponentMetadata,
 InputMetadata,
@@ -13,9 +14,9 @@ HostListenerMetadata,
 ContentChildrenMetadata,
 ViewChildrenMetadata,
 ContentChildMetadata,
-ViewChildMetadata
-} from 'angular2/src/core/metadata';
-import {reflector} from 'angular2/src/core/reflection/reflection';
+ViewChildMetadata,
+reflector
+} from '@angular/core';
 
 function _isDirectiveMetadata(type: any): boolean {
   let className: string = type.constructor.toString().match(/\w+/g)[1];

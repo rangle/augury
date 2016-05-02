@@ -1,4 +1,4 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input} from '@angular/core';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
