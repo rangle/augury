@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, NgZone}
-  from 'angular2/core';
+  from '@angular/core';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import ParseData from '../../utils/parse-data';
 

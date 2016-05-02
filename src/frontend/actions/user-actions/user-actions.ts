@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {Dispatcher} from '../../dispatcher/dispatcher';
 import {UserActionType} from '../action-constants';
 import {BackendMessagingService} from '../../channel/backend-messaging-service';

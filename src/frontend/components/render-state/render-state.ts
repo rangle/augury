@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input} from 'angular2/core';
+import {Component, EventEmitter, Input} from '@angular/core';
 import StateValues from '../state-values/state-values';
 
 @Component({

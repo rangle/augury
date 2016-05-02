@@ -1,4 +1,4 @@
-import {RouteRule} from 'angular2/src/router/rules/rules';
+import {RouteRule} from '@angular/router/src/rules/rules';
 
 export interface Route {
   name: string;

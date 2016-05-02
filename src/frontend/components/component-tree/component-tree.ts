@@ -1,12 +1,12 @@
-import {Component, Inject, ElementRef} from 'angular2/core';
-import {NgFor} from 'angular2/common';
+import {Component, Inject, ElementRef} from '@angular/core';
+import {NgFor} from '@angular/common';
 import {NodeItem} from '../node-item/node-item';
 import {UserActionType}
   from '../../actions/action-constants';
 
 @Component({
   selector: 'component-tree',
-  inputs: ['tree', 'changedNodes'],
+  inputs: ['tree', 'changedNodes', 'selectedNode', 'openedNodes'],
   templateUrl: 'src/frontend/components/component-tree/component-tree.html',
   host: {'class': 'flex overflow-scroll'},
   directives: [NgFor, NodeItem]

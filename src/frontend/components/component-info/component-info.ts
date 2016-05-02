@@ -1,7 +1,7 @@
 declare var JSONFormatter: any;
 import {Component, ElementRef, Inject, EventEmitter,
   OnChanges}
-  from 'angular2/core';
+  from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 
