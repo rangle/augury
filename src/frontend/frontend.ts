@@ -85,7 +85,10 @@ class App {
           this.changedNodes =
             parseUtils.getChangedNodes(this.previousTree, this.tree);
         }
-        this.selectedNode = data.selectedNode;
+        if (data.selectedNode) {
+          const treeMap = this.parseUtils.getNodesMap(this.tree);
+          this.selectedNode = JSON.parse(treeMap[data.selectedNode.id]);
+        }
         this.openedNodes = data.openedNodes;
         this._ngZone.run(() => undefined);
       }
