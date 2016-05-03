@@ -1,5 +1,5 @@
 // Load Global Styles
-import {ROUTER_PROVIDERS} from '@angular/router';
+import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 
 import {provide} from '@angular/core';
 import {FORM_DIRECTIVES, LocationStrategy,

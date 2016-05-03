@@ -4,7 +4,7 @@ import {
   RouteConfig,
   RouterLink,
   RouterOutlet
-} from '@angular/router';
+} from '@angular/router-deprecated';
 
 import InnerChild2 from './inner-child2';
 import InnerChildMain from './inner-child-main';

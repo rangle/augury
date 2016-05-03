@@ -6,7 +6,7 @@ import {
   RouterOutlet,
   AuxRoute,
   Router
-} from '@angular/router';
+} from '@angular/router-deprecated';
 
 import StartChild from './start-child';
 import StartMain from './start-main';

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, OnDestroy }
  from '@angular/core';
 import { ROUTER_DIRECTIVES, RouteConfig, RouterLink, RouterOutlet,
   Router}
- from '@angular/router';
+ from '@angular/router-deprecated';
 
 import {CamelCasePipe} from '../pipes/camelcase';
 

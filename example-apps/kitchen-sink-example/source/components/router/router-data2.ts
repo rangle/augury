@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RouteParams, RouteData} from '@angular/router';
+import {RouteParams, RouteData} from '@angular/router-deprecated';
 
 @Component({
   selector: 'aux-comp',

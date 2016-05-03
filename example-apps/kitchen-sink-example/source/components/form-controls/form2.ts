@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FORM_DIRECTIVES, Location} from '@angular/common';
 import {ROUTER_DIRECTIVES, RouterLink, RouteParams, Router}
-from '@angular/router';
+from '@angular/router-deprecated';
 
 @Component({
   selector: 'form2',
