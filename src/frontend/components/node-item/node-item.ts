@@ -1,5 +1,5 @@
-import {Component, Inject, NgZone, Input} from 'angular2/core';
-import {NgIf, NgFor, NgStyle} from 'angular2/common';
+import {Component, Inject, NgZone, Input, SimpleChange} from '@angular/core';
+import {NgIf, NgFor} from '@angular/common';
 import * as Rx from 'rxjs';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
@@ -10,7 +10,7 @@ import {UserActionType}
 @Component({
   selector: 'bt-node-item',
   templateUrl: 'src/frontend/components/node-item/node-item.html',
-  directives: [NgIf, NgFor, NodeItem, NgStyle]
+  directives: [NgIf, NgFor, NodeItem]
 })
 /**
  * Node Item
@@ -21,65 +21,18 @@ export class NodeItem {
 
   @Input() node: any;
   @Input() changedNodes: any;
+  @Input() selectedNode: any;
+  @Input() openedNodes: Array<any>;
 
   private collapsed: any;
-  private color: any;
-  private borderColor: any;
   private isUpdated: boolean = false;
+  private isSelected: boolean = false;
 
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
     private _ngZone: NgZone
-  ) {
-
-    this.borderColor = 'rgba(0, 0, 0, 0.125)';
-    this.color = '#666';
-
-    // Listen for changes in selected node
-    this.componentDataStore.dataStream
-      .filter((data) => {
-        return  data.action && data.action === UserActionType.SELECT_NODE &&
-          data.selectedNode && data.selectedNode.id;
-        })
-        .map(({ selectedNode }: any) => selectedNode)
-        .subscribe((selectedNode: any) => {
-            const isSelected = this.node && selectedNode &&
-              selectedNode.id === this.node.id;
-            this.update(isSelected);
-        });
-
-    this.componentDataStore.dataStream
-      .filter((data: any) => {
-        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
-          data.openedNodes.indexOf(this.node.id) > -1;
-      })
-      .subscribe((data) => {
-        this.node.isOpen = false;
-        this._ngZone.run(() => undefined);
-      });
-
-    this.componentDataStore.dataStream
-      .filter((data: any) => {
-        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
-          data.selectedNode.id === this.node.id;
-      })
-      .subscribe((data) => {
-        this.userActions.selectNode({ node: this.node });
-      });
-  }
-
-  /**
-   * Update the state of the node based on selection
-   * @param  {Boolean} isSelected
-   */
-  update(isSelected) {
-    this.node.isSelected = isSelected;
-    this.borderColor = this.node.isSelected ? '#0074D9' :
-      'rgba(0, 0, 0, 0.125)';
-    this.color = this.node.isSelected ? '#222' : '#888';
-    this._ngZone.run(() => undefined);
-  }
+  ) {}
 
   getNodeDetails(node) {
 
@@ -128,7 +81,6 @@ export class NodeItem {
    */
   onClick($event) {
     this.userActions.selectNode({ node: this.node });
-    this._ngZone.run(() => undefined);
     $event.preventDefault();
     $event.stopPropagation();
   }
@@ -168,12 +120,20 @@ export class NodeItem {
     $event.stopPropagation();
   }
 
-  ngOnChanges() {
-    if (this.changedNodes && this.node) {
+  ngOnChanges(changes) {
+    if (this.selectedNode && this.node) {
+      this.isSelected = (this.selectedNode.id === this.node.id);
+    }
+    if (changes.changedNodes && this.node) {
       this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
       setTimeout(() => {
         this.isUpdated = false;
       }, 2000);
+    }
+    if (this.openedNodes && this.node) {
+      if (this.openedNodes.indexOf(this.node.id) > -1) {
+        this.node.isOpen = false;
+      }
     }
   }
 

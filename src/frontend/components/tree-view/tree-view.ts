@@ -1,5 +1,5 @@
-import {Component, Inject, NgZone, ElementRef} from 'angular2/core';
-import {NgFor} from 'angular2/common';
+import {Component, Inject, NgZone, ElementRef} from '@angular/core';
+import {NgFor} from '@angular/common';
 import {NodeItem} from '../node-item/node-item';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentDataStore}
@@ -10,7 +10,7 @@ import {ComponentTree} from '../component-tree/component-tree';
 
 @Component({
   selector: 'bt-tree-view',
-  inputs: ['tree', 'changedNodes'],
+  inputs: ['tree', 'changedNodes', 'selectedNode', 'openedNodes'],
   templateUrl: 'src/frontend/components/tree-view/tree-view.html',
   directives: [NgFor, NodeItem, ComponentTree]
 })

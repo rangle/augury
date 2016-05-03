@@ -19,7 +19,7 @@ declare var ng: { probe: Function, coreTokens: any };
 declare var getAllAngularRootElements: Function;
 declare var Reflect: { getOwnMetadata: Function };
 
-import { ChangeDetectionStrategy } from 'angular2/core';
+import { ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -170,7 +170,7 @@ export class Angular2Adapter extends BaseAdapter {
     if (isRoot) {
       return this.addRoot(compEl);
     } else if (nodeName !== 'NgSelectOption ') {
-      // skipping the NgSelectOption to imporove performance 
+      // skipping the NgSelectOption to imporove performance
       // It adds no value displaying node elements
       this.addChild(compEl);
     }
