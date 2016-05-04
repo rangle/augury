@@ -49,8 +49,12 @@ export class GameService {
     }
   }
 
-  getScores() {
-    return JSON.parse(localStorage.getItem('scores'));
+  getScores(count) {
+    const scores = JSON.parse(localStorage.getItem('scores')) || [];
+    if (count) {
+      return scores.slice(0, count);
+    }
+    return scores;
   }
 
   getPlayerByIndex(index: number): Player {
