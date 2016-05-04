@@ -8,7 +8,7 @@
     [ngClass]="{flex: selectedNode}">
     <div *ngIf="parentHierarchyDisplay && parentHierarchyDisplay.length > 0">
         <h3 class="monospace">Component Hierarchy</h3>
-        <span *ngFor="#node of parentHierarchyDisplay; #i = index">
+        <span *ngFor="let node of parentHierarchyDisplay; let i = index">
           <a href="#" class="node-item-property"
             (click)="selectComponent(node)">{{node.name}}</a>
           <span *ngIf="i < parentHierarchyDisplay.length - 1"
