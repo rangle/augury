@@ -14,7 +14,7 @@ import GameTitle from '../game/game-title';
 @Component({
   selector: 'scores',
   directives: [GameTitle, StartButton, HomeButton, ScoreFilterButton],
-  // providers: [HerosService, VillansService, GameService],
+  providers: [HerosService, VillansService, GameService],
   styles: [`
     table, td, th {
         font-size: 20px;

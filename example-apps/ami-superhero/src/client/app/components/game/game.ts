@@ -14,7 +14,7 @@ import VillansService from '../../services/villans-service';
 
 @Component({
   selector: 'game',
-  directives: [GameTitle, GameButton, ScoresButton, StartButton, HomeButton],
+  directives: [GameTitle, GameButton, ScoresButton, HomeButton],
   styles: [`
     .label {
       text-align: center;
@@ -69,12 +69,12 @@ import VillansService from '../../services/villans-service';
         (onClick)="onClick($event)">
       </start-button>
       <scores-button
-        [url]="'/scores/all'"
+        [url]="'/scores'"
         [label]="'View Scores'">
       </scores-button>
     </div>
   `,
-  // providers: [HerosService, VillansService, GameService],
+  providers: [HerosService, VillansService, GameService],
 })
 export default class Game {
 
