@@ -41,7 +41,7 @@
     "basscss": "^7.0.4",
     "core-js": "^2.2.2",
     "crypto": "0.0.3",
-    "d3": "^3.5.16",
+    "d3": "^3.5.17",
     "file-loader": "^0.8.5",
     "immutable": "^3.7.6",
     "json-formatter-js": "^0.3.0",
