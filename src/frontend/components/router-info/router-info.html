@@ -23,7 +23,7 @@
           <li *ngIf="selectedNode._data && selectedNode._data.length > 0">
             <span class="info-key">data: </span>
             <ul class="list-reset">
-              <li *ngFor="#el of selectedNode._data">
+              <li *ngFor="let el of selectedNode._data">
                 <span class="info-key">{{el.key}}: </span>
                 <span class="info-value">{{el.value}}</span>
               </li>
