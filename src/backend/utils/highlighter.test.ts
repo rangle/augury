@@ -7,7 +7,7 @@ test('utils/highlighter: passing undefined', t => {
 
   t.deepEqual(hls, undefined, 'get undefined highlight');
   t.end();
-})
+});
 
 test('utils/highlighter: test highlight', t => {
   t.plan(3);
@@ -21,14 +21,15 @@ test('utils/highlighter: test highlight', t => {
 
   const hls = Highlighter.highlight(div, 'highlight div');
 
-  t.deepEqual(document.getElementsByTagName('div')[0].textContent, 'highlight div',
+  t.deepEqual(document.getElementsByTagName('div')[0].textContent,
+    'highlight div',
      'get highlighted text');
   t.deepEqual(document.getElementsByTagName('div')[0].style.padding, '5px',
     'get highlighted padding');
   t.deepEqual(document.getElementsByTagName('div')[0].style.position,
     'absolute', 'get highlighted position');
   t.end();
-})
+});
 
 test('utils/highlighter: test highlight', t => {
   t.plan(1);
@@ -46,4 +47,4 @@ test('utils/highlighter: test highlight', t => {
   t.deepEqual(document.getElementsByTagName('div').length, 0,
     'remove all highlight');
   t.end();
-})
+});

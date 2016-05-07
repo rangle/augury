@@ -7,7 +7,7 @@ test('utils/description: Passing undefined', t => {
 
   t.deepEqual(description, [], 'get undefined description');
   t.end();
-})
+});
 
 test('utils/description: Passing undefined', t => {
   t.plan(1);
@@ -24,7 +24,7 @@ test('utils/description: Passing undefined', t => {
       value: undefined
     }], 'get empty description');
   t.end();
-})
+});
 
 test('utils/description: RouterLink', t => {
   t.plan(1);
@@ -55,7 +55,7 @@ test('utils/description: RouterLink', t => {
     }
   ], 'get RouterLink description');
   t.end();
-})
+});
 
 
 test('utils/description: RouterOutlet', t => {
@@ -67,7 +67,7 @@ test('utils/description: RouterOutlet', t => {
       componentType: {
         name: 'RouterOutlet'
       }
-    }
+    };
   };
 
   const routerOutet: RouterOutlet = new RouterOutlet();
@@ -89,7 +89,7 @@ test('utils/description: RouterOutlet', t => {
     }
   ], 'get RouterOutlet description');
   t.end();
-})
+});
 
 test('utils/description: NgSelectOption', t => {
   t.plan(1);
@@ -122,13 +122,13 @@ test('utils/description: NgSelectOption', t => {
     }
   ], 'get NgSelectOption description');
   t.end();
-})
+});
 
 test('utils/description: NgIf', t => {
   t.plan(1);
 
   class NgIf {
-    _prevCondition: boolean = true
+    _prevCondition: boolean = true;
   };
 
   const ngIf: NgIf = new NgIf();
@@ -143,7 +143,7 @@ test('utils/description: NgIf', t => {
       value: true
     }], 'get NgIf description');
   t.end();
-})
+});
 
 
 test('utils/description: NgSwitch', t => {
@@ -160,7 +160,7 @@ test('utils/description: NgSwitch', t => {
 
   const compEl = {
     componentInstance: ngSwitch
-  }
+  };
 
   const description = Description.getComponentDescription(compEl);
 
@@ -176,7 +176,7 @@ test('utils/description: NgSwitch', t => {
       value: 10
     }], 'get NgSwitch description');
   t.end();
-})
+});
 
 
 test('utils/description: NgForm', t => {
@@ -192,7 +192,7 @@ test('utils/description: NgForm', t => {
 
   const compEl = {
     componentInstance: ngForm
-  }
+  };
 
   const description = Description.getComponentDescription(compEl);
 
@@ -205,7 +205,7 @@ test('utils/description: NgForm', t => {
       value: false
     }], 'get NgForm description');
   t.end();
-})
+});
 
 test('utils/description: NgControlName', t => {
   t.plan(1);
@@ -219,7 +219,7 @@ test('utils/description: NgControlName', t => {
 
   const compEl = {
     componentInstance: ngControlName
-  }
+  };
 
   const description = Description.getComponentDescription(compEl);
 
@@ -235,7 +235,7 @@ test('utils/description: NgControlName', t => {
       value: true
     }], 'get NgControlName description');
   t.end();
-})
+});
 
 test('utils/description: NgSwitchWhen', t => {
   t.plan(1);
@@ -257,7 +257,7 @@ test('utils/description: NgSwitchWhen', t => {
       value: 'switchValue'
     }], 'get NgSwitchWhen description');
   t.end();
-})
+});
 
 test('utils/description: NgModel', t => {
   t.plan(1);
@@ -269,7 +269,7 @@ test('utils/description: NgModel', t => {
     dirty: boolean = true;
     control: any = {
       status: true
-    }
+    };
   };
   const comp: NgModel = new NgModel();
 
@@ -297,7 +297,7 @@ test('utils/description: NgModel', t => {
       value: true
     }], 'get NgModel description');
   t.end();
-})
+});
 
 test('utils/description: NgFormControl', t => {
   t.plan(1);
@@ -331,7 +331,7 @@ test('utils/description: NgFormControl', t => {
       value: true
     }], 'get NgFormControl description');
   t.end();
-})
+});
 
 test('utils/description: NgFormModel', t => {
   t.plan(1);
@@ -365,7 +365,7 @@ test('utils/description: NgFormModel', t => {
       value: '{"name":"CompName"}'
     }], 'get NgFormModel description');
   t.end();
-})
+});
 
 test('utils/description: NgClass', t => {
   t.plan(1);
@@ -391,4 +391,4 @@ test('utils/description: NgClass', t => {
       value: 'class1,class2,class3'
     }], 'get NgClass description');
   t.end();
-})
+});
