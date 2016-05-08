@@ -1,5 +1,7 @@
 {
   "version": "1.6.2",
+  "compileOnSave": false,
+  "buildOnSave": false,
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
