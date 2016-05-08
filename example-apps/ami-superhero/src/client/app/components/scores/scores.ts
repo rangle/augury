@@ -2,6 +2,8 @@ import {Component} from 'angular2/core';
 import {Router} from 'angular2/router';
 
 import StartButton from '../home/start-button';
+import HomeButton from './home-button';
+import ScoreFilterButton from './score-filter-button';
 
 import {GameService, Player} from '../../services/game-service';
 import HerosService from '../../services/heros-service';
@@ -11,11 +13,13 @@ import GameTitle from '../game/game-title';
 
 @Component({
   selector: 'scores',
-  directives: [GameTitle, StartButton],
-  // providers: [HerosService, VillansService, GameService],
+  directives: [GameTitle, StartButton, HomeButton, ScoreFilterButton],
+  providers: [HerosService, VillansService, GameService],
   styles: [`
     table, td, th {
+        font-size: 20px;
         border: 1px solid white;
+        padding: 10px;
     }
 
     table {
@@ -32,10 +36,26 @@ import GameTitle from '../game/game-title';
     <game-title
       [title]="'Current Game Score'">
     </game-title>
-    <h4 style="text-align: center;">Game {{scores.length}}: {{gameService.getScore()}}</h4>
-    <game-title
-      [title]="'All Time Score'">
-    </game-title>
+    <h1 style="text-align: center;">Game {{scores.length}}: {{gameService.getScore()}}</h1>
+    <div style="text-align: center;margin: 20px;">
+      <score-filter-button
+        (onClick)="showScores($event)"
+        [selected]="!scoresCount"
+        [label]="'All'">
+      </score-filter-button>
+      <score-filter-button 
+        (onClick)="showScores($event)"
+        [selected]="scoresCount == 10"
+        [label]="'First 10'"
+        [count]="'10'">
+      </score-filter-button>
+      <score-filter-button 
+        (onClick)="showScores($event)"
+        [selected]="scoresCount == 20"
+        [label]="'First 20'"
+        [count]="'20'">
+      </score-filter-button>
+    </div>
     <table>
       <tr>
         <th>Game</th>
@@ -47,6 +67,10 @@ import GameTitle from '../game/game-title';
       </tr>
     </table>
     <div style="text-align: center; margin: 25px; padding-top: 30px;">
+      <home-button
+        [label]="'Home'"
+        [url]="'/'">
+      </home-button>
       <start-button
         [label]="'Play Again'"
         [count]="3"
@@ -57,12 +81,18 @@ import GameTitle from '../game/game-title';
 })
 export default class Scores {
   private scores: any;
+  private scoresCount = undefined;
 
   constructor(
     private gameService: GameService,
     private router: Router
   ) {
-    this.scores = gameService.getScores();
+    this.showScores(this.scoresCount);
+  }
+
+  showScores(data) {
+    this.scoresCount = data;
+    this.scores = this.gameService.getScores(data);
   }
 
   onClick(count: any) {

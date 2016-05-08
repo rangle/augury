@@ -6,6 +6,7 @@ import GameTitle from './game-title';
 import GameButton from './game-button';
 import StartButton from '../home/start-button';
 import ScoresButton from './scores-button';
+import HomeButton from '../scores/home-button';
 
 import {GameService, Player} from '../../services/game-service';
 import HerosService from '../../services/heros-service';
@@ -13,7 +14,7 @@ import VillansService from '../../services/villans-service';
 
 @Component({
   selector: 'game',
-  directives: [GameTitle, GameButton, ScoresButton, StartButton],
+  directives: [GameTitle, GameButton, ScoresButton, HomeButton],
   styles: [`
     .label {
       text-align: center;
@@ -42,16 +43,14 @@ import VillansService from '../../services/villans-service';
       [ngClass]="{'label-success': player.correct,
       'label-error': !player.correct}">{{msg}}</label>
     </div>
-    <div style="text-align: center; margin: 25px; padding-top: 30px;">
+    <div style="text-align: center; margin: 25px; padding-top: 30px;" *ngIf="!gussed">
       <game-button
-        [hidden]="gussed" 
         [label]="'Yes'"
         [type]="true"
         (onClick)="makeGuess($event)">
       </game-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <game-button
-      [hidden]="gussed"
       [label]="'No'"
       [type]="false"
       (onClick)="makeGuess($event)">
@@ -59,19 +58,23 @@ import VillansService from '../../services/villans-service';
     </div>
     <div style="text-align: center; margin: 25px; padding-top: 30px;"
       *ngIf="gameOver">
-      <h2>Click to play again or view High Scores</h2>
+      <h1>Click to play again or view High Scores</h1>
+      <home-button
+        [label]="'Home'"
+        [url]="'/'">
+      </home-button>
       <start-button
         [label]="'Play Again'"
         [count]="3"
         (onClick)="onClick($event)">
       </start-button>
       <scores-button
-        [url]="'/scores/all'"
+        [url]="'/scores'"
         [label]="'View Scores'">
       </scores-button>
     </div>
   `,
-  // providers: [HerosService, VillansService, GameService],
+  providers: [HerosService, VillansService, GameService],
 })
 export default class Game {
 
@@ -114,7 +117,7 @@ export default class Game {
       this.player.correct = true;
     }
     if (this.count < parseInt(this.params.get('count')) - 1) {
-      setTimeout(this.nextGuess.bind(this), 1500);
+      setTimeout(this.nextGuess.bind(this), 1000);
     } else {
       this.gameService.saveScore(this.gameService.getScore());
       this.gameOver = true;
