@@ -1,5 +1,6 @@
 {
   "compileOnSave": false,
+  "buildOnSave": false,
   "compilerOptions": {
     "declaration": false,
     "emitDecoratorMetadata": true,
