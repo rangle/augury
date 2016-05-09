@@ -1,4 +1,4 @@
-<div class="pl4" *ngFor="#k of keys(state)">
+<div class="pl4" *ngFor="let k of keys(state)">
     <span *ngIf="type(state[k]) =='object'">
       <img src="../images/Triangle.svg" style="width: 0.8rem; height: 0.8rem;"
          [ngClass]="{rotate90: expanded[k]}"

@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 
 import {User} from './user';
 import {UserInfoDefault} from './user-info-default';
@@ -24,7 +24,7 @@ import {UserInfoCheckOnce} from './user-info-checkonce';
       (click)="makeUserOnline(1)">
       Make User Online (imuttable)
     </button>
-    
+
     <user-info-default [user]="user">
     </user-info-default>
 

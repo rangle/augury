@@ -25,7 +25,7 @@
       [hidden]="showChildren()"
       [selectedNode]="selectedNode"
       [openedNodes]="openedNodes"
-      *ngFor="#node of node.children"
+      *ngFor="let node of node.children"
       [node]="node">
     </bt-node-item>
   </div>
