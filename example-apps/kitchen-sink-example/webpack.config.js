@@ -15,12 +15,12 @@ module.exports = {
     vendor: [
       'core-js',
       'reflect-metadata',
-      'angular2/bundles/angular2-polyfills',
-      'angular2/platform/browser',
-      'angular2/platform/common_dom',
-      'angular2/core',
-      'angular2/router',
-      'angular2/http'
+      'zone.js/dist/zone',
+      '@angular/platform-browser-dynamic',
+      '@angular/core',
+      '@angular/common',
+      '@angular/router-deprecated',
+      '@angular/http'
      ]
   },
 

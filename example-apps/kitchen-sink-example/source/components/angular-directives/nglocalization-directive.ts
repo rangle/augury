@@ -1,5 +1,5 @@
-import {Component, provide} from 'angular2/core';
-import {NgPlural, NgPluralCase, NgLocalization} from 'angular2/common';
+import {Component, provide} from '@angular/core';
+import {NgPlural, NgPluralCase, NgLocalization} from '@angular/common';
 
 class MyLocalization extends NgLocalization {
    getPluralCategory(value: any) {

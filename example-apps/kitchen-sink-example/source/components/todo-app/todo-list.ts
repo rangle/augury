@@ -1,5 +1,5 @@
-import {Component} from 'angular2/core';
-import {NgFor} from 'angular2/common';
+import {Component} from '@angular/core';
+import {NgFor} from '@angular/common';
 import {TodoService} from './todo-service';
 
 @Component({
@@ -22,7 +22,7 @@ import {TodoService} from './todo-service';
              *ngSwitchWhen="'completed'">Completed</p>
         </h4>
       </td>
-      <td><button 
+      <td><button
          class="btn btn-warning"
         (click)="todo.toggle()">Toggle</button></td>
     </tr>
