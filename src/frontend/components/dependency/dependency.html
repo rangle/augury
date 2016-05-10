@@ -1,7 +1,7 @@
 <!--dependencies view-->
 <div *ngIf="!(depComps && depComps.length > 0)" class="mxn4 myn2">
   <ul class="list-reset m0">
-    <li *ngFor="#dep of dependencies" class="py2 px4 border-bottom">
+    <li *ngFor="let dep of dependencies" class="py2 px4 border-bottom">
         <a href="#" (click)="findDependency(dep)">
           {{dep}}
         </a>
@@ -19,12 +19,12 @@
 
   <ul class="list-reset m0"
     *ngIf="(depComps && depComps.length > 0)">
-    <li *ngFor="#comp of depComps" class="py2 px4 border-bottom">
+    <li *ngFor="let comp of depComps" class="py2 px4 border-bottom">
       <a href="#" (click)="selectNode(comp)">
         {{comp.name}} (a-id = {{comp.id}})
       </a>
       <ul>
-        <li *ngFor="#dep of comp.dependencies">
+        <li *ngFor="let dep of comp.dependencies">
             <a href="#" (click)="findDependency(dep)">
               {{dep}}
             </a>

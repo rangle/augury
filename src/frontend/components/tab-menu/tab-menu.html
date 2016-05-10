@@ -2,7 +2,7 @@
     <div class="flex pannel-tab-header regular center px2 py1 m0"
           [ngClass]=
             "{'bg-white border-top border-right border-left': t.selected}"
-          *ngFor="#t of tabs; #i = index"
+          *ngFor="let t of tabs; let i = index"
           (click)="tabClick(i)">
       {{t.title}}
     </div>
