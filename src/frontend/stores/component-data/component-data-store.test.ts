@@ -2,7 +2,8 @@ import * as test from 'tape';
 import {ReflectiveInjector, provide} from '@angular/core';
 import {ComponentDataStore} from '../component-data/component-data-store';
 import {Dispatcher} from '../../dispatcher/dispatcher';
-import {BackendActionType, UserActionType} from '../../actions/action-constants';
+import {BackendActionType, UserActionType}
+from '../../actions/action-constants';
 
 test('frontend/component-data-store: component changes', t => {
 
