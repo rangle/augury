@@ -1,15 +1,15 @@
 
-import { Component } from 'angular2/core'; import {
+import { Component } from '@angular/core'; import {
   FORM_DIRECTIVES,
   FormBuilder,
   ControlGroup
-} from 'angular2/common';
+} from '@angular/common';
 @Component({
   selector: 'control-form',
   directives: [FORM_DIRECTIVES],
   template: `
     <div>
-        <form [ngFormModel]="formControl" 
+        <form [ngFormModel]="formControl"
            (ngSubmit)="onSubmit(formControl.value)"
            class="col-sm-8">
             <div class="form-group">

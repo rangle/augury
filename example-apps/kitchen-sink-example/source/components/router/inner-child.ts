@@ -1,10 +1,10 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {
   ROUTER_DIRECTIVES,
   RouteConfig,
   RouterLink,
   RouterOutlet
-} from 'angular2/router';
+} from '@angular/router-deprecated';
 
 import InnerChild2 from './inner-child2';
 import InnerChildMain from './inner-child-main';
