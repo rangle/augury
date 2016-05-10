@@ -81,7 +81,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
 
-    if (compEl.componentInstance) {
+    if (compEl.providerTokens.length > 0) {
       this._tree[idx] = 0;
       cb(compEl, isRoot, idx);
     }
@@ -92,7 +92,7 @@ export class Angular2Adapter extends BaseAdapter {
       .forEach((child: any, childIdx: number) => {
 
         let index: string = idx;
-        if (child.componentInstance) {
+        if (child.providerTokens.length > 0) {
           index = [idx, this._tree[idx]].join('.');
           this._tree[idx]++;
         }
@@ -170,7 +170,7 @@ export class Angular2Adapter extends BaseAdapter {
     if (isRoot) {
       return this.addRoot(compEl);
     } else if (nodeName !== 'NgSelectOption ') {
-      // skipping the NgSelectOption to imporove performance
+      // skipping the NgSelectOption to imporove performance 
       // It adds no value displaying node elements
       this.addChild(compEl);
     }
@@ -194,7 +194,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentDirectives(compEl: any) {
     const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.componentInstance.constructor);
+      compEl.providerTokens[0]);
 
     const directives = [];
     if (metadata && metadata.length > 0 && metadata[0].directives) {
@@ -207,7 +207,7 @@ export class Angular2Adapter extends BaseAdapter {
   _getComponentCD(compEl: any) {
     let changeDetection;
     const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.componentInstance.constructor);
+      compEl.providerTokens[0]);
     if (metadata && metadata.length > 0) {
       changeDetection = metadata[0].changeDetection;
     }
@@ -218,7 +218,7 @@ export class Angular2Adapter extends BaseAdapter {
 
     const dependencies = [];
     const parameters = Reflect.getOwnMetadata('design:paramtypes',
-      compEl.componentInstance.constructor) || [];
+      compEl.providerTokens[0]) || [];
 
     parameters.forEach((param) => dependencies.push(param.name));
 
@@ -249,12 +249,16 @@ export class Angular2Adapter extends BaseAdapter {
   _getComponentName(compEl: any): string {
     const constructor =  <any>this._getComponentInstance(compEl)
                                   .constructor;
-    const constructorName = constructor.name;
+    let constructorName = constructor.name;
 
     // Cover components not backed by a custom class.
-    return constructorName !== 'Object' ?
-           constructorName :
-           this._getComponentRef(compEl).tagName;
+    if (constructorName === 'Object') {
+      constructorName = this.getFunctionName(compEl.providerTokens[0]);
+    }
+    return constructorName;
+    // return constructorName !== 'Object' ?
+    //        constructorName :
+    //        this._getComponentRef(compEl).tagName;
   }
 
   _isSerializable(val: any) {
@@ -286,7 +290,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentInput(compEl: any): Object {
     const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.componentInstance.constructor);
+      compEl.providerTokens[0]);
 
     return (metadata && metadata.length > 0) ?
       metadata[0].inputs : [];
@@ -294,7 +298,7 @@ export class Angular2Adapter extends BaseAdapter {
 
   _getComponentOutput(compEl: any): Object {
     const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.componentInstance.constructor);
+      compEl.providerTokens[0]);
 
     return (metadata && metadata.length > 0) ?
       metadata[0].outputs : [];
@@ -354,7 +358,7 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getDescription(compEl: any): Object[] {
-    if (compEl.componentInstance) {
+    if (compEl.providerTokens.length > 0) {
       return Description.getComponentDescription(compEl);
     } else {
       return [

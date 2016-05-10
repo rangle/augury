@@ -12,12 +12,11 @@ export abstract class Description {
     }
 
     const componentInstance: any = compEl.componentInstance || {};
-    const constructor: any =  componentInstance.constructor;
-    const constructorName: string = constructor.name;
-    const componentName: string = constructorName !== 'Object' ?
-      constructorName : compEl.nativeElement.tagName;
+    const componentName: string =
+      this.getFunctionName(compEl.providerTokens[0]);
     const element: HTMLElement = <HTMLElement>compEl.nativeElement;
 
+    console.log(componentName, componentInstance);
     switch (componentName) {
       case 'RouterLink':
         description =  Description._getRouterLinkDesc(element);
@@ -93,6 +92,9 @@ export abstract class Description {
   }
 
   private static _getNgFormDesc(instance: any): Array<Property> {
+    if (!instance.form) {
+      return [];
+    }
     return [
       { key: 'status', value: instance.form.status },
       { key: 'dirty', value: instance.form.dirty }
@@ -157,6 +159,9 @@ export abstract class Description {
   }
 
   private static _getNgFormModelDesc(instance: any): Array<Property> {
+    if (!instance.form) {
+      return [];
+    }
     return [
       { key: 'status', value: instance.form.status },
       { key: 'dirty', value: instance.form.dirty },
@@ -168,5 +173,12 @@ export abstract class Description {
     return [
       { key: 'condition', value: instance._prevCondition }
     ];
+  }
+
+  private static  getFunctionName(value: string) {
+    let name = value.toString();
+    name = name.substr('function '.length);
+    name = name.substr(0, name.indexOf('('));
+    return name;
   }
 }
