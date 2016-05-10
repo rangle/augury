@@ -37,18 +37,3 @@
   color: var(--webkit-attribute-value);
   display: inline;
 }
-
-.text-property {
-  color: var(--bt-key-color);
-  display: inline;
-}
-
-.text-value {
-  color: var(--bt-editable-color);
-  display: inline;
-}
-
-.text-type {
-  color: var(--bt-type-color);
-  display: inline;
-}
