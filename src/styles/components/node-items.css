@@ -1,26 +1,22 @@
+
+/* Node Items */
+
 .node-item {
   cursor: pointer;
   width: 100%;
-}
 
-.node-item:hover {
-  background-color: var(--blue-light);
+  &:hover {
+    background-color: var(--blue-light);
+  }
 }
 
 .node-item-error {
   background-color: var(--red-lightest)
 }
 
-.node-item-selected {
-  background-color: var(--blue);
-}
-
+.node-item-selected,
 .node-item-selected:hover {
   background-color: var(--blue);
-}
-
-.node-item-container {
-  display: inline;
 }
 
 .node-item-name {

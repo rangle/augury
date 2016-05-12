@@ -3,14 +3,14 @@
   (dblclick)=onDblClick($event)
   (click)="onClick($event)">
 
-  <div class="node-item pl4 rounded border-box"
+  <div class="node-item pl3 rounded border-box"
     [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
     <img src="../images/Triangle.svg"
       style="width: 0.8em; height: 0.8em;"
       [hidden]="node.children ? false : true"
       [ngClass]="{rotate90: showChildren()}"
       (click)="expandTree($event)">
-    <div class="node-item-container"
+    <div class="inline"
       [innerHTML]="getNodeDetails(node)">
       </div>
   </div>
