@@ -1,6 +1,6 @@
 <div class="flex flex-column flex-stretch col-12">
   <header class="bg-darken-1 border-bottom py3 px3">
-    <h4 class="regular header flex flex-center primary-color col col-4 m0">
+    <h4 class="regular flex flex-center primary-color col col-4 m0">
       <img src="../images/augury-logo.svg"
         class="mr2"
         style="width: 18px; height: 18px;">
@@ -12,7 +12,9 @@
         </div>
       <div class="right-align mx3"
         *ngIf="totalSearchCount > 0 && query.value.length > 0">
-        <span>{{searchIndex + 1}} of {{totalSearchCount}}</span>
+        <span class="h4 regular">
+          {{searchIndex + 1}} of {{totalSearchCount}}
+          </span>
         <button class="btn btn-primary black bg-silver mb1"
           style="padding: 2px 4px;"
           (click)="onChange($event, query.value, true)">
