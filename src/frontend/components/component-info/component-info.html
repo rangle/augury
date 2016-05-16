@@ -1,89 +1,118 @@
 <div class="flex flex-column overflow-scroll col-12">
-
-  <div class="py3 px3 m0 bg-darken-1 border-bottom">
-      <h4 class="col m0 header">
-        {{ node && node.name || 'No Component Selected' }}
-        &nbsp;<a href="" class="source-color" *ngIf="node && node.name"
-          (click)="viewComponentSource($event)">(View Source)</a>
-      </h4>
-      <span class="right regular mr4" *ngIf="node">($a in Console)</span>
+  <div class="bg-darken-1 border-bottom py3 px3 m0 ">
+    <h4 class="col pt1 pb2 m0">
+      {{ node && node.name || 'No Component Selected' }}
+      &nbsp;
+      <a href=""
+        class="red-1"
+        *ngIf="node && node.name"
+        (click)="viewComponentSource($event)">
+        (View Source)
+        </a>
+    </h4>
+    <span class="h4 regular right"
+      *ngIf="node">
+      ($a in Console)
+      </span>
   </div>
 
   <div [hidden]="!(node && node.name)">
     <accordion [sectionTitle]='"Properties"'>
       <section-content>
-        <ul class="list-reset m0" *ngIf="node && node.description">
-            <li *ngFor="let property of node.description">
-                <span class="inline-block info-key">{{property.key}}: </span>
-                <span class="inline-block info-value">{{property.value}}</span>
-            </li>
+        <ul class="list-reset m0"
+          *ngIf="node && node.description">
+          <li *ngFor="let property of node.description">
+            <span class="inline-block info-key">
+              {{property.key}}:
+              </span>
+            <span class="inline-block info-value">
+              {{property.value}}
+              </span>
+          </li>
         </ul>
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Directives"' *ngIf="node && node.directives && node.directives.length > 0">
+    <accordion [sectionTitle]='"Directives"'
+      *ngIf="node && node.directives && node.directives.length > 0">
       <section-content>
         <ul class="list-reset m0">
-            <li *ngFor="let directive of node.directives">
-                <span class="inline-block info-key">{{directive}}</span>
-            </li>
-        </ul>
-      </section-content>
-    </accordion>
-
-    <accordion *ngIf="node && node.changeDetection" [sectionTitle]='"Change Detection"'>
-      <section-content>
-        {{node.changeDetection}}
-      </section-content>
-    </accordion>
-
-    <accordion [sectionTitle]='"Input"' *ngIf="node && node.input && node.input.length > 0">
-      <section-content>
-        <ul class="list-reset m0">
-              <li *ngFor="let input of _input">
-                <span class="info-key inline-block">{{input.key}}:</span>
-                <span *ngIf="input.value !== ''" class="info-value inline-block">{{input.value}}</span>
-              </li>
-          </ul>
-      </section-content>
-    </accordion>
-
-    <accordion [sectionTitle]='"Output"' *ngIf="node && node.output && node.output.length > 0">
-      <section-content>
-        <ul class="list-reset m0">
-            <li *ngFor="let output of node.output; ">
-                <span class="info-key inline-block">{{output}}
-                  <input type="text" #prop class="info-editable">
-                  <button
-                   class="btn btn-primary mb1 bg-olive"
-                   (click)="fireEvent(output, prop.value)">Fire</button>
+          <li *ngFor="let directive of node.directives">
+              <span class="inline-block info-key">
+                {{directive}}
                 </span>
-            </li>
+          </li>
         </ul>
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"State"' *ngIf="node && node.state">
+    <accordion [sectionTitle]='"Change Detection"'
+      *ngIf="node && node.changeDetection">
+      <section-content>{{node.changeDetection}}</section-content>
+    </accordion>
+
+    <accordion [sectionTitle]='"Input"'
+      *ngIf="node && node.input && node.input.length > 0">
+      <section-content>
+        <ul class="list-reset m0">
+          <li *ngFor="let input of _input">
+            <span class="info-key inline-block">
+              {{input.key}}:
+              </span>
+            <span class="info-value inline-block"
+              *ngIf="input.value !== ''">
+              {{input.value}}
+              </span>
+          </li>
+        </ul>
+      </section-content>
+    </accordion>
+
+    <accordion [sectionTitle]='"Output"'
+      *ngIf="node && node.output && node.output.length > 0">
+      <section-content>
+        <ul class="list-reset m0">
+          <li *ngFor="let output of node.output; ">
+            <span class="info-key inline-block">
+              {{output}}
+              <input class="info-editable"
+                type="text"
+                #prop>
+              <button class="btn btn-primary bg-olive mb1"
+                (click)="fireEvent(output, prop.value)">
+                Fire
+                </button>
+            </span>
+          </li>
+        </ul>
+      </section-content>
+    </accordion>
+
+    <accordion [sectionTitle]='"State"'
+      *ngIf="node && node.state">
       <section-content>
         <div class="mxn4">
-            <bt-render-state
-                [propertyTree]="propertyTree"
-                [id]="node.id"
-                [state]="node.state"></bt-render-state>
+          <bt-render-state [propertyTree]="propertyTree"
+            [id]="node.id"
+            [state]="node.state">
+            </bt-render-state>
         </div>
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Dependencies"' *ngIf="node && node.dependencies && node.dependencies.length > 0">
+    <accordion [sectionTitle]='"Dependencies"'
+      *ngIf="node && node.dependencies && node.dependencies.length > 0">
       <section-content>
-        <bt-dependency [dependencies]="node.dependencies">
-        </bt-dependency>
+        <bt-dependency [dependencies]="node.dependencies"></bt-dependency>
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Children"' *ngIf="node && node.children && node.children.length > 0">
+    <accordion [sectionTitle]='"Children"'
+      *ngIf="node && node.children && node.children.length > 0">
       <section-content>
-        <div id="tree-children" class="px4 tree-container"></div>
+        <div id="tree-children"
+          class="h4">
+          </div>
       </section-content>
     </accordion>
 

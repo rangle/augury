@@ -2,7 +2,7 @@
   [tabs]="tabs"
   (tabChange)="tabClicked($event)"
   [selectedTabIndex]="selectedTabIndex">
-</bt-tab-menu>
+  </bt-tab-menu>
 
 <bt-tree-view
   [hidden]="selectedTabIndex != 0"
@@ -11,9 +11,9 @@
   [selectedNode]="selectedNode"
   [openedNodes]="openedNodes"
   [tree]="tree">
-</bt-tree-view>
+  </bt-tree-view>
 
 <bt-router-tree
   [hidden]="selectedTabIndex != 1"
   [routerTree]="routerTree">
-</bt-router-tree>
+  </bt-router-tree>

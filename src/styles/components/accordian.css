@@ -1,0 +1,28 @@
+
+/* Accordian */
+
+.expand-arrow {
+  -webkit-mask-position: -18px -96px;
+  background-color: var(--grey-darkest);
+  margin: auto 5px;
+  pointer-events: none;
+}
+
+.icon {
+  -webkit-mask-image: url(../../images/toolbarButtonGlyphs_2x.png);
+  -webkit-mask-size: 352px 168px;
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+}
+
+.double-arrow {
+  -webkit-mask-position: -74px 16px;
+  background-color: var(--bt-link-color);
+}
+
+.no-highlight {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
