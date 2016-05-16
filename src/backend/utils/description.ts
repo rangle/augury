@@ -12,8 +12,13 @@ export abstract class Description {
     }
 
     const componentInstance: any = compEl.componentInstance || {};
-    const componentName: string =
-      this.getFunctionName(compEl.providerTokens[0]);
+    let componentName: string;
+    if (compEl.componentInstance) {
+      componentName = compEl.componentInstance.constructor.name;
+    } else if (compEl.providerTokens && compEl.providerTokens.length > 0) {
+      componentName = this.getFunctionName(compEl.providerTokens[0]);
+    }
+
     const element: HTMLElement = <HTMLElement>compEl.nativeElement;
 
     switch (componentName) {
@@ -30,7 +35,7 @@ export abstract class Description {
         description = Description._getNgIfDesc(componentInstance);
         break;
       case 'NgClass':
-        description = Description._getClassDesc(componentInstance);
+        description = Description._getClassDesc(compEl);
         break;
       case 'NgControlName':
         description = Description._getControlNameDesc(componentInstance);
@@ -126,11 +131,11 @@ export abstract class Description {
     ];
   }
 
-  private static _getClassDesc(instance: any): Array<Property> {
-    const rawClasses = instance._rawClass;
+  private static _getClassDesc(compEl: any): Array<Property> {
+    const instance = compEl.injector.get(compEl.providerTokens[0]);
     const appliedClasses = [];
-    for (let key in rawClasses) {
-      if (rawClasses[key]) {
+    for (let key in instance._rawClass) {
+      if (instance._rawClass[key]) {
         appliedClasses.push(key);
       }
     }
