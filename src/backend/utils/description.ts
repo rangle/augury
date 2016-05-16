@@ -16,13 +16,12 @@ export abstract class Description {
       this.getFunctionName(compEl.providerTokens[0]);
     const element: HTMLElement = <HTMLElement>compEl.nativeElement;
 
-    console.log(componentName, componentInstance);
     switch (componentName) {
       case 'RouterLink':
         description =  Description._getRouterLinkDesc(element);
         break;
       case 'RouterOutlet':
-        description =  Description._getRouterOutletDesc(componentInstance);
+        description =  Description._getRouterOutletDesc(compEl);
         break;
       case 'NgSelectOption':
         description = Description._getSelectOptionDesc(element);
@@ -39,17 +38,14 @@ export abstract class Description {
       case 'NgFormControl':
         description = Description._getFormControlDesc(componentInstance);
         break;
-      case 'ControlForm':
-        description = Description._getFormControlDesc(componentInstance);
-        break;
       case 'NgModel':
         description = Description._getNgModelDesc(componentInstance);
         break;
       case 'NgForm':
-        description = Description._getNgFormDesc(componentInstance);
+        description = Description._getNgFormDesc(compEl);
         break;
       case 'NgFormModel':
-        description = Description._getNgFormModelDesc(componentInstance);
+        description = Description._getNgFormModelDesc(compEl);
         break;
       case 'NgSwitch':
         description = Description._getNgSwitchDesc(componentInstance);
@@ -91,23 +87,26 @@ export abstract class Description {
     ];
   }
 
-  private static _getNgFormDesc(instance: any): Array<Property> {
-    if (!instance.form) {
-      return [];
-    }
+  private static _getNgFormDesc(compEl: any): Array<Property> {
+    const instance = compEl.injector.get(compEl.providerTokens[0]);
     return [
       { key: 'status', value: instance.form.status },
       { key: 'dirty', value: instance.form.dirty }
     ];
   }
 
-  private static _getRouterOutletDesc(instance: any): Array<Property> {
+  private static _getRouterOutletDesc(compEl: any): Array<Property> {
+    const properties = compEl.injector.get(compEl.providerTokens[0]);
     return [
-      { key: 'name', value: instance.name || ''},
+      { key: 'name', value: properties.name || ''},
+      { key: 'routeName',
+        value: properties._currentInstruction &&
+        properties._currentInstruction.routeName || ''
+      },
       { key: 'hostComponent',
-        value: instance._componentRef
-           && instance._componentRef.componentType
-           && instance._componentRef.componentType.name }
+        value: properties._currentInstruction && this.getFunctionName
+          (properties._currentInstruction.componentType) || ''
+      }
     ];
   }
 
@@ -115,7 +114,9 @@ export abstract class Description {
     return [
       { key: 'useDefault', value: instance._useDefault },
       { key: 'switchValue', value: instance._switchValue },
-      { key: 'valuesCount', value: instance._valueViews.size }
+      {
+        key: 'valuesCount', value:
+          instance._valueViews ? instance._valueViews.size : 0 }
     ];
   }
 
@@ -158,10 +159,8 @@ export abstract class Description {
     ];
   }
 
-  private static _getNgFormModelDesc(instance: any): Array<Property> {
-    if (!instance.form) {
-      return [];
-    }
+  private static _getNgFormModelDesc(compEl: any): Array<Property> {
+    const instance = compEl.injector.get(compEl.providerTokens[0]);
     return [
       { key: 'status', value: instance.form.status },
       { key: 'dirty', value: instance.form.dirty },

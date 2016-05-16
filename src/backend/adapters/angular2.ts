@@ -272,9 +272,14 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentState(compEl: any): Object {
-    const ret = {};
-    const instance = this._getComponentInstance(compEl);
+    let instance = {};
+    if (compEl.componentInstance) {
+      instance = this._getComponentInstance(compEl);
+    } else if (compEl.providerTokens && compEl.providerTokens.length > 0) {
+      instance = compEl.injector.get(compEl.providerTokens[0]);
+    }
 
+    const ret = {};
     Object.keys(instance).forEach((key) => {
       const val = instance[key];
 
@@ -316,9 +321,19 @@ export class Angular2Adapter extends BaseAdapter {
         return this._normalizeNgSwitch(state);
       case 'NgStyle':
         return this._normalizeNgStyle(state);
+      case 'RouterOutlet':
+        return this._normalizeRouterOutlet(state);
       default:
         return state;
     }
+  }
+
+  _normalizeRouterOutlet(state: any): Object {
+    return {
+      name: state.name,
+      currentInstruction: state._currentInstruction,
+      activateEvents: state.activateEvents
+    };
   }
 
   _normalizeNgIf(state: any): Object {
