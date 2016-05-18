@@ -3,10 +3,11 @@
 
 .node-item {
   cursor: pointer;
-  width: 100%;
 
   &:hover {
     background-color: var(--blue-light);
+    padding-left: 58px;
+    margin-left: -50px;
   }
 }
 
@@ -17,6 +18,8 @@
 .node-item-selected,
 .node-item-selected:hover {
   background-color: var(--blue);
+  padding-left: 58px !important;
+  margin-left: -50px;
 }
 
 .node-item-name {
