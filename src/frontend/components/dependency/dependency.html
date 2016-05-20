@@ -29,8 +29,8 @@
     *ngIf="(depComps && depComps.length > 0)">
     <li class="border-bottom py2 px4"
       *ngFor="let comp of depComps">
-      <a href="#" (
-        click)="selectNode(comp)">
+      <a href="#"
+        (click)="selectNode(comp)">
         {{comp.name}} (a-id = {{comp.id}})
         </a>
       <ul>
