@@ -106,9 +106,14 @@ export class Angular2Adapter extends BaseAdapter {
     }
   }
 
+  _isComponent(debugEl: any): boolean {
+    return debugEl.componentInstance !== null;
+  }
+
   serializeComponent(el: any, event: string): TreeNode {
     const debugEl = el;
     const id = this._getComponentID(debugEl);
+    const isComponent = this._isComponent(debugEl);
     const name = this._getComponentName(debugEl);
     const description = this._getDescription(debugEl);
     const state = this._normalizeState(name, this._getComponentState(debugEl));
@@ -118,6 +123,7 @@ export class Angular2Adapter extends BaseAdapter {
     const changeDetection = this._getComponentCD(debugEl);
     const injectors = this._getComponentInjectors(debugEl, dependencies);
     const directives = this._getComponentDirectives(debugEl);
+    const providers = this._getProviders(debugEl);
 
     description.unshift({
       key: 'a-id',
@@ -136,7 +142,9 @@ export class Angular2Adapter extends BaseAdapter {
       dependencies,
       changeDetection,
       injectors,
-      directives
+      directives,
+      isComponent,
+      providers
     };
   }
 
@@ -176,12 +184,12 @@ export class Angular2Adapter extends BaseAdapter {
     }
   };
 
-  _getComponentInjectors(compEl: any, dependencies: any) {
+  _getComponentInjectors(debugEl: any, dependencies: any) {
 
-    const componentName = this._getComponentName(compEl);
+    const componentName = this._getComponentName(debugEl);
     const injectors = [];
-    for (let i = 0; i < compEl.providerTokens.length; i++) {
-      const provider: any = compEl.providerTokens[i];
+    for (let i = 0; i < debugEl.providerTokens.length; i++) {
+      const provider: any = debugEl.providerTokens[i];
       const name: string = this.getFunctionName(provider);
       injectors.push(name);
     }
@@ -192,42 +200,48 @@ export class Angular2Adapter extends BaseAdapter {
     return compEl.nativeElement;
   }
 
-  _getComponentDirectives(compEl: any) {
-    const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.providerTokens[0]);
-
+  _getComponentDirectives(debugEl: any) {
     const directives = [];
-    if (metadata && metadata.length > 0 && metadata[0].directives) {
-      metadata[0].directives.forEach((directive) =>
-        directives.push(this.getFunctionName(directive)));
+
+    if (debugEl.componentInstance) {
+      const metadata = Reflect.getOwnMetadata
+        ('annotations', debugEl.componentInstance);
+
+      if (metadata && metadata.length > 0 && metadata[0].directives) {
+        metadata[0].directives.forEach((directive) =>
+          directives.push(this.getFunctionName(directive)));
+      }
     }
     return directives;
   }
 
-  _getComponentCD(compEl: any) {
+  _getComponentCD(debugEl: any) {
     let changeDetection;
-    const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.providerTokens[0]);
-    if (metadata && metadata.length > 0) {
-      changeDetection = metadata[0].changeDetection;
+    if (debugEl.componentInstance) {
+      const metadata = Reflect.getOwnMetadata
+        ('annotations', debugEl.componentInstance);
+      if (metadata && metadata.length > 0) {
+        changeDetection = ChangeDetectionStrategy[metadata[0].changeDetection];
+      }
     }
-    return ChangeDetectionStrategy[changeDetection];
+    return changeDetection;
   }
 
-  _getComponentDependencies(compEl: any) {
-
+  _getComponentDependencies(debugEl: any) {
     const dependencies = [];
-    const parameters = Reflect.getOwnMetadata('design:paramtypes',
-      compEl.providerTokens[0]) || [];
+    if (debugEl.componentInstance) {
+      const parameters = Reflect.getOwnMetadata
+        ('design:paramtypes', debugEl.componentInstance) || [];
 
-    parameters.forEach((param) => dependencies.push(param.name));
+      parameters.forEach((param) => dependencies.push(param.name));
+    }
 
     return dependencies;
   }
 
   _getComponentInstance(compEl: any): Object {
     // fix could be undefined (are we grabbing the right element?)
-    return compEl.componentInstance || {};
+    return compEl.componentInstance;
   }
 
   _getComponentRef(compEl: any): Element {
@@ -246,19 +260,16 @@ export class Angular2Adapter extends BaseAdapter {
     return id;
   }
 
-  _getComponentName(compEl: any): string {
-    const constructor =  <any>this._getComponentInstance(compEl)
-                                  .constructor;
-    let constructorName = constructor.name;
-
-    // Cover components not backed by a custom class.
-    if (constructorName === 'Object') {
-      constructorName = this.getFunctionName(compEl.providerTokens[0]);
+  _getComponentName(debugEl: any): string {
+    let componentName;
+    if (this._isComponent(debugEl)) {
+      const constructor =  <any>this._getComponentInstance(debugEl)
+        .constructor;
+      componentName = constructor.name;
+    } else {
+      componentName = debugEl.name;
     }
-    return constructorName;
-    // return constructorName !== 'Object' ?
-    //        constructorName :
-    //        this._getComponentRef(compEl).tagName;
+    return componentName;
   }
 
   _isSerializable(val: any) {
@@ -271,42 +282,46 @@ export class Angular2Adapter extends BaseAdapter {
     return true;
   }
 
-  _getComponentState(compEl: any): Object {
-    let instance = {};
-    if (compEl.componentInstance) {
-      instance = this._getComponentInstance(compEl);
-    } else if (compEl.providerTokens && compEl.providerTokens.length > 0) {
-      instance = compEl.injector.get(compEl.providerTokens[0]);
+  _getComponentState(debugEl: any): Object {
+    let state;
+    if (debugEl.componentInstance) {
+      state = {};
+      const instance = this._getComponentInstance(debugEl);
+      Object.keys(instance).forEach((key) => {
+        const val = instance[key];
+
+        if (!this._isSerializable(val)) {
+          return;
+        }
+
+        state[key] = val;
+      });
     }
-
-    const ret = {};
-    Object.keys(instance).forEach((key) => {
-      const val = instance[key];
-
-      if (!this._isSerializable(val)) {
-        return;
-      }
-
-      ret[key] = val;
-    });
-
-    return ret;
+    return state;
   }
 
-  _getComponentInput(compEl: any): Object {
-    const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.providerTokens[0]);
+  _getComponentInput(debugEl: any): Object[] {
+    let inputs = [];
+    if (debugEl.componentInstance) {
+      const metadata = Reflect.getOwnMetadata
+        ('annotations', debugEl.componentInstance);
 
-    return (metadata && metadata.length > 0) ?
-      metadata[0].inputs : [];
+      inputs = (metadata && metadata.length > 0) ?
+        metadata[0].inputs : [];
+    }
+    return inputs;
   }
 
-  _getComponentOutput(compEl: any): Object {
-    const metadata = Reflect.getOwnMetadata('annotations',
-      compEl.providerTokens[0]);
+  _getComponentOutput(debugEl: any): Object {
+    let outputs = [];
+    if (debugEl.componentInstance) {
+      const metadata = Reflect.getOwnMetadata
+        ('annotations', debugEl.componentInstance);
 
-    return (metadata && metadata.length > 0) ?
-      metadata[0].outputs : [];
+      outputs = (metadata && metadata.length > 0) ?
+        metadata[0].outputs : [];
+    }
+    return outputs;
   }
 
   _normalizeState(name: string, state: Object): Object {
@@ -372,14 +387,25 @@ export class Angular2Adapter extends BaseAdapter {
     };
   }
 
-  _getDescription(compEl: any): Object[] {
-    if (compEl.providerTokens.length > 0) {
-      return Description.getComponentDescription(compEl);
+  _getDescription(debugEl: any): Object[] {
+    if (debugEl.componentInstance) {
+      return Description.getComponentDescription(debugEl);
     } else {
       return [
-        { key: 'name', value: this._getComponentName(compEl) }
+        { key: 'name', value: this._getComponentName(debugEl) }
       ];
     }
+  }
+
+  _getProviders(debugEl: any): Object[] {
+    let providers = [];
+    if (debugEl.providerTokens && debugEl.providerTokens.length > 0) {
+      providers = debugEl.providerTokens.map((provider) => {
+        return Description.getProviderDescription
+          (provider, debugEl.injector.get(provider));
+      });
+    }
+    return providers;
   }
 
   getFunctionName(value: string) {

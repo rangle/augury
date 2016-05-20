@@ -33,6 +33,25 @@
       </section-content>
     </accordion>
 
+    <accordion [sectionTitle]='"Providers"'
+      *ngIf="node && node.providers && node.providers.length > 0">
+      <section-content>
+        <span *ngFor="let provider of node.providers">
+          <p class="m1">{{provider.key}}</p>
+          <ul>
+            <li *ngFor="let property of provider.value">
+              <span class="inline-block info-key">
+                {{property.key}}:
+                </span>
+              <span class="inline-block info-value">
+                {{property.value}}
+              </span>
+            </li>
+          </ul>
+        </span>
+      </section-content>
+    </accordion>
+
     <accordion [sectionTitle]='"Directives"'
       *ngIf="node && node.directives && node.directives.length > 0">
       <section-content>
