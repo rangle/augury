@@ -10,7 +10,6 @@ import {RouterTree} from '../router-tree/router-tree';
   directives: [TabMenu, TreeView, RouterTree],
   inputs: ['tree', 'routerTree', 'selectedTabIndex',
     'selectedNode', 'changedNodes', 'openedNodes'],
-  host: {'class': 'flex flex-column vh-100'},
   templateUrl:
     '/src/frontend/components/app-trees/app-trees.html'
 })
