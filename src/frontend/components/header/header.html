@@ -6,10 +6,11 @@
         style="width: 18px; height: 18px;">
         Augury
     </h4>
+
     <div class="col col-4">
       <div *ngIf="!(totalSearchCount > 0 && query.length > 0)">
         &nbsp;
-        </div>
+      </div>
       <div class="right-align mx3"
         *ngIf="totalSearchCount > 0 && query.length > 0">
         <span class="h4 regular">
@@ -30,13 +31,43 @@
         </button>
       </div>
     </div>
-    <!-- SEARCH -->
-    <input class="border rounded border-color-dark col col-4"
-      [ngClass]="{'bg-silver': searchDisabled}"
-      placeholder="Search for Component"
-      type="text"
-      (keyup)="onKey($event)"
-      [disabled]="searchDisabled"
-      [(ngModel)]="query">
+
+    <div class="col col-4 flex">
+      <!-- SEARCH -->
+      <input class="border rounded border-color-dark flex-auto"
+        [ngClass]="{'bg-silver': searchDisabled}"
+        placeholder="Search for Component"
+        type="text"
+        (keyup)="onKey($event)"
+        [disabled]="searchDisabled"
+        [(ngModel)]="query">
+
+      <!-- SETTING -->
+      <div class="icon setting" (click)="settingOpened=!settingOpened"></div>
+    </div>
   </header>
+
+  <form>
+    <ul class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" *ngIf="settingOpened">
+      <li class="p3 border-bottom border-dark">
+        <input type="radio"
+          #lightTheme
+          [checked]="theme==='light'"
+          (change)="themeChange('light', lightTheme.checked)"
+          name="theme"
+          value="light">
+        <label for="light">Light Mode</label>
+      </li>
+      <li class="p3">
+        <input type="radio"
+          #darkTheme
+          [checked]="theme==='dark'"
+          (change)="themeChange('dark', darkTheme.checked)"
+          name="theme"
+          value="dark">
+        <label for="dark">Dark Mode</label>
+      </li>
+    </ul>
+  </form>
+
 </div>
