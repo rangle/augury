@@ -45,6 +45,9 @@ export abstract class Description {
   }
 
   public static getComponentDescription(debugEl: any): Object[] {
+    if (!debugEl) {
+      return [];
+    }
     const element: any = debugEl.nativeElement;
     let description: Array<Property> = new Array<Property>();
     let componentName;
