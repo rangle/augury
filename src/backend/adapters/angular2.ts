@@ -304,7 +304,7 @@ export class Angular2Adapter extends BaseAdapter {
     let inputs = [];
     if (debugEl.componentInstance) {
       const metadata = Reflect.getOwnMetadata
-        ('annotations', debugEl.componentInstance);
+        ('annotations', debugEl.componentInstance.constructor);
 
       inputs = (metadata && metadata.length > 0) ?
         metadata[0].inputs : [];
@@ -316,7 +316,7 @@ export class Angular2Adapter extends BaseAdapter {
     let outputs = [];
     if (debugEl.componentInstance) {
       const metadata = Reflect.getOwnMetadata
-        ('annotations', debugEl.componentInstance);
+        ('annotations', debugEl.componentInstance.constructor);
 
       outputs = (metadata && metadata.length > 0) ?
         metadata[0].outputs : [];
@@ -326,6 +326,10 @@ export class Angular2Adapter extends BaseAdapter {
 
   _normalizeState(name: string, state: Object): Object {
     switch (name) {
+      case 'LoadNextToComponent':
+        return {};
+      case 'LoadAsRootComponent':
+        return {};
       case 'NgFor':
         return this._normalizeNgFor(state);
       case 'NgIf':
@@ -388,13 +392,7 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getDescription(debugEl: any): Object[] {
-    if (debugEl.componentInstance) {
       return Description.getComponentDescription(debugEl);
-    } else {
-      return [
-        { key: 'name', value: this._getComponentName(debugEl) }
-      ];
-    }
   }
 
   _getProviders(debugEl: any): Object[] {
@@ -405,6 +403,12 @@ export class Angular2Adapter extends BaseAdapter {
           (provider, debugEl.injector.get(provider));
       });
     }
+
+    if (debugEl.componentInstance) {
+      const name = this._getComponentName(debugEl);
+      providers = providers.filter((provider) => provider.key !== name);
+    }
+
     return providers;
   }
 

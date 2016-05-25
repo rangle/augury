@@ -45,14 +45,22 @@ export abstract class Description {
   }
 
   public static getComponentDescription(debugEl: any): Object[] {
+    const element: any = debugEl.nativeElement;
     let description: Array<Property> = new Array<Property>();
-    if (!debugEl || !debugEl.componentInstance) {
-      return description;
+    let componentName;
+    if (debugEl.componentInstance) {
+      componentName = debugEl.componentInstance.constructor.name;
+    } else {
+      componentName = element.tagName.toLowerCase();
     }
-    const componentName = debugEl.componentInstance.constructor.name;
-    const element: HTMLElement = <HTMLElement>debugEl.nativeElement;
 
     switch (componentName) {
+      case 'a':
+        description = [
+          { key: 'text', value: element.text },
+          { key: 'url', value: element.hash }
+        ];
+        break;
       case 'NgSelectOption':
         description = Description._getSelectOptionDesc(element);
         break;

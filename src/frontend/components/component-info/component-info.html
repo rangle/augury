@@ -13,7 +13,7 @@
     <span class="h4 regular right"
       *ngIf="node">
       ($a in Console)
-      </span>
+    </span>
   </div>
 
   <div [hidden]="!(node && node.name)">
@@ -21,14 +21,12 @@
       <section-content>
         <ul class="list-reset m0"
           *ngIf="node && node.description">
-          <li *ngFor="let property of node.description">
-            <span class="inline-block info-key">
-              {{property.key}}:
-              </span>
-            <span class="inline-block info-value">
-              {{property.value}}
-              </span>
-          </li>
+          <bt-property-value 
+            *ngFor="let property of node.description"
+            [checkUpdate]="false"
+            [key]="property.key"
+            [value]="property.value">
+          </bt-property-value>
         </ul>
       </section-content>
     </accordion>
@@ -37,17 +35,13 @@
       *ngIf="node && node.providers && node.providers.length > 0">
       <section-content>
         <span *ngFor="let provider of node.providers">
-          <p class="m1">{{provider.key}}</p>
-          <ul>
-            <li *ngFor="let property of provider.value">
-              <span class="inline-block info-key">
-                {{property.key}}:
-                </span>
-              <span class="inline-block info-value">
-                {{property.value}}
-              </span>
-            </li>
-          </ul>
+          <p class="m1 bold">{{provider.key}}</p>
+          <bt-property-value 
+            *ngFor="let property of provider.value"
+            [checkUpdate]="true"
+            [key]="property.key"
+            [value]="property.value">
+          </bt-property-value>
         </span>
       </section-content>
     </accordion>
@@ -59,7 +53,7 @@
           <li *ngFor="let directive of node.directives">
               <span class="inline-block info-key">
                 {{directive}}
-                </span>
+              </span>
           </li>
         </ul>
       </section-content>
@@ -77,11 +71,11 @@
           <li *ngFor="let input of _input">
             <span class="info-key inline-block">
               {{input.key}}:
-              </span>
+            </span>
             <span class="info-value inline-block"
               *ngIf="input.value !== ''">
               {{input.value}}
-              </span>
+            </span>
           </li>
         </ul>
       </section-content>
@@ -100,7 +94,7 @@
               <button class="btn btn-primary bg-olive mb1"
                 (click)="fireEvent(output, prop.value)">
                 Fire
-                </button>
+              </button>
             </span>
           </li>
         </ul>
