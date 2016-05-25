@@ -17,6 +17,7 @@ import {BackendMessagingService} from './channel/backend-messaging-service';
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';
+import {Header} from './components/header/header';
 
 import * as Rx from 'rxjs';
 
@@ -27,25 +28,34 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 @Component({
   selector: 'bt-app',
   providers: [ParseUtils],
-  directives: [TreeView, InfoPanel, AppTrees],
+  directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <div class="clearfix">
-      <div class="col col-6 overflow-hidden vh-100
-      border-right border-color-dark"
-      [ngClass]="{'col-12 overflow-scroll': selectedTabIndex > 0}">
-        <bt-app-trees
-          [selectedTabIndex]="selectedTabIndex"
-          [selectedNode]="selectedNode"
-          [openedNodes]="openedNodes"
-          [routerTree]="routerTree"
-          [tree]="tree"
-          [changedNodes]="changedNodes"
-          (tabChange)="tabChange($event)">
-        </bt-app-trees>
-      </div>
-      <div class="col col-6 overflow-hidden vh-100"
-      [hidden]="selectedTabIndex > 0">
-        <bt-info-panel [tree]="tree" [node]="selectedNode"></bt-info-panel>
+    <div class="clearfix vh-100 overflow-hidden flex flex-column">
+      <augury-header [searchDisabled]="searchDisabled"></augury-header>
+      <div class="flex flex-auto">
+        <div class="col col-6 overflow-hidden
+          border-right border-color-dark flex"
+        [ngClass]="{'overflow-scroll col-12': selectedTabIndex > 0}">
+          <bt-app-trees
+            class="flex flex-column flex-auto"
+            [selectedTabIndex]="selectedTabIndex"
+            [selectedNode]="selectedNode"
+            [openedNodes]="openedNodes"
+            [routerTree]="routerTree"
+            [tree]="tree"
+            [changedNodes]="changedNodes"
+            (tabChange)="tabChange($event)">
+          </bt-app-trees>
+        </div>
+        <div class="col col-6 overflow-hidden"
+          [ngClass]="{'flex': selectedTabIndex === 0}"
+          [hidden]="selectedTabIndex > 0">
+          <bt-info-panel
+            class="flex flex-column flex-auto"
+            [tree]="tree"
+            [node]="selectedNode">
+          </bt-info-panel>
+        </div>
       </div>
     </div>`
 })
@@ -61,6 +71,7 @@ class App {
   private selectedNode: any;
   private openedNodes: Array<any> = [];
   private changedNodes: any = [];
+  private searchDisabled: boolean = false;
 
   constructor(
     private backendAction: BackendActions,
@@ -135,6 +146,9 @@ class App {
     this.selectedTabIndex = index;
     if (index === 1) {
       this.userActions.renderRouterTree();
+      this.searchDisabled = true;
+    } else {
+      this.searchDisabled = false;
     }
   }
 }
