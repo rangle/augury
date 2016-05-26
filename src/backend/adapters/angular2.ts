@@ -177,8 +177,8 @@ export class Angular2Adapter extends BaseAdapter {
 
     if (isRoot) {
       return this.addRoot(compEl);
-    } else if (nodeName !== 'NgSelectOption ') {
-      // skipping the NgSelectOption to imporove performance 
+    } else if (nodeName !== 'option') {
+      // skipping the option to imporove performance 
       // It adds no value displaying node elements
       this.addChild(compEl);
     }
@@ -205,7 +205,7 @@ export class Angular2Adapter extends BaseAdapter {
 
     if (debugEl.componentInstance) {
       const metadata = Reflect.getOwnMetadata
-        ('annotations', debugEl.componentInstance);
+        ('annotations', debugEl.componentInstance.constructor);
 
       if (metadata && metadata.length > 0 && metadata[0].directives) {
         metadata[0].directives.forEach((directive) =>
@@ -219,7 +219,7 @@ export class Angular2Adapter extends BaseAdapter {
     let changeDetection;
     if (debugEl.componentInstance) {
       const metadata = Reflect.getOwnMetadata
-        ('annotations', debugEl.componentInstance);
+        ('annotations', debugEl.componentInstance.constructor);
       if (metadata && metadata.length > 0) {
         changeDetection = ChangeDetectionStrategy[metadata[0].changeDetection];
       }
@@ -231,7 +231,7 @@ export class Angular2Adapter extends BaseAdapter {
     const dependencies = [];
     if (debugEl.componentInstance) {
       const parameters = Reflect.getOwnMetadata
-        ('design:paramtypes', debugEl.componentInstance) || [];
+        ('design:paramtypes', debugEl.componentInstance.constructor) || [];
 
       parameters.forEach((param) => dependencies.push(param.name));
     }

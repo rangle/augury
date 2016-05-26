@@ -37,8 +37,6 @@ export abstract class Description {
       case 'NgForm':
         properties = Description._getNgFormDesc(instance);
         break;
-
-
     }
     description = { key: providerName, value: properties };
     return description;
@@ -84,11 +82,6 @@ export abstract class Description {
       case 'NgSwitchDefault':
         description = Description._getNgSwitchWhenDesc
           (debugEl.componentInstance);
-        break;
-      default:
-        description = [
-          { key: 'name', value: componentName },
-        ];
         break;
     }
     return description;
@@ -210,7 +203,6 @@ export abstract class Description {
 
   private static _getNgModelDesc(instance: any): Array<Property> {
     return [
-      { key: 'model', value: instance.name },
       { key: 'value', value: instance.value },
       { key: 'viewModel', value: instance.viewModel },
       { key: 'controlStatus', value: instance.control.status },
@@ -223,6 +215,7 @@ export abstract class Description {
     return [
       { key: 'status', value: instance.form.status },
       { key: 'dirty', value: instance.form.dirty },
+      { key: 'pristine', value: instance.form.pristine },
       { key: 'value', value: JSON.stringify(instance.value) }
     ];
   }

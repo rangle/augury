@@ -20,11 +20,7 @@ test('utils/description: Passing undefined', t => {
 
   const description = Description.getComponentDescription(compEl);
 
-  t.deepEqual(description, [
-    {
-      key: 'name',
-      value: 'tagname'
-    }], 'get empty description');
+  t.deepEqual(description, [], 'get empty description');
   t.end();
 });
 
