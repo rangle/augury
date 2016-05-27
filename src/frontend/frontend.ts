@@ -31,10 +31,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <div
-      class="clearfix vh-100 overflow-hidden flex flex-column"
-      [ngClass]="{'dark-theme': theme === 'dark'}"
-    >
+    <div class="clearfix vh-100 overflow-hidden flex flex-column dark-theme"
+      [ngClass]="{'dark-theme': theme === 'dark'}">
       <augury-header
         [searchDisabled]="searchDisabled"
         [theme]="theme"
@@ -45,7 +43,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           border-right border-color-dark flex"
         [ngClass]="{'overflow-scroll col-12': selectedTabIndex > 0}">
           <bt-app-trees
-            class="flex flex-column flex-auto"
+            class="flex flex-column flex-auto bg-white"
             [selectedTabIndex]="selectedTabIndex"
             [selectedNode]="selectedNode"
             [openedNodes]="openedNodes"
@@ -59,7 +57,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           [ngClass]="{'flex': selectedTabIndex === 0}"
           [hidden]="selectedTabIndex > 0">
           <bt-info-panel
-            class="flex flex-column flex-auto"
+            class="flex flex-column flex-auto bg-white"
             [tree]="tree"
             [node]="selectedNode">
           </bt-info-panel>

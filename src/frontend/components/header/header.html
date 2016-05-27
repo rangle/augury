@@ -1,49 +1,52 @@
 <div class="flex flex-column flex-stretch col-12">
-  <header class="bg-darken-1 border-bottom py3 px3">
-    <h4 class="regular flex flex-center primary-color col col-4 m0">
+  <header class="flex flex-justify bg-panel border-bottom py3 px3 dark-theme">
+    <h4 class="regular flex flex-center primary-color m0">
       <img src="../images/augury-logo.svg"
         class="mr2"
         style="width: 18px; height: 18px;">
         Augury
     </h4>
-
-    <div class="col col-4">
-      <div *ngIf="!(totalSearchCount > 0 && query.length > 0)">
-        &nbsp;
+    <div class="flex">
+      <div class="flex flex-center border rounded border-color-dark bg-white mr3"
+        [ngClass]="{'disabled-color': searchDisabled}">
+        <!-- SEARCH -->
+        <input class="outline border-none bg-white flex-auto primary-color"
+          [ngClass]="{'bg-panel disabled-color': searchDisabled}"
+          placeholder="Find Component"
+          type="text"
+          (keyup)="onKey($event)"
+          [disabled]="searchDisabled"
+          [(ngModel)]="query">
+        <div class="bg-white right-align pr2"
+          style="min-width:50px">
+          <span class="h4 regular primary-color"
+            *ngIf="totalSearchCount > 0 && query.length > 0">
+            {{searchIndex + 1}} of {{totalSearchCount}}
+            </span>
+        </div>
+        <div class="right-align border-left">
+          <div class="inline-block">
+            <button class="outline border-none btn-primary primary-color bg-panel pointer py2"
+              (click)="onKey($event, false)">
+              <img src="../images/Triangle.svg"
+                class="rotate180"
+                style="width: 0.8em; height: 0.8em;">
+            </button>
+          </div>
+          <div class="border-left inline-block"
+            style="margin-left: -4px">
+            <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py2"
+              (click)="onKey($event, true)">
+              <img src="../images/Triangle.svg"
+                style="width: 0.8em; height: 0.8em;">
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="right-align mx3"
-        *ngIf="totalSearchCount > 0 && query.length > 0">
-        <span class="h4 regular">
-          {{searchIndex + 1}} of {{totalSearchCount}}
-          </span>
-        <button class="btn btn-primary black bg-silver mb1"
-          style="padding: 2px 4px;"
-          (click)="onKey($event, true)">
-          <img src="../images/Triangle.svg"
-            style="width: 0.8em; height: 0.8em;">
-        </button>
-        <button class="btn btn-primary black bg-silver mb1"
-          style="padding: 2px 4px;"
-          (click)="onKey($event, false)">
-          <img src="../images/Triangle.svg"
-            class="rotate180"
-            style="width: 0.8em; height: 0.8em;">
-        </button>
-      </div>
-    </div>
-
-    <div class="col col-4 flex">
-      <!-- SEARCH -->
-      <input class="border rounded border-color-dark flex-auto"
-        [ngClass]="{'bg-silver': searchDisabled}"
-        placeholder="Search for Component"
-        type="text"
-        (keyup)="onKey($event)"
-        [disabled]="searchDisabled"
-        [(ngModel)]="query">
 
       <!-- SETTING -->
-      <div class="icon setting" (click)="settingOpened=!settingOpened"></div>
+      <div class="icon setting"
+        (click)="settingOpened=!settingOpened"></div>
     </div>
   </header>
 

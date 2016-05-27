@@ -1,7 +1,7 @@
 <div class="flex flex-column overflow-scroll col-12">
-  <div class="bg-darken-1 border-bottom py3 px3 m0"
+  <div class="bg-panel border-bottom py3 px3 m0"
     [hidden]="selectedNode">
-    <h4 class="pt1 pb2 m0"
+    <h4 class="primary-color pt1 pb2 m0"
       [hidden]="selectedNode">
       No Component Selected
       </h4>
@@ -11,7 +11,7 @@
     [hidden]="!selectedNode"
     [ngClass]="{flex: selectedNode}">
     <div *ngIf="parentHierarchyDisplay && parentHierarchyDisplay.length > 0">
-      <h3 class="monospace">
+      <h3 class="monospace primary-color">
         Component Hierarchy
         </h3>
       <span *ngFor="let node of parentHierarchyDisplay; let i = index">
@@ -20,7 +20,8 @@
           (click)="selectComponent(node)">
           {{node.name}}
           </a>
-        <span style="font-size: 14px;font-weight: bold;"
+        <span class="primary-color"
+          style="font-size: 14px;font-weight: bold;"
           *ngIf="i < parentHierarchyDisplay.length - 1">
           &#187;
           </span>
@@ -28,7 +29,7 @@
     </div>
     <hr>
     <div [hidden]="!selectedNode">
-      <h3 class="monospace">
+      <h3 class="monospace primary-color">
         Injector Graph
         </h3>
       <div id="graphContainer"></div>
