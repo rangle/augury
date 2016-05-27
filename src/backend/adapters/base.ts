@@ -49,6 +49,8 @@ export interface TreeNode {
   changeDetection: any;
   injectors: any;
   directives: any;
+  isComponent: boolean;
+  providers: Object[];
 }
 
 export abstract class BaseAdapter {

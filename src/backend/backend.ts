@@ -19,6 +19,12 @@ let dom = new DomController(adapter, channel);
 dom.hookIntoBackend();
 adapter.setup();
 
+function getFunctionName(value: string) {
+  let name = value.toString();
+  name = name.substr('function '.length);
+  name = name.substr(0, name.indexOf('('));
+  return name;
+}
 
 window.addEventListener('message', function(event) {
   // We only accept messages from ourselves
@@ -64,16 +70,24 @@ window.addEventListener('message', function(event) {
       let property = propertyTree.pop();
 
       // replace with existing property as we normalized data initally
-      if (dE.componentInstance.constructor.name === 'NgStyle') {
+      if (!dE.componentInstance &&
+        getFunctionName(dE.providerTokens[0]) === 'NgStyle') {
         propertyTree[0] = '_rawStyle';
-      } else if (dE.componentInstance.constructor.name === 'NgSwitch') {
+      } else if (!dE.componentInstance &&
+        getFunctionName(dE.providerTokens[0]) === 'NgSwitch') {
         property = '_' + property;
-      } else if (dE.componentInstance.constructor.name === 'NgClass') {
+      } else if (!dE.componentInstance &&
+        getFunctionName(dE.providerTokens[0]) === 'NgClass') {
         propertyTree[0] = '_' + propertyTree[0];
       }
 
+      let instance = dE.componentInstance;
+      if (!instance) {
+        instance = dE.injector.get(dE.providerTokens[0]);
+      }
+
       const value = propertyTree.reduce((previousValue, currentValue) =>
-        previousValue[currentValue], dE.componentInstance);
+        previousValue[currentValue], instance);
 
       if (value !== undefined) {
         const type: string = event.data.message.message.property.type;
