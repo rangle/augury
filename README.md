@@ -5,8 +5,9 @@
 
 [Augury](https://augury.angular.io/) is a Google Chrome Dev Tools extension for debugging Angular 2 applications. You can install the extension from [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd).
 
-![Screenshot of Augury](assets/screenloop.gif)
+Once the extenion is installed you can test it against the demo application https://augury.angular.io/demo/
 
+![Screenshot of Augury](assets/screenloop.gif)
 
 ## Supported Version
 
