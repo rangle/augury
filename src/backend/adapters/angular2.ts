@@ -220,7 +220,11 @@ export class Angular2Adapter extends BaseAdapter {
     const parameters = Reflect.getOwnMetadata('design:paramtypes',
       compEl.componentInstance.constructor) || [];
 
-    parameters.forEach((param) => dependencies.push(param.name));
+    parameters.forEach((param) => {
+      if (param) {
+        dependencies.push(param.name)
+      }
+    });
 
     return dependencies;
   }
