@@ -1,11 +1,11 @@
 <html>
   <head>
     <style>
-      /*------- Modal Structure -------*/
+      /* Modal Structure */
       html, body {
-        padding: 0px;
-        margin: 0px;
+        margin: 0;
         min-height: 150px;
+        padding: 0;
         width: 400px;
       }
 
@@ -27,7 +27,7 @@
         width: 100%;
       }
 
-      /*------- Header Section -------*/
+      /* Header Section */
       .logo {
         align-items: center;
         display: flex;
@@ -52,8 +52,8 @@
         height: 25px;
         margin-left: auto;
         margin-right: 12px;
-        outline: none;
         opacity: 0.65;
+        outline: none;
         transition: opacity 0.2s ease-in-out;
         width: 25px;
       }
@@ -62,7 +62,7 @@
         opacity: 0.4;
       }
 
-      /*------- CTA Section -------*/
+      /* CTA Section */
       .flex_container {
         display: flex;
         justify-content:space-between;
@@ -70,9 +70,9 @@
       }
 
       .flex {
-        width: 120px;
         opacity: 1;
         transition: opacity 0.2s ease-in-out;
+        width: 120px;
       }
 
       .flex:hover {
@@ -89,8 +89,8 @@
         display: inline-block;
         height: 25px;
         margin-right: 8px;
-        width: 25px;
         vertical-align: middle;
+        width: 25px;
       }
 
       .icon span {
@@ -113,14 +113,13 @@
         background-repeat: no-repeat;
       }
 
-      /*------- Content -------*/
+      /* Content */
 
-      a:link {
-        color: #000000;
-      }
-
+      a:link,
       a:visited {
         color: #000000;
+        outline: 0;
+        text-decoration: none;
       }
 
       img {
@@ -150,42 +149,45 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <!--<div class="modal_container">-->
-      <div class="modal_header">
-        <div class="logo">
-          <div class="logo_icon">
-            <img src="images/augury-logo.svg">
-          </div>
-          <div class="logo_text">
-            <h1>
-              Augury
-            </h1>
-          </div>
+    <div class="modal_header">
+      <div class="logo">
+        <div class="logo_icon">
+          <img src="images/augury-logo.svg">
         </div>
-        <!--<button class="close_btn">
-        </button>-->
-      </div>
-
-      <div class="modal_content">
-        <p>
-          Augury is a Google Chrome Dev Tool extension for debugging Angular 2 applications. Currently works with applications built in Angular 2.0.0-beta.15.
-        </p>
-      </div>
-
-      <div class="modal_cta">
-        <div class="flex_container">
-          <div class="flex github">
-            <a target="_blank" href="https://github.com/rangle/augury" class="icon github"><span>Github</span></a>
-          </div>
-          <div class="flex website">
-            <a target="_blank" href="https://augury.angular.io/" class="icon"><span>Website</span></a>
-          </div>
-          <div class="flex contribute">
-            <a target="_blank" href="https://github.com/rangle/augury/blob/master/CONTRIBUTING.md" class="icon"><span>Contribute</span></a>
-          </div>
+        <div class="logo_text">
+          <h1>Augury</h1>
         </div>
       </div>
-    <!--</div>-->
+    </div>
 
+    <div class="modal_content">
+      <p>Augury is a Google Chrome Dev Tool extension for debugging Angular 2 applications. Currently works with applications built in Angular 2.0.0-rc.1.</p>
+    </div>
+
+    <div class="modal_cta">
+      <div class="flex_container">
+        <div class="flex github">
+          <a href="https://github.com/rangle/augury"
+            target="_blank"
+            class="icon github">
+            <span>Github</span>
+          </a>
+        </div>
+        <div class="flex website">
+          <a href="https://augury.angular.io/"
+            target="_blank"
+            class="icon">
+            <span>Website</span>
+          </a>
+        </div>
+        <div class="flex contribute">
+          <a href="https://github.com/rangle/augury/blob/master/CONTRIBUTING.md"
+            target="_blank"
+            class="icon">
+            <span>Contribute</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

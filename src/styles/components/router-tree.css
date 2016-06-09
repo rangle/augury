@@ -1,0 +1,28 @@
+
+/* Router Tree */
+
+bt-router-tree .node {
+  cursor: pointer;
+}
+
+.node-route {
+  stroke: var(--red);
+  stroke-width: 1px;
+}
+
+.node-aux-route {
+  stroke: var(--bt-link-color);
+  stroke-width: 1px;
+}
+
+/* Router Info Modal */
+
+bt-router-info {
+  background: white;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.10), 0 3px 6px rgba(0, 0, 0, 0.10);
+  min-width: 200px;
+  position: absolute;
+  right: 20px;
+  top: 80px;
+  z-index: 100;
+}

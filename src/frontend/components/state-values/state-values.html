@@ -1,10 +1,14 @@
-<div [ngClass]="{'changed': isUpdated}" class="pl4">
-    <span class="info-key">{{getPropertyKey(propertyTree)}}: </span>
-    <span class="info-editable"
-      *ngIf="!editable"
-      (dblclick)="onDblClick($event)" >{{value}}</span>
-    <input class="info-editable"
-      *ngIf="editable" #property
-      value="{{value}}"
-      (keyup)="propertyChange($event, property.value)" />
+<div [ngClass]="{'changed': isUpdated}">
+  <span class="info-key">
+    {{getPropertyKey(propertyTree)}}:
+    </span>
+  <span class="info-editable"
+    *ngIf="!editable"
+    (dblclick)="onDblClick($event)">
+    {{value}}
+    </span>
+  <input class="info-editable"
+    *ngIf="editable" #property
+    value="{{value}}"
+    (keyup)="propertyChange($event, property.value)"/>
 </div>

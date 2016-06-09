@@ -1,6 +1,6 @@
 {
   "name": "augury",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
   "repository": {
     "type": "git",
@@ -26,18 +26,19 @@
     "clean": "rimraf node_modules typings",
     "postinstall": "rimraf typings && typings install",
     "start": "rimraf build && webpack --watch",
-    "test": "webpack --config webpack.test.config.js && cat build/test.js | tape-run | tap-spec",
+    "test": "npm run lint && webpack --config webpack.test.config.js && cat build/test.js | tape-run | tap-spec",
     "prepack": "npm run build",
-    "pack": "./crxmake.sh"
+    "pack": "./crxmake.sh",
+    "lint": "tslint 'src/**/*.ts'"
   },
   "dependencies": {
-    "@angular/common": "0.0.0-5",
-    "@angular/compiler": "0.0.0-5",
-    "@angular/core": "0.0.0-5",
-    "@angular/router": "0.0.0-5",
-    "@angular/http": "0.0.0-5",
-    "@angular/platform-browser": "0.0.0-5",
-    "@angular/platform-browser-dynamic": "0.0.0-5",
+    "@angular/common": "2.0.0-rc.1",
+    "@angular/compiler": "2.0.0-rc.1",
+    "@angular/core": "2.0.0-rc.1",
+    "@angular/http": "2.0.0-rc.1",
+    "@angular/platform-browser": "2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.1",
+    "@angular/router-deprecated": "2.0.0-rc.1",
     "basscss": "^7.0.4",
     "core-js": "^2.2.2",
     "crypto": "0.0.3",
@@ -51,7 +52,7 @@
   "devDependencies": {
     "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
-    "reflect-metadata": "0.1.2",
+    "reflect-metadata": "0.1.3",
     "autoprefixer": "^6.3.6",
     "css-loader": "^0.21.0",
     "file-loader": "^0.8.5",
@@ -66,11 +67,12 @@
     "tape-run": "^2.1.3",
     "ts-loader": "^0.8.1",
     "tslint-loader": "^2.1.4",
-    "tslint": "^3.8.1",
+    "tslint": "^3.9.0",
     "typescript": "^1.8.9",
     "typings": "^0.8.1",
     "url-loader": "^0.5.7",
     "webpack": "1.13.0",
     "webpack-dev-server": "1.14.1"
-  }
+  },
+  "license": "MIT"
 }

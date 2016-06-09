@@ -1,4 +1,4 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input} from '@angular/core';
 import LoadAsRootComponent from './load-as-root-component';
 import LoadNextToComponent from './load-next-to-component';
 

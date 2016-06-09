@@ -1,9 +1,9 @@
 <!-- BLOCK VIEW -->
-<main class="p1 col-12 monospace">
-  <bt-node-item *ngFor="#node of tree"
+<main class="monospace col-12 p1">
+  <bt-node-item *ngFor="let node of tree"
     [changedNodes]="changedNodes"
     [node]="node"
     [selectedNode]="selectedNode"
     [openedNodes]="openedNodes">
-  </bt-node-item>
+    </bt-node-item>
 </main>

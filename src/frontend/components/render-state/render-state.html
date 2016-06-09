@@ -1,22 +1,28 @@
-<div class="pl4" *ngFor="#k of keys(state)">
-    <span *ngIf="type(state[k]) =='object'">
-      <img src="../images/Triangle.svg" style="width: 0.8rem; height: 0.8rem;"
-         [ngClass]="{rotate90: expanded[k]}"
-         (click)="expandTree(k, $event)">
-         <span class="info-key">{{k}}</span><span class="info-value">{{displayType(state[k])}}</span>
-    </span>
+<div class="pl4"
+  *ngFor="let k of keys(state)">
+  <span *ngIf="type(state[k]) =='object'">
+    <img src="../images/Triangle.svg"
+      style="width: 0.8rem; height: 0.8rem;"
+      [ngClass]="{rotate90: expanded[k]}"
+      (click)="expandTree(k, $event)">
+    <span class="info-key">
+      {{k}}
+      </span>
+    <span class="info-value">
+      {{displayType(state[k])}}
+      </span>
+  </span>
 
-    <bt-state-values *ngIf="type(state[k]) !='object'"
-      [propertyTree]="propertyTree + ',' + k"
-      [id]="id"
-      [value]="state[k]">
+  <bt-state-values *ngIf="type(state[k]) !='object'"
+    [propertyTree]="propertyTree + ',' + k"
+    [id]="id"
+    [value]="state[k]">
     </bt-state-values>
 
-    <bt-render-state
-      [propertyTree]="propertyTree + ',' + k"
-      [id]="id"
-      [hidden]="expanded[k]"
-      *ngIf="type(state[k]) =='object'" [state]="state[k]">
+  <bt-render-state *ngIf="type(state[k]) =='object'"
+    [propertyTree]="propertyTree + ',' + k"
+    [id]="id"
+    [hidden]="expanded[k]"
+    [state]="state[k]">
     </bt-render-state>
-
 </div>

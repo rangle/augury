@@ -1,11 +1,11 @@
-import {Component} from 'angular2/core';
-import {FORM_DIRECTIVES} from 'angular2/common';
-import {NgForm} from 'angular2/common';
+import {Component} from '@angular/core';
+import {FORM_DIRECTIVES} from '@angular/common';
+import {NgForm} from '@angular/common';
 
 @Component({
   selector: 'my-form',
   template: `
-    <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)" 
+    <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)"
       novalidate class="col-sm-8">
 
       <div class="control-group">
@@ -21,7 +21,7 @@ import {NgForm} from 'angular2/common';
       </div>
       <br/>
       <div class="control-group">
-        <button class="btn btn-success" 
+        <button class="btn btn-success"
           type="submit">Register</button>
       </div>
 

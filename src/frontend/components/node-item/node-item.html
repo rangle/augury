@@ -1,32 +1,27 @@
-<div
-  (mouseout)=onMouseOut($event)
+<div (mouseout)=onMouseOut($event)
   (mouseover)=onMouseOver($event)
   (dblclick)=onDblClick($event)
   (click)="onClick($event)">
 
-  <div class="node-item pl4 rounded border-box"
-       [ngClass]="{'node-item-selected':isSelected,
-       'changed': isUpdated}">
-
+  <div class="node-item pl3 rounded border-box"
+    [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
     <img src="../images/Triangle.svg"
-         style="width: 0.8em; height: 0.8em;"
-         [hidden]="node.children ? false : true"
-         [ngClass]="{rotate90: showChildren()}"
-         (click)="expandTree($event)">
-
-    <div class="node-item-container"
+      style="width: 0.8em; height: 0.8em;"
+      [hidden]="node.children ? false : true"
+      [ngClass]="{rotate90: showChildren()}"
+      (click)="expandTree($event)">
+    <div class="inline"
       [innerHTML]="getNodeDetails(node)">
-    </div>
+      </div>
   </div>
 
-  <div class="pl4 border-box">
-    <bt-node-item
+  <div class="border-box pl4">
+    <bt-node-item *ngFor="let node of node.children"
       [changedNodes]="changedNodes"
       [hidden]="showChildren()"
       [selectedNode]="selectedNode"
       [openedNodes]="openedNodes"
-      *ngFor="#node of node.children"
       [node]="node">
-    </bt-node-item>
+      </bt-node-item>
   </div>
 </div>

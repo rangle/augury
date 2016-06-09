@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from 'angular2/core';
+import {Component, EventEmitter} from '@angular/core';
 import Service1 from '../../services/service1';
 import Service2 from '../../services/service2';
 import {FormatService} from '../todo-app/todo-service';

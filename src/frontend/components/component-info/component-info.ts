@@ -10,11 +10,13 @@ import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
 import Dependency from '../dependency/dependency';
 
+import PropertyValue from '../property-value/property-value';
+
 @Component({
   selector: 'bt-component-info',
   templateUrl: '/src/frontend/components/component-info/component-info.html',
   inputs: ['node'],
-  directives: [RenderState, Accordion, Dependency]
+  directives: [RenderState, Accordion, Dependency, PropertyValue]
 })
 export default class ComponentInfo {
   private node: any;

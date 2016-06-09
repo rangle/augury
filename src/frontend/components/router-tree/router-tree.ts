@@ -6,7 +6,6 @@ import * as d3 from 'd3';
 @Component({
   selector: 'bt-router-tree',
   templateUrl: '/src/frontend/components/router-tree/router-tree.html',
-  host: { 'class': 'col col-12' },
   directives: [RouterInfo]
 })
 
