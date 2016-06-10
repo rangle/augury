@@ -5,75 +5,113 @@ export interface Property {
 
 export abstract class Description {
 
-  public static getComponentDescription(compEl: any): Object[] {
+  public static getProviderDescription(provider: any, instance: any): Object {
+    let description = {};
+    let properties = [];
+    const providerName = this.getFunctionName(provider);
+    switch (providerName) {
+      case 'RouterOutlet':
+        properties =  Description._getRouterOutletDesc(instance);
+        break;
+      case 'RouterLink':
+        properties = Description._getRouterLinkDesc(instance);
+        break;
+      case 'NgClass':
+        properties = Description._getClassDesc(instance);
+        break;
+      case 'NgStyle':
+        properties = Description._getNgClassDesc(instance);
+        break;
+      case 'NgFormModel':
+        properties = Description._getNgFormModelDesc(instance);
+        break;
+      case 'NgFormControl':
+        properties = Description._getFormControlDesc(instance);
+        break;
+      case 'NgControlStatus':
+        properties = Description._getControlStatusDesc(instance);
+        break;
+      case 'NgModel':
+        properties = Description._getNgModelDesc(instance);
+        break;
+      case 'NgForm':
+        properties = Description._getNgFormDesc(instance);
+        break;
+    }
+    description = { key: providerName, value: properties };
+    return description;
+  }
+
+  public static getComponentDescription(debugEl: any): Object[] {
+    if (!debugEl) {
+      return [];
+    }
+    const element: any = debugEl.nativeElement;
     let description: Array<Property> = new Array<Property>();
-    if (!compEl) {
-      return description;
+    let componentName;
+    if (debugEl.componentInstance) {
+      componentName = debugEl.componentInstance.constructor.name;
+    } else {
+      componentName = element.tagName.toLowerCase();
     }
 
-    const componentInstance: any = compEl.componentInstance || {};
-    const constructor: any =  componentInstance.constructor;
-    const constructorName: string = constructor.name;
-    const componentName: string = constructorName !== 'Object' ?
-      constructorName : compEl.nativeElement.tagName;
-    const element: HTMLElement = <HTMLElement>compEl.nativeElement;
-
     switch (componentName) {
-      case 'RouterLink':
-        description =  Description._getRouterLinkDesc(element);
-        break;
-      case 'RouterOutlet':
-        description =  Description._getRouterOutletDesc(componentInstance);
+      case 'a':
+        description = [
+          { key: 'text', value: element.text },
+          { key: 'url', value: element.hash }
+        ];
         break;
       case 'NgSelectOption':
         description = Description._getSelectOptionDesc(element);
         break;
       case 'NgIf':
-        description = Description._getNgIfDesc(componentInstance);
-        break;
-      case 'NgClass':
-        description = Description._getClassDesc(componentInstance);
+        description = Description._getNgIfDesc(debugEl.componentInstance);
         break;
       case 'NgControlName':
-        description = Description._getControlNameDesc(componentInstance);
-        break;
-      case 'NgFormControl':
-        description = Description._getFormControlDesc(componentInstance);
-        break;
-      case 'ControlForm':
-        description = Description._getFormControlDesc(componentInstance);
-        break;
-      case 'NgModel':
-        description = Description._getNgModelDesc(componentInstance);
-        break;
-      case 'NgForm':
-        description = Description._getNgFormDesc(componentInstance);
-        break;
-      case 'NgFormModel':
-        description = Description._getNgFormModelDesc(componentInstance);
+        description = Description._getControlNameDesc
+          (debugEl.componentInstance);
         break;
       case 'NgSwitch':
-        description = Description._getNgSwitchDesc(componentInstance);
+        description = Description._getNgSwitchDesc(debugEl.componentInstance);
         break;
       case 'NgSwitchWhen':
-        description = Description._getNgSwitchWhenDesc(componentInstance);
+        description = Description._getNgSwitchWhenDesc
+          (debugEl.componentInstance);
         break;
       case 'NgSwitchDefault':
-        description = Description._getNgSwitchWhenDesc(componentInstance);
-        break;
-      default:
-        description = [
-          { key: 'name', value: componentName },
-        ];
+        description = Description._getNgSwitchWhenDesc
+          (debugEl.componentInstance);
         break;
     }
     return description;
   }
 
-  private static _getRouterLinkDesc(element: HTMLElement): Array<Property> {
-    return [
-      { key: 'href', value: element.getAttribute('href') },
-      { key: 'htmlText', value: element.innerText }
+  private static _getNgClassDesc(instance: any): Array<Property> {
+    const styles = [];
+    for (let key in instance._rawStyle) {
+      if (instance._rawStyle[key]) {
+        styles.push({
+          key: key,
+          value: instance._rawStyle[key]
+        });
+      }
+    }
+    return styles;
+  }
+
+  private static _getRouterLinkDesc(instance: any): Array<Property> {
+    return [{
+        key: 'routeName',
+        value: instance._navigationInstruction.component.routeName
+      },
+      {
+        key: 'componentType',
+        value: instance._navigationInstruction.component.componentType.name
+      },
+      { key: 'visibleHref', value: instance.visibleHref },
+      { key: 'isRouteActive', value: instance.isRouteActive },
+      { key: 'routeParams', value: instance._routeParams }
     ];
   }
 
@@ -81,6 +119,17 @@ export abstract class Description {
     return [
       { key: 'label', value: element.innerText },
       { key: 'value', value: element.getAttribute('value') }
+    ];
+  }
+
+  private static _getControlStatusDesc(instance: any): Array<Property> {
+    return [
+      { key: 'ngClassDirty', value: instance.ngClassDirty },
+      { key: 'ngClassPristine', value: instance.ngClassPristine },
+      { key: 'ngClassValid', value: instance.ngClassValid },
+      { key: 'ngClassInvalid', value: instance.ngClassInvalid },
+      { key: 'ngClassTouched', value: instance.ngClassTouched },
+      { key: 'ngClassUntouched', value: instance.ngClassUntouched }
     ];
   }
 
@@ -95,17 +144,22 @@ export abstract class Description {
   private static _getNgFormDesc(instance: any): Array<Property> {
     return [
       { key: 'status', value: instance.form.status },
-      { key: 'dirty', value: instance.form.dirty }
+      { key: 'dirty', value: instance.form.dirty },
+      { key: 'value', value: JSON.stringify(instance.value) }
     ];
   }
 
   private static _getRouterOutletDesc(instance: any): Array<Property> {
     return [
       { key: 'name', value: instance.name || ''},
+      { key: 'routeName',
+        value: instance._currentInstruction &&
+        instance._currentInstruction.routeName || ''
+      },
       { key: 'hostComponent',
-        value: instance._componentRef
-           && instance._componentRef.componentType
-           && instance._componentRef.componentType.name }
+        value: instance._currentInstruction && this.getFunctionName
+          (instance._currentInstruction.componentType) || ''
+      }
     ];
   }
 
@@ -113,7 +167,9 @@ export abstract class Description {
     return [
       { key: 'useDefault', value: instance._useDefault },
       { key: 'switchValue', value: instance._switchValue },
-      { key: 'valuesCount', value: instance._valueViews.size }
+      {
+        key: 'valuesCount', value:
+          instance._valueViews ? instance._valueViews.size : 0 }
     ];
   }
 
@@ -124,10 +180,9 @@ export abstract class Description {
   }
 
   private static _getClassDesc(instance: any): Array<Property> {
-    const rawClasses = instance._rawClass;
     const appliedClasses = [];
-    for (let key in rawClasses) {
-      if (rawClasses[key]) {
+    for (let key in instance._rawClass) {
+      if (instance._rawClass[key]) {
         appliedClasses.push(key);
       }
     }
@@ -139,20 +194,20 @@ export abstract class Description {
 
   private static _getFormControlDesc(instance: any): Array<Property> {
     return [
-      { key: 'model', value: instance.name },
       { key: 'value', value: instance.value },
-      { key: 'viewModel', value: instance.viewModel },
-      { key: 'dirty', value: instance.dirty }
+      { key: 'dirty', value: instance.dirty },
+      { key: 'pristine', value: instance.pristine },
+      { key: 'status', value: instance.control.status }
     ];
   }
 
   private static _getNgModelDesc(instance: any): Array<Property> {
     return [
-      { key: 'model', value: instance.name },
       { key: 'value', value: instance.value },
       { key: 'viewModel', value: instance.viewModel },
       { key: 'controlStatus', value: instance.control.status },
-      { key: 'dirty', value: instance.dirty }
+      { key: 'dirty', value: instance.dirty },
+      { key: 'pristine', value: instance.pristine },
     ];
   }
 
@@ -160,6 +215,7 @@ export abstract class Description {
     return [
       { key: 'status', value: instance.form.status },
       { key: 'dirty', value: instance.form.dirty },
+      { key: 'pristine', value: instance.form.pristine },
       { key: 'value', value: JSON.stringify(instance.value) }
     ];
   }
@@ -168,5 +224,12 @@ export abstract class Description {
     return [
       { key: 'condition', value: instance._prevCondition }
     ];
+  }
+
+  private static  getFunctionName(value: string) {
+    let name = value.toString();
+    name = name.substr('function '.length);
+    name = name.substr(0, name.indexOf('('));
+    return name;
   }
 }
