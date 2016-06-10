@@ -31,8 +31,8 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <div class="clearfix vh-100 overflow-hidden flex flex-column dark-theme"
-      [ngClass]="{'dark-theme': theme === 'dark'}">
+    <div class="clearfix vh-100 overflow-hidden flex flex-column"
+      [ngClass]="{'dark': theme === 'dark'}">
       <augury-header
         [searchDisabled]="searchDisabled"
         [theme]="theme"
