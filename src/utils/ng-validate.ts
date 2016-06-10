@@ -1,7 +1,11 @@
 let isInitalized: boolean = false;
 
 const observeDOM = (() => {
-  const MutationObserver = window['MutationObserver'];
+  const MutationObserver =
+    /* tslint:disable */
+    window['MutationObserver'];
+    /* tslint:enable */
+
   const eventListenerSupported = window.addEventListener;
 
   return function (obj, callback) {
