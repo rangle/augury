@@ -10,7 +10,7 @@ const observeDOM = (() => {
 
   return function (obj, callback) {
     if (MutationObserver) {
-      let obs = new MutationObserver((mutations, observer) => {
+      const obs = new MutationObserver((mutations, observer) => {
         if (mutations[0].addedNodes.length ||
           mutations[0].removedNodes.length) {
           callback();
