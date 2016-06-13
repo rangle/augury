@@ -5,6 +5,7 @@
     <li class="border-bottom py2 px4"
       *ngFor="let dep of dependencies">
       <a href="#"
+        class="node-item-property"
         (click)="findDependency(dep)">
         {{dep}}
         </a>
@@ -20,22 +21,24 @@
       class="icon double-arrow rotate180"
       (click)="navBack()">
       </a>
-    <span class="inline-block">
+    <span class="node-item-property inline-block">
       {{currDep}}
       </span>
   </div>
 
-  <ul class="list-reset m0"
+  <ul class="list-reset primary-color m0"
     *ngIf="(depComps && depComps.length > 0)">
     <li class="border-bottom py2 px4"
       *ngFor="let comp of depComps">
       <a href="#"
+        class="node-item-property"
         (click)="selectNode(comp)">
         {{comp.name}} (a-id = {{comp.id}})
         </a>
       <ul>
         <li *ngFor="let dep of comp.dependencies">
           <a href="#"
+            class="node-item-property"
             (click)="findDependency(dep)">
             {{dep}}
             </a>

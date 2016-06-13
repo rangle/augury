@@ -27,3 +27,29 @@ body {
 .pointer {
   cursor: pointer;
 }
+
+.bg-panel {
+  background-color: rgba(0, 0, 0, .0625);
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.border-transparent {
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.outline {
+  outline: 0;
+}
+
+.border-none {
+  border: 0;
+}
+
+.disabled-color {
+  opacity: 0.6;
+}
