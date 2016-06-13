@@ -5,6 +5,7 @@
 /* Basscss Modules */
 @import 'basscss';
 @import 'basscss-border-colors';
+@import 'basscss-layout';
 @import 'basscss-type-scale';
 @import 'basscss-typography';
 
@@ -12,4 +13,111 @@
 @import './base.css';
 @import './components/components.css';
 @import './properties.css';
-@import './utils/utils.css'; 
+@import './utils/utils.css';
+
+/* dark theme */
+
+.dark {
+
+  & .bg-panel {
+    background-color: rgb(42, 42, 42) !important;
+  }
+
+  & .bg-white {
+    background-color: rgb(36, 36, 36) !important;
+  }
+
+  & .primary-color {
+    color: rgb(165, 165, 165) !important;
+  }
+
+  & .selected-color {
+    color: rgb(204, 204, 204) !important;
+  }
+
+  & .tab-menu-title:hover {
+    color: rgb(204, 204, 204) !important;
+    background-color: rgb(49, 49, 49) !important;
+  }
+
+  & .border-bottom {
+    border-bottom-color: rgb(61, 61, 61) !important;
+  }
+
+  & .border-right {
+    border-right-color: rgb(61, 61, 61) !important;
+  }
+
+  & .border-top {
+    border-top-color: rgb(61, 61, 61) !important;
+  }
+
+  & .border-left {
+    border-left-color: rgb(61, 61, 61) !important;
+  }
+
+  & .border-color-dark {
+    border-color: rgb(61, 61, 61) !important;
+  }
+
+  & .setting {
+    background-color: rgb(165, 165, 165) !important;
+  }
+
+  & .info-editable {
+    background-color: rgb(36, 36, 36) !important;
+    border-bottom: dashed rgb(189, 198, 207) 1px !important;
+    border: 0;
+    color: rgb(189, 198, 207);
+    display: inline-block;
+  }
+
+  & .node-item-name,
+  & .info-key,
+  & .key {
+    color: #A28AD0 !important;
+  }
+
+  & .node-item-property,
+  & .constructor-name,
+  & .boolean {
+    color: rgb(189, 198, 207) !important;
+  }
+
+  & .node-item-value,
+  & .info-value,
+  & .bracket,
+  & .number,
+  & .value,
+  & .string {
+    color: #FFCC33 !important;
+  }
+
+  & .node-item:hover {
+    background-color: rgb(61, 61, 61) !important;
+  }
+
+  & .node-item-selected,
+  & .node-item-selected:hover {
+    background-color: #A28AD0 !important;
+  }
+
+  & .node-item-selected .node-item-name,
+  & .node-item-selected .node-item-property,
+  & .node-item-selected .node-item-value {
+    color: rgb(36, 36, 36) !important;
+  }
+
+
+  & .expand-arrow {
+    background-color: rgb(165, 165, 165) !important;
+  }
+
+  & .double-arrow {
+    background-color: rgb(165, 165, 165) !important;
+  }
+
+  & .toggler {
+    color: rgb(165, 165, 165) !important;
+  }
+}

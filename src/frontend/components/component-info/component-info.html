@@ -1,16 +1,16 @@
 <div class="flex flex-column flex-auto overflow-scroll">
-  <div class="bg-darken-1 border-bottom py3 px3 m0 ">
-    <h4 class="col pt1 pb2 m0">
+  <div class="bg-darken-1 bg-panel border-bottom py3 px3 m0 ">
+    <h4 class="primary-color col pt1 pb2 m0">
       {{ node && node.name || 'No Component Selected' }}
       &nbsp;
       <a href=""
-        class="red-1"
+        class="red-1 node-item-property"
         *ngIf="node && node.name"
         (click)="viewComponentSource($event)">
         (View Source)
         </a>
     </h4>
-    <span class="h4 regular right"
+    <span class="h4 regular right primary-color"
       *ngIf="node">
       ($a in Console)
     </span>
@@ -51,8 +51,8 @@
       <section-content>
         <ul class="list-reset m0">
           <li *ngFor="let directive of node.directives">
-              <span class="inline-block info-key">
-                {{directive}}
+            <span class="inline-block info-key">
+              {{directive}}
               </span>
           </li>
         </ul>
@@ -61,7 +61,9 @@
 
     <accordion [sectionTitle]='"Change Detection"'
       *ngIf="node && node.changeDetection">
-      <section-content>{{node.changeDetection}}</section-content>
+      <section-content>
+        <span class="node-item-property">{{node.changeDetection}}</span>
+      </section-content>
     </accordion>
 
     <accordion [sectionTitle]='"Input"'

@@ -1,4 +1,5 @@
 import {Component, Inject, bind, NgZone} from '@angular/core';
+
 import {bootstrap} from '@angular/platform-browser-dynamic';
 
 import {Dispatcher} from './dispatcher/dispatcher';
@@ -30,14 +31,19 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <div class="clearfix vh-100 overflow-hidden flex flex-column">
-      <augury-header [searchDisabled]="searchDisabled"></augury-header>
+    <div class="clearfix vh-100 overflow-hidden flex flex-column"
+      [ngClass]="{'dark': theme === 'dark'}">
+      <augury-header
+        [searchDisabled]="searchDisabled"
+        [theme]="theme"
+        (newTheme)="themeChanged($event)">
+      </augury-header>
       <div class="flex flex-auto">
         <div class="col col-6 overflow-hidden
           border-right border-color-dark flex"
         [ngClass]="{'overflow-scroll col-12': selectedTabIndex > 0}">
           <bt-app-trees
-            class="flex flex-column flex-auto"
+            class="flex flex-column flex-auto bg-white"
             [selectedTabIndex]="selectedTabIndex"
             [selectedNode]="selectedNode"
             [openedNodes]="openedNodes"
@@ -51,7 +57,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           [ngClass]="{'flex': selectedTabIndex === 0}"
           [hidden]="selectedTabIndex > 0">
           <bt-info-panel
-            class="flex flex-column flex-auto"
+            class="flex flex-column flex-auto bg-white"
             [tree]="tree"
             [node]="selectedNode">
           </bt-info-panel>
@@ -72,6 +78,7 @@ class App {
   private openedNodes: Array<any> = [];
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
+  private theme: string = 'light'; // default theme
 
   constructor(
     private backendAction: BackendActions,
@@ -150,6 +157,11 @@ class App {
     } else {
       this.searchDisabled = false;
     }
+  }
+
+  themeChanged(newTheme) {
+    this.theme = newTheme;
+    // TODO: do stuff here to persist the theme selection
   }
 }
 
