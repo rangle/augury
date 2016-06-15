@@ -19,7 +19,7 @@ judgement when applying them.*
   * [Pull Requests](#pull-requests)
   * [Coding Style](#coding-style)
 1. __[Get In Touch](#how-to-get-in-touch)__
-1. __[License](#License)__
+1. __[License](#license)__
 
 
 ## I'm new. Anything I should know?
