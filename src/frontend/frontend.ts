@@ -78,7 +78,7 @@ class App {
   private openedNodes: Array<any> = [];
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
-  private theme: string = 'light'; // default theme
+  private theme: string;
 
   constructor(
     private backendAction: BackendActions,
@@ -87,6 +87,13 @@ class App {
     private _ngZone: NgZone,
     private parseUtils: ParseUtils
   ) {
+    chrome.storage.sync.get('theme', (result: any) => {
+      if (result.theme === 'dark') {
+        this.theme = result.theme;
+      } else {
+        this.theme = 'light'; // default theme
+      }
+    });
 
     this.userActions.startComponentTreeInspection();
 
@@ -159,9 +166,10 @@ class App {
     }
   }
 
-  themeChanged(newTheme) {
+  themeChanged(newTheme: string): void {
     this.theme = newTheme;
-    // TODO: do stuff here to persist the theme selection
+    // Set the new theme
+    chrome.storage.sync.set({ theme: newTheme });
   }
 }
 
