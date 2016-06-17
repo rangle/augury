@@ -49,6 +49,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
             [openedNodes]="openedNodes"
             [routerTree]="routerTree"
             [tree]="tree"
+            [theme]="theme"
             [changedNodes]="changedNodes"
             (tabChange)="tabChange($event)">
           </bt-app-trees>
@@ -59,6 +60,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           <bt-info-panel
             class="flex flex-column flex-auto bg-white"
             [tree]="tree"
+            [theme]="theme"
             [node]="selectedNode">
           </bt-info-panel>
         </div>

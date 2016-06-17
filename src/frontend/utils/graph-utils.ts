@@ -36,11 +36,13 @@ export const ANGULAR_COMPONENTS = [
 
 export class GraphUtils {
 
-  addText(svg: any, x: number, y: number, text: string) {
+  addText(svg: any, x: number, y: number, text: string, theme: string) {
+    const fillColor: string = theme === 'dark' ? '#A5A5A5' : '#000000';
     svg
       .append('text')
       .attr('x', x)
       .attr('y', y)
+      .attr('fill', fillColor)
       .text(text);
   }
 
