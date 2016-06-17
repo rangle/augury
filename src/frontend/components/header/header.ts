@@ -42,12 +42,12 @@ export class Header {
 
   resetTheme() {
     this.settingOpened = false;
-    document.removeEventListener('click', this.resetTheme.bind(this), true);
+    // document.removeEventListener('click', this.resetTheme.bind(this), false);
   }
 
   openSettings() {
-    document.addEventListener('click', this.resetTheme.bind(this), true);
     this.settingOpened = !this.settingOpened;
+    // document.addEventListener('click', this.resetTheme.bind(this), false);
   }
 
   themeChange(theme, selected) {
