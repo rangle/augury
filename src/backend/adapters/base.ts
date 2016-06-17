@@ -50,6 +50,7 @@ export interface TreeNode {
   injectors: any;
   directives: any;
   isComponent: boolean;
+  isFrameworkComponent: boolean;
   providers: Object[];
 }
 
