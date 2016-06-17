@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter}
+import {Component, Output, EventEmitter, Input}
   from '@angular/core';
 import {NgClass} from '@angular/common';
 import TabMenu from '../tab-menu/tab-menu';
@@ -15,6 +15,7 @@ import {RouterTree} from '../router-tree/router-tree';
 })
 export default class AppTrees {
 
+  @Input() theme: string;
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
 
   private tabs = [{
