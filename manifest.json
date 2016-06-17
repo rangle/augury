@@ -5,7 +5,8 @@
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
   "permissions": [
     "tabs",
-    "<all_urls>"
+    "<all_urls>",
+    "storage"
   ],
   "browser_action": {
     "default_icon": "images/augury.png",
