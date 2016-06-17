@@ -113,7 +113,6 @@ export class Angular2Adapter extends BaseAdapter {
   serializeComponent(el: any, event: string): TreeNode {
     const debugEl = el;
     const id = this._getComponentID(debugEl);
-    const isFrameworkComponent = this._getComponentInstance(debugEl) == null;
     const isComponent = this._isComponent(debugEl);
     const name = this._getComponentName(debugEl);
     const description = this._getDescription(debugEl);
@@ -145,7 +144,6 @@ export class Angular2Adapter extends BaseAdapter {
       injectors,
       directives,
       isComponent,
-      isFrameworkComponent,
       providers
     };
   }

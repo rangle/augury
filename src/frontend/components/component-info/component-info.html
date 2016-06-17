@@ -5,7 +5,7 @@
       &nbsp;
       <a href=""
         class="red-1 node-item-property"
-        *ngIf="node && node.name && node.isFrameworkComponent === false"
+        *ngIf="node && node.name && node.isComponent"
         (click)="viewComponentSource($event)">
         (View Source)
         </a>
