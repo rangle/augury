@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.0.3
+## 1.0.2
 
 * Settings menu should close when click outside of it bug ([436](https://github.com/rangle/augury/issues/436))
 * Graphs colors need to match the rest of the design in dark theme bug ([435](https://github.com/rangle/augury/issues/435))
