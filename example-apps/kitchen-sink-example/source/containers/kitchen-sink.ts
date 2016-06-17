@@ -21,21 +21,21 @@ import AngularDirectives from
 import Demo from '../components/demo/demo';
 
 @RouteConfig([
-  { path: '/', component: Home, as: 'Home' },
-  { path: '/input-output', component: InputOutput, as: 'InputOutput' },
-  { path: '/my-form', component: MyForm, as: 'MyForm' },
-  { path: '/form2', component: Form2, as: 'Form2' },
-  { path: '/control-form', component: ControlForm, as: 'ControlForm' },
-  { path: '/start/...', component: Start, as: 'Start' },
+  { path: '/', component: Home, name: 'Home' },
+  { path: '/input-output', component: InputOutput, name: 'InputOutput' },
+  { path: '/my-form', component: MyForm, name: 'MyForm' },
+  { path: '/form2', component: Form2, name: 'Form2' },
+  { path: '/control-form', component: ControlForm, name: 'ControlForm' },
+  { path: '/start/...', component: Start, name: 'Start' },
   { path: '/dynamic-controls', component: DynamicControls,
-    as: 'DynamicControls' },
-  { path: '/todo-app', component: TodoApp, as: 'TodoApp'},
-  { path: '/di-tree', component: DITree, as: 'DITree' },
+    name: 'DynamicControls' },
+  { path: '/todo-app', component: TodoApp, name: 'TodoApp'},
+  { path: '/di-tree', component: DITree, name: 'DITree' },
   { path: '/angular-directives', component: AngularDirectives,
-    as: 'AngularDirectives' },
+    name: 'AngularDirectives' },
   { path: '/change-detection', component: ChangeDetection,
-    as: 'ChangeDetection' },
-  { path: '/demo', component: Demo, as: 'DemoForNgConf' }
+    name: 'ChangeDetection' },
+  { path: '/demo', component: Demo, name: 'DemoForNgConf' }
 ])
 @Component({
   selector: 'kitchen-sink',

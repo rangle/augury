@@ -10,8 +10,8 @@ import InnerChild2 from './inner-child2';
 import InnerChildMain from './inner-child-main';
 
 @RouteConfig([
-  {path: '/', component: InnerChildMain, as: 'InnerChildMain'  },
-  {path: '/child2', component: InnerChild2, as: 'InnerChild2'  }
+  {path: '/', component: InnerChildMain, name: 'InnerChildMain'  },
+  {path: '/child2', component: InnerChild2, name: 'InnerChild2'  }
 ])
 @Component({
   selector: 'inner-child',
