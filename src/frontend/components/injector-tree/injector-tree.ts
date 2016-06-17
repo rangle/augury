@@ -32,6 +32,7 @@ export default class InjectorTree implements OnChanges {
 
   @Input() tree: any;
   @Input() selectedNode: any;
+  @Input() theme: string;
 
   private parentHierarchy;
   private parentHierarchyDisplay;
@@ -99,11 +100,14 @@ export default class InjectorTree implements OnChanges {
     this.graphUtils.addCircle(this.svg, 8, 36, 8,
       NODE_COLORS[1], NODE_STROKE_COLORS[1]);
 
-    this.graphUtils.addText(this.svg, 20, 16, 'Component');
-    this.graphUtils.addText(this.svg, 20, 40, 'Service');
-    this.graphUtils.addText(this.svg, 20, 64, 'Component to Component');
-    this.graphUtils.addText(this.svg, 20, 88, 'Component to Service');
-    this.graphUtils.addText(this.svg, 20, 112, 'Component to Dependency');
+    this.graphUtils.addText(this.svg, 20, 16, 'Component', this.theme);
+    this.graphUtils.addText(this.svg, 20, 40, 'Service', this.theme);
+    this.graphUtils.addText(this.svg, 20, 64,
+      'Component to Component', this.theme);
+    this.graphUtils.addText(this.svg, 20, 88,
+      'Component to Service', this.theme);
+    this.graphUtils.addText(this.svg, 20, 112,
+      'Component to Dependency', this.theme);
 
     this.graphUtils.addLine(this.svg, 0, 60, 16, 60, '');
     this.graphUtils.addLine(this.svg, 0, 84, 16, 84, 'stroke: #2CA02C;');
@@ -132,7 +136,8 @@ export default class InjectorTree implements OnChanges {
   private addNodeAndText(posX: number, posY: number,
     title: any, positions: any, color: string, stroke: string) {
       this.graphUtils.addCircle(this.svg, posX, posY, 8, color, stroke);
-      this.graphUtils.addText(this.svg, posX - 6, posY - 15, title);
+      this.graphUtils.addText(this.svg, posX - 6, posY - 15,
+        title, this.theme);
   }
 
   private render() {
@@ -208,7 +213,8 @@ export default class InjectorTree implements OnChanges {
         posY = START_Y + NODE_INCREMENT_Y * i;
         this.graphUtils.addCircle(this.svg, posX, posY, 8,
           NODE_COLORS[2], NODE_STROKE_COLORS[2]);
-        this.graphUtils.addText(this.svg, posX - 6, posY - 15, injector);
+        this.graphUtils.addText(this.svg, posX - 6, posY - 15,
+          injector, this.theme);
 
         x1 = posX - NODE_INCREMENT_X + 10;
         y1 = posY;
