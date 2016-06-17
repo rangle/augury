@@ -12,6 +12,7 @@ import * as d3 from 'd3';
 export class RouterTree {
 
   @Input() routerTree: Array<any>;
+  @Input() theme: string;
   treeConfig: any;
   selectedNode: any;
 
@@ -75,11 +76,13 @@ export class RouterTree {
       .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')
       .attr('r', 6);
 
+    const fillColor: string = this.theme === 'dark' ? '#A5A5A5' : '#000000';
     nodeEnter.append('text')
       .attr('x', (d) => d.children || d._children ? -13 : 13)
       .attr('dy', '.35em')
       .attr('text-anchor', (d) => d.children || d._children ? 'end' : 'start')
       .text((d) => d.name)
+      .attr('fill', fillColor)
       .style('fill-opacity', 1);
 
     // Update the nodes
@@ -95,6 +98,7 @@ export class RouterTree {
       });
 
     nodeUpdate.select('text')
+      .attr('fill', fillColor)
       .attr('class', 'monospace')
       .style('fill-opacity', 1);
 
