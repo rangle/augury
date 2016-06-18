@@ -63,7 +63,7 @@ wait to hear from you.
 :bangbang: [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 In the interest of making the Augury project a safe and friendly
-place for people from diverse backgrounds, we'll be adhering to a [Contributor Code of Conduct](./CODE_OF_CONDUCT). As a contributor, you'll be expected to
+place for people from diverse backgrounds, we'll be adhering to a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). As a contributor, you'll be expected to
 uphold this code as well as report unacceptable behaviour to
 [augury@rangle.io](mailto:augury@rangle.io).
 
