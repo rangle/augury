@@ -178,7 +178,7 @@ export class Angular2Adapter extends BaseAdapter {
     if (isRoot) {
       return this.addRoot(compEl);
     } else if (nodeName !== 'option') {
-      // skipping the option to imporove performance 
+      // skipping the option to improve performance 
       // It adds no value displaying node elements
       this.addChild(compEl);
     }
