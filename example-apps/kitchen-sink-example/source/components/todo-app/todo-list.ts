@@ -12,14 +12,14 @@ import {TodoService} from './todo-service';
       <th>Status</th>
       <th>Actions</th>
     </tr>
-    <tr *ngFor="#todo of todoService.todos">
+    <tr *ngFor="let todo of todoService.todos">
       <td>{{todo.title}}</td>
       <td>
         <h4 [ngSwitch]="todo.status">
             <p class="label label-success"
-             *ngSwitchWhen="'started'">Started</p>
+             *ngSwitchCase="'started'">Started</p>
             <p class="label label-primary"
-             *ngSwitchWhen="'completed'">Completed</p>
+             *ngSwitchCase="'completed'">Completed</p>
         </h4>
       </td>
       <td><button

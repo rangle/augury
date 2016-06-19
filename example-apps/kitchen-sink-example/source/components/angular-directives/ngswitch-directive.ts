@@ -8,11 +8,11 @@ import Hello from './hello';
   template: `
   <div>
      <div class="container" [ngSwitch]="color">
-        <hello *ngSwitchWhen="'red'" [msg]="'Color is Red'"></hello>
-        <hello *ngSwitchWhen="'green'" [msg]="'Color is Green'"></hello>
-        <hello *ngSwitchWhen="'yellow'" [msg]="'Color is Yellow'"></hello>
-        <hello *ngSwitchWhen="'blue'" [msg]="'Color is Blue'"></hello>
-        <hello *ngSwitchWhen="'grey'" [msg]="'Color is Grey'"></hello>
+        <hello *ngSwitchCase="'red'" [msg]="'Color is Red'"></hello>
+        <hello *ngSwitchCase="'green'" [msg]="'Color is Green'"></hello>
+        <hello *ngSwitchCase="'yellow'" [msg]="'Color is Yellow'"></hello>
+        <hello *ngSwitchCase="'blue'" [msg]="'Color is Blue'"></hello>
+        <hello *ngSwitchCase="'grey'" [msg]="'Color is Grey'"></hello>
         <hello *ngSwitchDefault [msg]="'No Color Selected'"></hello>
      </div>
      <button class="btn btn-success" (click)="switch()">Switch Color</button>

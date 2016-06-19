@@ -100,7 +100,9 @@ export default class KitchenSink {
   public path: string = '';
 
   constructor(private router: Router) {
-    router.subscribe((val) => this.path = val);
+    router.subscribe((val) => {
+      this.path = val.instruction.urlPath;
+    });
   }
 
 }
