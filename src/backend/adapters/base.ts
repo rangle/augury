@@ -5,7 +5,7 @@
  * the state of the components (e.g. mount ops/locations, state changes,
  * performance profile, etc...).
  *
- * For more information, see the Angular2 Adapater (./angular2.ts).
+ * For more information, see the Angular2 Adapter (./angular2.ts).
  *
  * The adapter works in two phases:
  * 1) Setup phase: The initial bootstrap of the extension. After angular
@@ -14,7 +14,7 @@
  *                 components into the view.
  * 2) Tracking phase: After setup, we listen to changes in the application and
  *                    broadcast component changes and removal as well as new
- *                    additions into the view after the intial load.
+ *                    additions into the view after the initial load.
  *
  * Interface:
  * - addRoot

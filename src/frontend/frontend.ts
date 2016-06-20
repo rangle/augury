@@ -49,6 +49,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
             [openedNodes]="openedNodes"
             [routerTree]="routerTree"
             [tree]="tree"
+            [theme]="theme"
             [changedNodes]="changedNodes"
             (tabChange)="tabChange($event)">
           </bt-app-trees>
@@ -59,6 +60,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           <bt-info-panel
             class="flex flex-column flex-auto bg-white"
             [tree]="tree"
+            [theme]="theme"
             [node]="selectedNode">
           </bt-info-panel>
         </div>
@@ -78,7 +80,7 @@ class App {
   private openedNodes: Array<any> = [];
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
-  private theme: string = 'light'; // default theme
+  private theme: string;
 
   constructor(
     private backendAction: BackendActions,
@@ -87,6 +89,13 @@ class App {
     private _ngZone: NgZone,
     private parseUtils: ParseUtils
   ) {
+    chrome.storage.sync.get('theme', (result: any) => {
+      if (result.theme === 'dark') {
+        this.theme = result.theme;
+      } else {
+        this.theme = 'light'; // default theme
+      }
+    });
 
     this.userActions.startComponentTreeInspection();
 
@@ -159,9 +168,10 @@ class App {
     }
   }
 
-  themeChanged(newTheme) {
+  themeChanged(newTheme: string): void {
     this.theme = newTheme;
-    // TODO: do stuff here to persist the theme selection
+    // Set the new theme
+    chrome.storage.sync.set({ theme: newTheme });
   }
 }
 

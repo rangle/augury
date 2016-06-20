@@ -19,6 +19,7 @@ export class InfoPanel {
 
   @Input() tree: any;
   @Input() node: any;
+  @Input() theme: string;
 
   private selectedTabIndex: number = 0;
   private tabs = [{

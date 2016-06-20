@@ -40,12 +40,22 @@ export class Header {
     }
   }
 
+  resetTheme() {
+    this.settingOpened = false;
+    // document.removeEventListener('click', this.resetTheme.bind(this), false);
+  }
+
+  openSettings() {
+    this.settingOpened = !this.settingOpened;
+    // document.addEventListener('click', this.resetTheme.bind(this), false);
+  }
+
   themeChange(theme, selected) {
     if (selected) {
       this.theme = theme;
       this.newTheme.emit(this.theme);
     }
-    this.settingOpened = false;
+    this.resetTheme();
   }
 
   /**
