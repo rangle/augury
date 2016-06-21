@@ -6,20 +6,20 @@ import {BaseException}
 import {ListWrapper, StringMapWrapper}
  from '@angular/compiler/src/facade/collection';
 import {
-resolveForwardRef,
-Injectable,
-DirectiveMetadata,
-ComponentMetadata,
-InputMetadata,
-OutputMetadata,
-HostBindingMetadata,
-HostListenerMetadata,
-ContentChildrenMetadata,
-ViewChildrenMetadata,
-ContentChildMetadata,
-ViewChildMetadata,
-reflector
+  resolveForwardRef,
+  Injectable,
+  DirectiveMetadata,
+  ComponentMetadata,
+  InputMetadata,
+  OutputMetadata,
+  HostBindingMetadata,
+  HostListenerMetadata,
+  ContentChildrenMetadata,
+  ViewChildrenMetadata,
+  ContentChildMetadata,
+  ViewChildMetadata
 } from '@angular/core';
+import { reflector } from '@angular/core/src/reflection/reflection';
 
 function _isDirectiveMetadata(type: any): boolean {
   let className: string = type.constructor.toString().match(/\w+/g)[1];

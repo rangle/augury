@@ -16,14 +16,14 @@ import RouterData1 from './router-data1';
 import RouterData2 from './router-data2';
 
 @RouteConfig([
-  { aux: '/auxcomp', component: AuxComp, as: 'AuxComp' },
-  { path: '/', component: StartMain, as: 'StartMain'  },
-  { path: '/child', component: StartChild, as: 'StartChild'  },
-  { path: '/router-data1/:message', component: RouterData1, as: 'RouterData1',
+  { aux: '/auxcomp', component: AuxComp, name: 'AuxComp' },
+  { path: '/', component: StartMain, name: 'StartMain'  },
+  { path: '/child', component: StartChild, name: 'StartChild'  },
+  { path: '/router-data1/:message', component: RouterData1, name: 'RouterData1',
     data: { passedData: 'Passed in via Data'}},
   { path: '/router-data2/:name/:message', component: RouterData2,
-    as: 'RouterData2'},
-  { path: '/inner-child/...', component: InnerChild, as: 'InnerChild' },
+    name: 'RouterData2'},
+  { path: '/inner-child/...', component: InnerChild, name: 'InnerChild' },
 ])
 @Component({
   selector: 'start',
