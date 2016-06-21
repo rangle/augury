@@ -1,0 +1,22 @@
+
+/* Header */
+
+.setting {
+  -webkit-mask-position: -200px -29px;
+  background-color: var(--grey-darkest);
+  height: 16px;
+  margin: auto;
+  width: 16px;
+}
+
+.setting-dropdown {
+  background: var(--grey-light);
+}
+
+.setting-dropdown li {
+  padding-left: 2rem;
+}
+
+.setting-dropdown li.selected {
+
+}

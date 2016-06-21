@@ -1,14 +1,14 @@
-import {Component, NgZone} from '@angular/core';
+import {Component, NgZone, EventEmitter, Output} from '@angular/core';
+import {FORM_DIRECTIVES} from '@angular/common';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentDataStore}
   from '../../stores/component-data/component-data-store';
 
-
 @Component({
   selector: 'augury-header',
   templateUrl: 'src/frontend/components/header/header.html',
-  inputs: ['searchDisabled']
+  inputs: ['searchDisabled', 'theme']
 })
 export class Header {
 
@@ -16,6 +16,10 @@ export class Header {
   private searchIndex: number = 0;
   private totalSearchCount: number = 0;
   private query: string = '';
+  private settingOpened: boolean = false;
+  private theme: string;
+
+  @Output() newTheme: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private userActions: UserActions,
@@ -34,6 +38,24 @@ export class Header {
     if (this.searchDisabled) {
       this.query = '';
     }
+  }
+
+  resetTheme() {
+    this.settingOpened = false;
+    // document.removeEventListener('click', this.resetTheme.bind(this), false);
+  }
+
+  openSettings() {
+    this.settingOpened = !this.settingOpened;
+    // document.addEventListener('click', this.resetTheme.bind(this), false);
+  }
+
+  themeChange(theme, selected) {
+    if (selected) {
+      this.theme = theme;
+      this.newTheme.emit(this.theme);
+    }
+    this.resetTheme();
   }
 
   /**

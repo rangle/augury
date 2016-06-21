@@ -1,11 +1,12 @@
 {
   "name": "Augury",
   "short_name": "Augury",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
   "permissions": [
     "tabs",
-    "<all_urls>"
+    "<all_urls>",
+    "storage"
   ],
   "browser_action": {
     "default_icon": "images/augury.png",

@@ -1,4 +1,5 @@
 import {Component, Inject, bind, NgZone} from '@angular/core';
+
 import {bootstrap} from '@angular/platform-browser-dynamic';
 
 import {Dispatcher} from './dispatcher/dispatcher';
@@ -30,19 +31,25 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
   providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <div class="clearfix vh-100 overflow-hidden flex flex-column">
-      <augury-header [searchDisabled]="searchDisabled"></augury-header>
+    <div class="clearfix vh-100 overflow-hidden flex flex-column"
+      [ngClass]="{'dark': theme === 'dark'}">
+      <augury-header
+        [searchDisabled]="searchDisabled"
+        [theme]="theme"
+        (newTheme)="themeChanged($event)">
+      </augury-header>
       <div class="flex flex-auto">
         <div class="col col-6 overflow-hidden
           border-right border-color-dark flex"
         [ngClass]="{'overflow-scroll col-12': selectedTabIndex > 0}">
           <bt-app-trees
-            class="flex flex-column flex-auto"
+            class="flex flex-column flex-auto bg-white"
             [selectedTabIndex]="selectedTabIndex"
             [selectedNode]="selectedNode"
             [openedNodes]="openedNodes"
             [routerTree]="routerTree"
             [tree]="tree"
+            [theme]="theme"
             [changedNodes]="changedNodes"
             (tabChange)="tabChange($event)">
           </bt-app-trees>
@@ -51,8 +58,9 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
           [ngClass]="{'flex': selectedTabIndex === 0}"
           [hidden]="selectedTabIndex > 0">
           <bt-info-panel
-            class="flex flex-column flex-auto"
+            class="flex flex-column flex-auto bg-white"
             [tree]="tree"
+            [theme]="theme"
             [node]="selectedNode">
           </bt-info-panel>
         </div>
@@ -72,6 +80,7 @@ class App {
   private openedNodes: Array<any> = [];
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
+  private theme: string;
 
   constructor(
     private backendAction: BackendActions,
@@ -80,6 +89,13 @@ class App {
     private _ngZone: NgZone,
     private parseUtils: ParseUtils
   ) {
+    chrome.storage.sync.get('theme', (result: any) => {
+      if (result.theme === 'dark') {
+        this.theme = result.theme;
+      } else {
+        this.theme = 'light'; // default theme
+      }
+    });
 
     this.userActions.startComponentTreeInspection();
 
@@ -150,6 +166,12 @@ class App {
     } else {
       this.searchDisabled = false;
     }
+  }
+
+  themeChanged(newTheme: string): void {
+    this.theme = newTheme;
+    // Set the new theme
+    chrome.storage.sync.set({ theme: newTheme });
   }
 }
 

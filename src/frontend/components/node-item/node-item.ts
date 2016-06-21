@@ -7,9 +7,40 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 import {UserActionType}
   from '../../actions/action-constants';
 
+// NOTE(cbond): This template must remain inline, there is a bug with recursive
+// controls in Angular 2 and templateUrl that prevents this from working
+// otherwise. Once they fix that bug then this can be placed back inside a
+// templateUrl file.
 @Component({
   selector: 'bt-node-item',
-  templateUrl: 'src/frontend/components/node-item/node-item.html',
+  template: `
+    <div (mouseout)=onMouseOut($event)
+      (mouseover)=onMouseOver($event)
+      (dblclick)=onDblClick($event)
+      (click)="onClick($event)">
+    
+      <div class="node-item pl3 rounded border-box"
+        [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
+        <img src="../images/Triangle.svg"
+          style="width: 0.8em; height: 0.8em;"
+          [hidden]="node.children ? false : true"
+          [ngClass]="{rotate90: showChildren()}"
+          (click)="expandTree($event)">
+        <div class="inline"
+          [innerHTML]="getNodeDetails(node)">
+          </div>
+      </div>
+    
+      <div class="border-box pl4">
+        <bt-node-item *ngFor="let node of node.children"
+          [changedNodes]="changedNodes"
+          [hidden]="showChildren()"
+          [selectedNode]="selectedNode"
+          [openedNodes]="openedNodes"
+          [node]="node">
+        </bt-node-item>
+      </div>
+    </div>`,
   directives: [NgIf, NgFor, NodeItem]
 })
 /**
