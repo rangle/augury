@@ -3,7 +3,7 @@
 ## [1.0.3](https://github.com/rangle/augury/tree/1.0.3)
 * Update Augury to Angular 2.0.0-rc.3
 * Fix a bug where graph colors in "Router Tree" where not matching the dark theme ([435](https://github.com/rangle/augury/issues/435))
-* Ignore build output ([453](https://github.com/rangle/augury/issues/453))
+* Ignore build output ([453](https://github.com/rangle/augury/issues/453)) 
 
 ## [1.0.2](https://github.com/rangle/augury/tree/1.0.2)
 * Settings menu should close when click outside of it bug ([436](https://github.com/rangle/augury/issues/436))
@@ -21,6 +21,7 @@
 * No support for dark mode in Chrome ([378](https://github.com/rangle/augury/issues/378))
 * Reload of browser window breaks augury bug ([377](https://github.com/rangle/augury/issues/377))
 * "Cannot read property 'root' of undefined" console error when viewing router tree ([376](https://github.com/rangle/augury/issues/376))
+* Fix Augury hanging on load on Chrome Canary ([394](https://github.com/rangle/augury/issues/394))
 
 ## [1.0.1](https://github.com/rangle/augury/tree/1.0.1) (2016-05-28)
 * [Changes](https://github.com/rangle/augury/compare/1.0.1...v0.0.3)
