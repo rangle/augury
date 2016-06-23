@@ -11,7 +11,7 @@ Once the extenion is installed you can test it against the demo application http
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-rc.2](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc3-2016-06-21) using [Angular Deprecated Router](https://angular.io/docs/ts/latest/guide/router-deprecated.html) with _limited backward compatibility_, which will change once Angular 2 stabilizes. 
+Currently works with applications built in [Angular 2.0.0-rc.3](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc3-2016-06-21) using [Angular Deprecated Router](https://angular.io/docs/ts/latest/guide/router-deprecated.html) with _limited backward compatibility_, which will change once Angular 2 stabilizes. 
 
 To view the router graph inject the Router in main application as shown below.
 ```js
