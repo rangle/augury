@@ -101,18 +101,26 @@ export abstract class Description {
   }
 
   private static _getRouterLinkDesc(instance: any): Array<Property> {
-    return [{
-        key: 'routeName',
-        value: instance._navigationInstruction.component.routeName
-      },
-      {
-        key: 'componentType',
-        value: instance._navigationInstruction.component.componentType.name
-      },
-      { key: 'visibleHref', value: instance.visibleHref },
-      { key: 'isRouteActive', value: instance.isRouteActive },
-      { key: 'routeParams', value: instance._routeParams }
-    ];
+    // this is just a patch until we upgrade to work with new router
+    if (instance._navigationInstruction) {
+      return [{
+          key: 'routeName',
+          value: instance._navigationInstruction.component.routeName
+        },
+        {
+          key: 'componentType',
+          value: instance._navigationInstruction.component.componentType.name
+        },
+        { key: 'visibleHref', value: instance.visibleHref },
+        { key: 'isRouteActive', value: instance.isRouteActive },
+        { key: 'routeParams', value: instance._routeParams }
+      ];
+    } else {
+      return [
+        { key: 'href', value: instance.href },
+        { key: 'isRouteActive', value: instance.isActive }
+      ];
+    }
   }
 
   private static _getSelectOptionDesc(element: HTMLElement): Array<Property> {
