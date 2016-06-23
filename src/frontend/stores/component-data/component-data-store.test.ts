@@ -29,7 +29,7 @@ test('frontend/component-data-store: component changes', t => {
     t.deepEqual(data, {
       action: 'START_COMPONENT_TREE_INSPECTION',
       componentData: mockData,
-      openedNodes: [],
+      closedNodes: [],
       selectedNode: undefined
     }, 'emits component tree change event');
   });

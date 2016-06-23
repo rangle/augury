@@ -6,7 +6,7 @@ import {UserActionType}
 
 @Component({
   selector: 'component-tree',
-  inputs: ['tree', 'changedNodes', 'selectedNode', 'openedNodes'],
+  inputs: ['tree', 'changedNodes', 'selectedNode', 'closedNodes'],
   templateUrl: 'src/frontend/components/component-tree/component-tree.html',
   host: {'class': 'flex overflow-scroll'},
   directives: [NgFor, NodeItem]
