@@ -46,5 +46,9 @@ NOTES.md
 typings
 
 key.pem
-*.crx
 .vscode/
+
+# build output
+*.crx
+augury.zip
+download.html
