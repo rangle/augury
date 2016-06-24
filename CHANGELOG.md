@@ -1,9 +1,10 @@
 # Change Log
 
 ## [1.0.3](https://github.com/rangle/augury/tree/1.0.3)
-* Update Augury to Angular 2.0.0-rc.3
+* Update Augury to Angular 2.0.0-rc.3 ([450](https://github.com/rangle/augury/issues/450))
 * Fix a bug where graph colors in "Router Tree" where not matching the dark theme ([435](https://github.com/rangle/augury/issues/435))
-* Ignore build output ([453](https://github.com/rangle/augury/issues/453)) 
+* Ignore build output ([453](https://github.com/rangle/augury/issues/453))
+* Rename `openedNodes` to `closedNodes` for clarity ([363](https://github.com/rangle/augury/issues/363))
 
 ## [1.0.2](https://github.com/rangle/augury/tree/1.0.2)
 * Settings menu should close when click outside of it bug ([436](https://github.com/rangle/augury/issues/436))
