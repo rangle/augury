@@ -19,7 +19,7 @@ interface SearchCriteria {
 export class ComponentDataStore extends AbstractStore {
 
   private _componentData;
-  private _openedNodes = [];
+  private _closedNodes = [];
   private _selectedNode;
 
   constructor(
@@ -83,7 +83,7 @@ export class ComponentDataStore extends AbstractStore {
     this.emitChange({
       componentData,
       selectedNode: this._selectedNode,
-      openedNodes: this._openedNodes,
+      closedNodes: this._closedNodes,
       action: UserActionType.START_COMPONENT_TREE_INSPECTION
     });
   }
@@ -128,24 +128,24 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
-   * Update node state of current openedNodes and selectedNode
-   * @param  {Object} openedNodes Currently closed Nodes
+   * Update node state of current closedNodes and selectedNode
+   * @param  {Object} closedNodes Currently closed Nodes
    * @param  {Object} selectedNode Current selected Node
    */
-  private updateNodeState({openedNodes, selectedNode}) {
+  private updateNodeState({closedNodes, selectedNode}) {
     selectedNode = this.getUpdatedNode(selectedNode);
     this.emitChange({
-      openedNodes,
+      closedNodes,
       selectedNode,
       action: UserActionType.OPEN_CLOSE_TREE
     });
   }
 
   /**
-   * Clear the selection of previously selectedNode and openedNodes
+   * Clear the selection of previously selectedNode and closedNodes
    */
   private clearSelections() {
-    this._openedNodes = [];
+    this._closedNodes = [];
     this._selectedNode = undefined;
   }
 
@@ -251,15 +251,15 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
-   * Save the node id to openedNodes array on clicking expand and collapse
+   * Save the node id to closedNodes array on clicking expand and collapse
    */
   private openCloseNode({node}) {
-    const index = this._openedNodes.indexOf(node.id);
+    const index = this._closedNodes.indexOf(node.id);
     if (!node.isOpen && index === -1) {
-      this._openedNodes.push(node.id);
+      this._closedNodes.push(node.id);
     } else if (node.isOpen) {
       if (index > -1) {
-        this._openedNodes.splice(index, 1);
+        this._closedNodes.splice(index, 1);
       }
     }
   }

@@ -36,7 +36,7 @@ import {UserActionType}
           [changedNodes]="changedNodes"
           [hidden]="showChildren()"
           [selectedNode]="selectedNode"
-          [openedNodes]="openedNodes"
+          [closedNodes]="closedNodes"
           [node]="node">
         </bt-node-item>
       </div>
@@ -53,7 +53,7 @@ export class NodeItem {
   @Input() node: any;
   @Input() changedNodes: any;
   @Input() selectedNode: any;
-  @Input() openedNodes: Array<any>;
+  @Input() closedNodes: Array<any>;
 
   private collapsed: any;
   private isUpdated: boolean = false;
@@ -161,8 +161,8 @@ export class NodeItem {
         this.isUpdated = false;
       }, 2000);
     }
-    if (this.openedNodes && this.node) {
-      if (this.openedNodes.indexOf(this.node.id) > -1) {
+    if (this.closedNodes && this.node) {
+      if (this.closedNodes.indexOf(this.node.id) > -1) {
         this.node.isOpen = false;
       }
     }

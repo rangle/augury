@@ -46,7 +46,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
             class="flex flex-column flex-auto bg-white"
             [selectedTabIndex]="selectedTabIndex"
             [selectedNode]="selectedNode"
-            [openedNodes]="openedNodes"
+            [closedNodes]="closedNodes"
             [routerTree]="routerTree"
             [tree]="tree"
             [theme]="theme"
@@ -77,7 +77,7 @@ class App {
   private routerTree: any;
   private selectedTabIndex = 0;
   private selectedNode: any;
-  private openedNodes: Array<any> = [];
+  private closedNodes: Array<any> = [];
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
   private theme: string;
@@ -117,7 +117,7 @@ class App {
           const treeMapNode = treeMap[data.selectedNode.id];
           this.selectedNode = treeMapNode ? JSON.parse(treeMapNode) : undefined;
         }
-        this.openedNodes = data.openedNodes;
+        this.closedNodes = data.closedNodes;
         this._ngZone.run(() => undefined);
       }
     );

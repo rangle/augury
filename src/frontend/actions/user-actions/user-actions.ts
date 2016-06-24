@@ -87,13 +87,13 @@ export class UserActions {
    * Update the node state after re rendering the tree.
    * Select the previously selected node and
    * Preserve state of previously Closed Component.
-   * @param  {Object} options.openedNodes list of opened Nodes id's
+   * @param  {Object} options.closedNodes list of closed Nodes id's
    * @param  {Object} options.selectedNode currently selectedNode
    */
-  updateNodeState({openedNodes, selectedNode}) {
+  updateNodeState({closedNodes, selectedNode}) {
     this.dispatcher.messageBus.next({
       actionType: UserActionType.UPDATE_NODE_STATE,
-      openedNodes,
+      closedNodes,
       selectedNode
     });
   }
