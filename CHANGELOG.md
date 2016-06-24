@@ -1,6 +1,7 @@
 # Change Log
 
 ## [1.0.3](https://github.com/rangle/augury/tree/1.0.3)
+* Augury supports projects written in Angular 2.0.0-rc.3  
 * Update Augury to Angular 2.0.0-rc.3 ([450](https://github.com/rangle/augury/issues/450))
 * Fix a bug where graph colors in "Router Tree" where not matching the dark theme ([435](https://github.com/rangle/augury/issues/435))
 * Ignore build output ([453](https://github.com/rangle/augury/issues/453))
