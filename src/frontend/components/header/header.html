@@ -51,7 +51,7 @@
   </header>
 
   <form>
-    <ul class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" *ngIf="settingOpened">
+    <ul class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" [ngClass]="{'setting-dropdown--dark':theme==='dark'}" *ngIf="settingOpened">
       <li class="p3 border-bottom border-dark">
         <input type="radio"
           #lightTheme
