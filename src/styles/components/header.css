@@ -13,6 +13,11 @@
   background: var(--grey-light);
 }
 
+.setting-dropdown--dark {
+  background: var(--grey-darkest);
+  color: var(--grey-light);
+}
+
 .setting-dropdown li {
   padding-left: 2rem;
 }
