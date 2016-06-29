@@ -84,3 +84,34 @@ export class ParseRouter {
     };
   }
 }
+
+export class ComponentRouterParser {
+  public static parseConfigRoutes(router: any): MainRoute {
+    const children = router.config.map((child, index) => {
+      const childName = child.component ? child.component.name : 'no-name-route';
+      // TODO: populate the schema of every child, every child corresponds to a path.
+      return {
+        depth: 1, // TODO: (ericjim) the children of the children will need this property incremented.
+        // data: { data: } (???, I have no idea what this is)
+        handler: childName,
+        id: index, // TODO: (ericjim) is this the supposed id?
+        // isAux: boolean (???, default False)
+        name: childName,
+        parent: root,
+        path: `/${child.path}`
+        // children: child.children // (Recursively resolve children's children)
+      }
+    });
+
+    var root = {
+      // id:
+      name: "test",
+      children: children,
+      depth: 0,
+      x: 0,
+      y: 0
+    };
+    
+    return root;
+  }
+}
