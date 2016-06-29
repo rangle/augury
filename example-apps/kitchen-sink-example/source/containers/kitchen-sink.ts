@@ -19,6 +19,7 @@ import ChangeDetection from '../components/change-detection/change-detection';
 import AngularDirectives from
   '../components/angular-directives/angular-directives';
 import Demo from '../components/demo/demo';
+import StressTester from '../components/stress-tester/stress-tester';
 
 @RouteConfig([
   { path: '/', component: Home, name: 'Home' },
@@ -35,7 +36,8 @@ import Demo from '../components/demo/demo';
     name: 'AngularDirectives' },
   { path: '/change-detection', component: ChangeDetection,
     name: 'ChangeDetection' },
-  { path: '/demo', component: Demo, name: 'DemoForNgConf' }
+  { path: '/demo', component: Demo, name: 'DemoForNgConf' },
+  { path: '/stress-tester', component: StressTester, name: 'StressTester' }
 ])
 @Component({
   selector: 'kitchen-sink',
@@ -80,6 +82,9 @@ import Demo from '../components/demo/demo';
       </li>
       <li [ngClass]="{active: path=='change-detection'}">
         <a [routerLink]="['./ChangeDetection']">ChangeDetection</a>
+      </li>
+      <li [ngClass]="{active: path=='stress-tester'}">
+        <a [routerLink]="['./StressTester']">StressTester</a>
       </li>
       </ul>
     </div>
