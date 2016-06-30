@@ -88,15 +88,21 @@ export class ParseRouter {
 
 export function IS_OLD_ROUTER_HACK(router) : boolean {
 
-  // `config` key is different for both routers, it's highly unlikely that the deprecated router will change this.
+  // `config` key is different for both routers, 
+  // it's highly unlikely that the deprecated router will change this.
   const componentRouterConfigIsArray: boolean = Array.isArray(router.config);
-  const deprecatedRouterConfigIsFunction: boolean = typeof router.config === "function";
-  const oldConfig = deprecatedRouterConfigIsFunction && !componentRouterConfigIsArray;
+  const deprecatedRouterConfigIsFunction: boolean =
+    typeof router.config === 'function';
+  const oldConfig =
+    deprecatedRouterConfigIsFunction && !componentRouterConfigIsArray;
 
   // root of the app is stored in a different key.
-  const deprecatedRootComponentKey: boolean = router.hasOwnProperty('root');
-  const componentRouterRootComponentKey: boolean = router.hasOwnProperty('rootComponentType');
-  const oldRoot = deprecatedRootComponentKey && !componentRouterRootComponentKey;
+  const deprecatedRootComponentKey: boolean =
+    router.hasOwnProperty('root');
+  const componentRouterRootComponentKey: boolean =
+    router.hasOwnProperty('rootComponentType');
+  const oldRoot =
+    deprecatedRootComponentKey && !componentRouterRootComponentKey;
 
   return oldRoot && oldConfig;
 }
@@ -106,7 +112,7 @@ export function parseConfigRoutes(router: any): MainRoute {
   const rootName = router.rootComponentType.name;
   const rootChildren: [any] = router.config;
 
-  var root = {
+  const root = {
     handler: rootName,
     name: rootName,
     path: '/',
@@ -126,7 +132,8 @@ function assignChildrenToParent(parent, children): [any] {
       name: childName,
       parent: parent,
       path: `/${child.path}`,
-      children: childDescendents ? assignChildrenToParent(this, childDescendents) : []
+      children: childDescendents ?
+        assignChildrenToParent(this, childDescendents) : []
     };
   });
 }

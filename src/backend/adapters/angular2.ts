@@ -25,7 +25,8 @@ import { Subject } from 'rxjs/Subject';
 
 import { TreeNode, BaseAdapter } from './base';
 import { Description } from '../utils/description';
-import { ParseRouter, IS_OLD_ROUTER_HACK, parseConfigRoutes } from '../utils/parse-router';
+import { ParseRouter, IS_OLD_ROUTER_HACK, parseConfigRoutes }
+from '../utils/parse-router';
 
 export class Angular2Adapter extends BaseAdapter {
   _tree: any = {};
@@ -74,7 +75,8 @@ export class Angular2Adapter extends BaseAdapter {
       let routes: any;
 
       if (IS_OLD_ROUTER_HACK(router)) {
-        // TODO: (ericjim): remove if-block and function once we no longer support the old router.
+        // TODO: (ericjim): remove if-block and function
+        // once we no longer support the old router.
         routes = ParseRouter.parseRoutes(router.root.registry);
       } else {
         routes = parseConfigRoutes(router);
