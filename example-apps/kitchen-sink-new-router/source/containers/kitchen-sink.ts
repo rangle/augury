@@ -6,7 +6,6 @@ import { ROUTER_DIRECTIVES, RouterConfig, Router}
 import {CamelCasePipe} from '../pipes/camelcase';
 
 import Home from '../components/home';
-import Start from '../components/router/start';
 import InputOutput from '../components/input-output/input-output';
 import MyForm from '../components/form-controls/my-form';
 import Form2 from '../components/form-controls/form2';
@@ -20,20 +19,32 @@ import AngularDirectives from
 import Demo from '../components/demo/demo';
 import StressTester from '../components/stress-tester/stress-tester';
 
+import Start from '../components/router/start';
+import StartChild from '../components/router/start-child';
+import StartMain from '../components/router/start-main';
+import InnerChild from '../components/router/inner-child';
+import RouterData1 from '../components/router/router-data1';
+import RouterData2 from '../components/router/router-data2';
+
 export const KitchenSinkRoutes: RouterConfig = [
   { path: '', component: Home },
   { path: 'input-output', component: InputOutput },
   { path: 'my-form', component: MyForm },
   { path: 'form2', component: Form2 },
   { path: 'control-form', component: ControlForm },
-  // { path: 'start', component: Start, children: [] },
   { path: 'dynamic-controls', component: DynamicControls },
   { path: 'todo-app', component: TodoApp },
   { path: 'di-tree', component: DITree },
   { path: 'angular-directives', component: AngularDirectives },
   { path: 'change-detection', component: ChangeDetection },
   { path: 'demo', component: Demo },
-  { path: 'stress-tester', component: StressTester }
+  { path: 'stress-tester', component: StressTester },
+  { path: 'start', component: Start, children: [
+    { path: 'main', component: StartMain },
+    { path: 'child', component: StartChild },
+    { path: 'router-data1/:name', component: RouterData1 },
+    { path: 'router-data2/:name/:message', component: RouterData2 }]
+  }
 ];
 
 @Component({
@@ -63,7 +74,7 @@ export const KitchenSinkRoutes: RouterConfig = [
         <a [routerLink]="['/input-output']">InputOutput</a>
       </li>
       <li [ngClass]="{active: path.indexOf('start') > -1}">
-        <a [routerLink]="['/start']">Router</a>
+        <a [routerLink]="['/start/main']">Router</a>
       </li>
       <li [ngClass]="{active: path=='dynamic-controls'}">
         <a [routerLink]="['/dynamic-controls']">DynamicControls</a>
