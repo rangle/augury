@@ -58,7 +58,6 @@ import RouterData2 from './router-data2';
     </ul>
     <hr/>
     <router-outlet></router-outlet>
-    <router-outlet name="auxcomp"></router-outlet>
   </div>
   `
 })
