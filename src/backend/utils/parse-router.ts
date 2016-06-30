@@ -16,6 +16,7 @@ export interface MainRoute {
   children: Array<Route>;
 }
 
+// *** Deprecated Router ***
 export class ParseRouter {
 
   private static NAME_REGEX = /function ([^\(]*)/;
@@ -85,33 +86,51 @@ export class ParseRouter {
   }
 }
 
-export class ComponentRouterParser {
-  public static parseConfigRoutes(router: any): MainRoute {
-    const children = router.config.map((child, index) => {
-      const childName = child.component ? child.component.name : 'no-name-route';
-      // TODO: populate the schema of every child, every child corresponds to a path.
-      return {
-        depth: 1, // TODO: (ericjim) the children of the children will need this property incremented.
-        // data: { data: } (???, I have no idea what this is)
-        handler: childName,
-        id: index, // TODO: (ericjim) is this the supposed id?
-        // isAux: boolean (???, default False)
-        name: childName,
-        parent: root,
-        path: `/${child.path}`
-        // children: child.children // (Recursively resolve children's children)
-      }
-    });
+export function IS_OLD_ROUTER_HACK(router) : boolean {
 
-    var root = {
-      // id:
-      name: "test",
-      children: children,
-      depth: 0,
-      x: 0,
-      y: 0
+  // `config` key is different for both routers, it's highly unlikely that the deprecated router will change this.
+  const componentRouterConfigIsArray: boolean = Array.isArray(router.config);
+  const deprecatedRouterConfigIsFunction: boolean = typeof router.config === "function";
+  const oldConfig = deprecatedRouterConfigIsFunction && !componentRouterConfigIsArray;
+
+  // root of the app is stored in a different key.
+  const deprecatedRootComponentKey: boolean = router.hasOwnProperty('root');
+  const componentRouterRootComponentKey: boolean = router.hasOwnProperty('rootComponentType');
+  const oldRoot = deprecatedRootComponentKey && !componentRouterRootComponentKey;
+
+  return oldRoot && oldConfig;
+}
+
+// *** Component Router ***
+export function parseConfigRoutes(router: any): MainRoute {
+  const rootName = router.rootComponentType.name;
+  const rootChildren: [any] = router.config;
+
+  var root = {
+    handler: rootName,
+    name: rootName,
+    path: '/',
+    children: rootChildren ? assignChildrenToParent(null, rootChildren) : []
+  };
+
+  return root;
+}
+
+function assignChildrenToParent(parent, children): [any] {
+  return children.map((child) => {
+    const childName = childRouteName(child);
+    const childDescendents: [any] = child.children;
+
+    return {
+      handler: childName,
+      name: childName,
+      parent: parent,
+      path: `/${child.path}`,
+      children: childDescendents ? assignChildrenToParent(this, childDescendents) : []
     };
-    
-    return root;
-  }
+  });
+}
+
+function childRouteName(child): string {
+  return child.component ? child.component.name : 'no-name-route';
 }

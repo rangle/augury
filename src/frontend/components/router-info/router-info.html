@@ -18,7 +18,8 @@
           {{selectedNode.path}}
           </span>
       </li>
-      <li>
+      <!-- Note: (ericjim) specificity is not a concept in the alpha component router. -->
+      <li *ngIf="selectedNode.specificity">
         <span class="info-key">
           specificity:
           </span>

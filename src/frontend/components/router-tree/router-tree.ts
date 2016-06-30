@@ -44,7 +44,6 @@ export class RouterTree {
   }
 
   render() {
-    console.log(this.routerTree);
     if (!this.routerTree) {
       return;
     }
