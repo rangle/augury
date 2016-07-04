@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, OnDestroy }
  from '@angular/core';
-import { ROUTER_DIRECTIVES, RouterConfig, Router}
+import { ROUTER_DIRECTIVES, RouterConfig, Router, ActivatedRoute}
  from '@angular/router';
 
 import {CamelCasePipe} from '../pipes/camelcase';
@@ -58,7 +58,7 @@ export const KitchenSinkRoutes: RouterConfig = [
     <div class="col-md-3">
       <ul class="nav nav-pills nav-stacked">
       <li [ngClass]="{active: path==''}">
-        <a [routerLink]="['/home']">Home</a>
+        <a [routerLink]="['/']">Home</a>
       </li>
       <li [ngClass]="{active: path=='demo'}">
         <a [routerLink]="['/demo']">Demo</a>
@@ -114,11 +114,13 @@ export const KitchenSinkRoutes: RouterConfig = [
 export default class KitchenSink {
   public path: string = '';
 
-  constructor(private router: Router) {
-    console.log(router);
-    // router.subscribe((val) => {
-    //   this.path = val.instruction.urlPath;
-    // });
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
+    router.events.subscribe((data) => {
+      this.path = data.url.substr(1);
+    });
   }
 
 }
