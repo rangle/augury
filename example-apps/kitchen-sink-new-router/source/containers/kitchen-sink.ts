@@ -25,6 +25,7 @@ import StartMain from '../components/router/start-main';
 import InnerChild from '../components/router/inner-child';
 import RouterData1 from '../components/router/router-data1';
 import RouterData2 from '../components/router/router-data2';
+import AuxComp from '../components/router/aux-comp';
 
 export const KitchenSinkRoutes: RouterConfig = [
   { path: '', component: Home },
@@ -41,6 +42,7 @@ export const KitchenSinkRoutes: RouterConfig = [
   { path: 'stress-tester', component: StressTester },
   { path: 'start', component: Start, children: [
     { path: 'main', component: StartMain },
+    { path: 'auxcomp', component: AuxComp, outlet: 'aux' },
     { path: 'child', component: StartChild },
     { path: 'router-data1/:name', component: RouterData1 },
     { path: 'router-data2/:name/:message', component: RouterData2 }]

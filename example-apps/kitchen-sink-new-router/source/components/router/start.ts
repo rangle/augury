@@ -20,18 +20,21 @@ import RouterData2 from './router-data2';
   <div>
     <ul class="nav nav-pills">
       <li>
-        <a [routerLink]="['/start/main']">StartMain</a>
+        <a (click)="goToRoute(0)">Start Main</a>
       </li>
       <li>
-        <a [routerLink]="['/start/child']">StartChild</a>
+        <a (click)="goToRoute(1)">Start Child</a>
       </li>
       <li>
-        <a (click)="gotoRouterData1()">
+        <a (click)="goToRoute(2)">Open AuxComp</a>
+      </li>
+      <li>
+        <a (click)="goToRoute(3)">
           RouterData1
         </a>
       </li>
       <li>
-        <a (click)="gotoRouterData2()">
+        <a (click)="goToRoute(4)">
           RouterData2
         </a>
       </li>
@@ -39,6 +42,7 @@ import RouterData2 from './router-data2';
     <hr/>
     <div class="inner-outlet">
       <router-outlet></router-outlet>
+      <router-outlet name="aux"></router-outlet>
     </div>
   </div>
   `
@@ -47,13 +51,18 @@ export default class Start {
 
   constructor(private router: Router) { }
 
-  gotoRouterData1() {
-    this.router.navigate(['/start/router-data1', 'Message from router']);
-  }
-
-  gotoRouterData2() {
-    this.router.navigate(['/start/router-data2',
+  goToRoute(index) {
+    if (index === 0) {
+      this.router.navigate(['/start/main']);
+    } else if (index === 1) {
+      this.router.navigate(['/start/child']);
+    } else if (index === 2) {
+      this.router.navigateByUrl('start/(aux:auxcomp)');
+    } else if (index === 3) {
+      this.router.navigate(['/start/router-data1', 'Message from router']);
+    } else if (index === 4) {
+      this.router.navigate(['/start/router-data2',
       'Message from router', 'Router Name']);
+    }
   }
-
 }
