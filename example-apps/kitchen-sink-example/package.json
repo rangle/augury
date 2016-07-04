@@ -2,6 +2,7 @@
   "name": "kitchen-sink-example",
   "scripts": {
     "postinstall": "npm run typings",
+    "build": "webpack",
     "typings": "rimraf typings && typings install",
     "start": "webpack-dev-server --display-error-details --display-cached"
   },
