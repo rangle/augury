@@ -25,7 +25,8 @@ import { Subject } from 'rxjs/Subject';
 
 import { TreeNode, BaseAdapter } from './base';
 import { Description } from '../utils/description';
-import { ParseRouter } from '../utils/parse-router';
+import { ParseRouter, IS_OLD_ROUTER_HACK, parseConfigRoutes }
+from '../utils/parse-router';
 
 export class Angular2Adapter extends BaseAdapter {
   _tree: any = {};
@@ -70,8 +71,16 @@ export class Angular2Adapter extends BaseAdapter {
   showAppRoutes(): void {
     const root = this._findRoot();
     try {
-      const routes = ParseRouter.parseRoutes(
-        ng.probe(root).componentInstance.router.root.registry);
+      const router = ng.probe(root).componentInstance.router;
+      let routes: any;
+
+      if (IS_OLD_ROUTER_HACK(router)) {
+        // TODO: (ericjim): remove if-block and function
+        // once we no longer support the old router.
+        routes = ParseRouter.parseRoutes(router.root.registry);
+      } else {
+        routes = parseConfigRoutes(router);
+      }
 
       this.showRoutes(routes);
     } catch (error) {
