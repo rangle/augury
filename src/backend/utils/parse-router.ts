@@ -126,12 +126,14 @@ function assignChildrenToParent(parent, children): [any] {
   return children.map((child) => {
     const childName = childRouteName(child);
     const childDescendents: [any] = child.children;
+    const isAuxRoute = !!child.outlet; // .outlet is only found in aux routes, otherwise property will be undefined.
 
     return {
       handler: childName,
       name: childName,
       parent: parent,
       path: `/${child.path}`,
+      isAux: isAuxRoute,
       children: childDescendents ?
         assignChildrenToParent(this, childDescendents) : []
     };
