@@ -3,11 +3,10 @@ import {Component} from '@angular/core';
 import {User} from './user';
 import {UserInfoDefault} from './user-info-default';
 import {UserInfoPush} from './user-info-push';
-import {UserInfoCheckOnce} from './user-info-checkonce';
 
 @Component({
   selector: 'change-detection',
-  directives: [UserInfoDefault, UserInfoPush, UserInfoCheckOnce],
+  directives: [UserInfoDefault, UserInfoPush],
   template: `
   <div>
     <button type="button" class="btn btn-danger"
@@ -30,10 +29,6 @@ import {UserInfoCheckOnce} from './user-info-checkonce';
 
     <user-info-push [user]="user">
     </user-info-push>
-
-    <user-info-checkonce [user]="user">
-    </user-info-checkonce>
-
 
   </div>
   `
