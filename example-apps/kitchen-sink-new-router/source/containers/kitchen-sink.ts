@@ -26,6 +26,7 @@ import InnerChild from '../components/router/inner-child';
 import RouterData1 from '../components/router/router-data1';
 import RouterData2 from '../components/router/router-data2';
 import AuxComp from '../components/router/aux-comp';
+import MetadataTest from '../components/metadata-test/metadata-test';
 
 export const KitchenSinkRoutes: RouterConfig = [
   { path: '', component: Home },
@@ -46,7 +47,8 @@ export const KitchenSinkRoutes: RouterConfig = [
     { path: 'child', component: StartChild },
     { path: 'router-data1/:name', component: RouterData1 },
     { path: 'router-data2/:name/:message', component: RouterData2 }]
-  }
+  },
+  { path: 'metadata-test', component: MetadataTest },
 ];
 
 @Component({
@@ -95,6 +97,9 @@ export const KitchenSinkRoutes: RouterConfig = [
       </li>
       <li [ngClass]="{active: path=='stress-tester'}">
         <a [routerLink]="['./stress-tester']">StressTester</a>
+      </li>
+      <li [ngClass]="{active: path=='metadata-test'}">
+        <a [routerLink]="['./metadata-test']">MetadataTest</a>
       </li>
       </ul>
     </div>
