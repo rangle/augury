@@ -358,7 +358,7 @@ export class Angular2Adapter extends BaseAdapter {
       // Get outputs from @Output()
       const propMetadata = Reflect.getOwnMetadata('propMetadata',
         debugEl.componentInstance.constructor);
-  
+
       if (propMetadata) {
         for (const key of Object.keys(propMetadata)) {
           for (const meta of propMetadata[key]) {
