@@ -19,7 +19,11 @@ declare var ng: { probe: Function, coreTokens: any };
 declare var getAllAngularRootElements: Function;
 declare var Reflect: { getOwnMetadata: Function };
 
-import { ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  InputMetadata,
+  OutputMetadata,
+} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -316,24 +320,58 @@ export class Angular2Adapter extends BaseAdapter {
   _getComponentInput(debugEl: any): Object[] {
     let inputs = [];
     if (debugEl.componentInstance) {
+      // Get inputs from @Component({ inputs: [] })
       const metadata = Reflect.getOwnMetadata
         ('annotations', debugEl.componentInstance.constructor);
 
-      inputs = (metadata && metadata.length > 0) ?
-        metadata[0].inputs : [];
+      inputs = (metadata && metadata.length > 0 && metadata[0].inputs) || [];
+
+      // Get inputs from @Input()
+      const propMetadata = Reflect.getOwnMetadata('propMetadata',
+        debugEl.componentInstance.constructor);
+
+      if (propMetadata) {
+        for (const key of Object.keys(propMetadata)) {
+          for (const meta of propMetadata[key]) {
+            if (meta.constructor.name === (InputMetadata as any).name) {
+              if (inputs.indexOf(key) < 0) { // avoid duplicates
+                inputs.push(key);
+              }
+            }
+          }
+        }
+      }
     }
+
     return inputs;
   }
 
   _getComponentOutput(debugEl: any): Object {
+    // Get outputs from @Component({ outputs })
     let outputs = [];
     if (debugEl.componentInstance) {
       const metadata = Reflect.getOwnMetadata
         ('annotations', debugEl.componentInstance.constructor);
 
-      outputs = (metadata && metadata.length > 0) ?
-        metadata[0].outputs : [];
+      outputs = (metadata && metadata.length > 0 && metadata[0].outputs) || [];
+
+      // Get outputs from @Output()
+      const propMetadata = Reflect.getOwnMetadata('propMetadata',
+        debugEl.componentInstance.constructor);
+
+      if (propMetadata) {
+        for (const key of Object.keys(propMetadata)) {
+          for (const meta of propMetadata[key]) {
+            if (meta.constructor.name === (OutputMetadata as any).name) {
+              if (outputs.indexOf(key) < 0) { // avoid duplicates
+                outputs.push(key);
+              }
+            }
+          }
+        }
+      }
     }
+
     return outputs;
   }
 
