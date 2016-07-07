@@ -56,7 +56,8 @@ export class MetadataFromDecoratorWithCustomName {
     <attr-from-array-custom attrCustomIn='Data from array using a custom name.'>
     </attr-from-array-custom>
 
-    <attr-from-decorator-custom attrCustomIn='Data from decorator using a custom name.'>
+    <attr-from-decorator-custom 
+      attrCustomIn='Data from decorator using a custom name.'>
     </attr-from-decorator-custom>
   `
 })
