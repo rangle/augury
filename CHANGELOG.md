@@ -1,7 +1,7 @@
 # Change Log
 
 ## [1.0.4](https://github.com/rangle/augury/tree/1.0.4)
-* Update Auguty to RC4 ([474](https://github.com/rangle/augury/issues/474))
+* Update Augury to RC4 ([474](https://github.com/rangle/augury/issues/474))
 * Input & Output only show up when declared in metadata array ([472](https://github.com/rangle/augury/issues/472))
 * Router checking ([465](https://github.com/rangle/augury/issues/465))
 * Stress test Augury ([464](https://github.com/rangle/augury/issues/464))
