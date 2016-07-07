@@ -1,4 +1,10 @@
-import {Component, NgZone, EventEmitter, Output} from '@angular/core';
+import {
+  Component,
+  NgZone,
+  EventEmitter,
+  Output,
+  ElementRef
+} from '@angular/core';
 import {FORM_DIRECTIVES} from '@angular/common';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -8,7 +14,10 @@ import {ComponentDataStore}
 @Component({
   selector: 'augury-header',
   templateUrl: 'src/frontend/components/header/header.html',
-  inputs: ['searchDisabled', 'theme']
+  inputs: ['searchDisabled', 'theme'],
+  host: {
+    '(document:click)': 'resetIfSettingOpened($event)'
+  }
 })
 export class Header {
 
@@ -18,14 +27,18 @@ export class Header {
   private query: string = '';
   private settingOpened: boolean = false;
   private theme: string;
+  private elementRef;
 
   @Output() newTheme: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    elementRef: ElementRef
   ) {
+
+    this.elementRef = elementRef;
 
     this.componentDataStore.dataStream
       .subscribe((data: any) => {
@@ -42,12 +55,26 @@ export class Header {
 
   resetTheme() {
     this.settingOpened = false;
-    // document.removeEventListener('click', this.resetTheme.bind(this), false);
+  }
+
+  resetIfSettingOpened(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+
+    do {
+      if (clickedComponent === this.elementRef.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = clickedComponent.parentNode;
+    } while (clickedComponent);
+
+    if (!inside) {
+      this.resetTheme();
+    }
   }
 
   openSettings() {
     this.settingOpened = !this.settingOpened;
-    // document.addEventListener('click', this.resetTheme.bind(this), false);
   }
 
   themeChange(theme, selected) {
