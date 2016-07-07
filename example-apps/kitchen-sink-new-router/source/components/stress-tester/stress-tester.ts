@@ -31,7 +31,9 @@ class StressItem {
     <h4>List of values</h4>
     <ul>
       <stress-item *ngFor="let val of values" value="{{val}}"></stress-item>
-      <li *ngIf="values.length === 0">Hint: type a number and click Add above.</li>
+      <li *ngIf="values.length === 0">
+        Hint: type a number and click Add above.
+      </li>
     </ul>
   `
 })
