@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.0.4](https://github.com/rangle/augury/tree/1.0.4)
+* Update Auguty to RC4 ([474](https://github.com/rangle/augury/issues/474))
+* Input & Output only show up when declared in metadata array ([472](https://github.com/rangle/augury/issues/472))
+* Router checking ([465](https://github.com/rangle/augury/issues/465))
+* Stress test Augury ([464](https://github.com/rangle/augury/issues/464))
+* Add a build step to the kitchen-sink-example app ([460](https://github.com/rangle/augury/issues/460))
+* Color Settings popup should be consistent with theme ([459](https://github.com/rangle/augury/issues/459))
+
 ## [1.0.3](https://github.com/rangle/augury/tree/1.0.3)
 * Augury supports projects written in Angular 2.0.0-rc.3  
 * Update Augury to Angular 2.0.0-rc.3 ([450](https://github.com/rangle/augury/issues/450))
