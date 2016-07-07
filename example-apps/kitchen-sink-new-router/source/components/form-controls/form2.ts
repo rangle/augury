@@ -1,11 +1,9 @@
 import {Component} from '@angular/core';
 import {FORM_DIRECTIVES, Location} from '@angular/common';
-import {ROUTER_DIRECTIVES, RouterLink, RouteParams, Router}
-from '@angular/router-deprecated';
 
 @Component({
   selector: 'form2',
-  directives: [FORM_DIRECTIVES, RouterLink, ROUTER_DIRECTIVES],
+  directives: [FORM_DIRECTIVES],
   template: `
   <div>
     <form (ngSubmit)="onSubmit(myform)" class="col-sm-8">
