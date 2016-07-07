@@ -335,7 +335,11 @@ export class Angular2Adapter extends BaseAdapter {
           for (const meta of propMetadata[key]) {
             if (meta.constructor.name === (InputMetadata as any).name) {
               if (inputs.indexOf(key) < 0) { // avoid duplicates
-                inputs.push(key);
+                if (meta.bindingPropertyName) {
+                  inputs.push(`${key}:${meta.bindingPropertyName}`);
+                } else {
+                  inputs.push(key);
+                }
               }
             }
           }
