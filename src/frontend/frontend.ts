@@ -1,27 +1,16 @@
-import {Component, Inject, bind, NgZone} from '@angular/core';
-
+import {Component, NgZone} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
-
 import {Dispatcher} from './dispatcher/dispatcher';
-
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
-
-import {UserActionType}
-  from './actions/action-constants';
-
-import {ComponentDataStore}
-  from './stores/component-data/component-data-store';
-
+import {UserActionType} from './actions/action-constants';
+import {ComponentDataStore} from './stores/component-data/component-data-store';
 import {BackendMessagingService} from './channel/backend-messaging-service';
-
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
-
 import * as Rx from 'rxjs';
-
 import {ParseUtils} from './utils/parse-utils';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');

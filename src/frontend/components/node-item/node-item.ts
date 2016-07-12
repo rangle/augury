@@ -1,11 +1,8 @@
-import {Component, Inject, NgZone, Input, SimpleChange} from '@angular/core';
+import {Component, NgZone, Input, ChangeDetectionStrategy} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
-import * as Rx from 'rxjs';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
+import {ComponentDataStore} from
+  '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {UserActionType}
-  from '../../actions/action-constants';
 
 // NOTE(cbond): This template must remain inline, there is a bug with recursive
 // controls in Angular 2 and templateUrl that prevents this from working
@@ -13,6 +10,7 @@ import {UserActionType}
 // templateUrl file.
 @Component({
   selector: 'bt-node-item',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div (mouseout)=onMouseOut($event)
       (mouseover)=onMouseOver($event)
@@ -28,7 +26,7 @@ import {UserActionType}
           (click)="expandTree($event)">
         <div class="inline"
           [innerHTML]="getNodeDetails(node)">
-          </div>
+        </div>
       </div>
     
       <div class="border-box pl4">
@@ -43,6 +41,7 @@ import {UserActionType}
     </div>`,
   directives: [NgIf, NgFor, NodeItem]
 })
+
 /**
  * Node Item
  * Renders a node in the Component Tree View
@@ -167,5 +166,4 @@ export class NodeItem {
       }
     }
   }
-
 }

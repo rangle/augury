@@ -1,8 +1,6 @@
-import {Component, Inject, ElementRef} from '@angular/core';
+import {Component, ElementRef} from '@angular/core';
 import {NgFor} from '@angular/common';
 import {NodeItem} from '../node-item/node-item';
-import {UserActionType}
-  from '../../actions/action-constants';
 
 @Component({
   selector: 'component-tree',
