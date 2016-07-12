@@ -12,7 +12,7 @@ import {RouterTree} from '../router-tree/router-tree';
   selector: 'bt-app-trees',
   directives: [TabMenu, TreeView, RouterTree],
   inputs: ['tree', 'routerTree', 'selectedTabIndex',
-    'selectedNode', 'changedNodes', 'closedNodes'],
+    'selectedNode', 'changedNodes', 'closedNodes', 'allowedComponentTreeDepth'],
   templateUrl:
     '/src/frontend/components/app-trees/app-trees.html'
 })

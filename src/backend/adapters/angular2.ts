@@ -151,7 +151,7 @@ export class Angular2Adapter extends BaseAdapter {
       input,
       output,
       isSelected: false,
-      isOpen: false,
+      isOpen: true,
       dependencies,
       changeDetection,
       injectors,

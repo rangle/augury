@@ -35,6 +35,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
           [hidden]="showChildren()"
           [selectedNode]="selectedNode"
           [closedNodes]="closedNodes"
+          [allowedComponentTreeDepth]="allowedComponentTreeDepth"
           [node]="node">
         </bt-node-item>
       </div>
@@ -53,6 +54,7 @@ export class NodeItem {
   @Input() changedNodes: any;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
+  @Input() allowedComponentTreeDepth: number;
 
   private collapsed: any;
   private isUpdated: boolean = false;
@@ -62,7 +64,17 @@ export class NodeItem {
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
     private _ngZone: NgZone
-  ) {}
+  ) {
+  }
+  
+  ngOnInit() {
+    this.node.isOpen = this.isDepthLimitReached() ? false : this.node.isOpen;
+    this.allowedComponentTreeDepth -= this.allowedComponentTreeDepth;
+  }
+  
+  isDepthLimitReached(): boolean {
+    return this.allowedComponentTreeDepth <= 0;
+  }
 
   getNodeDetails(node) {
 
