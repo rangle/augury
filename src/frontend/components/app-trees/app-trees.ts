@@ -1,6 +1,9 @@
-import {Component, Output, EventEmitter, Input}
-  from '@angular/core';
-import {NgClass} from '@angular/common';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input
+} from '@angular/core';
 import TabMenu from '../tab-menu/tab-menu';
 import {TreeView} from '../tree-view/tree-view';
 import {RouterTree} from '../router-tree/router-tree';
