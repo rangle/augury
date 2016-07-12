@@ -93,6 +93,9 @@ class App {
       .filter((data: any) => data.action &&
               data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
       .subscribe(data => {
+        
+        // TODO: Get count of nodes and come up with some heuristic for depth. At 1000 or more stop at depth 2 or 3.
+        
         if (!this.tree) {
           this.tree = data.componentData;
         } else {

@@ -29,7 +29,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
         </div>
       </div>
     
-      <div class="border-box pl4">
+      <div class="border-box pl4" *ngIf="node.isOpen">
         <bt-node-item *ngFor="let node of node.children"
           [changedNodes]="changedNodes"
           [hidden]="showChildren()"
