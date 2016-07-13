@@ -16,9 +16,9 @@ import {ParseUtils} from './utils/parse-utils';
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 // TODO: (ericjim) tweak these values based off research on the stress tester.
-const HEURISTIC_BREAKPOINT = 10; // at this value, set allowed depth to the maximum allowed depth.
-const HEURISTIC_MAXIMUM_ALLOWED_DEPTH = 2;
-let HEURISTIC_ALLOWED_DEPTH: number = Infinity; // assume a non-complex tree and reveal all nodes in the component tree.
+const NODE_BREAKPOINT = 1000; // at this value, set allowed depth to the maximum allowed depth.
+const MAXIMUM_ALLOWED_DEPTH = 3;
+let ALLOWED_DEPTH: number = Infinity; // assume a non-complex tree and reveal all nodes in the component tree.
 
 @Component({
   selector: 'bt-app',
@@ -76,7 +76,7 @@ class App {
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
   private theme: string;
-  private allowedComponentTreeDepth: number = HEURISTIC_ALLOWED_DEPTH;
+  private allowedComponentTreeDepth: number = ALLOWED_DEPTH;
 
   constructor(
     private backendAction: BackendActions,
@@ -103,9 +103,9 @@ class App {
         
         console.log(data.componentData[0].children.length);
         
-        if (data.componentData[0].children.length > HEURISTIC_MAXIMUM_ALLOWED_DEPTH) {
+        if (data.componentData[0].children.length > MAXIMUM_ALLOWED_DEPTH) {
           // tree is too complex, lessen amount of upfront rendering.
-          this.allowedComponentTreeDepth = HEURISTIC_MAXIMUM_ALLOWED_DEPTH;
+          this.allowedComponentTreeDepth = MAXIMUM_ALLOWED_DEPTH;
         }
   
         if (!this.tree) {

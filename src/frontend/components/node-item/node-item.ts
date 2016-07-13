@@ -76,7 +76,7 @@ export class NodeItem {
     
     // the deeper the rendering goes, the closer the rendering comes to reaching the limit.
     // Pass this value recursively to sub nodes.
-    this.allowedComponentTreeDepth -= this.allowedComponentTreeDepth;
+    this.allowedComponentTreeDepth -= 1;
   }
   
   isDepthLimitReached(): boolean {
