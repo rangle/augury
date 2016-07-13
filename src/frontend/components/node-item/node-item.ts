@@ -29,7 +29,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
         </div>
       </div>
     
-      <div class="border-box pl4" *ngIf="node.isOpen">
+      <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
         <bt-node-item *ngFor="let node of node.children"
           [changedNodes]="changedNodes"
           [hidden]="showChildren()"
@@ -59,6 +59,9 @@ export class NodeItem {
   private collapsed: any;
   private isUpdated: boolean = false;
   private isSelected: boolean = false;
+  
+  // Perf: if the node was already rendered keep it in the component tree, even if it is hidden.
+  private wasRendered: boolean = false;
 
   constructor(
     private userActions: UserActions,
@@ -68,7 +71,11 @@ export class NodeItem {
   }
   
   ngOnInit() {
+    // if the tree is too deep stop opening and rendering the tree.
     this.node.isOpen = this.isDepthLimitReached() ? false : this.node.isOpen;
+    
+    // the deeper the rendering goes, the closer the rendering comes to reaching the limit.
+    // Pass this value recursively to sub nodes.
     this.allowedComponentTreeDepth -= this.allowedComponentTreeDepth;
   }
   
@@ -158,13 +165,16 @@ export class NodeItem {
   expandTree($event) {
     this.node.isOpen = !this.node.isOpen;
     this.userActions.openCloseNode({ node: this.node });
+  
+    // if the disclosure arrow on the component node was clicked, it was rendered
+    this.wasRendered = true;
     $event.preventDefault();
     $event.stopPropagation();
   }
 
   ngOnChanges(changes) {
     if (this.selectedNode && this.node) {
-      this.isSelected = (this.selectedNode.id === this.node.id);
+      this.isSelected = (this.selectedNode.id === this.node.id)
     }
     if (changes.changedNodes && this.node) {
       this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
