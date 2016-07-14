@@ -11,9 +11,7 @@ Once the extenion is installed you can test it against the demo application http
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-rc.4](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc4-2016-06-30) using [Angular Deprecated Router](https://angular.io/docs/ts/latest/guide/router-deprecated.html) with _limited backward compatibility_, which will change once Angular 2 stabilizes. 
-
-Currently works with applications built in [Angular 2.0.0-rc.4](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc4-2016-06-30) using the Angular Component Router. Augury also has _limited backwards compatibility_ with the [Angular Deprecated Router](https://angular.io/docs/ts/latest/guide/router-deprecated.html), this will change once Angular 2 stabilizes.
+Currently works with applications built in [Angular 2.0.0-rc.4](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc4-2016-06-30) using the Angular Component Router version `3.0.0-alpha.8`. Augury also has _limited backwards compatibility_ with the [Angular Deprecated Router](https://angular.io/docs/ts/latest/guide/router-deprecated.html), this will change once Angular 2 stabilizes.
 
 To view the router graph inject the Router in main application as shown below.
 ```js
