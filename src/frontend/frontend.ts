@@ -100,9 +100,6 @@ class App {
       .filter((data: any) => data.action &&
               data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
       .subscribe(data => {
-        
-        console.log(data.componentData[0].children.length);
-        
         if (data.componentData[0].children.length > MAXIMUM_ALLOWED_DEPTH) {
           // tree is too complex, lessen amount of upfront rendering.
           this.allowedComponentTreeDepth = MAXIMUM_ALLOWED_DEPTH;
