@@ -4,7 +4,13 @@ import {NodeItem} from '../node-item/node-item';
 
 @Component({
   selector: 'component-tree',
-  inputs: ['tree', 'changedNodes', 'selectedNode', 'closedNodes', 'allowedComponentTreeDepth'],
+  inputs: [
+    'tree',
+    'changedNodes',
+    'selectedNode',
+    'closedNodes',
+    'allowedComponentTreeDepth'
+  ],
   templateUrl: 'src/frontend/components/component-tree/component-tree.html',
   host: {'class': 'flex overflow-scroll'},
   directives: [NgFor, NodeItem]
