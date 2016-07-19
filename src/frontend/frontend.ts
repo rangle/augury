@@ -15,12 +15,9 @@ import {ParseUtils} from './utils/parse-utils';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
-// (ericjim) tweak these values based off research on the stress tester.
-const NODE_BREAKPOINT = 1000; // limit at which maximum depth takes effect.
-const MAXIMUM_ALLOWED_DEPTH = 3; // overrides allowed depth.
-
-// assume a non-complex tree, reveal all levels.
-let ALLOWED_DEPTH: number = Infinity;
+// (ericjim) tweak this value to control the depth in which
+// the component tree will render initially.
+const ALLOWED_DEPTH: number = 3;
 
 @Component({
   selector: 'bt-app',
@@ -102,11 +99,6 @@ class App {
       .filter((data: any) => data.action &&
               data.action === UserActionType.START_COMPONENT_TREE_INSPECTION)
       .subscribe(data => {
-        if (data.componentData[0].children.length > MAXIMUM_ALLOWED_DEPTH) {
-          // tree is too complex, lessen amount of upfront rendering.
-          this.allowedComponentTreeDepth = MAXIMUM_ALLOWED_DEPTH;
-        }
-
         if (!this.tree) {
           this.tree = data.componentData;
         } else {
