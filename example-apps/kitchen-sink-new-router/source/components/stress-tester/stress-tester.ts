@@ -1,22 +1,21 @@
 import {Component, Input} from '@angular/core';
-import {FORM_DIRECTIVES, NgForm, NgIf} from '@angular/common';
+import {FORM_DIRECTIVES, NgForm} from '@angular/common';
 
 // StressComponent wraps a list item around an Angular 2 component
 // for Augury to detect.
 @Component({
   selector: 'stress-item',
-  inputs: ['value'],
   template: `
     <li>{{value}}</li>
   `
 })
 class StressItem {
+  @Input() value: number;
 }
 
 @Component({
   selector: 'stress-rec-item',
-  inputs: ['value'],
-  directives: [NgIf, StressRecItem],
+  directives: [StressRecItem],
   template: `
     <ul>
         <li>{{value}}</li>
@@ -75,7 +74,7 @@ export default class StressTester {
       this.values.push(i);
     }
   }
-  
+
   onSubmitRec(regForm: NgForm) {
     this.value = regForm.value.count;
   }
