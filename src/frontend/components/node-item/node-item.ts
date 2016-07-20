@@ -1,4 +1,4 @@
-import {Component, NgZone, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, NgZone, Input} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
 import {ComponentDataStore} from
   '../../stores/component-data/component-data-store';
@@ -10,7 +10,6 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 // templateUrl file.
 @Component({
   selector: 'bt-node-item',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div (mouseout)=onMouseOut($event)
       (mouseover)=onMouseOver($event)
@@ -49,7 +48,6 @@ import {UserActions} from '../../actions/user-actions/user-actions';
  * (see ../tree-view.ts)
  */
 export class NodeItem {
-
   @Input() node: any;
   @Input() changedNodes: any;
   @Input() selectedNode: any;

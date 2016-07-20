@@ -11,14 +11,20 @@ import {RouterTree} from '../router-tree/router-tree';
 @Component({
   selector: 'bt-app-trees',
   directives: [TabMenu, TreeView, RouterTree],
-  inputs: ['tree', 'routerTree', 'selectedTabIndex',
-    'selectedNode', 'changedNodes', 'closedNodes', 'allowedComponentTreeDepth'],
   templateUrl:
     '/src/frontend/components/app-trees/app-trees.html'
 })
 export default class AppTrees {
 
   @Input() theme: string;
+  @Input() tree: any;
+  @Input() routerTree: any;
+  @Input() selectedTabIndex: any;
+  @Input() selectedNode: any;
+  @Input() changedNodes: any;
+  @Input() closedNodes: any;
+  @Input() allowedComponentTreeDepth: number;
+
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
 
   private tabs = [{
