@@ -7,6 +7,8 @@ machine:
 dependencies:
   pre:
     - rm -rf node_modules typings
+  post:
+    - npm run build; ./crxmake.sh
 
 test:
   pre:
