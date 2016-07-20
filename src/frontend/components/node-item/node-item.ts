@@ -1,11 +1,8 @@
-import {Component, Inject, NgZone, Input, SimpleChange} from '@angular/core';
+import {Component, NgZone, Input} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
-import * as Rx from 'rxjs';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
+import {ComponentDataStore} from
+  '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {UserActionType}
-  from '../../actions/action-constants';
 
 // NOTE(cbond): This template must remain inline, there is a bug with recursive
 // controls in Angular 2 and templateUrl that prevents this from working
@@ -28,42 +25,64 @@ import {UserActionType}
           (click)="expandTree($event)">
         <div class="inline"
           [innerHTML]="getNodeDetails(node)">
-          </div>
+        </div>
       </div>
     
-      <div class="border-box pl4">
+      <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
         <bt-node-item *ngFor="let node of node.children"
           [changedNodes]="changedNodes"
           [hidden]="showChildren()"
           [selectedNode]="selectedNode"
           [closedNodes]="closedNodes"
+          [allowedComponentTreeDepth]="allowedComponentTreeDepth"
           [node]="node">
         </bt-node-item>
       </div>
     </div>`,
   directives: [NgIf, NgFor, NodeItem]
 })
+
 /**
  * Node Item
  * Renders a node in the Component Tree View
  * (see ../tree-view.ts)
  */
 export class NodeItem {
-
   @Input() node: any;
   @Input() changedNodes: any;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
+  @Input() allowedComponentTreeDepth: number;
 
   private collapsed: any;
   private isUpdated: boolean = false;
   private isSelected: boolean = false;
 
+  // Perf: if the node was already rendered keep it in the component tree
+  // even if it is hidden.
+  private wasRendered: boolean = false;
+
   constructor(
     private userActions: UserActions,
     private componentDataStore: ComponentDataStore,
     private _ngZone: NgZone
-  ) {}
+  ) {
+  }
+
+  ngOnInit() {
+    // if the tree is too deep stop opening and rendering the tree.
+    this.node.isOpen = this.isDepthLimitReached() ? false : this.node.isOpen;
+
+    // the deeper the rendering goes, the closer the rendering comes to
+    // reaching the limit. Pass this value recursively to sub nodes.
+    this.allowedComponentTreeDepth -= 1;
+  }
+
+  // Return true if the component tree should no longer be opening
+  // its nodes by default, if false keep expanding the tree.
+  isDepthLimitReached(): boolean {
+    return this.allowedComponentTreeDepth <= 0;
+  }
 
   getNodeDetails(node) {
 
@@ -147,6 +166,10 @@ export class NodeItem {
   expandTree($event) {
     this.node.isOpen = !this.node.isOpen;
     this.userActions.openCloseNode({ node: this.node });
+
+    // if the disclosure arrow on the component node was clicked
+    // it was rendered.
+    this.wasRendered = true;
     $event.preventDefault();
     $event.stopPropagation();
   }
@@ -167,5 +190,4 @@ export class NodeItem {
       }
     }
   }
-
 }

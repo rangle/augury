@@ -1,30 +1,23 @@
-import {Component, Inject, bind, NgZone} from '@angular/core';
-
+import {Component, NgZone} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
-
 import {Dispatcher} from './dispatcher/dispatcher';
-
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
-
-import {UserActionType}
-  from './actions/action-constants';
-
-import {ComponentDataStore}
-  from './stores/component-data/component-data-store';
-
+import {UserActionType} from './actions/action-constants';
+import {ComponentDataStore} from './stores/component-data/component-data-store';
 import {BackendMessagingService} from './channel/backend-messaging-service';
-
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
-
 import * as Rx from 'rxjs';
-
 import {ParseUtils} from './utils/parse-utils';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
+
+// (ericjim) tweak this value to control the depth in which
+// the component tree will render initially.
+const ALLOWED_DEPTH: number = 3;
 
 @Component({
   selector: 'bt-app',
@@ -51,6 +44,7 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
             [tree]="tree"
             [theme]="theme"
             [changedNodes]="changedNodes"
+            [allowedComponentTreeDepth]="allowedComponentTreeDepth"
             (tabChange)="tabChange($event)">
           </bt-app-trees>
         </div>
@@ -81,6 +75,7 @@ class App {
   private changedNodes: any = [];
   private searchDisabled: boolean = false;
   private theme: string;
+  private allowedComponentTreeDepth: number = ALLOWED_DEPTH;
 
   constructor(
     private backendAction: BackendActions,
