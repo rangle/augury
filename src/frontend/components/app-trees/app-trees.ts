@@ -19,10 +19,10 @@ export default class AppTrees {
   @Input() theme: string;
   @Input() tree: any;
   @Input() routerTree: any;
-  @Input() selectedTabIndex: any;
+  @Input() selectedTabIndex: number;
   @Input() selectedNode: any;
   @Input() changedNodes: any;
-  @Input() closedNodes: any;
+  @Input() closedNodes: Array<any>;
   @Input() allowedComponentTreeDepth: number;
 
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
