@@ -1,5 +1,3 @@
-import {RouteRule} from '@angular/router-deprecated/src/rules/rules';
-
 export interface Route {
   name: string;
   hash: string;
@@ -70,7 +68,7 @@ export class ParseRouter {
   }
 
   private static getRoute
-    (value: RouteRule, name: string, isAux: boolean = false): Route {
+    (value: any, name: string, isAux: boolean = false): Route {
     const handler: string =
       this.NAME_REGEX.exec(value.handler.componentType + '')[1];
 
