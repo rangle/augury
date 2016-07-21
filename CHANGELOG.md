@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.5](https://github.com/rangle/augury/tree/1.0.5)
+* Performance improvements ([493](https://github.com/rangle/augury/issues/493))
+* Support for @angular/router version 3.0.0-beta.2
+
 ## [1.0.4](https://github.com/rangle/augury/tree/1.0.4)
 * Update Augury to RC4 ([474](https://github.com/rangle/augury/issues/474))
 * Input & Output only show up when declared in metadata array ([472](https://github.com/rangle/augury/issues/472))
