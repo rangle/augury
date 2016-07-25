@@ -19,7 +19,7 @@ module.exports = {
       '@angular/platform-browser-dynamic',
       '@angular/core',
       '@angular/common',
-      '@angular/router-deprecated',
+      '@angular/router',
       '@angular/http'
      ]
   },
