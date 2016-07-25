@@ -1,9 +1,7 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'counter',
-  inputs: ['count'],
-  outputs: ['result', 'displayMessage'],
   template: `
     <div>
       <h4>Count: {{ count }}</h4>
@@ -17,9 +15,9 @@ import {Component, EventEmitter, Output} from '@angular/core';
   `
 })
 export default class Counter {
-  count: number = 0;
-  result: EventEmitter<number> = new EventEmitter<number>();
-  displayMessage: EventEmitter<any> = new EventEmitter<any>();
+  @Input() count: number = 0;
+  @Output() result: EventEmitter<number> = new EventEmitter<number>();
+  @Output() displayMessage: EventEmitter<any> = new EventEmitter<any>();
 
   increment() {
     this.count++;

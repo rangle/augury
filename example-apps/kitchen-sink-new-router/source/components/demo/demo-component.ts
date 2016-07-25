@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import Service1 from '../../services/service1';
 import Service2 from '../../services/service2';
 import {FormatService} from '../todo-app/todo-service';
@@ -18,17 +18,16 @@ import DITree from '../di-tree/di-tree';
    <label>Message: <input type="text" [value]="msg"
    (change)="changeMsg($event)"></label>
  `,
- providers: [DITree],
- inputs: ['msg'],
- outputs: ['newMsg']
+ providers: [DITree]
 })
 export default class DemoComponent {
-  msg: string;
+  @Input() msg: string;
+  @Output() newMsg: EventEmitter<string> = new EventEmitter<string>();
+
   size: string = '50px';
   bgcolor: string = 'white';
   padding: string = '10px';
   textcolor: string = 'slategrey';
-  newMsg: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private s1: Service1,

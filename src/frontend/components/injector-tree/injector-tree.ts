@@ -1,5 +1,5 @@
 import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
-  ElementRef, Input, EventEmitter}
+  ElementRef, Input, Output, EventEmitter}
   from '@angular/core';
 import {NgClass} from '@angular/common';
 
@@ -14,7 +14,6 @@ import {ParseUtils} from '../../utils/parse-utils';
 @Component({
   selector: 'bt-injector-tree',
   encapsulation: ViewEncapsulation.None,
-  outputs: ['selectNode'],
   providers: [GraphUtils, ParseUtils],
   templateUrl:
     '/src/frontend/components/injector-tree/injector-tree.html',
@@ -33,10 +32,10 @@ export default class InjectorTree implements OnChanges {
   @Input() tree: any;
   @Input() selectedNode: any;
   @Input() theme: string;
+  @Output() selectNode: EventEmitter<any> = new EventEmitter<any>();
 
   private parentHierarchy;
   private parentHierarchyDisplay;
-  private selectNode: EventEmitter<any> = new EventEmitter<any>();
   private svg: any;
   private flattenedTree: any;
 
