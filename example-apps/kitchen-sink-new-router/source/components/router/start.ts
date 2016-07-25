@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 
 import {
   ROUTER_DIRECTIVES,
-  RouterConfig,
   Router
 } from '@angular/router';
 
@@ -37,6 +36,9 @@ import RouterData2 from './router-data2';
         <a (click)="goToRoute(4)">
           RouterData2
         </a>
+      </li>
+      <li>
+        <a [routerLink]="['/start', 'inner-child']">InnerChild</a>
       </li>
     </ul>
     <hr/>
