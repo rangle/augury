@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
    selector: 'ngclass-directive',
-   inputs: ['isDisabled'],
   template: `
      <div class="button"
        [ngClass]="{active: isOn, disabled: isDisabled}"
@@ -27,7 +26,7 @@ import {Component} from '@angular/core';
 })
 export default class NgClassDirective {
   isOn = false;
-  isDisabled = false;
+  @Input() isDisabled: boolean = false;
 
   toggle(newState) {
     if (!this.isDisabled) {

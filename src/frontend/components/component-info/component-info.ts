@@ -1,6 +1,6 @@
 declare var JSONFormatter: any;
 import {Component, ElementRef, Inject, EventEmitter,
-  OnChanges}
+  OnChanges, Input}
   from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -15,11 +15,10 @@ import PropertyValue from '../property-value/property-value';
 @Component({
   selector: 'bt-component-info',
   templateUrl: '/src/frontend/components/component-info/component-info.html',
-  inputs: ['node'],
   directives: [RenderState, Accordion, Dependency, PropertyValue]
 })
 export default class ComponentInfo {
-  private node: any;
+  @Input() node: any;
   private propertyTree: string = '';
   private _input: Array<any>;
 

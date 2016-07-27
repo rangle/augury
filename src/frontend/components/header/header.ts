@@ -3,7 +3,8 @@ import {
   NgZone,
   EventEmitter,
   Output,
-  ElementRef
+  ElementRef,
+  Input
 } from '@angular/core';
 import {FORM_DIRECTIVES} from '@angular/common';
 
@@ -14,19 +15,18 @@ import {ComponentDataStore}
 @Component({
   selector: 'augury-header',
   templateUrl: 'src/frontend/components/header/header.html',
-  inputs: ['searchDisabled', 'theme'],
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   }
 })
 export class Header {
 
-  private searchDisabled: boolean;
+  @Input() searchDisabled: boolean;
+  @Input() theme: string;
   private searchIndex: number = 0;
   private totalSearchCount: number = 0;
   private query: string = '';
   private settingOpened: boolean = false;
-  private theme: string;
   private elementRef;
 
   @Output() newTheme: EventEmitter<string> = new EventEmitter<string>();
