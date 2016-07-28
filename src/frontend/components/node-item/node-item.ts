@@ -29,7 +29,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
       </div>
     
       <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
-        <bt-node-item *ngFor="let node of node.children"
+        <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
           [changedNodes]="changedNodes"
           [hidden]="showChildren()"
           [selectedNode]="selectedNode"
@@ -189,5 +189,9 @@ export class NodeItem {
         this.node.isOpen = false;
       }
     }
+  }
+
+  trackById(index: number, node: any): string {
+    return node.id;
   }
 }
