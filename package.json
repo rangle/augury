@@ -38,7 +38,7 @@
     "@angular/http": "2.0.0-rc.4",
     "@angular/platform-browser": "2.0.0-rc.4",
     "@angular/platform-browser-dynamic": "2.0.0-rc.4",
-    "basscss": "^7.0.4",
+    "basscss": "^8.0.2",
     "basscss-border-colors": "^2.1.0",
     "basscss-type-scale": "^1.0.5",
     "basscss-typography": "^3.0.3",
