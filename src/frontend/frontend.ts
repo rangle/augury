@@ -1,5 +1,6 @@
 import {Component, NgZone} from '@angular/core';
-import {bootstrap} from '@angular/platform-browser-dynamic';
+// import {bootstrap} from '@angular/platform-browser-dynamic';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
@@ -64,7 +65,7 @@ const ALLOWED_DEPTH: number = 3;
 /**
  * Augury App
  */
-class App {
+export class App {
 
   private tree: any;
   private previousTree: any;
@@ -173,10 +174,25 @@ class App {
   }
 }
 
-bootstrap(App, [
-  BackendActions,
-  UserActions,
-  Dispatcher,
-  ComponentDataStore,
-  BackendMessagingService
-]);
+// bootstrap(App, [
+//   BackendActions,
+//   UserActions,
+//   Dispatcher,
+//   ComponentDataStore,
+//   BackendMessagingService
+// ]);
+
+// --- NOTE: RC5 
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [App],
+  imports: [BrowserModule, FormsModule],
+  providers: [BackendActions, UserActions, Dispatcher, ComponentDataStore, BackendMessagingService],
+  bootstrap: [App]
+})
+class FrontendModule {}
+console.log('hello RC5');
+platformBrowserDynamic().bootstrapModule(FrontendModule);
