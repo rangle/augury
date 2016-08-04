@@ -81,7 +81,7 @@ export class NodeItem {
   // Return true if the component tree should no longer be opening
   // its nodes by default, if false keep expanding the tree.
   isDepthLimitReached(): boolean {
-    return this.allowedComponentTreeDepth <= 0;
+    return this.allowedComponentTreeDepth <= 0 && !this.node.overrideDepthLimit;
   }
 
   getNodeDetails(node) {
