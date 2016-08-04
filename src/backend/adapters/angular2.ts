@@ -102,8 +102,8 @@ export class Angular2Adapter extends BaseAdapter {
     if (compEl.children.length > 0) {
       compEl
       .children
+      .filter((child: any) => !this._isComponentExcluded(child))
       .forEach((child: any, childIdx: number) => {
-
         let index: string = idx;
         if (child.providerTokens.length > 0) {
           index = [idx, this._tree[idx]].join('.');
@@ -174,7 +174,6 @@ export class Angular2Adapter extends BaseAdapter {
   _emitNativeElement = (compEl: any, isRoot: boolean,
     idx: string): void => {
     const nativeElement = this._getNativeElement(compEl);
-    const nodeName = this._getComponentName(compEl);
 
     // When encounter a template comment, insert another comment with
     // augury-id above it.
@@ -187,12 +186,9 @@ export class Angular2Adapter extends BaseAdapter {
     } else {
       (<HTMLElement>nativeElement).setAttribute('augury-id', idx);
     }
-
     if (isRoot) {
       return this.addRoot(compEl);
-    } else if (nodeName !== 'option') {
-      // skipping the option to improve performance 
-      // It adds no value displaying node elements
+    } else {
       this.addChild(compEl);
     }
   };
@@ -297,6 +293,12 @@ export class Angular2Adapter extends BaseAdapter {
     }
 
     return true;
+  }
+
+  _isComponentExcluded(debugEl: any): boolean {
+    // skipping the option to improve performance
+    // It adds no value displaying node elements
+    return this._getComponentName(debugEl) === 'option';
   }
 
   _getComponentState(debugEl: any): Object {
