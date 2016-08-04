@@ -45,4 +45,7 @@ export class ComponentTree {
     }
   }
 
+  trackById(index: number, node: any): string {
+    return node.id;
+  }
 }
