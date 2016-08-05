@@ -27,8 +27,12 @@ export class ComponentTree {
   scrollToViewIfNeeded(node) {
     const selectedNodeBound = node.getBoundingClientRect();
     const treeViewBound = this.el.nativeElement.getBoundingClientRect();
+    const scrollBarHeight = this.el.nativeElement.offsetHeight -
+      this.el.nativeElement.clientHeight;
     const topOffset = selectedNodeBound.top - treeViewBound.top;
-    const bottomOffset = selectedNodeBound.bottom - treeViewBound.bottom;
+    const bottomOffset = selectedNodeBound.bottom - treeViewBound.bottom +
+      scrollBarHeight;
+
     if (topOffset < 0) {              // node is too high
       this.el.nativeElement.scrollTop += topOffset;
     } else if (bottomOffset > 0) {    // node is too low
