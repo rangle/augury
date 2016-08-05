@@ -1,7 +1,9 @@
 # Change Log
 
 ## [1.0.5](https://github.com/rangle/augury/tree/1.0.5)
-* Performance improvements ([493](https://github.com/rangle/augury/issues/493))
+* Performance improvements ([493](https://github.com/rangle/augury/issues/493), [504](https://github.com/rangle/augury/issues/504))
+* Bug fixes for search ([496](https://github.com/rangle/augury/issues/496), [511](https://github.com/rangle/augury/issues/511))
+* Fixed an issue where highlighting would thrown an error ([487](https://github.com/rangle/augury/issues/487))
 * Support for @angular/router version 3.0.0-beta.2
 
 ## [1.0.4](https://github.com/rangle/augury/tree/1.0.4)
