@@ -97,6 +97,45 @@ export class ComponentDataStore extends AbstractStore {
   }
 
   /**
+   * Get the nodes from root of the tree to given node.
+   * @param  {Object} node
+   */
+  private getPathToNode(node: any): any[] {
+    // The ID shows the path from root to given node.
+    let splitId: number[] = node.id.split('.');
+    let nodes: any[] = [];
+
+    // First index is for the component root:
+    let rootIndex = splitId.shift();
+    let root = this._componentData[rootIndex];
+    nodes.push(root);
+
+    // Next traverse the tree by index from ID.
+    splitId.reduce((previousNode: any, childIndex: number) => {
+      let child = previousNode.children[childIndex];
+      nodes.push(child);
+      return child;
+    }, root);
+    return nodes;
+  }
+
+  /**
+   * Opens the nodes from root of the tree to given node
+   * to reveal the given node.
+   * @param  {Object} node
+   */
+  private openPathToNode(node: any) {
+    let path = this.getPathToNode(node);
+    path.pop(); // Only open until the parent of selected.
+
+    path.forEach(pathNode => {
+      pathNode.isOpen = true;
+      pathNode.overrideDepthLimit = true;
+      this.openCloseNode({ node: pathNode });
+    });
+  }
+
+  /**
    * Select a node to be highlighted after search
    * @param  {Object} node Current selected Node
    * @param  {number} searchIndex Current search Index
@@ -105,6 +144,9 @@ export class ComponentDataStore extends AbstractStore {
   private selectNode(node: any, searchIndex: number = -1,
                      totalSearchCount: number = 0) {
     this._selectedNode = node;
+    if (node) {
+      this.openPathToNode(node);
+    }
     this.emitChange({
       selectedNode: this._selectedNode,
       searchIndex: searchIndex,

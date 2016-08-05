@@ -56,10 +56,27 @@ test('frontend/component-data-store: user selects tree node', t => {
     id: '0.0',
     name: 'INPUT'
   };
+  const mockTree = [{
+    name: 'TodoList',
+    children: [{
+      id: '0.0',
+      name: 'INPUT'
+    }, {
+      id: '0.1',
+      name: 'NgIf'
+    }]
+  }];
 
-  componentStore.dataStream.subscribe((data: any) => {
-    t.deepEqual(data.selectedNode, mockData,
-      'emits user selects node event');
+  componentStore.dataStream
+    .filter((data: any) => data.selectedNode)
+    .subscribe((data: any) => {
+      t.deepEqual(data.selectedNode, mockData,
+        'emits user selects node event');
+    });
+
+  mockDispatcher.messageBus.next({
+    actionType: BackendActionType.COMPONENT_TREE_CHANGED,
+    componentData: mockTree
   });
 
   mockDispatcher.messageBus.next({
@@ -104,7 +121,8 @@ test('frontend/component-data-store: user searches for node', t => {
 
   mockDispatcher.messageBus.next({
     actionType: UserActionType.SEARCH_NODE,
-    query: mockQuery
+    query: mockQuery,
+    index: 0
   });
 
   t.end();
