@@ -13,12 +13,17 @@ import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
 import * as Rx from 'rxjs';
 import {ParseUtils} from './utils/parse-utils';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
 // (ericjim) tweak this value to control the depth in which
 // the component tree will render initially.
 const ALLOWED_DEPTH: number = 3;
+
+// --- Root component
 
 @Component({
   selector: 'bt-app',
@@ -174,18 +179,7 @@ export class App {
   }
 }
 
-// bootstrap(App, [
-//   BackendActions,
-//   UserActions,
-//   Dispatcher,
-//   ComponentDataStore,
-//   BackendMessagingService
-// ]);
-
-// --- NOTE: RC5 
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+// --- Bootstrap
 
 @NgModule({
   declarations: [App],
@@ -194,5 +188,4 @@ import { FormsModule } from '@angular/forms';
   bootstrap: [App]
 })
 class FrontendModule {}
-console.log('hello RC5');
 platformBrowserDynamic().bootstrapModule(FrontendModule);
