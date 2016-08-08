@@ -85,11 +85,14 @@ class App {
     private parseUtils: ParseUtils
   ) {
     chrome.storage.sync.get('theme', (result: any) => {
-      if (result.theme === 'dark') {
-        this.theme = result.theme;
-      } else {
-        this.theme = 'light'; // default theme
-      }
+      // Run in Angular zone so that theme change is detected.
+      this._ngZone.run(() => {
+        if (result.theme === 'dark') {
+          this.theme = result.theme;
+        } else {
+          this.theme = 'light'; // default theme
+        }
+      });
     });
 
     this.userActions.startComponentTreeInspection();
