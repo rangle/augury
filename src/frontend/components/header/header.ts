@@ -59,14 +59,17 @@ export class Header {
 
   resetIfSettingOpened(event) {
     let clickedComponent = event.target;
-    let inside = false;
+    if (!clickedComponent) {
+      return;
+    }
+    let menuElement = this.elementRef.nativeElement
+      .querySelector('#augury-theme-menu');
+    let menuButtonElement = this.elementRef.nativeElement
+      .querySelector('#augury-theme-menu-button');
 
-    do {
-      if (clickedComponent === this.elementRef.nativeElement) {
-        inside = true;
-      }
-      clickedComponent = clickedComponent.parentNode;
-    } while (clickedComponent);
+    // If click was not inside menu button or menu, close the menu.
+    let inside = (menuElement && menuElement.contains(clickedComponent)) ||
+      (menuButtonElement && menuButtonElement.contains(clickedComponent));
 
     if (!inside) {
       this.resetTheme();

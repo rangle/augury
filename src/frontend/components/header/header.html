@@ -45,13 +45,13 @@
       </div>
 
       <!-- SETTING -->
-      <div class="icon setting"
+      <div class="icon setting" id="augury-theme-menu-button"
         (click)="openSettings()"></div>
     </div>
   </header>
 
   <form>
-    <ul class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" [ngClass]="{'setting-dropdown--dark':theme==='dark'}" *ngIf="settingOpened">
+    <ul id="augury-theme-menu" class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" [ngClass]="{'setting-dropdown--dark':theme==='dark'}" *ngIf="settingOpened">
       <li class="p3 border-bottom border-dark">
         <input type="radio"
           #lightTheme
