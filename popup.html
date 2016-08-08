@@ -135,11 +135,15 @@
       margin: 0;
     }
     
-    p {
+    p, .version-support {
       font-family: 'Open Sans', sans-serif;
       font-size: 12px;
       line-height: 24px;
       margin: 0;
+    }
+
+    .version-support {
+      padding: 0 18px;
     }
     
     span {
@@ -163,7 +167,14 @@
   </div>
 
   <div class="modal_content">
-    <p>Augury is a Google Chrome Dev Tool extension for debugging Angular 2 applications. Currently works with applications built in Angular 2.0.0-rc.4.</p>
+    <p>Augury is a Google Chrome Dev Tool extension for debugging Angular 2 applications.</p>
+    <br>
+    <p>Currently works with:</p>
+    <ul class="version-support">
+      <li>Angular 2.0.0-rc.4</li>
+      <li>"@angular/router": "^3.0.0-beta.2"</li>
+      <li>"@angular/router-deprecated": "2.0.0-rc.2"</li>
+    </ul>
   </div>
 
   <div class="modal_cta">
