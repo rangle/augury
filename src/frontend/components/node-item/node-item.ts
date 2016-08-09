@@ -15,7 +15,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
       (mouseover)=onMouseOver($event)
       (dblclick)=onDblClick($event)
       (click)="onClick($event)">
-    
+
       <div class="node-item pl3 rounded border-box"
         [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
         <img src="../images/Triangle.svg"
@@ -27,7 +27,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
           [innerHTML]="getNodeDetails(node)">
         </div>
       </div>
-    
+
       <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
         <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
           [changedNodes]="changedNodes"
@@ -87,15 +87,15 @@ export class NodeItem {
   getNodeDetails(node) {
 
     let html = '';
-    html += '<p class="node-item-name">' + node.name + '</p>';
+    html += `<p class="node-item-name">${node.name}</p>`;
     if (node.description && node.description.length) {
       html += '<span class="node-item-description">(';
       for (let i = 0; i < node.description.length; i++) {
         const desc = node.description[i];
-        html += '<p class="node-item-property">' + desc.key + '=</p>';
-        html += '<p class="node-item-value">"' + desc.value + '"</p>';
+        html += `<p class="node-item-property">${desc.key}=</p>` +
+                `<p class="node-item-value">&#34;${desc.value}&#34;</p>`;
         if (i < node.description.length - 1) {
-          html += '<span>, </span>';
+          html += ', ';
         }
       }
       html += ')</span>';
@@ -109,8 +109,7 @@ export class NodeItem {
    * @param  {Object} $event
    */
   onDblClick($event) {
-    let evalStr = 'inspect($$(\'body [augury-id=\"' +
-      this.node.id + '\"]\')[0])';
+    const evalStr = `inspect($$('body [augury-id="${this.node.id}"]\')[0])`;
 
     chrome.devtools.inspectedWindow.eval(
       evalStr,
