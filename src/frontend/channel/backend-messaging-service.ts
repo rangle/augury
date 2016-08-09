@@ -28,9 +28,9 @@ export class BackendMessagingService {
         this.backendActions.clearTree();
       }
 
-      if (message.data.message.type === 'render_routes') {
+      if (message.data && message.data.message.type === 'render_routes') {
         this.backendActions.renderRouterTree(message.data.message.payload);
-      } else {
+      } else if (message.data) {
         this.backendActions.componentTreeChanged(message.data.message.payload);
       }
     });
