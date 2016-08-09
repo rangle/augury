@@ -1,5 +1,4 @@
 import {Component, NgZone} from '@angular/core';
-// import {bootstrap} from '@angular/platform-browser-dynamic';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
@@ -22,8 +21,6 @@ const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 // (ericjim) tweak this value to control the depth in which
 // the component tree will render initially.
 const ALLOWED_DEPTH: number = 3;
-
-// --- Root component
 
 @Component({
   selector: 'bt-app',
@@ -68,7 +65,7 @@ const ALLOWED_DEPTH: number = 3;
     </div>`
 })
 /**
- * Augury App
+ * Augury App, the root component of our application.
  */
 export class App {
 
@@ -179,13 +176,20 @@ export class App {
   }
 }
 
-// --- Bootstrap
-
+// --- FrontendModule, the module containing our root component.
 @NgModule({
   declarations: [App],
   imports: [BrowserModule, FormsModule],
-  providers: [BackendActions, UserActions, Dispatcher, ComponentDataStore, BackendMessagingService],
+  providers: [
+    BackendActions,
+    UserActions,
+    Dispatcher,
+    ComponentDataStore,
+    BackendMessagingService
+  ],
   bootstrap: [App]
 })
 class FrontendModule {}
+
+// --- Bootstrap the module containing our root component on the web browser.
 platformBrowserDynamic().bootstrapModule(FrontendModule);
