@@ -7,7 +7,8 @@ import HelloDirectives from './hello-directives';
   directives: [HelloDirectives],
   template: `
   <div>
-     
+     <hello-directives *ngFor="let name of names" [msg]="'Hello from ' + name">
+     </hello-directives>
   </div>
   `
 })
