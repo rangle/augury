@@ -19,8 +19,9 @@ export default class RouterData1 {
   constructor(private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    const name = 'name';
     this.params$ = this.activatedRoute.params.subscribe(params => {
-      this.message = params['name'];
+      this.message = params[name];
     });
   }
 
