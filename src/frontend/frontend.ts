@@ -1,3 +1,4 @@
+import {enableProdMode} from '@angular/core';
 import {Component, NgZone} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Dispatcher} from './dispatcher/dispatcher';
@@ -171,6 +172,10 @@ class App {
     // Set the new theme
     chrome.storage.sync.set({ theme: newTheme });
   }
+}
+
+if (process.env.NODE_ENV !== 'development') {
+  enableProdMode();
 }
 
 bootstrap(App, [
