@@ -20,7 +20,7 @@ import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
       <div class="control-group">
         <label for="password">Password:</label>
         <input class="form-control" type="password"
-         id="password" [ngControl]="password">
+         id="password" [formControl]="password">
       </div>
       <br/>
       <div class="control-group">
