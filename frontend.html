@@ -6,11 +6,70 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/src/styles/style.min.css" rel="stylesheet">
+  <style>
+    body {
+      height: 100vh;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); }
+      100% { transform: scale(1.2); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2); }
+    }
+
+    #augury-loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    #augury-loading-column {
+      display: flex;
+      padding: 0;
+      margin: 0;
+    }
+
+    #augury-loading-icon {
+      animation: pulse 0.75s ease-in-out alternate infinite;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      animation-delay: 1s;
+      border-radius: 50%;
+      width: 128px;
+      height: 128px;
+    }
+
+    @keyframes iris-pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+
+    #augury-loading-iris {
+      animation: iris-pulse 0.75s ease-in-out alternate infinite;
+      animation-delay: 1.2s;
+      transform-origin: center;
+    }
+  </style>
 </head>
 <body>
 
   <bt-app>
-    Loading...
+    <div id="augury-loading-container">
+      <div id="augury-loading-column">
+        <svg id="augury-loading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+          <defs>
+            <filter id="d">
+              <feFlood flood-color="#f9bf2b"/>
+              <feComposite in2="SourceGraphic" operator="in"/>
+              <feOffset dx="1.5" dy="2"/>
+              <feComposite in="SourceGraphic"/>
+            </filter>
+          </defs>
+          <circle fill="#fcd735" cx="64" cy="64" r="64"/>
+          <path id="augury-loading-iris" fill="#4a3493" filter="url(#d)" d="M64.5 27.5a37 37 0 0 0-37 37 37 37 0 0 0 37 37 37 37 0 0 0 37-37 37 37 0 0 0-.506-6.02A21.5 21.5 0 0 1 80.5 73.5 21.5 21.5 0 0 1 59 52a21.5 21.5 0 0 1 20.172-21.453A37 37 0 0 0 64.5 27.5z"/>
+        </svg>
+      </div>
+    </div>
   </bt-app>
 
   <script src="/build/frontend.js"></script>
