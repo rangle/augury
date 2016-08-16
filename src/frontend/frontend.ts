@@ -1,3 +1,4 @@
+import {enableProdMode} from '@angular/core';
 import {Component, NgZone} from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {Dispatcher} from './dispatcher/dispatcher';
@@ -191,5 +192,10 @@ export class App {
 })
 class FrontendModule {}
 
+if (process.env.NODE_ENV !== 'development') {
+  enableProdMode();
+}
+
 // --- Bootstrap the module containing our root component on the web browser.
 platformBrowserDynamic().bootstrapModule(FrontendModule);
+
