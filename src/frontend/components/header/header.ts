@@ -6,7 +6,6 @@ import {
   ElementRef,
   Input
 } from '@angular/core';
-import {FORM_DIRECTIVES} from '@angular/common';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentDataStore}

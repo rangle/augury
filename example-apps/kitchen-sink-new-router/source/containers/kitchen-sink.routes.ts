@@ -1,4 +1,4 @@
-import { RouterConfig } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import Home from '../components/home';
 import InputOutput from '../components/input-output/input-output';
@@ -12,12 +12,11 @@ import ChangeDetection from '../components/change-detection/change-detection';
 import AngularDirectives from
   '../components/angular-directives/angular-directives';
 import Demo from '../components/demo/demo';
-import StressTester from '../components/stress-tester/stress-tester';
+import {StressTester, StressRecItem, StressItem}
+ from '../components/stress-tester/stress-tester';
 import MetadataTest from '../components/metadata-test/metadata-test';
 
-
-
-export const KitchenSinkRoutes: RouterConfig = [
+export const KitchenSinkRoutes: Routes = [
   { path: '', component: Home },
   { path: 'input-output', component: InputOutput },
   { path: 'my-form', component: MyForm },
@@ -31,4 +30,22 @@ export const KitchenSinkRoutes: RouterConfig = [
   { path: 'demo', component: Demo },
   { path: 'stress-tester', component: StressTester },
   { path: 'metadata-test', component: MetadataTest },
+];
+
+export const KitchenSinkDeclarations = [
+  Home,
+  InputOutput,
+  MyForm,
+  Form2,
+  DynamicControls,
+  ControlForm,
+  TodoApp,
+  DITree,
+  ChangeDetection,
+  AngularDirectives,
+  Demo,
+  StressTester,
+  StressRecItem,
+  StressItem,
+  MetadataTest
 ];

@@ -5,7 +5,7 @@ import {NgForm} from '@angular/common';
 @Component({
   selector: 'my-form',
   template: `
-    <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)"
+    <form (ngSubmit)="onSubmit()"
       novalidate class="col-sm-8">
 
       <div class="control-group">
@@ -30,7 +30,7 @@ import {NgForm} from '@angular/common';
   directives: [FORM_DIRECTIVES]
 })
 export default class MyForm {
-  onSubmit(regForm: NgForm) {
-    console.log(regForm.value);
-  }
+  // onSubmit(regForm: NgForm) {
+  //   console.log(regForm.value);
+  // }
 }

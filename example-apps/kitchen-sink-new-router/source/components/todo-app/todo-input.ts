@@ -1,22 +1,15 @@
 import {Component} from '@angular/core';
-import {FORM_DIRECTIVES} from '@angular/common';
+import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
+ from '@angular/forms';
 import {TodoService, TodoModel, FormatService} from './todo-service';
 
 @Component({
   selector: 'todo-input',
-  directives: [FORM_DIRECTIVES],
   template: `
   <div>
-    <h4>Without Model</h4>
-    <form (ngSubmit)="onClick(todo)" class="form-inline">
-      <input type="text" #todo required class="form-control" />
-      <button class="btn btn-success">Add Todo</button>
-    </form>
-    <hr/>
-    <h4>With Model</h4>
     <form (ngSubmit)="onSubmit()"  class="form-inline">
       <input type="text" [(ngModel)]="todoModel.title"
-       required class="form-control"  />
+       required class="form-control" name="title" />
       <button class="btn btn-success">Add Todo</button>
     </form>
   </div>

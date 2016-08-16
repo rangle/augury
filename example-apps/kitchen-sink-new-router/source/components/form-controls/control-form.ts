@@ -1,28 +1,28 @@
 
-import { Component } from '@angular/core'; import {
-  FORM_DIRECTIVES,
-  FormBuilder,
-  ControlGroup
-} from '@angular/common';
+import { Component } from '@angular/core';
+
+import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
+ from '@angular/forms';
+
 @Component({
   selector: 'control-form',
-  directives: [FORM_DIRECTIVES],
+  directives: [REACTIVE_FORM_DIRECTIVES],
+  providers: [FORM_PROVIDERS],
   template: `
     <div>
-        <form [ngFormModel]="formControl"
-           (ngSubmit)="onSubmit(formControl.value)"
+        <form (submit)="onSubmit(formControl.value)"
            class="col-sm-8">
             <div class="form-group">
                 <label>Name</label>
                 <input type="text" id="name" placeholder="Name"
                   class="form-control"
-                  [ngFormControl]="formControl.controls['name']">
+                  [formControl]="formGroup.controls['name']">
             </div>
             <div class="form-group">
                 <label>Email</label>
                 <input type="text" id="email" placeholder="Email"
                   class="form-control"
-                  [ngFormControl]="formControl.controls['email']">
+                  [formControl]="formGroup.controls['email']">
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
@@ -30,12 +30,12 @@ import { Component } from '@angular/core'; import {
 `
 })
 export default class ControlForm {
-  formControl: ControlGroup;
+  formGroup: FormGroup;
 
-  constructor(fb: FormBuilder) {
-    this.formControl = fb.group({
-      'name': ['John Doe'],
-      'email': 'johndoe@gmail.com'
+  constructor() {
+    this.formGroup = new FormGroup({
+      'name': new FormControl('John Doe'),
+      'email': new FormControl('johndoe@gmail.com')
     });
   }
 

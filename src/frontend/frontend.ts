@@ -1,6 +1,6 @@
 import {enableProdMode} from '@angular/core';
 import {Component, NgZone} from '@angular/core';
-import {bootstrap} from '@angular/platform-browser-dynamic';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {Dispatcher} from './dispatcher/dispatcher';
 import {BackendActions} from './actions/backend-actions/backend-actions';
 import {UserActions} from './actions/user-actions/user-actions';
@@ -13,6 +13,9 @@ import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
 import * as Rx from 'rxjs';
 import {ParseUtils} from './utils/parse-utils';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
@@ -63,9 +66,9 @@ const ALLOWED_DEPTH: number = 3;
     </div>`
 })
 /**
- * Augury App
+ * Augury App, the root component of our application.
  */
-class App {
+export class App {
 
   private tree: any;
   private previousTree: any;
@@ -174,14 +177,25 @@ class App {
   }
 }
 
+// --- FrontendModule, the module containing our root component.
+@NgModule({
+  declarations: [App],
+  imports: [BrowserModule, FormsModule],
+  providers: [
+    BackendActions,
+    UserActions,
+    Dispatcher,
+    ComponentDataStore,
+    BackendMessagingService
+  ],
+  bootstrap: [App]
+})
+class FrontendModule {}
+
 if (process.env.NODE_ENV !== 'development') {
   enableProdMode();
 }
 
-bootstrap(App, [
-  BackendActions,
-  UserActions,
-  Dispatcher,
-  ComponentDataStore,
-  BackendMessagingService
-]);
+// --- Bootstrap the module containing our root component on the web browser.
+platformBrowserDynamic().bootstrapModule(FrontendModule);
+
