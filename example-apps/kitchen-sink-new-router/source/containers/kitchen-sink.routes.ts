@@ -12,7 +12,8 @@ import ChangeDetection from '../components/change-detection/change-detection';
 import AngularDirectives from
   '../components/angular-directives/angular-directives';
 import Demo from '../components/demo/demo';
-import StressTester from '../components/stress-tester/stress-tester';
+import {StressTester, StressRecItem, StressItem}
+ from '../components/stress-tester/stress-tester';
 import MetadataTest from '../components/metadata-test/metadata-test';
 
 export const KitchenSinkRoutes: Routes = [
@@ -44,5 +45,7 @@ export const KitchenSinkDeclarations = [
   AngularDirectives,
   Demo,
   StressTester,
+  StressRecItem,
+  StressItem,
   MetadataTest
 ];
