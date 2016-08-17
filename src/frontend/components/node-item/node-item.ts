@@ -4,28 +4,19 @@ import {
   NgZone,
   Input,
 } from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
 
-import {
-  ComponentDataStore
-} from '../../stores/component-data/component-data-store';
 import {Highlightable} from '../highlightable';
 import {UserActions} from '../../actions/user-actions/user-actions';
 
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
-  directives: [NgIf, NgFor, NodeItem]
+  directives: [NodeItem]
 })
 
-/**
- * Node Item
- * Renders a node in the Component Tree View
- * (see ../tree-view.ts)
- */
 export class NodeItem extends Highlightable {
   @Input() node: any;
-  @Input() changedNodes: any;
+  @Input() changedNodes: any[];
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
   @Input() allowedComponentTreeDepth: number;
@@ -39,8 +30,7 @@ export class NodeItem extends Highlightable {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private userActions: UserActions,
-    private componentDataStore: ComponentDataStore
+    private userActions: UserActions
   ) {
     super(changeDetector, () => this.changedNodes.indexOf(this.node.id) > 0);
   }

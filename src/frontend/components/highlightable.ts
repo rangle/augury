@@ -3,7 +3,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-import { highlightTime } from '../utils/configuration';
+import { highlightTime } from '../../utils/configuration';
 
 export class Highlightable {
   private isUpdated = false;

@@ -1,44 +1,101 @@
-let connections = new Map<number, chrome.runtime.Port>();
+import {messageTimeout} from '../utils/configuration';
+import {getMessageIdentifier} from './identifier';
+import {dispatch} from './dispatch';
+
+type Message = any;
+
+const connections = new Map<number, chrome.runtime.Port>();
+
+const pendingMessages = new Map<string, (response) => void>();
+
+export const sendToBrowser =
+    <Response, Request>(message: Request): Promise<Response> => {
+  return new Promise((resolve, reject) => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+
+    if (!connections.has(tabId)) {
+      reject(new Error(`Attempted to send message to nonexistent backend listener (tab ${tabId})`));
+    }
+
+    const msgid = getMessageIdentifier();
+
+    const timeoutfn = () =>
+      reject(new Error(`Timeout waiting for message response (ID ${msgid})`));
+
+    const timeout = setTimeout(timeoutfn, messageTimeout);
+
+    pendingMessages.set(msgid,
+      response => {
+        /// Stop the timeout handler
+        clearTimeout(timeout);
+
+        resolve(response);
+      });
+
+    const port = connections.get(tabId);
+
+    port.postMessage({messageId: msgid, request: message});
+  });
+};
+
+const respondToBrowserMessage = <T>(tabId: number, messageId: string, response: T) => {
+  const port = connections.get(tabId);
+  if (port == null) {
+    throw new Error(`Attempted to send message to nonexistent tab (${tabId})`);
+  }
+
+  port.postMessage({tabId, messageResponseId: messageId, response});
+};
 
 chrome.runtime.onConnect.addListener(port => {
+  debugger;
 
-  let frontendListener = (message, sender) => {
-    // The original connection event doesn't include the tab ID of the
-    // DevTools page, so we need to send it explicitly.
-    if (message.name === 'init') {
-      connections.set(message.tabId, port);
+  const tabId = port.sender.tab.id;
+  if (connections.has(tabId)) {
+    throw new Error(`Received superfluous onConnect message for tab ID ${tabId}`);
+  }
+
+  connections.set(port.sender.tab.id, port);
+
+  const messageHandler = (message: Message, p) => {
+    if (typeof message.messageResponseId === 'string') {
+      const handler = pendingMessages.get(message.messageResponseId);
+      try {
+        handler(message.response);
+      }
+      finally {
+        pendingMessages.delete(message.messageResponseId);
+      }
     }
+    else {
+      try {
+        const response = dispatch(message.request);
 
-    chrome.tabs.sendMessage(message.tabId, message);
-    // other message handling
+        port.postMessage({tabId, messageResponseId: message.messageId, response});
+      }
+      catch (error) {
+        console.error(`Failed to dispatch backend message ${message.messageId}: ${error.stack}`);
+      }
+    }
   };
 
-  // Listen to messages sent from the DevTools page
-  port.onMessage.addListener(frontendListener);
+  port.onMessage.addListener(messageHandler);
 
-  port.onDisconnect.addListener(_port => {
+  port.onDisconnect.addListener(p => {
+    p.onMessage.removeListener(messageHandler);
 
-    _port.onMessage.removeListener(frontendListener);
-    connections.forEach((value, key, map) => {
-      if (value === port) {
-        map.delete(key);
-      }
-    });
+    /// Remove this connection from our map
+    connections.delete(port.sender.tab.id);
   });
-
 });
 
-// Receive message from content script and
-// relay to the devTools page for the current tab
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
-    // Messages from content scripts should have sender.tab set
-    if (sender.tab && connections.has(sender.tab.id)) {
-      if (message.from === 'content-script') {
-        sendResponse({connection: true});
-      }
-      connections.get(sender.tab.id).postMessage(message);
+    debugger;
+    try {
+      sendResponse(dispatch(message));
     }
-
-    return true;
+    catch (error) {
+      sendResponse({error});
+    }
   });

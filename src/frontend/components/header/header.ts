@@ -6,11 +6,8 @@ import {
   ElementRef,
   Input
 } from '@angular/core';
-import {FORM_DIRECTIVES} from '@angular/common';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
 
 @Component({
   selector: 'augury-header',
@@ -27,25 +24,14 @@ export class Header {
   private totalSearchCount: number = 0;
   private query: string = '';
   private settingOpened: boolean = false;
-  private elementRef;
 
   @Output() newTheme: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private userActions: UserActions,
-    private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone,
-    elementRef: ElementRef
-  ) {
-
-    this.elementRef = elementRef;
-
-    this.componentDataStore.dataStream
-      .subscribe((data: any) => {
-        this.totalSearchCount = data.totalSearchCount;
-      });
-
-  }
+    private ngZone: NgZone,
+    private elementRef: ElementRef
+  ) {}
 
   ngOnChanges() {
     if (this.searchDisabled) {
@@ -118,7 +104,7 @@ export class Header {
     this.query = this.query.toLocaleLowerCase();
 
     this.userActions.searchNode({ query: this.query, index: this.searchIndex });
-    this._ngZone.run(() => undefined);
+    this.ngZone.run(() => undefined);
   }
 
 }

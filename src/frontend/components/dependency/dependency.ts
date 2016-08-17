@@ -1,6 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {UserActionType} from '../../actions/action-constants';
 
@@ -15,28 +13,25 @@ export default class Dependency {
   private depComps: Array<any> = [];
   private isNavBack: boolean = false;
 
-  constructor(
-    private componentDataStore: ComponentDataStore,
-    private userActions: UserActions
-  ) {
-    this.componentDataStore.dataStream
-      .filter((data: any) => data.action &&
-        data.action === UserActionType.GET_DEPENDENCIES)
-      .subscribe(({ selectedDependency, dependentComponents }) => {
-        if (this.currDep !== '' && !this.isNavBack) {
-          this.prevDep.push(this.currDep);
-        }
-        this.isNavBack = false;
-        this.currDep = selectedDependency;
-        this.depComps = dependentComponents;
-      });
+  constructor(private userActions: UserActions) {
+    // this.componentDataStore.dataStream
+    //   .filter((data: any) => data.action &&
+    //     data.action === UserActionType.GET_DEPENDENCIES)
+    //   .subscribe(({ selectedDependency, dependentComponents }) => {
+    //     if (this.currDep !== '' && !this.isNavBack) {
+    //       this.prevDep.push(this.currDep);
+    //     }
+    //     this.isNavBack = false;
+    //     this.currDep = selectedDependency;
+    //     this.depComps = dependentComponents;
+    //   });
 
-    this.componentDataStore.dataStream
-      .filter((data: any) => data.action &&
-        data.action === UserActionType.SELECT_NODE)
-      .subscribe(() => {
-        this.reset();
-      });
+    // this.componentDataStore.dataStream
+    //   .filter((data: any) => data.action &&
+    //     data.action === UserActionType.SELECT_NODE)
+    //   .subscribe(() => {
+    //     this.reset();
+    //   });
   }
 
   findDependency(dep: string) {

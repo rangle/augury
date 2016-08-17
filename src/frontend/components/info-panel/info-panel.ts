@@ -1,8 +1,11 @@
-import {Component, ElementRef, Inject, NgZone, Input} from '@angular/core';
-import {NgIf, NgClass} from '@angular/common';
-import * as Rx from 'rxjs';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  NgZone,
+  Input,
+} from '@angular/core';
+
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {UserActionType} from '../../actions/action-constants';
 
@@ -13,15 +16,15 @@ import InjectorTree from '../injector-tree/injector-tree';
 @Component({
   selector: 'bt-info-panel',
   template: require('./info-panel.html'),
-  directives: [NgIf, TabMenu, ComponentInfo, InjectorTree]
+  directives: [TabMenu, ComponentInfo, InjectorTree]
 })
 export class InfoPanel {
-
-  @Input() tree: any;
-  @Input() node: any;
+  @Input() tree;
+  @Input() node;
   @Input() theme: string;
 
   private selectedTabIndex: number = 0;
+
   private tabs = [{
       title: 'Properties',
       selected: false
@@ -30,10 +33,7 @@ export class InfoPanel {
       selected: false
     }];
 
-  constructor(
-    private componentDataStore: ComponentDataStore,
-    private userActions: UserActions
-  ) {}
+  constructor(private userActions: UserActions) {}
 
   tabChange(index: number): void {
     this.selectedTabIndex = index;
@@ -42,5 +42,4 @@ export class InfoPanel {
   selectNode(node: any): void {
     this.userActions.selectNode({ node: node });
   }
-
 }

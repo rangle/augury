@@ -2,13 +2,13 @@
   [tabs]="tabs"
   (tabChange)="tabChange($event)"
   [selectedTabIndex]="selectedTabIndex">
-  </bt-tab-menu>
+</bt-tab-menu>
 
 <bt-component-info
   [node]="node"
   [hidden]="selectedTabIndex != 0"
   [ngClass]="{flex: selectedTabIndex == 0}">
-  </bt-component-info>
+</bt-component-info>
 
 <bt-injector-tree
   (selectNode)="selectNode($event)"
@@ -17,4 +17,4 @@
   [selectedNode]="node"
   [theme]="theme"
   [ngClass]="{'flex flex-auto': selectedTabIndex == 1}">
-  </bt-injector-tree>
+</bt-injector-tree>

@@ -1,35 +1,37 @@
-let isInitalized: boolean = false;
+import {dispatch} from '../channel/dispatch';
+import {MessageFactory} from '../channel/message-factory';
 
-const observeDOM = (() => {
-  const MutationObserver =
-    /* tslint:disable */
-    window['MutationObserver'];
-    /* tslint:enable */
+declare const getAllAngularTestabilities: Function;
 
-  const eventListenerSupported = window.addEventListener;
+let unsubscribe: () => void;
 
-  return function (obj, callback) {
-    if (MutationObserver) {
-      const obs = new MutationObserver((mutations, observer) => {
-        if (mutations[0].addedNodes.length ||
-          mutations[0].removedNodes.length) {
-          callback();
-        }
-      });
-      obs.observe(obj, { childList: true, subtree: true });
-    } else if (eventListenerSupported) {
-      obj.addEventListener('DOMNodeInserted', callback, false);
-      obj.addEventListener('DOMNodeRemoved', callback, false);
+const handler = () => {
+  if (typeof getAllAngularTestabilities === 'function') {
+    dispatch(MessageFactory.frameworkLoaded());
+
+    if (unsubscribe) {
+      unsubscribe();
     }
-  };
-})();
 
-observeDOM(document, init);
-
-function init() {
-  if (window && window.hasOwnProperty('ng') && !isInitalized) {
-    isInitalized = true;
-    window.postMessage({ type: 'AUGURY_NG_VALID' }, '*');
+    return true;
   }
 }
-init();
+
+if (!handler()) {
+  const subscribe = () => {
+    if (MutationObserver) {
+      const observer = new MutationObserver((mutations, observer) => handler());
+      observer.observe(document, { childList: true, subtree: true });
+
+      return () => observer.disconnect();
+    }
+
+    const eventKeys = ['DOMNodeInserted', 'DOMNodeRemoved'];
+
+    eventKeys.forEach(k => document.addEventListener(k, handler, false));
+
+    return () => eventKeys.forEach(k => document.removeEventListener(k, handler, false));
+  }
+
+  unsubscribe = subscribe();
+}
