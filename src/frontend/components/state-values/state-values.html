@@ -1,14 +1,6 @@
-<div [ngClass]="{'changed': isUpdated}">
+<div [ngClass]="{changed: isUpdated, property: true}">
   <span class="info-key">
-    {{getPropertyKey(propertyTree)}}:
-    </span>
-  <span class="info-editable"
-    *ngIf="!editable"
-    (dblclick)="onDblClick($event)">
-    {{value}}
-    </span>
-  <input class="info-editable"
-    *ngIf="editable" #property
-    value="{{value}}"
-    (keyup)="propertyChange($event, property.value)"/>
+    {{propertyKey}}:
+  </span>
+  <bt-property-editor [initialValue]="value" (submit)="onValueChanged($event)"></bt-property-editor>
 </div>

@@ -29,6 +29,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
 
+  console.log('Post message', message);
+
   window.postMessage({ type: 'AUGURY_CONTENT_SCRIPT', message }, '*');
   return true;
 });

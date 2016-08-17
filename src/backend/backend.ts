@@ -1,5 +1,6 @@
 import {DomController} from './controllers/dom';
 import {Angular2Adapter} from './adapters/angular2';
+import {deserialize, serialize} from '../utils/serialize';
 import Highlighter from './utils/highlighter';
 import ParseData from '../frontend/utils/parse-data';
 
@@ -7,10 +8,26 @@ declare var ng: { probe: Function, coreTokens: any };
 
 let channel = {
   sendMessage: (message) => {
-    return window.postMessage(JSON.parse(JSON.stringify({
+    const m = {
       type: 'AUGURY_INSPECTED_APP',
-      message
-    })), '*');
+      message: message,
+      serialized: false
+    };
+
+    // If we can get away with sending the raw object, then do so, but if we
+    // get a DataCloneError exception then we must resort to an expensive
+    // serialization operation.
+    const send = () => window.postMessage(m, '*');
+
+    try {
+      return send();
+    }
+    catch (e) { // DataCloneError
+      m.message = serialize(m.message);
+      m.serialized = true;
+
+      return send();
+    }
   }
 };
 
@@ -33,6 +50,10 @@ window.addEventListener('message', function(event) {
   }
 
   if (event.data.type && (event.data.type === 'AUGURY_CONTENT_SCRIPT')) {
+    if (event.data.message.serialized) {
+      event.data.message.message = deserialize(event.data.message.message);
+      event.data.message.serialized = false;
+    }
 
     if (event.data.message.message.actionType ===
       'START_COMPONENT_TREE_INSPECTION') {
@@ -65,20 +86,20 @@ window.addEventListener('message', function(event) {
       const highlightStr = '[augury-id=\"' +
         event.data.message.message.property.id + '\"]';
       const dE = ng.probe(document.querySelector(highlightStr));
-      const propertyTree: Array<string> =
-        event.data.message.message.property.propertyTree.split(',');
-      let property = propertyTree.pop();
+
+      const path: Array<string> = event.data.message.message.property.path;
+      let property = path.pop();
 
       // replace with existing property as we normalized data initally
       if (!dE.componentInstance &&
         getFunctionName(dE.providerTokens[0]) === 'NgStyle') {
-        propertyTree[0] = '_rawStyle';
+        path[0] = '_rawStyle';
       } else if (!dE.componentInstance &&
         getFunctionName(dE.providerTokens[0]) === 'NgSwitch') {
         property = '_' + property;
       } else if (!dE.componentInstance &&
         getFunctionName(dE.providerTokens[0]) === 'NgClass') {
-        propertyTree[0] = '_' + propertyTree[0];
+        path[0] = '_' + path[0];
       }
 
       let instance = dE.componentInstance;
@@ -86,7 +107,7 @@ window.addEventListener('message', function(event) {
         instance = dE.injector.get(dE.providerTokens[0]);
       }
 
-      const value = propertyTree.reduce((previousValue, currentValue) =>
+      const value = path.reduce((previousValue, currentValue) =>
         previousValue[currentValue], instance);
 
       if (value !== undefined) {

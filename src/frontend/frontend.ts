@@ -113,7 +113,7 @@ class App {
         if (data.selectedNode) {
           const treeMap = this.parseUtils.getNodesMap(this.tree);
           const treeMapNode = treeMap[data.selectedNode.id];
-          this.selectedNode = treeMapNode ? JSON.parse(treeMapNode) : undefined;
+          this.selectedNode = treeMapNode ? treeMapNode : undefined;
         }
         this.closedNodes = data.closedNodes;
         this._ngZone.run(() => undefined);
@@ -130,7 +130,7 @@ class App {
     );
 
     this.componentDataStore.dataStream
-      .debounce(() => Rx.Observable.timer(250))
+      .debounce(() => Rx.Observable.timer(0))
       .filter((data: any) => {
         return (data.action &&
           data.action !== UserActionType.GET_DEPENDENCIES &&

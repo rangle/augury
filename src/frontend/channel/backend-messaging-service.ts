@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BackendActions} from '../actions/backend-actions/backend-actions';
+import {serialize, deserialize} from '../../utils/serialize';
 
 @Injectable()
 /**
@@ -24,14 +25,23 @@ export class BackendMessagingService {
     this.backgroundPageConnection.onMessage.addListener((message: any) => {
       // if this is a reload, clear selections then tree
       if (message.from && message.from === 'content-script') {
+        console.log('clear selections; clear tree');
         this.backendActions.clearSelections();
         this.backendActions.clearTree();
       }
 
-      if (message.data && message.data.message.type === 'render_routes') {
-        this.backendActions.renderRouterTree(message.data.message.payload);
-      } else if (message.data) {
-        this.backendActions.componentTreeChanged(message.data.message.payload);
+      if (message.data) {
+        if (message.data.serialized) {
+          console.log('Deserialize', message.data);
+          message.data.message = deserialize(message.data.message);
+          message.data.serialized = false;
+        }
+
+        if (message.data.message.type === 'render_routes') {
+          this.backendActions.renderRouterTree(message.data.message.payload);
+        } else {
+          this.backendActions.componentTreeChanged(message.data.message.payload);
+        }
       }
     });
 
@@ -42,13 +52,11 @@ export class BackendMessagingService {
    * @param  {Object} message
    */
   sendMessageToBackend(message) {
-
     this.backgroundPageConnection.postMessage({
       name: 'message',
       tabId: chrome.devtools.inspectedWindow.tabId,
-      message: message
+      message: serialize(message),
+      serialized: true
     });
-
   }
-
 }

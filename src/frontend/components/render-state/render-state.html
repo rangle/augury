@@ -1,28 +1,28 @@
-<div class="pl4"
-  *ngFor="let k of keys(state)">
-  <span *ngIf="type(state[k]) =='object'">
-    <img src="../images/Triangle.svg"
-      style="width: 0.8rem; height: 0.8rem;"
-      [ngClass]="{rotate90: expanded[k]}"
-      (click)="expandTree(k, $event)">
+<div class="pl4" *ngFor="let k of keys(state)">
+  <span *ngIf="nest(k)" (click)="expandTree(k, $event)">
+    <div [ngClass]="{
+        expander: true,
+        rotate90: !expanded[k],
+        invisible: keys(state[k]).length == 0
+      }">
+    </div>
     <span class="info-key">
-      {{k}}
-      </span>
+      {{k}}:
+    </span>
     <span class="info-value">
       {{displayType(state[k])}}
-      </span>
+    </span>
   </span>
-
-  <bt-state-values *ngIf="type(state[k]) !='object'"
-    [propertyTree]="propertyTree + ',' + k"
+  <bt-state-values *ngIf="nest(k) === false"
+    [path]="path.concat([k])"
     [id]="id"
     [value]="state[k]">
-    </bt-state-values>
-
-  <bt-render-state *ngIf="type(state[k]) =='object'"
-    [propertyTree]="propertyTree + ',' + k"
-    [id]="id"
-    [hidden]="expanded[k]"
-    [state]="state[k]">
+  </bt-state-values>
+  <div *ngIf="expanded[k]">
+    <bt-render-state *ngIf="nest(k)"
+      [path]="path.concat([k])"
+      [id]="id"
+      [state]="state[k]">
     </bt-render-state>
+  </div>
 </div>

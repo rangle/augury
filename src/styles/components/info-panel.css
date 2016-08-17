@@ -13,7 +13,7 @@
   color: var(--bt-key-color);
 }
 
-.info-editable {
+.editable {
   background-color: var(--bt-editable-highlight-color);
   border-bottom: dashed blue 1px !important;
   border: 0;

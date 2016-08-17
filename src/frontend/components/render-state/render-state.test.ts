@@ -9,7 +9,6 @@ test('utils/render-state: init component', t => {
   };
 
   t.notEqual(comp, undefined, 'should not be undefined');
-  t.deepEqual(comp.type(value), 'object', 'type should be object');
   t.deepEqual(comp.keys(value), ['name'], 'should have name as keys');
   t.doesNotThrow(() => {
     comp.expandTree('name', new CustomEvent('test'));

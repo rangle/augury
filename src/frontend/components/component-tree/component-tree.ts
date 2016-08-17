@@ -4,7 +4,7 @@ import {NodeItem} from '../node-item/node-item';
 
 @Component({
   selector: 'component-tree',
-  templateUrl: 'src/frontend/components/component-tree/component-tree.html',
+  template: require('./component-tree.html'),
   host: {'class': 'flex overflow-scroll'},
   directives: [NgFor, NodeItem]
 })

@@ -1,23 +1,44 @@
-import {Component, ViewEncapsulation, OnChanges, Inject,
-  ElementRef, Input} from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  Inject,
+  ElementRef,
+  Input,
+} from '@angular/core';
+
 import RouterInfo from '../router-info/router-info';
+
 import * as d3 from 'd3';
+
+interface TreeConfig {
+  tree: d3.layout.Tree<d3.layout.tree.Node>;
+  diagonal:
+    d3.svg.Diagonal<
+      d3.svg.diagonal.Link<d3.svg.diagonal.Node>,
+      d3.svg.diagonal.Node
+    >;
+  svg: d3.Selection<any>;
+  duration: number;
+}
 
 @Component({
   selector: 'bt-router-tree',
-  templateUrl: '/src/frontend/components/router-tree/router-tree.html',
+  template: require('./router-tree.html'),
   directives: [RouterInfo]
 })
-
 export class RouterTree {
-
   @Input() routerTree: Array<any>;
   @Input() theme: string;
-  treeConfig: any;
-  selectedNode: any;
+
+  private treeConfig: TreeConfig;
+
+  private selectedNode;
 
   constructor(@Inject(ElementRef) elementRef: ElementRef) {
+    this.treeConfig = this.getTree(elementRef);
+  }
 
+  private getTree(elementRef: ElementRef): TreeConfig {
     const tree = d3.layout.tree();
 
     const diagonal = d3.svg.diagonal()
@@ -30,17 +51,12 @@ export class RouterTree {
       .append('g')
       .attr('transform', 'translate(100, 200)');
 
-    this.treeConfig = {
+    return {
       tree,
       diagonal,
       svg,
       duration: 500
     };
-
-  }
-
-  ngOnChanges() {
-    this.render();
   }
 
   render() {
@@ -64,13 +80,13 @@ export class RouterTree {
 
     // Declare the nodes
     const node = this.treeConfig.svg.selectAll('g.node')
-      .data(nodes, (d) => d.id || (d.id = ++i));
+      .data(nodes, (d: any) => d.id || (d.id = ++i));
 
     // Enter the nodes
     const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
-      .on('mouseover', this.rollover.bind(this))
-      .on('mouseout', this.rollover.bind(this));
+      .on('mouseover', node => this.onRollover(node))
+      .on('mouseout', node => this.onRollover(node));
 
     nodeEnter.append('circle')
       .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')
@@ -104,7 +120,7 @@ export class RouterTree {
 
     // Declare the links
     const link = this.treeConfig.svg.selectAll('path.link')
-      .data(links, (d) => d.target.id);
+      .data(links, (d: any) => d.target.id);
 
     // Enter any new links at the parent's previous position.
     link
@@ -120,13 +136,16 @@ export class RouterTree {
 
   }
 
-  rollover(d) {
-    if (this.selectedNode) {
-      this.selectedNode = null;
-    } else {
-      this.selectedNode = d;
-    }
+  private ngOnChanges() {
     this.render();
   }
 
+  private onRollover(node) {
+    if (this.selectedNode) {
+      this.selectedNode = null;
+    } else {
+      this.selectedNode = node;
+    }
+    this.render();
+  }
 }

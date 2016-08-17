@@ -21,7 +21,7 @@
       <section-content>
         <ul class="list-reset m0"
           *ngIf="node && node.description">
-          <bt-property-value 
+          <bt-property-value
             *ngFor="let property of node.description"
             [checkUpdate]="false"
             [key]="property.key"
@@ -36,7 +36,7 @@
       <section-content>
         <span *ngFor="let provider of node.providers">
           <p class="m1 bold">{{provider.key}}</p>
-          <bt-property-value 
+          <bt-property-value
             *ngFor="let property of provider.value"
             [checkUpdate]="true"
             [key]="property.key"
@@ -70,7 +70,7 @@
       *ngIf="node && node.input && node.input.length > 0">
       <section-content>
         <ul class="list-reset m0">
-          <li *ngFor="let input of _input">
+          <li *ngFor="let input of input">
             <span class="info-key inline-block">
               {{input.key}}:
             </span>
@@ -90,7 +90,7 @@
           <li *ngFor="let output of node.output; ">
             <span class="info-key inline-block">
               {{output}}
-              <input class="info-editable"
+              <input class="editable"
                 type="text"
                 #prop>
               <button class="btn btn-primary bg-olive mb1"
@@ -107,7 +107,7 @@
       *ngIf="node && node.state">
       <section-content>
         <div class="mxn4">
-          <bt-render-state [propertyTree]="propertyTree"
+          <bt-render-state [path]="path"
             [id]="node.id"
             [state]="node.state">
             </bt-render-state>

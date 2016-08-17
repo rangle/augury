@@ -1,0 +1,31 @@
+<div (mouseout)=onMouseOut($event)
+  (mouseover)=onMouseOver($event)
+  (dblclick)=onDblClick($event)
+  (click)="onClick($event)">
+
+  <div class="node-item pl3 rounded border-box"
+    [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
+    <div
+      [ngClass]="{
+        expander: true,
+        rotate90: showChildren(),
+        invisible: !node.children
+      }"
+      (click)="expandTree($event)">
+    </div>
+    <div class="inline"
+      [innerHTML]="getNodeDetails(node)">
+    </div>
+  </div>
+
+  <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
+    <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
+      [changedNodes]="changedNodes"
+      [hidden]="showChildren()"
+      [selectedNode]="selectedNode"
+      [closedNodes]="closedNodes"
+      [allowedComponentTreeDepth]="allowedComponentTreeDepth"
+      [node]="node">
+    </bt-node-item>
+  </div>
+</div>

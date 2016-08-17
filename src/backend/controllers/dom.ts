@@ -30,7 +30,7 @@ export class DomController extends BaseController {
   private adapter: any;
   private channel: Sendable;
   private model: Array<any>;
-  private callToRenderTree: any;
+  private callToRenderTree = new Subject<any>();
 
   static detectFramework(): Angular2Adapter {
     return new Angular2Adapter;
@@ -38,14 +38,12 @@ export class DomController extends BaseController {
 
   constructor(adapter: any, channel: Sendable) {
     super();
+
     this.model = [];
     this.adapter = adapter;
     this.channel = channel;
 
-    this.callToRenderTree = new Subject();
-    this.callToRenderTree
-      .debounce(() => Observable.timer(250))
-      .subscribe(this.callFrontend.bind(this));
+    this.callToRenderTree.debounceTime(0).subscribe(data => this.callFrontend(data));
   }
 
   callFrontend(data) {

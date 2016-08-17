@@ -3,7 +3,7 @@ import {NgFor, NgIf} from '@angular/common';
 
 @Component({
   selector: 'bt-router-info',
-  templateUrl: '/src/frontend/components/router-info/router-info.html',
+  template: require('./router-info.html'),
   directives: [NgFor, NgIf]
 })
 

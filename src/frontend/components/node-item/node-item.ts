@@ -1,44 +1,20 @@
-import {Component, NgZone, Input} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  Input,
+} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
-import {ComponentDataStore} from
-  '../../stores/component-data/component-data-store';
+
+import {
+  ComponentDataStore
+} from '../../stores/component-data/component-data-store';
+import {Highlightable} from '../highlightable';
 import {UserActions} from '../../actions/user-actions/user-actions';
 
-// NOTE(cbond): This template must remain inline, there is a bug with recursive
-// controls in Angular 2 and templateUrl that prevents this from working
-// otherwise. Once they fix that bug then this can be placed back inside a
-// templateUrl file.
 @Component({
   selector: 'bt-node-item',
-  template: `
-    <div (mouseout)=onMouseOut($event)
-      (mouseover)=onMouseOver($event)
-      (dblclick)=onDblClick($event)
-      (click)="onClick($event)">
-
-      <div class="node-item pl3 rounded border-box"
-        [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
-        <img src="../images/Triangle.svg"
-          style="width: 0.8em; height: 0.8em;"
-          [hidden]="node.children ? false : true"
-          [ngClass]="{rotate90: showChildren()}"
-          (click)="expandTree($event)">
-        <div class="inline"
-          [innerHTML]="getNodeDetails(node)">
-        </div>
-      </div>
-
-      <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
-        <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
-          [changedNodes]="changedNodes"
-          [hidden]="showChildren()"
-          [selectedNode]="selectedNode"
-          [closedNodes]="closedNodes"
-          [allowedComponentTreeDepth]="allowedComponentTreeDepth"
-          [node]="node">
-        </bt-node-item>
-      </div>
-    </div>`,
+  template: require('./node-item.html'),
   directives: [NgIf, NgFor, NodeItem]
 })
 
@@ -47,7 +23,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
  * Renders a node in the Component Tree View
  * (see ../tree-view.ts)
  */
-export class NodeItem {
+export class NodeItem extends Highlightable {
   @Input() node: any;
   @Input() changedNodes: any;
   @Input() selectedNode: any;
@@ -55,7 +31,6 @@ export class NodeItem {
   @Input() allowedComponentTreeDepth: number;
 
   private collapsed: any;
-  private isUpdated: boolean = false;
   private isSelected: boolean = false;
 
   // Perf: if the node was already rendered keep it in the component tree
@@ -63,10 +38,11 @@ export class NodeItem {
   private wasRendered: boolean = false;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private userActions: UserActions,
-    private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
+    private componentDataStore: ComponentDataStore
   ) {
+    super(changeDetector, () => this.changedNodes.indexOf(this.node.id) > 0);
   }
 
   ngOnInit() {
@@ -76,6 +52,10 @@ export class NodeItem {
     // the deeper the rendering goes, the closer the rendering comes to
     // reaching the limit. Pass this value recursively to sub nodes.
     this.allowedComponentTreeDepth -= 1;
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   // Return true if the component tree should no longer be opening
@@ -174,20 +154,19 @@ export class NodeItem {
   }
 
   ngOnChanges(changes) {
+    super.ngOnChanges(changes);
+
     if (this.selectedNode && this.node) {
       this.isSelected = (this.selectedNode.id === this.node.id);
     }
-    if (changes.changedNodes && this.node) {
-      this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
-      setTimeout(() => {
-        this.isUpdated = false;
-      }, 2000);
-    }
+
     if (this.closedNodes && this.node) {
       if (this.closedNodes.indexOf(this.node.id) > -1) {
         this.node.isOpen = false;
       }
     }
+
+    this.changedNodes.splice(0, this.changedNodes.length);
   }
 
   trackById(index: number, node: any): string {

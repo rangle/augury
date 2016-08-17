@@ -15,8 +15,7 @@ import {ParseUtils} from '../../utils/parse-utils';
   selector: 'bt-injector-tree',
   encapsulation: ViewEncapsulation.None,
   providers: [GraphUtils, ParseUtils],
-  templateUrl:
-    '/src/frontend/components/injector-tree/injector-tree.html',
+  template: require('./injector-tree.html'),
   styles: [`
     .link {
       stroke-width: 1.5px;
@@ -68,9 +67,7 @@ export default class InjectorTree implements OnChanges {
   }
 
   private displayTree() {
-    const tree = JSON.parse(JSON.stringify(this.tree));
-
-    this.flattenedTree = this.parseUtils.flatten(tree);
+    this.flattenedTree = this.parseUtils.flatten(this.tree);
     this.parentHierarchy =
       this.parseUtils.getParentHierarchy(this.flattenedTree, this.selectedNode);
     this.parentHierarchyDisplay =

@@ -90,6 +90,9 @@ module.exports = {
     }, {
       test: /\.png$/,
       loader: "url-loader?mimetype=image/png"
+    }, {
+      test: /\.html$/,
+      loader: 'raw'
     }],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,

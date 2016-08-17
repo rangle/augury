@@ -1,33 +1,26 @@
-import {Component, EventEmitter, Input, OnChanges, NgZone}
-  from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+} from '@angular/core';
+
+import {Highlightable} from '../highlightable';
 
 @Component({
   selector: 'bt-property-value',
-  templateUrl:
-  '/src/frontend/components/property-value/property-value.html'
+  template: require('./property-value.html'),
 })
-export default class PropertyValue implements OnChanges {
+export default class PropertyValue extends Highlightable {
+  @Input() private key: string;
+  @Input() private value: string;
 
-  @Input() key: string;
-  @Input() value: string;
-  @Input() checkUpdate: boolean = false;
-
-  private isUpdated: boolean = false;
-
-  constructor(
-    private _ngZone: NgZone
-  ) { }
-
-  ngOnChanges(changes: any) {
-    if (this.checkUpdate && changes &&
-      changes.value !== undefined &&
-      changes.value.currentValue !== changes.value.previousValue) {
-      this.isUpdated = true;
-      setTimeout(() => {
-        this.isUpdated = false;
-        this._ngZone.run(() => undefined);
-      }, 1750);
-    }
+  constructor(@Inject(ChangeDetectorRef) changeDetectorRef: ChangeDetectorRef) {
+    super(changeDetectorRef);
   }
 
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
 }

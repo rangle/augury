@@ -11,8 +11,7 @@ import {RouterTree} from '../router-tree/router-tree';
 @Component({
   selector: 'bt-app-trees',
   directives: [TabMenu, TreeView, RouterTree],
-  templateUrl:
-    '/src/frontend/components/app-trees/app-trees.html'
+  template: require('./app-trees.html'),
 })
 export default class AppTrees {
 

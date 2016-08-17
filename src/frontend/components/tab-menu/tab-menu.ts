@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnChanges, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'bt-tab-menu',
-  templateUrl: '/src/frontend/components/tab-menu/tab-menu.html'
+  template: require('./tab-menu.html'),
 })
 export default class TabMenu {
   @Input() tabs: any;

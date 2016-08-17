@@ -6,7 +6,7 @@ import {UserActionType} from '../../actions/action-constants';
 
 @Component({
   selector: 'bt-dependency',
-  templateUrl: '/src/frontend/components/dependency/dependency.html'
+  template: require('./dependency.html'),
 })
 export default class Dependency {
   @Input() dependencies;

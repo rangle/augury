@@ -12,7 +12,7 @@ import InjectorTree from '../injector-tree/injector-tree';
 
 @Component({
   selector: 'bt-info-panel',
-  templateUrl: '/src/frontend/components/info-panel/info-panel.html',
+  template: require('./info-panel.html'),
   directives: [NgIf, TabMenu, ComponentInfo, InjectorTree]
 })
 export class InfoPanel {

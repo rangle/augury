@@ -3,7 +3,7 @@ import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'accordion',
-  templateUrl: '/src/frontend/components/accordion/accordion.html'
+  template: require('./accordion.html'),
 })
 export default class Accordion {
   @Input() sectionTitle: string;

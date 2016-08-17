@@ -33,22 +33,20 @@ import { ParseRouter, IS_OLD_ROUTER_HACK, parseConfigRoutes }
 from '../utils/parse-router';
 
 export class Angular2Adapter extends BaseAdapter {
-  _tree: any = {};
-  _onEventDone: any;
+  private tree: any = {};
+
+  private onEventDone = new Subject<void>();
 
   constructor() {
     super();
-    this._onEventDone = new Subject();
 
-    this._onEventDone
-      .debounce((x) => Observable.timer(250))
-      .subscribe(this.renderTree.bind(this));
+    this.onEventDone.debounceTime(0).subscribe(this.renderTree.bind(this));
   }
 
   renderTree() {
     this.reset();
     const root = this._findRoot();
-    this._tree = {};
+    this.tree = {};
     this._traverseElements(ng.probe(root),
       true,
       '0',
@@ -58,7 +56,7 @@ export class Angular2Adapter extends BaseAdapter {
   setup(): void {
     // only supports applications with single root for now
     const root = this._findRoot();
-    this._tree = {};
+    this.tree = {};
     this._traverseElements(ng.probe(root),
       true,
       '0',
@@ -69,33 +67,47 @@ export class Angular2Adapter extends BaseAdapter {
 
   _trackAngularChanges(rootNgProbe: any) {
     const ngZone = rootNgProbe.inject(ng.coreTokens.NgZone);
-    ngZone.onStable.subscribe(() => this._onEventDone.next());
+    ngZone.onStable.subscribe(() => this.onEventDone.next(void 0));
   }
 
-  showAppRoutes(): void {
-    const root = this._findRoot();
-    try {
-      const router = ng.probe(root).componentInstance.router;
-      let routes: any;
-
-      if (IS_OLD_ROUTER_HACK(router)) {
-        // TODO: (ericjim): remove if-block and function
-        // once we no longer support the old router.
-        routes = ParseRouter.parseRoutes(router.root.registry);
-      } else {
-        routes = parseConfigRoutes(router);
-      }
-
-      this.showRoutes(routes);
-    } catch (error) {
-      console.log(error);
+  showAppRoutes() {
+    const root = ng.probe(this._findRoot());
+    if (root == null) {
+      return;
     }
+
+    // There are two methods that we use to discover the router. The first is
+    // the preferred method: it is discovered through ng.coreTokens. This is
+    // a nice solution that doesn't require the app being debugged to do
+    // anything special. (But it does require Angular RC6.) The alternate method
+    // is to find a `router' instance variable on the primary application class.
+    // This is a really hacky method but it necessary until some recent changes
+    // in the Angular router.
+    if (ng.coreTokens.router) {
+      let router = root.inject(ng.coreTokens.router);
+      if (router) {
+        this.showRoutes(parseConfigRoutes(router));
+        return;
+      }
+    }
+
+    if (root.componentInstance == null) {
+      return;
+    }
+
+    const router = root.componentInstance.router;
+
+    // TODO: (ericjim): remove if-block and function
+    // once we no longer support the old router.
+    this.showRoutes(
+      IS_OLD_ROUTER_HACK(router)
+        ? ParseRouter.parseRoutes(router.root.registry)
+        : parseConfigRoutes(router));
   }
 
   _traverseElements(compEl: any, isRoot: boolean, idx: string, cb: Function) {
-
     if (compEl.providerTokens.length > 0) {
-      this._tree[idx] = 0;
+      this.tree[idx] = 0;
       cb(compEl, isRoot, idx);
     }
 
@@ -106,8 +118,8 @@ export class Angular2Adapter extends BaseAdapter {
       .forEach((child: any, childIdx: number) => {
         let index: string = idx;
         if (child.providerTokens.length > 0) {
-          index = [idx, this._tree[idx]].join('.');
-          this._tree[idx]++;
+          index = [idx, this.tree[idx]].join('.');
+          this.tree[idx]++;
         }
 
         this._traverseElements(child,
@@ -194,7 +206,6 @@ export class Angular2Adapter extends BaseAdapter {
   };
 
   _getComponentInjectors(debugEl: any, dependencies: any) {
-
     const componentName = this._getComponentName(debugEl);
     const injectors = [];
     for (let i = 0; i < debugEl.providerTokens.length; i++) {
@@ -285,16 +296,6 @@ export class Angular2Adapter extends BaseAdapter {
     return componentName;
   }
 
-  _isSerializable(val: any) {
-    try {
-      JSON.stringify(val);
-    } catch (error) {
-      return false;
-    }
-
-    return true;
-  }
-
   _isComponentExcluded(debugEl: any): boolean {
     // skipping the option to improve performance
     // It adds no value displaying node elements
@@ -302,25 +303,16 @@ export class Angular2Adapter extends BaseAdapter {
   }
 
   _getComponentState(debugEl: any): Object {
-    let state;
     if (debugEl.componentInstance) {
-      state = {};
-      const instance = this._getComponentInstance(debugEl);
-      Object.keys(instance).forEach((key) => {
-        const val = instance[key];
-
-        if (!this._isSerializable(val)) {
-          return;
-        }
-
-        state[key] = val;
-      });
+      return this._getComponentInstance(debugEl);
     }
-    return state;
+
+    return {};
   }
 
   _getComponentInput(debugEl: any): Object[] {
     let inputs = [];
+
     if (debugEl.componentInstance) {
       // Get inputs from @Component({ inputs: [] })
       const metadata = Reflect.getOwnMetadata

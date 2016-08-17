@@ -14,13 +14,15 @@ import PropertyValue from '../property-value/property-value';
 
 @Component({
   selector: 'bt-component-info',
-  templateUrl: '/src/frontend/components/component-info/component-info.html',
+  template: require('./component-info.html'),
   directives: [RenderState, Accordion, Dependency, PropertyValue]
 })
 export default class ComponentInfo {
   @Input() node: any;
-  private propertyTree: string = '';
-  private _input: Array<any>;
+
+  private path = new Array<string>();
+
+  private input: Array<any>;
 
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef,
@@ -30,7 +32,7 @@ export default class ComponentInfo {
   ngOnChanges(change: any) {
     if (this.node) {
       this.normalizeInput();
-      setTimeout(() => this.displayTree());
+      this.displayTree();
     }
   }
 
@@ -54,11 +56,12 @@ export default class ComponentInfo {
   }
 
   normalizeInput(): void {
-    this._input = [];
+    this.input = [];
+
     if (this.node.input) {
       this.node.input.forEach(elem => {
         let [key, value] = elem.split(':');
-        this._input.push({
+        this.input.push({
           key: key,
           value: (value ? value.trim() : '')
         });
@@ -67,18 +70,8 @@ export default class ComponentInfo {
   }
 
   isJson(data: string): boolean {
-    let isJson: boolean = false;
-    if (data.indexOf('{') !== 0) {
-      isJson = false;
-    } else {
-      try {
-        JSON.parse(data);
-        isJson = true;
-      } catch (ex) {
-        console.log(ex);
-      }
-    }
-    return isJson;
+    return /^([\s\[\{]*(?:"(?:\\.|[^"])*"|-?\d[\d\.]*(?:[Ee][+-]?\d+)?|null|true|false|)[\s\]\}]*(?:,|:|$))+$/
+      .test(data);
   }
 
   fireEvent(output: string, param: any) {

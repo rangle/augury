@@ -14,7 +14,7 @@ import {ComponentDataStore}
 
 @Component({
   selector: 'augury-header',
-  templateUrl: 'src/frontend/components/header/header.html',
+  template: require('./header.html'),
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   }

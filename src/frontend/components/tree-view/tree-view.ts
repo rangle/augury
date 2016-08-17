@@ -5,7 +5,7 @@ import {ComponentTree} from '../component-tree/component-tree';
 
 @Component({
   selector: 'bt-tree-view',
-  templateUrl: 'src/frontend/components/tree-view/tree-view.html',
+  template: require('./tree-view.html'),
   directives: [NgFor, NodeItem, ComponentTree]
 })
 /**

@@ -1,15 +1,15 @@
 export class ParseUtils {
-
-  getNodesMap(tree: any) {
+  getNodesMap(tree) {
     return this
       .flatten(tree)
       .reduce((previousValue, node) => {
-        previousValue[node.id] = JSON.stringify(node);
+        previousValue[node.id] = node;
         return previousValue;
-      }, {});
+      },
+      {});
   }
 
-  getChangedNodes(previousTree: any, newTree: any) {
+  getChangedNodes(previousTree, newTree) {
     const flattenedOldData = this.getNodesMap(previousTree);
 
     return this
@@ -17,11 +17,12 @@ export class ParseUtils {
       .reduce((x, n) => {
         if (!flattenedOldData[n.id]) {
           x.push(n.id);
-        } else if (flattenedOldData[n.id] !== JSON.stringify(n)) {
+        } else if (flattenedOldData[n.id] !== n) {
           x.push(n.id);
         }
         return x;
-      }, []);
+      },
+      []);
   }
 
   getParentNodeIds(nodeId: string) {
