@@ -1,5 +1,5 @@
-import {dispatch} from '../channel/dispatch';
-import {MessageFactory} from '../channel/message-factory';
+import {browserDispatch} from '../communication/message-dispatch';
+import {MessageFactory} from '../communication/message-factory';
 
 declare const getAllAngularTestabilities: Function;
 
@@ -7,7 +7,7 @@ let unsubscribe: () => void;
 
 const handler = () => {
   if (typeof getAllAngularTestabilities === 'function') {
-    dispatch(MessageFactory.frameworkLoaded());
+    browserDispatch(MessageFactory.frameworkLoaded());
 
     if (unsubscribe) {
       unsubscribe();

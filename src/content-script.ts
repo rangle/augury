@@ -1,10 +1,17 @@
 import {
+  Message,
   MessageFactory,
   MessageType,
-  dispatch,
-  sendToExtension,
-  subscribeOnce,
-} from './channel';
+  browserDispatch,
+  browserSubscribe,
+  browserSubscribeDispatch,
+  browserSubscribeOnce,
+} from './communication';
+
+import {
+  send,
+  subscribe,
+} from './backend/connection';
 
 const scriptInjection = new Set<string>();
 
@@ -21,22 +28,33 @@ const injectScript = (path: string) => {
   scriptInjection.add(path);
 };
 
-subscribeOnce(MessageType.FrameworkLoaded,
+browserSubscribeOnce(MessageType.FrameworkLoaded,
   () => {
     injectScript('build/backend.js')
     return true;
   });
 
-sendToExtension(MessageFactory.initialize())
-  .then(response => {
-    injectScript('build/ng-validate.js');
+browserSubscribeDispatch(message => {
+  if (message.messageType === MessageType.DispatchWrapper) {
+    send(message.content)
+      .then(response => {
+        browserDispatch(MessageFactory.response(message, response));
+      })
+      .catch(error => {
+        browserDispatch(MessageFactory.response(message, error));
+      });
+  }
+});
+
+subscribe((message: Message<any>) => browserDispatch(message));
+
+send(MessageFactory.initialize())
+  .then((response: any) => {
+    if (response.extensionId) {
+      injectScript('build/ng-validate.js');
+    }
   })
   .catch(error => {
     console.error('Augury initialization has failed');
     console.error(error);
-  });
-
-chrome.runtime.onMessage.addListener(
-  (message, sender, sendResponse) => {
-    sendResponse(dispatch(message));
   });

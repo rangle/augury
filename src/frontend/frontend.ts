@@ -4,6 +4,12 @@ import {
   NgZone,
 } from '@angular/core';
 
+import {
+  Message,
+  MessageFactory,
+  MessageType,
+} from '../communication';
+
 import {Connection} from './channel/connection';
 import {UserActions} from './actions/user-actions/user-actions';
 import {UserActionType} from './actions/action-constants';
@@ -62,6 +68,7 @@ class App {
   private theme: string;
 
   constructor(
+    private connection: Connection,
     private userActions: UserActions,
     private ngZone: NgZone,
     private parseUtils: ParseUtils
@@ -74,7 +81,25 @@ class App {
       });
   }
 
-  tabChange(index: number) {
+  private ngOnInit() {
+    this.connection.connect();
+
+    this.connection.subscribe(msg => this.process(msg));
+
+    this.connection.send<void, void>(MessageFactory.bootstrap())
+      .then(() => {
+        debugger;
+      })
+      .catch(error => {
+        debugger;
+      });
+  }
+
+  private ngOnDestroy() {
+    this.connection.close();
+  }
+
+  private tabChange(index: number) {
     this.selectedTabIndex = index;
     if (index === 1) {
       this.userActions.renderRouterTree();
@@ -84,10 +109,24 @@ class App {
     }
   }
 
-  themeChanged(newTheme: string): void {
+  private themeChanged(newTheme: string): void {
     this.theme = newTheme;
     // Set the new theme
     chrome.storage.sync.set({ theme: newTheme });
+  }
+
+  private process(msg: Message<any>) {
+    switch (msg.messageType) {
+      case MessageType.CompleteTree:
+        debugger;
+        return true;
+      case MessageType.TreeDiff:
+        debugger;
+        return true;
+      default:
+        debugger;
+        break;
+    }
   }
 }
 

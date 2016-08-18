@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import {Connection} from '../../channel/connection';
+
 import {UserActionType} from '../action-constants';
 
 @Injectable()
