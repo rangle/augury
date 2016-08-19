@@ -1,8 +1,8 @@
 <header class="flex bg-darken-1 bg-panel border-bottom pt0 pb0">
   <div class="flex tab-menu-title primary-color px2 py2 border-transparent mt1"
-    [ngClass]="{'bg-white border-top border-right border-left selected-color': t.selected}"
-    *ngFor="let t of tabs; let i = index"
-    (click)="tabClick(i)">
+      [ngClass]="{'bg-white border-top border-right border-left selected-color': t.selected}"
+      *ngFor="let t of tabs; let i = index"
+      (click)="onSelect(t)">
     {{t.title}}
     </div>
 </header>

@@ -1,20 +1,20 @@
 <bt-tab-menu
   [tabs]="tabs"
-  (tabChange)="tabClicked($event)"
-  [selectedTabIndex]="selectedTabIndex">
+  (tabChange)="onTabSelectionChanged($event)"
+  [selectedTab]="selectedTab">
   </bt-tab-menu>
 
 <bt-tree-view
-  [hidden]="selectedTabIndex != 0"
-  [ngClass]="{flex: selectedTabIndex == 0}"
+  [hidden]="selectedTab != Tab.ComponentTree"
+  [ngClass]="{flex: selectedTab === Tab.ComponentTree}"
   [changedNodes]="changedNodes"
   [selectedNode]="selectedNode"
   [closedNodes]="closedNodes"
   [tree]="tree">
-  </bt-tree-view>
+</bt-tree-view>
 
 <bt-router-tree class="overflow-scroll flex-auto"
   [theme]="theme"
-  [hidden]="selectedTabIndex != 1"
+  [hidden]="selectedTab !== Tab.RouterTree"
   [routerTree]="routerTree">
-  </bt-router-tree>
+</bt-router-tree>

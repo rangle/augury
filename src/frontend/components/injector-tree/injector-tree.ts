@@ -11,6 +11,8 @@ import {ARROW_TYPES, NODE_TYPES, NODE_COLORS, NODE_STROKE_COLORS,
 
 import {ParseUtils} from '../../utils/parse-utils';
 
+import {Theme} from '../../state';
+
 @Component({
   selector: 'bt-injector-tree',
   encapsulation: ViewEncapsulation.None,
@@ -26,12 +28,12 @@ import {ParseUtils} from '../../utils/parse-utils';
     }
   `]
 })
-export default class InjectorTree implements OnChanges {
+export class InjectorTree implements OnChanges {
+  @Input() tree;
+  @Input() selectedNode;
+  @Input() theme: Theme;
 
-  @Input() tree: any;
-  @Input() selectedNode: any;
-  @Input() theme: string;
-  @Output() selectNode: EventEmitter<any> = new EventEmitter<any>();
+  @Output() selectComponent: EventEmitter<any> = new EventEmitter<any>();
 
   private parentHierarchy;
   private parentHierarchyDisplay;
@@ -44,8 +46,8 @@ export default class InjectorTree implements OnChanges {
     private parseUtils: ParseUtils
   ) { }
 
-  selectComponent(component: any): void {
-    this.selectNode.emit(component);
+  private onSelectComponent(component: any): void {
+    this.selectComponent.emit(component);
   }
 
   ngOnChanges() {
@@ -96,14 +98,16 @@ export default class InjectorTree implements OnChanges {
     this.graphUtils.addCircle(this.svg, 8, 36, 8,
       NODE_COLORS[1], NODE_STROKE_COLORS[1]);
 
-    this.graphUtils.addText(this.svg, 20, 16, 'Component', this.theme);
-    this.graphUtils.addText(this.svg, 20, 40, 'Service', this.theme);
+    const themeClass = this.getThemeClass();
+
+    this.graphUtils.addText(this.svg, 20, 16, 'Component', themeClass);
+    this.graphUtils.addText(this.svg, 20, 40, 'Service', themeClass);
     this.graphUtils.addText(this.svg, 20, 64,
-      'Component to Component', this.theme);
+      'Component to Component', themeClass);
     this.graphUtils.addText(this.svg, 20, 88,
-      'Component to Service', this.theme);
+      'Component to Service', themeClass);
     this.graphUtils.addText(this.svg, 20, 112,
-      'Component to Dependency', this.theme);
+      'Component to Dependency', themeClass);
 
     this.graphUtils.addLine(this.svg, 0, 60, 16, 60, '');
     this.graphUtils.addLine(this.svg, 0, 84, 16, 84, 'stroke: #2CA02C;');
@@ -133,13 +137,16 @@ export default class InjectorTree implements OnChanges {
     title: any, positions: any, color: string, stroke: string) {
       this.graphUtils.addCircle(this.svg, posX, posY, 8, color, stroke);
       this.graphUtils.addText(this.svg, posX - 6, posY - 15,
-        title, this.theme);
+        title, this.getThemeClass());
   }
 
   private render() {
     if (!this.flattenedTree) {
       return;
     }
+
+    const themeClass = this.getThemeClass();
+
     let posX, posY, x1, y1, x2, y2;
     const positions = {};
 
@@ -210,7 +217,7 @@ export default class InjectorTree implements OnChanges {
         this.graphUtils.addCircle(this.svg, posX, posY, 8,
           NODE_COLORS[2], NODE_STROKE_COLORS[2]);
         this.graphUtils.addText(this.svg, posX - 6, posY - 15,
-          injector, this.theme);
+          injector, themeClass);
 
         x1 = posX - NODE_INCREMENT_X + 10;
         y1 = posY;
@@ -255,5 +262,15 @@ export default class InjectorTree implements OnChanges {
       .style('opacity', '0.8');
 
     // this.addLegends();
+  }
+
+  private getThemeClass() {
+    switch (this.theme) {
+      case Theme.Light:
+      default:
+        return 'light';
+      case Theme.Dark:
+        return 'dark';
+    }
   }
 }

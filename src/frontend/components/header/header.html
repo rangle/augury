@@ -40,31 +40,32 @@
           </div>
         </div>
       </div>
-
-      <!-- SETTING -->
       <div class="icon setting" id="augury-theme-menu-button"
-        (click)="openSettings()"></div>
+        (click)="onOpenSettings()"></div>
     </div>
   </header>
 
   <form>
-    <ul id="augury-theme-menu" class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" [ngClass]="{'setting-dropdown--dark':theme==='dark'}" *ngIf="settingOpened">
+    <ul id="augury-theme-menu"
+        class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0"
+        [ngClass]="{'setting-dropdown--dark': theme === Theme.Dark}"
+        *ngIf="settingOpened">
       <li class="p3 border-bottom border-dark">
         <input type="radio"
           #lightTheme
-          [checked]="theme==='light'"
-          (change)="themeChange('light', lightTheme.checked)"
-          name="theme"
-          value="light">
+          [checked]="theme === Theme.Light"
+          [value]="Theme.Light"
+          (change)="onThemeChange(Theme.Light, lightTheme.checked)"
+          name="theme">
         <label for="light">Light Mode</label>
       </li>
       <li class="p3">
         <input type="radio"
           #darkTheme
-          [checked]="theme==='dark'"
-          (change)="themeChange('dark', darkTheme.checked)"
-          name="theme"
-          value="dark">
+          [checked]="theme === Theme.Dark"
+          [value]="Theme.Dark"
+          (change)="onThemeChange(Theme.Dark, darkTheme.checked)"
+          name="theme" />
         <label for="dark">Dark Mode</label>
       </li>
     </ul>

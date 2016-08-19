@@ -4,36 +4,51 @@ import {
   EventEmitter,
   Input
 } from '@angular/core';
-import TabMenu from '../tab-menu/tab-menu';
+
 import {TreeView} from '../tree-view/tree-view';
 import {RouterTree} from '../router-tree/router-tree';
+import {
+  TabDescription,
+  TabMenu,
+} from '../tab-menu/tab-menu';
+import {
+  Tab,
+  Theme,
+} from '../../state';
 
 @Component({
   selector: 'bt-app-trees',
-  directives: [TabMenu, TreeView, RouterTree],
+  directives: [
+    TabMenu,
+    TreeView,
+    RouterTree,
+  ],
   template: require('./app-trees.html'),
 })
 export default class AppTrees {
-  @Input() theme: string;
-  @Input() tree: Array<any>;
+  private Tab = Tab;
+
+  @Input() theme: Theme;
+  @Input() tree: Array<Node>;
   @Input() routerTree: any;
-  @Input() selectedTabIndex: number;
+  @Input() selectedTab: Tab;
   @Input() selectedNode: Node;
   @Input() changedNodes: Array<any>;
   @Input() closedNodes: Array<any>;
 
-  @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() tabChange: EventEmitter<Tab> = new EventEmitter<Tab>();
 
   private tabs = [{
     title: 'Component Tree',
-    selected: false
+    selected: false,
+    tab: Tab.ComponentTree,
   }, {
     title: 'Router Tree',
-    selected: false
+    selected: false,
+    tab: Tab.RouterTree,
   }];
 
-  tabClicked(index: number): void {
-    this.tabChange.emit(index);
+  onTabSelectionChanged(index: number): void {
+    this.tabChange.emit(this.tabs[index].tab);
   }
-
 }

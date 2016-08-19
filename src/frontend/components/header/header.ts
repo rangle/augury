@@ -9,6 +9,8 @@ import {
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 
+import {Theme} from '../../state';
+
 @Component({
   selector: 'augury-header',
   template: require('./header.html'),
@@ -17,15 +19,17 @@ import {UserActions} from '../../actions/user-actions/user-actions';
   }
 })
 export class Header {
+  private Theme = Theme;
 
   @Input() searchDisabled: boolean;
-  @Input() theme: string;
+  @Input() theme: Theme;
+
   private searchIndex: number = 0;
   private totalSearchCount: number = 0;
   private query: string = '';
   private settingOpened: boolean = false;
 
-  @Output() newTheme: EventEmitter<string> = new EventEmitter<string>();
+  @Output() newTheme: EventEmitter<Theme> = new EventEmitter<Theme>();
 
   constructor(
     private userActions: UserActions,
@@ -48,9 +52,10 @@ export class Header {
     if (!clickedComponent) {
       return;
     }
-    let menuElement = this.elementRef.nativeElement
+    const menuElement = this.elementRef.nativeElement
       .querySelector('#augury-theme-menu');
-    let menuButtonElement = this.elementRef.nativeElement
+
+    const menuButtonElement = this.elementRef.nativeElement
       .querySelector('#augury-theme-menu-button');
 
     // If click was not inside menu button or menu, close the menu.
@@ -62,24 +67,20 @@ export class Header {
     }
   }
 
-  openSettings() {
+  onOpenSettings() {
     this.settingOpened = !this.settingOpened;
   }
 
-  themeChange(theme, selected) {
+  onThemeChange(theme: Theme, selected: boolean) {
     if (selected) {
       this.theme = theme;
       this.newTheme.emit(this.theme);
     }
+
     this.resetTheme();
   }
 
-  /**
-   * Query for a node
-   * @param  {String} query
-   */
   onKey(event, isNext) {
-
     if (this.query.length === 0) {
       return;
     }
@@ -106,5 +107,4 @@ export class Header {
     this.userActions.searchNode({ query: this.query, index: this.searchIndex });
     this.ngZone.run(() => undefined);
   }
-
 }

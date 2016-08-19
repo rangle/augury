@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {UserActionType} from '../../actions/action-constants';
+import {Node} from '../../../tree';
 
 @Component({
   selector: 'bt-dependency',
@@ -8,6 +9,7 @@ import {UserActionType} from '../../actions/action-constants';
 })
 export default class Dependency {
   @Input() dependencies;
+
   private currDep: string = '';
   private prevDep: Array<string> = [];
   private depComps: Array<any> = [];
@@ -47,8 +49,8 @@ export default class Dependency {
     }
   }
 
-  selectNode(node: any) {
-    this.userActions.selectNode({ node: node });
+  selectComponent(node: Node) {
+    this.userActions.selectComponent(node);
   }
 
   reset() {

@@ -16,4 +16,7 @@ export enum MessageType {
 
   /// Transmit the delta of two trees
   TreeDiff,
+
+  /// Select a component in the tree view
+  SelectComponent,
 }

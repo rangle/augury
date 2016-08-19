@@ -17,7 +17,7 @@ import PropertyValue from '../property-value/property-value';
   template: require('./component-info.html'),
   directives: [RenderState, Accordion, Dependency, PropertyValue]
 })
-export default class ComponentInfo {
+export class ComponentInfo {
   @Input() node: any;
 
   private path = new Array<string>();

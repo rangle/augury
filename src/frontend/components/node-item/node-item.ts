@@ -75,7 +75,8 @@ export class NodeItem extends Highlightable {
    * @param  {Object} $event
    */
   onClick($event) {
-    this.userActions.selectNode({ node: this.node });
+    this.userActions.selectComponent(this.node);
+
     $event.preventDefault();
     $event.stopPropagation();
   }

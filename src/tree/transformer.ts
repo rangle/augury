@@ -63,6 +63,17 @@ export const transform = (element: Source, cache: Cache): Node => {
 
     const injectors = element.providerTokens.map(t => t.name);
 
+    const dependencies = () => {
+      const parameters = Reflect.getOwnMetadata('design:paramtypes',
+        element.componentInstance.constructor) || [];
+
+      return parameters.map(param => param.name);
+    };
+
+    const input = getComponentInputs(element);
+
+    const output = getComponentOutputs(element);
+
     const node: Node = {
       id: getUniqueIdentifier(),
       attributes: cloneDeep(element.attributes),
@@ -70,11 +81,14 @@ export const transform = (element: Source, cache: Cache): Node => {
       classes: cloneDeep(element.classes),
       styles: cloneDeep(element.styles),
       injectors,
+      input,
+      output,
       name: name(),
       listeners,
       properties: cloneDeep(element.properties),
       componentInstance,
       context,
+      dependencies: dependencies(),
       source: element.source,
       nativeElement: 'insert-xpath-here',
     };
@@ -123,4 +137,57 @@ export const componentChildren = (element: Source): Array<Source> => {
     return [element];
   }
   return recursiveSearch(element.children);
+}
+
+const getComponentInputs = (element: Source) => {
+  const metadata = Reflect.getOwnMetadata('annotations',
+    element.componentInstance.constructor);
+
+  const inputs =
+    (metadata && metadata.length > 0 && metadata[0].inputs) || [];
+
+  const propMetadata = Reflect.getOwnMetadata('propMetadata',
+    element.componentInstance.constructor);
+  if (propMetadata == null) {
+    return inputs;
+  }
+
+  for (const key of Object.keys(propMetadata)) {
+    for (const meta of propMetadata[key]) {
+      if (meta.constructor.name === 'InputMetadata') {
+        if (inputs.indexOf(key) < 0) { // avoid duplicates
+          if (meta.bindingPropertyName) {
+            inputs.push(`${key}: bound to ${meta.bindingPropertyName}`);
+          } else {
+            inputs.push(key);
+          }
+        }
+      }
+    }
+  }
+};
+
+const getComponentOutputs = (element: Source) => {
+  const metadata = Reflect.getOwnMetadata('annotations',
+    element.componentInstance.constructor);
+
+  const outputs = (metadata && metadata.length > 0 && metadata[0].outputs) || [];
+
+  const propMetadata = Reflect.getOwnMetadata('propMetadata',
+    element.componentInstance.constructor);
+  if (propMetadata == null) {
+    return outputs;
+  }
+
+  for (const key of Object.keys(propMetadata)) {
+    for (const meta of propMetadata[key]) {
+      if (meta.constructor.name === 'OutputMetadata') {
+        if (outputs.indexOf(key) < 0) { // avoid duplicates
+          outputs.push(key);
+        }
+      }
+    }
+  }
+
+  return outputs;
 }

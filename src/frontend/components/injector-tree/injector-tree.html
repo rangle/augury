@@ -1,10 +1,8 @@
 <div class="flex flex-column overflow-scroll col-12">
-  <div class="bg-panel border-bottom py3 px3 m0"
-    [hidden]="selectedNode">
-    <h4 class="primary-color pt1 pb2 m0"
-      [hidden]="selectedNode">
-      No Component Selected
-      </h4>
+  <div class="bg-panel border-bottom py3 px3 m0" [hidden]="selectedNode">
+    <h4 class="primary-color pt1 pb2 m0" [hidden]="selectedNode">
+      No component selected
+    </h4>
   </div>
 
   <div class="flex-column monospace pl4 pt2"
@@ -17,7 +15,7 @@
       <span *ngFor="let node of parentHierarchyDisplay; let i = index">
         <a href="#"
           class="node-item-property"
-          (click)="selectComponent(node)">
+          (click)="onSelectComponent(node)">
           {{node.name}}
           </a>
         <span class="primary-color"

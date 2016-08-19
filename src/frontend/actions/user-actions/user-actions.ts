@@ -4,24 +4,32 @@ import {Connection} from '../../channel/connection';
 
 import {UserActionType} from '../action-constants';
 
+import {
+  ExpansionState,
+  NodeRenderState,
+} from '../../state';
+
+import {Node} from '../../../tree';
+
+import {MessageFactory} from '../../../communication';
+
 @Injectable()
 export class UserActions {
-  constructor(private connection: Connection) {}
+  constructor(
+    private connection: Connection,
+    private expansionState: NodeRenderState
+  ) {}
 
-  /**
-   * Select a node to be highlighted
-   * @param  {Object} options.node
-   */
-  selectNode({ node }) {
-    // this.dispatcher.messageBus.next({
-    //   actionType: UserActionType.SELECT_NODE,
-    //   node
-    // });
+  collapseComponent(node: Node) {
+    this.expansionState.setExpansionState(node, ExpansionState.Collapsed);
+  }
 
-    // this.messagingService.sendMessageToBackend({
-    //   actionType: UserActionType.SELECT_NODE,
-    //   node
-    // });
+  expandComponent(node: Node) {
+    this.expansionState.setExpansionState(node, ExpansionState.Expanded);
+  }
+
+  selectComponent(node: Node): Promise<void> {
+    return <Promise<void>> <any> this.connection.send(MessageFactory.selectComponent(node))
   }
 
   /**
@@ -64,21 +72,6 @@ export class UserActions {
     // this.dispatcher.messageBus.next({
     //   actionType: UserActionType.OPEN_CLOSE_TREE,
     //   node
-    // });
-  }
-
-  /**
-   * Update the node state after re rendering the tree.
-   * Select the previously selected node and
-   * Preserve state of previously Closed Component.
-   * @param  {Object} options.openedNodes list of opened Nodes id's
-   * @param  {Object} options.selectedNode currently selectedNode
-   */
-  updateNodeState({openedNodes, selectedNode}) {
-    // this.dispatcher.messageBus.next({
-    //   actionType: UserActionType.UPDATE_NODE_STATE,
-    //   openedNodes,
-    //   selectedNode
     // });
   }
 

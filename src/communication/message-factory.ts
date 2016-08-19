@@ -13,6 +13,7 @@ import {getUniqueIdentifier} from './identifier';
 import {
   Change,
   MutableTree,
+  Node,
 } from '../tree';
 
 import {
@@ -50,6 +51,16 @@ export abstract class MessageFactory {
     });
   }
 
+  static selectComponent(node: Node): Message<string> {
+    return create({
+      messageType: MessageType.SelectComponent,
+      content: node.id,
+    });
+  }
+
+  /// Wrap a message in a DispatchWrapper so that we know to post it to the browser event
+  /// queue instead of posting it to the Chrome communication channel. A message wrapped
+  /// in this way takes a different path than a normal message.
   static dispatchWrapper<T>(message: Message<T>): Message<Message<T>> {
     return create({
       messageType: MessageType.DispatchWrapper,
