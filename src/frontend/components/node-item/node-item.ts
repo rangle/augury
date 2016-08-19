@@ -7,6 +7,7 @@ import {
 
 import {Highlightable} from '../highlightable';
 import {UserActions} from '../../actions/user-actions/user-actions';
+import {Node} from '../../../tree';
 
 @Component({
   selector: 'bt-node-item',
@@ -23,10 +24,6 @@ export class NodeItem extends Highlightable {
 
   private collapsed: any;
   private isSelected: boolean = false;
-
-  // Perf: if the node was already rendered keep it in the component tree
-  // even if it is hidden.
-  private wasRendered: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -136,9 +133,6 @@ export class NodeItem extends Highlightable {
     this.node.isOpen = !this.node.isOpen;
     this.userActions.openCloseNode({ node: this.node });
 
-    // if the disclosure arrow on the component node was clicked
-    // it was rendered.
-    this.wasRendered = true;
     $event.preventDefault();
     $event.stopPropagation();
   }
@@ -159,7 +153,5 @@ export class NodeItem extends Highlightable {
     this.changedNodes.splice(0, this.changedNodes.length);
   }
 
-  trackById(index: number, node: any): string {
-    return node.id;
-  }
+  trackById = (index: number, node: Node) => node.id;
 }

@@ -15,7 +15,7 @@
     <div class="inline" [innerHTML]="getNodeDetails(node)"></div>
   </div>
 
-  <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
+  <div class="border-box pl4" *ngIf="node.isOpen">
     <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
       [changedNodes]="changedNodes"
       [hidden]="showChildren()"

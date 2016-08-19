@@ -23,7 +23,7 @@ export const transform = (element: Source, cache: Cache): Node => {
     return null;
   }
 
-  const getOrCreate = <T>(key, creator: () => T) => {
+  const load = <T>(key, creator: () => T) => {
     if (key == null) {
       return null;
     }
@@ -39,27 +39,25 @@ export const transform = (element: Source, cache: Cache): Node => {
 
   const clone = object => deserialize(serialize(object));
 
-  return getOrCreate<Node>(element, () => {
+  return load<Node>(element, () => {
     const componentInstance =
-      getOrCreate(element.componentInstance, () => clone(element.componentInstance));
+      load(element.componentInstance, () => clone(element.componentInstance));
 
-    const context = getOrCreate(element.context, () => clone(element.context));
+    const context = load(element.context, () => clone(element.context));
 
     const properties = cloneDeep(element.properties);
     const attributes = cloneDeep(element.attributes);
     const classes = cloneDeep(element.classes);
     const styles = cloneDeep(element.styles);
 
-    const children = element.children.map(c => this.transform(c, cache));
-
     const listeners = element.listeners.map(l => cloneDeep(l));
 
-    return {
+    const node = {
       id: getUniqueIdentifier(),
       attributes,
+      children: null,
       classes,
       styles,
-      children,
       name: element.name,
       listeners,
       properties,
@@ -68,5 +66,49 @@ export const transform = (element: Source, cache: Cache): Node => {
       source: element.source,
       nativeElement: 'insert-xpath-here',
     };
+
+    node.children = [];
+
+    for (const child of element.children) {
+      componentChildren(child).forEach(c => node.children.push(transform(c, cache)));
+    }
+
+    return node;
   });
+}
+
+const recursiveComponentSearch = (element: Source): Array<Source> => {
+  if (element.componentInstance == null) {
+    const children = new Array<Source>();
+
+    const concat = (c: Array<Source>) => children.concat(c);
+
+    element.children.forEach(c => concat(recursiveComponentSearch(c)));
+  }
+  else {
+    return [element];
+  }
+};
+
+export const recursiveSearch = (children: Source[]): Array<Source> => {
+  const result = new Array<Source>();
+
+  for (const c of children) {
+    if (c.componentInstance) {
+      result.push(c);
+    }
+    else {
+      Array.prototype.splice.apply(result,
+        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children)));
+    }
+  }
+
+  return result;
+}
+
+export const componentChildren = (element: Source): Array<Source> => {
+  if (element.componentInstance) {
+    return [element];
+  }
+  return recursiveSearch(element.children);
 }

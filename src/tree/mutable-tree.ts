@@ -4,13 +4,7 @@ import {Node} from './node';
 import {transform} from './transformer';
 
 export const transformToTree = (root) => {
-  const cache = new Map();
-  try {
-    return transform(root, cache);
-  }
-  finally {
-    cache.clear();
-  }
+  return transform(root, new WeakMap());
 }
 
 export const createTree = (root) => {

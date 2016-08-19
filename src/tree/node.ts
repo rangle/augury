@@ -4,6 +4,7 @@ export interface EventListener {
 }
 
 export interface Node {
+  id: string;
   nativeElement: string;
   listeners: Array<EventListener>;
   componentInstance;
