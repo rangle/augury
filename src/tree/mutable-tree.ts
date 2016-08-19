@@ -26,7 +26,7 @@ export const createTree = (root) => {
 const recurse = (node: Node, fn: (node: Node) => void) => {
   fn(node);
 
-  node.children.forEach(n => fn(n));
+  node.children.forEach(n => recurse(n, fn));
 }
 
 export class MutableTree {

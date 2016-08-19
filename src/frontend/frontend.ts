@@ -152,6 +152,7 @@ class App {
 
       this.ngZone.run(() => {
         this.tree.recurse((n: any) => n.isOpen = true);
+        debugger;
 
         this.changeDetector.detectChanges();
       });
