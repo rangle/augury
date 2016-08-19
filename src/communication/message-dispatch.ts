@@ -70,15 +70,11 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
 export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
-export const browserDispatch = <T>(message: Message<T>) => window.postMessage(serialize(message), '*');
+export const browserDispatch = <T>(message: Message<T>) => window.postMessage(message, '*');
 
 window.addEventListener('message',
   (event: MessageEvent) => {
-    if (typeof event.data !== 'string') {
-      return;
-    }
-
-    const msg = deserialize(event.data);
+    const msg = event.data;
 
     if (checkSource(msg) === false) {
       return;

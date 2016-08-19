@@ -18,7 +18,6 @@ export class ComponentTree {
   @Input() changedNodes: Array<Node>;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
 
   private prevSelectedNode: Element;
 

@@ -37,13 +37,15 @@ export const transform = (element: Source, cache: Cache): Node => {
     return value;
   };
 
-  const clone = object => deserialize(serialize(object));
+  // const functionRepresentation = object => serialize(object);
+  const functionRepresentation = object => object;
 
   return load<Node>(element, () => {
-    const componentInstance =
-      load(element.componentInstance, () => clone(element.componentInstance));
+    const componentInstance = load(element.componentInstance,
+      () => functionRepresentation(element.componentInstance));
 
-    const context = load(element.context, () => clone(element.context));
+    const context = load(element.context,
+      () => functionRepresentation(element.context));
 
     const properties = cloneDeep(element.properties);
     const attributes = cloneDeep(element.attributes);
@@ -52,13 +54,25 @@ export const transform = (element: Source, cache: Cache): Node => {
 
     const listeners = element.listeners.map(l => cloneDeep(l));
 
+    const name = () => {
+      if (element.componentInstance.constructor) {
+        return element.componentInstance.constructor.name;
+      }
+      else if (element.name) {
+        return element.name;
+      }
+      else {
+        return element.nativeElement.tagName.toLowerCase();
+      }
+    }
+
     const node = {
       id: getUniqueIdentifier(),
       attributes,
       children: null,
       classes,
       styles,
-      name: element.name,
+      name: name(),
       listeners,
       properties,
       componentInstance,

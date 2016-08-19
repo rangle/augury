@@ -56,7 +56,6 @@ require('!style!css!postcss!../styles/app.css');
             [routerTree]="routerTree"
             [theme]="theme"
             [tree]="treeRef"
-            [allowedComponentTreeDepth]="3"
             (tabChange)="tabChange($event)">
           </bt-app-trees>
         </div>
@@ -150,7 +149,12 @@ class App {
       sendResponse: (response: MessageResponse<any>) => void) {
     const processed = () => {
       sendResponse(MessageFactory.response(msg, {processed: true}));
-      this.changeDetector.detectChanges();
+
+      this.ngZone.run(() => {
+        this.tree.recurse((n: any) => n.isOpen = true);
+
+        this.changeDetector.detectChanges();
+      });
     }
 
     switch (msg.messageType) {

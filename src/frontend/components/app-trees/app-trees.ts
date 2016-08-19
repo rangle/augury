@@ -21,7 +21,6 @@ export default class AppTrees {
   @Input() selectedNode: Node;
   @Input() changedNodes: Array<any>;
   @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
 
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
 

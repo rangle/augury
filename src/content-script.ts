@@ -50,11 +50,6 @@ subscribe((message: Message<any>) => browserDispatch(message));
 
 send(MessageFactory.initialize())
   .then((response: {extensionId: string}) => {
-    const script = document.createElement('script');
-    script.text = `window.auguryExtensionId = "${response.extensionId}";`
-    document.documentElement.appendChild(script);
-    script.parentNode.removeChild(script);
-
     injectScript('build/ng-validate.js');
   })
   .catch(error => {

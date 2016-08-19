@@ -8,7 +8,7 @@
       [ngClass]="{
         expander: true,
         rotate90: showChildren(),
-        invisible: !node.children
+        invisible: node.children == null || node.children.length === 0
       }"
       (click)="expandTree($event)">
     </div>
@@ -21,7 +21,6 @@
       [hidden]="showChildren()"
       [selectedNode]="selectedNode"
       [closedNodes]="closedNodes"
-      [allowedComponentTreeDepth]="allowedComponentTreeDepth"
       [node]="node">
     </bt-node-item>
   </div>

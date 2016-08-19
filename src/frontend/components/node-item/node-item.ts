@@ -20,7 +20,6 @@ export class NodeItem extends Highlightable {
   @Input() changedNodes: any[];
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
 
   private collapsed: any;
   private isSelected: boolean = false;
@@ -32,27 +31,7 @@ export class NodeItem extends Highlightable {
     super(changeDetector, () => this.changedNodes.indexOf(this.node.id) > 0);
   }
 
-  ngOnInit() {
-    // if the tree is too deep stop opening and rendering the tree.
-    this.node.isOpen = this.isDepthLimitReached() ? false : this.node.isOpen;
-
-    // the deeper the rendering goes, the closer the rendering comes to
-    // reaching the limit. Pass this value recursively to sub nodes.
-    this.allowedComponentTreeDepth -= 1;
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
-  // Return true if the component tree should no longer be opening
-  // its nodes by default, if false keep expanding the tree.
-  isDepthLimitReached(): boolean {
-    return this.allowedComponentTreeDepth <= 0 && !this.node.overrideDepthLimit;
-  }
-
   getNodeDetails(node) {
-
     let html = '';
     html += `<p class="node-item-name">${node.name}</p>`;
     if (node.description && node.description.length) {

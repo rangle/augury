@@ -13,5 +13,4 @@ export class TreeView {
   @Input() changedNodes: Array<any>;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
 }
