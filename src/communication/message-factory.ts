@@ -19,21 +19,15 @@ const create = <T>(properties: T) =>
   Object.assign({messageSource, messageId: getMessageIdentifier()}, properties);
 
 export abstract class MessageFactory {
-  static initialize(): Message<void> {
-    return create({
-      messageType: MessageType.Initialize,
-    });
-  }
-
   static frameworkLoaded(): Message<void> {
     return create({
       messageType: MessageType.FrameworkLoaded,
     });
   }
 
-  static bootstrap(): Message<void> {
+  static initialize(): Message<void> {
     return create({
-      messageType: MessageType.Bootstrap,
+      messageType: MessageType.Initialize,
     });
   }
 
@@ -59,6 +53,13 @@ export abstract class MessageFactory {
   }
 
   static response<Response, T>(message: Message<T>, response: Response): MessageResponse<Response> {
-    return new MessageResponse<Response>(message, response);
+    return create({
+      messageType: MessageType.Response,
+      messageId: null,
+      messageSource: message.messageSource,
+      messageResponseId: message.messageId,
+      content: response instanceof Error ? null : response,
+      error: response instanceof Error ? response : null
+    });
   }
 }

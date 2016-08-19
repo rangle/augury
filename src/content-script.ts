@@ -55,6 +55,6 @@ send(MessageFactory.initialize())
     }
   })
   .catch(error => {
-    console.error('Augury initialization has failed');
+    console.error('Augury initialization has failed', error.stack);
     console.error(error);
   });

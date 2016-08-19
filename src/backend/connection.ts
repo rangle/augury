@@ -5,34 +5,41 @@ import {
   MessageResponse,
   MessageType,
   Subscription,
-  testSource,
   testResponse,
 } from '../communication';
 
 const subscriptions = new Set<MessageHandler>();
 
 chrome.runtime.onMessage.addListener(
-  (message: Message<any>, sender: chrome.runtime.MessageSender, sendResponse) => {
-    // Message responses will be handled by a separate onMessage subscription below
-    if (testSource(message) && message.messageType === MessageType.Response) {
-      return;
-    }
-
-    const values = subscriptions.values();
-
-    let result: IteratorResult<MessageHandler> = values.next();
-    while (result.done === false) {
-      const handlerResult = result.value(message);
-
-      /// The first subscription handler who returns a non-null result gets the
-      /// privilege of sending the message response.
-      if (handlerResult != null) {
-        sendResponse(MessageFactory.response(message, handlerResult));
-        break;
+  (message: Message<any>, sender: chrome.runtime.MessageSender) => {
+    if (message.messageType === MessageType.Response) {
+      const cannotRespond = () => {
+        throw new Error('You cannot respond to a response');
       }
 
-      result = values.next();
+      subscriptions.forEach(handler => handler(message, cannotRespond));
     }
+    else {
+      let responded = false;
+
+      const respond = (messageResponse: MessageResponse<any>) => {
+        if (responded) {
+          throw new Error('Cannot respond to the same message twice');
+        }
+
+        chrome.runtime.sendMessage(messageResponse);
+
+        responded = true;
+      }
+
+      subscriptions.forEach(handler => handler(message, respond));
+
+      if (responded === false) {
+        respond(MessageFactory.response(message, {processed: false}));
+      }
+    }
+
+    return true;
   });
 
 export const subscribe = (handler: MessageHandler) => {

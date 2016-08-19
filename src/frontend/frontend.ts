@@ -8,6 +8,7 @@ import {
   Message,
   MessageFactory,
   MessageType,
+  MessageResponse,
 } from '../communication';
 
 import {Connection} from './channel/connection';
@@ -27,7 +28,12 @@ require('!style!css!postcss!../styles/app.css');
   providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <div class="clearfix vh-100 overflow-hidden flex flex-column"
+    <template [ngIf]="initializationFailure">
+      <h3>Failed to initialize Augury</h3>
+      <p><pre>{{initializationFailure}}</pre></p>
+    </template>
+    <div *ngIf="!initializationFailure"
+      class="clearfix vh-100 overflow-hidden flex flex-column"
       [ngClass]="{'dark': theme === 'dark'}">
       <augury-header
         [searchDisabled]="searchDisabled"
@@ -66,6 +72,7 @@ class App {
   private selectedTabIndex = 0;
   private searchDisabled: boolean = false;
   private theme: string;
+  private initializationFailure: string;
 
   constructor(
     private connection: Connection,
@@ -84,14 +91,11 @@ class App {
   private ngOnInit() {
     this.connection.connect();
 
-    this.connection.subscribe(msg => this.process(msg));
+    this.connection.subscribe(this.onReceiveMessage.bind(this));;
 
-    this.connection.send<void, void>(MessageFactory.bootstrap())
-      .then(() => {
-        debugger;
-      })
+    this.connection.send(MessageFactory.initialize())
       .catch(error => {
-        debugger;
+        this.initializationFailure = error.stack;
       });
   }
 
@@ -115,14 +119,17 @@ class App {
     chrome.storage.sync.set({ theme: newTheme });
   }
 
-  private process(msg: Message<any>) {
+  private onReceiveMessage(msg: Message<any>,
+      sendResponse: (response: MessageResponse<any>) => void) {
     switch (msg.messageType) {
       case MessageType.CompleteTree:
         debugger;
-        return true;
+        sendResponse(MessageFactory.response(msg, {processed: true}));
+        break;
       case MessageType.TreeDiff:
         debugger;
-        return true;
+        sendResponse(MessageFactory.response(msg, {processed: true}));
+        break;
       default:
         debugger;
         break;

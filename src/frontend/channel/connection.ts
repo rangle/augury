@@ -7,51 +7,50 @@ import {
   MessageResponse,
   MessageType,
   Subscription,
-  testSource,
   testResponse,
 } from '../../communication';
 
 const subscriptions = new Set<MessageHandler>();
 
-let connection: chrome.runtime.Port;
+const connection = chrome.runtime.connect();
 
-export const connect = () => {
-  connection = chrome.runtime.connect();
-
+const post = <T>(message: Message<T>) =>
   connection.postMessage(
-    Object.assign(MessageFactory.bootstrap(), {
-      tabId: chrome.devtools.inspectedWindow.tabId
+    Object.assign({}, message, {
+      tabId: chrome.devtools.inspectedWindow.tabId,
     }));
 
+export const connect = () => {
   connection.onMessage.addListener(
     (message: Message<any>, port: chrome.runtime.Port) => {
-      // Message responses will be handled by a separate onMessage subscription below
-      if (testSource(message) && message.messageType === MessageType.Response) {
-        return;
-      }
-
-      const values = subscriptions.values();
-
-      let result: IteratorResult<MessageHandler> = values.next();
-      while (result.done === false) {
-        const handlerResult = result.value(message);
-
-        /// The first subscription handler who returns a non-null result gets the
-        /// privilege of sending the message response.
-        if (handlerResult != null) {
-          port.postMessage(MessageFactory.response(message, handlerResult));
-          return;
+      if (message.messageType === MessageType.Response) {
+        const cannotRespond = () => {
+          throw new Error('You cannot respond to a response');
         }
 
-        result = values.next();
+        subscriptions.forEach(handler => handler(message, cannotRespond));
       }
+      else {
+        let responded = false;
 
-      throw new Error(`Message was not handled: ${JSON.stringify(message)}`);
+        const sendResponse = (messageResponse: MessageResponse<any>) => {
+          post(messageResponse);
+        }
+
+        subscriptions.forEach(handler => {
+          const respond = (response: MessageResponse<any>) => {
+            sendResponse(response);
+            responded = true;
+          };
+
+          handler(message, respond);
+        });
+
+        if (responded === false) {
+          sendResponse(MessageFactory.response(message, {processed: false}));
+        }
+      }
     });
-
-  connection.onDisconnect.addListener(() => {
-    console.warn('Lost connection to Augury extension');
-  });
 };
 
 export const subscribe = (handler: MessageHandler): Subscription => {
@@ -78,7 +77,7 @@ export const send = <Response, T>(message: Message<T>): Promise<MessageResponse<
 
     connection.onMessage.addListener(responseHandler);
 
-    connection.postMessage(message);
+    post(message);
   });
 }
 

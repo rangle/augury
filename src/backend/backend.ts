@@ -52,7 +52,7 @@ getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 browserSubscribe(
   message => {
     switch (message.messageType) {
-      case MessageType.Bootstrap:
+      case MessageType.Initialize:
         subject.next(void 0); // initial load
         return true;
       default:

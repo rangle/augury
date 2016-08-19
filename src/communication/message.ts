@@ -7,30 +7,13 @@ export interface Message<T> {
   content?: T;
 }
 
-export class MessageResponse<T> implements Message<T> {
-  public messageId;
-  public messageSource;
-  public messageType;
-  public messageResponseId: string;
-  public content: T;
-  public error: Error;
-
-  constructor(request: Message<any>, response: T | Error) {
-    this.messageId = null;
-    this.messageSource = request.messageSource;
-    this.messageResponseId = request.messageId;
-
-    if (response instanceof Error) {
-      this.error = response;
-    }
-    else {
-      this.content = response;
-    }
-  }
+export interface MessageResponse<T> extends Message<T> {
+  messageResponseId: string;
+  error?: Error;
 }
 
 export interface MessageHandler {
-  <T>(message: Message<T>): any;
+  <T>(message: Message<T>, sendResponse: (response: MessageResponse<any>) => void): any;
 }
 
 export interface Subscription {
@@ -39,12 +22,12 @@ export interface Subscription {
 
 export const messageSource = 'AUGURY_INSPECTED_APPLICATION';
 
-export const testSource =
+export const checkSource =
   <T>(message: Message<T>) => message.messageSource === messageSource;
 
 export const testResponse =
   <T>(request: Message<T>, response: MessageResponse<T>) => {
-    return testSource(response)
+    return checkSource(response)
         && response.messageResponseId === request.messageId
         && response.messageType === MessageType.Response;
   }
