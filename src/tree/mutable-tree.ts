@@ -32,8 +32,8 @@ const recurse = (node: Node, fn: (node: Node) => void) => {
 export class MutableTree {
   public root: Node;
 
-  diff(previous: MutableTree): Array<Change> {
-    return patch.diff(previous.root, this.root);
+  diff(nextTree: MutableTree): Array<Change> {
+    return patch.diff(this.root, nextTree.root);
   }
 
   patch(changes: Array<Change>) {

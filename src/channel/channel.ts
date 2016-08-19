@@ -1,4 +1,7 @@
-import {MessageType} from '../communication';
+import {
+  Message,
+  MessageType,
+} from '../communication';
 
 const connections = new Map<number, chrome.runtime.Port>();
 
@@ -7,26 +10,22 @@ const connections = new Map<number, chrome.runtime.Port>();
 /// re-established
 const buffer = new Map<number, Array<any>>();
 
-const drainQueue = (tabId: number, buffer: Array<any>) => {
+const drainQueue = (port: chrome.runtime.Port, buffer: Array<any>) => {
   if (buffer == null || buffer.length === 0) {
     return;
   }
 
-  const port = connections.get(tabId);
-
   const remove = new Array<number>();
 
-  buffer.forEach((b, index: number) => {
+  const send = (m: Message<any>, index: number) => {
     try {
-      port.postMessage(b.message);
-
-      // If the post did not throw an exception, then we can remove it from the buffer
+      port.postMessage(m);
       remove.push(index);
     }
-    catch (error) {
-      // Will retry again in a moment
-    }
-  });
+    catch (error) {} // retry later
+  }
+
+  buffer.forEach(send);
 
   for (const index of remove.reverse()) {
     buffer.splice(index, 1);

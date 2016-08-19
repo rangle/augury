@@ -47,11 +47,6 @@ export const transform = (element: Source, cache: Cache): Node => {
     const context = load(element.context,
       () => functionRepresentation(element.context));
 
-    const properties = cloneDeep(element.properties);
-    const attributes = cloneDeep(element.attributes);
-    const classes = cloneDeep(element.classes);
-    const styles = cloneDeep(element.styles);
-
     const listeners = element.listeners.map(l => cloneDeep(l));
 
     const name = () => {
@@ -66,15 +61,18 @@ export const transform = (element: Source, cache: Cache): Node => {
       }
     }
 
-    const node = {
+    const injectors = element.providerTokens.map(t => t.name);
+
+    const node: Node = {
       id: getUniqueIdentifier(),
-      attributes,
+      attributes: cloneDeep(element.attributes),
       children: null,
-      classes,
-      styles,
+      classes: cloneDeep(element.classes),
+      styles: cloneDeep(element.styles),
+      injectors,
       name: name(),
       listeners,
-      properties,
+      properties: cloneDeep(element.properties),
       componentInstance,
       context,
       source: element.source,

@@ -9,6 +9,7 @@ export interface Node {
   listeners: Array<EventListener>;
   componentInstance;
   context;
+  injectors: Array<string>;
   source: string;
   name: string;
   children: Array<Node>;

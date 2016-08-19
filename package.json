@@ -61,7 +61,6 @@
     "json8-patch": "^0.4.0",
     "keycode": "^2.1.4",
     "lodash": "^4.15.0",
-    "msgpack-lite": "^0.1.20",
     "object-assign": "4.0.1",
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^8.1.0",

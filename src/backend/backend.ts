@@ -18,19 +18,6 @@ import {send} from './indirect-connection';
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
 
-const subject = new Subject<void>();
-
-const bind = (root: DebugElement) => {
-  const ngZone = root.injector.get(ng.coreTokens.NgZone);
-  if (ngZone) {
-    ngZone.onStable.subscribe(() => subject.next(void 0));
-  }
-
-  subject.debounceTime(0).subscribe(() => updateTree(root));
-
-  subject.next(void 0); // initial load
-};
-
 const lastTree = new Map<DebugElement, MutableTree>();
 
 const updateTree = (root: DebugElement) => {
@@ -47,6 +34,22 @@ const updateTree = (root: DebugElement) => {
   }
 
   lastTree.set(root, newTree);
+};
+
+const update = () => {
+  getAllAngularRootElements().forEach(root => updateTree(ng.probe(root)));
+}
+const subject = new Subject<void>();
+
+const bind = (root: DebugElement) => {
+  const ngZone = root.injector.get(ng.coreTokens.NgZone);
+  if (ngZone) {
+    ngZone.onStable.subscribe(() => subject.next(void 0));
+  }
+
+  subject.subscribe(() => update());
+
+  subject.next(void 0); // initial load
 };
 
 getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
