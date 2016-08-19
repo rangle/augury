@@ -1,6 +1,8 @@
 import {Component, ElementRef, Input} from '@angular/core';
 import {NgFor} from '@angular/common';
+
 import {NodeItem} from '../node-item/node-item';
+import {Node} from '../../../tree';
 
 @Component({
   selector: 'component-tree',
@@ -12,8 +14,8 @@ import {NodeItem} from '../node-item/node-item';
  * Displays the components' hierarchy
  */
 export class ComponentTree {
-  @Input() tree: any;
-  @Input() changedNodes: any;
+  @Input() tree: Array<Node>;
+  @Input() changedNodes: Array<Node>;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
   @Input() allowedComponentTreeDepth: number;

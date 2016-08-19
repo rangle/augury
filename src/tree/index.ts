@@ -1,4 +1,4 @@
 export * from './change';
 export * from './node';
 export * from './transformer';
-export * from './tree';
+export * from './mutable-tree';

@@ -1,8 +1,7 @@
-<div (mouseout)=onMouseOut($event)
-  (mouseover)=onMouseOver($event)
-  (dblclick)=onDblClick($event)
-  (click)="onClick($event)">
-
+<div (mouseout)="onMouseOut($event)"
+     (mouseover)="onMouseOver($event)"
+     (dblclick)="onDblClick($event)"
+     (click)="onClick($event)">
   <div class="node-item pl3 rounded border-box"
     [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
     <div
@@ -13,9 +12,7 @@
       }"
       (click)="expandTree($event)">
     </div>
-    <div class="inline"
-      [innerHTML]="getNodeDetails(node)">
-    </div>
+    <div class="inline" [innerHTML]="getNodeDetails(node)"></div>
   </div>
 
   <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">

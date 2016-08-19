@@ -6,9 +6,13 @@ import {
 } from '@angular/core';
 
 import {Node} from './node';
-import {Tree} from './tree';
 
-import {serialize} from '../utils/serialize';
+import {getUniqueIdentifier} from '../communication';
+
+import {
+  deserialize,
+  serialize,
+} from '../utils/serialize';
 
 type Source = DebugElement & DebugNode;
 
@@ -33,11 +37,13 @@ export const transform = (element: Source, cache: Cache): Node => {
     return value;
   };
 
+  const clone = object => deserialize(serialize(object));
+
   return getOrCreate<Node>(element, () => {
     const componentInstance =
-      getOrCreate(element.componentInstance, () => serialize(element.componentInstance));
+      getOrCreate(element.componentInstance, () => clone(element.componentInstance));
 
-    const context = getOrCreate(element.context, () => serialize(element.context));
+    const context = getOrCreate(element.context, () => clone(element.context));
 
     const properties = cloneDeep(element.properties);
     const attributes = cloneDeep(element.attributes);
@@ -46,10 +52,10 @@ export const transform = (element: Source, cache: Cache): Node => {
 
     const children = element.children.map(c => this.transform(c, cache));
 
-    const listeners = element.listeners.map(
-      l => ({name: l.name, callback: l.callback}));
+    const listeners = element.listeners.map(l => cloneDeep(l));
 
     return {
+      id: getUniqueIdentifier(),
       attributes,
       classes,
       styles,

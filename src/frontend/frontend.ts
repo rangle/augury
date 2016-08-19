@@ -13,9 +13,12 @@ import {
 } from '../communication';
 
 import {
+  MutableTree,
   Node,
-  Tree,
+  createTree,
 } from '../tree';
+
+import {deserialize} from '../utils/serialize';
 
 import {Connection} from './channel/connection';
 import {UserActions} from './actions/user-actions/user-actions';
@@ -33,11 +36,7 @@ require('!style!css!postcss!../styles/app.css');
   providers: [ParseUtils],
   directives: [TreeView, InfoPanel, AppTrees, Header],
   template: `
-    <template [ngIf]="initializationFailure">
-      <h3>Failed to initialize Augury</h3>
-      <pre>{{initializationFailure}}</pre>
-    </template>
-    <div *ngIf="initialized"
+    <div *ngIf="treeRef"
       class="clearfix vh-100 overflow-hidden flex flex-column"
       [ngClass]="{'dark': theme === 'dark'}">
       <augury-header
@@ -51,10 +50,12 @@ require('!style!css!postcss!../styles/app.css');
         [ngClass]="{'overflow-scroll col-12': selectedTabIndex > 0}">
           <bt-app-trees #trees
             class="flex flex-column flex-auto bg-white"
+            [changedNodes]="changedNodes"
             [selectedTabIndex]="selectedTabIndex"
             [selectedNode]="selectedNode"
             [routerTree]="routerTree"
             [theme]="theme"
+            [tree]="treeRef"
             [allowedComponentTreeDepth]="3"
             (tabChange)="tabChange($event)">
           </bt-app-trees>
@@ -64,22 +65,27 @@ require('!style!css!postcss!../styles/app.css');
           [hidden]="selectedTabIndex > 0">
           <bt-info-panel
             class="flex flex-column flex-auto bg-white"
-            [tree]="tree"
+            [tree]="treeRef"
             [theme]="theme"
             [node]="selectedNode">
           </bt-info-panel>
         </div>
       </div>
-    </div>`
+    </div>
+    <template [ngIf]="exception">
+      <pre>{{exception}}</pre>
+    </template>
+  `
 })
 class App {
-  private tree: Tree;
+  private tree: MutableTree;
   private selectedNode: Node;
+  private changedNodes = new Array<Node>();
   private selectedTabIndex = 0;
   private searchDisabled: boolean = false;
   private theme: string;
   private initialized = false;
-  private initializationFailure: string;
+  private exception: string;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -96,6 +102,14 @@ class App {
       });
   }
 
+  private get treeRef(): Array<Node> {
+    if (this.tree == null) {
+      return null;
+    }
+
+    return [this.tree.root];
+  }
+
   private ngOnInit() {
     this.connection.connect();
 
@@ -107,7 +121,7 @@ class App {
         this.changeDetector.detectChanges();
       })
       .catch(error => {
-        this.initializationFailure = error.stack;
+        this.exception = error.stack;
         this.changeDetector.detectChanges();
       });
   }
@@ -134,19 +148,24 @@ class App {
 
   private onReceiveMessage(msg: Message<any>,
       sendResponse: (response: MessageResponse<any>) => void) {
+    const processed = () => {
+      sendResponse(MessageFactory.response(msg, {processed: true}));
+      this.changeDetector.detectChanges();
+    }
+
     switch (msg.messageType) {
       case MessageType.CompleteTree:
-        this.tree = Object.setPrototypeOf(msg.content, Tree.prototype);
-        sendResponse(MessageFactory.response(msg, {processed: true}));
+        this.tree = createTree(deserialize(msg.content));
+        processed();
         break;
       case MessageType.TreeDiff:
         if (this.tree == null) {
           this.connection.send(MessageFactory.initialize()); // request tree
         }
         else {
-          this.tree.patch(msg.content);
-          sendResponse(MessageFactory.response(msg, {processed: true}));
+          this.tree.patch(deserialize(msg.content));
         }
+        processed();
         break;
     }
   }

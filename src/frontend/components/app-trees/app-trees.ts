@@ -14,13 +14,12 @@ import {RouterTree} from '../router-tree/router-tree';
   template: require('./app-trees.html'),
 })
 export default class AppTrees {
-
   @Input() theme: string;
-  @Input() tree: any;
+  @Input() tree: Array<any>;
   @Input() routerTree: any;
   @Input() selectedTabIndex: number;
-  @Input() selectedNode: any;
-  @Input() changedNodes: any;
+  @Input() selectedNode: Node;
+  @Input() changedNodes: Array<any>;
   @Input() closedNodes: Array<any>;
   @Input() allowedComponentTreeDepth: number;
 

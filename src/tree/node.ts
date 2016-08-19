@@ -1,8 +1,3 @@
-import {
-  DebugElement,
-  DebugNode,
-} from '@angular/core';
-
 export interface EventListener {
   name: string;
   callback: Function;

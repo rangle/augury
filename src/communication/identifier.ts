@@ -1,1 +1,1 @@
-export const getMessageIdentifier = () => Math.random().toString(16).slice(2);
+export const getUniqueIdentifier = () => Math.random().toString(16).slice(2);

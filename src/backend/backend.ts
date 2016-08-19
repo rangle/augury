@@ -3,7 +3,8 @@ import {DebugElement} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {
-  Tree,
+  MutableTree,
+  createTree,
 } from '../tree';
 
 import {
@@ -30,10 +31,10 @@ const bind = (root: DebugElement) => {
   subject.next(void 0); // initial load
 };
 
-const lastTree = new Map<DebugElement, Tree>();
+const lastTree = new Map<DebugElement, MutableTree>();
 
 const updateTree = (root: DebugElement) => {
-  const newTree = new Tree(root);
+  const newTree = createTree(root);
 
   const previousTree = lastTree.get(root);
   if (previousTree) {
