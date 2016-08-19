@@ -2,9 +2,15 @@ import {
   Message,
   MessageResponse,
   Subscription,
+  checkSource,
 } from './message';
 
 import {MessageType} from './message-type';
+
+import {
+  deserialize,
+  serialize,
+} from '../utils/serialize';
 
 export interface DispatchHandler {
   <T, Response>(message: Message<T>): Response;
@@ -64,14 +70,24 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
 export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
-export const browserDispatch = <T>(message: Message<T>) => window.postMessage(message, '*');
+export const browserDispatch = <T>(message: Message<T>) => window.postMessage(serialize(message), '*');
 
 window.addEventListener('message',
   (event: MessageEvent) => {
-    if (event.data.messageType === MessageType.DispatchWrapper) {
-      dispatchers.forEach(handler => handler(event.data));
+    if (typeof event.data !== 'string') {
+      return;
+    }
+
+    const msg = deserialize(event.data);
+
+    if (checkSource(msg) === false) {
+      return;
+    }
+
+    if (msg.messageType === MessageType.DispatchWrapper) {
+      dispatchers.forEach(handler => handler(msg));
     }
     else {
-      subscriptions.forEach(handler => handler(event.data));
+      subscriptions.forEach(handler => handler(msg));
     }
   });

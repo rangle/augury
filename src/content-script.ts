@@ -49,10 +49,13 @@ browserSubscribeDispatch(message => {
 subscribe((message: Message<any>) => browserDispatch(message));
 
 send(MessageFactory.initialize())
-  .then((response: any) => {
-    if (response.extensionId) {
-      injectScript('build/ng-validate.js');
-    }
+  .then((response: {extensionId: string}) => {
+    const script = document.createElement('script');
+    script.text = `window.auguryExtensionId = "${response.extensionId}";`
+    document.documentElement.appendChild(script);
+    script.parentNode.removeChild(script);
+
+    injectScript('build/ng-validate.js');
   })
   .catch(error => {
     console.error('Augury initialization has failed', error.stack);

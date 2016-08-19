@@ -1,5 +1,5 @@
 export enum MessageType {
-  // Bootstrap
+  // Begin the process of loading the extension
   Initialize,
 
   /// Response to a previous message

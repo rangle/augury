@@ -1,5 +1,6 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {
+  ChangeDetectorRef,
   Component,
   NgZone,
 } from '@angular/core';
@@ -11,6 +12,11 @@ import {
   MessageResponse,
 } from '../communication';
 
+import {
+  Node,
+  Tree,
+} from '../tree';
+
 import {Connection} from './channel/connection';
 import {UserActions} from './actions/user-actions/user-actions';
 import {UserActionType} from './actions/action-constants';
@@ -19,7 +25,6 @@ import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
 import {ParseUtils} from './utils/parse-utils';
-import {ComponentInfo} from '../tree';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -30,9 +35,9 @@ require('!style!css!postcss!../styles/app.css');
   template: `
     <template [ngIf]="initializationFailure">
       <h3>Failed to initialize Augury</h3>
-      <p><pre>{{initializationFailure}}</pre></p>
+      <pre>{{initializationFailure}}</pre>
     </template>
-    <div *ngIf="!initializationFailure"
+    <div *ngIf="initialized"
       class="clearfix vh-100 overflow-hidden flex flex-column"
       [ngClass]="{'dark': theme === 'dark'}">
       <augury-header
@@ -68,13 +73,16 @@ require('!style!css!postcss!../styles/app.css');
     </div>`
 })
 class App {
-  private selectedNode: ComponentInfo;
+  private tree: Tree;
+  private selectedNode: Node;
   private selectedTabIndex = 0;
   private searchDisabled: boolean = false;
   private theme: string;
+  private initialized = false;
   private initializationFailure: string;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private connection: Connection,
     private userActions: UserActions,
     private ngZone: NgZone,
@@ -94,8 +102,13 @@ class App {
     this.connection.subscribe(this.onReceiveMessage.bind(this));;
 
     this.connection.send(MessageFactory.initialize())
+      .then(() => {
+        this.initialized = true;
+        this.changeDetector.detectChanges();
+      })
       .catch(error => {
         this.initializationFailure = error.stack;
+        this.changeDetector.detectChanges();
       });
   }
 
@@ -123,15 +136,17 @@ class App {
       sendResponse: (response: MessageResponse<any>) => void) {
     switch (msg.messageType) {
       case MessageType.CompleteTree:
-        debugger;
+        this.tree = Object.setPrototypeOf(msg.content, Tree.prototype);
         sendResponse(MessageFactory.response(msg, {processed: true}));
         break;
       case MessageType.TreeDiff:
-        debugger;
-        sendResponse(MessageFactory.response(msg, {processed: true}));
-        break;
-      default:
-        debugger;
+        if (this.tree == null) {
+          this.connection.send(MessageFactory.initialize()); // request tree
+        }
+        else {
+          this.tree.patch(msg.content);
+          sendResponse(MessageFactory.response(msg, {processed: true}));
+        }
         break;
     }
   }

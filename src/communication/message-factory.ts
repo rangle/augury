@@ -19,22 +19,22 @@ const create = <T>(properties: T) =>
   Object.assign({messageSource, messageId: getMessageIdentifier()}, properties);
 
 export abstract class MessageFactory {
-  static frameworkLoaded(): Message<void> {
-    return create({
-      messageType: MessageType.FrameworkLoaded,
-    });
-  }
-
   static initialize(): Message<void> {
     return create({
       messageType: MessageType.Initialize,
     });
   }
 
+  static frameworkLoaded(): Message<void> {
+    return create({
+      messageType: MessageType.FrameworkLoaded,
+    });
+  }
+
   static completeTree(root: DebugElement, tree: Tree): Message<Tree> {
     return create({
       messageType: MessageType.CompleteTree,
-      content: tree,
+      content: tree.root,
     });
   }
 

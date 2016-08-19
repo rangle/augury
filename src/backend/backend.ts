@@ -4,7 +4,6 @@ import {Subject} from 'rxjs';
 
 import {
   Tree,
-  TreeFactory,
 } from '../tree';
 
 import {
@@ -27,12 +26,14 @@ const bind = (root: DebugElement) => {
   }
 
   subject.debounceTime(0).subscribe(() => updateTree(root));
+
+  subject.next(void 0); // initial load
 };
 
 const lastTree = new Map<DebugElement, Tree>();
 
 const updateTree = (root: DebugElement) => {
-  const newTree = TreeFactory.fromRoot(root);
+  const newTree = new Tree(root);
 
   const previousTree = lastTree.get(root);
   if (previousTree) {
@@ -53,9 +54,12 @@ browserSubscribe(
   message => {
     switch (message.messageType) {
       case MessageType.Initialize:
-        subject.next(void 0); // initial load
+        // Clear out existing tree representations and start over
+        lastTree.clear();
+
+        // Load the complete component tree
+        subject.next(void 0);
+
         return true;
-      default:
-        debugger;
     }
   });
