@@ -5,19 +5,25 @@ import {
   DebugNode,
 } from '@angular/core';
 
-import {Node} from './node';
-
-import {getUniqueIdentifier} from '../communication';
-
 import {
-  deserialize,
-  serialize,
-} from '../utils/serialize';
+  Description,
+  Property,
+} from '../backend/utils/description';
+
+import {Node} from './node';
+import {getUniqueIdentifier} from '../communication';
+import {serialize} from '../utils/serialize';
 
 type Source = DebugElement & DebugNode;
 
 type Cache = WeakMap<any, any>;
 
+/// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
+/// object that is our local representation of the combined data of those two
+/// types. It is important that our object be a deep-cloned copy of the element
+/// in order for our tree comparisons to work. If we just create a reference to
+/// the existing DebugElement data, that data will mutate over time and
+/// invalidate the results of our comparison operations.
 export const transform = (element: Source, cache: Cache): Node => {
   if (element == null) {
     return null;
@@ -37,19 +43,25 @@ export const transform = (element: Source, cache: Cache): Node => {
     return value;
   };
 
-  // const functionRepresentation = object => serialize(object);
-  const functionRepresentation = object => object;
+  /// NOTE(cbond): The following comment is misleading because right now
+  /// we actually do not need a copy of the component instance or context
+  /// in the frontend. But if we do later want to send that information,
+  /// then the comment applies.
+  ///
+  /// Data that we do not control, for example component instance, context,
+  /// etc., we must use our reconstructing serializer since it may -- and
+  /// typically does -- contain circular references and so forth. These
+  /// objects are reconstructed once they pass the object boundary.
 
   return load<Node>(element, () => {
-    const componentInstance = load(element.componentInstance,
-      () => functionRepresentation(element.componentInstance));
+    // const componentInstance = load(element.componentInstance,
+    //   () => serialize(element.componentInstance));
 
-    const context = load(element.context,
-      () => functionRepresentation(element.context));
+    // const context = load(element.context, () => serialize(element.context));
 
     const listeners = element.listeners.map(l => cloneDeep(l));
 
-    const name = () => {
+    const name = (() => {
       if (element.componentInstance.constructor) {
         return element.componentInstance.constructor.name;
       }
@@ -59,7 +71,7 @@ export const transform = (element: Source, cache: Cache): Node => {
       else {
         return element.nativeElement.tagName.toLowerCase();
       }
-    }
+    })();
 
     const injectors = element.providerTokens.map(t => t.name);
 
@@ -70,6 +82,8 @@ export const transform = (element: Source, cache: Cache): Node => {
       return parameters.map(param => param.name);
     };
 
+    const providers = getComponentProviders(element, name);
+
     const input = getComponentInputs(element);
 
     const output = getComponentOutputs(element);
@@ -78,16 +92,16 @@ export const transform = (element: Source, cache: Cache): Node => {
       id: getUniqueIdentifier(),
       attributes: cloneDeep(element.attributes),
       children: null,
+      description: Description.getComponentDescription(element),
       classes: cloneDeep(element.classes),
       styles: cloneDeep(element.styles),
       injectors,
       input,
       output,
-      name: name(),
+      name,
       listeners,
       properties: cloneDeep(element.properties),
-      componentInstance,
-      context,
+      providers,
       dependencies: dependencies(),
       source: element.source,
       nativeElement: 'insert-xpath-here',
@@ -137,6 +151,23 @@ export const componentChildren = (element: Source): Array<Source> => {
     return [element];
   }
   return recursiveSearch(element.children);
+}
+
+const getComponentProviders = (element: Source, name: string): Array<Property> => {
+    let providers = new Array<Property>();
+
+    if (element.providerTokens && element.providerTokens.length > 0) {
+      providers = element.providerTokens.map(provider =>
+        Description.getProviderDescription(provider,
+          element.injector.get(provider)));
+    }
+
+    if (name) {
+      return providers.filter(provider => provider.key !== name);
+    }
+    else {
+      return providers;
+    }
 }
 
 const getComponentInputs = (element: Source) => {

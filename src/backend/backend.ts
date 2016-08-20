@@ -47,7 +47,7 @@ const bind = (root: DebugElement) => {
     ngZone.onStable.subscribe(() => subject.next(void 0));
   }
 
-  subject.subscribe(() => update());
+  subject.debounceTime(0).subscribe(() => update());
 
   subject.next(void 0); // initial load
 };

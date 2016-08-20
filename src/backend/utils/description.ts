@@ -1,90 +1,72 @@
+import {DebugElement} from '@angular/core';
+
 export interface Property {
   key: string;
-  value: string;
+  value;
 }
 
 export abstract class Description {
+  public static getProviderDescription(provider, instance): Property {
+    const p = properties => ({ key: provider.name, value: properties });
 
-  public static getProviderDescription(provider: any, instance: any): Object {
-    let description = {};
-    let properties = [];
-    const providerName = this.getFunctionName(provider);
-    switch (providerName) {
+    switch (provider.name) {
       case 'RouterOutlet':
-        properties =  Description._getRouterOutletDesc(instance);
-        break;
+        return p(Description._getRouterOutletDesc(instance));
       case 'RouterLink':
-        properties = Description._getRouterLinkDesc(instance);
-        break;
+        return p(Description._getRouterLinkDesc(instance));
       case 'NgClass':
-        properties = Description._getClassDesc(instance);
-        break;
+        return p(Description._getClassDesc(instance));
       case 'NgStyle':
-        properties = Description._getNgClassDesc(instance);
-        break;
+        return p(Description._getNgClassDesc(instance));
       case 'NgFormModel':
-        properties = Description._getNgFormModelDesc(instance);
-        break;
+        return p(Description._getNgFormModelDesc(instance));
       case 'NgFormControl':
-        properties = Description._getFormControlDesc(instance);
-        break;
+        return p(Description._getFormControlDesc(instance));
       case 'NgControlStatus':
-        properties = Description._getControlStatusDesc(instance);
-        break;
+        return p(Description._getControlStatusDesc(instance));
       case 'NgModel':
-        properties = Description._getNgModelDesc(instance);
-        break;
+        return p(Description._getNgModelDesc(instance));
       case 'NgForm':
-        properties = Description._getNgFormDesc(instance);
-        break;
+        return p(Description._getNgFormDesc(instance));
     }
-    description = { key: providerName, value: properties };
-    return description;
+    return p([]);
   }
 
-  public static getComponentDescription(debugEl: any): Object[] {
-    if (!debugEl) {
+  public static getComponentDescription(debugElement: any): Array<Property> {
+    if (debugElement == null) {
       return [];
     }
-    const element: any = debugEl.nativeElement;
-    let description: Array<Property> = new Array<Property>();
-    let componentName;
-    if (debugEl.componentInstance) {
-      componentName = debugEl.componentInstance.constructor.name;
-    } else {
-      componentName = element.tagName.toLowerCase();
-    }
+
+    const element: any = debugElement.nativeElement;
+
+    const componentName = debugElement.componentInstance
+      ? debugElement.componentInstance.constructor.name
+      : element.tagName.toLowerCase();
 
     switch (componentName) {
       case 'a':
-        description = [
+        return [
           { key: 'text', value: element.text },
           { key: 'url', value: element.hash }
         ];
-        break;
       case 'NgSelectOption':
-        description = Description._getSelectOptionDesc(element);
-        break;
+        return Description._getSelectOptionDesc(element);
       case 'NgIf':
-        description = Description._getNgIfDesc(debugEl.componentInstance);
-        break;
+        return Description._getNgIfDesc(debugElement.componentInstance);
       case 'NgControlName':
-        description = Description._getControlNameDesc
-          (debugEl.componentInstance);
-        break;
+        return Description._getControlNameDesc
+          (debugElement.componentInstance);
       case 'NgSwitch':
-        description = Description._getNgSwitchDesc(debugEl.componentInstance);
-        break;
+        return Description._getNgSwitchDesc(debugElement.componentInstance);
       case 'NgSwitchWhen':
-        description = Description._getNgSwitchWhenDesc
-          (debugEl.componentInstance);
-        break;
+        return Description._getNgSwitchWhenDesc
+          (debugElement.componentInstance);
       case 'NgSwitchDefault':
-        description = Description._getNgSwitchWhenDesc
-          (debugEl.componentInstance);
-        break;
+        return Description._getNgSwitchWhenDesc
+          (debugElement.componentInstance);
     }
-    return description;
+
+    return null;
   }
 
   private static _getNgClassDesc(instance: any): Array<Property> {
@@ -165,8 +147,8 @@ export abstract class Description {
         instance._currentInstruction.routeName || ''
       },
       { key: 'hostComponent',
-        value: instance._currentInstruction && this.getFunctionName
-          (instance._currentInstruction.componentType) || ''
+        value: instance._currentInstruction &&
+          instance._currentInstruction.componentType.name || ''
       }
     ];
   }
@@ -232,12 +214,5 @@ export abstract class Description {
     return [
       { key: 'condition', value: instance._prevCondition }
     ];
-  }
-
-  private static  getFunctionName(value: string) {
-    let name = value.toString();
-    name = name.substr('function '.length);
-    name = name.substr(0, name.indexOf('('));
-    return name;
   }
 }

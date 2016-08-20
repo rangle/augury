@@ -104,7 +104,8 @@ export class Header {
 
     this.query = this.query.toLocaleLowerCase();
 
-    this.userActions.searchNode({ query: this.query, index: this.searchIndex });
+    this.userActions.searchNode(this.query, this.searchIndex);
+
     this.ngZone.run(() => undefined);
   }
 }

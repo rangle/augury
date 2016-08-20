@@ -21,7 +21,7 @@ import {
 import {deserialize} from '../utils';
 
 import {
-  NodeRenderState,
+  ViewState,
   Options,
   Tab,
   Theme,
@@ -96,18 +96,18 @@ class App {
   constructor(
     private changeDetector: ChangeDetectorRef,
     private connection: Connection,
-    private userActions: UserActions,
     private ngZone: NgZone,
-    private renderState: NodeRenderState,
     private options: Options,
-    private parseUtils: ParseUtils
+    private parseUtils: ParseUtils,
+    private userActions: UserActions,
+    private viewState: ViewState
   ) {
     this.options.getTheme().then(theme => {
       this.theme = theme;
       this.changeDetector.detectChanges();
     });
 
-    this.renderState.changes.subscribe(() => this.changeDetector.detectChanges());
+    this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
   }
 
   private get treeRef(): Array<Node> {
@@ -177,6 +177,6 @@ class App {
 bootstrap(App, [
   Connection,
   UserActions,
-  NodeRenderState,
+  ViewState,
   Options,
 ]);

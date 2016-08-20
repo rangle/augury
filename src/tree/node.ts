@@ -1,3 +1,5 @@
+import {Property} from '../backend/utils/description';
+
 export interface EventListener {
   name: string;
   callback: Function;
@@ -10,12 +12,12 @@ export interface Binding {
 
 export interface Node {
   id: string;
+  description: Array<Property>;
   nativeElement: string;
   listeners: Array<EventListener>;
-  componentInstance;
-  context;
   dependencies: Array<string>;
   injectors: Array<string>;
+  providers: Array<Property>;
   input: Array<Binding>;
   output: Array<Binding>;
   source: string;

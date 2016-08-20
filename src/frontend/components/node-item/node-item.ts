@@ -9,23 +9,27 @@ import {Highlightable} from '../highlightable';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Node} from '../../../tree';
 
+import {
+  ExpandState,
+  ViewState,
+} from '../../state';
+
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
-  directives: [NodeItem]
+  directives: [
+    NodeItem,
+  ]
 })
-
 export class NodeItem extends Highlightable {
   @Input() node: any;
   @Input() changedNodes: any[];
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
 
-  private collapsed: any;
-  private isSelected: boolean = false;
-
   constructor(
     private changeDetector: ChangeDetectorRef,
+    private viewState: ViewState,
     private userActions: UserActions
   ) {
     super(changeDetector, () => this.changedNodes.indexOf(this.node.id) > 0);
@@ -50,11 +54,28 @@ export class NodeItem extends Highlightable {
     return html;
   }
 
-  /**
-   * Select the element in inspect window on double click
-   * @param  {Object} $event
-   */
-  onDblClick($event) {
+  private get selected(): boolean {
+    return this.viewState.selectedState(this.node);
+  }
+
+  private get expanded(): boolean {
+    return this.viewState.expandState(this.node) === ExpandState.Expanded;
+  }
+
+  /// Prevent propagation of mouse events so that parent handlers are not invoked
+  private stop(event: MouseEvent, handler: (event: MouseEvent) => void) {
+    try {
+      handler.bind(this)(event);
+    }
+    finally {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  /// Select the element in inspect window on double click
+  onDblClick(event: MouseEvent) {
     const evalStr = `inspect($$('body [augury-id="${this.node.id}"]\')[0])`;
 
     chrome.devtools.inspectedWindow.eval(
@@ -65,73 +86,34 @@ export class NodeItem extends Highlightable {
         }
       }
     );
-
-    $event.preventDefault();
-    $event.stopPropagation();
   }
 
-  /**
-   * Select this node on click
-   * @param  {Object} $event
-   */
-  onClick($event) {
+  onClick(event: MouseEvent) {
     this.userActions.selectComponent(this.node);
-
-    $event.preventDefault();
-    $event.stopPropagation();
   }
 
-  /**
-   * Dispatch clear highlight action on node mouse out
-   * @param  {Object} $event
-   */
-  onMouseOut($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
+  onMouseOut(event: MouseEvent) {
     this.userActions.clearHighlight();
   }
 
-  /**
-   * Dispatch element highlight action on node mouse over
-   * @param  {Object} $event
-   */
   onMouseOver($event) {
-    this.userActions.highlight({ node: this.node });
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.userActions.highlight(this.node);
   }
 
-  showChildren() {
-    return !this.node.isOpen;
-  }
-
-  /**
-   * Expand or Collapse tree based on current state on click
-   * @param  {Object} $event
-   */
   expandTree($event) {
     this.node.isOpen = !this.node.isOpen;
-    this.userActions.openCloseNode({ node: this.node });
 
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.userActions.toggle(this.node);
   }
 
   ngOnChanges(changes) {
     super.ngOnChanges(changes);
-
-    if (this.selectedNode && this.node) {
-      this.isSelected = (this.selectedNode.id === this.node.id);
-    }
-
-    if (this.closedNodes && this.node) {
-      if (this.closedNodes.indexOf(this.node.id) > -1) {
-        this.node.isOpen = false;
-      }
-    }
-
-    this.changedNodes.splice(0, this.changedNodes.length);
   }
 
   trackById = (index: number, node: Node) => node.id;
+}
+
+const stop = (event: MouseEvent) => {
+  event.preventDefault();
+  event.stopPropagation();
 }

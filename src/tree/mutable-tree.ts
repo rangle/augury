@@ -2,6 +2,7 @@ const patch = require('json8-patch');
 
 import {Change} from './change';
 import {Node} from './node';
+import {deserialize} from '../utils';
 import {transform} from './transformer';
 
 export const transformToTree = (root) => {
@@ -43,4 +44,19 @@ export class MutableTree {
   recurse(fn: (node: Node) => void) {
     recurse(this.root, fn);
   }
+
+  // NOTE(cbond): If we want to send the component instance and context data,
+  // then uncomment this method that will hydrate those properties from the
+  // serialized type that they arrived in over the message channel.
+  //
+  // hydrate() {
+  //   this.recurse(node => {
+  //     if (typeof node.componentInstance === 'string') {
+  //       node.componentInstance = deserialize(node.componentInstance);
+  //     }
+  //     if (typeof node.context === 'string') {
+  //       node.context = deserialize(node.context)
+  //     }
+  //   });
+  // }
 }

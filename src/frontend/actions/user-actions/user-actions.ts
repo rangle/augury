@@ -5,8 +5,8 @@ import {Connection} from '../../channel/connection';
 import {UserActionType} from '../action-constants';
 
 import {
-  ExpansionState,
-  NodeRenderState,
+  ExpandState,
+  ViewState,
 } from '../../state';
 
 import {Node} from '../../../tree';
@@ -17,16 +17,8 @@ import {MessageFactory} from '../../../communication';
 export class UserActions {
   constructor(
     private connection: Connection,
-    private expansionState: NodeRenderState
+    private viewState: ViewState
   ) {}
-
-  collapseComponent(node: Node) {
-    this.expansionState.setExpansionState(node, ExpansionState.Collapsed);
-  }
-
-  expandComponent(node: Node) {
-    this.expansionState.setExpansionState(node, ExpansionState.Expanded);
-  }
 
   selectComponent(node: Node): Promise<void> {
     return <Promise<void>> <any> this.connection.send(MessageFactory.selectComponent(node))
@@ -36,7 +28,7 @@ export class UserActions {
    * Search for a node to be highlighted
    * @param  {String} options.query
    */
-  searchNode({ query, index }) {
+  searchNode(query: string, index: number) {
     // this.dispatcher.messageBus.next({
     //   actionType: UserActionType.SEARCH_NODE,
     //   query,
@@ -53,26 +45,25 @@ export class UserActions {
     // });
   }
 
-  /**
-   * Highlight the element on web page
-   * @param  {Node} current element node
-   */
-  highlight({node}) {
+  /// Highlight a node element on the page
+  highlight(node: Node) {
     // this.messagingService.sendMessageToBackend({
     //   actionType: UserActionType.HIGHLIGHT_NODE,
     //   node
     // });
   }
 
-  /**
-   * On clicking expand and collapse of Component store the values in store
-   * @param  {Object} options.node
-   */
-  openCloseNode({node}) {
-    // this.dispatcher.messageBus.next({
-    //   actionType: UserActionType.OPEN_CLOSE_TREE,
-    //   node
-    // });
+  /// Toggle the expansion state of a node
+  toggle(node: Node) {
+    switch (this.viewState.expandState(node)) {
+      case ExpandState.Collapsed:
+        this.viewState.expandState(node, ExpandState.Expanded);
+        break;
+      case ExpandState.Expanded:
+      default:
+        this.viewState.expandState(node, ExpandState.Collapsed);
+        break;
+    }
   }
 
   /**
@@ -90,7 +81,7 @@ export class UserActions {
    * Update the Component property when updating from info panel
    * @param  {Object} options.property
    */
-  updateProperty({property}) {
+  updateProperty(property) {
     // this.messagingService.sendMessageToBackend({
     //   actionType: UserActionType.UPDATE_PROPERTY,
     //   property
@@ -106,7 +97,7 @@ export class UserActions {
     // });
   }
 
-  fireEvent(data: any) {
+  fireEvent(data) {
     // this.messagingService.sendMessageToBackend({
     //   actionType: UserActionType.FIRE_EVENT,
     //   data
