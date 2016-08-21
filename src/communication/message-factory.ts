@@ -8,7 +8,7 @@ import {
 
 import {MessageType} from './message-type';
 
-import {getUniqueIdentifier} from './identifier';
+import {getRandomHash} from './hash';
 
 import {
   Change,
@@ -22,7 +22,7 @@ import {
 } from '../utils/serialize';
 
 const create = <T>(properties: T) =>
-  Object.assign({messageSource, messageId: getUniqueIdentifier()}, properties);
+  Object.assign({messageSource, messageId: getRandomHash()}, properties);
 
 export abstract class MessageFactory {
   static initialize(): Message<void> {

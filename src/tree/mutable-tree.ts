@@ -1,3 +1,4 @@
+// TODO(cbond): Replace json8-patch with something that does better diffs?
 const patch = require('json8-patch');
 
 import {Change} from './change';
@@ -6,7 +7,13 @@ import {deserialize} from '../utils';
 import {transform} from './transformer';
 
 export const transformToTree = (root) => {
-  return transform(root, new WeakMap());
+  const map = new Map<string, Node>();
+  try {
+    return transform(null, root, map);
+  }
+  finally {
+    map.clear(); // release references
+  }
 }
 
 export const createTree = (root) => {

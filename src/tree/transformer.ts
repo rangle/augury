@@ -11,7 +11,7 @@ import {
 } from '../backend/utils/description';
 
 import {Node} from './node';
-import {getUniqueIdentifier} from '../communication';
+import {nodePath, serializeNodePath} from './path';
 import {serialize} from '../utils/serialize';
 
 type Source = DebugElement & DebugNode;
@@ -24,12 +24,13 @@ type Cache = WeakMap<any, any>;
 /// in order for our tree comparisons to work. If we just create a reference to
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
-export const transform = (element: Source, cache: Cache): Node => {
+export const transform =
+    (parentNode: Node, element: Source, cache: Cache): Node => {
   if (element == null) {
     return null;
   }
 
-  const load = <T>(key, creator: () => T) => {
+  const load = <T>(key: string, creator: () => T) => {
     if (key == null) {
       return null;
     }
@@ -37,7 +38,6 @@ export const transform = (element: Source, cache: Cache): Node => {
     let value = cache.get(key);
     if (value == null) {
       value = creator();
-      cache.set(key, value);
     }
 
     return value;
@@ -53,7 +53,7 @@ export const transform = (element: Source, cache: Cache): Node => {
   /// typically does -- contain circular references and so forth. These
   /// objects are reconstructed once they pass the object boundary.
 
-  return load<Node>(element, () => {
+  return load<Node>(serializeNodePath(element), () => {
     // const componentInstance = load(element.componentInstance,
     //   () => serialize(element.componentInstance));
 
@@ -88,8 +88,20 @@ export const transform = (element: Source, cache: Cache): Node => {
 
     const output = getComponentOutputs(element);
 
+    const assert = (): Node => {
+      throw new Error('Parent should already have been created and cached');
+    }
+
+    const path = nodePath(element);
+
+    const parent = path.length > 0
+      ? load<Node>(parentNode.id, assert)
+      : null;
+
+    const serializedPath = serializeNodePath(path);
+
     const node: Node = {
-      id: getUniqueIdentifier(),
+      id: serializedPath,
       attributes: cloneDeep(element.attributes),
       children: null,
       description: Description.getComponentDescription(element),
@@ -100,6 +112,7 @@ export const transform = (element: Source, cache: Cache): Node => {
       output,
       name,
       listeners,
+      parent,
       properties: cloneDeep(element.properties),
       providers,
       dependencies: dependencies(),
@@ -107,28 +120,19 @@ export const transform = (element: Source, cache: Cache): Node => {
       nativeElement: 'insert-xpath-here',
     };
 
+    /// Set before we search for children so that the value is cached and the
+    /// reference will be correcet when transform runs on the child
+    cache.set(serializedPath, node);
+
     node.children = [];
 
     for (const child of element.children) {
-      componentChildren(child).forEach(c => node.children.push(transform(c, cache)));
+      componentChildren(child).forEach(c => node.children.push(transform(node, c, cache)));
     }
 
     return node;
   });
 }
-
-const recursiveComponentSearch = (element: Source): Array<Source> => {
-  if (element.componentInstance == null) {
-    const children = new Array<Source>();
-
-    const concat = (c: Array<Source>) => children.concat(c);
-
-    element.children.forEach(c => concat(recursiveComponentSearch(c)));
-  }
-  else {
-    return [element];
-  }
-};
 
 export const recursiveSearch = (children: Source[]): Array<Source> => {
   const result = new Array<Source>();

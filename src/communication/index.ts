@@ -1,4 +1,4 @@
-export * from './identifier';
+export * from './hash';
 export * from './message';
 export * from './message-dispatch';
 export * from './message-factory';
