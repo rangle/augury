@@ -10,7 +10,7 @@ import {transform} from './transformer';
 export const transformToTree = (root) => {
   const map = new Map<string, Node>();
   try {
-    return transform(null, [], root, map);
+    return transform(null, [NaN], root, map);
   }
   finally {
     map.clear(); // release references
@@ -79,6 +79,13 @@ export class MutableTree {
     let iterator = this.root;
 
     for (const index of path) {
+      if (isNaN(index)) {
+        if (iterator.parent != null) {
+          throw new Error('NaN must represent the root node');
+        }
+        continue;
+      }
+
       if (iterator.children.length <= index) {
         return null; // not found
       }
