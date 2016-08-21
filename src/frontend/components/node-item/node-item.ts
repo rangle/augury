@@ -55,7 +55,7 @@ export class NodeItem extends Highlightable {
   }
 
   private get selected(): boolean {
-    return this.viewState.selectedState(this.node);
+    return this.viewState.selectionState(this.node);
   }
 
   private get expanded(): boolean {

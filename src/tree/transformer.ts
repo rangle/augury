@@ -11,7 +11,7 @@ import {
 } from '../backend/utils/description';
 
 import {Node} from './node';
-import {nodePath, serializeNodePath} from './path';
+import {nodePath, serializePath} from './path';
 import {serialize} from '../utils/serialize';
 
 type Source = DebugElement & DebugNode;
@@ -25,7 +25,7 @@ type Cache = WeakMap<any, any>;
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
 export const transform =
-    (parentNode: Node, element: Source, cache: Cache): Node => {
+    (parentNode: Node, path: number[], element: Source, cache: Cache): Node => {
   if (element == null) {
     return null;
   }
@@ -53,7 +53,9 @@ export const transform =
   /// typically does -- contain circular references and so forth. These
   /// objects are reconstructed once they pass the object boundary.
 
-  return load<Node>(serializeNodePath(element), () => {
+  const serializedPath = serializePath(path);
+
+  return load<Node>(serializedPath, () => {
     // const componentInstance = load(element.componentInstance,
     //   () => serialize(element.componentInstance));
 
@@ -92,14 +94,6 @@ export const transform =
       throw new Error('Parent should already have been created and cached');
     }
 
-    const path = nodePath(element);
-
-    const parent = path.length > 0
-      ? load<Node>(parentNode.id, assert)
-      : null;
-
-    const serializedPath = serializeNodePath(path);
-
     const node: Node = {
       id: serializedPath,
       attributes: cloneDeep(element.attributes),
@@ -112,7 +106,7 @@ export const transform =
       output,
       name,
       listeners,
-      parent,
+      parent: parentNode,
       properties: cloneDeep(element.properties),
       providers,
       dependencies: dependencies(),
@@ -127,7 +121,8 @@ export const transform =
     node.children = [];
 
     for (const child of element.children) {
-      componentChildren(child).forEach(c => node.children.push(transform(node, c, cache)));
+      componentChildren(child).forEach((c, index) =>
+        node.children.push(transform(node, path.concat([index]), c, cache)));
     }
 
     return node;

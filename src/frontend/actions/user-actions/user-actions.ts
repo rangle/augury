@@ -21,7 +21,10 @@ export class UserActions {
   ) {}
 
   selectComponent(node: Node): Promise<void> {
-    return <Promise<void>> <any> this.connection.send(MessageFactory.selectComponent(node))
+    return this.connection.send(MessageFactory.selectComponent(node))
+      .then(() => {
+        this.viewState.select(node);
+      });
   }
 
   /**

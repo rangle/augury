@@ -5,7 +5,11 @@ import {
   Subject,
 } from 'rxjs';
 
-import {Node} from '../../tree';
+import {
+  MutableTree,
+  Node,
+  deserializePath,
+} from '../../tree';
 
 export enum ExpandState {
   Expanded,
@@ -24,7 +28,7 @@ export class ViewState {
 
   private expansion = new Map<string, ExpandState>();
 
-  private selected = new Set<string>();
+  private selected: string; // node path ID
 
   get changes(): Observable<void> {
     return this.subject.asObservable();
@@ -46,31 +50,30 @@ export class ViewState {
     }
   }
 
-  selectedState(node: Node, selected?: boolean) {
-    checkReferenceId(node);
-
-    if (selected != null) {
-      this.selected.add(node.id);
-      this.publish();
-    }
-    else {
-      return this.selected.has(node.id);
-    }
+  selectionState(node: Node): boolean {
+    return this.selected === node.id;
   }
 
-  select(node: Node | Array<Node>) {
-    if (Array.isArray(node)) {
-      node.forEach(n => checkReferenceId(n));
-    }
-    else {
-      checkReferenceId(node);
+  selectedTreeNode(tree: MutableTree): Node {
+    if (this.selected == null) {
+      return null;
     }
 
-    this.selected = new Set<string>(
-      Array.isArray(node)
-        ? node.map(n => n.id)
-        : [node.id]);
+    const path = deserializePath(this.selected);
 
+    return tree.traverse(path);
+  }
+
+  select(node: Node) {
+    checkReferenceId(node);
+
+    this.selected = node.id;
+
+    this.publish();
+  }
+
+  unselect() {
+    this.selected = null;
     this.publish();
   }
 

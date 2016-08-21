@@ -1,9 +1,9 @@
-import {DebugElement} from '@angular/core';
+import {Node} from './node';
 
-export const pathToRoot = (debugElement: DebugElement): Array<DebugElement> => {
-  const path = new Array<DebugElement>();
+export const pathToRoot = (node: Node): Array<Node> => {
+  const path = new Array<Node>();
 
-  let iterator = debugElement;
+  let iterator = node;
   while (iterator) {
     path.push(iterator);
 
@@ -13,21 +13,30 @@ export const pathToRoot = (debugElement: DebugElement): Array<DebugElement> => {
   return path;
 }
 
-export const nodePath = (debugElement: DebugElement): Array<number> => {
-  const indexOf = (path: Array<number>, element: DebugElement) => {
+export const nodePath = (node: Node): Array<number> => {
+  if (node == null) {
+    return [];
+  }
+
+  const indexOf = (path: Array<number>, element: Node) => {
     const parent = element.parent;
     if (parent) {
-      path.push(parent.children.indexOf(element));
+      const index = parent.children.indexOf(element);
+      if (index < 0) {
+        debugger;
+        throw new Error('Child-parent relationship is corrupted');
+      }
+      path.unshift(index);
     }
 
     return path;
   };
 
-  return pathToRoot(debugElement).reduce(indexOf, new Array<number>());
+  return pathToRoot(node).reduce(indexOf, new Array<number>());
 };
 
-export const serializeNodePath =
-    (elementOrPath: DebugElement | Array<number>): string => {
+export const serializePath =
+    (elementOrPath: Node | Array<number>): string => {
   const pathKey = ' ';
 
   if (Array.isArray(elementOrPath)) {
@@ -38,6 +47,6 @@ export const serializeNodePath =
   }
 };
 
-export const deserializeNodePath = (path: string) => {
-  return path.split(/ /);
+export const deserializePath = (path: string) => {
+  return path.split(/ /).map(n => parseInt(n, 10));
 };
