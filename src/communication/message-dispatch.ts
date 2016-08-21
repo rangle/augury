@@ -5,6 +5,7 @@ import {
   checkSource,
 } from './message';
 
+import {MessageFactory} from './message-factory';
 import {MessageType} from './message-type';
 
 import {
@@ -56,6 +57,12 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
     if (response.messageType === MessageType.Response &&
         response.messageResponseId === messageId) {
       try {
+        if (response.serialized) {
+          if (typeof response.content !== 'string') {
+            throw new Error('Message is marked serialized but is not a string');
+          }
+          response.content = deserialize(response.content);
+        }
         return handler(response);
       }
       finally {
@@ -82,6 +89,24 @@ window.addEventListener('message',
 
     if (msg.messageType === MessageType.DispatchWrapper) {
       dispatchers.forEach(handler => handler(msg));
+    }
+    else if (msg.messageType !== MessageType.Response) {
+      let dispatchResult;
+      subscriptions.forEach(handler => {
+        if (dispatchResult == null) {
+          dispatchResult = handler(msg);
+        }
+        else {
+          handler(msg);
+        }
+      });
+
+      if (dispatchResult != null) {
+        const response =
+          MessageFactory.dispatchWrapper(
+            MessageFactory.response(msg, dispatchResult, true));
+        browserDispatch(response);
+      }
     }
     else {
       subscriptions.forEach(handler => handler(msg));

@@ -1,5 +1,10 @@
-import {Component, ElementRef, Input} from '@angular/core';
-import {NgFor} from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Input,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 
 import {NodeItem} from '../node-item/node-item';
 import {Node} from '../../../tree';
@@ -8,16 +13,15 @@ import {Node} from '../../../tree';
   selector: 'component-tree',
   template: require('./component-tree.html'),
   host: {'class': 'flex overflow-scroll'},
-  directives: [NgFor, NodeItem]
+  directives: [NodeItem]
 })
-/**
- * Displays the components' hierarchy
- */
 export class ComponentTree {
   @Input() tree: Array<Node>;
   @Input() changedNodes: Array<Node>;
-  @Input() selectedNode: any;
+  @Input() selectedNode;
   @Input() closedNodes: Array<any>;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 
   private prevSelectedNode: Element;
 
@@ -52,5 +56,9 @@ export class ComponentTree {
 
   trackById(index: number, node: any): string {
     return node.id;
+  }
+
+  private onSelectionChange(node: Node) {
+    this.selectionChange.emit(node);
   }
 }

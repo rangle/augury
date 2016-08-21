@@ -1,10 +1,17 @@
 declare var JSONFormatter: any;
-import {Component, ElementRef, Inject, EventEmitter,
-  OnChanges, Input}
-  from '@angular/core';
+
+import {
+  Component,
+  ElementRef,
+  Inject,
+  EventEmitter,
+  OnChanges,
+  Input,
+  Output,
+} from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-
+import {Node} from '../../../tree';
 import Accordion from '../accordion/accordion';
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
@@ -18,7 +25,10 @@ import PropertyValue from '../property-value/property-value';
   directives: [RenderState, Accordion, Dependency, PropertyValue]
 })
 export class ComponentInfo {
-  @Input() node: any;
+  @Input() node;
+  @Input() state;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 
   private path = new Array<string>();
 
@@ -27,7 +37,7 @@ export class ComponentInfo {
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef,
     private userActions: UserActions
-  ) { }
+  ) {}
 
   ngOnChanges(change: any) {
     if (this.node) {
@@ -99,5 +109,4 @@ export class ComponentInfo {
       childrenContainer.appendChild(formatter2.render());
     }
   }
-
 }

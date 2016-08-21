@@ -20,7 +20,8 @@
       [changedNodes]="changedNodes"
       [selectedNode]="selectedNode"
       [closedNodes]="closedNodes"
-      [node]="node">
+      [node]="node"
+      (selectionChange)="selectionChange.emit($event)">
     </bt-node-item>
   </div>
 </div>

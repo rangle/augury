@@ -1,9 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Inject,
   NgZone,
   Input,
+  Output,
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -26,7 +28,10 @@ import {Node} from '../../../tree';
 export class InfoPanel {
   @Input() tree;
   @Input() node;
+  @Input() state;
   @Input() theme: Theme;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 
   private StateTab = StateTab;
 
@@ -44,12 +49,11 @@ export class InfoPanel {
 
   constructor(private userActions: UserActions) {}
 
-  onSelectedTabChanged(tab: StateTab) {
-    debugger;
+  private onSelectedTabChanged(tab: StateTab) {
     this.selectedTab = tab;
   }
 
-  onSelectInjectorNode(node: Node) {
-    this.userActions.selectComponent(node);
+  private onSelectionChange(node: Node) {
+    this.selectionChange.emit(node);
   }
 }

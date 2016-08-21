@@ -103,7 +103,7 @@ export const transform =
       providers,
       dependencies: dependencies(),
       source: element.source,
-      nativeElement: 'insert-xpath-here',
+      nativeElement: element.nativeElement // this will be null in the frontend
     };
 
     /// Set before we search for children so that the value is cached and the

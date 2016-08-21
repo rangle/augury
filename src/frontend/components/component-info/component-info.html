@@ -5,7 +5,7 @@
       &nbsp;
       <a href=""
         class="red-1 node-item-property"
-        *ngIf="node && node.name && node.isComponent"
+        *ngIf="node && node.name"
         (click)="viewComponentSource($event)">
         (View Source)
         </a>
@@ -17,7 +17,7 @@
   </div>
 
   <div [hidden]="!(node && node.name)">
-    <accordion [sectionTitle]='"Properties"'>
+    <accordion sectionTitle="Properties">
       <section-content>
         <ul class="list-reset m0"
           *ngIf="node && node.description">
@@ -31,7 +31,7 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Providers"'
+    <accordion sectionTitle="Providers"
       *ngIf="node && node.providers && node.providers.length > 0">
       <section-content>
         <span *ngFor="let provider of node.providers">
@@ -46,7 +46,7 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Directives"'
+    <accordion sectionTitle="Directives"
       *ngIf="node && node.directives && node.directives.length > 0">
       <section-content>
         <ul class="list-reset m0">
@@ -59,14 +59,14 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Change Detection"'
+    <accordion sectionTitle="Change Detection"
       *ngIf="node && node.changeDetection">
       <section-content>
         <span class="node-item-property">{{node.changeDetection}}</span>
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Input"'
+    <accordion sectionTitle="Input"
       *ngIf="node && node.input && node.input.length > 0">
       <section-content>
         <ul class="list-reset m0">
@@ -83,7 +83,7 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Output"'
+    <accordion sectionTitle="Output"
       *ngIf="node && node.output && node.output.length > 0">
       <section-content>
         <ul class="list-reset m0">
@@ -103,22 +103,22 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"State"'
-      *ngIf="node && node.state">
+    <accordion sectionTitle="State" *ngIf="node && state">
       <section-content>
         <div class="mxn4">
-          <bt-render-state [path]="path"
-            [id]="node.id"
-            [state]="node.componentInstance">
+          <bt-render-state [path]="path" [id]="node.id" [state]="state">
           </bt-render-state>
         </div>
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Dependencies"'
+    <accordion sectionTitle="Dependencies"
       *ngIf="node && node.dependencies && node.dependencies.length > 0">
       <section-content>
-        <bt-dependency [dependencies]="node.dependencies"></bt-dependency>
+        <bt-dependency
+          [dependencies]="node.dependencies"
+          (selectionChange)="selectionChange.emit($event)">
+        </bt-dependency>
       </section-content>
     </accordion>
 
@@ -130,6 +130,5 @@
           </div>
       </section-content>
     </accordion>
-
   </div>
 </div>

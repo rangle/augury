@@ -10,7 +10,8 @@
   [changedNodes]="changedNodes"
   [selectedNode]="selectedNode"
   [closedNodes]="closedNodes"
-  [tree]="tree">
+  [tree]="tree"
+  (selectionChange)="onSelectionChange($event)">
 </bt-tree-view>
 
 <bt-router-tree class="overflow-scroll flex-auto"

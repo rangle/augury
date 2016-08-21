@@ -58,27 +58,12 @@ export class MutableTree {
     apply(this.roots[rootIndex]);
   }
 
-  /// Search for a node in the tree based on its path
+  /// Search for a node in the tree based on its path. An ID is a path that
+  /// has been serialized into a string. So we deserialize the path and then
+  /// traverse the tree using that information so that the search is much
+  /// faster because we do not have to compare every node in the tree.
   search(id: string) {
-    let result: Node;
-
-    const path = deserializePath(id);
-    if (path.length < 1) {
-      throw new Error('No root element to search');
-    }
-
-    const rootIndex = <number> path.shift();
-
-    const apply = (node: Node): boolean => {
-      if (node.id === id) {
-        result = node;
-        return false;
-      }
-    };
-
-    this.recurse(rootIndex, apply);
-
-    return result;
+    return this.traverse(deserializePath(id));
   }
 
   traverse(path: Path): Node {

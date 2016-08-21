@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 
 import {
   MutableTree,
+  Path,
   createTreeFromElements,
 } from '../tree';
 
@@ -67,11 +68,26 @@ browserSubscribe(
 
         return true;
 
-      case MessageType.ReadComponentInstance:
+      case MessageType.SelectComponent:
+        // For component selection events, we respond with component instance
+        // properties for the selected node. If we had to serialize the
+        // properties of each node on the tree that would be a performance
+        // killer, so we only send the componentInstance values for the
+        // node that has been selected.
         return getComponentInstance(previousTree, message.content);
     }
   });
 
-const getComponentInstance = (tree: MutableTree, path: string) => {
+// We do not store component instance properties on the node itself because
+// we do not want to have to serialize them across backend-frontend boundaries.
+// So we look them up using ng.probe, and only when the node is selected.
+const getComponentInstance = (tree: MutableTree, path: Path) => {
+  const node = tree.traverse(path);
+  if (node) {
+    const probed = ng.probe(node.nativeElement);
+    if (probed) {
+      return probed.componentInstance;
+    }
+  }
   return null;
 };

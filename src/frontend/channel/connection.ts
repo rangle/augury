@@ -10,6 +10,8 @@ import {
   testResponse,
 } from '../../communication';
 
+import {deserialize} from '../../utils';
+
 const subscriptions = new Set<MessageHandler>();
 
 const connection = chrome.runtime.connect();
@@ -24,6 +26,13 @@ export const connect = () => {
   connection.onMessage.addListener(
     (message: Message<any>, port: chrome.runtime.Port) => {
       if (message.messageType === MessageType.Response) {
+        if (message.serialized) {
+          if (typeof message.content !== 'string') {
+            throw new Error('Message is marked serialized but is not a string');
+          }
+          message.content = deserialize(message.content);
+        }
+
         const cannotRespond = () => {
           throw new Error('You cannot respond to a response');
         }
@@ -47,7 +56,7 @@ export const connect = () => {
         });
 
         if (responded === false) {
-          sendResponse(MessageFactory.response(message, {processed: false}));
+          sendResponse(MessageFactory.response(message, {processed: false}, false));
         }
       }
     });

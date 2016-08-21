@@ -1,4 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {UserActionType} from '../../actions/action-constants';
 import {Node} from '../../../tree';
@@ -9,6 +14,8 @@ import {Node} from '../../../tree';
 })
 export default class Dependency {
   @Input() dependencies;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 
   private currDep: string = '';
   private prevDep: Array<string> = [];
@@ -50,7 +57,7 @@ export default class Dependency {
   }
 
   selectComponent(node: Node) {
-    this.userActions.selectComponent(node);
+    this.selectionChange.emit(node);
   }
 
   reset() {

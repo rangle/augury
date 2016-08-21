@@ -3,6 +3,7 @@
     [changedNodes]="changedNodes"
     [node]="node"
     [selectedNode]="selectedNode"
-    [closedNodes]="closedNodes">
+    [closedNodes]="closedNodes"
+    (selectionChange)="onSelectionChange($event)">
     </bt-node-item>
 </main>

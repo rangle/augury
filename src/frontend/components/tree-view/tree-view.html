@@ -3,6 +3,7 @@
     [changedNodes]="changedNodes"
     [tree]="tree"
     [selectedNode]="selectedNode"
-    [closedNodes]="closedNodes">
+    [closedNodes]="closedNodes"
+    (selectionChange)="selectionChange.emit($event)">
     </component-tree>
 </div>

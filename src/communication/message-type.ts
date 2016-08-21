@@ -19,7 +19,4 @@ export enum MessageType {
 
   /// Select a component in the tree view
   SelectComponent,
-
-  /// Load component instance properties from the backend
-  ReadComponentInstance,
 }

@@ -38,10 +38,10 @@ browserSubscribeDispatch(message => {
   if (message.messageType === MessageType.DispatchWrapper) {
     send(message.content)
       .then(response => {
-        browserDispatch(MessageFactory.response(message, response));
+        browserDispatch(MessageFactory.response(message, response, true));
       })
       .catch(error => {
-        browserDispatch(MessageFactory.response(message, error));
+        browserDispatch(MessageFactory.response(message, error, false));
       });
   }
 });

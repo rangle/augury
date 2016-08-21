@@ -1,8 +1,10 @@
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   NgZone,
   Input,
+  Output,
 } from '@angular/core';
 
 import {Highlightable} from '../highlightable';
@@ -26,6 +28,8 @@ export class NodeItem extends Highlightable {
   @Input() changedNodes: any[];
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -89,7 +93,7 @@ export class NodeItem extends Highlightable {
   }
 
   onClick(event: MouseEvent) {
-    this.userActions.selectComponent(this.node);
+    this.selectionChange.emit(this.node);
   }
 
   onMouseOut(event: MouseEvent) {

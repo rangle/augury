@@ -14,6 +14,7 @@ import {
   Change,
   MutableTree,
   Node,
+  deserializePath,
 } from '../tree';
 
 import {
@@ -54,7 +55,7 @@ export abstract class MessageFactory {
   static selectComponent(node: Node): Message<string> {
     return create({
       messageType: MessageType.SelectComponent,
-      content: node.id,
+      content: deserializePath(node.id),
     });
   }
 
@@ -68,13 +69,22 @@ export abstract class MessageFactory {
     });
   }
 
-  static response<Response, T>(message: Message<T>, response: Response): MessageResponse<Response> {
+  static response<Response, T>(message: Message<T>, response: Response,
+      serializeResponse: boolean): MessageResponse<Response> {
+    const prepare = (): any => {
+      if (serializeResponse) {
+        return serialize(response);
+      }
+      return response;
+    }
+
     return create({
       messageType: MessageType.Response,
       messageId: null,
       messageSource: message.messageSource,
       messageResponseId: message.messageId,
-      content: response instanceof Error ? null : response,
+      serialized: serializeResponse,
+      content: response instanceof Error ? null : prepare(),
       error: response instanceof Error ? response : null
     });
   }

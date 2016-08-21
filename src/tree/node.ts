@@ -13,7 +13,7 @@ export interface Binding {
 export interface Node {
   id: string;
   description: Array<Property>;
-  nativeElement: string;
+  nativeElement: HTMLElement; // null on frontend
   listeners: Array<EventListener>;
   dependencies: Array<string>;
   injectors: Array<string>;

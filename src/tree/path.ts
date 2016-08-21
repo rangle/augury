@@ -25,7 +25,6 @@ export const nodePath = (roots, node: Node): Path => {
     if (parent) {
       const index = parent.children.indexOf(element);
       if (index < 0) {
-        debugger;
         throw new Error('Child-parent relationship is corrupted');
       }
       path.unshift(index);

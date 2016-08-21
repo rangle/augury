@@ -2,7 +2,7 @@ import {
   Component,
   Output,
   EventEmitter,
-  Input
+  Input,
 } from '@angular/core';
 
 import {TreeView} from '../tree-view/tree-view';
@@ -15,6 +15,8 @@ import {
   Tab,
   Theme,
 } from '../../state';
+
+type Node = any;
 
 @Component({
   selector: 'bt-app-trees',
@@ -36,7 +38,9 @@ export default class AppTrees {
   @Input() changedNodes: Array<any>;
   @Input() closedNodes: Array<any>;
 
-  @Output() tabChange: EventEmitter<Tab> = new EventEmitter<Tab>();
+  @Output() private tabChange = new EventEmitter<Tab>();
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 
   private tabs = [{
     title: 'Component Tree',
@@ -48,7 +52,11 @@ export default class AppTrees {
     tab: Tab.RouterTree,
   }];
 
-  onTabSelectionChanged(index: number): void {
+  onTabSelectionChanged(index: number) {
     this.tabChange.emit(this.tabs[index].tab);
+  }
+
+  private onSelectionChange(node: Node) {
+    this.selectionChange.emit(node);
   }
 }

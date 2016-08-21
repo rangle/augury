@@ -4,6 +4,7 @@ export interface Message<T> {
   messageId: string;
   messageSource: string;
   messageType: MessageType;
+  serialized?: boolean;
   content?: T;
 }
 

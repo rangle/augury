@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
 
 import {NodeItem} from '../node-item/node-item';
 import {ComponentTree} from '../component-tree/component-tree';
@@ -13,4 +13,6 @@ export class TreeView {
   @Input() changedNodes: Array<any>;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
 }
