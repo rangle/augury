@@ -16,8 +16,8 @@ import StateValues from '../state-values/state-values';
 })
 export default class RenderState {
   @Input() id: string;
-  @Input() state: any;
   @Input() path: Array<string | number>;
+  @Input() state;
 
   private expanded = {};
 

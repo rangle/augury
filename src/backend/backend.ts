@@ -4,10 +4,11 @@ import {Subject} from 'rxjs';
 
 import {
   MutableTree,
-  createTree,
+  createTreeFromElements,
 } from '../tree';
 
 import {
+  Message,
   MessageFactory,
   MessageType,
   browserSubscribe,
@@ -18,27 +19,27 @@ import {send} from './indirect-connection';
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
 
-const lastTree = new Map<DebugElement, MutableTree>();
+/// NOTE(cbond): We collect roots from all applications (mulit-app support)
+let previousTree: MutableTree;
 
-const updateTree = (root: DebugElement) => {
-  const newTree = createTree(root);
+const updateTree = (roots: Array<DebugElement>) => {
+  const newTree = createTreeFromElements(roots);
 
-  const previousTree = lastTree.get(root);
   if (previousTree) {
     const difference = previousTree.diff(newTree);
 
-    send(MessageFactory.treeDiff(root, difference));
+    send(MessageFactory.treeDiff(difference));
   }
   else {
-    send(MessageFactory.completeTree(root, newTree));
+    send(MessageFactory.completeTree(newTree));
   }
 
-  lastTree.set(root, newTree);
+  previousTree = newTree;
 };
 
-const update = () => {
-  getAllAngularRootElements().forEach(root => updateTree(ng.probe(root)));
-}
+const update = () =>
+  updateTree(getAllAngularRootElements().map(r => ng.probe(r)));
+
 const subject = new Subject<void>();
 
 const bind = (root: DebugElement) => {
@@ -55,15 +56,22 @@ const bind = (root: DebugElement) => {
 getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
 browserSubscribe(
-  message => {
+  (message: Message<any>) => {
     switch (message.messageType) {
       case MessageType.Initialize:
-        // Clear out existing tree representations and start over
-        lastTree.clear();
+        // Clear out existing tree representation and start over
+        previousTree = null;
 
         // Load the complete component tree
         subject.next(void 0);
 
         return true;
+
+      case MessageType.ReadComponentInstance:
+        return getComponentInstance(previousTree, message.content);
     }
   });
+
+const getComponentInstance = (tree: MutableTree, path: string) => {
+  return null;
+};

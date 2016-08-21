@@ -89,6 +89,7 @@ class App {
   private selectedTab: Tab = Tab.ComponentTree;
   private theme: Theme;
   private tree: MutableTree;
+  private selectedNode: Node;
   private changedNodes = new Array<Node>();
   private exception: string;
 
@@ -112,11 +113,11 @@ class App {
   private get treeRef(): Array<Node> {
     return this.tree == null
       ? null
-      : [this.tree.root];
+      : this.tree.roots;
   }
 
-  private get selectedNode(): Node {
-    return this.viewState.selectedTreeNode(this.tree);
+  private ngDoCheck() {
+    this.selectedNode = this.viewState.selectedTreeNode(this.tree);
   }
 
   private ngOnInit() {

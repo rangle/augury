@@ -1,5 +1,7 @@
 import {Node} from './node';
 
+export type Path = Array<string | number>;
+
 export const pathToRoot = (node: Node): Array<Node> => {
   const path = new Array<Node>();
 
@@ -13,12 +15,12 @@ export const pathToRoot = (node: Node): Array<Node> => {
   return path;
 }
 
-export const nodePath = (node: Node): Array<number> => {
+export const nodePath = (roots, node: Node): Path => {
   if (node == null) {
     return [];
   }
 
-  const indexOf = (path: Array<number>, element: Node) => {
+  const indexOf = (path: Path, element: Node) => {
     const parent = element.parent;
     if (parent) {
       const index = parent.children.indexOf(element);
@@ -28,25 +30,30 @@ export const nodePath = (node: Node): Array<number> => {
       }
       path.unshift(index);
     }
+    else {
+      const rootIndex = roots.indexOf(element);
+      if (rootIndex < 0) {
+        throw new Error('Cannot find root node for element');
+      }
+      path.unshift(rootIndex);
+    }
 
     return path;
   };
 
-  return pathToRoot(node).reduce(indexOf, new Array<number>());
+  return pathToRoot(node).reduce(indexOf, new Array<string | number>());
 };
 
-export const serializePath =
-    (elementOrPath: Node | Array<number>): string => {
-  const pathKey = ' ';
-
-  if (Array.isArray(elementOrPath)) {
-    return elementOrPath.join(pathKey);
-  }
-  else {
-    return nodePath(elementOrPath).join(pathKey);
-  }
+export const serializePath = (path: Path): string => {
+  return path.join(' ');
 };
 
-export const deserializePath = (path: string) => {
-  return path.split(/ /).map(n => parseInt(n, 10));
+export const deserializePath = (path: string): Path => {
+  return path.split(/ /).map(piece => {
+    const v = parseInt(piece, 10);
+    if (isNaN(v)) {
+      return piece;
+    }
+    return v;
+  });
 };

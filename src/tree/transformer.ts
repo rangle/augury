@@ -11,7 +11,12 @@ import {
 } from '../backend/utils/description';
 
 import {Node} from './node';
-import {nodePath, serializePath} from './path';
+
+import {
+  Path,
+  nodePath,
+  serializePath
+} from './path';
 import {serialize} from '../utils/serialize';
 
 type Source = DebugElement & DebugNode;
@@ -25,7 +30,7 @@ type Cache = WeakMap<any, any>;
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
 export const transform =
-    (parentNode: Node, path: number[], element: Source, cache: Cache): Node => {
+    (parentNode: Node, path: Path, element: Source, cache: Cache): Node => {
   if (element == null) {
     return null;
   }
@@ -43,23 +48,10 @@ export const transform =
     return value;
   };
 
-  /// NOTE(cbond): The following comment is misleading because right now
-  /// we actually do not need a copy of the component instance or context
-  /// in the frontend. But if we do later want to send that information,
-  /// then the comment applies.
-  ///
-  /// Data that we do not control, for example component instance, context,
-  /// etc., we must use our reconstructing serializer since it may -- and
-  /// typically does -- contain circular references and so forth. These
-  /// objects are reconstructed once they pass the object boundary.
-
   const serializedPath = serializePath(path);
 
   return load<Node>(serializedPath, () => {
-    // const componentInstance = load(element.componentInstance,
-    //   () => serialize(element.componentInstance));
-
-    // const context = load(element.context, () => serialize(element.context));
+    const key = (subkey: string) => serializePath(path.concat([subkey]));
 
     const listeners = element.listeners.map(l => cloneDeep(l));
 

@@ -1,51 +1,50 @@
-// TODO(cbond): Replace json8-patch with something that does better diffs?
-const patch = require('json8-patch');
+import {DebugElement} from '@angular/core';
 
 import {Change} from './change';
 import {Node} from './node';
-import {deserializePath} from './path';
 import {deserialize} from '../utils';
 import {transform} from './transformer';
+import { Path, deserializePath } from './path';
 
-export const transformToTree = (root) => {
+const patch = require('json8-patch');
+
+export const transformToTree = (root, index: number) => {
   const map = new Map<string, Node>();
   try {
-    return transform(null, [NaN], root, map);
+    return transform(null, [index], root, map);
   }
   finally {
     map.clear(); // release references
   }
 }
 
-export const createTree = (root) => {
+export const createTree = (roots: Array<Node>) => {
   const tree = new MutableTree();
+  tree.roots = roots;
+  return tree;
+}
 
-  const isDebugElement = typeof root.nativeElement !== 'string';
-  if (isDebugElement) {
-    tree.root = transformToTree(root);
-  }
-  else {
-    tree.root = root;
-  }
-
+export const createTreeFromElements = (roots: Array<DebugElement>) => {
+  const tree = new MutableTree();
+  tree.roots = roots.map((r, index) => transformToTree(r, index));
   return tree;
 }
 
 export class MutableTree {
-  public root: Node;
+  public roots: Array<Node>;
 
   /// Compare this tree to another tree and generate a delta
   diff(nextTree: MutableTree): Array<Change> {
-    return patch.diff(this.root, nextTree.root);
+    return patch.diff(this.roots, nextTree.roots);
   }
 
   /// Apply a set of changes to this tree, mutating it
   patch(changes: Array<Change>) {
-    this.root = patch.apply(this.root, changes).doc;
+    this.roots = patch.apply(this.roots, changes).doc;
   }
 
-  /// Apply a function to a tree recursively
-  recurse(fn: (node: Node) => boolean | void) {
+  /// Apply a function to all nodes in the specified tree index
+  recurse(rootIndex: number, fn: (node: Node) => boolean | void) {
     const apply = (node: Node) => {
       fn(node);
 
@@ -56,12 +55,19 @@ export class MutableTree {
       }
     };
 
-    apply(this.root);
+    apply(this.roots[rootIndex]);
   }
 
   /// Search for a node in the tree based on its path
   search(id: string) {
     let result: Node;
+
+    const path = deserializePath(id);
+    if (path.length < 1) {
+      throw new Error('No root element to search');
+    }
+
+    const rootIndex = <number> path.shift();
 
     const apply = (node: Node): boolean => {
       if (node.id === id) {
@@ -70,43 +76,37 @@ export class MutableTree {
       }
     };
 
-    this.recurse(apply);
+    this.recurse(rootIndex, apply);
 
     return result;
   }
 
-  traverse(path: Array<number>): Node {
-    let iterator = this.root;
+  traverse(path: Path): Node {
+    const root = this.roots[path.shift()];
+    if (root == null) {
+      return null;
+    }
+
+    let iterator = root;
 
     for (const index of path) {
-      if (isNaN(index)) {
-        if (iterator.parent != null) {
-          throw new Error('NaN must represent the root node');
-        }
-        continue;
+      if (iterator == null) {
+        return null;
       }
 
-      if (iterator.children.length <= index) {
-        return null; // not found
+      switch (typeof index) {
+        case 'number':
+          if (iterator.children.length <= index) {
+            return null; // not found
+          }
+          iterator = iterator.children[index];
+          break;
+        case 'string':
+          iterator = iterator[index];
+          break;
       }
-      iterator = iterator.children[index];
     }
 
     return iterator;
   }
-
-  // NOTE(cbond): If we want to send the component instance and context data,
-  // then uncomment this method that will hydrate those properties from the
-  // serialized type that they arrived in over the message channel.
-  //
-  // hydrate() {
-  //   this.recurse(node => {
-  //     if (typeof node.componentInstance === 'string') {
-  //       node.componentInstance = deserialize(node.componentInstance);
-  //     }
-  //     if (typeof node.context === 'string') {
-  //       node.context = deserialize(node.context)
-  //     }
-  //   });
-  // }
 }

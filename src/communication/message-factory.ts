@@ -37,14 +37,14 @@ export abstract class MessageFactory {
     });
   }
 
-  static completeTree(root: DebugElement, tree: MutableTree): Message<MutableTree> {
+  static completeTree(tree: MutableTree): Message<MutableTree> {
     return create({
       messageType: MessageType.CompleteTree,
-      content: serialize(tree.root),
+      content: serialize(tree.roots),
     });
   }
 
-  static treeDiff(root: DebugElement, changes: Change[]): Message<Change[]> {
+  static treeDiff(changes: Change[]): Message<Change[]> {
     return create({
       messageType: MessageType.TreeDiff,
       content: serialize(changes),
