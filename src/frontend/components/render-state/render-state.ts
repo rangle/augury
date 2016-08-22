@@ -5,7 +5,13 @@ import {
   Input,
   SimpleChanges,
 } from '@angular/core';
+
 import StateValues from '../state-values/state-values';
+
+import {
+  isObservable,
+  isSubject,
+} from '../../utils';
 
 const defaultExpansionDepth = 1;
 
@@ -37,7 +43,10 @@ export default class RenderState {
     if (this.expansionState.hasOwnProperty(key)) {
       return this.expansionState[key];
     }
-    return this.level <= defaultExpansionDepth;
+    if (isObservable(this.state[key])) { // do not expand observables (default)
+      return false;
+    }
+    return this.level <= defaultExpansionDepth; // default depth
   }
 
   expandTree(key, $event) {
@@ -53,6 +62,12 @@ export default class RenderState {
     }
     else if (typeof d === 'object') {
       if (d) {
+        if (isSubject(d)) {
+          return 'Subject';
+        }
+        else if (isObservable(d)) {
+          return 'Observable';
+        }
         return 'Object';
       } else if (d === null) {
         return 'null';

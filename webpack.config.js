@@ -112,6 +112,7 @@ module.exports = {
   plugins: [
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+      'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
       'VERSION': JSON.stringify(pkg.version)
     }),
     new OccurenceOrderPlugin(),

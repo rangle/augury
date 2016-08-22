@@ -215,7 +215,8 @@ const extractIdentifiersFromChanges = changes => {
 })
 class FrontendModule {}
 
-if (process.env.NODE_ENV !== 'development') {
+declare const PRODUCTION: boolean;
+if (PRODUCTION) {
   enableProdMode();
 }
 

@@ -48,11 +48,12 @@ export class Options {
           reduce();
         });
 
-      chrome.storage.sync.get('show-elements',
-        (result: {show: boolean}) => {
-          this.showElements = (result || {show: false}).show;
-          reduce();
-        });
+      // TODO(cbond): I do not think we want to save this, do we?
+      // chrome.storage.sync.get('show-elements',
+      //   (result: {show: boolean}) => {
+      //     this.showElements = (result || {show: false}).show;
+      //     reduce();
+      //   });
     });
   }
 
