@@ -22,7 +22,7 @@ const DEFAULT_SECONDARY_WIDTH = 384;
 export default class SplitPane {
   @ViewChild('wrapper') wrapperElement : ElementRef;
   @ViewChild('resizer') resizerElement : ElementRef;
-  @ViewChild('movecapture') moveCaptureElement : ElementRef;
+  @ViewChild('overlay') overlayElement : ElementRef;
   @ViewChild('primary') primaryElement : ElementRef;
   @ViewChild('secondary') secondaryElement : ElementRef;
 
@@ -32,37 +32,8 @@ export default class SplitPane {
   // State for resizing
   mouseX : number;
   bounds : ClientRect;
-
-  /**
-   * When the component initializes, capture the initial geometry,
-   * and set up the resizer element.
-   */
-  ngAfterViewInit() {
-    this.bounds = this.wrapperElement.nativeElement.getBoundingClientRect();
-
-    this.reshape();
-  }
-
-  /**
-   * Capture the starting mouse position, and set up
-   * the mouse move capture div for a resize drag.
-   */
-  resizerMouseDown ($event) {
-    this.moveCaptureElement.nativeElement.style.display = 'block';
-    this.secondaryWidth = this.clampSecondaryWidth();
-
-    this.mouseX = $event.clientX;
-  }
-
-  /**
-   * Handle mouse move events on the mouse move capture div.
-   */
-  moveCaptureMouseMove ($event) {
-    this.secondaryWidth = (this.mouseX - $event.clientX) + this.secondaryWidth;
-    this.mouseX = $event.clientX;
-
-    this.reshape();
-  }
+  guardMouseMoved;
+  guardMouseUp;
 
   /**
    * Clamp the secondary panel width value to prevent layout issues.
@@ -78,11 +49,61 @@ export default class SplitPane {
   }
 
   /**
+   * When the component initializes, capture the initial geometry,
+   * and set up the resizer element.
+   */
+  ngAfterViewInit() {
+    this.bounds = this.wrapperElement.nativeElement.getBoundingClientRect();
+
+    // Proxy event handlers to preserve instance binding.
+    this.guardMouseMoved = (e) => this.mouseMoved(e);
+    this.guardMouseUp = (e) => this.mouseUp(e);
+
+    this.reshape();
+  }
+
+  /**
+   * Capture the starting mouse position, and set up
+   * the mouse move capture div for a resize drag.
+   */
+  resizerMouseDown ($event) {
+    this.secondaryWidth = this.clampSecondaryWidth();
+
+    this.mouseX = $event.clientX;
+
+    // Required to convince TypeScript that there is a WebkitUserSelect CSS property.
+    const bodyStyle : any = window.document.body.style;
+    bodyStyle.WebkitUserSelect = 'none';
+
+    this.overlayElement.nativeElement.style.display = 'block';
+
+    window.addEventListener('mousemove', this.guardMouseMoved);
+    window.addEventListener('mouseup', this.guardMouseUp);
+  }
+
+  /**
+   * Handle mouse move events on window.
+   */
+  mouseMoved (e) {
+    this.secondaryWidth = (this.mouseX - e.clientX) + this.secondaryWidth;
+    this.mouseX = e.clientX;
+
+    this.reshape();
+  }
+
+  /**
    * Finalize a resize drag, and set secondaryWidth
    * to reflect what is currently rendered.
    */
-  moveCaptureMouseUp () {
-    this.moveCaptureElement.nativeElement.style.display = 'none';
+  mouseUp (e) {
+    // Required to convince TypeScript that there is a WebkitUserSelect CSS property.
+    const bodyStyle : any = window.document.body.style;
+    bodyStyle.WebkitUserSelect = '';
+
+    this.overlayElement.nativeElement.style.display = 'none';
+
+    window.removeEventListener('mousemove', this.guardMouseMoved);
+    window.removeEventListener('mouseup', this.guardMouseUp);
 
     this.secondaryWidth = this.clampSecondaryWidth();
   }
