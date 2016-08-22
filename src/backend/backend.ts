@@ -67,15 +67,17 @@ browserSubscribe(
         subject.next(void 0);
 
         return true;
-
       case MessageType.SelectComponent:
         // For component selection events, we respond with component instance
         // properties for the selected node. If we had to serialize the
         // properties of each node on the tree that would be a performance
         // killer, so we only send the componentInstance values for the
         // node that has been selected.
-        return getComponentInstance(previousTree, message.content);
+        if (message.content.requestInstance) {
+          return getComponentInstance(previousTree, message.content.path);
+        }
     }
+    return undefined;
   });
 
 // We do not store component instance properties on the node itself because

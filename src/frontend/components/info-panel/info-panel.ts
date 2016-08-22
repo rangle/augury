@@ -15,6 +15,7 @@ import {TabMenu} from '../tab-menu/tab-menu';
 import {ComponentInfo} from '../component-info/component-info';
 import {InjectorTree} from '../injector-tree/injector-tree';
 import {Node} from '../../../tree';
+import {ComponentLoadState} from '../../state';
 
 @Component({
   selector: 'bt-info-panel',
@@ -29,6 +30,7 @@ export class InfoPanel {
   @Input() tree;
   @Input() node;
   @Input() state;
+  @Input() loadingState: ComponentLoadState;
   @Input() theme: Theme;
 
   @Output() private selectionChange = new EventEmitter<Node>();

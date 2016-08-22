@@ -29,7 +29,8 @@
         [tree]="treeRef"
         [theme]="theme"
         [node]="selectedNode"
-        [state]="componentState"
+        [loadingState]="componentState.loadingState(selectedNode)"
+        [state]="componentState.componentInstance(selectedNode)"
         (selectionChange)="onSelectionChange($event)">
       </bt-info-panel>
     </div>

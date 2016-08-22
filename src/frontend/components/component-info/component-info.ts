@@ -8,25 +8,34 @@ import {
   OnChanges,
   Input,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Node} from '../../../tree';
+import {ComponentLoadState} from '../../state';
+import {Spinner} from '../spinner/spinner';
 import Accordion from '../accordion/accordion';
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
 import Dependency from '../dependency/dependency';
-
 import PropertyValue from '../property-value/property-value';
 
 @Component({
   selector: 'bt-component-info',
   template: require('./component-info.html'),
-  directives: [RenderState, Accordion, Dependency, PropertyValue]
+  directives: [
+    RenderState,
+    Accordion,
+    Dependency,
+    PropertyValue,
+    Spinner,
+  ]
 })
 export class ComponentInfo {
   @Input() node;
   @Input() state;
+  @Input() loadingState: ComponentLoadState;
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
@@ -34,12 +43,14 @@ export class ComponentInfo {
 
   private input: Array<any>;
 
+  private ComponentLoadState = ComponentLoadState;
+
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef,
     private userActions: UserActions
   ) {}
 
-  ngOnChanges(change: any) {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.node) {
       this.normalizeInput();
       this.displayTree();
@@ -47,10 +58,12 @@ export class ComponentInfo {
   }
 
   viewComponentSource($event) {
+    // FIXME(cbond): This will no longer work, augury-id is gone, use node path
     const highlightStr = '[augury-id=\"' + this.node.id + '\"]';
 
-    let evalStr = `inspect(ng.probe(document.querySelector('${highlightStr}'))
-    .componentInstance.constructor)`;
+    let evalStr = `inspect(
+      ng.probe(document.querySelector('${highlightStr}'))
+        .componentInstance.constructor)`;
 
     chrome.devtools.inspectedWindow.eval(
       evalStr,

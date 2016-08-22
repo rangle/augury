@@ -20,13 +20,10 @@ export class UserActions {
     private viewState: ViewState
   ) {}
 
-  selectComponent(node: Node): Promise<any> {
-    return this.connection.send(MessageFactory.selectComponent(node))
-      .then(componentInstance => {
-        this.viewState.select(node);
-        console.log('YOOO GOT', componentInstance);
-        return componentInstance;
-      });
+  selectComponent(node: Node, requestInstance: boolean = true): Promise<any> {
+    this.viewState.select(node);
+
+    return this.connection.send(MessageFactory.selectComponent(node, requestInstance));
   }
 
   /**

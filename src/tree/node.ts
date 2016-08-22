@@ -17,7 +17,6 @@ export interface Node {
   listeners: Array<EventListener>;
   dependencies: Array<string>;
   injectors: Array<string>;
-  parent: Node;
   providers: Array<Property>;
   input: Array<Binding>;
   output: Array<Binding>;

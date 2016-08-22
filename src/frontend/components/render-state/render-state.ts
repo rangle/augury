@@ -3,8 +3,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  SimpleChanges,
 } from '@angular/core';
 import StateValues from '../state-values/state-values';
+
+const defaultExpansionDepth = 1;
 
 @Component({
   selector: 'bt-render-state',
@@ -17,16 +20,29 @@ import StateValues from '../state-values/state-values';
 export default class RenderState {
   @Input() id: string;
   @Input() path: Array<string | number>;
+  @Input() level: number;
   @Input() state;
 
-  private expanded = {};
+  private expansionState = {};
+
+  private get none() {
+    return this.state == null || Object.keys(this.state).length === 0;
+  }
 
   private nest(key: string): boolean {
     return typeof this.state[key] === 'object';
   }
 
+  private expanded(key: string): boolean {
+    if (this.expansionState.hasOwnProperty(key)) {
+      return this.expansionState[key];
+    }
+    return this.level <= defaultExpansionDepth;
+  }
+
   expandTree(key, $event) {
-    this.expanded[key] = !this.expanded[key];
+    this.expansionState[key] = !this.expansionState[key];
+
     $event.preventDefault();
     $event.stopPropagation();
   }

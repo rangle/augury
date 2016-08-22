@@ -21,6 +21,7 @@ import {
 import {deserialize} from '../utils';
 
 import {
+  ComponentInstanceState,
   ViewState,
   Options,
   Tab,
@@ -53,7 +54,7 @@ class App {
   private tree: MutableTree;
   private selectedNode: Node;
   private changedNodes = new Array<Node>();
-  private componentState;
+  private componentState: ComponentInstanceState;
   private exception: string;
 
   constructor(
@@ -65,6 +66,8 @@ class App {
     private userActions: UserActions,
     private viewState: ViewState
   ) {
+    this.componentState = new ComponentInstanceState(changeDetector);
+
     this.options.getTheme().then(theme => {
       this.theme = theme;
       this.changeDetector.detectChanges();
@@ -110,6 +113,7 @@ class App {
 
     switch (msg.messageType) {
       case MessageType.CompleteTree:
+        this.componentState.reset();
         this.tree = createTree(deserialize(msg.content));
         respond();
         break;
@@ -118,7 +122,10 @@ class App {
           this.connection.send(MessageFactory.initialize()); // request tree
         }
         else {
-          this.tree.patch(deserialize(msg.content));
+          const changes = deserialize(msg.content);
+          this.componentState.reset(extractIdentifiersFromChanges(changes));
+          this.tree.patch(changes);
+          this.onSelectionChange(this.selectedNode); // retrieve state again
         }
         respond();
         break;
@@ -139,12 +146,28 @@ class App {
   }
 
   private onSelectionChange(node: Node) {
-    this.userActions.selectComponent(node)
-      .then(response => {
-        this.componentState = response;
-        this.changeDetector.detectChanges();
-      });
+    this.selectedNode = node;
+
+    if (this.componentState.has(node)) {
+      this.userActions.selectComponent(node, false);
+    }
+    else {
+      this.componentState.wait(node, this.userActions.selectComponent(node, true));
+    }
   }
+}
+
+const extractIdentifiersFromChanges = changes => {
+  const extract = (node: Array<Node> | Node) => {
+    if (Array.isArray(node)) {
+      return node.reduce((p, c) => p.concat([c.id].concat(extract(c.children))), []);
+    }
+    else {
+      return [node.id].concat((node.children || []).map(c => extract(c)));
+    }
+  }
+
+  return changes.reduce((p, c) => p.concat(extract(c.value)), []);
 }
 
 bootstrap(App, [

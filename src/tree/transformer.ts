@@ -14,7 +14,6 @@ import {Node} from './node';
 
 import {
   Path,
-  nodePath,
   serializePath
 } from './path';
 import {serialize} from '../utils/serialize';
@@ -98,7 +97,6 @@ export const transform =
       output,
       name,
       listeners,
-      parent: parentNode,
       properties: cloneDeep(element.properties),
       providers,
       dependencies: dependencies(),

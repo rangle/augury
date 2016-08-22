@@ -1,8 +1,11 @@
 <div class="pl4" *ngFor="let k of keys(state)">
+  <span *ngIf="none">
+    No state to show
+  </span>
   <span *ngIf="nest(k)" (click)="expandTree(k, $event)">
     <div [ngClass]="{
         expander: true,
-        rotate90: !expanded[k],
+        rotate90: !expanded(k),
         invisible: keys(state[k]).length == 0
       }">
     </div>
@@ -18,10 +21,11 @@
     [id]="id"
     [value]="state[k]">
   </bt-state-values>
-  <div *ngIf="expanded[k]">
+  <div *ngIf="expanded(k)">
     <bt-render-state *ngIf="nest(k)"
       [path]="path.concat([k])"
       [id]="id"
+      [level]="level + 1"
       [state]="state[k]">
     </bt-render-state>
   </div>

@@ -52,10 +52,13 @@ export abstract class MessageFactory {
     });
   }
 
-  static selectComponent(node: Node): Message<string> {
+  static selectComponent(node: Node, requestInstance?: boolean): Message<string> {
     return create({
       messageType: MessageType.SelectComponent,
-      content: deserializePath(node.id),
+      content: {
+        path: deserializePath(node.id),
+        requestInstance
+      }
     });
   }
 

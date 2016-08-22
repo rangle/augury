@@ -103,11 +103,25 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="State" *ngIf="node && state">
+    <accordion sectionTitle="State" *ngIf="node" [defaultExpanded]="node != null">
       <section-content>
         <div class="mxn4">
-          <bt-render-state [path]="path" [id]="node.id" [state]="state">
-          </bt-render-state>
+          <div [ngSwitch]="loadingState">
+            <template [ngSwitchCase]="ComponentLoadState.Loading">
+              <spinner></spinner>
+            </template>
+            <template [ngSwitchCase]="ComponentLoadState.Received">
+              <bt-render-state
+                [path]="path"
+                [id]="node.id"
+                [state]="state"
+                [level]="0">
+              </bt-render-state>
+            </template>
+            <template [ngSwitchCase]="ComponentLoadState.Failed">
+              Failed to load component state
+            </template>
+          </div>
         </div>
       </section-content>
     </accordion>
