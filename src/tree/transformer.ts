@@ -205,6 +205,8 @@ const getComponentInputs = (element: Source) => {
       }
     }
   }
+
+  return inputs;
 };
 
 const getComponentOutputs = (element: Source): Array<string> => {
