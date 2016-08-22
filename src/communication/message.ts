@@ -1,5 +1,7 @@
 import {MessageType} from './message-type';
 
+import {deserialize} from '../utils';
+
 export interface Message<T> {
   messageId: string;
   messageSource: string;
@@ -31,4 +33,14 @@ export const testResponse =
     return checkSource(response)
         && response.messageResponseId === request.messageId
         && response.messageType === MessageType.Response;
+  };
+
+export const deserializeMessage = <T>(message: Message<T>) => {
+  if (message.serialized) {
+    if (typeof message.content !== 'string') {
+      throw new Error('Message is marked serialized but is not a string');
+    }
+    message.content = deserialize(message.content);
+    message.serialized = false;
   }
+};

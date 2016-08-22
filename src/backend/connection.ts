@@ -5,6 +5,7 @@ import {
   MessageResponse,
   MessageType,
   Subscription,
+  deserializeMessage,
   testResponse,
 } from '../communication';
 
@@ -12,6 +13,8 @@ const subscriptions = new Set<MessageHandler>();
 
 chrome.runtime.onMessage.addListener(
   (message: Message<any>, sender: chrome.runtime.MessageSender) => {
+    deserializeMessage(message);
+
     const cannotRespond = () => {
       throw new Error('You cannot respond through MessageHandler');
     }

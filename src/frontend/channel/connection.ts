@@ -7,6 +7,7 @@ import {
   MessageResponse,
   MessageType,
   Subscription,
+  deserializeMessage,
   testResponse,
 } from '../../communication';
 
@@ -25,14 +26,9 @@ const post = <T>(message: Message<T>) =>
 export const connect = () => {
   connection.onMessage.addListener(
     (message: Message<any>, port: chrome.runtime.Port) => {
-      if (message.messageType === MessageType.Response) {
-        if (message.serialized) {
-          if (typeof message.content !== 'string') {
-            throw new Error('Message is marked serialized but is not a string');
-          }
-          message.content = deserialize(message.content);
-        }
+      deserializeMessage(message);
 
+      if (message.messageType === MessageType.Response) {
         const cannotRespond = () => {
           throw new Error('You cannot respond to a response');
         }

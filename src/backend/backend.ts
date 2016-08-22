@@ -84,13 +84,19 @@ browserSubscribe(
 
         return true;
       case MessageType.SelectComponent:
+        const path: Path = message.content.path;
+
+        const node = previousTree.traverse(path);
+
+        this.consoleReference(node);
+
         // For component selection events, we respond with component instance
         // properties for the selected node. If we had to serialize the
         // properties of each node on the tree that would be a performance
         // killer, so we only send the componentInstance values for the
         // node that has been selected.
         if (message.content.requestInstance) {
-          return getComponentInstance(previousTree, message.content.path);
+          return getComponentInstance(previousTree, node);
         }
         break;
       case MessageType.UpdateProperty:
@@ -105,8 +111,7 @@ browserSubscribe(
 // We do not store component instance properties on the node itself because
 // we do not want to have to serialize them across backend-frontend boundaries.
 // So we look them up using ng.probe, and only when the node is selected.
-const getComponentInstance = (tree: MutableTree, path: Path) => {
-  const node = tree.traverse(path);
+const getComponentInstance = (tree: MutableTree, node: Node) => {
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
@@ -117,8 +122,6 @@ const getComponentInstance = (tree: MutableTree, path: Path) => {
 };
 
 const updateProperty = (tree: MutableTree, path: Path, newValue) => {
-  const rootIndex = <number> path[0];
-
   const node = tree.traverse(path.slice(0, path.length - 1));
   if (node) {
     const probed = ng.probe(node.nativeElement());
@@ -127,7 +130,22 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
     }
   }
 
+  const rootIndex: number = <number> path[0];
+
   const app = ng.probe(getAllAngularRootElements()[rootIndex]);
   const applicationRef = app.injector.get(ng.coreTokens.ApplicationRef);
   applicationRef.tick();
+};
+
+export const consoleReference = (node: Node) => {
+  const propertyKey = '$a';
+
+  Object.defineProperty(window, propertyKey, {
+    get: () => {
+      if (node) {
+        return ng.probe(node.nativeElement());
+      }
+      return null;
+    }
+  });
 };

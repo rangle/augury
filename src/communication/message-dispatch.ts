@@ -3,6 +3,7 @@ import {
   MessageResponse,
   Subscription,
   checkSource,
+  deserializeMessage,
 } from './message';
 
 import {MessageFactory} from './message-factory';
@@ -41,6 +42,8 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
   const messageHandler = <T>(message: Message<T>) => {
     if (message.messageType === messageType) {
       try {
+        deserializeMessage(message);
+
         return handler(message);
       }
       finally {
@@ -57,12 +60,8 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
     if (response.messageType === MessageType.Response &&
         response.messageResponseId === messageId) {
       try {
-        if (response.serialized) {
-          if (typeof response.content !== 'string') {
-            throw new Error('Message is marked serialized but is not a string');
-          }
-          response.content = deserialize(response.content);
-        }
+        deserializeMessage(response);
+
         return handler(response);
       }
       finally {

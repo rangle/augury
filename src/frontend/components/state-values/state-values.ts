@@ -44,11 +44,6 @@ export default class StateValues extends Highlightable {
     return this.path[this.path.length - 1];
   }
 
-  private get width() {
-    return this.domSanitizationService.bypassSecurityTrustStyle(
-      `width: calc(100% - ${(this.level * 5) + 15}px)`);
-  }
-
   private onValueChanged(newValue) {
     if (newValue !== this.value) {
       this.userActions.updateProperty(this.path, newValue);
