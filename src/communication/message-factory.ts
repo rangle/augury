@@ -74,6 +74,16 @@ export abstract class MessageFactory {
     });
   }
 
+  static emitValue(path: Path, value): Message<void> {
+    return create({
+      messageType: MessageType.EmitValue,
+      content: {
+        path,
+        value
+      }
+    });
+  }
+
   /// Wrap a message in a DispatchWrapper so that we know to post it to the browser event
   /// queue instead of posting it to the Chrome communication channel. A message wrapped
   /// in this way takes a different path than a normal message.

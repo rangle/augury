@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {UserActionType} from '../../actions/action-constants';
 import {StateTab, Theme} from '../../state';
 import {TabMenu} from '../tab-menu/tab-menu';
 import {ComponentInfo} from '../component-info/component-info';

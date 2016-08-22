@@ -14,6 +14,7 @@ import {
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentLoadState} from '../../state';
 import {Spinner} from '../spinner/spinner';
+import {Property} from '../../../backend/utils/description';
 import Accordion from '../accordion/accordion';
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
@@ -25,9 +26,16 @@ import {
   deserializePath,
 } from '../../../tree';
 
+export enum EmitState {
+  None,
+  Emitted,
+  Failed,
+}
+
 @Component({
   selector: 'bt-component-info',
   template: require('./component-info.html'),
+  styles: [require('to-string!./component-info.css')],
   directives: [
     RenderState,
     Accordion,
@@ -37,7 +45,7 @@ import {
   ]
 })
 export class ComponentInfo {
-  @Input() node;
+  @Input() node: Node;
   @Input() state;
   @Input() loadingState: ComponentLoadState;
 
@@ -47,20 +55,41 @@ export class ComponentInfo {
 
   private ComponentLoadState = ComponentLoadState;
 
+  private EmitState = EmitState;
+
+  private emitState = new Map<string, EmitState>();
+
   constructor(
-    @Inject(ElementRef) private elementRef: ElementRef,
+    private elementRef: ElementRef,
     private userActions: UserActions
   ) {}
 
   private ngOnChanges(changes: SimpleChanges) {
-    if (this.node) {
-      this.normalizeInput();
-      this.displayTree();
-    }
+    this.displayTree();
   }
 
   private get path(): Path {
     return deserializePath(this.node.id);
+  }
+
+  private get inputs(): Array<Property> {
+    if (this.node == null || this.node.input == null) {
+      return [];
+    }
+
+    return this.node.input.map(
+      property => {
+        let [key, value] = property.split(':');
+        return {key, value};
+      });
+  }
+
+  private get outputs(): Array<string> {
+    if (this.node == null) {
+      return [];
+    }
+
+    return this.node.output;
   }
 
   private viewComponentSource($event) {
@@ -84,38 +113,43 @@ export class ComponentInfo {
     $event.stopPropagation();
   }
 
-  private normalizeInput(): void {
-    this.input = [];
-
-    if (this.node.input) {
-      this.node.input.forEach(elem => {
-        let [key, value] = elem.split(':');
-        this.input.push({
-          key: key,
-          value: (value ? value.trim() : '')
-        });
-      });
-    }
-  }
-
   private isJson(data: string): boolean {
-    return /^([\s\[\{]*(?:"(?:\\.|[^"])*"|-?\d[\d\.]*(?:[Ee][+-]?\d+)?|null|true|false|)[\s\]\}]*(?:,|:|$))+$/
-      .test(data);
+    try {
+      JSON.parse(data);
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
   }
 
-  private fireEvent(output: string, param: any) {
-    if (this.isJson(param)) {
-      param = JSON.parse(param);
+  private emitValue(outputProperty: string, data) {
+    if (this.isJson(data)) {
+      data = JSON.parse(data);
     }
 
-    this.userActions.fireEvent({
-      'output': output,
-      'data': param,
-      'id': this.node.id
-    });
+    const update = (state: EmitState) => this.emitState.set(outputProperty, state);
+
+    const timedReset = () => setTimeout(() => update(EmitState.None), 3000);
+
+    const path = deserializePath(this.node.id).concat([outputProperty]);
+
+    return this.userActions.emitValue(path, data)
+      .then(() => {
+        update(EmitState.Emitted);
+        timedReset();
+      })
+      .catch(error => {
+        update(EmitState.Failed);
+        timedReset();
+      });
   }
 
   private displayTree() {
+    if (this.node == null) {
+      return;
+    }
+
     const childrenContainer = this
       .elementRef.nativeElement
       .querySelector('#tree-children');

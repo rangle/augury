@@ -64,11 +64,10 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="Input"
-      *ngIf="node && node.input && node.input.length > 0">
+    <accordion sectionTitle="Input" *ngIf="inputs.length > 0">
       <section-content>
         <ul class="list-reset m0">
-          <li *ngFor="let input of input">
+          <li *ngFor="let input of inputs">
             <span class="info-key inline-block">
               {{input.key}}:
             </span>
@@ -81,23 +80,32 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="Output"
-      *ngIf="node && node.output && node.output.length > 0">
+    <accordion sectionTitle="Output" *ngIf="outputs.length > 0">
       <section-content>
-        <ul class="list-reset m0">
-          <li *ngFor="let output of node.output; ">
-            <span class="info-key inline-block">
-              {{output}}
-              <input class="editable"
-                type="text"
-                #prop>
-              <button class="btn btn-primary bg-olive mb1"
-                (click)="fireEvent(output, prop.value)">
-                Fire
-              </button>
-            </span>
-          </li>
-        </ul>
+        <table class="m0">
+          <tbody>
+            <tr *ngFor="let output of outputs">
+              <td class="info-key inline-block">
+                {{output}}
+              </td>
+              <td>
+                <input class="editable" type="text" #prop />
+              </td>
+              <td>
+                <button class="btn btn-primary bg-olive mb1"
+                  (click)="emitValue(output, prop.value)">
+                  Emit Value
+                </button>
+              </td>
+              <td>
+                <div [ngSwitch]="emitState.get(output)" class="emit-state">
+                  <span *ngSwitchCase="EmitState.Emitted" class="emitted">✔</span>
+                  <span *ngSwitchCase="EmitState.Failed" class="failed">✘</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </section-content>
     </accordion>
 

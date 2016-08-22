@@ -71,12 +71,17 @@ export const send = <Response, T>(message: Message<T>): Promise<MessageResponse<
     throw new Error('No connection to send messsage through!');
   }
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const responseHandler = (response: MessageResponse<any>) => {
       if (testResponse(message, response)) {
         connection.onMessage.removeListener(<any> responseHandler);
 
-        resolve(response.content);
+        if (response.error) {
+          reject(response.error);
+        }
+        else {
+          resolve(response.content);
+        }
       }
     };
 

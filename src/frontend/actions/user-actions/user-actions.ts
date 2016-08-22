@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 
 import {Connection} from '../../channel/connection';
 
-import {UserActionType} from '../action-constants';
-
 import {
   ExpandState,
   ViewState,
@@ -27,6 +25,29 @@ export class UserActions {
     this.viewState.select(node);
 
     return this.connection.send(MessageFactory.selectComponent(node, requestInstance));
+  }
+
+  /// Toggle the expansion state of a node
+  toggle(node: Node) {
+    switch (this.viewState.expandState(node)) {
+      case ExpandState.Collapsed:
+        this.viewState.expandState(node, ExpandState.Expanded);
+        break;
+      case ExpandState.Expanded:
+      default:
+        this.viewState.expandState(node, ExpandState.Collapsed);
+        break;
+    }
+  }
+
+  /// Update a property inside of the component tree
+  updateProperty(path: Path, newValue) {
+    return this.connection.send(MessageFactory.updateProperty(path, newValue));
+  }
+
+  /// Emit a new value through an EventEmitter object
+  emitValue(path: Path, value?) {
+    return this.connection.send(MessageFactory.emitValue(path, value));
   }
 
   /**
@@ -58,24 +79,6 @@ export class UserActions {
     // });
   }
 
-  /// Toggle the expansion state of a node
-  toggle(node: Node) {
-    switch (this.viewState.expandState(node)) {
-      case ExpandState.Collapsed:
-        this.viewState.expandState(node, ExpandState.Expanded);
-        break;
-      case ExpandState.Expanded:
-      default:
-        this.viewState.expandState(node, ExpandState.Collapsed);
-        break;
-    }
-  }
-
-  /// Update a property inside of the component tree
-  updateProperty(path: Path, newValue) {
-    return this.connection.send(MessageFactory.updateProperty(path, newValue));
-  }
-
   /**
    * Get the list of dependent Components when clicking on dependency
    * @param  {String} dependency Name of the dependency
@@ -93,13 +96,6 @@ export class UserActions {
   renderRouterTree() {
     // this.messagingService.sendMessageToBackend({
     //   actionType: UserActionType.RENDER_ROUTER_TREE
-    // });
-  }
-
-  fireEvent(data) {
-    // this.messagingService.sendMessageToBackend({
-    //   actionType: UserActionType.FIRE_EVENT,
-    //   data
     // });
   }
 }

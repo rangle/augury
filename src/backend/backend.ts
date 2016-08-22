@@ -100,10 +100,13 @@ browserSubscribe(
         }
         break;
       case MessageType.UpdateProperty:
-        updateProperty(previousTree,
+        return tryWrap(() => updateProperty(previousTree,
           message.content.path,
-          message.content.newValue);
-        break;
+          message.content.newValue));
+      case MessageType.EmitValue:
+        return tryWrap(() => emitValue(previousTree,
+          message.content.path,
+          message.content.value));
     }
     return undefined;
   });
@@ -121,6 +124,18 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   return null;
 };
 
+const tickApplication = (path: Path) => {
+  if (path == null || path.length === 0) {
+    return;
+  }
+
+  const rootIndex: number = <number> path[0];
+
+  const app = ng.probe(getAllAngularRootElements()[rootIndex]);
+  const applicationRef = app.injector.get(ng.coreTokens.ApplicationRef);
+  applicationRef.tick();
+};
+
 const updateProperty = (tree: MutableTree, path: Path, newValue) => {
   const node = tree.traverse(path.slice(0, path.length - 1));
   if (node) {
@@ -130,11 +145,19 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
     }
   }
 
-  const rootIndex: number = <number> path[0];
+  tickApplication(path);
+};
 
-  const app = ng.probe(getAllAngularRootElements()[rootIndex]);
-  const applicationRef = app.injector.get(ng.coreTokens.ApplicationRef);
-  applicationRef.tick();
+const emitValue = (tree: MutableTree, path: Path, newValue) => {
+  const node = tree.traverse(path.slice(0, path.length - 1));
+  if (node) {
+    const probed = ng.probe(node.nativeElement());
+    if (probed) {
+      probed.componentInstance[path.pop()].emit(newValue);
+    }
+  }
+
+  tickApplication(path);
 };
 
 export const consoleReference = (node: Node) => {
@@ -148,4 +171,17 @@ export const consoleReference = (node: Node) => {
       return null;
     }
   });
+};
+
+export const tryWrap = (fn: Function) => {
+  try {
+    let result = fn();
+    if (result === undefined) {
+      result = true;
+    }
+    return result;
+  }
+  catch (error) {
+    return error;
+  }
 };

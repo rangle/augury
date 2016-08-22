@@ -5,11 +5,6 @@ export interface EventListener {
   callback: Function;
 }
 
-export interface Binding {
-  variable: string;
-  boundTo: string;
-}
-
 export interface Node {
   id: string;
   isComponent: boolean;
@@ -19,8 +14,8 @@ export interface Node {
   dependencies: Array<string>;
   injectors: Array<string>;
   providers: Array<Property>;
-  input: Array<Binding>;
-  output: Array<Binding>;
+  input: Array<string>;
+  output: Array<string>;
   source: string;
   name: string;
   children: Array<Node>;

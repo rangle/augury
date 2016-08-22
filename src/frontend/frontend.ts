@@ -32,7 +32,6 @@ import {Connection} from './channel/connection';
 import {enableProdMode} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {UserActions} from './actions/user-actions/user-actions';
-import {UserActionType} from './actions/action-constants';
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';

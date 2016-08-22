@@ -197,7 +197,7 @@ const getComponentInputs = (element: Source) => {
       if (meta.constructor.name === 'InputMetadata') {
         if (inputs.indexOf(key) < 0) { // avoid duplicates
           if (meta.bindingPropertyName) {
-            inputs.push(`${key}: bound to ${meta.bindingPropertyName}`);
+            inputs.push(`${key}:${meta.bindingPropertyName}`);
           } else {
             inputs.push(key);
           }
@@ -207,7 +207,7 @@ const getComponentInputs = (element: Source) => {
   }
 };
 
-const getComponentOutputs = (element: Source) => {
+const getComponentOutputs = (element: Source): Array<string> => {
   const metadata = Reflect.getOwnMetadata('annotations',
     element.componentInstance.constructor);
 

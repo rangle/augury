@@ -22,4 +22,7 @@ export enum MessageType {
 
   /// Update the value of a property inside the component tree
   UpdateProperty,
+
+  /// Emit a new value through an EventEmitter
+  EmitValue,
 }
