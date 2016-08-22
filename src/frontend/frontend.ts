@@ -76,12 +76,6 @@ class App {
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
   }
 
-  private get treeRef(): Array<Node> {
-    return this.tree == null
-      ? null
-      : this.tree.roots;
-  }
-
   private ngDoCheck() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
   }

@@ -7,7 +7,10 @@ import {
 } from '@angular/core';
 
 import {NodeItem} from '../node-item/node-item';
-import {Node} from '../../../tree';
+import {
+  MutableTree,
+  Node,
+} from '../../../tree';
 
 @Component({
   selector: 'component-tree',
@@ -16,7 +19,7 @@ import {Node} from '../../../tree';
   directives: [NodeItem]
 })
 export class ComponentTree {
-  @Input() tree: Array<Node>;
+  @Input() tree: MutableTree;
   @Input() changedNodes: Array<Node>;
   @Input() selectedNode;
   @Input() closedNodes: Array<any>;

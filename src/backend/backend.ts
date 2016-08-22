@@ -26,12 +26,20 @@ let previousTree: MutableTree;
 const updateTree = (roots: Array<DebugElement>) => {
   const newTree = createTreeFromElements(roots);
 
-  if (previousTree) {
-    const difference = previousTree.diff(newTree);
+  let delta = false;
 
-    send(MessageFactory.treeDiff(difference));
+  if (previousTree) {
+    // In certain cases with large trees the JSON diff tool blows up with a
+    // stack overflow error. In the event we encounter that, instead of just
+    // silently failing we will re-send the tree instead of the delta.
+    try {
+      send(MessageFactory.treeDiff(previousTree.diff(newTree)));
+      delta = true;
+    }
+    catch (error) {}
   }
-  else {
+
+  if (delta === false) {
     send(MessageFactory.completeTree(newTree));
   }
 

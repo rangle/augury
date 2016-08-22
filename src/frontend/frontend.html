@@ -1,4 +1,4 @@
-<div *ngIf="treeRef"
+<div *ngIf="tree"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="{'dark': theme === Theme.Dark}">
   <augury-header
@@ -16,7 +16,7 @@
         [selectedNode]="selectedNode"
         [routerTree]="routerTree"
         [theme]="theme"
-        [tree]="treeRef"
+        [tree]="tree"
         (tabChange)="selectedTab = $event"
         (selectionChange)="onSelectionChange($event)">
       </bt-app-trees>
@@ -26,7 +26,7 @@
       [hidden]="selectedTab !== Tab.ComponentTree">
       <bt-info-panel
         class="flex flex-column flex-auto bg-white"
-        [tree]="treeRef"
+        [tree]="tree"
         [theme]="theme"
         [node]="selectedNode"
         [loadingState]="componentState.loadingState(selectedNode)"

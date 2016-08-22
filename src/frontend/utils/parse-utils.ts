@@ -1,89 +1,62 @@
+import {
+  MutableTree,
+  Node,
+  Path,
+  deserializePath,
+  serializePath,
+} from '../../tree';
+
 export class ParseUtils {
-  getNodesMap(tree) {
-    return this
-      .flatten(tree)
-      .reduce((previousValue, node) => {
-        previousValue[node.id] = node;
-        return previousValue;
-      },
-      {});
-  }
-
-  getChangedNodes(previousTree, newTree) {
-    const flattenedOldData = this.getNodesMap(previousTree);
-
-    return this
-      .flatten(newTree)
-      .reduce((x, n) => {
-        if (!flattenedOldData[n.id]) {
-          x.push(n.id);
-        } else if (flattenedOldData[n.id] !== n) {
-          x.push(n.id);
-        }
-        return x;
-      },
-      []);
-  }
-
   getParentNodeIds(nodeId: string) {
-    const nodeIds = nodeId.split('.');
-    let initalValue = {
-      concatedIds : '',
-      allIds : []
-    };
+    const path = deserializePath(nodeId);
 
-    const reduced = nodeIds.reduce((previousVal, currentVal) => {
-      const concatenated =
-      previousVal.concatedIds.length === 0 ?
-        previousVal.concatedIds + currentVal :
-        previousVal.concatedIds + '.' + currentVal;
+    const result = new Array<string>();
 
-      previousVal.concatedIds = concatenated;
-      previousVal.allIds.push(concatenated);
+    for (let i = 1; i < path.length; ++i) {
+      result.push(serializePath(path.slice(0, i)));
+    }
 
-      return previousVal;
-    }, initalValue);
-    reduced.allIds.pop();
-    return reduced.allIds;
+    return result;
   }
 
-  getDependencyLink (flattenedTree: any, nodeId: string, dependency: string) {
-    let node;
+  getDependencyLink (tree: MutableTree, nodeId: string, dependency: string) {
     const nodeIds = this.getParentNodeIds(nodeId);
 
-    nodeIds.forEach((id) => {
-      const searchNodes = flattenedTree.filter((n) => n.id === id);
-      if (!node && searchNodes.length > 0 &&
-          searchNodes[0].injectors.indexOf(dependency) > -1) {
-        node = searchNodes[0];
+    for (const id of nodeIds) {
+      const matchingNode = tree.search(id);
+      if (matchingNode &&
+          matchingNode.injectors.indexOf(dependency) >= 0) {
+        return matchingNode;
       }
-    });
-    return node;
+    }
+
+    return null;
   }
 
-  getParentHierarchy(flattenedTree: any, node: any) {
+  getParentHierarchy(tree: MutableTree, node: Node) {
     const nodeIds = this.getParentNodeIds(node.id);
 
-    const hierarchy = nodeIds.reduce((data, id) => {
-      const searchNodes = flattenedTree.filter((n) => n.id === id);
-      if (searchNodes.length > 0) {
-        data.push(searchNodes[0]);
-      }
-      return data;
-    }, []);
+    const hierarchy = nodeIds.reduce(
+      (array, id) => {
+        const matchingNode = tree.search(id);
+        if (matchingNode) {
+          array.push(matchingNode);
+        }
+        return array;
+      },
+      []);
 
     return hierarchy;
   }
 
   flatten(list: Array<any>) {
-    return list.reduce((a, b) => {
-      return a.concat(Array.isArray(b.children) ?
-        [this.copyParent(b), ...this.flatten(b.children)] : b);
-    }, []);
+    return list.reduce((a, b) =>
+      a.concat(Array.isArray(b.children) ?
+        [this.copyParent(b), ...this.flatten(b.children)] : b),
+      []);
   }
 
   copyParent(p: Object) {
     return Object.assign({}, p, { children: undefined });
   }
-
 }

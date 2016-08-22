@@ -1,5 +1,6 @@
 import * as test from 'tape';
 import {ParseUtils} from './parse-utils';
+import {createTree} from '../../tree';
 
 test('utils/parse-utils: copyParent', t => {
   t.plan(1);
@@ -100,9 +101,9 @@ test('utils/parse-utils: getParentHierarchy', t => {
     name: 'two'
     }];
 
+  const tree = createTree(<any> mockData);
   const parseUtils: ParseUtils = new ParseUtils();
-  const flattened = parseUtils.flatten(mockData);
-  const output = parseUtils.getParentHierarchy(flattened, node);
+  const output = parseUtils.getParentHierarchy(tree, <any> node);
   t.deepEqual(result, output, 'result should be equal to output');
   t.end();
 });
@@ -146,8 +147,11 @@ test('utils/parse-utils: getDependencyLink', t => {
   const dependency = 'service1';
 
   const parseUtils: ParseUtils = new ParseUtils();
-  const flattened = parseUtils.flatten(mockData);
-  const output = parseUtils.getDependencyLink(flattened, nodeId, dependency);
+
+  const tree = createTree(<any> mockData);
+
+  const output = parseUtils.getDependencyLink(tree, nodeId, dependency);
+
   const result = {
     children: undefined,
     id: '0',

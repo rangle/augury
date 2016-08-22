@@ -1,15 +1,35 @@
-import {Component, AfterViewInit, ViewEncapsulation, OnChanges, Inject,
-  ElementRef, Input, Output, EventEmitter}
-  from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ViewEncapsulation,
+  OnChanges,
+  Inject,
+  ElementRef,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+
 import {NgClass} from '@angular/common';
 
 import * as d3 from 'd3';
 
-import {ARROW_TYPES, NODE_TYPES, NODE_COLORS, NODE_STROKE_COLORS,
-  ANGULAR_COMPONENTS, GraphUtils}
-  from '../../utils/graph-utils';
+import {
+  ARROW_TYPES,
+  NODE_TYPES,
+  NODE_COLORS,
+  NODE_STROKE_COLORS,
+  ANGULAR_COMPONENTS,
+  GraphUtils,
+} from '../../utils/graph-utils';
 
 import {ParseUtils} from '../../utils/parse-utils';
+
+import {
+  MutableTree,
+  Node,
+  deserializePath,
+} from '../../../tree';
 
 import {Theme} from '../../state';
 
@@ -29,8 +49,8 @@ import {Theme} from '../../state';
   `]
 })
 export class InjectorTree implements OnChanges {
-  @Input() tree;
-  @Input() selectedNode;
+  @Input() tree: MutableTree;
+  @Input() selectedNode: Node;
   @Input() theme: Theme;
 
   @Output() selectComponent: EventEmitter<any> = new EventEmitter<any>();
@@ -38,7 +58,6 @@ export class InjectorTree implements OnChanges {
   private parentHierarchy;
   private parentHierarchyDisplay;
   private svg: any;
-  private flattenedTree: any;
 
   constructor(
     @Inject(ElementRef) private elementRef: ElementRef,
@@ -57,21 +76,28 @@ export class InjectorTree implements OnChanges {
   }
 
   private addRootDependencies() {
-    this.selectedNode.dependencies.forEach((dependency) => {
-      if (this.selectedNode.injectors.indexOf(dependency) === -1) {
-        const parent = this.parseUtils.getDependencyLink
-          (this.flattenedTree, this.selectedNode.id, dependency);
-        if (!parent && this.flattenedTree && this.flattenedTree.length > 0) {
-          this.flattenedTree[0].injectors.push(dependency);
+    const rootIndex = deserializePath(this.selectedNode.id).shift();
+
+    const rootElement = this.tree.roots[rootIndex];
+    if (rootElement == null) {
+      return;
+    }
+
+    this.selectedNode.dependencies.forEach(
+      dependency => {
+        if (this.selectedNode.injectors.indexOf(dependency) < 0) {
+          const parent = this.parseUtils.getDependencyLink
+            (this.tree, this.selectedNode.id, dependency);
+          if (!parent) {
+            rootElement.injectors.push(dependency);
+          }
         }
-      }
-    });
+      });
   }
 
   private displayTree() {
-    this.flattenedTree = this.parseUtils.flatten(this.tree);
     this.parentHierarchy =
-      this.parseUtils.getParentHierarchy(this.flattenedTree, this.selectedNode);
+      this.parseUtils.getParentHierarchy(this.tree, this.selectedNode);
     this.parentHierarchyDisplay =
       this.parentHierarchy.concat([this.selectedNode]);
     this.addRootDependencies();
@@ -141,7 +167,7 @@ export class InjectorTree implements OnChanges {
   }
 
   private render() {
-    if (!this.flattenedTree) {
+    if (this.tree == null) {
       return;
     }
 
@@ -231,7 +257,7 @@ export class InjectorTree implements OnChanges {
 
     this.selectedNode.dependencies.forEach((dependency) => {
       const parent = this.parseUtils.getDependencyLink
-        (this.flattenedTree, this.selectedNode.id, dependency);
+        (this.tree, this.selectedNode.id, dependency);
       if (parent) {
         const service = positions[parent.id].injectors[dependency];
         if (service) {

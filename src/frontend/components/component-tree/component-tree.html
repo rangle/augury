@@ -1,5 +1,5 @@
 <main class="monospace col-12 p1">
-  <bt-node-item *ngFor="let node of tree; trackBy: trackById"
+  <bt-node-item *ngFor="let node of tree.roots; trackBy: trackById"
     [changedNodes]="changedNodes"
     [node]="node"
     [selectedNode]="selectedNode"

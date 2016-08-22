@@ -2,6 +2,7 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
 
 import {NodeItem} from '../node-item/node-item';
 import {ComponentTree} from '../component-tree/component-tree';
+import {MutableTree} from '../../../tree';
 
 @Component({
   selector: 'bt-tree-view',
@@ -9,7 +10,7 @@ import {ComponentTree} from '../component-tree/component-tree';
   directives: [NodeItem, ComponentTree]
 })
 export class TreeView {
-  @Input() tree: Array<any>;
+  @Input() tree: MutableTree;
   @Input() changedNodes: Array<any>;
   @Input() selectedNode: any;
   @Input() closedNodes: Array<any>;
