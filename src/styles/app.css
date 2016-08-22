@@ -18,6 +18,11 @@
 /* dark theme */
 
 .dark {
+  background-color: rgb(36, 36, 36) !important;
+
+  split-pane-secondary-content {
+    border-left: 1px solid rgb(64%, 64%, 64%) !important;
+  }
 
   & .bg-panel {
     background-color: rgb(42, 42, 42) !important;

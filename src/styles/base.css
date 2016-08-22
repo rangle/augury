@@ -3,8 +3,19 @@
 
 html,
 body {
+  /* Override basscss default white background to prevent a white flash during load. */
+  background-color: inherit !important;
+
   font-size: 11px;
   font-family: '.SFNSDisplay-Regular', 'Helvetica Neue', 'Lucida Grande', sans-serif;
+}
+
+bt-tab-menu > header {
+  padding-left: 5px;
+}
+
+split-pane-secondary-content {
+  border-left: 1px solid rgb(92, 92, 92);
 }
 
 .monospace {
@@ -13,6 +24,10 @@ body {
 
 .vh-100 {
   height: 100vh;
+}
+
+.mh100pct {
+  max-height: 100%;
 }
 
 .tab-menu-title {
