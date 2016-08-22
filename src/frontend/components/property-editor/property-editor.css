@@ -1,11 +1,8 @@
 .property-editor {
-  display: inline-block;
-  width: 98%;
+  overflow: hidden;
 }
 
-.property-editor.editing {
-  white-space: nowrap;
-}
+.property-editor.editing {}
 
 .property-editor input {
   position: relative;

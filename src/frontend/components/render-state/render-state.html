@@ -19,6 +19,7 @@
   <bt-state-values *ngIf="nest(k) === false"
     [path]="path.concat([k])"
     [id]="id"
+    [level]="level"
     [value]="state[k]">
   </bt-state-values>
   <div *ngIf="expanded(k)">

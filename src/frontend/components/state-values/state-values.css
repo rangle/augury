@@ -1,4 +1,10 @@
 .property {
-  width: 100%;
-  white-space: nowrap;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.property span {
+  width: auto;
+  float: left;
+  margin-right: 5px;
 }

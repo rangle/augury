@@ -1,6 +1,9 @@
-<div [ngClass]="{changed: isUpdated, property: true}">
+<div [ngClass]="{changed: isUpdated, property: true}" [style]="width" >
   <span class="info-key">
     {{propertyKey}}:
   </span>
-  <bt-property-editor [initialValue]="value" (submit)="onValueChanged($event)"></bt-property-editor>
+  <bt-property-editor
+    [initialValue]="value"
+    (submit)="onValueChanged($event)">
+  </bt-property-editor>
 </div>

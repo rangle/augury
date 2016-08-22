@@ -158,6 +158,10 @@ class App {
   private onSelectionChange(node: Node) {
     this.selectedNode = node;
 
+    if (node == null) {
+      return;
+    }
+
     /// If this is an Angular component, attempt to retrieve the componentInstance value
     if (this.componentState.has(node)) { // cached?
       this.userActions.selectComponent(node, false);

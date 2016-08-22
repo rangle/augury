@@ -113,6 +113,7 @@ export class PropertyEditor extends Highlightable {
       case State.Write:
         this.changeDetector.detectChanges();
         this.focus();
+        this.editor.select();
         this.moveCursorToEnd();
         break;
     }
