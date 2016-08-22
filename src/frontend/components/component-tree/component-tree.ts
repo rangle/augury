@@ -26,6 +26,8 @@ export class ComponentTree {
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
+  @Output() private inspectElement = new EventEmitter<Node>();
+
   private prevSelectedNode: Element;
 
   constructor(
@@ -59,9 +61,5 @@ export class ComponentTree {
 
   trackById(index: number, node: any): string {
     return node.id;
-  }
-
-  private onSelectionChange(node: Node) {
-    this.selectionChange.emit(node);
   }
 }

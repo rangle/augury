@@ -42,6 +42,8 @@ export default class AppTrees {
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
+  @Output() private inspectElement = new EventEmitter<Node>();
+
   private tabs = [{
     title: 'Component Tree',
     selected: false,
@@ -54,9 +56,5 @@ export default class AppTrees {
 
   onTabSelectionChanged(index: number) {
     this.tabChange.emit(this.tabs[index].tab);
-  }
-
-  private onSelectionChange(node: Node) {
-    this.selectionChange.emit(node);
   }
 }

@@ -9,7 +9,10 @@ import {
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 
-import {Theme} from '../../state';
+import {
+  Options,
+  Theme,
+} from '../../state';
 
 @Component({
   selector: 'augury-header',
@@ -21,27 +24,18 @@ import {Theme} from '../../state';
 export class Header {
   private Theme = Theme;
 
-  @Input() searchDisabled: boolean;
-  @Input() theme: Theme;
+  @Input() private options: Options;
 
   private searchIndex: number = 0;
   private totalSearchCount: number = 0;
   private query: string = '';
   private settingOpened: boolean = false;
 
-  @Output() newTheme: EventEmitter<Theme> = new EventEmitter<Theme>();
-
   constructor(
     private userActions: UserActions,
     private ngZone: NgZone,
     private elementRef: ElementRef
   ) {}
-
-  ngOnChanges() {
-    if (this.searchDisabled) {
-      this.query = '';
-    }
-  }
 
   resetTheme() {
     this.settingOpened = false;
@@ -73,8 +67,7 @@ export class Header {
 
   onThemeChange(theme: Theme, selected: boolean) {
     if (selected) {
-      this.theme = theme;
-      this.newTheme.emit(this.theme);
+      this.options.theme = theme;
     }
 
     this.resetTheme();

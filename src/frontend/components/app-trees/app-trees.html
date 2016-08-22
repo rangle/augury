@@ -11,7 +11,8 @@
   [selectedNode]="selectedNode"
   [closedNodes]="closedNodes"
   [tree]="tree"
-  (selectionChange)="onSelectionChange($event)">
+  (selectionChange)="selectionChange.emit($event)"
+  (inspectElement)="inspectElement.emit($event)">
 </bt-tree-view>
 
 <bt-router-tree class="overflow-scroll flex-auto"

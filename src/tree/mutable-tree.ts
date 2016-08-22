@@ -4,14 +4,17 @@ import {Change} from './change';
 import {Node} from './node';
 import {deserialize} from '../utils';
 import {transform} from './transformer';
-import { Path, deserializePath } from './path';
+import {
+  Path,
+  deserializePath,
+} from './path';
 
 const patch = require('json8-patch');
 
-export const transformToTree = (root, index: number) => {
+export const transformToTree = (root, index: number, includeElements: boolean) => {
   const map = new Map<string, Node>();
   try {
-    return transform(null, [index], root, map);
+    return transform(null, [index], root, map, includeElements);
   }
   finally {
     map.clear(); // release references
@@ -24,9 +27,9 @@ export const createTree = (roots: Array<Node>) => {
   return tree;
 }
 
-export const createTreeFromElements = (roots: Array<DebugElement>) => {
+export const createTreeFromElements = (roots: Array<DebugElement>, includeElements: boolean) => {
   const tree = new MutableTree();
-  tree.roots = roots.map((r, index) => transformToTree(r, index));
+  tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements));
   return tree;
 }
 

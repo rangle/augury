@@ -16,4 +16,6 @@ export class TreeView {
   @Input() closedNodes: Array<any>;
 
   @Output() private selectionChange = new EventEmitter<Node>();
+
+  @Output() private inspectElement = new EventEmitter<Node>();
 }

@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 
 import {
   MutableTree,
+  Node,
   Path,
   createTreeFromElements,
 } from '../tree';
@@ -23,8 +24,11 @@ declare const getAllAngularRootElements: () => Element[];
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
 let previousTree: MutableTree;
 
+/// Collect just components or also HTML elements?
+let includeElements: boolean;
+
 const updateTree = (roots: Array<DebugElement>) => {
-  const newTree = createTreeFromElements(roots);
+  const newTree = createTreeFromElements(roots, includeElements);
 
   let delta = false;
 
@@ -68,6 +72,10 @@ browserSubscribe(
   (message: Message<any>) => {
     switch (message.messageType) {
       case MessageType.Initialize:
+        const defaults = {showElements: false};
+
+        includeElements = (message.content || defaults).showElements;
+
         // Clear out existing tree representation and start over
         previousTree = null;
 
@@ -84,6 +92,7 @@ browserSubscribe(
         if (message.content.requestInstance) {
           return getComponentInstance(previousTree, message.content.path);
         }
+        break;
     }
     return undefined;
   });

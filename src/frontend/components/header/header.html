@@ -6,16 +6,17 @@
         style="width: 18px; height: 18px;">
         Augury
     </h4>
+    <div class="regular flex flex-left primary-color m0">
+      <input id="exclude-non-components" type="checkbox" [(ngModel)]="options.showElements" />
+      <label for="exclude-non-components">Show HTML elements</label>
+    </div>
     <div class="flex">
-      <div class="flex flex-center border rounded border-color-dark bg-white mr3"
-        [ngClass]="{'disabled-color': searchDisabled}">
+      <div class="flex flex-center border rounded border-color-dark bg-white mr3">
         <!-- SEARCH -->
         <input class="outline border-none bg-white flex-auto primary-color"
-          [ngClass]="{'bg-panel disabled-color': searchDisabled}"
           placeholder="Find Component"
           type="text"
           (keyup)="onKey($event)"
-          [disabled]="searchDisabled"
           [(ngModel)]="query">
         <div class="bg-white right-align pr2"
           style="min-width:50px">
@@ -48,12 +49,12 @@
   <form>
     <ul id="augury-theme-menu"
         class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0"
-        [ngClass]="{'setting-dropdown--dark': theme === Theme.Dark}"
+        [ngClass]="{'setting-dropdown--dark': options.theme === Theme.Dark}"
         *ngIf="settingOpened">
       <li class="p3 border-bottom border-dark">
         <input type="radio"
           #lightTheme
-          [checked]="theme === Theme.Light"
+          [checked]="options.theme === Theme.Light"
           [value]="Theme.Light"
           (change)="onThemeChange(Theme.Light, lightTheme.checked)"
           name="theme">
@@ -62,7 +63,7 @@
       <li class="p3">
         <input type="radio"
           #darkTheme
-          [checked]="theme === Theme.Dark"
+          [checked]="options.theme === Theme.Dark"
           [value]="Theme.Dark"
           (change)="onThemeChange(Theme.Dark, darkTheme.checked)"
           name="theme" />

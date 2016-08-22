@@ -16,7 +16,8 @@ import {
   Path,
   serializePath
 } from './path';
-import {serialize} from '../utils/serialize';
+
+import {serialize} from '../utils';
 
 type Source = DebugElement & DebugNode;
 
@@ -28,8 +29,8 @@ type Cache = WeakMap<any, any>;
 /// in order for our tree comparisons to work. If we just create a reference to
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
-export const transform =
-    (parentNode: Node, path: Path, element: Source, cache: Cache): Node => {
+export const transform = (parentNode: Node, path: Path, element: Source,
+    cache: Cache, html: boolean): Node => {
   if (element == null) {
     return null;
   }
@@ -55,7 +56,8 @@ export const transform =
     const listeners = element.listeners.map(l => cloneDeep(l));
 
     const name = (() => {
-      if (element.componentInstance.constructor) {
+      if (element.componentInstance &&
+          element.componentInstance.constructor) {
         return element.componentInstance.constructor.name;
       }
       else if (element.name) {
@@ -69,6 +71,10 @@ export const transform =
     const injectors = element.providerTokens.map(t => t.name);
 
     const dependencies = () => {
+      if (element.componentInstance == null) {
+        return [];
+      }
+
       const parameters = Reflect.getOwnMetadata('design:paramtypes',
         element.componentInstance.constructor) || [];
 
@@ -77,9 +83,15 @@ export const transform =
 
     const providers = getComponentProviders(element, name);
 
-    const input = getComponentInputs(element);
+    const isComponent = element.componentInstance != null;
 
-    const output = getComponentOutputs(element);
+    const input = isComponent
+      ? getComponentInputs(element)
+      : [];
+
+    const output = isComponent
+      ? getComponentOutputs(element)
+      : [];
 
     const assert = (): Node => {
       throw new Error('Parent should already have been created and cached');
@@ -87,6 +99,7 @@ export const transform =
 
     const node: Node = {
       id: serializedPath,
+      isComponent,
       attributes: cloneDeep(element.attributes),
       children: null,
       description: Description.getComponentDescription(element),
@@ -110,9 +123,16 @@ export const transform =
 
     node.children = [];
 
-    for (const child of element.children) {
-      componentChildren(child).forEach((c, index) =>
-        node.children.push(transform(node, path.concat([index]), c, cache)));
+    /// Show HTML elements or only components?
+    if (html) {
+      element.children.forEach((c, index) =>
+        node.children.push(transform(node, path.concat([index]), c, cache, html)));
+    }
+    else {
+      for (const child of element.children) {
+        componentChildren(child).forEach((c, index) =>
+          node.children.push(transform(node, path.concat([index]), c, cache, html)));
+      }
     }
 
     return node;

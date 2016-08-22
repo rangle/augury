@@ -26,9 +26,10 @@ const create = <T>(properties: T) =>
   Object.assign({messageSource, messageId: getRandomHash()}, properties);
 
 export abstract class MessageFactory {
-  static initialize(): Message<void> {
+  static initialize(options?: {showElements: boolean}): Message<void> {
     return create({
       messageType: MessageType.Initialize,
+      content: options,
     });
   }
 

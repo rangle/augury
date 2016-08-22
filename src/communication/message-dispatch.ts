@@ -101,7 +101,7 @@ window.addEventListener('message',
         }
       });
 
-      if (dispatchResult != null) {
+      if (dispatchResult !== undefined) {
         const response =
           MessageFactory.dispatchWrapper(
             MessageFactory.response(msg, dispatchResult, true));

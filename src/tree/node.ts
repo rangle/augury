@@ -12,6 +12,7 @@ export interface Binding {
 
 export interface Node {
   id: string;
+  isComponent: boolean;
   description: Array<Property>;
   nativeElement: HTMLElement; // null on frontend
   listeners: Array<EventListener>;

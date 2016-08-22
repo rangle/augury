@@ -21,6 +21,7 @@ import {
 import {deserialize} from '../utils';
 
 import {
+  ComponentLoadState,
   ComponentInstanceState,
   ViewState,
   Options,
@@ -68,10 +69,10 @@ class App {
   ) {
     this.componentState = new ComponentInstanceState(changeDetector);
 
-    this.options.getTheme().then(theme => {
-      this.theme = theme;
-      this.changeDetector.detectChanges();
-    });
+    this.options.changes.subscribe(() => this.requestTree());
+
+    this.options.load()
+      .then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
   }
@@ -85,7 +86,19 @@ class App {
 
     this.connection.subscribe(this.onReceiveMessage.bind(this));;
 
-    this.connection.send(MessageFactory.initialize())
+    this.requestTree();
+  }
+
+  private ngOnDestroy() {
+    this.connection.close();
+  }
+
+  private requestTree() {
+    const cleanOptions = {
+      showElements: this.options.showElements,
+    };
+
+    this.connection.send(MessageFactory.initialize(cleanOptions))
       .then(() => {
         this.changeDetector.detectChanges();
       })
@@ -95,8 +108,10 @@ class App {
       });
   }
 
-  private ngOnDestroy() {
-    this.connection.close();
+  private restoreSelection() {
+    this.selectedNode = this.viewState.selectedTreeNode(this.tree);
+
+    this.onSelectionChange(this.selectedNode);
   }
 
   private processMessage(msg: Message<any>,
@@ -109,17 +124,18 @@ class App {
       case MessageType.CompleteTree:
         this.componentState.reset();
         this.tree = createTree(deserialize(msg.content));
+        this.restoreSelection();
         respond();
         break;
       case MessageType.TreeDiff:
         if (this.tree == null) {
-          this.connection.send(MessageFactory.initialize()); // request tree
+          this.connection.send(MessageFactory.initialize(this.options)); // request tree
         }
         else {
           const changes = deserialize(msg.content);
           this.componentState.reset(extractIdentifiersFromChanges(changes));
           this.tree.patch(changes);
-          this.onSelectionChange(this.selectedNode); // retrieve state again
+          this.restoreSelection();
         }
         respond();
         break;
@@ -142,12 +158,26 @@ class App {
   private onSelectionChange(node: Node) {
     this.selectedNode = node;
 
-    if (this.componentState.has(node)) {
+    /// If this is an Angular component, attempt to retrieve the componentInstance value
+    if (this.componentState.has(node)) { // cached?
       this.userActions.selectComponent(node, false);
     }
     else {
-      this.componentState.wait(node, this.userActions.selectComponent(node, true));
+      if (node.isComponent) {
+        this.componentState.wait(node,
+          this.userActions.selectComponent(node, true));
+      }
+      else {
+        this.userActions.selectComponent(node, false);
+        this.componentState.write(node, ComponentLoadState.Received, null);
+      }
     }
+  }
+
+  private onInspectElement(node: Node) {
+    debugger;
+    // FIXME(cbond): Find a better way to inspect the element without augury-id
+    // chrome.devtools.inspectedWindow.eval(`inspect()`);
   }
 }
 

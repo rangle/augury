@@ -31,6 +31,8 @@ export class NodeItem extends Highlightable {
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
+  @Output() private inspectElement = new EventEmitter<Node>();
+
   constructor(
     private changeDetector: ChangeDetectorRef,
     private viewState: ViewState,
@@ -80,16 +82,7 @@ export class NodeItem extends Highlightable {
 
   /// Select the element in inspect window on double click
   onDblClick(event: MouseEvent) {
-    const evalStr = `inspect($$('body [augury-id="${this.node.id}"]\')[0])`;
-
-    chrome.devtools.inspectedWindow.eval(
-      evalStr,
-      function(result, isException) {
-        if (isException) {
-          console.log(isException);
-        }
-      }
-    );
+    this.inspectElement.emit(this.node);
   }
 
   onClick(event: MouseEvent) {
