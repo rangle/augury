@@ -3,7 +3,7 @@
  */
 var sliceArgs = Function.prototype.call.bind(Array.prototype.slice);
 var toString  = Function.prototype.call.bind(Object.prototype.toString);
-var NODE_ENV  = process.env.NODE_ENV || 'development';
+var NODE_ENV  = process.env.NODE_ENV || 'production';
 var pkg = require('./package.json');
 
 // Polyfill

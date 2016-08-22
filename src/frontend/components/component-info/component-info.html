@@ -23,7 +23,6 @@
           *ngIf="node && node.description">
           <bt-property-value
             *ngFor="let property of node.description"
-            [checkUpdate]="false"
             [key]="property.key"
             [value]="property.value">
           </bt-property-value>
@@ -38,7 +37,6 @@
           <p class="m1 bold">{{provider.key}}</p>
           <bt-property-value
             *ngFor="let property of provider.value"
-            [checkUpdate]="true"
             [key]="property.key"
             [value]="property.value">
           </bt-property-value>

@@ -1,14 +1,17 @@
 import {Component} from '@angular/core';
 
-import Hello from './hello';
+import HelloDirectives from './hello-directives';
 
 @Component({
   selector: 'ngif-directive',
-  directives: [Hello],
+  directives: [HelloDirectives],
   template: `
   <div>
-    <hello [msg]='"Hello from John!!"' *ngIf="sayHello"></hello>
-    <hello [msg]='"Hi from John!!"' *ngIf="!sayHello"></hello>
+    <hello-directives msg="Hello from John!!" *ngIf="sayHello">
+    </hello-directives>
+    
+    <hello-directives msg="Hi from John!!" *ngIf="!sayHello">
+    </hello-directives>
 
     <button class="btn btn-primary"
        (click)="toggle()">

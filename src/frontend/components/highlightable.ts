@@ -8,8 +8,6 @@ import { highlightTime } from '../../utils/configuration';
 export class Highlightable {
   private isUpdated = false;
 
-  private checkUpdate = true;
-
   private resetUpdateState;
 
   constructor(
@@ -18,10 +16,6 @@ export class Highlightable {
   ) {}
 
   protected ngOnChanges(changes: SimpleChanges) {
-    if (this.checkUpdate === false) {
-      return;
-    }
-
     if (typeof this.getUpdated === 'function') {
       if (!this.getUpdated(changes)) {
         return;

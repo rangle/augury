@@ -20,7 +20,7 @@ class StressItem {
   template: `
     <p>Stress test Augury by adding values to the list. 
      Warning: may crash Augury and/or Chrome.</p>
-    <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)" novalidate>
+    <form (ngSubmit)="onSubmit()" novalidate>
       <div>
         <label for="node-count">Specify number of values: </label>
         <input type="number" id="node-count" ngControl="count">
@@ -41,9 +41,9 @@ export default class StressTester {
   // onSubmit make an array of the specified count. Each element will result in
   // a new Angular 2 component.
   onSubmit(regForm: NgForm) {
-    let maxCount = regForm.value.count;
-    for (let i = 0; i < maxCount; i++) {
-      this.values.push(i);
-    }
+    // let maxCount = regForm.value.count;
+    // for (let i = 0; i < maxCount; i++) {
+    //   this.values.push(i);
+    // }
   }
 }

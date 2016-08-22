@@ -1,4 +1,3 @@
-import {bootstrap} from '@angular/platform-browser-dynamic';
 import {
   ChangeDetectorRef,
   Component,
@@ -30,6 +29,8 @@ import {
 } from './state';
 
 import {Connection} from './channel/connection';
+import {enableProdMode} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {UserActions} from './actions/user-actions/user-actions';
 import {UserActionType} from './actions/action-constants';
 import {TreeView} from './components/tree-view/tree-view';
@@ -37,6 +38,9 @@ import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
 import {ParseUtils} from './utils/parse-utils';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from '@angular/forms';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -198,9 +202,21 @@ const extractIdentifiersFromChanges = changes => {
   return changes.reduce((p, c) => p.concat(extract(c.value)), []);
 }
 
-bootstrap(App, [
-  Connection,
-  UserActions,
-  ViewState,
-  Options,
-]);
+@NgModule({
+  declarations: [App],
+  imports: [BrowserModule, FormsModule],
+  providers: [
+    Connection,
+    UserActions,
+    ViewState,
+    Options,
+  ],
+  bootstrap: [App]
+})
+class FrontendModule {}
+
+if (process.env.NODE_ENV !== 'development') {
+  enableProdMode();
+}
+
+platformBrowserDynamic().bootstrapModule(FrontendModule);

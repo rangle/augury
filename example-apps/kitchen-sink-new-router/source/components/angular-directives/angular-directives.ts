@@ -9,9 +9,14 @@ import NgLocalizationDirective from './nglocalization-directive';
 
 @Component({
   selector: 'angular-directives',
-  directives: [NgIfDirective, NgForDirective,
-    NgSwitchDirective, NgClassDirective, NgStyleDirective,
-    NgLocalizationDirective],
+  directives: [
+    NgIfDirective,
+    NgForDirective,
+    NgSwitchDirective,
+    NgClassDirective,
+    NgStyleDirective,
+    NgLocalizationDirective
+  ],
   template: `
   <div>
     <ngif-directive></ngif-directive>

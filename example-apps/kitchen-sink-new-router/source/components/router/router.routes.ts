@@ -1,4 +1,4 @@
-import { RouterConfig } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import Start from './start';
 import StartChild from './start-child';
@@ -11,7 +11,7 @@ import AuxComp from './aux-comp';
 import InnerChild2 from './inner-child2';
 import InnerChildMain from './inner-child-main';
 
-export const RouterRoutes: RouterConfig = [
+export const RouterRoutes: Routes = [
   { path: 'start', component: Start, children: [
     { path: 'main', component: StartMain },
     { path: 'auxcomp', component: AuxComp, outlet: 'aux' },
@@ -23,4 +23,16 @@ export const RouterRoutes: RouterConfig = [
       { path: 'child2', component: InnerChild2 }
     ]},
   ]}
+];
+
+export const RouterDeclarations = [
+  Start,
+  StartMain,
+  AuxComp,
+  StartChild,
+  RouterData1,
+  RouterData2,
+  InnerChild,
+  InnerChildMain,
+  InnerChild2
 ];
