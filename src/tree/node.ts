@@ -14,7 +14,7 @@ export interface Node {
   id: string;
   isComponent: boolean;
   description: Array<Property>;
-  nativeElement: HTMLElement; // null on frontend
+  nativeElement: () => HTMLElement; // null on frontend
   listeners: Array<EventListener>;
   dependencies: Array<string>;
   injectors: Array<string>;

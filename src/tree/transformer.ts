@@ -114,7 +114,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
       providers,
       dependencies: dependencies(),
       source: element.source,
-      nativeElement: element.nativeElement // this will be null in the frontend
+      nativeElement: () => element.nativeElement // this will be null in the frontend
     };
 
     /// Set before we search for children so that the value is cached and the

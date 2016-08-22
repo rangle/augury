@@ -108,7 +108,7 @@ browserSubscribe(
 const getComponentInstance = (tree: MutableTree, path: Path) => {
   const node = tree.traverse(path);
   if (node) {
-    const probed = ng.probe(node.nativeElement);
+    const probed = ng.probe(node.nativeElement());
     if (probed) {
       return probed.componentInstance;
     }
@@ -121,7 +121,7 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
 
   const node = tree.traverse(path.slice(0, path.length - 1));
   if (node) {
-    const probed = ng.probe(node.nativeElement);
+    const probed = ng.probe(node.nativeElement());
     if (probed) {
       probed.componentInstance[path.pop()] = newValue;
     }
