@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {Node} from '../../../tree';
 import {ComponentLoadState} from '../../state';
 import {Spinner} from '../spinner/spinner';
 import Accordion from '../accordion/accordion';
@@ -20,6 +19,11 @@ import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
 import Dependency from '../dependency/dependency';
 import PropertyValue from '../property-value/property-value';
+import {
+  Node,
+  Path,
+  deserializePath,
+} from '../../../tree';
 
 @Component({
   selector: 'bt-component-info',
@@ -39,8 +43,6 @@ export class ComponentInfo {
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
-  private path = new Array<string>();
-
   private input: Array<any>;
 
   private ComponentLoadState = ComponentLoadState;
@@ -50,14 +52,18 @@ export class ComponentInfo {
     private userActions: UserActions
   ) {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  private ngOnChanges(changes: SimpleChanges) {
     if (this.node) {
       this.normalizeInput();
       this.displayTree();
     }
   }
 
-  viewComponentSource($event) {
+  private get path(): Path {
+    return deserializePath(this.node.id);
+  }
+
+  private viewComponentSource($event) {
     // FIXME(cbond): This will no longer work, augury-id is gone, use node path
     const highlightStr = '[augury-id=\"' + this.node.id + '\"]';
 
@@ -78,7 +84,7 @@ export class ComponentInfo {
     $event.stopPropagation();
   }
 
-  normalizeInput(): void {
+  private normalizeInput(): void {
     this.input = [];
 
     if (this.node.input) {
@@ -92,12 +98,12 @@ export class ComponentInfo {
     }
   }
 
-  isJson(data: string): boolean {
+  private isJson(data: string): boolean {
     return /^([\s\[\{]*(?:"(?:\\.|[^"])*"|-?\d[\d\.]*(?:[Ee][+-]?\d+)?|null|true|false|)[\s\]\}]*(?:,|:|$))+$/
       .test(data);
   }
 
-  fireEvent(output: string, param: any) {
+  private fireEvent(output: string, param: any) {
     if (this.isJson(param)) {
       param = JSON.parse(param);
     }
@@ -109,7 +115,7 @@ export class ComponentInfo {
     });
   }
 
-  displayTree(): void {
+  private displayTree() {
     const childrenContainer = this
       .elementRef.nativeElement
       .querySelector('#tree-children');

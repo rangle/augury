@@ -9,6 +9,7 @@ import {
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Highlightable} from '../highlightable';
 import {PropertyEditor} from '../property-editor/property-editor';
+import {Path} from '../../../tree';
 import ParseData from '../../utils/parse-data';
 
 @Component({
@@ -19,7 +20,7 @@ import ParseData from '../../utils/parse-data';
 })
 export default class StateValues extends Highlightable {
   @Input() id: string | number;
-  @Input() path: string;
+  @Input() path: Path;
   @Input() value;
 
   private editable: boolean = false;
@@ -41,14 +42,7 @@ export default class StateValues extends Highlightable {
 
   private onValueChanged(newValue) {
     if (newValue !== this.value) {
-      this.userActions.updateProperty({
-        property: {
-          path: this.path,
-          value: newValue,
-          id: this.id,
-          type: typeof newValue
-        }
-      });
+      this.userActions.updateProperty(this.path, newValue);
     }
   }
 }

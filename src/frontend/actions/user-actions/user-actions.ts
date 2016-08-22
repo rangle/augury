@@ -9,7 +9,10 @@ import {
   ViewState,
 } from '../../state';
 
-import {Node} from '../../../tree';
+import {
+  Node,
+  Path,
+} from '../../../tree';
 
 import {MessageFactory} from '../../../communication';
 
@@ -68,6 +71,11 @@ export class UserActions {
     }
   }
 
+  /// Update a property inside of the component tree
+  updateProperty(path: Path, newValue) {
+    return this.connection.send(MessageFactory.updateProperty(path, newValue));
+  }
+
   /**
    * Get the list of dependent Components when clicking on dependency
    * @param  {String} dependency Name of the dependency
@@ -76,17 +84,6 @@ export class UserActions {
     // this.dispatcher.messageBus.next({
     //   actionType: UserActionType.GET_DEPENDENCIES,
     //   dependency
-    // });
-  }
-
-  /**
-   * Update the Component property when updating from info panel
-   * @param  {Object} options.property
-   */
-  updateProperty(property) {
-    // this.messagingService.sendMessageToBackend({
-    //   actionType: UserActionType.UPDATE_PROPERTY,
-    //   property
     // });
   }
 

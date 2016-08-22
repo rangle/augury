@@ -93,6 +93,11 @@ browserSubscribe(
           return getComponentInstance(previousTree, message.content.path);
         }
         break;
+      case MessageType.UpdateProperty:
+        updateProperty(previousTree,
+          message.content.path,
+          message.content.newValue);
+        break;
     }
     return undefined;
   });
@@ -109,4 +114,20 @@ const getComponentInstance = (tree: MutableTree, path: Path) => {
     }
   }
   return null;
+};
+
+const updateProperty = (tree: MutableTree, path: Path, newValue) => {
+  const rootIndex = <number> path[0];
+
+  const node = tree.traverse(path.slice(0, path.length - 1));
+  if (node) {
+    const probed = ng.probe(node.nativeElement);
+    if (probed) {
+      probed.componentInstance[path.pop()] = newValue;
+    }
+  }
+
+  const app = ng.probe(getAllAngularRootElements()[rootIndex]);
+  const applicationRef = app.injector.get(ng.coreTokens.ApplicationRef);
+  applicationRef.tick();
 };

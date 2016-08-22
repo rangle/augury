@@ -14,6 +14,7 @@ import {
   Change,
   MutableTree,
   Node,
+  Path,
   deserializePath,
 } from '../tree';
 
@@ -59,6 +60,16 @@ export abstract class MessageFactory {
       content: {
         path: deserializePath(node.id),
         requestInstance
+      }
+    });
+  }
+
+  static updateProperty(path: Path, newValue): Message<void> {
+    return create({
+      messageType: MessageType.UpdateProperty,
+      content: {
+        path,
+        newValue,
       }
     });
   }
