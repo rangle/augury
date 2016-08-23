@@ -11,36 +11,11 @@
       <label for="exclude-non-components">Show HTML elements</label>
     </div>
     <div class="flex">
-      <div class="flex flex-center border rounded border-color-dark bg-white mr3">
-        <!-- SEARCH -->
-        <input class="outline border-none bg-white flex-auto primary-color"
-          placeholder="Find Component"
-          type="text"
-          (keyup)="onKey($event)"
-          [(ngModel)]="query">
-        <div class="bg-white right-align pr2"
-          style="min-width:50px">
-          <span class="h4 regular primary-color"
-            *ngIf="totalSearchCount > 0 && query.length > 0">
-            {{searchIndex + 1}} of {{totalSearchCount}}
-            </span>
-        </div>
-        <div class="right-align border-left">
-          <div class="inline-block">
-            <button class="outline border-none btn-primary primary-color bg-panel pointer py2"
-              (click)="onKey($event, false)">
-              <div class="expander rotate180"></div>
-            </button>
-          </div>
-          <div class="border-left inline-block"
-            style="margin-left: -4px">
-            <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py2"
-              (click)="onKey($event, true)">
-              <div class="expander"></div>
-            </button>
-          </div>
-        </div>
-      </div>
+      <search
+        [placeholder]="searchPlaceholder"
+        [handler]="onRetrieveSearchResults"
+        (selectedResult)="onSelectedSearchResultChanged($event)">
+      </search>
       <div class="icon setting" id="augury-theme-menu-button"
         (click)="onOpenSettings()"></div>
     </div>

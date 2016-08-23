@@ -7,10 +7,11 @@ import {
   Input
 } from '@angular/core';
 
+import {Search} from '../search/search';
 import {UserActions} from '../../actions/user-actions/user-actions';
-
 import {
   Options,
+  Tab,
   Theme,
 } from '../../state';
 
@@ -19,16 +20,19 @@ import {
   template: require('./header.html'),
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
-  }
+  },
+  directives: [
+    Search,
+  ]
 })
 export class Header {
+  private Tab = Tab;
   private Theme = Theme;
+
+  @Input() private selectedTab: Tab;
 
   @Input() private options: Options;
 
-  private searchIndex: number = 0;
-  private totalSearchCount: number = 0;
-  private query: string = '';
   private settingOpened: boolean = false;
 
   constructor(
@@ -61,11 +65,22 @@ export class Header {
     }
   }
 
-  onOpenSettings() {
+  private get searchPlaceholder(): string {
+    switch (this.selectedTab) {
+      case Tab.ComponentTree:
+        return 'Search components';
+      case Tab.RouterTree:
+        return 'Search router';
+      default:
+        throw new Error(`Unknown tab: ${this.selectedTab}`);
+    }
+  }
+
+  private onOpenSettings = () => {
     this.settingOpened = !this.settingOpened;
   }
 
-  onThemeChange(theme: Theme, selected: boolean) {
+  private onThemeChange = (theme: Theme, selected: boolean) => {
     if (selected) {
       this.options.theme = theme;
     }
@@ -73,32 +88,14 @@ export class Header {
     this.resetTheme();
   }
 
-  onKey(event, isNext) {
-    if (this.query.length === 0) {
-      return;
+  private onRetrieveSearchResults = (query: string) => {
+    switch (this.selectedTab) {
+      case Tab.ComponentTree:
+        return this.userActions.searchComponents(query);
+      case Tab.RouterTree:
+        return this.userActions.searchRouter(query);
+      default:
+        throw new Error(`Unknown tab: ${this.selectedTab}`);
     }
-
-    if (isNext === undefined && event.keyCode === 13) {
-      this.searchIndex++;
-    } else if (isNext === undefined) {
-      this.searchIndex = 0;
-    } else if (isNext) {
-      this.searchIndex++;
-    } else if (!isNext) {
-      this.searchIndex--;
-    }
-
-    // cycle over the search results if reached at the end
-    if (this.searchIndex === this.totalSearchCount) {
-      this.searchIndex = 0;
-    } else if (this.searchIndex < 0) {
-      this.searchIndex = this.totalSearchCount - 1;
-    }
-
-    this.query = this.query.toLocaleLowerCase();
-
-    this.userActions.searchNode(this.query, this.searchIndex);
-
-    this.ngZone.run(() => undefined);
   }
 }

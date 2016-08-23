@@ -50,16 +50,12 @@ export class UserActions {
     return this.connection.send(MessageFactory.emitValue(path, value));
   }
 
-  /**
-   * Search for a node to be highlighted
-   * @param  {String} options.query
-   */
-  searchNode(query: string, index: number) {
-    // this.dispatcher.messageBus.next({
-    //   actionType: UserActionType.SEARCH_NODE,
-    //   query,
-    //   index
-    // });
+  searchComponents(query: string): Promise<Array<Node>> {
+    return Promise.reject<Array<Node>>(new Error('Not implemented'));
+  }
+
+  searchRouter(query: string): Promise<Array<any>> {
+    return Promise.reject<Array<any>>(new Error('Not implemented'));
   }
 
   /**

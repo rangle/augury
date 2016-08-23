@@ -1,7 +1,10 @@
 <div *ngIf="tree"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="{'dark': theme === Theme.Dark}">
-  <augury-header [options]="options"></augury-header>
+  <augury-header
+    [options]="options"
+    [selectedTab]="selectedTab">
+  </augury-header>
   <div class="flex flex-auto">
     <div class="col col-6 overflow-hidden
       border-right border-color-dark flex"

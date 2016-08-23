@@ -1,0 +1,27 @@
+<div class="flex flex-center border rounded border-color-dark bg-white mr3">
+  <input
+    [placeholder]="placeholder"
+    [(ngModel)]="search"
+    (keypress)="onKeypress($event)" />
+  <div class="bg-white right-align pr2">
+    <span class="h4 regular primary-color" [ngClass]="{hide: total === 0}">
+      {{current}} of {{total}}
+    </span>
+  </div>
+  <div class="right-align border-left" [ngClass]="{hide: total === 0}">
+    <div class="inline-block">
+      <button class="outline border-none btn-primary primary-color bg-panel pointer py2"
+          (click)="onPreviousResult()"
+          [disabled]="enablePrevious === false">
+        <div class="expander rotate180"></div>
+      </button>
+    </div>
+    <div class="border-left inline-block" style="margin-left: -4px">
+      <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py2"
+          (click)="onNextResult()"
+          [disabled]="enableNext === false">
+        <div class="expander"></div>
+      </button>
+    </div>
+  </div>
+</div>
