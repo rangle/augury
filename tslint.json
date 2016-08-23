@@ -8,7 +8,7 @@
     "indent": [true, "spaces"],
     "label-position": true,
     "label-undefined": true,
-    "max-line-length": [true, 80],
+    "max-line-length": [true, 120],
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [true,

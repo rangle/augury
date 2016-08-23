@@ -1,21 +1,25 @@
-import {enableProdMode} from '@angular/core';
-import {Component, NgZone} from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {Dispatcher} from './dispatcher/dispatcher';
-import {BackendActions} from './actions/backend-actions/backend-actions';
-import {UserActions} from './actions/user-actions/user-actions';
-import {UserActionType} from './actions/action-constants';
-import {ComponentDataStore} from './stores/component-data/component-data-store';
-import {BackendMessagingService} from './channel/backend-messaging-service';
-import {TreeView} from './components/tree-view/tree-view';
-import {InfoPanel} from './components/info-panel/info-panel';
-import AppTrees from './components/app-trees/app-trees';
-import {Header} from './components/header/header';
+import {
+  Component,
+  NgModule,
+  NgZone,
+  enableProdMode,
+} from '@angular/core';
 import * as Rx from 'rxjs';
-import {ParseUtils} from './utils/parse-utils';
-import { NgModule } from '@angular/core';
+import AppTrees from './components/app-trees/app-trees';
+import SplitPane from './components/split-pane/split-pane';
+import { BackendActions } from './actions/backend-actions/backend-actions';
+import { BackendMessagingService } from './channel/backend-messaging-service';
 import { BrowserModule } from '@angular/platform-browser';
+import { ComponentDataStore } from './stores/component-data/component-data-store';
+import { Dispatcher } from './dispatcher/dispatcher';
 import { FormsModule } from '@angular/forms';
+import { Header } from './components/header/header';
+import { InfoPanel } from './components/info-panel/info-panel';
+import { TreeView } from './components/tree-view/tree-view';
+import { UserActionType } from './actions/action-constants';
+import { UserActions } from './actions/user-actions/user-actions';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ParseUtils } from './utils/parse-utils';
 
 const BASE_STYLES = require('!style!css!postcss!../styles/app.css');
 
@@ -26,7 +30,7 @@ const ALLOWED_DEPTH: number = 3;
 @Component({
   selector: 'bt-app',
   providers: [ParseUtils],
-  directives: [TreeView, InfoPanel, AppTrees, Header],
+  directives: [AppTrees, Header, InfoPanel, SplitPane, TreeView],
   template: `
     <div class="clearfix vh-100 overflow-hidden flex flex-column"
       [ngClass]="{'dark': theme === 'dark'}">
@@ -35,34 +39,17 @@ const ALLOWED_DEPTH: number = 3;
         [theme]="theme"
         (newTheme)="themeChanged($event)">
       </augury-header>
-      <div class="flex flex-auto">
-        <div class="col col-6 overflow-hidden
-          border-right border-color-dark flex"
-        [ngClass]="{'overflow-scroll col-12': selectedTabIndex > 0}">
-          <bt-app-trees
-            class="flex flex-column flex-auto bg-white"
-            [selectedTabIndex]="selectedTabIndex"
-            [selectedNode]="selectedNode"
-            [closedNodes]="closedNodes"
-            [routerTree]="routerTree"
-            [tree]="tree"
-            [theme]="theme"
-            [changedNodes]="changedNodes"
-            [allowedComponentTreeDepth]="allowedComponentTreeDepth"
-            (tabChange)="tabChange($event)">
-          </bt-app-trees>
-        </div>
-        <div class="col col-6 overflow-hidden"
-          [ngClass]="{'flex': selectedTabIndex === 0}"
-          [hidden]="selectedTabIndex > 0">
-          <bt-info-panel
-            class="flex flex-column flex-auto bg-white"
-            [tree]="tree"
-            [theme]="theme"
-            [node]="selectedNode">
-          </bt-info-panel>
-        </div>
-      </div>
+      <bt-app-trees class="flex flex-column flex-auto"
+        [selectedTabIndex]="selectedTabIndex"
+        [selectedNode]="selectedNode"
+        [closedNodes]="closedNodes"
+        [routerTree]="routerTree"
+        [tree]="tree"
+        [theme]="theme"
+        [changedNodes]="changedNodes"
+        [allowedComponentTreeDepth]="allowedComponentTreeDepth"
+        (tabChange)="tabChange($event)">
+      </bt-app-trees>
     </div>`
 })
 /**
@@ -198,4 +185,3 @@ if (process.env.NODE_ENV !== 'development') {
 
 // --- Bootstrap the module containing our root component on the web browser.
 platformBrowserDynamic().bootstrapModule(FrontendModule);
-
