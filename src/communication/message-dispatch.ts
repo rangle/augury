@@ -76,7 +76,10 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
 export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
-export const browserDispatch = <T>(message: Message<T>) => window.postMessage(message, '*');
+export const browserDispatch = <T>(message: Message<T>) => {
+  debugger;
+  window.postMessage(message, '*');
+};
 
 window.addEventListener('message',
   (event: MessageEvent) => {

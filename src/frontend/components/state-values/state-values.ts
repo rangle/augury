@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Inject,
   Input,
+  SimpleChanges,
 } from '@angular/core';
 
 import {DomSanitizationService} from '@angular/platform-browser';
@@ -33,11 +34,26 @@ export default class StateValues extends Highlightable {
     private userActions: UserActions,
     private domSanitizationService: DomSanitizationService
   ) {
-    super(changeDetector);
+    super(changeDetector, changes => this.hasChanged(changes));
   }
 
   ngOnDestroy() {
     super.ngOnDestroy();
+  }
+
+  private hasChanged(changes) {
+    if (changes == null || !changes.hasOwnProperty('value')) {
+      return false;
+    }
+
+    const oldValue = changes.value.previousValue;
+    const newValue = changes.value.currentValue;
+
+    if (oldValue.toString() === 'CD_INIT_VALUE') {
+      return false;
+    }
+
+    return oldValue !== newValue;
   }
 
   private get propertyKey(): string | number {

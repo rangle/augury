@@ -30,7 +30,7 @@ export enum State {
   template: require('./property-editor.html'),
   styles: [require('to-string!./property-editor.css')],
 })
-export class PropertyEditor extends Highlightable {
+export class PropertyEditor {
   @Input() private initialValue;
 
   @Output() private cancel = new EventEmitter<void>();
@@ -48,9 +48,7 @@ export class PropertyEditor extends Highlightable {
   constructor(
     private changeDetector: ChangeDetectorRef,
     private elementRef: ElementRef
-  ) {
-    super(changeDetector, changes => this.hasChanged(changes));
-  }
+  ) {}
 
   private get editor(): HTMLInputElement {
     return this.elementRef.nativeElement.querySelector('input');
@@ -60,12 +58,8 @@ export class PropertyEditor extends Highlightable {
     this.editor.focus();
   }
 
-  protected ngOnChanges(changes) {
-    super.ngOnChanges(changes);
-
-    if (this.hasChanged(changes)) {
-      this.value = changes.initialValue.currentValue;
-    }
+  private ngOnChanges() {
+    this.value = this.initialValue;
   }
 
   private ngAfterViewChecked() {
@@ -86,6 +80,9 @@ export class PropertyEditor extends Highlightable {
   }
 
   private hasChanged(changes: SimpleChanges) {
+    if (changes == null) {
+      return false;
+    }
     return changes.hasOwnProperty('initialValue');
   }
 

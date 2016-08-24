@@ -1,12 +1,21 @@
 import {MessageType} from './message-type';
 
-import {deserialize} from '../utils';
+import {
+  deserialize,
+  deserializeBinary,
+} from '../utils';
+
+export enum Serialize {
+  None,
+  Binary,
+  Recreator,
+}
 
 export interface Message<T> {
   messageId: string;
   messageSource: string;
   messageType: MessageType;
-  serialized?: boolean;
+  serialize?: Serialize;
   content?: T;
 }
 
@@ -36,12 +45,19 @@ export const testResponse =
   };
 
 export const deserializeMessage = <T>(message: Message<T>) => {
-  if (message.serialized) {
-    if (typeof message.content !== 'string') {
-      throw new Error('Message is marked serialized but is not a string');
-    }
-    message.content = deserialize(message.content);
-    message.serialized = false;
+  switch (message.serialize) {
+    case Serialize.Binary:
+      message.content = deserializeBinary(<any> message.content);
+      break;
+    case Serialize.Recreator:
+      message.content = deserialize(message.content);
+      break;
+    case Serialize.None:
+      break;
+    default:
+      throw new Error(`Unknown serialization type: ${message.serialize}`);
   }
+
+  message.serialize = Serialize.None;
 };
 

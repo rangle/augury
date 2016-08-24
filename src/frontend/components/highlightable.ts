@@ -12,25 +12,32 @@ export class Highlightable {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    private getUpdated?: (changes: SimpleChanges) => boolean
+    private getUpdated?: (changes?: SimpleChanges) => boolean
   ) {}
 
   protected ngOnChanges(changes: SimpleChanges) {
     if (typeof this.getUpdated === 'function') {
-      if (!this.getUpdated(changes)) {
-        return;
+      if (this.getUpdated(changes)) {
+        this.changed();
       }
     }
     else {
-      if (changes.hasOwnProperty('id')
-      || !changes.hasOwnProperty('value')) {
-        return;
-      }
+      this.changed();
+    }
+  }
+
+  protected ngOnDestroy() {
+    this.isUpdated = false;
+
+    clearTimeout(this.resetUpdateState);
+  }
+
+  protected changed() {
+    if (this.isUpdated) {
+      return;
     }
 
     this.isUpdated = true;
-
-    clearTimeout(this.resetUpdateState);
 
     this.resetUpdateState = setTimeout(() => {
         this.resetUpdateState = null;
@@ -42,9 +49,7 @@ export class Highlightable {
         }
       },
       highlightTime);
-  }
 
-  protected ngOnDestroy() {
-    clearTimeout(this.resetUpdateState);
+    this.changeDetectorRef.detectChanges();
   }
 }

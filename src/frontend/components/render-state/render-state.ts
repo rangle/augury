@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  SimpleChanges,
 } from '@angular/core';
 
 import StateValues from '../state-values/state-values';

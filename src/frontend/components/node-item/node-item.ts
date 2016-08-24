@@ -39,6 +39,12 @@ export class NodeItem extends Highlightable {
     super(changeDetector, () => viewState.nodeIsChanged(this.node));
   }
 
+  private ngDoCheck() {
+    if (this.viewState.nodeIsChanged(this.node)) {
+      this.changed();
+    }
+  }
+
   getNodeDetails(node) {
     let html = '';
     html += `<p class="node-item-name">${node.name}</p>`;
@@ -97,10 +103,6 @@ export class NodeItem extends Highlightable {
 
   expandTree($event) {
     this.userActions.toggle(this.node);
-  }
-
-  ngOnChanges(changes) {
-    super.ngOnChanges(changes);
   }
 
   trackById = (index: number, node: Node) => node.id;

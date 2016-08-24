@@ -40,7 +40,9 @@ export class MutableTree {
   diff(nextTree: MutableTree): Array<Change> {
     const changes = <Change[]> compare(this, nextTree);
 
-    return changes.filter(c => c.path.indexOf('nativeElement') < 0);
+    const exclude = /nativeElement$/;
+
+    return changes.filter(c => exclude.test(c.path) === false);
   }
 
   /// Apply a set of changes to this tree, mutating it
@@ -61,9 +63,15 @@ export class MutableTree {
 
   /// Retreive a node matching {@link path} (fast)
   traverse(path: Path): Node {
+    path = path.slice(0);
+
     const root = this.roots[path.shift()];
     if (root == null) {
       return null;
+    }
+
+    if (path.length === 0) {
+      return root;
     }
 
     let iterator = root;

@@ -17,7 +17,7 @@ export default class PropertyValue extends Highlightable {
   @Input() private value: string;
 
   constructor(@Inject(ChangeDetectorRef) changeDetectorRef: ChangeDetectorRef) {
-    super(changeDetectorRef);
+    super(changeDetectorRef, changes => changes && changes.hasOwnProperty('value'));
   }
 
   ngOnDestroy() {

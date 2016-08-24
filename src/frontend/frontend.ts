@@ -21,7 +21,9 @@ import {
   Change,
   MutableTree,
   Node,
+  Path,
   createTree,
+  serializePath,
 } from '../tree';
 
 import {deserialize} from '../utils';
@@ -155,21 +157,26 @@ class App {
     this.tree = createTree(roots);
 
     this.restoreSelection();
+
+    this.changeDetector.detectChanges();
   }
 
   private updateTree(changes) {
-    const changedIdentifiers = extractIdentifiersFromChanges(changes);
+    /// Patch the treee
+    this.tree.patch(changes);
+
+    /// This operation must happen after the tree patch
+    const changedIdentifiers = this.extractIdentifiersFromChanges(changes);
 
     /// Reset component state cache for these IDs
     this.componentState.reset(changedIdentifiers);
-
-    /// Patch the treee
-    this.tree.patch(changes);
 
     /// Highlight the nodes that have changed
     this.viewState.nodesChanged(changedIdentifiers);
 
     this.restoreSelection();
+
+    this.changeDetector.detectChanges();
   }
 
   private onReceiveMessage(msg: Message<any>,
@@ -234,26 +241,38 @@ class App {
         throw new Error(`Unknown tab: ${tab}`);
     }
   }
-}
 
-const extractIdentifiersFromChanges = (changes: Array<Change>): string[] => {
-  const identifiers = new Set<string>();
+  private extractIdentifiersFromChanges(changes: Array<Change>): string[] {
+    const identifiers = new Set<string>();
 
-  for (const change of changes) {
-    const path = change.path.split('/').filter(k => /^\d+$/.test(k));
+    for (const change of changes) {
+      const path = this.nodePathFromChangePath(change.path.split('/'));
 
-    if (path.length > 1) { // add parent
-      identifiers.add(path.slice(0, path.length - 1).join(' '));
+      identifiers.add(serializePath(path));
     }
 
-    identifiers.add(path.join(' '));
+    const results = new Array<string>();
+
+    identifiers.forEach(id => results.push(id));
+
+    return results;
   }
 
-  const results = new Array<string>();
-  identifiers.forEach(id => results.push(id));
+  private nodePathFromChangePath(changePath: Array<string>) {
+    const result = new Array<number>();
 
-  return results;
-};
+    for (let index = 0; index < changePath.length; ++index) {
+      switch (changePath[index]) {
+        case 'roots':
+        case 'children':
+          result.push(parseInt(changePath[++index], 10));
+          break;
+      }
+    }
+
+    return result;
+  }
+}
 
 @NgModule({
   declarations: [App],

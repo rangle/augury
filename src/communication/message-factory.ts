@@ -3,6 +3,7 @@ import {DebugElement} from '@angular/core';
 import {
   Message,
   MessageResponse,
+  Serialize,
   messageSource,
 } from './message';
 
@@ -19,12 +20,17 @@ import {
 } from '../tree';
 
 import {
-  deserialize,
-  serialize
-} from '../utils/serialize';
+  serialize,
+  serializeBinary,
+} from '../utils';
 
 const create = <T>(properties: T) =>
-  Object.assign({messageSource, messageId: getRandomHash()}, properties);
+  Object.assign({
+    messageSource,
+    messageId: getRandomHash(),
+    serialize: Serialize.None,
+  },
+  properties);
 
 export abstract class MessageFactory {
   static initialize(options?: {showElements: boolean}): Message<void> {
@@ -43,16 +49,16 @@ export abstract class MessageFactory {
   static completeTree(tree: MutableTree): Message<MutableTree> {
     return create({
       messageType: MessageType.CompleteTree,
-      content: serialize(tree.roots),
-      serialized: true,
+      content: serializeBinary(tree.roots),
+      serialize: Serialize.Binary,
     });
   }
 
   static treeDiff(changes: Change[]): Message<Change[]> {
     return create({
       messageType: MessageType.TreeDiff,
-      content: serialize(changes),
-      serialized: true,
+      content: serializeBinary(changes),
+      serialize: Serialize.Binary,
     });
   }
 
@@ -111,12 +117,16 @@ export abstract class MessageFactory {
       return response;
     };
 
+    const serialization = serializeResponse
+      ? Serialize.Recreator
+      : Serialize.None;
+
     return create({
       messageType: MessageType.Response,
       messageId: null,
       messageSource: message.messageSource,
       messageResponseId: message.messageId,
-      serialized: serializeResponse,
+      serialize: serialization,
       content: response instanceof Error ? null : prepare(),
       error: response instanceof Error ? response : null
     });
