@@ -92,25 +92,12 @@ export class ComponentInfo {
     return this.node.output;
   }
 
-  private viewComponentSource($event) {
-    // FIXME(cbond): This will no longer work, augury-id is gone, use node path
-    const highlightStr = '[augury-id=\"' + this.node.id + '\"]';
-
-    let evalStr = `inspect(
-      ng.probe(document.querySelector('${highlightStr}'))
-        .componentInstance.constructor)`;
-
-    chrome.devtools.inspectedWindow.eval(
-      evalStr,
-      function(result, isException) {
-        if (isException) {
-          console.log(isException);
-        }
-      }
-    );
-
-    $event.preventDefault();
-    $event.stopPropagation();
+  private viewComponentSource() {
+    chrome.devtools.inspectedWindow.eval(`
+      var root = ng.probe(window.pathLookupNode('${this.node.id}'));
+      if (root) {
+        inspect(root.componentInstance.constructor);
+      }`);
   }
 
   private isJson(data: string): boolean {
