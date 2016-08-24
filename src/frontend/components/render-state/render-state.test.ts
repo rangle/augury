@@ -1,4 +1,5 @@
 import * as test from 'tape';
+
 import RenderState from './render-state';
 
 test('utils/render-state: init component', t => {

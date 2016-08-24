@@ -37,7 +37,7 @@ let includeElements: boolean;
 const updateTree = (roots: Array<DebugElement>) => {
   const newTree = createTreeFromElements(roots, includeElements);
 
-  send(
+  send<void, any>(
     previousTree
       ? MessageFactory.treeDiff(previousTree.diff(newTree))
       : MessageFactory.completeTree(newTree));

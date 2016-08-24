@@ -12,13 +12,14 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 import {
   MutableTree,
   Node,
-  Route,
 } from '../../../tree';
 import {
   Options,
   Tab,
   Theme,
 } from '../../state';
+
+type Route = any; // TODO(cbond): use real Route type
 
 @Component({
   selector: 'augury-header',

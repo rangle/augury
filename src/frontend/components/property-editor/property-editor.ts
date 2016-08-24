@@ -60,7 +60,7 @@ export class PropertyEditor extends Highlightable {
     this.editor.focus();
   }
 
-  protected ngOnChanges(changes: SimpleChanges) {
+  protected ngOnChanges(changes) {
     super.ngOnChanges(changes);
 
     if (this.hasChanged(changes)) {
