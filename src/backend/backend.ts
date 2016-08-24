@@ -7,6 +7,7 @@ import {
   Node,
   Path,
   createTreeFromElements,
+  deserializePath,
 } from '../tree';
 
 import {
@@ -220,3 +221,17 @@ export const tryWrap = (fn: Function) => {
     return error;
   }
 };
+
+// NOTE(cbond): This is required to look up nodes based on a path from the
+// frontend. The only place it is used right now is in the inspectElement
+// operation. It would be nice if there were a cleaner way to do this.
+Object.assign(window, {
+  pathLookupNode: (id: string) => {
+    const node = previousTree.search(id);
+    if (node == null) {
+      console.error(`Cannot find element associated with node ${id}`);
+      return null;
+    }
+    return node.nativeElement();
+  }
+});
