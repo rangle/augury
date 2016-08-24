@@ -81,12 +81,7 @@ export class ComponentInstanceState {
     this.write(node, ComponentLoadState.Failed, error);
   }
 
-  reset(identifiers?: string[]) {
-    if (identifiers) {
-      identifiers.forEach(id => this.map.delete(id));
-    }
-    else {
+  reset() {
       this.map.clear();
-    }
   }
 }

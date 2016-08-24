@@ -168,8 +168,8 @@ class App {
     /// This operation must happen after the tree patch
     const changedIdentifiers = this.extractIdentifiersFromChanges(changes);
 
-    /// Reset component state cache for these IDs
-    this.componentState.reset(changedIdentifiers);
+    /// Reset component state cache
+    this.componentState.reset();
 
     /// Highlight the nodes that have changed
     this.viewState.nodesChanged(changedIdentifiers);
