@@ -1,24 +1,32 @@
-<div class="flex flex-center border rounded border-color-dark bg-white mr3">
+<div class="flex flex-center border rounded border-color-dark mr3"
+    [ngClass]="{
+      'bg-white': state !== SearchState.Failure,
+      'bg-red': state === SearchState.Failure,
+      'fg-white': state === SearchState.Failure}">
+  <div class="icon" [ngClass]="{searching: state === SearchState.Searching}"></div>
   <input
+    class="border-none outline-none"
     [placeholder]="placeholder"
-    [(ngModel)]="search"
-    (keypress)="onKeypress($event)" />
-  <div class="bg-white right-align pr2">
-    <span class="h4 regular primary-color" [ngClass]="{hide: total === 0}">
-      {{current}} of {{total}}
+    [ngModel]="query"
+    (ngModelChange)="onSearchChanged($event)"
+    (keypress)="onKeypress($event)"
+    [ngClass]="{searching: state === SearchState.Searching}" />
+  <div class="right-align pr2">
+    <span class="h4 regular primary-color" [ngClass]="{invisible: total === 0}">
+      {{current + 1}} of {{total}}
     </span>
   </div>
-  <div class="right-align border-left" [ngClass]="{hide: total === 0}">
+  <div class="right-align border-left" [ngClass]="{invisible: total === 0}">
     <div class="inline-block">
       <button class="outline border-none btn-primary primary-color bg-panel pointer py2"
-          (click)="onPreviousResult()"
+          (click)="previous()"
           [disabled]="enablePrevious === false">
         <div class="expander rotate180"></div>
       </button>
     </div>
     <div class="border-left inline-block" style="margin-left: -4px">
       <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py2"
-          (click)="onNextResult()"
+          (click)="next()"
           [disabled]="enableNext === false">
         <div class="expander"></div>
       </button>

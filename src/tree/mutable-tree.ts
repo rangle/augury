@@ -46,29 +46,18 @@ export class MutableTree {
     this.roots = patch.apply(this.roots, changes).doc;
   }
 
-  /// Apply a function to all nodes in the specified tree index
-  recurse(rootIndex: number, fn: (node: Node) => boolean | void) {
-    const apply = (node: Node) => {
-      fn(node);
-
-      for (const child of node.children || []) {
-        if (apply(child) === false) {
-          return false;
-        }
-      }
-    };
-
-    apply(this.roots[rootIndex]);
-  }
-
   /// Search for a node in the tree based on its path. An ID is a path that
   /// has been serialized into a string. So we deserialize the path and then
   /// traverse the tree using that information so that the search is much
-  /// faster because we do not have to compare every node in the tree.
+  /// faster because we do not have to compare every node in the tree. This
+  /// is not really a search. We just deserialize the ID, which is a path,
+  /// and then follow that path to the node that we need. There is no
+  /// searching involved, so this is a very fast operation.
   search(id: string) {
     return this.traverse(deserializePath(id));
   }
 
+  /// Retreive a node matching {@link path} (fast)
   traverse(path: Path): Node {
     const root = this.roots[path.shift()];
     if (root == null) {
@@ -96,5 +85,41 @@ export class MutableTree {
     }
 
     return iterator;
+  }
+
+  /// Apply a function to all nodes in the specified tree index
+  recurse(rootIndex: number, fn: (node: Node) => boolean | void) {
+    const apply = (node: Node) => {
+      fn(node);
+
+      for (const child of node.children || []) {
+        if (apply(child) === false) {
+          return false;
+        }
+      }
+    };
+
+    return apply(this.roots[rootIndex]);
+  }
+
+  /// Apply a function recursively to all nodes in all roots
+  recurseAll(fn: (node: Node) => boolean | void) {
+    for (let index = 0; index < this.roots.length; ++index) {
+      if (this.recurse(index, fn) === false) {
+        return false;
+      }
+    }
+  }
+
+  filter(fn: (node: Node) => boolean): Array<Node> {
+    const results = new Array<Node>();
+
+    this.recurseAll(node => {
+      if (fn(node)) {
+        results.push(node);
+      }
+    });
+
+    return results;
   }
 }

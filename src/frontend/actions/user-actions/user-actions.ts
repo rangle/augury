@@ -8,11 +8,14 @@ import {
 } from '../../state';
 
 import {
+  MutableTree,
   Node,
   Path,
 } from '../../../tree';
 
 import {MessageFactory} from '../../../communication';
+
+import {matchNode} from '../../utils';
 
 @Injectable()
 export class UserActions {
@@ -50,11 +53,19 @@ export class UserActions {
     return this.connection.send(MessageFactory.emitValue(path, value));
   }
 
-  searchComponents(query: string): Promise<Array<Node>> {
-    return Promise.reject<Array<Node>>(new Error('Not implemented'));
+  searchComponents(tree: MutableTree, query: string): Promise<Array<Node>> {
+    return new Promise((resolve, reject) => {
+      const results = tree.filter(node => matchNode(node, query));
+      if (results.length > 0) {
+        resolve(results);
+      }
+      else {
+        reject(new Error('No results found'));
+      }
+    });
   }
 
-  searchRouter(query: string): Promise<Array<any>> {
+  searchRouter(tree: MutableTree, query: string): Promise<Array<any>> {
     return Promise.reject<Array<any>>(new Error('Not implemented'));
   }
 

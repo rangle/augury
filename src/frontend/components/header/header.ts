@@ -10,6 +10,11 @@ import {
 import {Search} from '../search/search';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {
+  MutableTree,
+  Node,
+  Route,
+} from '../../../tree';
+import {
   Options,
   Tab,
   Theme,
@@ -26,12 +31,19 @@ import {
   ]
 })
 export class Header {
-  private Tab = Tab;
-  private Theme = Theme;
-
   @Input() private selectedTab: Tab;
-
   @Input() private options: Options;
+  @Input() private tree: MutableTree;
+
+  /// Search has resulted in a new node being selected
+  @Output() private selectNode = new EventEmitter<Node>();
+
+  /// Search has resulted in a new route being selected
+  @Output() private selectRoute = new EventEmitter<Route>();
+
+  private Tab = Tab;
+
+  private Theme = Theme;
 
   private settingOpened: boolean = false;
 
@@ -91,9 +103,22 @@ export class Header {
   private onRetrieveSearchResults = (query: string) => {
     switch (this.selectedTab) {
       case Tab.ComponentTree:
-        return this.userActions.searchComponents(query);
+        return this.userActions.searchComponents(this.tree, query);
       case Tab.RouterTree:
-        return this.userActions.searchRouter(query);
+        return this.userActions.searchRouter(this.tree, query);
+      default:
+        throw new Error(`Unknown tab: ${this.selectedTab}`);
+    }
+  }
+
+  private onSelectedSearchResultChanged(node: Node | Route) {
+    switch (this.selectedTab) {
+      case Tab.ComponentTree:
+        this.selectNode.emit(<Node> node);
+        break;
+      case Tab.RouterTree:
+        this.selectRoute.emit(<Route> node);
+        break;
       default:
         throw new Error(`Unknown tab: ${this.selectedTab}`);
     }

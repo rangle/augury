@@ -53,8 +53,4 @@ export class InfoPanel {
   private onSelectedTabChanged(tab: StateTab) {
     this.selectedTab = tab;
   }
-
-  private onSelectionChange(node: Node) {
-    this.selectionChange.emit(node);
-  }
 }

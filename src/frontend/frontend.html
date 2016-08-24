@@ -3,7 +3,10 @@
   [ngClass]="{'dark': theme === Theme.Dark}">
   <augury-header
     [options]="options"
-    [selectedTab]="selectedTab">
+    [selectedTab]="selectedTab"
+    [tree]="tree"
+    (selectNode)="onComponentSelectionChange($event)"
+    (selectRoute)="onRouteSelectionChange($event)">
   </augury-header>
   <div class="flex flex-auto">
     <div class="col col-6 overflow-hidden
@@ -18,7 +21,7 @@
         [theme]="options.theme"
         [tree]="tree"
         (tabChange)="selectedTab = $event"
-        (selectionChange)="onSelectionChange($event)"
+        (selectionChange)="onComponentSelectionChange($event)"
         (inspectElement)="onInspectElement($event)">
       </bt-app-trees>
     </div>
@@ -32,7 +35,7 @@
         [node]="selectedNode"
         [loadingState]="componentState.loadingState(selectedNode)"
         [state]="componentState.componentInstance(selectedNode)"
-        (selectionChange)="onSelectionChange($event)">
+        (selectionChange)="onComponentSelectionChange($event)">
       </bt-info-panel>
     </div>
   </div>

@@ -114,7 +114,7 @@ class App {
   private restoreSelection() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
 
-    this.onSelectionChange(this.selectedNode);
+    this.onComponentSelectionChange(this.selectedNode);
   }
 
   private processMessage(msg: Message<any>,
@@ -158,7 +158,7 @@ class App {
     }
   }
 
-  private onSelectionChange(node: Node) {
+  private onComponentSelectionChange(node: Node) {
     this.selectedNode = node;
 
     if (node == null) {
