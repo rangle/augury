@@ -19,8 +19,12 @@ export const matchNode = (node: Node, query: string): boolean => {
     return true;
   }
 
-  const matches = node.description
-    .map(d => matchValue(query, d.value)).filter(v => v === true);
+  if (node.description) {
+    const matches = node.description
+      .map(d => matchValue(query, d.value)).filter(v => v === true);
 
-  return matches.length > 0;
+    return matches.length > 0;
+  }
+
+  return false;
 }

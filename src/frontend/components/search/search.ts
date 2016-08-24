@@ -97,6 +97,10 @@ export class Search {
       this.state = state;
       this.results = results;
       this.current = 0;
+
+      if (results.length > 0) {
+        this.selectedResult.emit(this.results[this.current]);
+      }
     }
 
     const result = this.handler(this.query);
