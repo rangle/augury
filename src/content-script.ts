@@ -30,7 +30,7 @@ const injectScript = (path: string) => {
 
 browserSubscribeOnce(MessageType.FrameworkLoaded,
   () => {
-    injectScript('build/backend.js')
+    injectScript('build/backend.js');
     return true;
   });
 
@@ -56,3 +56,4 @@ send(MessageFactory.initialize())
     console.error('Augury initialization has failed', error.stack);
     console.error(error);
   });
+

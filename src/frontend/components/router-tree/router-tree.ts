@@ -94,8 +94,8 @@ export class RouterTree {
     // Enter the nodes
     const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
-      .on('mouseover', node => this.onRollover(node))
-      .on('mouseout', node => this.onRollover(node));
+      .on('mouseover', n => this.onRollover(n))
+      .on('mouseout', n => this.onRollover(n));
 
     nodeEnter.append('circle')
       .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')

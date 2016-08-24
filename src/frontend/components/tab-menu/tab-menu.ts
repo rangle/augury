@@ -23,7 +23,7 @@ export class TabMenu {
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
 
   private ngOnInit() {
-    const t = this.tabs.filter(t => t.tab === this.selectedTab);
+    const t = this.tabs.filter(tab => tab.tab === this.selectedTab);
     if (t.length > 0) {
       this.onSelect(t[0]);
     }

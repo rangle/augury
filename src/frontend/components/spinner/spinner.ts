@@ -9,3 +9,4 @@ import {
   styles: [require('to-string!./spinner.css')],
 })
 export class Spinner {}
+

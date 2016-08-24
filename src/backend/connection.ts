@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener(
 
     const cannotRespond = () => {
       throw new Error('You cannot respond through MessageHandler');
-    }
+    };
 
     subscriptions.forEach(handler => handler(message, cannotRespond));
 

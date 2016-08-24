@@ -20,7 +20,7 @@ const metaCreator = object => {
   }
 
   function map(value, parent?) {
-    var type = typeof value;
+    const type = typeof value;
 
     switch (type) {
       case 'string':
@@ -86,7 +86,7 @@ const metaCreator = object => {
           break;
         default:
           objref[index] = `{${Object.keys(value).map(key => {
-            var mapped = map(value[key], index);
+            const mapped = map(value[key], index);
 
             if (mapped instanceof ReferenceDescription) {
               mapped.from = index;
@@ -121,7 +121,7 @@ const metaCreator = object => {
 
       return _[0];
     }();`;
-}
+};
 
 /// Serialize a complex object into a function that can recreate the object.
 export const serialize = value => `return ${metaCreator(value)}`;

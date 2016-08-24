@@ -6,8 +6,9 @@ export const isObservable = object => {
   }
 
   return observableProperties.every(k => object.hasOwnProperty(k));
-}
+};
 
 export const isSubject = object => {
   return isObservable(object) && object.hasOwnProperty('hasError');
-}
+};
+

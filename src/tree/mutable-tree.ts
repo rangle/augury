@@ -19,19 +19,19 @@ export const transformToTree = (root, index: number, includeElements: boolean) =
   finally {
     map.clear(); // release references
   }
-}
+};
 
 export const createTree = (roots: Array<Node>) => {
   const tree = new MutableTree();
   tree.roots = roots;
   return tree;
-}
+};
 
 export const createTreeFromElements = (roots: Array<DebugElement>, includeElements: boolean) => {
   const tree = new MutableTree();
   tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements));
   return tree;
-}
+};
 
 export class MutableTree {
   public roots: Array<Node>;

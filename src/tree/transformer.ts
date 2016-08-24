@@ -95,7 +95,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
 
     const assert = (): Node => {
       throw new Error('Parent should already have been created and cached');
-    }
+    };
 
     const node: Node = {
       id: serializedPath,
@@ -137,7 +137,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
 
     return node;
   });
-}
+};
 
 export const recursiveSearch = (children: Source[]): Array<Source> => {
   const result = new Array<Source>();
@@ -153,14 +153,14 @@ export const recursiveSearch = (children: Source[]): Array<Source> => {
   }
 
   return result;
-}
+};
 
 export const componentChildren = (element: Source): Array<Source> => {
   if (element.componentInstance) {
     return [element];
   }
   return recursiveSearch(element.children);
-}
+};
 
 const getComponentProviders = (element: Source, name: string): Array<Property> => {
     let providers = new Array<Property>();
@@ -177,7 +177,7 @@ const getComponentProviders = (element: Source, name: string): Array<Property> =
     else {
       return providers;
     }
-}
+};
 
 const getComponentInputs = (element: Source) => {
   const metadata = Reflect.getOwnMetadata('annotations',
@@ -232,4 +232,5 @@ const getComponentOutputs = (element: Source): Array<string> => {
   }
 
   return outputs;
-}
+};
+

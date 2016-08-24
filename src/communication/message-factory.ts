@@ -109,7 +109,7 @@ export abstract class MessageFactory {
         return serialize(response);
       }
       return response;
-    }
+    };
 
     return create({
       messageType: MessageType.Response,
@@ -122,3 +122,4 @@ export abstract class MessageFactory {
     });
   }
 }
+

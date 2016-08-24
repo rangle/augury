@@ -101,7 +101,7 @@ export class Search {
       if (results.length > 0) {
         this.selectedResult.emit(this.results[this.current]);
       }
-    }
+    };
 
     const result = this.handler(this.query);
 

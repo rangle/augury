@@ -44,3 +44,4 @@ export const deserializeMessage = <T>(message: Message<T>) => {
     message.serialized = false;
   }
 };
+

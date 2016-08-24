@@ -11,3 +11,4 @@ export const send = <Response, T>(message: Message<T>): Promise<Response> => {
     browserDispatch(MessageFactory.dispatchWrapper(message));
   });
 };
+

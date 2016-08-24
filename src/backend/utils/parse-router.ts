@@ -150,4 +150,5 @@ export const parseRoutes = router => {
   } else {
     return parseConfigRoutes(router);
   }
-}
+};
+

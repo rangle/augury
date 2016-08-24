@@ -113,4 +113,5 @@ export class NodeItem extends Highlightable {
 const stop = (event: MouseEvent) => {
   event.preventDefault();
   event.stopPropagation();
-}
+};
+

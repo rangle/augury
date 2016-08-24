@@ -28,7 +28,7 @@ export const browserSubscribeDispatch = (handler: DispatchHandler): Subscription
   return {
     unsubscribe: () => dispatchers.delete(handler)
   };
-}
+};
 
 export const browserSubscribe = (handler: DispatchHandler): Subscription => {
   subscriptions.add(handler);
@@ -50,7 +50,7 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
         subscription.unsubscribe();
       }
     }
-  }
+  };
 
   const subscription = browserSubscribe(messageHandler);
 };
@@ -68,7 +68,7 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
         subscription.unsubscribe();
       }
     }
-  }
+  };
 
   const subscription = browserSubscribe(messageHandler);
 };
@@ -111,3 +111,4 @@ window.addEventListener('message',
       subscriptions.forEach(handler => handler(msg));
     }
   });
+

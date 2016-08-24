@@ -64,7 +64,7 @@ export class PropertyEditor extends Highlightable {
     super.ngOnChanges(changes);
 
     if (this.hasChanged(changes)) {
-      this.value = changes['initialValue'].currentValue;
+      this.value = changes.initialValue.currentValue;
     }
   }
 
@@ -157,7 +157,7 @@ export class PropertyEditor extends Highlightable {
       element.selectionStart = element.selectionEnd = element.value.length;
     } else if (element.createTextRange) {
       element.focus();
-      var range = element.createTextRange();
+      const range = element.createTextRange();
       range.collapse(false);
       range.select();
     }
@@ -192,3 +192,4 @@ export class PropertyEditor extends Highlightable {
     }
   }
 }
+

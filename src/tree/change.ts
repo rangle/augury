@@ -15,3 +15,4 @@ export interface Change {
   /// Right operand (value)
   value;
 }
+

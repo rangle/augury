@@ -15,7 +15,7 @@ const handler = () => {
 
     return true;
   }
-}
+};
 
 if (!handler()) {
   const subscribe = () => {
@@ -31,7 +31,8 @@ if (!handler()) {
     eventKeys.forEach(k => document.addEventListener(k, handler, false));
 
     return () => eventKeys.forEach(k => document.removeEventListener(k, handler, false));
-  }
+  };
 
   unsubscribe = subscribe();
-}
+};
+

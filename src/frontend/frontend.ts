@@ -92,7 +92,7 @@ class App {
   private ngOnInit() {
     this.connection.connect();
 
-    this.connection.subscribe(this.onReceiveMessage.bind(this));;
+    this.connection.subscribe(this.onReceiveMessage.bind(this));
 
     this.requestTree();
   }
@@ -226,10 +226,10 @@ const extractIdentifiersFromChanges = changes => {
     else {
       return [node.id].concat((node.children || []).map(c => extract(c)));
     }
-  }
+  };
 
   return changes.reduce((p, c) => p.concat(extract(c.value)), []);
-}
+};
 
 @NgModule({
   declarations: [App],

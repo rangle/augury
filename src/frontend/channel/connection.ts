@@ -31,7 +31,7 @@ export const connect = () => {
       if (message.messageType === MessageType.Response) {
         const cannotRespond = () => {
           throw new Error('You cannot respond to a response');
-        }
+        };
 
         subscriptions.forEach(handler => handler(message, cannotRespond));
       }
@@ -40,7 +40,7 @@ export const connect = () => {
 
         const sendResponse = (messageResponse: MessageResponse<any>) => {
           post(messageResponse);
-        }
+        };
 
         subscriptions.forEach(handler => {
           const respond = (response: MessageResponse<any>) => {
@@ -89,7 +89,7 @@ export const send = <Response, T>(message: Message<T>): Promise<Response> => {
 
     post(message);
   });
-}
+};
 
 @Injectable()
 export class Connection {
@@ -109,3 +109,4 @@ export class Connection {
     subscriptions.clear();
   }
 }
+

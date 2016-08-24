@@ -20,7 +20,7 @@ const checkReferenceId = (node: Node) => {
   if (node == null) {
     throw new Error('Node has no associated ID');
   }
-}
+};
 
 @Injectable()
 export class ViewState {

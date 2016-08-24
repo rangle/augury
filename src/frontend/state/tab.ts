@@ -13,3 +13,4 @@ export enum StateTab {
   /// Injector graph
   InjectorGraph
 }
+

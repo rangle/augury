@@ -27,4 +27,5 @@ export const matchNode = (node: Node, query: string): boolean => {
   }
 
   return false;
-}
+};
+

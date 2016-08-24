@@ -89,3 +89,4 @@ export class Options {
     this.subject.next(this);
   }
 }
+
