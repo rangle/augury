@@ -12,6 +12,8 @@ import {
   TabMenu,
 } from '../tab-menu/tab-menu';
 import {
+  ComponentInstanceState,
+  Options,
   Tab,
   Theme,
 } from '../../state';
@@ -30,13 +32,13 @@ type Node = any;
 export default class AppTrees {
   private Tab = Tab;
 
-  @Input() theme: Theme;
   @Input() tree: Array<Node>;
   @Input() routerTree: any;
   @Input() selectedTab: Tab;
   @Input() selectedNode: Node;
   @Input() changedNodes: Array<any>;
-  @Input() closedNodes: Array<any>;
+  @Input() options: Options;
+  @Input() componentState: ComponentInstanceState;
 
   @Output() private tabChange = new EventEmitter<Tab>();
 

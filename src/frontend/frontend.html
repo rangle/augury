@@ -8,37 +8,19 @@
     (selectNode)="onComponentSelectionChange($event)"
     (selectRoute)="onRouteSelectionChange($event)">
   </augury-header>
-  <div class="flex flex-auto">
-    <div class="col col-6 overflow-hidden
-      border-right border-color-dark flex"
-    [ngClass]="{'overflow-scroll col-12': selectedTab === Tab.RouterTree}">
-      <bt-app-trees #trees
-        class="flex flex-column flex-auto bg-white"
-        [changedNodes]="changedNodes"
-        [selectedTab]="selectedTab"
-        [selectedNode]="selectedNode"
-        [routerTree]="routerTree"
-        [theme]="options.theme"
-        [tree]="tree"
-        (tabChange)="selectedTab = $event"
-        (selectionChange)="onComponentSelectionChange($event)"
-        (inspectElement)="onInspectElement($event)">
-      </bt-app-trees>
-    </div>
-    <div class="col col-6 overflow-hidden"
-      [ngClass]="{'flex': selectedTab === Tab.ComponentTree}"
-      [hidden]="selectedTab !== Tab.ComponentTree">
-      <bt-info-panel
-        class="flex flex-column flex-auto bg-white"
-        [tree]="tree"
-        [theme]="options.theme"
-        [node]="selectedNode"
-        [loadingState]="componentState.loadingState(selectedNode)"
-        [state]="componentState.componentInstance(selectedNode)"
-        (selectionChange)="onComponentSelectionChange($event)">
-      </bt-info-panel>
-    </div>
-  </div>
+  <bt-app-trees #trees
+    class="flex flex-column flex-auto bg-white"
+    [componentState]="componentState"
+    [changedNodes]="changedNodes"
+    [selectedTab]="selectedTab"
+    [selectedNode]="selectedNode"
+    [routerTree]="routerTree"
+    [options]="options"
+    [tree]="tree"
+    (tabChange)="selectedTab = $event"
+    (selectionChange)="onComponentSelectionChange($event)"
+    (inspectElement)="onInspectElement($event)">
+  </bt-app-trees>
 </div>
 <template [ngIf]="exception">
   <pre>{{exception}}</pre>

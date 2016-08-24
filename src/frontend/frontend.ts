@@ -2,7 +2,13 @@ import {
   ChangeDetectorRef,
   Component,
   NgZone,
+  NgModule,
+  enableProdMode,
 } from '@angular/core';
+
+import {BrowserModule} from '@angular/platform-browser';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {FormsModule} from '@angular/forms';
 
 import {
   Message,
@@ -29,24 +35,20 @@ import {
 } from './state';
 
 import {Connection} from './channel/connection';
-import {enableProdMode} from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {UserActions} from './actions/user-actions/user-actions';
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
 import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
+import {SplitPane} from './components/split-pane/split-pane';
 import {ParseUtils} from './utils/parse-utils';
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
 
 require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
   providers: [ParseUtils],
-  directives: [TreeView, InfoPanel, AppTrees, Header],
+  directives: [AppTrees, Header, InfoPanel, SplitPane, TreeView],
   template: require('./frontend.html'),
   styles: [require('to-string!./frontend.css')],
 })

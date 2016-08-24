@@ -2,21 +2,40 @@
   [tabs]="tabs"
   (tabChange)="onTabSelectionChanged($event)"
   [selectedTab]="selectedTab">
-  </bt-tab-menu>
+</bt-tab-menu>
 
-<bt-tree-view
-  [hidden]="selectedTab != Tab.ComponentTree"
-  [ngClass]="{flex: selectedTab === Tab.ComponentTree}"
-  [changedNodes]="changedNodes"
-  [selectedNode]="selectedNode"
-  [closedNodes]="closedNodes"
-  [tree]="tree"
-  (selectionChange)="selectionChange.emit($event)"
-  (inspectElement)="inspectElement.emit($event)">
-</bt-tree-view>
-
-<bt-router-tree class="overflow-scroll flex-auto"
-  [theme]="theme"
-  [hidden]="selectedTab !== Tab.RouterTree"
-  [routerTree]="routerTree">
-</bt-router-tree>
+<split-pane class="flex flex-auto">
+  <split-pane-primary-content
+     class="flex flex-column flex-auto"
+     [ngClass]="{'overflow-scroll': selectedTab === Tab.RouterTree}">
+    <bt-tree-view
+      [hidden]="selectedTab != Tab.ComponentTree"
+      [ngClass]="{flex: selectedTab === Tab.ComponentTree}"
+      [changedNodes]="changedNodes"
+      [selectedNode]="selectedNode"
+      [closedNodes]="closedNodes"
+      [tree]="tree"
+      (selectionChange)="selectionChange.emit($event)"
+      (inspectElement)="inspectElement.emit($event)">
+    </bt-tree-view>
+    <bt-router-tree class="overflow-scroll flex-auto"
+      [theme]="options.theme"
+      [hidden]="selectedTab !== Tab.RouterTree"
+      [routerTree]="routerTree">
+    </bt-router-tree>
+  </split-pane-primary-content>
+  <split-pane-secondary-content
+     class="flex flex-column flex-auto"
+     [ngClass]="{'flex': selectedTab === Tab.ComponentTree}"
+     [hidden]="selectedTabIndex !== Tab.ComponentTree">
+     <bt-info-panel
+       class="flex flex-column flex-auto bg-white"
+       [tree]="tree"
+       [theme]="options.theme"
+       [node]="selectedNode"
+       [loadingState]="componentState.loadingState(selectedNode)"
+       [state]="componentState.componentInstance(selectedNode)"
+       (selectionChange)="selectionChange.emit($event)">
+     </bt-info-panel>
+  </split-pane-secondary-content>
+</split-pane>
