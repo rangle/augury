@@ -18,6 +18,12 @@ import {
 
 import {send} from './indirect-connection';
 
+import {
+  Route,
+  MainRoute,
+  parseRoutes,
+} from './utils';
+
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
 
@@ -107,6 +113,8 @@ browserSubscribe(
         return tryWrap(() => emitValue(previousTree,
           message.content.path,
           message.content.value));
+      case MessageType.RouterTree:
+        return tryWrap(() => routerTree());
     }
     return undefined;
   });
@@ -158,6 +166,33 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
   }
 
   tickApplication(path);
+};
+
+export const rootsWithRouters = () => {
+  const roots = getAllAngularRootElements().map(e => ng.probe(e));
+
+  const routers = [];
+
+  for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
+    if (element == null ||
+        element.componentInstance == null ||
+        element.componentInstance.router == null) {
+      continue;
+    }
+    routers.push(element.componentInstance.router);
+  }
+
+  return routers;
+}
+
+export const routerTree = (): Array<MainRoute> => {
+  let routes = new Array<MainRoute>();
+
+  for (const router of rootsWithRouters()) {
+    routes = routes.concat(parseRoutes(router));
+  }
+
+  return routes;
 };
 
 export const consoleReference = (node: Node) => {

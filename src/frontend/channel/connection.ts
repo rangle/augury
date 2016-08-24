@@ -66,7 +66,7 @@ export const subscribe = (handler: MessageHandler): Subscription => {
   };
 };
 
-export const send = <Response, T>(message: Message<T>): Promise<MessageResponse<Response>> => {
+export const send = <Response, T>(message: Message<T>): Promise<Response> => {
   if (connection == null) {
     throw new Error('No connection to send messsage through!');
   }
@@ -101,7 +101,7 @@ export class Connection {
     return subscribe(handler);
   }
 
-  send<Response, T>(message: Message<T>): Promise<MessageResponse<Response>> {
+  send<Response, T>(message: Message<T>): Promise<Response> {
     return send(message);
   }
 

@@ -42,6 +42,7 @@ import AppTrees from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
 import {SplitPane} from './components/split-pane/split-pane';
 import {ParseUtils} from './utils/parse-utils';
+import {Route} from '../backend/utils';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -58,6 +59,8 @@ class App {
   private selectedTab: Tab = Tab.ComponentTree;
   private theme: Theme;
   private tree: MutableTree;
+  private routerTree: Array<Route>;
+  private routerException: string;
   private selectedNode: Node;
   private changedNodes = new Array<Node>();
   private componentState: ComponentInstanceState;
@@ -128,7 +131,7 @@ class App {
     switch (msg.messageType) {
       case MessageType.CompleteTree:
         this.componentState.reset();
-        this.tree = createTree(deserialize(msg.content));
+        this.tree = createTree(msg.content);
         this.restoreSelection();
         respond();
         break;
@@ -137,11 +140,15 @@ class App {
           this.connection.send(MessageFactory.initialize(this.options)); // request tree
         }
         else {
-          const changes = deserialize(msg.content);
+          const changes = msg.content;
           this.componentState.reset(extractIdentifiersFromChanges(changes));
           this.tree.patch(changes);
           this.restoreSelection();
         }
+        respond();
+        break;
+      case MessageType.RouterTree: // TODO(cbond): support router tree diff
+        this.routerTree = msg.content;
         respond();
         break;
     }
@@ -187,6 +194,28 @@ class App {
     debugger;
     // FIXME(cbond): Find a better way to inspect the element without augury-id
     // chrome.devtools.inspectedWindow.eval(`inspect()`);
+  }
+
+  private onSelectedTabChange(tab: Tab) {
+    this.selectedTab = tab;
+
+    switch (tab) {
+      case Tab.ComponentTree:
+        break;
+      case Tab.RouterTree:
+        this.connection.send<Route[], any>(MessageFactory.routerTree())
+          .then(response => {
+            this.routerTree = response;
+            this.changeDetector.detectChanges();
+          })
+          .catch(error => {
+            this.routerException = error.stack;
+            this.changeDetector.detectChanges();
+          });
+        break;
+      default:
+        throw new Error(`Unknown tab: ${tab}`);
+    }
   }
 }
 

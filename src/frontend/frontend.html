@@ -15,9 +15,10 @@
     [selectedTab]="selectedTab"
     [selectedNode]="selectedNode"
     [routerTree]="routerTree"
+    [routerException]="routerException"
     [options]="options"
     [tree]="tree"
-    (tabChange)="selectedTab = $event"
+    (tabChange)="onSelectedTabChange($event)"
     (selectionChange)="onComponentSelectionChange($event)"
     (inspectElement)="onInspectElement($event)">
   </bt-app-trees>

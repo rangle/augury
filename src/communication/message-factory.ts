@@ -44,6 +44,7 @@ export abstract class MessageFactory {
     return create({
       messageType: MessageType.CompleteTree,
       content: serialize(tree.roots),
+      serialized: true,
     });
   }
 
@@ -51,6 +52,7 @@ export abstract class MessageFactory {
     return create({
       messageType: MessageType.TreeDiff,
       content: serialize(changes),
+      serialized: true,
     });
   }
 
@@ -81,6 +83,12 @@ export abstract class MessageFactory {
         path,
         value
       }
+    });
+  }
+
+  static routerTree(): Message<void> {
+    return create({
+      messageType: MessageType.RouterTree,
     });
   }
 

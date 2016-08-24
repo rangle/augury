@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import RouterInfo from '../router-info/router-info';
+import {Route} from '../../../backend/utils';
 
 import * as d3 from 'd3';
 
@@ -24,10 +25,12 @@ interface TreeConfig {
 @Component({
   selector: 'bt-router-tree',
   template: require('./router-tree.html'),
+  styles: [require('to-string!./router-tree.css')],
   directives: [RouterInfo]
 })
 export class RouterTree {
-  @Input() routerTree: Array<any>;
+  @Input() routerTree: Array<Route>;
+  @Input() routerException: string;
   @Input() theme: string;
 
   private treeConfig: TreeConfig;
@@ -70,7 +73,13 @@ export class RouterTree {
 
     // Compute the new tree layout.
     tree.nodeSize([20, 10]);
-    const nodes = tree.nodes(data).reverse();
+
+    let nodes = [];
+    for (const root of data) {
+      nodes = nodes.concat(tree.nodes(root));
+    }
+    nodes.reverse();
+
     const links = tree.links(nodes);
 
     // Normalize for fixed-depth.

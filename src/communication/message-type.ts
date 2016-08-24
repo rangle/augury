@@ -17,6 +17,9 @@ export enum MessageType {
   /// Transmit the delta of two trees
   TreeDiff,
 
+  /// Send the complete router tree (TODO(cbond: support diff))
+  RouterTree,
+
   /// Select a component in the tree view
   SelectComponent,
 

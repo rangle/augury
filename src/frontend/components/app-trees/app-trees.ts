@@ -7,6 +7,7 @@ import {
 
 import {TreeView} from '../tree-view/tree-view';
 import {RouterTree} from '../router-tree/router-tree';
+import {Route} from '../../../backend/utils';
 import {
   TabDescription,
   TabMenu,
@@ -33,7 +34,8 @@ export default class AppTrees {
   private Tab = Tab;
 
   @Input() tree: Array<Node>;
-  @Input() routerTree: any;
+  @Input() routerTree: Array<Route>;
+  @Input() routerException: string;
   @Input() selectedTab: Tab;
   @Input() selectedNode: Node;
   @Input() changedNodes: Array<any>;
