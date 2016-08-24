@@ -1,6 +1,6 @@
 import * as test from 'tape';
 import {ParseUtils} from './parse-utils';
-import {createTree} from '../../tree';
+import {MutableTree, createTree} from '../../tree';
 
 test('utils/parse-utils: copyParent', t => {
   t.plan(1);
@@ -60,7 +60,7 @@ test('utils/parse-utils: flatten list data', t => {
   }];
 
   const parseUtils: ParseUtils = new ParseUtils();
-  const output = parseUtils.flatten(mockData);
+  const output = parseUtils.flatten(<any> mockData);
   t.deepEqual(result, output, 'result should be equal to output');
   t.end();
 });
@@ -71,49 +71,44 @@ test('utils/parse-utils: getParentHierarchy', t => {
     id: '0',
     name: 'mockData',
     children: [{
-      id: '0.1',
+      id: '0 0',
       name: 'one'
     }, {
-      id: '0.2',
+      id: '0 1',
       name: 'two',
       children: [{
-        id: '0.2.1',
+        id: '0 1 0',
         name: 'three'
       }, {
-        id: '0.2.2',
-        name: 'four'
+        id: '0 1 1',
+        name: 'four',
+        children: []
       }]
     }]
   }];
 
   const node = {
-    id: '0.2.2',
+    id: '0 1 1',
     name: 'four'
   };
 
-  const result = [{
-    children: undefined,
-    id: '0',
-    name: 'mockData'
-  }, {
-    children: undefined,
-    id: '0.2',
-    name: 'two'
-    }];
+  const tree = createTree(<any>mockData);
 
-  const tree = createTree(<any> mockData);
   const parseUtils: ParseUtils = new ParseUtils();
-  const output = parseUtils.getParentHierarchy(tree, <any> node);
-  t.deepEqual(result, output, 'result should be equal to output');
+  const output = parseUtils.getParentHierarchy(tree, <any> node).map(n => n.id);
+
+  const result = ['0', '0 1'];
+
+  t.deepEqual(output, result, 'result should be equal to output');
   t.end();
 });
 
 test('utils/parse-utils: getParentNodeIds', t => {
   t.plan(1);
-  const nodeId = '0.1.22.333.444';
+  const nodeId = '0 1 22 333 444';
   const parseUtils: ParseUtils = new ParseUtils();
   const output = parseUtils.getParentNodeIds(nodeId);
-  const result = ['0', '0.1', '0.1.22', '0.1.22.333'];
+  const result = ['0', '0 1', '0 1 22', '0 1 22 333'];
   t.deepEqual(result, output, 'result should be equal to output');
   t.end();
 });
@@ -125,25 +120,25 @@ test('utils/parse-utils: getDependencyLink', t => {
     name: 'mockData',
     injectors: ['service1'],
     children: [{
-      id: '0.1',
+      id: '0 1',
       name: 'one',
       injectors: ['service2']
     }, {
-      id: '0.2',
+      id: '0 2',
       name: 'two',
       injectors: ['service3'],
       children: [{
-        id: '0.2.1',
+        id: '0 2 1',
         name: 'three'
       }, {
-        id: '0.2.2',
+        id: '0 2 2',
         name: 'four',
         injectors: ['service1']
       }]
     }]
   }];
 
-  const nodeId = '0.2.2';
+  const nodeId = '0 2 2';
   const dependency = 'service1';
 
   const parseUtils: ParseUtils = new ParseUtils();
@@ -152,13 +147,6 @@ test('utils/parse-utils: getDependencyLink', t => {
 
   const output = parseUtils.getDependencyLink(tree, nodeId, dependency);
 
-  const result = {
-    children: undefined,
-    id: '0',
-    injectors: [ 'service1' ],
-    name: 'mockData'
-  };
-
-  t.deepEqual(result, output, 'result should be equal to output');
+  t.deepEqual(mockData[0], output, 'result should be equal to output');
   t.end();
 });

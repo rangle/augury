@@ -66,7 +66,7 @@ export abstract class Description {
           (debugElement.componentInstance);
     }
 
-    return null;
+    return [];
   }
 
   private static _getNgClassDesc(instance: any): Array<Property> {

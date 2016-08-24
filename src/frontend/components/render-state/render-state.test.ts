@@ -3,7 +3,8 @@ import * as test from 'tape';
 import RenderState from './render-state';
 
 test('utils/render-state: init component', t => {
-  t.plan(4);
+  t.plan(3);
+
   const comp: RenderState = new RenderState();
   const value: any = {
     name: 'hello'

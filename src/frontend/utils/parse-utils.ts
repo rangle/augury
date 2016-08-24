@@ -33,7 +33,7 @@ export class ParseUtils {
     return null;
   }
 
-  getParentHierarchy(tree: MutableTree, node: Node) {
+  getParentHierarchy(tree: MutableTree, node: Node): Array<Node> {
     const nodeIds = this.getParentNodeIds(node.id);
 
     const hierarchy = nodeIds.reduce(
@@ -49,7 +49,7 @@ export class ParseUtils {
     return hierarchy;
   }
 
-  flatten(list: Array<any>) {
+  flatten(list: Array<Node>): Array<Node> {
     return list.reduce((a, b) =>
       a.concat(Array.isArray(b.children) ?
         [this.copyParent(b), ...this.flatten(b.children)] : b),
