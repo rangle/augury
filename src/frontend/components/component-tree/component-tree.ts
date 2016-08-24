@@ -20,12 +20,8 @@ import {
 })
 export class ComponentTree {
   @Input() tree: MutableTree;
-  @Input() changedNodes: Array<Node>;
-  @Input() selectedNode;
-  @Input() closedNodes: Array<any>;
 
   @Output() private selectionChange = new EventEmitter<Node>();
-
   @Output() private inspectElement = new EventEmitter<Node>();
 
   private prevSelectedNode: Element;

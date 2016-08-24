@@ -28,10 +28,20 @@ export class ViewState {
 
   private expansion = new Map<string, ExpandState>();
 
+  private changed = new Set<string>();
+
   private selected: string; // node path ID
 
   get changes(): Observable<void> {
     return this.subject.asObservable();
+  }
+
+  nodeIsChanged(node: Node) {
+    return this.changed.has(node.id);
+  }
+
+  nodesChanged(identifiers: Array<string>) {
+    this.changed = new Set<string>(identifiers);
   }
 
   expandState(node: Node, expandState?: ExpandState) {

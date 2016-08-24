@@ -1,9 +1,6 @@
 <div class="flex flex-column flex-stretch bg-white col-12">
   <component-tree
-    [changedNodes]="changedNodes"
     [tree]="tree"
-    [selectedNode]="selectedNode"
-    [closedNodes]="closedNodes"
     (selectionChange)="selectionChange.emit($event)"
     (inspectElement)="inspectElement.emit($event)">
     </component-tree>

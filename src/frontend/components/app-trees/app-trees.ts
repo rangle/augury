@@ -30,7 +30,7 @@ type Node = any;
   ],
   template: require('./app-trees.html'),
 })
-export default class AppTrees {
+export class AppTrees {
   private Tab = Tab;
 
   @Input() tree: Array<Node>;
@@ -38,14 +38,11 @@ export default class AppTrees {
   @Input() routerException: string;
   @Input() selectedTab: Tab;
   @Input() selectedNode: Node;
-  @Input() changedNodes: Array<any>;
   @Input() options: Options;
   @Input() componentState: ComponentInstanceState;
 
   @Output() private tabChange = new EventEmitter<Tab>();
-
   @Output() private selectionChange = new EventEmitter<Node>();
-
   @Output() private inspectElement = new EventEmitter<Node>();
 
   private tabs = [{

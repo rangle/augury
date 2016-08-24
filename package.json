@@ -60,8 +60,8 @@
     "css-loader": "^0.21.0",
     "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
+    "fast-json-patch": "^1.0.0",
     "file-loader": "^0.8.5",
-    "json8-patch": "^0.4.0",
     "keycode": "^2.1.4",
     "lodash": "^4.15.0",
     "object-assign": "4.0.1",
@@ -80,7 +80,7 @@
     "tslint": "^3.9.0",
     "tslint-loader": "^2.1.4",
     "typescript": "^1.8.9",
-    "typings": "^0.8.1",
+    "typings": "^1.3.2",
     "url-loader": "^0.5.7",
     "webpack": "1.13.0",
     "webpack-dev-server": "1.14.1"

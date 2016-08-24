@@ -9,7 +9,7 @@ import {
   deserializePath,
 } from './path';
 
-const patch = require('json8-patch');
+const {apply, compare} = require('ts!fast-json-patch/src/json-patch-duplex');
 
 export const transformToTree = (root, index: number, includeElements: boolean) => {
   const map = new Map<string, Node>();
@@ -38,12 +38,14 @@ export class MutableTree {
 
   /// Compare this tree to another tree and generate a delta
   diff(nextTree: MutableTree): Array<Change> {
-    return patch.diff(this.roots, nextTree.roots);
+    const changes = <Change[]> compare(this, nextTree);
+
+    return changes.filter(c => c.path.indexOf('nativeElement') < 0);
   }
 
   /// Apply a set of changes to this tree, mutating it
   patch(changes: Array<Change>) {
-    this.roots = patch.apply(this.roots, changes).doc;
+    apply(this, changes);
   }
 
   /// Search for a node in the tree based on its path. An ID is a path that
@@ -89,17 +91,17 @@ export class MutableTree {
 
   /// Apply a function to all nodes in the specified tree index
   recurse(rootIndex: number, fn: (node: Node) => boolean | void) {
-    const apply = (node: Node) => {
+    const applyfn = (node: Node) => {
       fn(node);
 
       for (const child of node.children || []) {
-        if (apply(child) === false) {
+        if (applyfn(child) === false) {
           return false;
         }
       }
     };
 
-    return apply(this.roots[rootIndex]);
+    return applyfn(this.roots[rootIndex]);
   }
 
   /// Apply a function recursively to all nodes in all roots

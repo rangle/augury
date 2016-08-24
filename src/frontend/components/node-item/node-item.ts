@@ -1,3 +1,5 @@
+///<amd-dependency path="../../../tree/node" />
+
 import {
   ChangeDetectorRef,
   Component,
@@ -9,7 +11,7 @@ import {
 
 import {Highlightable} from '../highlightable';
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {Node} from '../../../tree';
+import {Node} from '../../../tree/node';
 
 import {
   ExpandState,
@@ -24,13 +26,9 @@ import {
   ]
 })
 export class NodeItem extends Highlightable {
-  @Input() node: any;
-  @Input() changedNodes: any[];
-  @Input() selectedNode: any;
-  @Input() closedNodes: Array<any>;
+  @Input() node;
 
   @Output() private selectionChange = new EventEmitter<Node>();
-
   @Output() private inspectElement = new EventEmitter<Node>();
 
   constructor(
@@ -38,7 +36,7 @@ export class NodeItem extends Highlightable {
     private viewState: ViewState,
     private userActions: UserActions
   ) {
-    super(changeDetector, () => this.changedNodes.indexOf(this.node.id) > 0);
+    super(changeDetector, () => viewState.nodeIsChanged(this.node));
   }
 
   getNodeDetails(node) {
@@ -98,8 +96,6 @@ export class NodeItem extends Highlightable {
   }
 
   expandTree($event) {
-    this.node.isOpen = !this.node.isOpen;
-
     this.userActions.toggle(this.node);
   }
 

@@ -18,6 +18,7 @@ import {
 } from '../communication';
 
 import {
+  Change,
   MutableTree,
   Node,
   createTree,
@@ -38,7 +39,7 @@ import {Connection} from './channel/connection';
 import {UserActions} from './actions/user-actions/user-actions';
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
-import AppTrees from './components/app-trees/app-trees';
+import {AppTrees} from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
 import {SplitPane} from './components/split-pane/split-pane';
 import {ParseUtils} from './utils/parse-utils';
@@ -62,7 +63,6 @@ class App {
   private routerTree: Array<Route>;
   private routerException: string;
   private selectedNode: Node;
-  private changedNodes = new Array<Node>();
   private componentState: ComponentInstanceState;
   private exception: string;
 
@@ -130,9 +130,7 @@ class App {
 
     switch (msg.messageType) {
       case MessageType.CompleteTree:
-        this.componentState.reset();
-        this.tree = createTree(msg.content);
-        this.restoreSelection();
+        this.createTree(msg.content);
         respond();
         break;
       case MessageType.TreeDiff:
@@ -140,10 +138,7 @@ class App {
           this.connection.send(MessageFactory.initialize(this.options)); // request tree
         }
         else {
-          const changes = msg.content;
-          this.componentState.reset(extractIdentifiersFromChanges(changes));
-          this.tree.patch(changes);
-          this.restoreSelection();
+          this.updateTree(msg.content);
         }
         respond();
         break;
@@ -152,6 +147,29 @@ class App {
         respond();
         break;
     }
+  }
+
+  private createTree(roots: Array<Node>) {
+    this.componentState.reset();
+
+    this.tree = createTree(roots);
+
+    this.restoreSelection();
+  }
+
+  private updateTree(changes) {
+    const changedIdentifiers = extractIdentifiersFromChanges(changes);
+
+    /// Reset component state cache for these IDs
+    this.componentState.reset(changedIdentifiers);
+
+    /// Patch the treee
+    this.tree.patch(changes);
+
+    /// Highlight the nodes that have changed
+    this.viewState.nodesChanged(changedIdentifiers);
+
+    this.restoreSelection();
   }
 
   private onReceiveMessage(msg: Message<any>,
@@ -218,17 +236,23 @@ class App {
   }
 }
 
-const extractIdentifiersFromChanges = changes => {
-  const extract = (node: Array<Node> | Node) => {
-    if (Array.isArray(node)) {
-      return node.reduce((p, c) => p.concat([c.id].concat(extract(c.children))), []);
-    }
-    else {
-      return [node.id].concat((node.children || []).map(c => extract(c)));
-    }
-  };
+const extractIdentifiersFromChanges = (changes: Array<Change>): string[] => {
+  const identifiers = new Set<string>();
 
-  return changes.reduce((p, c) => p.concat(extract(c.value)), []);
+  for (const change of changes) {
+    const path = change.path.split('/').filter(k => /^\d+$/.test(k));
+
+    if (path.length > 1) { // add parent
+      identifiers.add(path.slice(0, path.length - 1).join(' '));
+    }
+
+    identifiers.add(path.join(' '));
+  }
+
+  const results = new Array<string>();
+  identifiers.forEach(id => results.push(id));
+
+  return results;
 };
 
 @NgModule({
