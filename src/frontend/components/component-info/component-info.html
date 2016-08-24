@@ -114,7 +114,9 @@
         <div class="mxn4">
           <div [ngSwitch]="loadingState">
             <template [ngSwitchCase]="ComponentLoadState.Loading">
-              <spinner></spinner>
+              <div class="spinner-container">
+                <spinner></spinner>
+              </div>
             </template>
             <template [ngSwitchCase]="ComponentLoadState.Received">
               <bt-render-state

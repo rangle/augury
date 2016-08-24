@@ -191,8 +191,8 @@ class App {
   }
 
   private onInspectElement(node: Node) {
-    // FIXME(cbond): Find a better way to inspect the element without augury-id
-    chrome.devtools.inspectedWindow.eval(`inspect(window.pathLookupNode('${node.id}'))`);
+    chrome.devtools.inspectedWindow.eval(
+      `inspect(window.pathLookupNode('${node.id}'))`);
   }
 
   private onSelectedTabChange(tab: Tab) {

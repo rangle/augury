@@ -19,12 +19,6 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-:host {
-  display: block;
-  width: 100%;
-  height: 20px;
-}
-
 .spinner {
   margin: 5px auto 0;
   width: 70px;
