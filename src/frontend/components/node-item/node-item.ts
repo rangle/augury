@@ -17,10 +17,17 @@ import {
   ViewState,
 } from '../../state';
 
+import {NodeAttributes} from './node-attributes';
+import {NodeCloseTag} from './node-close-tag';
+import {NodeOpenTag} from './node-open-tag';
+
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
   directives: [
+    NodeAttributes,
+    NodeCloseTag,
+    NodeOpenTag,
     NodeItem,
   ],
   styles: [require('to-string!./node-item.css')],
@@ -45,6 +52,10 @@ export class NodeItem {
 
   private get expanded(): boolean {
     return this.viewState.expandState(this.node) === ExpandState.Expanded;
+  }
+
+  private get hasChildren(): boolean {
+    return this.node.children.length > 0;
   }
 
   /// Prevent propagation of mouse events so that parent handlers are not invoked

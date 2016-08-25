@@ -1,13 +1,21 @@
-:host {
-  font-size: 0;
-}
-
 :host p {
-  font-size: 1rem;
   margin-left: 3px;
   margin-right: 2px;
 }
 
+:host .node-item-name {
+  margin-left: 5px;
+}
+
 :host .node-item-value {
   margin-left: 2px;
+}
+
+:host .node-item-close-tag {
+  margin-left: 15px;
+}
+
+:host .parenthesis,
+:host .punctuation {
+  color: darkcyan;
 }
