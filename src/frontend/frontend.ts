@@ -204,7 +204,7 @@ class App {
         const promise =
           this.userActions.selectComponent(node, true)
             .then(response => {
-              this.componentState.reset();
+              this.componentState.reset([node.id]);
               return response;
             });
 
