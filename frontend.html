@@ -6,11 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/src/styles/style.min.css" rel="stylesheet">
+  <link href="/src/frontend/components/spinner/spinner.css" rel="stylesheet">
 </head>
 <body>
 
   <bt-app>
-    Loading...
+    <div style="margin-top: 10%; height: 25%;">
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
   </bt-app>
 
   <script src="/build/frontend.js"></script>

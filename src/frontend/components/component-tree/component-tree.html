@@ -1,10 +1,7 @@
-<!-- BLOCK VIEW -->
 <main class="monospace col-12 p1">
-  <bt-node-item *ngFor="let node of tree; trackBy: trackById"
-    [changedNodes]="changedNodes"
+  <bt-node-item *ngFor="let node of tree.roots; trackBy: trackById"
     [node]="node"
-    [selectedNode]="selectedNode"
-    [closedNodes]="closedNodes"
-    [allowedComponentTreeDepth]="allowedComponentTreeDepth">
-    </bt-node-item>
+    (selectionChange)="selectionChange.emit($event)"
+    (inspectElement)="inspectElement.emit($event)">
+  </bt-node-item>
 </main>

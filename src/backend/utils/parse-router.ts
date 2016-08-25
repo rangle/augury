@@ -16,7 +16,6 @@ export interface MainRoute {
 
 // *** Deprecated Router ***
 export class ParseRouter {
-
   private static NAME_REGEX = /function ([^\(]*)/;
 
   public static parseRoutes(registry: any): MainRoute {
@@ -49,7 +48,6 @@ export class ParseRouter {
   }
 
   private static getMainRoute(key: any, value: any): MainRoute {
-
     const name: string = this.NAME_REGEX.exec(value)[1];
     const children: Array<Route> = new Array<Route>();
 
@@ -86,7 +84,7 @@ export class ParseRouter {
 
 export function IS_OLD_ROUTER_HACK(router) : boolean {
 
-  // `config` key is different for both routers, 
+  // `config` key is different for both routers,
   // it's highly unlikely that the deprecated router will change this.
   const componentRouterConfigIsArray: boolean = Array.isArray(router.config);
   const deprecatedRouterConfigIsFunction: boolean =
@@ -143,3 +141,14 @@ function assignChildrenToParent(parent, children): [any] {
 function childRouteName(child): string {
   return child.component ? child.component.name : 'no-name-route';
 }
+
+export const parseRoutes = router => {
+  if (IS_OLD_ROUTER_HACK(router)) {
+    // TODO: (ericjim): remove if-block and function
+    // once we no longer support the old router.
+    return ParseRouter.parseRoutes(router.root.registry);
+  } else {
+    return parseConfigRoutes(router);
+  }
+};
+

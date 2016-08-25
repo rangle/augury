@@ -4,53 +4,60 @@ import {
   EventEmitter,
   Output,
   ElementRef,
-  Input
+  Input,
+  Query,
+  ViewChild
 } from '@angular/core';
 
+import {Search} from '../search/search';
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
+import {
+  MutableTree,
+  Node,
+} from '../../../tree';
+import {
+  Options,
+  Tab,
+  Theme,
+} from '../../state';
+
+type Route = any; // TODO(cbond): use real Route type
 
 @Component({
   selector: 'augury-header',
-  templateUrl: 'src/frontend/components/header/header.html',
+  template: require('./header.html'),
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
-  }
+  },
+  directives: [
+    Search,
+  ]
 })
 export class Header {
+  @Input() private selectedTab: Tab;
+  @Input() private options: Options;
+  @Input() private tree: MutableTree;
+  @Input() private routerTree: Array<Route>;
 
-  @Input() searchDisabled: boolean;
-  @Input() theme: string;
-  private searchIndex: number = 0;
-  private totalSearchCount: number = 0;
-  private query: string = '';
+  /// Search has resulted in a new node being selected
+  @Output() private selectNode = new EventEmitter<Node>();
+
+  /// Search has resulted in a new route being selected
+  @Output() private selectRoute = new EventEmitter<Route>();
+
+  @ViewChild(Search) private search: Search;
+
+  private Tab = Tab;
+
+  private Theme = Theme;
+
   private settingOpened: boolean = false;
-  private elementRef;
-
-  @Output() newTheme: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private userActions: UserActions,
-    private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone,
-    elementRef: ElementRef
-  ) {
-
-    this.elementRef = elementRef;
-
-    this.componentDataStore.dataStream
-      .subscribe((data: any) => {
-        this.totalSearchCount = data.totalSearchCount;
-      });
-
-  }
-
-  ngOnChanges() {
-    if (this.searchDisabled) {
-      this.query = '';
-    }
-  }
+    private ngZone: NgZone,
+    private elementRef: ElementRef
+  ) {}
 
   resetTheme() {
     this.settingOpened = false;
@@ -61,9 +68,10 @@ export class Header {
     if (!clickedComponent) {
       return;
     }
-    let menuElement = this.elementRef.nativeElement
+    const menuElement = this.elementRef.nativeElement
       .querySelector('#augury-theme-menu');
-    let menuButtonElement = this.elementRef.nativeElement
+
+    const menuButtonElement = this.elementRef.nativeElement
       .querySelector('#augury-theme-menu-button');
 
     // If click was not inside menu button or menu, close the menu.
@@ -75,49 +83,58 @@ export class Header {
     }
   }
 
-  openSettings() {
+  private ngOnChanges(changes) {
+    if (changes.hasOwnProperty('selectedTab')) {
+      if (this.search) {
+        this.search.reset();
+      }
+    }
+  }
+
+  private get searchPlaceholder(): string {
+    switch (this.selectedTab) {
+      case Tab.ComponentTree:
+        return 'Search components';
+      case Tab.RouterTree:
+        return 'Search router';
+      default:
+        throw new Error(`Unknown tab: ${this.selectedTab}`);
+    }
+  }
+
+  private onOpenSettings = () => {
     this.settingOpened = !this.settingOpened;
   }
 
-  themeChange(theme, selected) {
+  private onThemeChange = (theme: Theme, selected: boolean) => {
     if (selected) {
-      this.theme = theme;
-      this.newTheme.emit(this.theme);
+      this.options.theme = theme;
     }
+
     this.resetTheme();
   }
 
-  /**
-   * Query for a node
-   * @param  {String} query
-   */
-  onKey(event, isNext) {
-
-    if (this.query.length === 0) {
-      return;
+  private onRetrieveSearchResults = (query: string) => {
+    switch (this.selectedTab) {
+      case Tab.ComponentTree:
+        return this.userActions.searchComponents(this.tree, query);
+      case Tab.RouterTree:
+        return this.userActions.searchRouter(this.routerTree, query);
+      default:
+        throw new Error(`Unknown tab: ${this.selectedTab}`);
     }
-
-    if (isNext === undefined && event.keyCode === 13) {
-      this.searchIndex++;
-    } else if (isNext === undefined) {
-      this.searchIndex = 0;
-    } else if (isNext) {
-      this.searchIndex++;
-    } else if (!isNext) {
-      this.searchIndex--;
-    }
-
-    // cycle over the search results if reached at the end
-    if (this.searchIndex === this.totalSearchCount) {
-      this.searchIndex = 0;
-    } else if (this.searchIndex < 0) {
-      this.searchIndex = this.totalSearchCount - 1;
-    }
-
-    this.query = this.query.toLocaleLowerCase();
-
-    this.userActions.searchNode({ query: this.query, index: this.searchIndex });
-    this._ngZone.run(() => undefined);
   }
 
+  private onSelectedSearchResultChanged(node: Node | Route) {
+    switch (this.selectedTab) {
+      case Tab.ComponentTree:
+        this.selectNode.emit(<Node> node);
+        break;
+      case Tab.RouterTree:
+        this.selectRoute.emit(<Route> node);
+        break;
+      default:
+        throw new Error(`Unknown tab: ${this.selectedTab}`);
+    }
+  }
 }

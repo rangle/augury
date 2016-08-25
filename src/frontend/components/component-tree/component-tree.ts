@@ -1,22 +1,28 @@
-import {Component, ElementRef, Input} from '@angular/core';
-import {NgFor} from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Input,
+  EventEmitter,
+  Output,
+} from '@angular/core';
+
 import {NodeItem} from '../node-item/node-item';
+import {
+  MutableTree,
+  Node,
+} from '../../../tree';
 
 @Component({
   selector: 'component-tree',
-  templateUrl: 'src/frontend/components/component-tree/component-tree.html',
+  template: require('./component-tree.html'),
   host: {'class': 'flex overflow-scroll'},
-  directives: [NgFor, NodeItem]
+  directives: [NodeItem]
 })
-/**
- * Displays the components' hierarchy
- */
 export class ComponentTree {
-  @Input() tree: any;
-  @Input() changedNodes: any;
-  @Input() selectedNode: any;
-  @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
+  @Input() tree: MutableTree;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private inspectElement = new EventEmitter<Node>();
 
   private prevSelectedNode: Element;
 

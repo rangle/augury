@@ -1,20 +1,23 @@
 <bt-tab-menu
   [tabs]="tabs"
-  (tabChange)="tabChange($event)"
-  [selectedTabIndex]="selectedTabIndex">
-  </bt-tab-menu>
+  (tabChange)="onSelectedTabChanged($event)"
+  [selectedTab]="selectedTab">
+</bt-tab-menu>
 
 <bt-component-info
   [node]="node"
-  [hidden]="selectedTabIndex != 0"
-  [ngClass]="{flex: selectedTabIndex == 0}">
-  </bt-component-info>
+  [loadingState]="loadingState"
+  [state]="state"
+  [hidden]="selectedTab !== StateTab.Properties"
+  [ngClass]="{flex: selectedTab === StateTab.Properties}"
+  (selectionChange)="selectionChange.emit($event)">
+</bt-component-info>
 
 <bt-injector-tree
-  (selectNode)="selectNode($event)"
-  [hidden]="selectedTabIndex != 1"
+  (selectComponent)="selectionChange.emit($event)"
+  [hidden]="selectedTab !== StateTab.InjectorGraph"
   [tree]="tree"
   [selectedNode]="node"
   [theme]="theme"
-  [ngClass]="{'flex flex-auto': selectedTabIndex == 1}">
-  </bt-injector-tree>
+  [ngClass]="{'flex flex-auto': selectedTab === StateTab.InjectorGraph}">
+</bt-injector-tree>

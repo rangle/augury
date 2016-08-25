@@ -1,0 +1,22 @@
+:host .icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: transparent url('/images/search.png') center center;
+  background-size: contain;
+  -webkit-mask-image: initial;
+  margin-left: 3px;
+  padding: 0;
+  opacity: 0.7;
+}
+
+:host input {
+  background-color: transparent;
+  font-size: 1em;
+  padding: 5px 5px 5px 0;
+  outline: none !important;
+}
+
+:host .invisible {
+  opacity: 0;
+}

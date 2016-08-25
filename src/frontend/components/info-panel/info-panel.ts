@@ -1,46 +1,56 @@
-import {Component, ElementRef, Inject, NgZone, Input} from '@angular/core';
-import {NgIf, NgClass} from '@angular/common';
-import * as Rx from 'rxjs';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
-import {UserActions} from '../../actions/user-actions/user-actions';
-import {UserActionType} from '../../actions/action-constants';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  NgZone,
+  Input,
+  Output,
+} from '@angular/core';
 
-import TabMenu from '../tab-menu/tab-menu';
-import ComponentInfo from '../component-info/component-info';
-import InjectorTree from '../injector-tree/injector-tree';
+import {UserActions} from '../../actions/user-actions/user-actions';
+import {StateTab, Theme} from '../../state';
+import {TabMenu} from '../tab-menu/tab-menu';
+import {ComponentInfo} from '../component-info/component-info';
+import {InjectorTree} from '../injector-tree/injector-tree';
+import {Node} from '../../../tree';
+import {ComponentLoadState} from '../../state';
 
 @Component({
   selector: 'bt-info-panel',
-  templateUrl: '/src/frontend/components/info-panel/info-panel.html',
-  directives: [NgIf, TabMenu, ComponentInfo, InjectorTree]
+  template: require('./info-panel.html'),
+  directives: [
+    ComponentInfo,
+    InjectorTree,
+    TabMenu,
+  ]
 })
 export class InfoPanel {
+  @Input() tree;
+  @Input() node;
+  @Input() state;
+  @Input() loadingState: ComponentLoadState;
+  @Input() theme: Theme;
 
-  @Input() tree: any;
-  @Input() node: any;
-  @Input() theme: string;
+  @Output() private selectionChange = new EventEmitter<Node>();
 
-  private selectedTabIndex: number = 0;
+  private StateTab = StateTab;
+
+  private selectedTab = StateTab.Properties;
+
   private tabs = [{
       title: 'Properties',
-      selected: false
+      selected: false,
+      tab: StateTab.Properties,
     }, {
       title: 'Injector Graph',
-      selected: false
+      selected: false,
+      tab: StateTab.InjectorGraph,
     }];
 
-  constructor(
-    private componentDataStore: ComponentDataStore,
-    private userActions: UserActions
-  ) {}
+  constructor(private userActions: UserActions) {}
 
-  tabChange(index: number): void {
-    this.selectedTabIndex = index;
+  private onSelectedTabChanged(tab: StateTab) {
+    this.selectedTab = tab;
   }
-
-  selectNode(node: any): void {
-    this.userActions.selectNode({ node: node });
-  }
-
 }

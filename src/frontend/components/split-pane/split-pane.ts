@@ -19,7 +19,7 @@ const DEFAULT_SECONDARY_WIDTH = 384;
   selector: 'split-pane',
   templateUrl: '/src/frontend/components/split-pane/split-pane.html'
 })
-export default class SplitPane {
+export class SplitPane {
   @ViewChild('wrapper') wrapperElement : ElementRef;
   @ViewChild('resizer') resizerElement : ElementRef;
   @ViewChild('overlay') overlayElement : ElementRef;

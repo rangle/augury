@@ -68,3 +68,20 @@ split-pane-secondary-content {
 .disabled-color {
   opacity: 0.6;
 }
+
+.expander {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.7rem;
+  background-color: transparent;
+  background: transparent url(/images/Triangle.svg) center center;
+  -webkit-transition: transform 250ms ease-in-out;
+  -moz-transition: transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out;
+}
+
+.expander.invisible {
+  background: transparent;
+  background-color: #eee;
+  border-radius: 100%;
+}

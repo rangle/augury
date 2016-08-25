@@ -7,11 +7,18 @@
     "filesystem": "github:DefinitelyTyped/DefinitelyTyped/filesystem/filesystem.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "filewriter": "github:DefinitelyTyped/DefinitelyTyped/filewriter/filewriter.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#263705d313346e093d95cb62cef6fed848e46978",
-    "tape": "github:DefinitelyTyped/DefinitelyTyped/tape/tape.d.ts#c2c22c3b953fe9730d4802022d5e0d18d083909e",
-    "webpack": "github:DefinitelyTyped/DefinitelyTyped/webpack/webpack.d.ts#95c02169ba8fa58ac1092422efbd2e3174a206f4"
+    "tape": "github:DefinitelyTyped/DefinitelyTyped/tape/tape.d.ts#c2c22c3b953fe9730d4802022d5e0d18d083909e"
   },
-  "dependencies": {
-    "d3": "github:typed-typings/npm-d3#8bb38bb0ef0a48ac273f6045c26753260ea089df",
-    "es6-promise": "github:typed-typings/npm-es6-promise#fb04188767acfec1defd054fc8024fafa5cd4de7"
+  "dependencies": {},
+  "globalDependencies": {
+    "chrome": "registry:dt/chrome#0.0.0+20160724063844",
+    "d3": "registry:dt/d3#0.0.0+20160727131401",
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "filesystem": "registry:dt/filesystem#0.0.0+20160316155526",
+    "filewriter": "registry:dt/filewriter#0.0.0+20160316155526",
+    "lodash": "registry:dt/lodash#4.14.0+20160817155621",
+    "node": "registry:dt/node#6.0.0+20160823142437",
+    "tape": "registry:dt/tape#4.2.2+20160317120654",
+    "webrtc/mediastream": "registry:dt/webrtc/mediastream#0.0.0+20160317120654"
   }
 }

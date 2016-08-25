@@ -1,21 +1,17 @@
-import {Component, Input} from '@angular/core';
-import {NgFor} from '@angular/common';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
+
 import {NodeItem} from '../node-item/node-item';
 import {ComponentTree} from '../component-tree/component-tree';
+import {MutableTree, Node} from '../../../tree';
 
 @Component({
   selector: 'bt-tree-view',
-  templateUrl: 'src/frontend/components/tree-view/tree-view.html',
-  directives: [NgFor, NodeItem, ComponentTree]
+  template: require('./tree-view.html'),
+  directives: [NodeItem, ComponentTree]
 })
-/**
- * The Tree View
- * Displays the components' hierarchy
- */
 export class TreeView {
-  @Input() tree: any;
-  @Input() changedNodes: any;
-  @Input() selectedNode: any;
-  @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
+  @Input() tree: MutableTree;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private inspectElement = new EventEmitter<Node>();
 }

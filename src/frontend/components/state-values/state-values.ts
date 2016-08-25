@@ -1,76 +1,64 @@
-import {Component, EventEmitter, Input, OnChanges, NgZone}
-  from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  SimpleChanges,
+} from '@angular/core';
+
+import {DomSanitizationService} from '@angular/platform-browser';
+
 import {UserActions} from '../../actions/user-actions/user-actions';
+import {Highlightable} from '../highlightable';
+import {PropertyEditor} from '../property-editor/property-editor';
+import {Path} from '../../../tree';
 import ParseData from '../../utils/parse-data';
 
 @Component({
   selector: 'bt-state-values',
-  templateUrl:
-  '/src/frontend/components/state-values/state-values.html'
+  template: require('./state-values.html'),
+  directives: [PropertyEditor],
+  styles: [require('to-string!./state-values.css')],
 })
-export default class StateValues implements OnChanges {
-
-  @Input() id: any;
-  @Input() value: any;
-  @Input() propertyTree: string;
+export default class StateValues extends Highlightable {
+  @Input() id: string | number;
+  @Input() path: Path;
+  @Input() value;
+  @Input() level: number;
 
   private editable: boolean = false;
-  private isUpdated: boolean = false;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private userActions: UserActions,
-    private _ngZone: NgZone
-  ) { }
+    private domSanitizationService: DomSanitizationService
+  ) {
+    super(changeDetector, changes => this.hasChanged(changes));
+  }
 
-  ngOnChanges(changes: any) {
-    if (changes &&
-      changes.id === undefined &&
-      changes.value !== undefined &&
-      typeof changes.value.previousValue !== 'object' &&
-      changes.value.currentValue !== changes.value.previousValue) {
-      this.isUpdated = true;
-      setTimeout(() => {
-        this.isUpdated = false;
-        this._ngZone.run(() => undefined);
-      }, 1750);
+  private hasChanged(changes) {
+    if (changes == null || !changes.hasOwnProperty('value')) {
+      return false;
     }
+
+    const oldValue = changes.value.previousValue;
+    const newValue = changes.value.currentValue;
+
+    if (oldValue.toString() === 'CD_INIT_VALUE') {
+      return false;
+    }
+
+    return oldValue !== newValue;
   }
 
-  getPropertyKey(tree: any): string {
-    tree = tree.split(',');
-    return tree[tree.length - 1] || '';
+  private get propertyKey(): string | number {
+    return this.path[this.path.length - 1];
   }
 
-  onDblClick($event) {
-    this.editable = true;
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
-
-  propertyChange($event, value) {
-    if ($event.keyCode === 13) {
-      this.editable = false;
-      const type: string = ParseData.getTypeByValue(this.value);
-
-      let newValue: any;
-      if (type === 'number') {
-        newValue = ParseData.convertToNumber(value, this.value);
-      } else if (type === 'boolean') {
-        newValue = ParseData.convertToBoolean(value, this.value);
-      } else {
-        newValue = value;
-      }
-
-      if (newValue !== this.value) {
-
-        const property = {
-          'propertyTree': this.propertyTree.substr(1),
-          'value': newValue,
-          'id': this.id,
-          'type': type
-        };
-        this.userActions.updateProperty({property});
-      }
+  private onValueChanged(newValue) {
+    if (newValue !== this.value) {
+      this.userActions.updateProperty(this.path, newValue);
     }
   }
 }

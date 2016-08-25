@@ -1,16 +1,16 @@
 import * as test from 'tape';
-import Highlighter from './highlighter';
+
+import {highlight} from './highlighter';
 
 test('utils/highlighter: passing undefined', t => {
   t.plan(1);
-  const hls = Highlighter.highlight(undefined, undefined);
-
-  t.deepEqual(hls, undefined, 'get undefined highlight');
+  const hls = highlight([]);
+  t.deepEqual(hls, [], 'get undefined highlight');
   t.end();
 });
 
 test('utils/highlighter: test highlight', t => {
-  t.plan(3);
+  t.plan(2);
   document.body.innerHTML = '';
 
   const div = document.createElement('div');
@@ -19,15 +19,17 @@ test('utils/highlighter: test highlight', t => {
   const node = document.createTextNode('innerText');
   div.appendChild(node);
 
-  const hls = Highlighter.highlight(div, 'highlight div');
+  document.body.appendChild(div);
 
-  t.deepEqual(document.getElementsByTagName('div')[0].textContent,
-    'highlight div',
-     'get highlighted text');
-  t.deepEqual(document.getElementsByTagName('div')[0].style.padding, '5px',
-    'get highlighted padding');
-  t.deepEqual(document.getElementsByTagName('div')[0].style.position,
-    'absolute', 'get highlighted position');
+  const hls = highlight(
+    <any> [{id: '0', nativeElement: () => div, name: 'highlight div'}]);
+
+  const all = document.querySelectorAll('div');
+  const h: any = all[all.length - 1];
+
+  t.deepEqual(h.style.padding, '5px', 'get highlighted padding');
+  t.deepEqual(h.style.position, 'absolute', 'get highlighted position');
+
   t.end();
 });
 
@@ -41,10 +43,14 @@ test('utils/highlighter: test highlight', t => {
   const node = document.createTextNode('innerText');
   div.appendChild(node);
 
-  const hls = Highlighter.highlight(div, 'highlight div');
-  Highlighter.clear();
+  document.body.appendChild(div);
 
-  t.deepEqual(document.getElementsByTagName('div').length, 0,
+  const hls = highlight(
+    <any> [{id: '1', nativeElement: () => div, name: 'foo'}]);
+
+  highlight([]);
+
+  t.deepEqual(document.getElementsByTagName('div').length, 3,
     'remove all highlight');
   t.end();
 });

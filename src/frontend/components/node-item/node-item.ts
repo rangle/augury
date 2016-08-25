@@ -1,196 +1,101 @@
-import {Component, NgZone, Input} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-import {ComponentDataStore} from
-  '../../stores/component-data/component-data-store';
-import {UserActions} from '../../actions/user-actions/user-actions';
+///<amd-dependency path="../../../tree/node" />
 
-// NOTE(cbond): This template must remain inline, there is a bug with recursive
-// controls in Angular 2 and templateUrl that prevents this from working
-// otherwise. Once they fix that bug then this can be placed back inside a
-// templateUrl file.
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  NgZone,
+  Input,
+  Output,
+} from '@angular/core';
+
+import {UserActions} from '../../actions/user-actions/user-actions';
+import {Node} from '../../../tree/node';
+
+import {
+  ExpandState,
+  ViewState,
+} from '../../state';
+
+import {NodeAttributes} from './node-attributes';
+import {NodeCloseTag} from './node-close-tag';
+import {NodeOpenTag} from './node-open-tag';
+
 @Component({
   selector: 'bt-node-item',
-  template: `
-    <div (mouseout)=onMouseOut($event)
-      (mouseover)=onMouseOver($event)
-      (dblclick)=onDblClick($event)
-      (click)="onClick($event)">
-
-      <div class="node-item pl3 rounded border-box"
-        [ngClass]="{'node-item-selected':isSelected,'changed': isUpdated}">
-        <img src="../images/Triangle.svg"
-          style="width: 0.8em; height: 0.8em;"
-          [hidden]="node.children ? false : true"
-          [ngClass]="{rotate90: showChildren()}"
-          (click)="expandTree($event)">
-        <div class="inline"
-          [innerHTML]="getNodeDetails(node)">
-        </div>
-      </div>
-
-      <div class="border-box pl4" *ngIf="node.isOpen || wasRendered">
-        <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
-          [changedNodes]="changedNodes"
-          [hidden]="showChildren()"
-          [selectedNode]="selectedNode"
-          [closedNodes]="closedNodes"
-          [allowedComponentTreeDepth]="allowedComponentTreeDepth"
-          [node]="node">
-        </bt-node-item>
-      </div>
-    </div>`,
-  directives: [NgIf, NgFor, NodeItem]
+  template: require('./node-item.html'),
+  directives: [
+    NodeAttributes,
+    NodeCloseTag,
+    NodeOpenTag,
+    NodeItem,
+  ],
+  styles: [require('to-string!./node-item.css')],
 })
-
-/**
- * Node Item
- * Renders a node in the Component Tree View
- * (see ../tree-view.ts)
- */
 export class NodeItem {
-  @Input() node: any;
-  @Input() changedNodes: any;
-  @Input() selectedNode: any;
-  @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
+  @Input() node;
 
-  private collapsed: any;
-  private isUpdated: boolean = false;
-  private isSelected: boolean = false;
+  /// Emitted when this node is selected
+  @Output() private selectionChange = new EventEmitter<Node>();
 
-  // Perf: if the node was already rendered keep it in the component tree
-  // even if it is hidden.
-  private wasRendered: boolean = false;
+  /// Emitted when this node is selected for element inspection
+  @Output() private inspectElement = new EventEmitter<Node>();
 
   constructor(
-    private userActions: UserActions,
-    private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
-  ) {
+    private viewState: ViewState,
+    private userActions: UserActions
+  ) {}
+
+  private get selected(): boolean {
+    return this.viewState.selectionState(this.node);
   }
 
-  ngOnInit() {
-    // if the tree is too deep stop opening and rendering the tree.
-    this.node.isOpen = this.isDepthLimitReached() ? false : this.node.isOpen;
-
-    // the deeper the rendering goes, the closer the rendering comes to
-    // reaching the limit. Pass this value recursively to sub nodes.
-    this.allowedComponentTreeDepth -= 1;
+  private get expanded(): boolean {
+    return this.viewState.expandState(this.node) === ExpandState.Expanded;
   }
 
-  // Return true if the component tree should no longer be opening
-  // its nodes by default, if false keep expanding the tree.
-  isDepthLimitReached(): boolean {
-    return this.allowedComponentTreeDepth <= 0 && !this.node.overrideDepthLimit;
+  private get hasChildren(): boolean {
+    return this.node.children.length > 0;
   }
 
-  getNodeDetails(node) {
-
-    let html = '';
-    html += `<p class="node-item-name">${node.name}</p>`;
-    if (node.description && node.description.length) {
-      html += '<span class="node-item-description">(';
-      for (let i = 0; i < node.description.length; i++) {
-        const desc = node.description[i];
-        html += `<p class="node-item-property">${desc.key}=</p>` +
-                `<p class="node-item-value">&#34;${desc.value}&#34;</p>`;
-        if (i < node.description.length - 1) {
-          html += ', ';
-        }
-      }
-      html += ')</span>';
+  /// Prevent propagation of mouse events so that parent handlers are not invoked
+  private stop(event: MouseEvent, handler: (event: MouseEvent) => void) {
+    try {
+      handler.bind(this)(event);
     }
-
-    return html;
+    finally {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 
-  /**
-   * Select the element in inspect window on double click
-   * @param  {Object} $event
-   */
-  onDblClick($event) {
-    const evalStr = `inspect($$('body [augury-id="${this.node.id}"]\')[0])`;
-
-    chrome.devtools.inspectedWindow.eval(
-      evalStr,
-      function(result, isException) {
-        if (isException) {
-          console.log(isException);
-        }
-      }
-    );
-
-    $event.preventDefault();
-    $event.stopPropagation();
+  /// Select the element in inspect window on double click
+  onDblClick(event: MouseEvent) {
+    this.inspectElement.emit(this.node);
   }
 
-  /**
-   * Select this node on click
-   * @param  {Object} $event
-   */
-  onClick($event) {
-    this.userActions.selectNode({ node: this.node });
-    $event.preventDefault();
-    $event.stopPropagation();
+  onClick(event: MouseEvent) {
+    this.selectionChange.emit(this.node);
   }
 
-  /**
-   * Dispatch clear highlight action on node mouse out
-   * @param  {Object} $event
-   */
-  onMouseOut($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
+  onMouseOut(event: MouseEvent) {
     this.userActions.clearHighlight();
   }
 
-  /**
-   * Dispatch element highlight action on node mouse over
-   * @param  {Object} $event
-   */
   onMouseOver($event) {
-    this.userActions.highlight({ node: this.node });
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.userActions.highlight(this.node);
   }
 
-  showChildren() {
-    return !this.node.isOpen;
-  }
-
-  /**
-   * Expand or Collapse tree based on current state on click
-   * @param  {Object} $event
-   */
   expandTree($event) {
-    this.node.isOpen = !this.node.isOpen;
-    this.userActions.openCloseNode({ node: this.node });
-
-    // if the disclosure arrow on the component node was clicked
-    // it was rendered.
-    this.wasRendered = true;
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.userActions.toggle(this.node);
   }
 
-  ngOnChanges(changes) {
-    if (this.selectedNode && this.node) {
-      this.isSelected = (this.selectedNode.id === this.node.id);
-    }
-    if (changes.changedNodes && this.node) {
-      this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
-      setTimeout(() => {
-        this.isUpdated = false;
-      }, 2000);
-    }
-    if (this.closedNodes && this.node) {
-      if (this.closedNodes.indexOf(this.node.id) > -1) {
-        this.node.isOpen = false;
-      }
-    }
-  }
-
-  trackById(index: number, node: any): string {
-    return node.id;
-  }
+  trackById = (index: number, node: Node) => node.id;
 }
+
+const stop = (event: MouseEvent) => {
+  event.preventDefault();
+  event.stopPropagation();
+};
+

@@ -1,99 +1,150 @@
 declare var JSONFormatter: any;
-import {Component, ElementRef, Inject, EventEmitter,
-  OnChanges, Input}
-  from '@angular/core';
+
+import {
+  Component,
+  ElementRef,
+  Inject,
+  EventEmitter,
+  OnChanges,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-
+import {ComponentLoadState} from '../../state';
+import {Spinner} from '../spinner/spinner';
+import {Property} from '../../../backend/utils/description';
 import Accordion from '../accordion/accordion';
 import ParseData from '../../utils/parse-data';
 import RenderState from '../render-state/render-state';
 import Dependency from '../dependency/dependency';
-
 import PropertyValue from '../property-value/property-value';
+import {
+  Node,
+  Path,
+  deserializePath,
+} from '../../../tree';
+
+export enum EmitState {
+  None,
+  Emitted,
+  Failed,
+}
 
 @Component({
   selector: 'bt-component-info',
-  templateUrl: '/src/frontend/components/component-info/component-info.html',
-  directives: [RenderState, Accordion, Dependency, PropertyValue]
+  template: require('./component-info.html'),
+  styles: [require('to-string!./component-info.css')],
+  directives: [
+    RenderState,
+    Accordion,
+    Dependency,
+    PropertyValue,
+    Spinner,
+  ]
 })
-export default class ComponentInfo {
-  @Input() node: any;
-  private propertyTree: string = '';
-  private _input: Array<any>;
+export class ComponentInfo {
+  @Input() node: Node;
+  @Input() state;
+  @Input() loadingState: ComponentLoadState;
+
+  @Output() private selectionChange = new EventEmitter<Node>();
+
+  private input: Array<any>;
+
+  private ComponentLoadState = ComponentLoadState;
+
+  private EmitState = EmitState;
+
+  private emitState = new Map<string, EmitState>();
 
   constructor(
-    @Inject(ElementRef) private elementRef: ElementRef,
+    private elementRef: ElementRef,
     private userActions: UserActions
-  ) { }
+  ) {}
 
-  ngOnChanges(change: any) {
-    if (this.node) {
-      this.normalizeInput();
-      setTimeout(() => this.displayTree());
+  private ngOnChanges(changes: SimpleChanges) {
+    this.displayTree();
+  }
+
+  private get path(): Path {
+    return deserializePath(this.node.id);
+  }
+
+  private get inputs(): Array<Property> {
+    if (this.node == null || this.node.input == null) {
+      return [];
     }
-  }
 
-  viewComponentSource($event) {
-    const highlightStr = '[augury-id=\"' + this.node.id + '\"]';
-
-    let evalStr = `inspect(ng.probe(document.querySelector('${highlightStr}'))
-    .componentInstance.constructor)`;
-
-    chrome.devtools.inspectedWindow.eval(
-      evalStr,
-      function(result, isException) {
-        if (isException) {
-          console.log(isException);
-        }
-      }
-    );
-
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
-
-  normalizeInput(): void {
-    this._input = [];
-    if (this.node.input) {
-      this.node.input.forEach(elem => {
-        let [key, value] = elem.split(':');
-        this._input.push({
-          key: key,
-          value: (value ? value.trim() : '')
-        });
+    return this.node.input.map(
+      property => {
+        let [key, value] = property.split(':');
+        return {key, value};
       });
+  }
+
+  private get outputs(): Array<string> {
+    if (this.node == null) {
+      return [];
+    }
+
+    return this.node.output;
+  }
+
+  private get hasState() {
+    if (this.node == null || this.state == null) {
+      return false;
+    }
+
+    return Object.keys(this.state).length > 0;
+  }
+
+  private viewComponentSource() {
+    chrome.devtools.inspectedWindow.eval(`
+      var root = ng.probe(window.pathLookupNode('${this.node.id}'));
+      if (root) {
+        inspect(root.componentInstance.constructor);
+      }`);
+  }
+
+  private isJson(data: string): boolean {
+    try {
+      JSON.parse(data);
+      return true;
+    }
+    catch (e) {
+      return false;
     }
   }
 
-  isJson(data: string): boolean {
-    let isJson: boolean = false;
-    if (data.indexOf('{') !== 0) {
-      isJson = false;
-    } else {
-      try {
-        JSON.parse(data);
-        isJson = true;
-      } catch (ex) {
-        console.log(ex);
-      }
-    }
-    return isJson;
-  }
-
-  fireEvent(output: string, param: any) {
-    if (this.isJson(param)) {
-      param = JSON.parse(param);
+  private emitValue(outputProperty: string, data) {
+    if (this.isJson(data)) {
+      data = JSON.parse(data);
     }
 
-    this.userActions.fireEvent({
-      'output': output,
-      'data': param,
-      'id': this.node.id
-    });
+    const update = (state: EmitState) => this.emitState.set(outputProperty, state);
+
+    const timedReset = () => setTimeout(() => update(EmitState.None), 3000);
+
+    const path = deserializePath(this.node.id).concat([outputProperty]);
+
+    return this.userActions.emitValue(path, data)
+      .then(() => {
+        update(EmitState.Emitted);
+        timedReset();
+      })
+      .catch(error => {
+        update(EmitState.Failed);
+        timedReset();
+      });
   }
 
-  displayTree(): void {
+  private displayTree() {
+    if (this.node == null) {
+      return;
+    }
+
     const childrenContainer = this
       .elementRef.nativeElement
       .querySelector('#tree-children');
@@ -106,5 +157,4 @@ export default class ComponentInfo {
       childrenContainer.appendChild(formatter2.render());
     }
   }
-
 }

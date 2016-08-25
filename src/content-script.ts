@@ -1,52 +1,86 @@
-// keeps track of what script got injected
-let scriptInjection = new Map<string, boolean>();
+import {
+  Message,
+  MessageFactory,
+  MessageType,
+  browserDispatch,
+  browserSubscribe,
+  browserSubscribeDispatch,
+  browserSubscribeOnce,
+} from './communication';
 
-const injectScript = (path: string) => {
-  if (!scriptInjection.get(path)) {
+import {
+  send,
+  subscribe,
+} from './backend/connection';
 
-    let script = document.createElement('script');
-    script.src = chrome.extension.getURL(path);
-    document.documentElement.appendChild(script);
-    script.parentNode.removeChild(script);
+import {loadOptions, SimpleOptions} from './options';
 
-    scriptInjection.set(path, true);
-  }
+const scriptInjection = new Set<string>();
+
+const inject = (fn: (element: HTMLScriptElement) => void) => {
+  const script = document.createElement('script');
+  fn(script);
+  document.documentElement.appendChild(script);
+  script.parentNode.removeChild(script);
 };
 
-// Check with background script to see if the current tab was
-// already registered. If so, then this is a reload.
-chrome.runtime.sendMessage({
-  from: 'content-script'
-}, (response) => {
-  if (response && response.connection) {
-    injectScript('build/ng-validate.js');
-  }
-});
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.name === 'init') {
-    injectScript('build/ng-validate.js');
+const injectScript = (path: string) => {
+  if (scriptInjection.has(path)) {
     return;
   }
 
-  window.postMessage({ type: 'AUGURY_CONTENT_SCRIPT', message }, '*');
-  return true;
-});
+  inject(script => {
+    script.src = chrome.extension.getURL(path);
+  });
 
-window.addEventListener('message', function(event) {
-  // We only accept messages from ourselves
-  if (event.source !== window) {
-    return;
-  }
+  scriptInjection.add(path);
+};
 
-  if (event.data.type && (event.data.type === 'AUGURY_NG_VALID')) {
-    injectScript('build/backend.js');
-  }
+export const injectSettings = (options: SimpleOptions) => {
+  inject(script => {
+    const serialized = JSON.stringify(options);
 
-  if (event.data.type && (event.data.type === 'AUGURY_INSPECTED_APP')) {
-    chrome.runtime.sendMessage({
-      name: 'message',
-      data: event.data
+    script.textContent = `this.treeRenderOptions = ${serialized};`;
+  });
+};
+
+browserSubscribeOnce(MessageType.FrameworkLoaded,
+  () => {
+    loadOptions().then(options => {
+      // We want to load the tree rendering options that the UI has saved
+      // because that allows us to send the correct tree immediately upon
+      // startup and send it to the message queue, allowing Augury to render
+      // instantly as soon as the application is loaded. Without this bit
+      // of code we would have to wait for the frontend to start and load its
+      // options and then request the tree, which would add a lot of latency
+      // to startup.
+      injectSettings(options);
+
+      injectScript('build/backend.js');
     });
+
+    return true;
+  });
+
+browserSubscribeDispatch(message => {
+  if (message.messageType === MessageType.DispatchWrapper) {
+    send(message.content)
+      .then(response => {
+        browserDispatch(MessageFactory.response(message, response, true));
+      })
+      .catch(error => {
+        browserDispatch(MessageFactory.response(message, error, false));
+      });
   }
-}, false);
+});
+
+subscribe((message: Message<any>) => browserDispatch(message));
+
+send(MessageFactory.initialize())
+  .then((response: {extensionId: string}) => {
+    injectScript('build/ng-validate.js');
+  })
+  .catch(error => {
+    console.error('Augury initialization has failed', error.stack);
+    console.error(error);
+  });

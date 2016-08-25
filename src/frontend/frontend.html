@@ -1,0 +1,28 @@
+<div *ngIf="tree"
+  class="clearfix vh-100 overflow-hidden flex flex-column"
+  [ngClass]="{'dark': theme === Theme.Dark}">
+  <augury-header
+    [options]="options"
+    [selectedTab]="selectedTab"
+    [tree]="tree"
+    [routerTree]="routerTree"
+    (selectNode)="onComponentSelectionChange($event, false)"
+    (selectRoute)="onRouteSelectionChange($event)">
+  </augury-header>
+  <bt-app-trees #trees
+    class="flex flex-column flex-auto bg-white"
+    [componentState]="componentState"
+    [selectedTab]="selectedTab"
+    [selectedNode]="selectedNode"
+    [routerTree]="routerTree"
+    [routerException]="routerException"
+    [options]="options"
+    [tree]="tree"
+    (tabChange)="onSelectedTabChange($event)"
+    (selectionChange)="onComponentSelectionChange($event, false)"
+    (inspectElement)="onInspectElement($event)">
+  </bt-app-trees>
+</div>
+<template [ngIf]="exception">
+  <pre>{{exception}}</pre>
+</template>

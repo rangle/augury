@@ -67,12 +67,14 @@ module.exports = {
   module: {
     preLoaders: [{
       test: /\.ts$/,
-      loader: 'tslint'
+      loader: 'tslint',
+      exclude: /node_modules/,
     }],
     loaders: [{
       // Support for .ts files.
       test: /\.ts$/,
       loader: 'ts',
+      exclude: /node_modules/,
       query: {
         'ignoreDiagnostics': []
       },
@@ -90,6 +92,9 @@ module.exports = {
     }, {
       test: /\.png$/,
       loader: "url-loader?mimetype=image/png"
+    }, {
+      test: /\.html$/,
+      loader: 'raw'
     }],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,
@@ -109,6 +114,7 @@ module.exports = {
   plugins: [
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+      'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
       'VERSION': JSON.stringify(pkg.version)
     }),
     new OccurenceOrderPlugin(),

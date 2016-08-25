@@ -1,42 +1,83 @@
-import {Component, EventEmitter, Input} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+} from '@angular/core';
+
 import StateValues from '../state-values/state-values';
+
+import {
+  isObservable,
+  isSubject,
+} from '../../utils';
+
+const defaultExpansionDepth = 1;
 
 @Component({
   selector: 'bt-render-state',
-  templateUrl:
-  '/src/frontend/components/render-state/render-state.html',
-  directives: [RenderState, StateValues]
+  template: require('./render-state.html'),
+  directives: [
+    RenderState,
+    StateValues,
+  ],
 })
 export default class RenderState {
   @Input() id: string;
-  @Input() state: any;
-  @Input() propertyTree: string;
+  @Input() path: Array<string | number>;
+  @Input() level: number;
+  @Input() state;
 
-  private expanded = {};
+  private expansionState = {};
+
+  private get none() {
+    return this.state == null || Object.keys(this.state).length === 0;
+  }
+
+  private nest(key: string): boolean {
+    return typeof this.state[key] === 'object';
+  }
+
+  private expanded(key: string): boolean {
+    if (this.expansionState.hasOwnProperty(key)) {
+      return this.expansionState[key];
+    }
+    if (isObservable(this.state[key])) { // do not expand observables (default)
+      return false;
+    }
+    return this.level <= defaultExpansionDepth; // default depth
+  }
 
   expandTree(key, $event) {
-    this.expanded[key] = !this.expanded[key];
+    this.expansionState[key] = !this.expansionState[key];
+
     $event.preventDefault();
     $event.stopPropagation();
   }
 
-  type(d: any): string {
-    return typeof (d);
-  }
-
   displayType(d: any): string {
-    let type = ': Object';
-    if (typeof d === 'object' && d && d.constructor &&
-      d.constructor.toString().indexOf('Array') > -1) {
-        type = ': Array[' + d.length + ']';
-    } else if (typeof d !== 'object') {
-      type = '';
+    if (Array.isArray(d)) {
+      return `Array[${d.length}]`;
     }
-
-    return type;
+    else if (typeof d === 'object') {
+      if (d) {
+        if (isSubject(d)) {
+          return 'Subject';
+        }
+        else if (isObservable(d)) {
+          return 'Observable';
+        }
+        return 'Object';
+      } else if (d === null) {
+        return 'null';
+      } else if (d === undefined) {
+        return 'undefined';
+      }
+    }
+    return typeof d;
   }
 
-  keys(obj: any): any {
+  keys(obj): string[] {
     return (obj instanceof Object) ? Object.keys(obj) : [];
   }
 }

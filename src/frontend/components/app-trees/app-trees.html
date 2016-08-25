@@ -1,39 +1,39 @@
 <bt-tab-menu
-   [tabs]="tabs"
-   (tabChange)="tabClicked($event)"
-   [selectedTabIndex]="selectedTabIndex">
+  [tabs]="tabs"
+  (tabChange)="onTabSelectionChanged($event)"
+  [selectedTab]="selectedTab">
 </bt-tab-menu>
 
 <split-pane class="flex flex-auto">
   <split-pane-primary-content
      class="flex flex-column flex-auto"
-     [ngClass]="{'overflow-scroll': selectedTabIndex > 0}">
+     [ngClass]="{'overflow-scroll': selectedTab === Tab.RouterTree}">
     <bt-tree-view
-       [hidden]="selectedTabIndex != 0"
-       [ngClass]="{flex: selectedTabIndex == 0}"
-       [changedNodes]="changedNodes"
-       [selectedNode]="selectedNode"
-       [closedNodes]="closedNodes"
-       [tree]="tree"
-       [allowedComponentTreeDepth]="allowedComponentTreeDepth">
+      [hidden]="selectedTab != Tab.ComponentTree"
+      [ngClass]="{flex: selectedTab === Tab.ComponentTree}"
+      [tree]="tree"
+      (selectionChange)="selectionChange.emit($event)"
+      (inspectElement)="inspectElement.emit($event)">
     </bt-tree-view>
+    <bt-router-tree class="overflow-scroll flex-auto"
+      [theme]="options.theme"
+      [hidden]="selectedTab !== Tab.RouterTree"
+      [routerException]="routerException"
+      [routerTree]="routerTree">
+    </bt-router-tree>
   </split-pane-primary-content>
   <split-pane-secondary-content
      class="flex flex-column flex-auto"
-     [ngClass]="{'flex': selectedTabIndex === 0}"
-     [hidden]="selectedTabIndex > 0">
-    <bt-info-panel
+     [ngClass]="{'flex': selectedTab === Tab.ComponentTree}"
+     [hidden]="selectedTabIndex !== Tab.ComponentTree">
+     <bt-info-panel
        class="flex flex-column flex-auto bg-white"
        [tree]="tree"
-       [theme]="theme"
-       [node]="selectedNode">
-    </bt-info-panel>
+       [theme]="options.theme"
+       [node]="selectedNode"
+       [loadingState]="componentState.loadingState(selectedNode)"
+       [state]="componentState.componentInstance(selectedNode)"
+       (selectionChange)="selectionChange.emit($event)">
+     </bt-info-panel>
   </split-pane-secondary-content>
 </split-pane>
-
-<bt-router-tree
-   class="overflow-scroll flex-auto"
-   [theme]="theme"
-   [hidden]="selectedTabIndex != 1"
-   [routerTree]="routerTree">
-</bt-router-tree>

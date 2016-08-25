@@ -6,68 +6,42 @@
         style="width: 18px; height: 18px;">
         Augury
     </h4>
+    <div class="regular flex flex-left primary-color m0 mt1">
+      <input id="exclude-non-components" type="checkbox" [(ngModel)]="options.showElements" />
+      <label for="exclude-non-components">Show HTML elements</label>
+    </div>
     <div class="flex">
-      <div class="flex flex-center border rounded border-color-dark bg-white mr3"
-        [ngClass]="{'disabled-color': searchDisabled}">
-        <!-- SEARCH -->
-        <input class="outline border-none bg-white flex-auto primary-color"
-          [ngClass]="{'bg-panel disabled-color': searchDisabled}"
-          placeholder="Find Component"
-          type="text"
-          (keyup)="onKey($event)"
-          [disabled]="searchDisabled"
-          [(ngModel)]="query">
-        <div class="bg-white right-align pr2"
-          style="min-width:50px">
-          <span class="h4 regular primary-color"
-            *ngIf="totalSearchCount > 0 && query.length > 0">
-            {{searchIndex + 1}} of {{totalSearchCount}}
-            </span>
-        </div>
-        <div class="right-align border-left">
-          <div class="inline-block">
-            <button class="outline border-none btn-primary primary-color bg-panel pointer py2"
-              (click)="onKey($event, false)">
-              <img src="../images/Triangle.svg"
-                class="rotate180"
-                style="width: 0.8em; height: 0.8em;">
-            </button>
-          </div>
-          <div class="border-left inline-block"
-            style="margin-left: -4px">
-            <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py2"
-              (click)="onKey($event, true)">
-              <img src="../images/Triangle.svg"
-                style="width: 0.8em; height: 0.8em;">
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- SETTING -->
+      <search
+        [placeholder]="searchPlaceholder"
+        [handler]="onRetrieveSearchResults"
+        (selectedResult)="onSelectedSearchResultChanged($event)">
+      </search>
       <div class="icon setting" id="augury-theme-menu-button"
-        (click)="openSettings()"></div>
+        (click)="onOpenSettings()"></div>
     </div>
   </header>
 
   <form>
-    <ul id="augury-theme-menu" class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0" [ngClass]="{'setting-dropdown--dark':theme==='dark'}" *ngIf="settingOpened">
+    <ul id="augury-theme-menu"
+        class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0"
+        [ngClass]="{'setting-dropdown--dark': options.theme === Theme.Dark}"
+        *ngIf="settingOpened">
       <li class="p3 border-bottom border-dark">
         <input type="radio"
           #lightTheme
-          [checked]="theme==='light'"
-          (change)="themeChange('light', lightTheme.checked)"
-          name="theme"
-          value="light">
+          [checked]="options.theme === Theme.Light"
+          [value]="Theme.Light"
+          (change)="onThemeChange(Theme.Light, lightTheme.checked)"
+          name="theme">
         <label for="light">Light Mode</label>
       </li>
       <li class="p3">
         <input type="radio"
           #darkTheme
-          [checked]="theme==='dark'"
-          (change)="themeChange('dark', darkTheme.checked)"
-          name="theme"
-          value="dark">
+          [checked]="options.theme === Theme.Dark"
+          [value]="Theme.Dark"
+          (change)="onThemeChange(Theme.Dark, darkTheme.checked)"
+          name="theme" />
         <label for="dark">Dark Mode</label>
       </li>
     </ul>

@@ -1,0 +1,17 @@
+<div [ngClass]="{'property-editor': true, editing: state === State.Write}" (click)="onClick($event)">
+  <span [ngSwitch]="state">
+    <span *ngSwitchCase="State.Read">
+      <span class="editable">{{value}}</span>
+    </span>
+    <span *ngSwitchDefault>
+      <input type="text"
+        [ngClass]="{
+          editable: true,
+          invalid: state === State.Unparseable
+        }"
+        [(ngModel)]="value"
+        (keypress)="onKeypress($event)"
+        (blur)="onBlur($event)" />
+    </span>
+  </span>
+</div>

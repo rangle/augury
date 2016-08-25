@@ -1,4 +1,7 @@
-<bt-router-info
+<div *ngIf="routerException">
+  <pre>{{routerException}}</pre>
+</div>
+<bt-router-info *ngIf="!routerException"
   [selectedNode]="selectedNode"
-  [hidden]="!selectedNode">
-  </bt-router-info>
+  [hidden]="selectedNode == null">
+</bt-router-info>

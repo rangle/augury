@@ -2,41 +2,60 @@ import {
   Component,
   Output,
   EventEmitter,
-  Input
+  Input,
 } from '@angular/core';
-import TabMenu from '../tab-menu/tab-menu';
+
 import {TreeView} from '../tree-view/tree-view';
 import {RouterTree} from '../router-tree/router-tree';
+import {Route} from '../../../backend/utils';
+import {
+  TabDescription,
+  TabMenu,
+} from '../tab-menu/tab-menu';
+import {
+  ComponentInstanceState,
+  Options,
+  Tab,
+  Theme,
+} from '../../state';
+
+type Node = any;
 
 @Component({
   selector: 'bt-app-trees',
-  directives: [TabMenu, TreeView, RouterTree],
-  templateUrl:
-    '/src/frontend/components/app-trees/app-trees.html'
+  directives: [
+    TabMenu,
+    TreeView,
+    RouterTree,
+  ],
+  template: require('./app-trees.html'),
 })
-export default class AppTrees {
+export class AppTrees {
+  private Tab = Tab;
 
-  @Input() theme: string;
-  @Input() tree: any;
-  @Input() routerTree: any;
-  @Input() selectedTabIndex: number;
-  @Input() selectedNode: any;
-  @Input() changedNodes: any;
-  @Input() closedNodes: Array<any>;
-  @Input() allowedComponentTreeDepth: number;
+  @Input() tree: Array<Node>;
+  @Input() routerTree: Array<Route>;
+  @Input() routerException: string;
+  @Input() selectedTab: Tab;
+  @Input() selectedNode: Node;
+  @Input() options: Options;
+  @Input() componentState: ComponentInstanceState;
 
-  @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() private tabChange = new EventEmitter<Tab>();
+  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private inspectElement = new EventEmitter<Node>();
 
   private tabs = [{
     title: 'Component Tree',
-    selected: false
+    selected: false,
+    tab: Tab.ComponentTree,
   }, {
     title: 'Router Tree',
-    selected: false
+    selected: false,
+    tab: Tab.RouterTree,
   }];
 
-  tabClicked(index: number): void {
-    this.tabChange.emit(index);
+  onTabSelectionChanged(index: number) {
+    this.tabChange.emit(this.tabs[index].tab);
   }
-
 }

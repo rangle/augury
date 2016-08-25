@@ -22,13 +22,29 @@ module.exports = {
       // Support for .ts files.
       test: /\.ts$/,
       loader: 'ts',
+      exclude: /node_modules/,
       query: {
         'ignoreDiagnostics': []
       },
       exclude: [
         /node_modules/
       ]
-    }]
+    }, {
+      test: /\.css$/,
+      loader: 'css!postcss'
+    }, {
+      test: /\.png$/,
+      loader: "url-loader?mimetype=image/png"
+    }, {
+      test: /\.html$/,
+      loader: 'raw'
+    }],
+    noParse: [
+      /rtts_assert\/src\/rtts_assert/,
+      /reflect-metadata/,
+      /.+zone\.js\/dist\/.+/,
+      /.+angular2\/bundles\/.+/
+    ]
   },
   resolve: {
     extensions: ['', '.ts', '.js', '.jsx'],
@@ -36,6 +52,12 @@ module.exports = {
   },
 
   node: {
-    fs: 'empty'
-  }
+    'fs': 'empty'
+  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      chrome: '{runtime: {connect: function() {}}}'
+    })
+  ]
 };
