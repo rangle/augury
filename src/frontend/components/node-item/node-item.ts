@@ -28,7 +28,10 @@ import {
 export class NodeItem extends Highlightable {
   @Input() node;
 
+  /// Emitted when this node is selected
   @Output() private selectionChange = new EventEmitter<Node>();
+
+  /// Emitted when this node is selected for element inspection
   @Output() private inspectElement = new EventEmitter<Node>();
 
   constructor(

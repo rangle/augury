@@ -227,7 +227,7 @@ class App {
       case Tab.ComponentTree:
         break;
       case Tab.RouterTree:
-        this.connection.send<Route[], any>(MessageFactory.routerTree())
+        this.userActions.renderRouterTree()
           .then(response => {
             this.routerTree = response;
             this.changeDetector.detectChanges();

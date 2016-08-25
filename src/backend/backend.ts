@@ -22,6 +22,9 @@ import {send} from './indirect-connection';
 import {
   Route,
   MainRoute,
+  defineLookupOperation,
+  highlight,
+  highlightRefresh,
   parseRoutes,
 } from './utils';
 
@@ -45,8 +48,9 @@ const updateTree = (roots: Array<DebugElement>) => {
   previousTree = newTree;
 };
 
-const update = () =>
+const update = () => {
   updateTree(getAllAngularRootElements().map(r => ng.probe(r)));
+};
 
 const subject = new Subject<void>();
 
@@ -56,7 +60,13 @@ const bind = (root: DebugElement) => {
     ngZone.onStable.subscribe(() => subject.next(void 0));
   }
 
-  subject.debounceTime(0).subscribe(() => update());
+  subject.debounceTime(0).subscribe(
+    () => {
+      update();
+
+      /// After updates, refresh nodes that have been highlighted
+      highlightRefresh(previousTree);
+    });
 
   subject.next(void 0); // initial load
 };
@@ -78,32 +88,43 @@ browserSubscribe(
         subject.next(void 0);
 
         return true;
+
       case MessageType.SelectComponent:
-        const path: Path = message.content.path;
+        return tryWrap(() => {
+          const path: Path = message.content.path;
 
-        const node = previousTree.traverse(path);
+          const node = previousTree.traverse(path);
 
-        this.consoleReference(node);
+          this.consoleReference(node);
 
-        // For component selection events, we respond with component instance
-        // properties for the selected node. If we had to serialize the
-        // properties of each node on the tree that would be a performance
-        // killer, so we only send the componentInstance values for the
-        // node that has been selected.
-        if (message.content.requestInstance) {
-          return getComponentInstance(previousTree, node);
-        }
-        break;
+          // For component selection events, we respond with component instance
+          // properties for the selected node. If we had to serialize the
+          // properties of each node on the tree that would be a performance
+          // killer, so we only send the componentInstance values for the
+          // node that has been selected.
+          if (message.content.requestInstance) {
+            return getComponentInstance(previousTree, node);
+          }
+        });
+
       case MessageType.UpdateProperty:
         return tryWrap(() => updateProperty(previousTree,
           message.content.path,
           message.content.newValue));
+
       case MessageType.EmitValue:
         return tryWrap(() => emitValue(previousTree,
           message.content.path,
           message.content.value));
+
       case MessageType.RouterTree:
         return tryWrap(() => routerTree());
+
+      case MessageType.Highlight:
+        const nodes = message.content.nodes
+          .map(id => previousTree.search(id));
+
+        return tryWrap(() => highlight(nodes));
     }
     return undefined;
   });
@@ -210,17 +231,4 @@ export const tryWrap = (fn: Function) => {
   }
 };
 
-// NOTE(cbond): This is required to look up nodes based on a path from the
-// frontend. The only place it is used right now is in the inspectElement
-// operation. It would be nice if there were a cleaner way to do this.
-Object.assign(window, {
-  pathLookupNode: (id: string) => {
-    const node = previousTree.search(id);
-    if (node == null) {
-      console.error(`Cannot find element associated with node ${id}`);
-      return null;
-    }
-    return node.nativeElement();
-  }
-});
-
+defineLookupOperation(() => previousTree);

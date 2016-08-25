@@ -1,21 +1,18 @@
 import {Injectable} from '@angular/core';
 
 import {Connection} from '../../channel/connection';
-
+import {MessageFactory} from '../../../communication';
+import {Route} from '../../../backend/utils';
+import {matchNode} from '../../utils';
 import {
   ExpandState,
   ViewState,
 } from '../../state';
-
 import {
   MutableTree,
   Node,
   Path,
 } from '../../../tree';
-
-import {MessageFactory} from '../../../communication';
-
-import {matchNode} from '../../utils';
 
 @Injectable()
 export class UserActions {
@@ -53,6 +50,7 @@ export class UserActions {
     return this.connection.send(MessageFactory.emitValue(path, value));
   }
 
+  /// Search components and return result as nodes
   searchComponents(tree: MutableTree, query: string): Promise<Array<Node>> {
     return new Promise((resolve, reject) => {
       const results = tree.filter(node => matchNode(node, query));
@@ -65,45 +63,25 @@ export class UserActions {
     });
   }
 
+  /// Search routers and return result as routes
   searchRouter(tree: MutableTree, query: string): Promise<Array<any>> {
     return Promise.reject<Array<any>>(new Error('Not implemented'));
   }
 
-  /**
-   * Clear the highlight from the web page
-   */
   clearHighlight() {
-    // this.messagingService.sendMessageToBackend({
-    //   actionType: UserActionType.CLEAR_HIGHLIGHT
-    // });
+    return this.connection.send(MessageFactory.highlight([]));
   }
 
-  /// Highlight a node element on the page
   highlight(node: Node) {
-    // this.messagingService.sendMessageToBackend({
-    //   actionType: UserActionType.HIGHLIGHT_NODE,
-    //   node
-    // });
+    return this.connection.send(MessageFactory.highlight([node]));
   }
 
-  /**
-   * Get the list of dependent Components when clicking on dependency
-   * @param  {String} dependency Name of the dependency
-   */
   getDependencies(dependency: string) {
-    // this.dispatcher.messageBus.next({
-    //   actionType: UserActionType.GET_DEPENDENCIES,
-    //   dependency
-    // });
+    throw new Error('Not implemented');
   }
 
-  /**
-   * Dispatch the event to render router tree
-   */
-  renderRouterTree() {
-    // this.messagingService.sendMessageToBackend({
-    //   actionType: UserActionType.RENDER_ROUTER_TREE
-    // });
+  renderRouterTree(): Promise<Route[]> {
+    return this.connection.send<Route[], any>(MessageFactory.routerTree());
   }
 }
 

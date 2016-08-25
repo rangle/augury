@@ -3,7 +3,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-import { highlightTime } from '../../utils/configuration';
+import {highlightTime} from '../../utils/configuration';
 
 export class Highlightable {
   private isUpdated = false;
@@ -19,11 +19,15 @@ export class Highlightable {
     if (typeof this.getUpdated === 'function') {
       if (this.getUpdated(changes)) {
         this.changed();
+        return;
       }
     }
     else {
       this.changed();
+      return;
     }
+
+    this.clear();
   }
 
   protected ngOnDestroy() {
@@ -32,23 +36,18 @@ export class Highlightable {
     clearTimeout(this.resetUpdateState);
   }
 
-  protected changed() {
-    if (this.isUpdated) {
-      return;
-    }
+  private clear() {
+    this.resetUpdateState = null;
 
+    this.isUpdated = false;
+
+    this.changeDetectorRef.detectChanges();
+  }
+
+  protected changed() {
     this.isUpdated = true;
 
-    this.resetUpdateState = setTimeout(() => {
-        this.resetUpdateState = null;
-
-        this.isUpdated = false;
-
-        if (this.changeDetectorRef) {
-          this.changeDetectorRef.detectChanges();
-        }
-      },
-      highlightTime);
+    this.resetUpdateState = setTimeout(() => this.clear(), highlightTime);
 
     this.changeDetectorRef.detectChanges();
   }

@@ -77,7 +77,6 @@ export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
 export const browserDispatch = <T>(message: Message<T>) => {
-  debugger;
   window.postMessage(message, '*');
 };
 

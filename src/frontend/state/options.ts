@@ -48,12 +48,11 @@ export class Options {
           reduce();
         });
 
-      // TODO(cbond): I do not think we want to save this, do we?
-      // chrome.storage.sync.get('show-elements',
-      //   (result: {show: boolean}) => {
-      //     this.showElements = (result || {show: false}).show;
-      //     reduce();
-      //   });
+      chrome.storage.sync.get('showElements',
+        (result: {showElements: boolean}) => {
+          this.showElements = (result || {showElements: false}).showElements;
+          reduce();
+        });
     });
   }
 
@@ -79,7 +78,7 @@ export class Options {
     this.cachedShowElements = show;
 
     chrome.storage.sync.set({
-      show: show,
+      'showElements': show,
     });
 
     this.publish();

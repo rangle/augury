@@ -98,6 +98,15 @@ export abstract class MessageFactory {
     });
   }
 
+  static highlight(nodes: Array<Node>): Message<Node[]> {
+    return create({
+      messageType: MessageType.Highlight,
+      content: {
+        nodes: nodes.map(n => n.id),
+      },
+    });
+  }
+
   /// Wrap a message in a DispatchWrapper so that we know to post it to the browser event
   /// queue instead of posting it to the Chrome communication channel. A message wrapped
   /// in this way takes a different path than a normal message.

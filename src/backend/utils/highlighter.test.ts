@@ -1,11 +1,11 @@
 import * as test from 'tape';
-import Highlighter from './highlighter';
+
+import {highlight} from './highlighter';
 
 test('utils/highlighter: passing undefined', t => {
   t.plan(1);
-  const hls = Highlighter.highlight(undefined, undefined);
-
-  t.deepEqual(hls, undefined, 'get undefined highlight');
+  const hls = highlight([]);
+  t.deepEqual(hls, [], 'get undefined highlight');
   t.end();
 });
 
@@ -19,15 +19,19 @@ test('utils/highlighter: test highlight', t => {
   const node = document.createTextNode('innerText');
   div.appendChild(node);
 
-  const hls = Highlighter.highlight(div, 'highlight div');
+  document.body.appendChild(div);
 
-  t.deepEqual(document.getElementsByTagName('div')[0].textContent,
+  const hls = highlight(
+    <any> [{id: '0', nativeElement: () => div, name: 'highlight div'}]);
+
+  t.deepEqual(div.querySelector('div:2nd-of-type,
     'highlight div',
      'get highlighted text');
-  t.deepEqual(document.getElementsByTagName('div')[0].style.padding, '5px',
+  t.deepEqual((<any>div.children[1]).style.padding, '5px',
     'get highlighted padding');
-  t.deepEqual(document.getElementsByTagName('div')[0].style.position,
+  t.deepEqual((<any>div.children[1]).style.position,
     'absolute', 'get highlighted position');
+
   t.end();
 });
 
@@ -41,10 +45,14 @@ test('utils/highlighter: test highlight', t => {
   const node = document.createTextNode('innerText');
   div.appendChild(node);
 
-  const hls = Highlighter.highlight(div, 'highlight div');
-  Highlighter.clear();
+  document.body.appendChild(div);
 
-  t.deepEqual(document.getElementsByTagName('div').length, 0,
+  const hls = highlight(
+    <any> [{id: '1', nativeElement: () => div, name: 'foo'}]);
+
+  highlight([]);
+
+  t.deepEqual(document.getElementsByTagName('div').length, 1,
     'remove all highlight');
   t.end();
 });
