@@ -31,7 +31,8 @@ export class Options implements SimpleOptions {
 
   load() {
     return loadOptions().then(options => {
-      Object.assign(this, options);
+      this.cachedTheme = options.theme;
+      this.cachedShowElements = options.showElements;
 
       this.publish();
 

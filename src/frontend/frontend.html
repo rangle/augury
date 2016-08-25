@@ -1,6 +1,6 @@
 <div *ngIf="tree"
   class="clearfix vh-100 overflow-hidden flex flex-column"
-  [ngClass]="{'dark': theme === Theme.Dark}">
+  [ngClass]="{'dark': options.theme === Theme.Dark}">
   <augury-header
     [options]="options"
     [selectedTab]="selectedTab"
