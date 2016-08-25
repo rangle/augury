@@ -10,7 +10,7 @@ test('utils/highlighter: passing undefined', t => {
 });
 
 test('utils/highlighter: test highlight', t => {
-  t.plan(3);
+  t.plan(2);
   document.body.innerHTML = '';
 
   const div = document.createElement('div');
@@ -24,13 +24,11 @@ test('utils/highlighter: test highlight', t => {
   const hls = highlight(
     <any> [{id: '0', nativeElement: () => div, name: 'highlight div'}]);
 
-  t.deepEqual(div.querySelector('div:2nd-of-type,
-    'highlight div',
-     'get highlighted text');
-  t.deepEqual((<any>div.children[1]).style.padding, '5px',
-    'get highlighted padding');
-  t.deepEqual((<any>div.children[1]).style.position,
-    'absolute', 'get highlighted position');
+  const all = document.querySelectorAll('div');
+  const h: any = all[all.length - 1];
+
+  t.deepEqual(h.style.padding, '5px', 'get highlighted padding');
+  t.deepEqual(h.style.position, 'absolute', 'get highlighted position');
 
   t.end();
 });
@@ -52,7 +50,7 @@ test('utils/highlighter: test highlight', t => {
 
   highlight([]);
 
-  t.deepEqual(document.getElementsByTagName('div').length, 1,
+  t.deepEqual(document.getElementsByTagName('div').length, 3,
     'remove all highlight');
   t.end();
 });
