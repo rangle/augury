@@ -104,11 +104,9 @@ class App {
   }
 
   private requestTree() {
-    const cleanOptions = {
-      showElements: this.options.showElements,
-    };
+    const options = this.options.simpleOptions();
 
-    this.connection.send(MessageFactory.initialize(cleanOptions))
+    this.connection.send(MessageFactory.initialize(options))
       .then(() => {
         this.changeDetector.detectChanges();
       })
@@ -121,7 +119,7 @@ class App {
   private restoreSelection() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
 
-    this.onComponentSelectionChange(this.selectedNode);
+    this.onComponentSelectionChange(this.selectedNode, true);
   }
 
   private processMessage(msg: Message<any>,
@@ -168,9 +166,6 @@ class App {
     /// This operation must happen after the tree patch
     const changedIdentifiers = this.extractIdentifiersFromChanges(changes);
 
-    /// Reset component state cache
-    this.componentState.reset();
-
     /// Highlight the nodes that have changed
     this.viewState.nodesChanged(changedIdentifiers);
 
@@ -192,7 +187,7 @@ class App {
     }
   }
 
-  private onComponentSelectionChange(node: Node) {
+  private onComponentSelectionChange(node: Node, reset: boolean) {
     this.selectedNode = node;
 
     if (node == null) {
@@ -200,13 +195,20 @@ class App {
     }
 
     /// If this is an Angular component, attempt to retrieve the componentInstance value
-    if (this.componentState.has(node)) { // cached?
+    if (this.componentState.has(node) && reset === false) { // cached?
       this.userActions.selectComponent(node, false);
     }
     else {
       if (node.isComponent) {
-        this.componentState.wait(node,
-          this.userActions.selectComponent(node, true));
+        // A bit of a contortion to prevent the UI from flickering when we reload the state
+        const promise =
+          this.userActions.selectComponent(node, true)
+            .then(response => {
+              this.componentState.reset();
+              return response;
+            });
+
+        this.componentState.wait(node, promise);
       }
       else {
         this.userActions.selectComponent(node, false);

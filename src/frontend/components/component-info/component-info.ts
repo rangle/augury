@@ -92,6 +92,14 @@ export class ComponentInfo {
     return this.node.output;
   }
 
+  private get hasState() {
+    if (this.node == null || this.state == null) {
+      return false;
+    }
+
+    return Object.keys(this.state).length > 0;
+  }
+
   private viewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
       var root = ng.probe(window.pathLookupNode('${this.node.id}'));

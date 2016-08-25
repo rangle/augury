@@ -3,6 +3,7 @@ import {MessageType} from './message-type';
 import {
   deserialize,
   deserializeBinary,
+  serializeBinary,
 } from '../utils';
 
 export enum Serialize {
@@ -61,3 +62,12 @@ export const deserializeMessage = <T>(message: Message<T>) => {
   message.serialize = Serialize.None;
 };
 
+export const serializeMessage = <T>(message: Message<T>) => {
+  switch (message.serialize) {
+    case Serialize.None:
+      message.content = <any> serializeBinary(message.content);
+      message.serialize = Serialize.Binary;
+    default:
+      break;
+  }
+};

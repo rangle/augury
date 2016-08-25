@@ -3,7 +3,10 @@ import {Injectable} from '@angular/core';
 import {Connection} from '../../channel/connection';
 import {MessageFactory} from '../../../communication';
 import {Route} from '../../../backend/utils';
-import {matchNode} from '../../utils';
+import {
+  matchNode,
+  matchRoute,
+} from '../../utils';
 import {
   ExpandState,
   ViewState,
@@ -64,7 +67,7 @@ export class UserActions {
   }
 
   /// Search routers and return result as routes
-  searchRouter(tree: MutableTree, query: string): Promise<Array<any>> {
+  searchRouter(routerTree: Array<Route>, query: string): Promise<Array<any>> {
     return Promise.reject<Array<any>>(new Error('Not implemented'));
   }
 

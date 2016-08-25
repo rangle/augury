@@ -1,4 +1,5 @@
 import {Node} from '../../tree';
+import {Route} from '../../backend/utils/parse-router';
 
 export const matchString = (query: string, value: string): boolean => {
   const llhs = (query || '').toLocaleLowerCase();
@@ -29,3 +30,6 @@ export const matchNode = (node: Node, query: string): boolean => {
   return false;
 };
 
+export const matchRoute = (route: Route, query: string): boolean => {
+  throw new Error('Not implemented');
+};

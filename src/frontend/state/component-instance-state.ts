@@ -4,7 +4,6 @@ import {Node} from '../../tree';
 
 export enum ComponentLoadState {
   Idle,
-  Loading,
   Received,
   Failed
 }
@@ -48,7 +47,6 @@ export class ComponentInstanceState {
 
     switch (cache.state) {
       case ComponentLoadState.Failed:
-      case ComponentLoadState.Loading:
         return null;
       case ComponentLoadState.Received:
         return cache.value;
@@ -58,8 +56,6 @@ export class ComponentInstanceState {
   }
 
   wait(node: Node, promise: Promise<any>) {
-    this.write(node, ComponentLoadState.Loading, promise);
-
     promise.then(response => {
       this.done(node, response);
     })
@@ -81,7 +77,14 @@ export class ComponentInstanceState {
     this.write(node, ComponentLoadState.Failed, error);
   }
 
-  reset() {
+  reset(identifiers?: Array<string>) {
+    if (identifiers == null || identifiers.length === 0) {
       this.map.clear();
+    }
+    else {
+      for (const id of identifiers) {
+        this.map.delete(id);
+      }
+    }
   }
 }

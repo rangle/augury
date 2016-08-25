@@ -24,20 +24,21 @@ import {
   MainRoute,
   defineLookupOperation,
   highlight,
-  highlightRefresh,
   parseRoutes,
 } from './utils';
 
+import {SimpleOptions} from '../options';
+
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
+declare const treeRenderOptions: SimpleOptions;
 
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
 let previousTree: MutableTree;
 
-/// Collect just components or also HTML elements?
-let includeElements: boolean;
-
 const updateTree = (roots: Array<DebugElement>) => {
+  const includeElements = treeRenderOptions.showElements;
+
   const newTree = createTreeFromElements(roots, includeElements);
 
   send<void, any>(
@@ -60,13 +61,7 @@ const bind = (root: DebugElement) => {
     ngZone.onStable.subscribe(() => subject.next(void 0));
   }
 
-  subject.debounceTime(0).subscribe(
-    () => {
-      update();
-
-      /// After updates, refresh nodes that have been highlighted
-      highlightRefresh(previousTree);
-    });
+  subject.debounceTime(0).subscribe(() => update());
 
   subject.next(void 0); // initial load
 };
@@ -77,9 +72,8 @@ browserSubscribe(
   (message: Message<any>) => {
     switch (message.messageType) {
       case MessageType.Initialize:
-        const defaults = {showElements: false};
-
-        includeElements = (message.content || defaults).showElements;
+        // Update our tree settings closure
+        Object.assign(treeRenderOptions, message.content);
 
         // Clear out existing tree representation and start over
         previousTree = null;

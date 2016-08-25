@@ -11,6 +11,8 @@ import {
   deserializePath,
 } from '../../tree';
 
+import {highlightTime} from '../../utils';
+
 export enum ExpandState {
   Expanded,
   Collapsed,
@@ -41,7 +43,19 @@ export class ViewState {
   }
 
   nodesChanged(identifiers: Array<string>) {
-    this.changed = new Set<string>(identifiers);
+    for (const id of identifiers) {
+      this.changed.add(id);
+    }
+
+    const remove = () => {
+      for (const id of identifiers) {
+        this.changed.delete(id);
+      }
+
+      this.subject.next(void 0);
+    };
+
+    setTimeout(() => remove(), highlightTime);
   }
 
   expandState(node: Node, expandState?: ExpandState) {

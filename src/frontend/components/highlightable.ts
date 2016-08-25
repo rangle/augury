@@ -1,54 +1,70 @@
 import {
   ChangeDetectorRef,
-  SimpleChanges
+  SimpleChanges,
+  NgZone,
 } from '@angular/core';
 
 import {highlightTime} from '../../utils/configuration';
 
-export class Highlightable {
+const initialTimespan = highlightTime;
+
+export abstract class Highlightable {
   private isUpdated = false;
+
+  private timespan = initialTimespan; // scales down
 
   private resetUpdateState;
 
   constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private getUpdated?: (changes?: SimpleChanges) => boolean
+    private elementChangeDetector: ChangeDetectorRef,
+    private elementIsUpdated?: (changes?: SimpleChanges) => boolean
   ) {}
 
   protected ngOnChanges(changes: SimpleChanges) {
-    if (typeof this.getUpdated === 'function') {
-      if (this.getUpdated(changes)) {
+    if (typeof this.elementIsUpdated === 'function') {
+      if (this.elementIsUpdated(changes)) {
         this.changed();
-        return;
       }
     }
     else {
       this.changed();
-      return;
     }
+  }
+
+  protected ngOnDestroy() {
+    this.elementChangeDetector = null;
 
     this.clear();
   }
 
-  protected ngOnDestroy() {
-    this.isUpdated = false;
-
+  protected clear() {
     clearTimeout(this.resetUpdateState);
-  }
 
-  private clear() {
     this.resetUpdateState = null;
 
     this.isUpdated = false;
 
-    this.changeDetectorRef.detectChanges();
+    if (this.elementChangeDetector) {
+      this.elementChangeDetector.detectChanges();
+    }
   }
 
   protected changed() {
     this.isUpdated = true;
 
+    if (this.resetUpdateState != null) {
+      clearTimeout(this.resetUpdateState);
+
+      this.timespan = initialTimespan * 0.1;
+    }
+    else {
+      this.timespan = initialTimespan;
+    }
+
     this.resetUpdateState = setTimeout(() => this.clear(), highlightTime);
 
-    this.changeDetectorRef.detectChanges();
+    if (this.elementChangeDetector) {
+      this.elementChangeDetector.detectChanges();
+    }
   }
 }

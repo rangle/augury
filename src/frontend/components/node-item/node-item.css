@@ -1,0 +1,13 @@
+:host {
+  font-size: 0;
+}
+
+:host p {
+  font-size: 1rem;
+  margin-left: 3px;
+  margin-right: 2px;
+}
+
+:host .node-item-value {
+  margin-left: 2px;
+}

@@ -9,7 +9,6 @@ import {
   Output,
 } from '@angular/core';
 
-import {Highlightable} from '../highlightable';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Node} from '../../../tree/node';
 
@@ -23,9 +22,10 @@ import {
   template: require('./node-item.html'),
   directives: [
     NodeItem,
-  ]
+  ],
+  styles: [require('to-string!./node-item.css')],
 })
-export class NodeItem extends Highlightable {
+export class NodeItem {
   @Input() node;
 
   /// Emitted when this node is selected
@@ -35,37 +35,9 @@ export class NodeItem extends Highlightable {
   @Output() private inspectElement = new EventEmitter<Node>();
 
   constructor(
-    private changeDetector: ChangeDetectorRef,
     private viewState: ViewState,
     private userActions: UserActions
-  ) {
-    super(changeDetector, () => viewState.nodeIsChanged(this.node));
-  }
-
-  private ngDoCheck() {
-    if (this.viewState.nodeIsChanged(this.node)) {
-      this.changed();
-    }
-  }
-
-  getNodeDetails(node) {
-    let html = '';
-    html += `<p class="node-item-name">${node.name}</p>`;
-    if (node.description && node.description.length) {
-      html += '<span class="node-item-description">(';
-      for (let i = 0; i < node.description.length; i++) {
-        const desc = node.description[i];
-        html += `<p class="node-item-property">${desc.key}=</p>` +
-                `<p class="node-item-value">&#34;${desc.value}&#34;</p>`;
-        if (i < node.description.length - 1) {
-          html += ', ';
-        }
-      }
-      html += ')</span>';
-    }
-
-    return html;
-  }
+  ) {}
 
   private get selected(): boolean {
     return this.viewState.selectionState(this.node);

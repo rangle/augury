@@ -109,15 +109,10 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="State" *ngIf="node" [defaultExpanded]="node != null">
+    <accordion sectionTitle="State" *ngIf="hasState" [defaultExpanded]="hasState">
       <section-content>
         <div class="mxn4">
           <div [ngSwitch]="loadingState">
-            <template [ngSwitchCase]="ComponentLoadState.Loading">
-              <div class="spinner-container">
-                <spinner></spinner>
-              </div>
-            </template>
             <template [ngSwitchCase]="ComponentLoadState.Received">
               <bt-render-state
                 [path]="path"

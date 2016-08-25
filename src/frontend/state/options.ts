@@ -5,18 +5,23 @@ import {
   Subject,
 } from 'rxjs';
 
-export enum Theme {
-  Light,
-  Dark,
-}
+import {
+  SimpleOptions,
+  Theme,
+  loadOptions,
+  saveOptions,
+} from '../../options';
+
+export {SimpleOptions};
+export {Theme};
 
 @Injectable()
-export class Options {
+export class Options implements SimpleOptions {
   /// Show HTML elements in addition to components in the component tree
-  private cachedShowElements: boolean;
+  private cachedShowElements = true;
 
   /// Theme (dark or light etc)
-  private cachedTheme: Theme;
+  private cachedTheme = Theme.Light;
 
   private subject = new Subject<Options>();
 
@@ -25,34 +30,12 @@ export class Options {
   }
 
   load() {
-    return new Promise<Options>(resolve => {
-      let count = 2;
+    return loadOptions().then(options => {
+      Object.assign(this, options);
 
-      const reduce = () => {
-        if (--count === 0) {
-          resolve(this);
-        }
-      };
+      this.publish();
 
-      chrome.storage.sync.get('theme',
-        (result: {theme: string}) => {
-          switch ((result || {theme: null}).theme) {
-            case 'light':
-            default:
-              this.theme = Theme.Light;
-              break;
-            case 'dark':
-              this.theme = Theme.Dark;
-              break;
-          }
-          reduce();
-        });
-
-      chrome.storage.sync.get('showElements',
-        (result: {showElements: boolean}) => {
-          this.showElements = (result || {showElements: false}).showElements;
-          reduce();
-        });
+      return options;
     });
   }
 
@@ -63,9 +46,7 @@ export class Options {
   set theme(theme: Theme) {
     this.cachedTheme = theme;
 
-    chrome.storage.sync.set({
-      theme: theme,
-    });
+    saveOptions({ theme });
 
     this.publish();
   }
@@ -77,11 +58,16 @@ export class Options {
   set showElements(show: boolean) {
     this.cachedShowElements = show;
 
-    chrome.storage.sync.set({
-      'showElements': show,
-    });
+    saveOptions({showElements: show});
 
     this.publish();
+  }
+
+  simpleOptions(): {showElements: boolean, theme: Theme} {
+    return {
+      showElements: this.showElements,
+      theme: this.theme,
+    };
   }
 
   private publish() {

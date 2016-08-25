@@ -24,6 +24,8 @@ import {
   serializeBinary,
 } from '../utils';
 
+import {SimpleOptions} from '../options';
+
 const create = <T>(properties: T) =>
   Object.assign({
     messageSource,
@@ -33,7 +35,7 @@ const create = <T>(properties: T) =>
   properties);
 
 export abstract class MessageFactory {
-  static initialize(options?: {showElements: boolean}): Message<void> {
+  static initialize(options?: SimpleOptions): Message<void> {
     return create({
       messageType: MessageType.Initialize,
       content: options,

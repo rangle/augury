@@ -81,20 +81,3 @@ export const highlight = (nodes: Array<Node>) => {
 
   return elements;
 };
-
-export const highlightRefresh = (tree: MutableTree) => {
-  clear();
-
-  const map = new Map<string, HTMLElement>();
-
-  highlights.forEach(
-    (value, key) => {
-      const node = tree.search(key);
-      if (node) {
-        map.set(key, highlightNode(node.nativeElement(), node.name));
-      }
-    });
-
-  highlights = map;
-};
-

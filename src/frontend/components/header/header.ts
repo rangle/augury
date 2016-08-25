@@ -4,7 +4,9 @@ import {
   EventEmitter,
   Output,
   ElementRef,
-  Input
+  Input,
+  Query,
+  ViewChild
 } from '@angular/core';
 
 import {Search} from '../search/search';
@@ -35,12 +37,15 @@ export class Header {
   @Input() private selectedTab: Tab;
   @Input() private options: Options;
   @Input() private tree: MutableTree;
+  @Input() private routerTree: Array<Route>;
 
   /// Search has resulted in a new node being selected
   @Output() private selectNode = new EventEmitter<Node>();
 
   /// Search has resulted in a new route being selected
   @Output() private selectRoute = new EventEmitter<Route>();
+
+  @ViewChild(Search) private search: Search;
 
   private Tab = Tab;
 
@@ -78,6 +83,14 @@ export class Header {
     }
   }
 
+  private ngOnChanges(changes) {
+    if (changes.hasOwnProperty('selectedTab')) {
+      if (this.search) {
+        this.search.reset();
+      }
+    }
+  }
+
   private get searchPlaceholder(): string {
     switch (this.selectedTab) {
       case Tab.ComponentTree:
@@ -106,7 +119,7 @@ export class Header {
       case Tab.ComponentTree:
         return this.userActions.searchComponents(this.tree, query);
       case Tab.RouterTree:
-        return this.userActions.searchRouter(this.tree, query);
+        return this.userActions.searchRouter(this.routerTree, query);
       default:
         throw new Error(`Unknown tab: ${this.selectedTab}`);
     }

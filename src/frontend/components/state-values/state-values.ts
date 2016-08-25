@@ -37,10 +37,6 @@ export default class StateValues extends Highlightable {
     super(changeDetector, changes => this.hasChanged(changes));
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   private hasChanged(changes) {
     if (changes == null || !changes.hasOwnProperty('value')) {
       return false;

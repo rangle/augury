@@ -5,7 +5,8 @@
     [options]="options"
     [selectedTab]="selectedTab"
     [tree]="tree"
-    (selectNode)="onComponentSelectionChange($event)"
+    [routerTree]="routerTree"
+    (selectNode)="onComponentSelectionChange($event, false)"
     (selectRoute)="onRouteSelectionChange($event)">
   </augury-header>
   <bt-app-trees #trees
@@ -18,7 +19,7 @@
     [options]="options"
     [tree]="tree"
     (tabChange)="onSelectedTabChange($event)"
-    (selectionChange)="onComponentSelectionChange($event)"
+    (selectionChange)="onComponentSelectionChange($event, false)"
     (inspectElement)="onInspectElement($event)">
   </bt-app-trees>
 </div>

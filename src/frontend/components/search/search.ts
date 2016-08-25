@@ -133,4 +133,8 @@ export class Search {
 
     this.selectedResult.emit(this.results[this.current]);
   }
+
+  reset() {
+    this.query = '';
+  }
 };
