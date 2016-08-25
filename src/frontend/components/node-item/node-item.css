@@ -1,7 +1,4 @@
-:host p {
-  margin-left: 3px;
-  margin-right: 2px;
-}
+:host p {}
 
 :host .node-item-name {
   margin-left: 5px;
