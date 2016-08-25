@@ -15,11 +15,13 @@ export const loadOptions = (): Promise<SimpleOptions> => {
         const theme = (result || {theme: null}).theme;
         if (theme != null) {
           switch (theme) {
-            case 'light':
+            case 'light': // for previous installs that saved as a string
+            case Theme.Light:
             default:
               result.theme = Theme.Light;
               break;
             case 'dark':
+            case Theme.Dark:
               result.theme = Theme.Dark;
               break;
           }
