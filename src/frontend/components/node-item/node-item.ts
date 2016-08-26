@@ -94,8 +94,3 @@ export class NodeItem {
   trackById = (index: number, node: Node) => node.id;
 }
 
-const stop = (event: MouseEvent) => {
-  event.preventDefault();
-  event.stopPropagation();
-};
-

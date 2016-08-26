@@ -10,7 +10,7 @@
         rotate90: !expanded,
         invisible: node.children == null || node.children.length === 0
       }"
-      (click)="expandTree($event)">
+      (click)="stop($event, expandTree)">
     </div>
     <div class="inline">
       <node-open-tag [node]="node" [hasChildren]="hasChildren"></node-open-tag>
