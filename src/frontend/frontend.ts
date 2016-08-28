@@ -120,7 +120,8 @@ class App {
   private restoreSelection() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
 
-    this.onComponentSelectionChange(this.selectedNode, true);
+    this.onComponentSelectionChange(this.selectedNode,
+      () => this.componentState.reset());
   }
 
   private processMessage(msg: Message<any>,
@@ -188,34 +189,24 @@ class App {
     }
   }
 
-  private onComponentSelectionChange(node: Node, reset: boolean) {
+  private onComponentSelectionChange(node: Node, beforeLoad?: () => void) {
     this.selectedNode = node;
 
     if (node == null) {
       return;
     }
 
-    /// If this is an Angular component, attempt to retrieve the componentInstance value
-    if (this.componentState.has(node) && reset === false) { // cached?
-      this.userActions.selectComponent(node, false);
-    }
-    else {
-      if (node.isComponent) {
-        // A bit of a contortion to prevent the UI from flickering when we reload the state
-        const promise =
-          this.userActions.selectComponent(node, true)
-            .then(response => {
-              this.componentState.reset([node.id]);
-              return response;
-            });
+    const promise =
+      this.userActions.selectComponent(node, node.isComponent)
+        .then(response => {
+          if (typeof beforeLoad === 'function') {
+            beforeLoad();
+          }
 
-        this.componentState.wait(node, promise);
-      }
-      else {
-        this.userActions.selectComponent(node, false);
-        this.componentState.write(node, ComponentLoadState.Received, null);
-      }
-    }
+          return response;
+        });
+
+    this.componentState.wait(node, promise);
   }
 
   private onInspectElement(node: Node) {
