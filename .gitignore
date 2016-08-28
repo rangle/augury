@@ -29,6 +29,7 @@ Thumbs.db
 *swp
 *swo
 *swn
+npm-debug.*
 build
 dist
 temp

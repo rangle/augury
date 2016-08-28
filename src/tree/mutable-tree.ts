@@ -11,10 +11,10 @@ import {
 
 const {apply, compare} = require('ts!fast-json-patch/src/json-patch-duplex');
 
-export const transformToTree = (root, index: number, includeElements: boolean) => {
+export const transformToTree = (root, index: number, showElements: boolean) => {
   const map = new Map<string, Node>();
   try {
-    return transform(null, [index], root, map, includeElements);
+    return transform(null, [index], root, map, showElements);
   }
   finally {
     map.clear(); // release references
@@ -27,9 +27,9 @@ export const createTree = (roots: Array<Node>) => {
   return tree;
 };
 
-export const createTreeFromElements = (roots: Array<DebugElement>, includeElements: boolean) => {
+export const createTreeFromElements = (roots: Array<DebugElement>, showElements: boolean) => {
   const tree = new MutableTree();
-  tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements));
+  tree.roots = roots.map((r, index) => transformToTree(r, index, showElements));
   return tree;
 };
 

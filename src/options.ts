@@ -27,7 +27,7 @@ export const loadOptions = (): Promise<SimpleOptions> => {
           }
         }
 
-        const showElements = (result || {showElements: true}).showElements;
+        const showElements = (result || {showElements: false}).showElements;
         if (showElements != null) {
           result.showElements = showElements;
         }
