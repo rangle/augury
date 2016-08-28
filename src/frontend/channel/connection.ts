@@ -15,7 +15,7 @@ import {deserialize} from '../../utils';
 
 const subscriptions = new Set<MessageHandler>();
 
-const connection = chrome.runtime.connect();
+let connection: chrome.runtime.Port;
 
 const post = <T>(message: Message<T>) =>
   connection.postMessage(
@@ -23,39 +23,68 @@ const post = <T>(message: Message<T>) =>
       tabId: chrome.devtools.inspectedWindow.tabId,
     }));
 
-export const connect = () => {
-  connection.onMessage.addListener(
-    (message: Message<any>, port: chrome.runtime.Port) => {
-      deserializeMessage(message);
+export const reconnect = (): Promise<void> => {
+  if (connection) {
+    return Promise.resolve(void 0);
+  }
 
-      if (message.messageType === MessageType.Response) {
-        const cannotRespond = () => {
-          throw new Error('You cannot respond to a response');
-        };
+  let interval;
 
-        subscriptions.forEach(handler => handler(message, cannotRespond));
-      }
-      else {
-        let responded = false;
+  const connect = (resolver: () => void) => {
+    try {
+      connection = chrome.runtime.connect();
 
-        const sendResponse = (messageResponse: MessageResponse<any>) => {
-          post(messageResponse);
-        };
+      clearInterval(interval);
 
-        subscriptions.forEach(handler => {
-          const respond = (response: MessageResponse<any>) => {
-            sendResponse(response);
-            responded = true;
-          };
+      connection.onMessage.addListener(
+        (message: Message<any>, port: chrome.runtime.Port) => {
+          deserializeMessage(message);
 
-          handler(message, respond);
+          if (message.messageType === MessageType.Response) {
+            const cannotRespond = () => {
+              throw new Error('You cannot respond to a response');
+            };
+
+            subscriptions.forEach(handler => handler(message, cannotRespond));
+          }
+          else {
+            let responded = false;
+
+            const sendResponse = (messageResponse: MessageResponse<any>) => {
+              post(messageResponse);
+            };
+
+            subscriptions.forEach(handler => {
+              const respond = (response: MessageResponse<any>) => {
+                sendResponse(response);
+                responded = true;
+              };
+
+              handler(message, respond);
+            });
+
+            if (responded === false) {
+              sendResponse(MessageFactory.response(message, {processed: false}, false));
+            }
+          }
         });
 
-        if (responded === false) {
-          sendResponse(MessageFactory.response(message, {processed: false}, false));
-        }
-      }
-    });
+      connection.onDisconnect.addListener(() => connection = null);
+
+      resolver();
+    }
+    catch (e) {}
+  };
+
+  return new Promise<void>(resolve => {
+    try {
+      connect(resolve);
+      return;
+    }
+    catch (e) {}
+
+    const interval = setInterval(() => connect(resolve), 250);
+  });
 };
 
 export const subscribe = (handler: MessageHandler): Subscription => {
@@ -93,8 +122,11 @@ export const send = <Response, T>(message: Message<T>): Promise<Response> => {
 
 @Injectable()
 export class Connection {
-  connect() {
-    connect();
+  reconnect(): Promise<void> {
+    if (connection == null) { // disconnected?
+      return reconnect();
+    }
+    return Promise.resolve(void 0);
   }
 
   subscribe(handler: MessageHandler): Subscription {
@@ -102,6 +134,8 @@ export class Connection {
   }
 
   send<Response, T>(message: Message<T>): Promise<Response> {
+    reconnect();
+
     return send(message);
   }
 

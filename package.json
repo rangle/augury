@@ -61,7 +61,6 @@
     "css-loader": "^0.21.0",
     "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
-    "fast-json-patch": "^1.0.0",
     "file-loader": "^0.8.5",
     "keycode": "^2.1.4",
     "lodash": "^4.15.0",

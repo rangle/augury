@@ -9,7 +9,7 @@ import {
   deserializePath,
 } from './path';
 
-const {apply, compare} = require('ts!fast-json-patch/src/json-patch-duplex');
+import {apply, compare} from './patch';
 
 export const transformToTree = (root, index: number, showElements: boolean) => {
   const map = new Map<string, Node>();

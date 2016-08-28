@@ -10,6 +10,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule} from '@angular/forms';
 
+import {Subscription} from '../communication';
+
 import {
   Message,
   MessageFactory,
@@ -67,6 +69,7 @@ class App {
   private routerException: string;
   private selectedNode: Node;
   private componentState: ComponentInstanceState;
+  private subscription: Subscription;
   private exception: string;
 
   constructor(
@@ -93,14 +96,16 @@ class App {
   }
 
   private ngOnInit() {
-    this.connection.connect();
+    this.subscription = this.connection.subscribe(this.onReceiveMessage.bind(this));
 
-    this.connection.subscribe(this.onReceiveMessage.bind(this));
-
-    this.requestTree();
+    this.connection.reconnect().then(() => this.requestTree());
   }
 
   private ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+
     this.connection.close();
   }
 
