@@ -52,6 +52,8 @@ export class NodeItem {
     return this.viewState.expandState(this.node) === ExpandState.Expanded;
   }
 
+  private hovered = false;
+
   private get hasChildren(): boolean {
     return this.node.children.length > 0;
   }
@@ -79,10 +81,12 @@ export class NodeItem {
 
   onMouseOut(event: MouseEvent) {
     this.userActions.clearHighlight();
+    this.hovered = false;
   }
 
   onMouseOver($event) {
     this.userActions.highlight(this.node);
+    this.hovered = true;
   }
 
   expandTree($event) {

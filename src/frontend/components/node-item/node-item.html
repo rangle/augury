@@ -1,9 +1,10 @@
-<div (mouseout)="stop($event, onMouseOut)"
+<div class="node-item"
+     (mouseout)="stop($event, onMouseOut)"
      (mouseover)="stop($event, onMouseOver)"
      (dblclick)="stop($event, onDblClick)"
      (click)="stop($event, onClick)">
-  <div class="node-item pl3 rounded border-box"
-    [ngClass]="{'node-item-selected': selected, changed: viewState.nodeIsChanged(node)}">
+  <div class="self node-item pl2 rounded border-box"
+    [ngClass]="{'node-item-selected': selected, 'node-item-hovered': hovered, changed: viewState.nodeIsChanged(node)}">
     <div
       [ngClass]="{
         expander: true,

@@ -23,6 +23,7 @@ import {
   Node,
   Path,
   createTree,
+  deserializeChangePath,
   serializePath,
 } from '../tree';
 
@@ -248,7 +249,7 @@ class App {
     const identifiers = new Set<string>();
 
     for (const change of changes) {
-      const path = this.nodePathFromChangePath(change.path.split('/'));
+      const path = this.nodePathFromChangePath(deserializeChangePath(change.path));
 
       identifiers.add(serializePath(path));
     }
@@ -260,14 +261,14 @@ class App {
     return results;
   }
 
-  private nodePathFromChangePath(changePath: Array<string>) {
-    const result = new Array<number>();
+  private nodePathFromChangePath(changePath: Path) {
+    const result = new Array<string | number>();
 
     for (let index = 0; index < changePath.length; ++index) {
       switch (changePath[index]) {
         case 'roots':
         case 'children':
-          result.push(parseInt(changePath[++index], 10));
+          result.push(changePath[++index]);
           break;
       }
     }
