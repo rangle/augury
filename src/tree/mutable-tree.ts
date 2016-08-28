@@ -13,13 +13,34 @@ const {apply, compare} = require('ts!fast-json-patch/src/json-patch-duplex');
 
 export const transformToTree = (root, index: number, showElements: boolean) => {
   const map = new Map<string, Node>();
+
+  const tasks = new Map<string, () => void>();
+
   try {
-    return transform(null, [index], root, map, showElements);
+    const node = transform(tasks, null, [index], root, map, showElements);
+
+    // Execute the remaining transform operations with a shallow call stack
+    // to avoid recursive transform stack overflows
+    do {
+      execute(tasks);
+    } while (tasks.size > 0);
+
+    return node;
   }
   finally {
     map.clear(); // release references
   }
 };
+
+const execute = (tasks: Map<string, () => void>) => {
+  const remove = new Set<string>();
+  tasks.forEach((t, key) => {
+    t();
+    remove.add(key);
+  });
+
+  remove.forEach(k => tasks.delete(k));
+}
 
 export const createTree = (roots: Array<Node>) => {
   const tree = new MutableTree();
