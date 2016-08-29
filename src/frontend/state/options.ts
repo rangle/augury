@@ -18,7 +18,7 @@ export {Theme};
 @Injectable()
 export class Options implements SimpleOptions {
   /// Show HTML elements in addition to components in the component tree
-  private cachedShowElements = true;
+  private cachedShowElements = false;
 
   /// Theme (dark or light etc)
   private cachedTheme = Theme.Light;
