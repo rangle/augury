@@ -129,10 +129,15 @@ export const transform = (parentNode: Node, path: Path, element: Source,
         node.children.push(transform(node, path.concat([index]), c, cache, html)));
     }
     else {
-      for (const child of element.children) {
-        componentChildren(child).forEach((c, index) =>
-          node.children.push(transform(node, path.concat([index]), c, cache, html)));
-      }
+      let subindex = 0;
+
+      element.children.forEach(outerChild => {
+        const components = componentChildren(outerChild);
+
+        components.forEach(component => {
+          node.children.push(transform(node, path.concat([subindex++]), component, cache, html));
+        });
+      });
     }
 
     return node;
