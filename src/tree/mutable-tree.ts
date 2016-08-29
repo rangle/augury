@@ -4,12 +4,8 @@ import {Change} from './change';
 import {Node} from './node';
 import {deserialize} from '../utils';
 import {transform} from './transformer';
-import {
-  Path,
-  deserializePath,
-} from './path';
-
-const {apply, compare} = require('ts!fast-json-patch/src/json-patch-duplex');
+import {Path, deserializePath} from './path';
+import {apply, compare} from '../utils/patch';
 
 export const transformToTree = (root, index: number, includeElements: boolean) => {
   const map = new Map<string, Node>();
