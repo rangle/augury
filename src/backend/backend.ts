@@ -37,9 +37,9 @@ declare const treeRenderOptions: SimpleOptions;
 let previousTree: MutableTree;
 
 const updateTree = (roots: Array<DebugElement>) => {
-  const includeElements = treeRenderOptions.showElements;
+  const showElements = treeRenderOptions.showElements;
 
-  const newTree = createTreeFromElements(roots, includeElements);
+  const newTree = createTreeFromElements(roots, showElements);
 
   send<void, any>(
     previousTree
