@@ -9,16 +9,37 @@ import {
   deserializePath,
 } from './path';
 
-const {apply, compare} = require('ts!fast-json-patch/src/json-patch-duplex');
+import {apply, compare} from './patch';
 
-export const transformToTree = (root, index: number, includeElements: boolean) => {
+export const transformToTree = (root, index: number, showElements: boolean) => {
   const map = new Map<string, Node>();
+
+  const tasks = new Map<string, () => void>();
+
   try {
-    return transform(null, [index], root, map, includeElements);
+    const node = transform(tasks, null, [index], root, map, showElements);
+
+    // Execute the remaining transform operations with a shallow call stack
+    // to avoid recursive transform stack overflows
+    do {
+      execute(tasks);
+    } while (tasks.size > 0);
+
+    return node;
   }
   finally {
     map.clear(); // release references
   }
+};
+
+const execute = (tasks: Map<string, () => void>) => {
+  const remove = new Set<string>();
+  tasks.forEach((t, key) => {
+    t();
+    remove.add(key);
+  });
+
+  remove.forEach(k => tasks.delete(k));
 };
 
 export const createTree = (roots: Array<Node>) => {
@@ -27,9 +48,9 @@ export const createTree = (roots: Array<Node>) => {
   return tree;
 };
 
-export const createTreeFromElements = (roots: Array<DebugElement>, includeElements: boolean) => {
+export const createTreeFromElements = (roots: Array<DebugElement>, showElements: boolean) => {
   const tree = new MutableTree();
-  tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements));
+  tree.roots = roots.map((r, index) => transformToTree(r, index, showElements));
   return tree;
 };
 

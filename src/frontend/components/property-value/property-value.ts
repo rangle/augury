@@ -17,6 +17,10 @@ export default class PropertyValue extends Highlightable {
   @Input() private value: string;
 
   constructor(@Inject(ChangeDetectorRef) changeDetectorRef: ChangeDetectorRef) {
-    super(changeDetectorRef, changes => changes && changes.hasOwnProperty('value'));
+    const valueChanged = changes => changes != null
+      && changes.hasOwnProperty('value')
+      && changes.value.currentValue !== changes.value.previousValue;
+
+    super(changeDetectorRef, changes => valueChanged(changes));
   }
 }

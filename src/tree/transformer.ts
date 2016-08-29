@@ -28,9 +28,11 @@ type Cache = WeakMap<any, any>;
 /// types. It is important that our object be a deep-cloned copy of the element
 /// in order for our tree comparisons to work. If we just create a reference to
 /// the existing DebugElement data, that data will mutate over time and
-/// invalidate the results of our comparison operations.
-export const transform = (parentNode: Node, path: Path, element: Source,
-    cache: Cache, html: boolean): Node => {
+/// invalidate the results of our comparison operations. Instead of executing
+/// this operation in a way that is recursive we store a flat list of compose functions
+/// that we can execute to finish constructing the tree.
+export const transform = (tasks: Map<string, () => void>, parentNode: Node, path: Path,
+    element: Source, cache: Cache, html: boolean): Node => {
   if (element == null) {
     return null;
   }
@@ -125,14 +127,18 @@ export const transform = (parentNode: Node, path: Path, element: Source,
 
     /// Show HTML elements or only components?
     if (html) {
-      element.children.forEach((c, index) =>
-        node.children.push(transform(node, path.concat([index]), c, cache, html)));
+      tasks.set(node.id, () => {
+        element.children.forEach((c, index) =>
+          node.children.push(transform(tasks, node, path.concat([index]), c, cache, html)));
+      });
     }
     else {
-      for (const child of element.children) {
-        componentChildren(child).forEach((c, index) =>
-          node.children.push(transform(node, path.concat([index]), c, cache, html)));
-      }
+      tasks.set(node.id, () => {
+        for (const child of element.children) {
+          componentChildren(child).forEach((c, index) =>
+            node.children.push(transform(tasks, node, path.concat([index]), c, cache, html)));
+        }
+      });
     }
 
     return node;
