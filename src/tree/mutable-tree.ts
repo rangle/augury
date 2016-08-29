@@ -40,7 +40,7 @@ const execute = (tasks: Map<string, () => void>) => {
   });
 
   remove.forEach(k => tasks.delete(k));
-}
+};
 
 export const createTree = (roots: Array<Node>) => {
   const tree = new MutableTree();

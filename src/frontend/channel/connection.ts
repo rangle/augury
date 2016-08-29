@@ -83,7 +83,7 @@ export const reconnect = (): Promise<void> => {
     }
     catch (e) {}
 
-    const interval = setInterval(() => connect(resolve), 250);
+    interval = setInterval(() => connect(resolve), 250);
   });
 };
 
