@@ -22,6 +22,7 @@
   "homepage": "https://github.com/rangle/augury",
   "scripts": {
     "build": "webpack --colors --display-error-details --display-cached",
+    "dev": "webpack --colors --display-error-details --display-cached --watch",
     "dev-build": "cross-env NODE_ENV=development npm run build",
     "webpack": "webpack",
     "clean": "rimraf node_modules typings",
