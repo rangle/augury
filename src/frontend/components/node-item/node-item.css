@@ -1,7 +1,10 @@
-:host p {}
-
 :host .node-item-name {
-  margin-left: 5px;
+  margin-left: 0;
+  white-space: nowrap;
+}
+
+:host .node-item.self {
+  white-space: nowrap;
 }
 
 :host .node-item-value {

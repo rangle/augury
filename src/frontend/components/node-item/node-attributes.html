@@ -1,3 +1,2 @@
 <span class="node-item-description" *ngIf="attributes.length > 0">
-  <template ngFor let-d [ngForOf]="attributes" let-last>
-    <p class="node-item-property">{{d.key}}</p><span class="punctuation">=&quot;</span><p class="node-item-value">{{d.value}}</p><span class="punctuation">&quot;</span><span *ngIf="!last" class="punctuation">&nbsp;</span></template></span>
+  (<template ngFor let-d [ngForOf]="attributes" let-last="last"><p class="node-item-property">{{d.key}}</p><span class="punctuation">=&quot;</span><p class="node-item-value">{{d.value}}</p><span class="punctuation">&quot;</span><span *ngIf="!last" class="punctuation">,&nbsp;</span></template>)</span>

@@ -1,9 +1,10 @@
-<div (mouseout)="stop($event, onMouseOut)"
-     (mouseover)="stop($event, onMouseOver)"
-     (dblclick)="stop($event, onDblClick)"
-     (click)="stop($event, onClick)">
+<div>
   <div class="node-item pl3 rounded border-box"
-    [ngClass]="{'node-item-selected': selected, changed: viewState.nodeIsChanged(node)}">
+      [ngClass]="{'node-item-selected': selected, changed: viewState.nodeIsChanged(node)}"
+      (mouseout)="stop($event, onMouseOut)"
+      (mouseover)="stop($event, onMouseOver)"
+      (dblclick)="stop($event, onDblClick)"
+      (click)="stop($event, onClick)">
     <div
       [ngClass]="{
         expander: true,
@@ -24,7 +25,4 @@
       (inspectElement)="inspectElement.emit($event)">
     </bt-node-item>
   </div>
-
-  <div class="inline" *ngIf="hasChildren">
-    <node-close-tag [node]="node"></node-close-tag>
 </div>
