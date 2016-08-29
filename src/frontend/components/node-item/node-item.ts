@@ -18,7 +18,6 @@ import {
 } from '../../state';
 
 import {NodeAttributes} from './node-attributes';
-import {NodeCloseTag} from './node-close-tag';
 import {NodeOpenTag} from './node-open-tag';
 
 @Component({
@@ -26,7 +25,6 @@ import {NodeOpenTag} from './node-open-tag';
   template: require('./node-item.html'),
   directives: [
     NodeAttributes,
-    NodeCloseTag,
     NodeOpenTag,
     NodeItem,
   ],
