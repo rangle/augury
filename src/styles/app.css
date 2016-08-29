@@ -113,6 +113,9 @@
     color: rgb(36, 36, 36) !important;
   }
 
+  & .node-item-hovered {
+    background-color: #A28AD0 !important;
+  }
 
   & .expand-arrow {
     background-color: rgb(165, 165, 165) !important;

@@ -23,6 +23,7 @@
   "scripts": {
     "build": "webpack --colors --display-error-details --display-cached",
     "dev-build": "cross-env NODE_ENV=development npm run build",
+    "dev": "webpack  --colors --display-error-details --display-cached --watch",
     "webpack": "webpack",
     "clean": "rimraf node_modules typings",
     "postinstall": "rimraf typings && typings install",

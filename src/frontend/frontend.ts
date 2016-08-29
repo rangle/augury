@@ -23,6 +23,7 @@ import {
   Node,
   Path,
   createTree,
+  deserializeChangePath,
   serializePath,
 } from '../tree';
 
@@ -119,7 +120,8 @@ class App {
   private restoreSelection() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
 
-    this.onComponentSelectionChange(this.selectedNode, true);
+    this.onComponentSelectionChange(this.selectedNode,
+      () => this.componentState.reset());
   }
 
   private processMessage(msg: Message<any>,
@@ -187,34 +189,24 @@ class App {
     }
   }
 
-  private onComponentSelectionChange(node: Node, reset: boolean) {
+  private onComponentSelectionChange(node: Node, beforeLoad?: () => void) {
     this.selectedNode = node;
 
     if (node == null) {
       return;
     }
 
-    /// If this is an Angular component, attempt to retrieve the componentInstance value
-    if (this.componentState.has(node) && reset === false) { // cached?
-      this.userActions.selectComponent(node, false);
-    }
-    else {
-      if (node.isComponent) {
-        // A bit of a contortion to prevent the UI from flickering when we reload the state
-        const promise =
-          this.userActions.selectComponent(node, true)
-            .then(response => {
-              this.componentState.reset([node.id]);
-              return response;
-            });
+    const promise =
+      this.userActions.selectComponent(node, node.isComponent)
+        .then(response => {
+          if (typeof beforeLoad === 'function') {
+            beforeLoad();
+          }
 
-        this.componentState.wait(node, promise);
-      }
-      else {
-        this.userActions.selectComponent(node, false);
-        this.componentState.write(node, ComponentLoadState.Received, null);
-      }
-    }
+          return response;
+        });
+
+    this.componentState.wait(node, promise);
   }
 
   private onInspectElement(node: Node) {
@@ -248,7 +240,7 @@ class App {
     const identifiers = new Set<string>();
 
     for (const change of changes) {
-      const path = this.nodePathFromChangePath(change.path.split('/'));
+      const path = this.nodePathFromChangePath(deserializeChangePath(change.path));
 
       identifiers.add(serializePath(path));
     }
@@ -260,14 +252,14 @@ class App {
     return results;
   }
 
-  private nodePathFromChangePath(changePath: Array<string>) {
-    const result = new Array<number>();
+  private nodePathFromChangePath(changePath: Path) {
+    const result = new Array<string | number>();
 
     for (let index = 0; index < changePath.length; ++index) {
       switch (changePath[index]) {
         case 'roots':
         case 'children':
-          result.push(parseInt(changePath[++index], 10));
+          result.push(changePath[++index]);
           break;
       }
     }

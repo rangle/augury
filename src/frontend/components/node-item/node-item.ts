@@ -18,7 +18,6 @@ import {
 } from '../../state';
 
 import {NodeAttributes} from './node-attributes';
-import {NodeCloseTag} from './node-close-tag';
 import {NodeOpenTag} from './node-open-tag';
 
 @Component({
@@ -26,7 +25,6 @@ import {NodeOpenTag} from './node-open-tag';
   template: require('./node-item.html'),
   directives: [
     NodeAttributes,
-    NodeCloseTag,
     NodeOpenTag,
     NodeItem,
   ],
@@ -53,6 +51,8 @@ export class NodeItem {
   private get expanded(): boolean {
     return this.viewState.expandState(this.node) === ExpandState.Expanded;
   }
+
+  private hovered = false;
 
   private get hasChildren(): boolean {
     return this.node.children.length > 0;
@@ -81,10 +81,14 @@ export class NodeItem {
 
   onMouseOut(event: MouseEvent) {
     this.userActions.clearHighlight();
+
+    this.hovered = false;
   }
 
   onMouseOver($event) {
     this.userActions.highlight(this.node);
+
+    this.hovered = true;
   }
 
   expandTree($event) {

@@ -16,6 +16,7 @@ import {
   selector: 'component-tree',
   template: require('./component-tree.html'),
   host: {'class': 'flex overflow-scroll'},
+  styles: [require('to-string!./component-tree.css')],
   directives: [NodeItem]
 })
 export class ComponentTree {

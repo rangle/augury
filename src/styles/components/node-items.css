@@ -3,23 +3,18 @@
 
 .node-item {
   cursor: pointer;
-
-  &:hover {
-    background-color: var(--blue-light);
-    padding-left: 58px;
-    margin-left: -50px;
-  }
 }
 
 .node-item-error {
   background-color: var(--red-lightest)
 }
 
-.node-item-selected,
-.node-item-selected:hover {
+.node-item-selected {
   background-color: var(--blue);
-  padding-left: 58px !important;
-  margin-left: -50px;
+}
+
+.node-item-hovered {
+  background-color: var(--blue-light);
 }
 
 .node-item-name {

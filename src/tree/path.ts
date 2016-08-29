@@ -6,13 +6,18 @@ export const serializePath = (path: Path): string => {
   return path.join(' ');
 };
 
-export const deserializePath = (path: string): Path => {
-  return path.split(/ /).map(piece => {
-    const v = parseInt(piece, 10);
-    if (isNaN(v)) {
-      return piece;
-    }
-    return v;
-  });
+const numberOrString = (segment: string): string | number => {
+  const v = parseInt(segment, 10);
+  if (isNaN(v)) {
+    return segment;
+  }
+  return v;
 };
 
+export const deserializePath = (path: string): Path => {
+  return path.split(/ /).map(numberOrString);
+};
+
+export const deserializeChangePath = (path: string): Path => {
+  return path.split(/\/| /).map(numberOrString);
+};

@@ -1,0 +1,4 @@
+:host > main {
+  min-height: min-content;
+  display: flex;
+}
