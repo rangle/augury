@@ -2,3 +2,7 @@
   min-height: min-content;
   display: flex;
 }
+
+:host > main > bt-node-item {
+  min-width: 100%;
+}
