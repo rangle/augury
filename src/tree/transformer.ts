@@ -1,13 +1,8 @@
 import {cloneDeep} from 'lodash';
 
-import 'reflect-metadata';
-
 import {
-  ComponentMetadata,
   DebugElement,
   DebugNode,
-  InputMetadata,
-  OutputMetadata,
 } from '@angular/core';
 
 import {
@@ -198,12 +193,12 @@ const getComponentProviders = (element: Source, name: string): Array<Property> =
     }
 };
 
-const getMetadata = (element: Source): ComponentMetadata => {
+const getMetadata = (element: Source) => {
   const annotations =
     Reflect.getOwnMetadata('annotations', element.componentInstance.constructor);
   if (annotations) {
     for (const decorator of annotations) {
-      if (decorator instanceof ComponentMetadata) {
+      if (decorator.constructor.name === 'ComponentMetadata') {
         return decorator;
       }
     }
@@ -211,7 +206,7 @@ const getMetadata = (element: Source): ComponentMetadata => {
   return null;
 };
 
-const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
+const getComponentDirectives = (metadata): Array<string> => {
   if (metadata == null || metadata.directives == null) {
     return [];
   }
@@ -219,14 +214,14 @@ const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
   return metadata.directives.map((d: any) => d.name);
 };
 
-const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
+const getComponentInputs = (metadata, element: Source) => {
   const inputs = metadata && metadata.inputs
     ? metadata.inputs
     : [];
 
   eachProperty(element,
     (key: string, meta) => {
-      if (meta instanceof InputMetadata && inputs.indexOf(key) < 0) {
+      if (meta.constructor.name === 'InputMetadata' && inputs.indexOf(key) < 0) {
         const property = meta.bindingPropertyName
           ? `${key}:${meta.bindingPropertyName}`
           : key;
@@ -237,14 +232,14 @@ const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
   return inputs;
 };
 
-const getComponentOutputs = (metadata: ComponentMetadata, element: Source): Array<string> => {
+const getComponentOutputs = (metadata, element: Source): Array<string> => {
  const outputs = metadata && metadata.outputs
     ? metadata.outputs
     : [];
 
   eachProperty(element,
     (key: string, meta) => {
-      if (meta instanceof OutputMetadata && outputs.indexOf(key) < 0) {
+      if (meta.constructor.name === 'OutputMetadata' && outputs.indexOf(key) < 0) {
         outputs.push(key);
       }
     });
