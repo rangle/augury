@@ -16,12 +16,9 @@ import {
 
 import {Node} from './node';
 
-import {
-  Path,
-  serializePath
-} from './path';
+import {Path, serializePath} from './path';
 
-import {serialize} from '../utils';
+import {functionName, serialize} from '../utils';
 
 type Source = DebugElement & DebugNode;
 
@@ -62,7 +59,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
     const name = (() => {
       if (element.componentInstance &&
           element.componentInstance.constructor) {
-        return element.componentInstance.constructor.name;
+        return functionName(element.componentInstance.constructor);
       }
       else if (element.name) {
         return element.name;
@@ -72,7 +69,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
       }
     })();
 
-    const injectors = element.providerTokens.map(t => t.name);
+    const injectors = element.providerTokens.map(t => functionName(t));
 
     const dependencies = () => {
       if (element.componentInstance == null) {
@@ -82,7 +79,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
       const parameters = Reflect.getOwnMetadata('design:paramtypes',
         element.componentInstance.constructor) || [];
 
-      return parameters.map(param => param.name);
+      return parameters.map(param => functionName(param));
     };
 
     const providers = getComponentProviders(element, name);
@@ -207,7 +204,7 @@ const getMetadata = (element: Source): ComponentMetadata => {
     Reflect.getOwnMetadata('annotations', element.componentInstance.constructor);
   if (annotations) {
     for (const decorator of annotations) {
-      if (decorator.constructor.name === (<any>ComponentMetadata).name) {
+      if (functionName(decorator.constructor) === functionName(ComponentMetadata)) {
         return decorator;
       }
     }
@@ -220,7 +217,7 @@ const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
     return [];
   }
 
-  return metadata.directives.map((d: any) => d.name);
+  return metadata.directives.map(d => functionName(d as any));
 };
 
 const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
@@ -230,7 +227,7 @@ const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
 
   eachProperty(element,
     (key: string, meta) => {
-      if (meta.constructor.name === (<any>InputMetadata).name && inputs.indexOf(key) < 0) {
+      if (functionName(meta.constructor) === functionName(InputMetadata) && inputs.indexOf(key) < 0) {
         const property = meta.bindingPropertyName
           ? `${key}:${meta.bindingPropertyName}`
           : key;
@@ -248,7 +245,7 @@ const getComponentOutputs = (metadata: ComponentMetadata, element: Source): Arra
 
   eachProperty(element,
     (key: string, meta) => {
-      if (meta.constructor.name === (<any>OutputMetadata).name && outputs.indexOf(key) < 0) {
+      if (functionName(meta.constructor) === functionName(OutputMetadata) && outputs.indexOf(key) < 0) {
         outputs.push(key);
       }
     });
