@@ -63,15 +63,16 @@ require('!style!css!postcss!../styles/app.css');
 class App {
   private Tab = Tab;
   private Theme = Theme;
-  private selectedTab: Tab = Tab.ComponentTree;
   private theme: Theme;
   private tree: MutableTree;
   private routerTree: Array<Route>;
   private routerException: string;
-  private selectedNode: Node;
   private componentState: ComponentInstanceState;
   private subscription: Subscription;
   private exception: string;
+  private selectedNode: Node;
+  private selectedRoute: Route;
+  private selectedTab: Tab = Tab.ComponentTree;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -90,6 +91,12 @@ class App {
       .then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
+  }
+
+  private hasContent() {
+    return this.tree &&
+           this.tree.roots &&
+           this.tree.roots.length > 0;
   }
 
   private ngDoCheck() {
@@ -213,6 +220,10 @@ class App {
         });
 
     this.componentState.wait(node, promise);
+  }
+
+  private onRouteSelectionChange(route: Route) {
+    this.selectedRoute = route;
   }
 
   private onInspectElement(node: Node) {

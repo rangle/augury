@@ -6,8 +6,10 @@ import {
   Input,
 } from '@angular/core';
 
-import RouterInfo from '../router-info/router-info';
+import {RouterInfo} from '../router-info/router-info';
 import {Route} from '../../../backend/utils';
+import {Theme} from '../../state/options';
+import {Node} from '../../../tree';
 
 import * as d3 from 'd3';
 
@@ -29,13 +31,12 @@ interface TreeConfig {
   directives: [RouterInfo]
 })
 export class RouterTree {
-  @Input() routerTree: Array<Route>;
-  @Input() routerException: string;
-  @Input() theme: string;
+  @Input() private routerTree: Array<Route>;
+  @Input() private routerException: string;
+  @Input() private theme: Theme;
+  @Input() private selectedNode;
 
   private treeConfig: TreeConfig;
-
-  private selectedNode;
 
   constructor(@Inject(ElementRef) elementRef: ElementRef) {
     this.treeConfig = this.getTree(elementRef);
@@ -101,7 +102,7 @@ export class RouterTree {
       .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')
       .attr('r', 6);
 
-    const fillColor: string = this.theme === 'dark' ? '#A5A5A5' : '#000000';
+    const fillColor: string = this.theme === Theme.Dark ? '#A5A5A5' : '#000000';
     nodeEnter.append('text')
       .attr('x', (d) => d.children || d._children ? -13 : 13)
       .attr('dy', '.35em')

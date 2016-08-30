@@ -84,11 +84,15 @@ export class Header {
   }
 
   private ngOnChanges(changes) {
-    if (changes.hasOwnProperty('selectedTab')) {
-      if (this.search) {
-        this.search.reset();
-      }
+    if (this.search == null) {
+      return;
     }
+
+    const func = changes.hasOwnProperty('selectedTab')
+      ? this.search.reset
+      : this.search.reload;
+
+    func.call(this.search);
   }
 
   private get searchPlaceholder(): string {
@@ -114,7 +118,7 @@ export class Header {
     this.resetTheme();
   }
 
-  private onRetrieveSearchResults = (query: string) => {
+  private onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
     switch (this.selectedTab) {
       case Tab.ComponentTree:
         return this.userActions.searchComponents(this.tree, query);

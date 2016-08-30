@@ -1,4 +1,4 @@
-<div *ngIf="tree"
+<div *ngIf="hasContent"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="{'dark': options.theme === Theme.Dark}">
   <augury-header
@@ -14,6 +14,7 @@
     [componentState]="componentState"
     [selectedTab]="selectedTab"
     [selectedNode]="selectedNode"
+    [selectedRoute]="selectedRoute"
     [routerTree]="routerTree"
     [routerException]="routerException"
     [options]="options"
@@ -23,6 +24,9 @@
     (inspectElement)="onInspectElement($event)">
   </bt-app-trees>
 </div>
+<template [ngIf]="!hasContent">
+  No components were found on the page
+</template>
 <template [ngIf]="exception">
   <pre>{{exception}}</pre>
 </template>

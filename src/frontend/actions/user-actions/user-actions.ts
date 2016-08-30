@@ -6,6 +6,7 @@ import {Route} from '../../../backend/utils';
 import {
   matchNode,
   matchRoute,
+  matchString,
 } from '../../utils';
 import {
   ExpandState,
@@ -67,8 +68,34 @@ export class UserActions {
   }
 
   /// Search routers and return result as routes
-  searchRouter(routerTree: Array<Route>, query: string): Promise<Array<any>> {
-    return Promise.reject<Array<any>>(new Error('Not implemented'));
+  searchRouter(routerTree: Array<Route>, query: string): Promise<Array<Route>> {
+    return new Promise((resolve, reject) => {
+      const recurse = (node: Route, fn: (route: Route) => void) => {
+        fn(node);
+
+        if (node.children) {
+          node.children.forEach(child => recurse(child, fn));
+        }
+      };
+
+      const matches = new Array<Route>();
+
+      routerTree.forEach(
+        root => recurse(root,
+          node => {
+            if (matchString(query, node.name) ||
+                matchString(query, node.path)) {
+              matches.push(node);
+            }
+          }));
+
+      if (matches.length > 0) {
+        resolve(matches);
+      }
+      else {
+        reject(new Error('No matching routes were found'));
+      }
+    });
   }
 
   clearHighlight() {

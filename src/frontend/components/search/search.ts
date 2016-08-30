@@ -86,13 +86,6 @@ export class Search {
   private onSearchChanged(value: string) {
     this.query = value;
 
-    if (this.query == null || this.query.length === 0) {
-      this.state = SearchState.Idle;
-      return;
-    }
-
-    this.state = SearchState.Searching;
-
     const response = (state: SearchState, results: Array<SearchResult>) => {
       this.state = state;
       this.results = results;
@@ -102,6 +95,13 @@ export class Search {
         this.selectedResult.emit(this.results[this.current]);
       }
     };
+
+    if (this.query == null || this.query.length === 0) {
+      response(SearchState.Idle, new Array<SearchResult>());
+      return;
+    }
+
+    this.state = SearchState.Searching;
 
     const result = this.handler(this.query);
 
@@ -134,7 +134,11 @@ export class Search {
     this.selectedResult.emit(this.results[this.current]);
   }
 
+  reload() {
+    this.onSearchChanged(this.query);
+  }
+
   reset() {
-    this.query = '';
+    this.onSearchChanged('');
   }
 };
