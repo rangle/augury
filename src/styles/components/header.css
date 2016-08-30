@@ -3,25 +3,19 @@
 
 .setting {
   -webkit-mask-position: -200px -29px;
-  background-color: var(--grey-darkest);
   height: 16px;
   margin: auto;
   width: 16px;
 }
 
 .setting-dropdown {
-  background: var(--grey-light);
-}
+  -webkit-user-select: none;
 
-.setting-dropdown--dark {
-  background: var(--grey-darkest);
-  color: var(--grey-light);
-}
+  & input {
+    vertical-align: text-bottom;
+  }
 
-.setting-dropdown li {
-  padding-left: 2rem;
-}
-
-.setting-dropdown li.selected {
-
+  & li {
+    padding-left: 1rem;
+  }
 }

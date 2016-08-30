@@ -6,7 +6,7 @@ bt-router-tree .node {
 }
 
 .node-route {
-  stroke: var(--red);
+  stroke: #F05057;
   stroke-width: 1px;
 }
 

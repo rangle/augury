@@ -3,7 +3,6 @@
 
 .expand-arrow {
   -webkit-mask-position: -18px -96px;
-  background-color: var(--grey-darkest);
   margin: auto 5px;
   pointer-events: none;
 }

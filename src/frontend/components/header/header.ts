@@ -34,6 +34,9 @@ type Route = any; // TODO(cbond): use real Route type
   ]
 })
 export class Header {
+  @ViewChild('theme-menu') menuElement: ElementRef;
+  @ViewChild('theme-menu-button') menuButtonElement: ElementRef;
+
   @Input() private selectedTab: Tab;
   @Input() private options: Options;
   @Input() private tree: MutableTree;
@@ -48,37 +51,20 @@ export class Header {
   @ViewChild(Search) private search: Search;
 
   private Tab = Tab;
-
   private Theme = Theme;
 
   private settingOpened: boolean = false;
 
-  constructor(
-    private userActions: UserActions,
-    private ngZone: NgZone,
-    private elementRef: ElementRef
-  ) {}
+  constructor(private userActions: UserActions) {}
 
   resetTheme() {
     this.settingOpened = false;
   }
 
   resetIfSettingOpened(event) {
-    let clickedComponent = event.target;
-    if (!clickedComponent) {
-      return;
-    }
-    const menuElement = this.elementRef.nativeElement
-      .querySelector('#augury-theme-menu');
-
-    const menuButtonElement = this.elementRef.nativeElement
-      .querySelector('#augury-theme-menu-button');
-
-    // If click was not inside menu button or menu, close the menu.
-    let inside = (menuElement && menuElement.contains(clickedComponent)) ||
-      (menuButtonElement && menuButtonElement.contains(clickedComponent));
-
-    if (!inside) {
+    if (this.menuElement && this.menuButtonElement &&
+        !(this.menuElement.nativeElement.contains(event.target) ||
+          this.menuButtonElement.nativeElement.contains(event.target))) {
       this.resetTheme();
     }
   }

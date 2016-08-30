@@ -9,7 +9,7 @@
       [ngClass]="{
         expander: true,
         rotate90: !expanded,
-        invisible: node.children == null || node.children.length === 0
+        transparent: node.children == null || node.children.length === 0
       }"
       (click)="expandTree($event)">
     </div>
