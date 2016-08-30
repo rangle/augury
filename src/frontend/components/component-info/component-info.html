@@ -17,7 +17,7 @@
   </div>
 
   <div [hidden]="!(node && node.name)">
-    <accordion sectionTitle="Properties">
+    <accordion sectionTitle="Properties" *ngIf="hasProperties" [defaultExpanded]="true">
       <section-content>
         <ul class="list-reset m0"
           *ngIf="node && node.description">
@@ -30,8 +30,7 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="Providers"
-      *ngIf="node && node.providers && node.providers.length > 0">
+    <accordion sectionTitle="Providers" *ngIf="hasProviders" [defaultExpanded]="true">
       <section-content>
         <span *ngFor="let provider of node.providers">
           <p class="m1 bold">{{provider.key}}</p>
@@ -44,8 +43,7 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="Directives"
-      *ngIf="node && node.directives && node.directives.length > 0">
+    <accordion sectionTitle="Directives" *ngIf="hasDirectives">
       <section-content>
         <ul class="list-reset m0">
           <li *ngFor="let directive of node.directives">
@@ -94,7 +92,7 @@
               <td>
                 <button class="btn btn-primary bg-olive mb1"
                   (click)="emitValue(output, prop.value)">
-                  Emit Value
+                  Emit
                 </button>
               </td>
               <td>
@@ -129,8 +127,7 @@
       </section-content>
     </accordion>
 
-    <accordion sectionTitle="Dependencies"
-      *ngIf="node && node.dependencies && node.dependencies.length > 0">
+    <accordion sectionTitle="Dependencies" *ngIf="hasDependencies">
       <section-content>
         <bt-dependency
           [dependencies]="node.dependencies"
@@ -139,8 +136,7 @@
       </section-content>
     </accordion>
 
-    <accordion [sectionTitle]='"Children"'
-      *ngIf="node && node.children && node.children.length > 0">
+    <accordion sectionTitle="Children" *ngIf="hasChildren">
       <section-content>
         <div id="tree-children"
           class="h4">

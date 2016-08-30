@@ -85,12 +85,20 @@ export const transform = (parentNode: Node, path: Path, element: Source,
 
     const isComponent = element.componentInstance != null;
 
+    const metadata = isComponent
+      ? getMetadata(element)
+      : null;
+
     const input = isComponent
-      ? getComponentInputs(element)
+      ? getComponentInputs(metadata, element)
       : [];
 
     const output = isComponent
-      ? getComponentOutputs(element)
+      ? getComponentOutputs(metadata, element)
+      : [];
+
+    const directives = isComponent
+      ? getComponentDirectives(metadata)
       : [];
 
     const assert = (): Node => {
@@ -103,6 +111,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
       attributes: cloneDeep(element.attributes),
       children: null,
       description: Description.getComponentDescription(element),
+      directives,
       classes: cloneDeep(element.classes),
       styles: cloneDeep(element.styles),
       injectors,
@@ -184,58 +193,67 @@ const getComponentProviders = (element: Source, name: string): Array<Property> =
     }
 };
 
-const getComponentInputs = (element: Source) => {
-  const metadata = Reflect.getOwnMetadata('annotations',
-    element.componentInstance.constructor);
-
-  const inputs =
-    (metadata && metadata.length > 0 && metadata[0].inputs) || [];
-
-  const propMetadata = Reflect.getOwnMetadata('propMetadata',
-    element.componentInstance.constructor);
-  if (propMetadata == null) {
-    return inputs;
-  }
-
-  for (const key of Object.keys(propMetadata)) {
-    for (const meta of propMetadata[key]) {
-      if (meta.constructor.name === 'InputMetadata') {
-        if (inputs.indexOf(key) < 0) { // avoid duplicates
-          if (meta.bindingPropertyName) {
-            inputs.push(`${key}:${meta.bindingPropertyName}`);
-          } else {
-            inputs.push(key);
-          }
-        }
+const getMetadata = (element: Source) => {
+  const annotations =
+    Reflect.getOwnMetadata('annotations', element.componentInstance.constructor);
+  if (annotations) {
+    for (const decorator of annotations) {
+      if (decorator.constructor.name === 'ComponentMetadata') {
+        return decorator;
       }
     }
   }
+  return null;
+};
+
+const getComponentDirectives = (metadata): Array<string> => {
+  if (metadata == null || metadata.directives == null) {
+    return [];
+  }
+
+  return metadata.directives.map((d: any) => d.name);
+};
+
+const getComponentInputs = (metadata, element: Source) => {
+  const inputs = metadata && metadata.inputs
+    ? metadata.inputs
+    : [];
+
+  eachProperty(element,
+    (key: string, meta) => {
+      if (meta.constructor.name === 'InputMetadata' && inputs.indexOf(key) < 0) {
+        const property = meta.bindingPropertyName
+          ? `${key}:${meta.bindingPropertyName}`
+          : key;
+        inputs.push(property);
+      }
+    });
 
   return inputs;
 };
 
-const getComponentOutputs = (element: Source): Array<string> => {
-  const metadata = Reflect.getOwnMetadata('annotations',
-    element.componentInstance.constructor);
+const getComponentOutputs = (metadata, element: Source): Array<string> => {
+ const outputs = metadata && metadata.outputs
+    ? metadata.outputs
+    : [];
 
-  const outputs = (metadata && metadata.length > 0 && metadata[0].outputs) || [];
-
-  const propMetadata = Reflect.getOwnMetadata('propMetadata',
-    element.componentInstance.constructor);
-  if (propMetadata == null) {
-    return outputs;
-  }
-
-  for (const key of Object.keys(propMetadata)) {
-    for (const meta of propMetadata[key]) {
-      if (meta.constructor.name === 'OutputMetadata') {
-        if (outputs.indexOf(key) < 0) { // avoid duplicates
-          outputs.push(key);
-        }
+  eachProperty(element,
+    (key: string, meta) => {
+      if (meta.constructor.name === 'OutputMetadata' && outputs.indexOf(key) < 0) {
+        outputs.push(key);
       }
-    }
-  }
+    });
 
   return outputs;
 };
 
+const eachProperty = (element: Source, fn: (key: string, decorator) => void) => {
+  const propMetadata = Reflect.getOwnMetadata('propMetadata', element.componentInstance.constructor);
+  if (propMetadata) {
+    for (const key of Object.keys(propMetadata)) {
+      for (const meta of propMetadata[key]) {
+        fn(key, meta);
+      }
+    }
+  }
+};
