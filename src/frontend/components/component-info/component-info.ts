@@ -23,6 +23,7 @@ import PropertyValue from '../property-value/property-value';
 import {
   Node,
   Path,
+  MutableTree,
   deserializePath,
 } from '../../../tree';
 
@@ -46,6 +47,7 @@ export enum EmitState {
 })
 export class ComponentInfo {
   @Input() node: Node;
+  @Input() tree: MutableTree;
   @Input() state;
   @Input() loadingState: ComponentLoadState;
 

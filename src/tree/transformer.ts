@@ -1,6 +1,10 @@
 import {cloneDeep} from 'lodash';
 
 import {
+  ChangeDetectionStrategy,
+  ComponentMetadata,
+  InputMetadata,
+  OutputMetadata,
   DebugElement,
   DebugNode,
 } from '@angular/core';
@@ -89,6 +93,10 @@ export const transform = (parentNode: Node, path: Path, element: Source,
       ? getMetadata(element)
       : null;
 
+    const changeDetection = isComponent
+      ? ChangeDetectionStrategy[getChangeDetection(metadata)]
+      : null;
+
     const input = isComponent
       ? getComponentInputs(metadata, element)
       : [];
@@ -110,6 +118,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
       isComponent,
       attributes: cloneDeep(element.attributes),
       children: null,
+      changeDetection,
       description: Description.getComponentDescription(element),
       directives,
       classes: cloneDeep(element.classes),
@@ -193,12 +202,12 @@ const getComponentProviders = (element: Source, name: string): Array<Property> =
     }
 };
 
-const getMetadata = (element: Source) => {
+const getMetadata = (element: Source): ComponentMetadata => {
   const annotations =
     Reflect.getOwnMetadata('annotations', element.componentInstance.constructor);
   if (annotations) {
     for (const decorator of annotations) {
-      if (decorator.constructor.name === 'ComponentMetadata') {
+      if (decorator.constructor.name === (<any>ComponentMetadata).name) {
         return decorator;
       }
     }
@@ -206,7 +215,7 @@ const getMetadata = (element: Source) => {
   return null;
 };
 
-const getComponentDirectives = (metadata): Array<string> => {
+const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
   if (metadata == null || metadata.directives == null) {
     return [];
   }
@@ -214,14 +223,14 @@ const getComponentDirectives = (metadata): Array<string> => {
   return metadata.directives.map((d: any) => d.name);
 };
 
-const getComponentInputs = (metadata, element: Source) => {
+const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
   const inputs = metadata && metadata.inputs
     ? metadata.inputs
     : [];
 
   eachProperty(element,
     (key: string, meta) => {
-      if (meta.constructor.name === 'InputMetadata' && inputs.indexOf(key) < 0) {
+      if (meta.constructor.name === (<any>InputMetadata).name && inputs.indexOf(key) < 0) {
         const property = meta.bindingPropertyName
           ? `${key}:${meta.bindingPropertyName}`
           : key;
@@ -232,14 +241,14 @@ const getComponentInputs = (metadata, element: Source) => {
   return inputs;
 };
 
-const getComponentOutputs = (metadata, element: Source): Array<string> => {
+const getComponentOutputs = (metadata: ComponentMetadata, element: Source): Array<string> => {
  const outputs = metadata && metadata.outputs
     ? metadata.outputs
     : [];
 
   eachProperty(element,
     (key: string, meta) => {
-      if (meta.constructor.name === 'OutputMetadata' && outputs.indexOf(key) < 0) {
+      if (meta.constructor.name === (<any>OutputMetadata).name && outputs.indexOf(key) < 0) {
         outputs.push(key);
       }
     });
@@ -256,4 +265,12 @@ const eachProperty = (element: Source, fn: (key: string, decorator) => void) => 
       }
     }
   }
+};
+
+const getChangeDetection = (metadata: ComponentMetadata): ChangeDetectionStrategy => {
+   if (metadata == null ||
+       metadata.changeDetection == null) {
+     return ChangeDetectionStrategy.Default;
+  }
+  return metadata.changeDetection;
 };

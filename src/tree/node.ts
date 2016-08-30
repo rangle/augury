@@ -8,6 +8,7 @@ export interface EventListener {
 export interface Node {
   id: string;
   isComponent: boolean;
+  changeDetection: string;
   description: Array<Property>;
   nativeElement: () => HTMLElement; // null on frontend
   listeners: Array<EventListener>;

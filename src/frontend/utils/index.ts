@@ -3,4 +3,4 @@ export * from './parse-data';
 export * from './parse-utils';
 export * from './object-types';
 export * from './match';
-
+export * from './stack';
