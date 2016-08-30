@@ -82,6 +82,4 @@ split-pane-secondary-content {
 
 .expander.invisible {
   background: transparent;
-  background-color: #eee;
-  border-radius: 100%;
 }
