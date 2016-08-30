@@ -100,6 +100,36 @@ export class ComponentInfo {
     return Object.keys(this.state).length > 0;
   }
 
+  private get hasProviders() {
+    return this.node &&
+        this.node.providers &&
+        this.node.providers.length > 0;
+  }
+
+  private get hasDirectives() {
+    return this.node &&
+           this.node.directives &&
+           this.node.directives.length > 0;
+  }
+
+  private get hasDependencies() {
+    return this.node &&
+           this.node.dependencies &&
+           this.node.dependencies.length > 0;
+  }
+
+  private get hasChildren() {
+    return this.node &&
+           this.node.children &&
+           this.node.children.length > 0;
+  }
+
+  private get hasProperties() {
+    return this.node &&
+           this.node.description &&
+           this.node.description.length > 0;
+  }
+
   private viewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
       var root = ng.probe(window.pathLookupNode('${this.node.id}'));

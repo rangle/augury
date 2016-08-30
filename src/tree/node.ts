@@ -12,6 +12,7 @@ export interface Node {
   nativeElement: () => HTMLElement; // null on frontend
   listeners: Array<EventListener>;
   dependencies: Array<string>;
+  directives: Array<string>;
   injectors: Array<string>;
   providers: Array<Property>;
   input: Array<string>;
