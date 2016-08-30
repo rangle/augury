@@ -33,13 +33,15 @@ type Node = any;
 export class AppTrees {
   private Tab = Tab;
 
-  @Input() tree: Array<Node>;
-  @Input() routerTree: Array<Route>;
-  @Input() routerException: string;
-  @Input() selectedTab: Tab;
-  @Input() selectedNode: Node;
-  @Input() options: Options;
-  @Input() componentState: ComponentInstanceState;
+  @Input() private tree: Array<Node>;
+  @Input() private routerTree: Array<Route>;
+  @Input() private routerException: string;
+  @Input() private options: Options;
+  @Input() private componentState: ComponentInstanceState;
+
+  @Input() private selectedTab: Tab;
+  @Input() private selectedNode: Node;
+  @Input() private selectedRoute: Route;
 
   @Output() private tabChange = new EventEmitter<Tab>();
   @Output() private selectionChange = new EventEmitter<Node>();

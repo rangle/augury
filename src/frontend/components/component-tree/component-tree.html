@@ -1,4 +1,4 @@
-<main class="monospace col-12 p1">
+<main class="monospace col-12 p1" *ngIf="tree">
   <bt-node-item *ngFor="let node of tree.roots; trackBy: trackById"
     [node]="node"
     (selectionChange)="selectionChange.emit($event)"

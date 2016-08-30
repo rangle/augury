@@ -1,5 +1,4 @@
-<div class="monospace border"
-  *ngIf="selectedNode">
+<div class="monospace border" *ngIf="selectedNode">
   <div class="modal_header border-bottom py3 px4">
     <div class="logo">
       <div class="logo_text monospace left-align">
@@ -8,8 +7,7 @@
     </div>
   </div>
   <div class="modal_content py3 px4">
-    <ul class="list-reset m0"
-      *ngIf="selectedNode">
+    <ul class="list-reset m0" *ngIf="selectedNode">
       <li>
         <span class="info-key">
           path:
@@ -35,12 +33,12 @@
           {{selectedNode.handler}}
           </span>
       </li>
-      <li *ngIf="selectedNode._data && selectedNode._data.length > 0">
+      <li *ngIf="hasSelection">
         <span class="info-key">
           data:
-          </span>
+        </span>
         <ul class="list-reset">
-          <li *ngFor="let el of selectedNode._data">
+          <li *ngFor="let el of selectedNode.data">
             <span class="info-key">
               {{el.key}}:
               </span>
