@@ -10,6 +10,36 @@ bt-router-tree .link {
   stroke: #9B9B9B;
 }
 
+bt-injector-tree {
+  & .stroke- {
+    &root {
+      stroke: #9B9B9B;
+    }
+
+    &component {
+      stroke: #2828AB;
+    }
+
+    &service {
+      stroke: #FF0202;
+    }
+  }
+
+  & .fill- {
+    &root {
+      fill: #9B9B9B;
+    }
+
+    &component {
+      fill: #EBF2FC;
+    }
+
+    &service {
+      fill: #FFF0F0;
+    }
+  }
+}
+
 .light {
   background-color: white;
 
@@ -110,6 +140,14 @@ bt-router-tree .link {
     & text {
       fill: black;
     }
+  }
+
+  & bt-injector-tree text {
+    fill: black;
+  }
+
+  & bt-injector-tree #suit > path {
+    stroke: #5A5A5A !important;
   }
 }
 
@@ -214,5 +252,13 @@ bt-router-tree .link {
     & text {
       fill: #A5A5A5;
     }
+  }
+
+  & bt-injector-tree text {
+    fill: #A5A5A5;
+  }
+
+  & bt-injector-tree #suit > path {
+    stroke: #A5A5A5 !important;
   }
 }
