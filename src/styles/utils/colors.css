@@ -6,6 +6,10 @@
   background-color: #E7B4E4;
 }
 
+bt-router-tree .link {
+  stroke: #9B9B9B;
+}
+
 .light {
   background-color: white;
 
@@ -92,6 +96,20 @@
 
   & .border-left {
     border-left-color: #CCC;
+  }
+
+  & bt-router-tree {
+    & .node-route {
+      stroke: #F05057;
+    }
+
+    & .node-aux-route {
+      stroke: var(--bt-link-color);
+    }
+
+    & text {
+      fill: black;
+    }
   }
 }
 
@@ -182,5 +200,19 @@
 
   & .border-left {
     border-left-color: #3D3D3D;
+  }
+
+  & bt-router-tree {
+    & .node-route {
+      stroke: #F05057;
+    }
+
+    & .node-aux-route {
+      stroke: var(--bt-link-color)
+    }
+
+    & text {
+      fill: #A5A5A5;
+    }
   }
 }

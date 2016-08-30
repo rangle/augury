@@ -8,7 +8,6 @@ import {
 
 import {RouterInfo} from '../router-info/router-info';
 import {Route} from '../../../backend/utils';
-import {Theme} from '../../state/options';
 import {Node} from '../../../tree';
 
 import * as d3 from 'd3';
@@ -33,7 +32,6 @@ interface TreeConfig {
 export class RouterTree {
   @Input() private routerTree: Array<Route>;
   @Input() private routerException: string;
-  @Input() private theme: Theme;
   @Input() private selectedNode;
 
   private treeConfig: TreeConfig;
@@ -102,14 +100,12 @@ export class RouterTree {
       .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')
       .attr('r', 6);
 
-    const fillColor: string = this.theme === Theme.Dark ? '#A5A5A5' : '#000000';
     nodeEnter.append('text')
       .attr('x', (d) => d.children || d._children ? -13 : 13)
       .attr('dy', '.35em')
       .attr('text-anchor', (d) => d.children || d._children ? 'end' : 'start')
       .text((d) => d.name)
-      .attr('fill', fillColor)
-      .style('fill-opacity', 1);
+      .attr('class', 'monospace');
 
     // Update the nodes
     const nodeUpdate = node.transition()
@@ -123,11 +119,6 @@ export class RouterTree {
         return d.isAux ? '#EBF2FC' : '#FFF0F0';
       });
 
-    nodeUpdate.select('text')
-      .attr('fill', fillColor)
-      .attr('class', 'monospace')
-      .style('fill-opacity', 1);
-
     // Declare the links
     const link = this.treeConfig.svg.selectAll('path.link')
       .data(links, (d: any) => d.target.id);
@@ -136,7 +127,6 @@ export class RouterTree {
     link
       .enter()
       .insert('path', 'g')
-      .attr('style', 'stroke: #9B9B9B; stroke-width: 1px; fill: none;')
       .attr('class', 'link');
 
     // Transition links to their new position.
