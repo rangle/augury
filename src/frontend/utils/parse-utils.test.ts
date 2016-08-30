@@ -1,6 +1,7 @@
 import * as test from 'tape';
 import {ParseUtils} from './parse-utils';
-import {MutableTree, createTree} from '../../tree';
+import {MutableTree} from '../../tree/mutable-tree';
+import {createTree} from '../../tree/mutable-tree-factory';
 
 test('utils/parse-utils: copyParent', t => {
   t.plan(1);

@@ -24,10 +24,11 @@ import {
   MutableTree,
   Node,
   Path,
-  createTree,
   deserializeChangePath,
   serializePath,
 } from '../tree';
+
+import {createTree} from '../tree/mutable-tree-factory';
 
 import {deserialize} from '../utils';
 

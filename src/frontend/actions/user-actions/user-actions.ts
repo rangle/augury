@@ -79,10 +79,6 @@ export class UserActions {
     return this.connection.send(MessageFactory.highlight([node]));
   }
 
-  getDependencies(dependency: string) {
-    throw new Error('Not implemented');
-  }
-
   renderRouterTree(): Promise<Route[]> {
     return this.connection.send<Route[], any>(MessageFactory.routerTree());
   }

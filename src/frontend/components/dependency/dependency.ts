@@ -3,66 +3,96 @@ import {
   EventEmitter,
   Input,
   Output,
+  SimpleChanges,
 } from '@angular/core';
+
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {Node} from '../../../tree';
+
+import {
+  MutableTree,
+  Node,
+} from '../../../tree';
+
+import {Stack} from '../../utils';
 
 @Component({
   selector: 'bt-dependency',
   template: require('./dependency.html'),
 })
 export default class Dependency {
-  @Input() dependencies;
+  @Input() selectedNode: Node;
+  @Input() tree: MutableTree;
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
-  private currDep: string = '';
-  private prevDep: Array<string> = [];
-  private depComps: Array<any> = [];
-  private isNavBack: boolean = false;
+  private selectedDependency: string;
 
-  constructor(private userActions: UserActions) {
-    // this.componentDataStore.dataStream
-    //   .filter((data: any) => data.action &&
-    //     data.action === UserActionType.GET_DEPENDENCIES)
-    //   .subscribe(({ selectedDependency, dependentComponents }) => {
-    //     if (this.currDep !== '' && !this.isNavBack) {
-    //       this.prevDep.push(this.currDep);
-    //     }
-    //     this.isNavBack = false;
-    //     this.currDep = selectedDependency;
-    //     this.depComps = dependentComponents;
-    //   });
+  private dependentComponents: Array<any> = [];
 
-    // this.componentDataStore.dataStream
-    //   .filter((data: any) => data.action &&
-    //     data.action === UserActionType.SELECT_NODE)
-    //   .subscribe(() => {
-    //     this.reset();
-    //   });
+  private navigationStack = new Stack<string>();
+
+  constructor(private userActions: UserActions) {}
+
+  private get dependencies(): Array<string> {
+    if (this.selectedNode == null) {
+      return [];
+    }
+    return this.selectedNode.dependencies;
   }
 
-  findDependency(dep: string) {
-    this.userActions.getDependencies(dep);
+  private get hasDependencies() {
+    return this.dependentComponents &&
+           this.dependentComponents.length > 0;
   }
 
-  navBack() {
-    if (this.prevDep.length === 0) {
+  private select(dependency: string) {
+    this.selectedDependency = dependency;
+
+    this.dependentComponents = this.getDependencies(dependency);
+  }
+
+  private onDependencySelected(dependency: string) {
+    if (this.selectedDependency) {
+      this.navigationStack.push(this.selectedDependency);
+    }
+
+    this.select(dependency);
+  }
+
+  private onBack() {
+    if (this.navigationStack.size === 0) {
       this.reset();
-    } else {
-      this.isNavBack = true;
-      this.findDependency(this.prevDep.pop());
+    }
+    else {
+      this.select(this.navigationStack.pop());
     }
   }
 
-  selectComponent(node: Node) {
+  private onSelectComponent(node: Node) {
     this.selectionChange.emit(node);
   }
 
-  reset() {
-    this.isNavBack = false;
-    this.prevDep = [];
-    this.currDep = '';
-    this.depComps = [];
+  private reset() {
+    this.navigationStack.clear();
+
+    this.selectedDependency = null;
+
+    this.dependentComponents = [];
+  }
+
+  private getDependencies(dependency: string): Array<Node> {
+    if (this.tree == null) {
+      return [];
+    }
+
+    const dependents = new Array<Node>();
+
+    this.tree.recurseAll(node => {
+      if (node.dependencies.indexOf(dependency) >= 0) {
+        dependents.push(node);
+      }
+    });
+
+    return dependents;
   }
 }

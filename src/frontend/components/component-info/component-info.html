@@ -130,7 +130,8 @@
     <accordion sectionTitle="Dependencies" *ngIf="hasDependencies">
       <section-content>
         <bt-dependency
-          [dependencies]="node.dependencies"
+          [tree]="tree"
+          [selectedNode]="node"
           (selectionChange)="selectionChange.emit($event)">
         </bt-dependency>
       </section-content>

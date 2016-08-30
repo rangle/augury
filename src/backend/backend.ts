@@ -6,9 +6,10 @@ import {
   MutableTree,
   Node,
   Path,
-  createTreeFromElements,
   deserializePath,
 } from '../tree';
+
+import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
 import {
   Message,

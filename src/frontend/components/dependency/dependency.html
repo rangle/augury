@@ -1,12 +1,11 @@
 <!--dependencies view-->
-<div class="mxn4 myn2"
-  *ngIf="!(depComps && depComps.length > 0)">
+<div class="mxn4 myn2" *ngIf="!hasDependencies">
   <ul class="list-reset m0">
     <li class="border-bottom py2 px4"
       *ngFor="let dep of dependencies">
       <a href="#"
         class="node-item-property"
-        (click)="findDependency(dep)">
+        (click)="onDependencySelected(dep)">
         {{dep}}
         </a>
     </li>
@@ -14,32 +13,30 @@
 </div>
 
 <!--dependent components view-->
-<div class="mxn4 myn2"
-  *ngIf="currDep != ''">
+<div class="mxn4 myn2" *ngIf="selectedDependency">
   <div class="border-bottom py2 px4">
     <a href="#"
       class="icon double-arrow rotate180"
-      (click)="navBack()">
+      (click)="onBack()">
       </a>
     <span class="node-item-property inline-block">
-      {{currDep}}
+      {{selectedDependency}}
       </span>
   </div>
 
-  <ul class="list-reset primary-color m0"
-    *ngIf="(depComps && depComps.length > 0)">
+  <ul class="list-reset primary-color m0" *ngIf="hasDependencies">
     <li class="border-bottom py2 px4"
-      *ngFor="let comp of depComps">
+      *ngFor="let comp of dependentComponents">
       <a href="#"
         class="node-item-property"
-        (click)="selectComponent(comp)">
+        (click)="onSelectComponent(comp)">
         {{comp.name}} (a-id = {{comp.id}})
         </a>
       <ul>
         <li *ngFor="let dep of comp.dependencies">
           <a href="#"
             class="node-item-property"
-            (click)="findDependency(dep)">
+            (click)="onDependencySelected(dep)">
             {{dep}}
             </a>
         </li>
