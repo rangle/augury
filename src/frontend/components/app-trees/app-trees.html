@@ -17,7 +17,6 @@
     <bt-info-panel
        class="flex flex-column flex-auto bg-base"
        [tree]="tree"
-       [theme]="options.theme"
        [node]="selectedNode"
        [loadingState]="componentState.loadingState(selectedNode)"
        [state]="componentState.componentInstance(selectedNode)"
@@ -29,7 +28,6 @@
 <bt-router-tree
    class="overflow-scroll flex-auto"
    [hidden]="selectedTab !== Tab.RouterTree"
-   [theme]="options.theme"
    [routerException]="routerException"
    [routerTree]="routerTree"
    [selectedNode]="selectedRoute">

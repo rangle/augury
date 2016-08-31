@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {StateTab, Theme} from '../../state';
+import {StateTab} from '../../state';
 import {TabMenu} from '../tab-menu/tab-menu';
 import {ComponentInfo} from '../component-info/component-info';
 import {InjectorTree} from '../injector-tree/injector-tree';
@@ -30,7 +30,6 @@ export class InfoPanel {
   @Input() node;
   @Input() state;
   @Input() loadingState: ComponentLoadState;
-  @Input() theme: Theme;
 
   @Output() private selectionChange = new EventEmitter<Node>();
 

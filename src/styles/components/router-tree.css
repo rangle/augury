@@ -1,17 +1,22 @@
 
 /* Router Tree */
 
-bt-router-tree .node {
-  cursor: pointer;
+bt-router-tree {
+  & .link {
+    stroke-width: 1px;
+    fill: none;
+  }
+
+  & .node {
+    cursor: pointer;
+  }
 }
 
 .node-route {
-  stroke: #F05057;
   stroke-width: 1px;
 }
 
 .node-aux-route {
-  stroke: var(--bt-link-color);
   stroke-width: 1px;
 }
 

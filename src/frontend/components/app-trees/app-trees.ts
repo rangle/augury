@@ -16,7 +16,6 @@ import {
   ComponentInstanceState,
   Options,
   Tab,
-  Theme,
 } from '../../state';
 
 type Node = any;

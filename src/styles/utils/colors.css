@@ -6,6 +6,40 @@
   background-color: #E7B4E4;
 }
 
+bt-router-tree .link {
+  stroke: #9B9B9B;
+}
+
+bt-injector-tree {
+  & .stroke- {
+    &root {
+      stroke: #9B9B9B;
+    }
+
+    &component {
+      stroke: #2828AB;
+    }
+
+    &service {
+      stroke: #FF0202;
+    }
+  }
+
+  & .fill- {
+    &root {
+      fill: #9B9B9B;
+    }
+
+    &component {
+      fill: #EBF2FC;
+    }
+
+    &service {
+      fill: #FFF0F0;
+    }
+  }
+}
+
 .light {
   background-color: white;
 
@@ -92,6 +126,28 @@
 
   & .border-left {
     border-left-color: #CCC;
+  }
+
+  & bt-router-tree {
+    & .node-route {
+      stroke: #F05057;
+    }
+
+    & .node-aux-route {
+      stroke: var(--bt-link-color);
+    }
+
+    & text {
+      fill: black;
+    }
+  }
+
+  & bt-injector-tree text {
+    fill: black;
+  }
+
+  & bt-injector-tree #suit > path {
+    stroke: #5A5A5A !important;
   }
 }
 
@@ -182,5 +238,27 @@
 
   & .border-left {
     border-left-color: #3D3D3D;
+  }
+
+  & bt-router-tree {
+    & .node-route {
+      stroke: #F05057;
+    }
+
+    & .node-aux-route {
+      stroke: var(--bt-link-color)
+    }
+
+    & text {
+      fill: #A5A5A5;
+    }
+  }
+
+  & bt-injector-tree text {
+    fill: #A5A5A5;
+  }
+
+  & bt-injector-tree #suit > path {
+    stroke: #A5A5A5 !important;
   }
 }
