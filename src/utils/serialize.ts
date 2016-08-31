@@ -111,13 +111,15 @@ const metaCreator = object => {
   /// Return a string representation of the recreator function. The result must
   /// be parseable JavaScript code that can be provided to `new Function()' to
   /// create a function that can recreate the object.
+  const encode = v => JSON.stringify(v);
+
   return `function() {
     var _ = [${objref.join(',')}];
       ${arrays.map(link =>
-      `_[${link.from}][${link.key}] = _[${link.to}];`).join('')}
+      `_[${encode(link.from)}][${encode(link.key)}] = _[${encode(link.to)}];`).join('')}
 
       ${hashes.map(link =>
-      `_[${link.from}][${JSON.stringify(link.key)}] = _[${link.to}];`).join('')}
+      `_[${encode(link.from)}][${encode(link.key)}] = _[${encode(link.to)}];`).join('')}
 
       return _[0];
     }();`;
