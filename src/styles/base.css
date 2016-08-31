@@ -26,29 +26,20 @@ split-pane-secondary-content {
   height: 100vh;
 }
 
-.mh100pct {
+.maxheight-100pct {
   max-height: 100%;
 }
 
-.tab-menu-title {
-  cursor: pointer;
-  font-size: var(--tab-menu-title);
+.minheight-100pct {
+  min-height: 100%;
+}
 
-  &:hover {
-    background-color: var(--grey-medium);
-  }
+.minwidth-100pct {
+  min-width: 100%;
 }
 
 .pointer {
   cursor: pointer;
-}
-
-.bg-panel {
-  background-color: rgba(0, 0, 0, .0625);
-}
-
-.bg-white {
-  background-color: #fff;
 }
 
 .border-transparent {
@@ -78,10 +69,4 @@ split-pane-secondary-content {
   -webkit-transition: transform 250ms ease-in-out;
   -moz-transition: transform 250ms ease-in-out;
   transition: transform 250ms ease-in-out;
-}
-
-.expander.invisible {
-  background: transparent;
-  background-color: #eee;
-  border-radius: 100%;
 }

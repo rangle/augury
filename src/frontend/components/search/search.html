@@ -1,6 +1,6 @@
-<div class="flex flex-center border rounded border-color-dark mr3"
+<div class="flex flex-center border rounded mr3"
     [ngClass]="{
-      'bg-white': state !== SearchState.Failure,
+      'bg-base': state !== SearchState.Failure,
       'bg-red': state === SearchState.Failure,
       'fg-white': state === SearchState.Failure}">
   <div class="icon" [ngClass]="{searching: state === SearchState.Searching}"></div>

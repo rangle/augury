@@ -6,9 +6,8 @@
     <div [ngClass]="{
         expander: true,
         rotate90: !expanded(k),
-        invisible: keys(state[k]).length == 0
-      }">
-    </div>
+        transparent: keys(state[k]).length == 0
+      }"></div>
     <span class="info-key">
       {{k}}:
     </span>

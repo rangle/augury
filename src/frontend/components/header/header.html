@@ -16,33 +16,35 @@
         [handler]="onRetrieveSearchResults"
         (selectedResult)="onSelectedSearchResultChanged($event)">
       </search>
-      <div class="icon setting" id="augury-theme-menu-button"
-        (click)="onOpenSettings()"></div>
+      <div #themeMenuButton
+           class="icon setting bg-primary"
+           (click)="onOpenSettings()"></div>
     </div>
   </header>
 
   <form>
-    <ul id="augury-theme-menu"
-        class="setting-dropdown list-reset border border-dark rounded bg-silver absolute right-0"
-        [ngClass]="{'setting-dropdown--dark': options.theme === Theme.Dark}"
+    <ul #themeMenu
+        class="bg-base primary-color list-reset border rounded absolute right-0 setting-dropdown"
         *ngIf="settingOpened">
       <li class="p3 border-bottom border-dark">
-        <input type="radio"
-          #lightTheme
-          [checked]="options.theme === Theme.Light"
-          [value]="Theme.Light"
-          (change)="onThemeChange(Theme.Light, lightTheme.checked)"
-          name="theme">
-        <label for="light">Light Mode</label>
+        <label>
+          <input
+             type="radio"
+             #lightTheme
+             [checked]="options.theme === Theme.Light"
+             [value]="Theme.Light"
+             (change)="onThemeChange(Theme.Light, lightTheme.checked)"
+             name="theme">Light Mode</label>
       </li>
       <li class="p3">
-        <input type="radio"
-          #darkTheme
-          [checked]="options.theme === Theme.Dark"
-          [value]="Theme.Dark"
-          (change)="onThemeChange(Theme.Dark, darkTheme.checked)"
-          name="theme" />
-        <label for="dark">Dark Mode</label>
+        <label>
+          <input
+             type="radio"
+             #darkTheme
+             [checked]="options.theme === Theme.Dark"
+             [value]="Theme.Dark"
+             (change)="onThemeChange(Theme.Dark, darkTheme.checked)"
+             name="theme">Dark Mode</label>
       </li>
     </ul>
   </form>
