@@ -12,5 +12,3 @@ import '@angular/http';
 // RxJS
 import 'rxjs';
 
-// Others
-import 'json-formatter-js';
