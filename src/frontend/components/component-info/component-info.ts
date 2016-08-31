@@ -1,5 +1,3 @@
-declare var JSONFormatter: any;
-
 import {
   Component,
   ElementRef,
@@ -66,10 +64,6 @@ export class ComponentInfo {
     private userActions: UserActions
   ) {}
 
-  private ngOnChanges(changes: SimpleChanges) {
-    this.displayTree();
-  }
-
   private get path(): Path {
     return deserializePath(this.node.id);
   }
@@ -120,12 +114,6 @@ export class ComponentInfo {
            this.node.dependencies.length > 0;
   }
 
-  private get hasChildren() {
-    return this.node &&
-           this.node.children &&
-           this.node.children.length > 0;
-  }
-
   private get hasProperties() {
     return this.node &&
            this.node.description &&
@@ -171,22 +159,5 @@ export class ComponentInfo {
         timedReset();
       });
   }
-
-  private displayTree() {
-    if (this.node == null) {
-      return;
-    }
-
-    const childrenContainer = this
-      .elementRef.nativeElement
-      .querySelector('#tree-children');
-
-    if (childrenContainer && this.node.children) {
-      while (childrenContainer.firstChild) {
-        childrenContainer.removeChild(childrenContainer.firstChild);
-      }
-      const formatter2 = new JSONFormatter(this.node.children);
-      childrenContainer.appendChild(formatter2.render());
-    }
-  }
 }
+
