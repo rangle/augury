@@ -7,7 +7,7 @@ export const functionName = (fn: Function): string => {
   let name: string = (<any>fn).name;
   if (name == null || name.length === 0) {
     const match = extract(fn.toString());
-    if (match.length > 1) {
+    if (match != null && match.length > 1) {
       return match[1];
     }
     return null;
