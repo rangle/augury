@@ -2,6 +2,10 @@
   color: red;
 }
 
+.bg-error {
+  background-color: rgba(255, 11, 0, 0.15);
+}
+
 .changed {
   background-color: #E7B4E4;
 }

@@ -1,11 +1,8 @@
 <div class="flex flex-center border rounded mr3"
-    [ngClass]="{
-      'bg-base': state !== SearchState.Failure,
-      'bg-red': state === SearchState.Failure,
-      'fg-white': state === SearchState.Failure}">
+    [ngClass]="{ 'bg-base': state !== SearchState.Failure, 'bg-error': state === SearchState.Failure}">
   <div class="icon" [ngClass]="{searching: state === SearchState.Searching}"></div>
   <input
-    class="border-none outline-none"
+    class="border-none outline-none primary-color"
     [placeholder]="placeholder"
     [ngModel]="query"
     (ngModelChange)="onSearchChanged($event)"
