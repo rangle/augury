@@ -1,5 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {FORM_DIRECTIVES, NgForm, NgIf} from '@angular/common';
+import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
+ from '@angular/forms';
+
 
 // StressComponent wraps a list item around an Angular 2 component
 // for Augury to detect.
@@ -9,41 +11,78 @@ import {FORM_DIRECTIVES, NgForm, NgIf} from '@angular/common';
     <li>{{value}}</li>
   `
 })
-class StressItem {
-  @Input() value: any;
+export class StressItem {
+  @Input() value: number;
 }
 
-//
 @Component({
-  selector: 'stress-tester',
-  directives: [FORM_DIRECTIVES, NgForm, StressItem],
+  selector: 'stress-rec-item',
+  directives: [StressRecItem],
   template: `
-    <p>Stress test Augury by adding values to the list. 
-     Warning: may crash Augury and/or Chrome.</p>
-    <form (ngSubmit)="onSubmit()" novalidate>
-      <div>
-        <label for="node-count">Specify number of values: </label>
-        <input type="number" id="node-count" ngControl="count">
-      </div>
-      <button type="submit">Add</button>
-    </form>
-    <br>
-    <h4>List of values</h4>
     <ul>
-      <stress-item *ngFor="let val of values" value="{{val}}"></stress-item>
-      <li *ngIf="values.length === 0">Hint: type a number and click Add above.</li>
+        <li>{{value}}</li>
+        <li *ngIf="value > 0">
+            <stress-rec-item [value]="value"></stress-rec-item>
+        </li>  
     </ul>
   `
 })
-export default class StressTester {
-  values: any = [];
+export class StressRecItem {
+  @Input() value: number;
+  ngOnInit() {
+    this.value -= 1;
+  }
+}
 
-  // onSubmit make an array of the specified count. Each element will result in
-  // a new Angular 2 component.
-  onSubmit(regForm: NgForm) {
-    // let maxCount = regForm.value.count;
-    // for (let i = 0; i < maxCount; i++) {
-    //   this.values.push(i);
-    // }
+@Component({
+  selector: 'stress-tester',
+  providers: [FORM_PROVIDERS],
+  directives: [REACTIVE_FORM_DIRECTIVES, StressRecItem, StressItem],
+  template: `
+  <div>
+    <p>Deep Tree Test</p>
+    <form (submit)="onSubmitRec()" novalidate>
+      <div>
+        <label for="node-count">Specify Depth of Tree: </label>
+        <input type="number" id="node-count" [formControl]="count">
+      </div>
+      <button type="submit">Run</button>
+    </form>
+    <br>
+    <div *ngIf="value">
+      <stress-rec-item [value]="value"></stress-rec-item>
+    </div>
+    <div>
+      <p>Single parent many children test.</p>
+      <form (submit)="onSubmit()" novalidate>
+        <div>
+          <label for="node-count">Specify number of children: </label>
+          <input type="number" id="node-count" [formControl]="nodeCount">
+        </div>
+        <button type="submit">Run</button>
+      </form>
+      <br>
+      <div *ngIf="values">
+        <stress-item *ngFor="let i of values" [value]="i"></stress-item>
+      </div>
+    </div>
+  </div>
+  `
+})
+export class StressTester {
+  private count: FormControl = new FormControl();
+  private nodeCount: FormControl = new FormControl();
+
+  private value: number;
+  private values = [];
+  onSubmit() {
+    this.values = [];
+    for (let i = 0; i < this.nodeCount.value; i++) {
+      this.values.push(i);
+    }
+  }
+
+  onSubmitRec() {
+    this.value = this.count.value;
   }
 }

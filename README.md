@@ -11,7 +11,7 @@ Once the extenion is installed you can test it against the demo application http
 
 ## Supported Version
 
-Currently works with applications built in [Angular 2.0.0-rc.4](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc4-2016-06-30) using the Angular Component Router version `3.0.0-beta.2`. Augury also has _limited backwards compatibility_ with the [Angular Deprecated Router](https://angular.io/docs/ts/latest/guide/router-deprecated.html), this will change once Angular 2 stabilizes.
+Currently works with applications built in [Angular 2.0.0-rc.5](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc5-2016-08-09) using the Angular Component Router version `3.0.0-beta.2`.
 
 To view the router graph inject the Router in the application root component as shown below (it must be named `router` exactly).
 ```js
@@ -30,7 +30,7 @@ If you want to contribute or need help getting started, [join us on Slack](https
 
 To develop this extension, the following environment is used:
 
-* Node v4.2.1
+* Node v4.2.6
 * NPM 3.3.10
 * TypeScript 1.7.5
 * typings 0.6.8
@@ -39,7 +39,7 @@ To develop this extension, the following environment is used:
 
 1. Clone this repository: `git clone git://github.com/rangle/augury`.
 2. Run `npm install`.
-3. Run `npm run build`.
+3. Run `npm run dev-build`.
 4. Navigate to chrome://extensions and enable Developer Mode.
 5. Choose "Load unpacked extension".
 6. In the dialog, open the directory you just cloned.

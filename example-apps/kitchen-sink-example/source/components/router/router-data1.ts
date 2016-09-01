@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RouteParams, RouteData} from '@angular/router-deprecated';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'aux-comp',
@@ -14,9 +14,19 @@ import {RouteParams, RouteData} from '@angular/router-deprecated';
 export default class RouterData1 {
   public message: string;
   public data: string;
+  private params$: any;
 
-  constructor (private routeParams: RouteParams, private routeData: RouteData) {
-    this.message = this.routeParams.get('message');
-    this.data = this.routeData.get('passedData');
+  constructor(private activatedRoute: ActivatedRoute) { }
+
+  ngOnInit() {
+    const name = 'name';
+    this.params$ = this.activatedRoute.params.subscribe(params => {
+      this.message = params[name];
+    });
   }
+
+  ngOnDestroy() {
+    this.params$.unsubscribe();
+  }
+
 }
