@@ -12,3 +12,9 @@ export const isSubject = object => {
   return isObservable(object) && object.hasOwnProperty('hasError');
 };
 
+export const isLargeArray = object => {
+  if (Array.isArray(object) === false) {
+    return false;
+  }
+  return object.length > 100;
+};

@@ -10,6 +10,7 @@ import StateValues from '../state-values/state-values';
 import {
   isObservable,
   isSubject,
+  isLargeArray,
 } from '../../utils';
 
 const defaultExpansionDepth = 1;
@@ -43,6 +44,9 @@ export default class RenderState {
       return this.expansionState[key];
     }
     if (isObservable(this.state[key])) { // do not expand observables (default)
+      return false;
+    }
+    if (isLargeArray(this.state[key])) { // same for large arrays which take a long time to render
       return false;
     }
     return this.level <= defaultExpansionDepth; // default depth
