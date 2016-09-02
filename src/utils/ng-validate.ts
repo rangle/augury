@@ -1,4 +1,4 @@
-import {browserDispatch} from '../communication/message-dispatch';
+import {messageJumpContext} from '../communication/message-dispatch';
 import {MessageFactory} from '../communication/message-factory';
 
 declare const getAllAngularTestabilities: Function;
@@ -7,7 +7,7 @@ let unsubscribe: () => void;
 
 const handler = () => {
   if (typeof getAllAngularTestabilities === 'function') {
-    browserDispatch(MessageFactory.frameworkLoaded());
+    messageJumpContext(MessageFactory.frameworkLoaded());
 
     if (unsubscribe) {
       unsubscribe();

@@ -2,7 +2,7 @@ import {
   Message,
   MessageFactory,
   MessageType,
-  browserDispatch,
+  messageJumpContext,
   browserSubscribe,
   browserSubscribeDispatch,
   browserSubscribeOnce,
@@ -66,21 +66,20 @@ browserSubscribeDispatch(message => {
   if (message.messageType === MessageType.DispatchWrapper) {
     send(message.content)
       .then(response => {
-        browserDispatch(MessageFactory.response(message, response, true));
+        messageJumpContext(MessageFactory.response(message, response, true));
       })
       .catch(error => {
-        browserDispatch(MessageFactory.response(message, error, false));
+        messageJumpContext(MessageFactory.response(message, error, false));
       });
   }
 });
 
-subscribe((message: Message<any>) => browserDispatch(message));
+subscribe((message: Message<any>) => messageJumpContext(message));
 
 send(MessageFactory.initialize())
   .then((response: {extensionId: string}) => {
     injectScript('build/ng-validate.js');
   })
   .catch(error => {
-    console.error('Augury initialization has failed', error.stack);
-    console.error(error);
+    console.error('Augury initialization has failed', error);
   });

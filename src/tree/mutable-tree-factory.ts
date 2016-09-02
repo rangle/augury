@@ -4,10 +4,10 @@ import {MutableTree} from './mutable-tree';
 import {transform} from './transformer';
 import {Node} from './node';
 
-export const transformToTree = (root, index: number, includeElements: boolean) => {
+export const transformToTree = (root, index: number, includeElements: boolean, increment: (n: number) => void) => {
   const map = new Map<string, Node>();
   try {
-    return transform(null, [index], root, map, includeElements);
+    return transform(null, [index], root, map, includeElements, increment);
   }
   finally {
     map.clear(); // release references
@@ -20,8 +20,22 @@ export const createTree = (roots: Array<Node>) => {
   return tree;
 };
 
-export const createTreeFromElements = (roots: Array<DebugElement>, includeElements: boolean) => {
+export interface ElementTransformResult {
+  /// The tree containing a root for each application on the page
+  tree: MutableTree;
+
+  /// The total number of nodes transformed
+  count: number;
+}
+
+export const createTreeFromElements =
+    (roots: Array<DebugElement>, includeElements: boolean): ElementTransformResult => {
   const tree = new MutableTree();
-  tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements));
-  return tree;
+
+  /// Keep track of the number of nodes that we process as part of this transformation
+  let count = 0;
+
+  tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements, n => count += n));
+
+  return {tree, count};
 };

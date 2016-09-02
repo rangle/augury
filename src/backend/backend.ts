@@ -6,7 +6,6 @@ import {
   MutableTree,
   Node,
   Path,
-  deserializePath,
 } from '../tree';
 
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
@@ -15,18 +14,21 @@ import {
   Message,
   MessageFactory,
   MessageType,
+  browserDispatch,
   browserSubscribe,
 } from '../communication';
 
 import {send} from './indirect-connection';
 
 import {
-  Route,
   MainRoute,
-  defineLookupOperation,
   highlight,
   parseRoutes,
 } from './utils';
+
+import {serialize} from '../utils';
+
+import {MessageQueue} from '../structures';
 
 import {SimpleOptions} from '../options';
 
@@ -34,20 +36,45 @@ declare const ng;
 declare const getAllAngularRootElements: () => Element[];
 declare const treeRenderOptions: SimpleOptions;
 
+/// For tree deltas that contain more changes than {@link deltaThreshold},
+/// we simply send the entire tree again instead of trying to patch it
+/// since it will be faster than trying to apply hundreds or thousands of
+/// changes to an existing tree.
+const deltaThreshold = 128;
+
+/// For large messages, we do not send them through the normal pipe (which
+/// is backend > content script > backround channel > frontend), we add them
+/// to this buffer and then send a {@link MessageType.Push} message that
+/// tells the frontend to read messages directly from this queue itself.
+/// This allows us to prevent very large messages containing tree data from
+/// being serialized and deserialized four times. Using this mechanism, they
+/// are serialized and deserialized a total of one times.
+const messageBuffer = new MessageQueue<Message<any>>();
+
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
 let previousTree: MutableTree;
+
+let previousCount: number;
 
 const updateTree = (roots: Array<DebugElement>) => {
   const showElements = treeRenderOptions.showElements;
 
-  const newTree = createTreeFromElements(roots, showElements);
+  const {tree, count} = createTreeFromElements(roots, showElements);
 
-  send<void, any>(
-    previousTree
-      ? MessageFactory.treeDiff(previousTree.diff(newTree))
-      : MessageFactory.completeTree(newTree));
+  if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
+    messageBuffer.enqueue(MessageFactory.completeTree(tree));
+  }
+  else {
+    messageBuffer.enqueue(MessageFactory.treeDiff(previousTree.diff(tree)));
+  }
 
-  previousTree = newTree;
+  /// Send a message through the normal channels to indicate to the frontend
+  /// that messages are waiting for it in {@link messageBuffer}
+  send<void, void>(MessageFactory.push());
+
+  previousTree = tree;
+
+  previousCount = count;
 };
 
 const update = () => {
@@ -69,60 +96,63 @@ const bind = (root: DebugElement) => {
 
 getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
-browserSubscribe(
-  (message: Message<any>) => {
-    switch (message.messageType) {
-      case MessageType.Initialize:
-        // Update our tree settings closure
-        Object.assign(treeRenderOptions, message.content);
+const messageHandler = (message: Message<any>) => {
+  switch (message.messageType) {
+    case MessageType.Initialize:
+      // Update our tree settings closure
+      Object.assign(treeRenderOptions, message.content);
 
-        // Clear out existing tree representation and start over
-        previousTree = null;
+      // Clear out existing tree representation and start over
+      previousTree = null;
 
-        // Load the complete component tree
-        subject.next(void 0);
+      // Load the complete component tree
+      subject.next(void 0);
 
-        return true;
+      return true;
 
-      case MessageType.SelectComponent:
-        return tryWrap(() => {
-          const path: Path = message.content.path;
+    case MessageType.SelectComponent:
+      return tryWrap(() => {
+        const path: Path = message.content.path;
 
-          const node = previousTree.traverse(path);
+        const node = previousTree.traverse(path);
 
-          this.consoleReference(node);
+        this.consoleReference(node);
 
-          // For component selection events, we respond with component instance
-          // properties for the selected node. If we had to serialize the
-          // properties of each node on the tree that would be a performance
-          // killer, so we only send the componentInstance values for the
-          // node that has been selected.
-          if (message.content.requestInstance) {
-            return getComponentInstance(previousTree, node);
-          }
-        });
+        // For component selection events, we respond with component instance
+        // properties for the selected node. If we had to serialize the
+        // properties of each node on the tree that would be a performance
+        // killer, so we only send the componentInstance values for the
+        // node that has been selected.
+        if (message.content.requestInstance) {
+          return getComponentInstance(previousTree, node);
+        }
+      });
 
-      case MessageType.UpdateProperty:
-        return tryWrap(() => updateProperty(previousTree,
-          message.content.path,
-          message.content.newValue));
+    case MessageType.UpdateProperty:
+      return tryWrap(() => updateProperty(previousTree,
+        message.content.path,
+        message.content.newValue));
 
-      case MessageType.EmitValue:
-        return tryWrap(() => emitValue(previousTree,
-          message.content.path,
-          message.content.value));
+    case MessageType.EmitValue:
+      return tryWrap(() => emitValue(previousTree,
+        message.content.path,
+        message.content.value));
 
-      case MessageType.RouterTree:
-        return tryWrap(() => routerTree());
+    case MessageType.RouterTree:
+      return tryWrap(() => routerTree());
 
-      case MessageType.Highlight:
-        const nodes = message.content.nodes
-          .map(id => previousTree.search(id));
+    case MessageType.Highlight:
+      if (previousTree == null) {
+        return;
+      }
+      return tryWrap(() => {
+        highlight(message.content.nodes.map(id => previousTree.lookup(id)));
+      });
+  }
+  return undefined;
+};
 
-        return tryWrap(() => highlight(nodes));
-    }
-    return undefined;
-  });
+browserSubscribe(messageHandler);
 
 // We do not store component instance properties on the node itself because
 // we do not want to have to serialize them across backend-frontend boundaries.
@@ -226,4 +256,59 @@ export const tryWrap = (fn: Function) => {
   }
 };
 
-defineLookupOperation(() => previousTree);
+/// We need to define some operations that are accessible from the global scope so that
+/// the frontend can invoke them using {@link inspectedWindow.eval}. But we try to do it
+/// in a safe way and ensure that we do not overwrite any existing properties or functions
+/// that share the same names. If we do encounter such things we throw an exception and
+/// complain about it instead of continuing with bootstrapping.
+export const defineWindowOperations = <T>(target, classImpl: T) => {
+  for (const key of Object.keys(classImpl)) {
+    if (target[key] != null) {
+      throw new Error(`A window function or object named ${key} would be overwritten`);
+    }
+  }
+
+  Object.assign(target, classImpl);
+};
+
+export class WindowOperations {
+  /// Note that the ID is a serialized path, and the first element in that path is the
+  /// index of the application that the node belongs to. So even though we have this
+  /// global lookup operation for things like 'inspect' and 'view source', it will find
+  /// the correct node even if multiple applications are instantiated on the same page.
+  nodeFromPath(id: string): Element {
+      if (previousTree == null) {
+      throw new Error('No tree exists');
+    }
+
+    const node = previousTree.lookup(id);
+    if (node == null) {
+      console.error(`Cannot find element associated with node ${id}`);
+      return null;
+    }
+    return node.nativeElement();
+  }
+
+  /// Post a response to a message from the frontend and dispatch it through normal channels
+  response<T>(response: Message<T>) {
+    browserDispatch(response);
+  }
+
+  /// Run the message handler and return the result immediately instead of posting a response
+  handleImmediate<T>(message: Message<T>) {
+    const result = messageHandler(message);
+    if (result) {
+      return serialize(result);
+    }
+    return null;
+  }
+
+  /// Read all messages in the buffer and remove them
+  readMessageQueue(): Array<Message<any>> {
+    return messageBuffer.dequeue();
+  }
+}
+
+const windowOperationsImpl = new WindowOperations();
+
+defineWindowOperations(window || global || this, {inspectedApplication: windowOperationsImpl});

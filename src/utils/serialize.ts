@@ -18,6 +18,9 @@ class Operation {
 
   /// Nodes that have been visited and recorded (-> index)
   visits = new Map<any, number>();
+
+  /// Recursion operations that we want to execute in a shallow call stack
+  tails = new Array<() => void>();
 }
 
 const serializer = object => {
@@ -25,6 +28,17 @@ const serializer = object => {
 
   /// Start the mapping operation at the root.
   map(operation, object);
+
+  /// Avoid recursive operations by adding functions to tails
+  while (operation.tails.length > 0) {
+    const run = operation.tails.length;
+
+    for (let index = 0; index < run; ++index) {
+      operation.tails[index]();
+    }
+
+    operation.tails.splice(0, run);
+  }
 
   /// Return a string representation of the recreator function. The result must
   /// be parseable JavaScript code that can be provided to `new Function()' to
@@ -102,34 +116,38 @@ function map(operation: Operation, value) {
 
           switch (objectType) {
             case '[object Array]':
-              operation.objref[index] = `[${value.map((i: number, key) => {
-                const ref = map(operation, i);
+              operation.tails.push(() => {
+                operation.objref[index] = `[${value.map((i: number, key) => {
+                  const ref = map(operation, i);
 
-                if (ref instanceof Reference) {
-                  ref.source = index;
-                  ref.key = key;
-                  operation.arrays.push(ref);
-                  return 'null';
-                }
-                else {
-                  return ref;
-                }
-              })}]`;
+                  if (ref instanceof Reference) {
+                    ref.source = index;
+                    ref.key = key;
+                    operation.arrays.push(ref);
+                    return 'null';
+                  }
+                  else {
+                    return ref;
+                  }
+                })}]`;
+              });
               break;
             default:
-              operation.objref[index] = `{${Object.keys(value).map(key => {
-                const mapped = map(operation, value[key]);
+              operation.tails.push(() => {
+                operation.objref[index] = `{${Object.keys(value).map(key => {
+                  const mapped = map(operation, value[key]);
 
-                if (mapped instanceof Reference) {
-                  mapped.source = index;
-                  mapped.key = key;
-                  operation.hashes.push(mapped);
-                  return mapped;
-                }
+                  if (mapped instanceof Reference) {
+                    mapped.source = index;
+                    mapped.key = key;
+                    operation.hashes.push(mapped);
+                    return mapped;
+                  }
 
-                return `${JSON.stringify(key)}: ${mapped}`;
-              }).filter(
-                v => v instanceof Reference === false).join(',')}}`;
+                  return `${JSON.stringify(key)}: ${mapped}`;
+                }).filter(
+                  v => v instanceof Reference === false).join(',')}}`;
+              });
               break;
           }
 

@@ -2,14 +2,24 @@ export enum MessageType {
   // Begin the process of loading the extension
   Initialize,
 
+  /// Angular framework has finished loading
+  FrameworkLoaded,
+
   /// Response to a previous message
   Response,
 
-  /// Post a message to the browser event queue so that it can be unwrapped and posted to the extension
+  /// Post a message to the browser event queue so that it can be unwrapped and
+  /// posted to the extension from the content-script. There is no pipe that is
+  /// direct from the backend to the frontend, so this allows us to bounce the
+  /// message through {@link window.postMessage} so that the content script can
+  /// receive it and send it through the multi-hop port.
   DispatchWrapper,
 
-  /// Angular framework has finished loading
-  FrameworkLoaded,
+  /// This is an unusual message -- it contains no data itself, it just tells the
+  /// frontend that there are messages waiting for it that it can read direct from
+  /// the message queue instead of passing the messages through the four-hop pipe
+  /// of backend -> content script -> channel -> frontend.
+  Push,
 
   /// Transmit a complete component tree
   CompleteTree,

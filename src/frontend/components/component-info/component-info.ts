@@ -122,26 +122,28 @@ export class ComponentInfo {
 
   private viewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
-      var root = ng.probe(window.pathLookupNode('${this.node.id}'));
+      var root = ng.probe(inspectedApplication.nodeFromPath('${this.node.id}'));
       if (root) {
-        inspect(root.componentInstance.constructor);
+        if (root.componentInstance) {
+          inspect(root.componentInstance.constructor);
+        }
+        else {
+          throw new Error('This component has no instance and therefore no constructor');
+        }
       }`);
   }
 
-  private isJson(data: string): boolean {
+  private evaluate(data: string) {
     try {
-      JSON.parse(data);
-      return true;
+      return (new Function(`return ${data}`))();
     }
     catch (e) {
-      return false;
+      return data;
     }
   }
 
   private emitValue(outputProperty: string, data) {
-    if (this.isJson(data)) {
-      data = JSON.parse(data);
-    }
+    data = this.evaluate(data);
 
     const update = (state: EmitState) => this.emitState.set(outputProperty, state);
 

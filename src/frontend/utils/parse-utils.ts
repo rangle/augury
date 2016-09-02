@@ -20,10 +20,14 @@ export class ParseUtils {
   }
 
   getDependencyLink (tree: MutableTree, nodeId: string, dependency: string) {
+    if (tree == null) {
+      return null;
+    }
+
     const nodeIds = this.getParentNodeIds(nodeId);
 
     for (const id of nodeIds) {
-      const matchingNode = tree.search(id);
+      const matchingNode = tree.lookup(id);
       if (matchingNode &&
           matchingNode.injectors.indexOf(dependency) >= 0) {
         return matchingNode;
@@ -34,11 +38,15 @@ export class ParseUtils {
   }
 
   getParentHierarchy(tree: MutableTree, node: Node): Array<Node> {
+    if (tree == null) {
+      return [];
+    }
+
     const nodeIds = this.getParentNodeIds(node.id);
 
     const hierarchy = nodeIds.reduce(
       (array, id) => {
-        const matchingNode = tree.search(id);
+        const matchingNode = tree.lookup(id);
         if (matchingNode) {
           array.push(matchingNode);
         }

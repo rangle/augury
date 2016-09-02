@@ -25,12 +25,6 @@ export class UserActions {
     private viewState: ViewState
   ) {}
 
-  selectComponent(node: Node, requestInstance: boolean = true): Promise<any> {
-    this.viewState.select(node);
-
-    return this.connection.send(MessageFactory.selectComponent(node, requestInstance));
-  }
-
   /// Toggle the expansion state of a node
   toggle(node: Node) {
     switch (this.viewState.expandState(node)) {

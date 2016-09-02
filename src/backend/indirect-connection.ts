@@ -1,14 +1,14 @@
 import {
   Message,
   MessageFactory,
-  browserDispatch,
+  messageJumpContext,
   browserSubscribeResponse,
 } from '../communication';
 
 export const send = <Response, T>(message: Message<T>): Promise<Response> => {
   return new Promise((resolve, reject) => {
     browserSubscribeResponse(message.messageId, response => resolve(response));
-    browserDispatch(MessageFactory.dispatchWrapper(message));
+    messageJumpContext(MessageFactory.dispatchWrapper(message));
   });
 };
 
