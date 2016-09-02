@@ -40,7 +40,7 @@ declare const treeRenderOptions: SimpleOptions;
 /// we simply send the entire tree again instead of trying to patch it
 /// since it will be faster than trying to apply hundreds or thousands of
 /// changes to an existing tree.
-const deltaThreshold = 128;
+const deltaThreshold = 512;
 
 /// For large messages, we do not send them through the normal pipe (which
 /// is backend > content script > backround channel > frontend), we add them
