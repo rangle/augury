@@ -241,11 +241,8 @@ const getMetadata = (element: Source): ComponentMetadata => {
 };
 
 const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
-  if (metadata == null || metadata['directives'] == null) {
-    return [];
-  }
-
-  return metadata['directives'].map(d => functionName(d as any));
+  /* TODO: Figure out which directives are invoked by checking selectors against the template. */
+  return [];
 };
 
 const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
