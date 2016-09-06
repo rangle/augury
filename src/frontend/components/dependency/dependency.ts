@@ -19,7 +19,7 @@ import {Stack} from '../../../structures';
   selector: 'bt-dependency',
   template: require('./dependency.html'),
 })
-export default class Dependency {
+export class Dependency {
   @Input() selectedNode: Node;
   @Input() tree: MutableTree;
 

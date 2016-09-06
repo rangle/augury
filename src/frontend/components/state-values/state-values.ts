@@ -1,27 +1,19 @@
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
-  Inject,
   Input,
-  SimpleChanges,
 } from '@angular/core';
 
-import {DomSanitizationService} from '@angular/platform-browser';
-
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {Highlightable} from '../highlightable';
-import {PropertyEditor} from '../property-editor/property-editor';
+import {Highlightable} from '../../utils/highlightable';
 import {Path} from '../../../tree';
-import ParseData from '../../utils/parse-data';
 
 @Component({
   selector: 'bt-state-values',
   template: require('./state-values.html'),
-  directives: [PropertyEditor],
   styles: [require('to-string!./state-values.css')],
 })
-export default class StateValues extends Highlightable {
+export class StateValues extends Highlightable {
   @Input() id: string | number;
   @Input() path: Path;
   @Input() value;
@@ -31,8 +23,7 @@ export default class StateValues extends Highlightable {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private userActions: UserActions,
-    private domSanitizationService: DomSanitizationService
+    private userActions: UserActions
   ) {
     super(changeDetector, changes => this.hasChanged(changes));
   }

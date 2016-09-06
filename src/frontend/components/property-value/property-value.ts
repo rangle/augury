@@ -1,18 +1,17 @@
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Inject,
   Input,
 } from '@angular/core';
 
-import {Highlightable} from '../highlightable';
+import {Highlightable} from '../../utils/highlightable';
 
 @Component({
   selector: 'bt-property-value',
   template: require('./property-value.html'),
 })
-export default class PropertyValue extends Highlightable {
+export class PropertyValue extends Highlightable {
   @Input() private key: string;
   @Input() private value: string;
 

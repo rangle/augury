@@ -1,27 +1,19 @@
 import {
   Component,
-  ElementRef,
-  Inject,
   EventEmitter,
-  OnChanges,
   Input,
+  OnChanges,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentLoadState} from '../../state';
-import {Spinner} from '../spinner/spinner';
 import {Property} from '../../../backend/utils/description';
-import Accordion from '../accordion/accordion';
-import ParseData from '../../utils/parse-data';
-import RenderState from '../render-state/render-state';
-import Dependency from '../dependency/dependency';
-import PropertyValue from '../property-value/property-value';
+
 import {
+  MutableTree,
   Node,
   Path,
-  MutableTree,
   deserializePath,
 } from '../../../tree';
 
@@ -35,13 +27,6 @@ export enum EmitState {
   selector: 'bt-component-info',
   template: require('./component-info.html'),
   styles: [require('to-string!./component-info.css')],
-  directives: [
-    RenderState,
-    Accordion,
-    Dependency,
-    PropertyValue,
-    Spinner,
-  ]
 })
 export class ComponentInfo {
   @Input() node: Node;
@@ -60,7 +45,6 @@ export class ComponentInfo {
   private emitState = new Map<string, EmitState>();
 
   constructor(
-    private elementRef: ElementRef,
     private userActions: UserActions
   ) {}
 
@@ -162,4 +146,3 @@ export class ComponentInfo {
       });
   }
 }
-

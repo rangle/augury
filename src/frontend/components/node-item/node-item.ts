@@ -4,13 +4,12 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  NgZone,
   Input,
   Output,
 } from '@angular/core';
 
-import {UserActions} from '../../actions/user-actions/user-actions';
 import {Node} from '../../../tree/node';
+import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
   ExpandState,
@@ -26,11 +25,6 @@ const defaultExpansionDepth = 3;
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
-  directives: [
-    NodeAttributes,
-    NodeOpenTag,
-    NodeItem,
-  ],
   styles: [require('to-string!./node-item.css')],
 })
 export class NodeItem {

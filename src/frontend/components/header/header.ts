@@ -1,12 +1,10 @@
 import {
   Component,
-  NgZone,
-  EventEmitter,
-  Output,
   ElementRef,
+  EventEmitter,
   Input,
-  Query,
-  ViewChild
+  Output,
+  ViewChild,
 } from '@angular/core';
 
 import {Search} from '../search/search';
@@ -30,9 +28,6 @@ type Route = any; // TODO(cbond): use real Route type
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   },
-  directives: [
-    Search,
-  ]
 })
 export class Header {
   @ViewChild('menuElement') private menuElement: ElementRef;

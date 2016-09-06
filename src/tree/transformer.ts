@@ -3,10 +3,10 @@ import {cloneDeep} from 'lodash';
 import {
   ChangeDetectionStrategy,
   ComponentMetadata,
-  InputMetadata,
-  OutputMetadata,
   DebugElement,
   DebugNode,
+  InputMetadata,
+  OutputMetadata,
 } from '@angular/core';
 
 import {
@@ -241,11 +241,11 @@ const getMetadata = (element: Source): ComponentMetadata => {
 };
 
 const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
-  if (metadata == null || metadata.directives == null) {
+  if (metadata == null || metadata['directives'] == null) {
     return [];
   }
 
-  return metadata.directives.map(d => functionName(d as any));
+  return metadata['directives'].map(d => functionName(d as any));
 };
 
 const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
