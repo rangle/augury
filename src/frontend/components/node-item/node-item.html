@@ -21,6 +21,7 @@
   <div class="border-box pl4" *ngIf="expanded && hasChildren">
     <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
       [node]="node"
+      [level]="level + 1"
       (selectionChange)="selectionChange.emit($event)"
       (inspectElement)="inspectElement.emit($event)">
     </bt-node-item>

@@ -20,6 +20,9 @@ import {
 import {NodeAttributes} from './node-attributes';
 import {NodeOpenTag} from './node-open-tag';
 
+/// The number of levels of tree nodes that we expand by default
+const defaultExpansionDepth = 3;
+
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
@@ -32,6 +35,9 @@ import {NodeOpenTag} from './node-open-tag';
 })
 export class NodeItem {
   @Input() node;
+
+  // The depth of this node in the tree
+  @Input() level: number;
 
   /// Emitted when this node is selected
   @Output() private selectionChange = new EventEmitter<Node>();
@@ -49,7 +55,11 @@ export class NodeItem {
   }
 
   private get expanded(): boolean {
-    return this.viewState.expandState(this.node) === ExpandState.Expanded;
+    const state = this.viewState.expandState(this.node);
+    if (state == null) { // user has not expanded or collapsed explicitly
+      return this.level < defaultExpansionDepth;
+    }
+    return state === ExpandState.Expanded;
   }
 
   private get hasChildren(): boolean {
