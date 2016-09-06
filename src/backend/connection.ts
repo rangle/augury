@@ -33,7 +33,9 @@ export const subscribe = (handler: MessageHandler) => {
 };
 
 export const send = <T>(message: Message<T>) => {
-  switch (message.messageType) {
+  if (message.messageType === MessageType.CompleteTree ||
+      message.messageType === MessageType.TreeDif ||
+      message.messageType === MessageType.DispatchWrapper) {
     /// These types of messages should never be sent through this mechanism. A DispatchWrapper
     /// message is for communication between content-script and the backend and has no business
     /// being sent to the frontend. Similarly, a message containing tree data should be sent
@@ -42,13 +44,8 @@ export const send = <T>(message: Message<T>) => {
     /// circuitous route and will be serialized and deserialized repeatedly. Therefore large
     /// messages must be sent using the {@link MessageBuffer} mechanism in order to avoid major
     /// performance bottlenecks and UI latency.
-    case MessageType.CompleteTree:
-    case MessageType.TreeDiff:
-    case MessageType.DispatchWrapper:
-      const description = MessageType[message.messageType];
-      throw new Error(`A ${description} message should never be posted through the communication port`);
-    default:
-      break;
+    const description = MessageType[message.messageType];
+    throw new Error(`A ${description} message should never be posted through the communication port`);
   }
 
   return new Promise((resolve, reject) => {
