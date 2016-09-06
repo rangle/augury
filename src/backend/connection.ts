@@ -34,7 +34,7 @@ export const subscribe = (handler: MessageHandler) => {
 
 export const send = <T>(message: Message<T>) => {
   if (message.messageType === MessageType.CompleteTree ||
-      message.messageType === MessageType.TreeDif ||
+      message.messageType === MessageType.TreeDiff ||
       message.messageType === MessageType.DispatchWrapper) {
     /// These types of messages should never be sent through this mechanism. A DispatchWrapper
     /// message is for communication between content-script and the backend and has no business
