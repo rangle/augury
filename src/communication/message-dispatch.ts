@@ -76,41 +76,43 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
 export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
-export const browserDispatch = <T>(message: Message<T>) => {
+export const messageJumpContext = <T>(message: Message<T>) => {
   window.postMessage(message, '*');
+};
+
+export const browserDispatch = <T>(message: Message<T>) => {
+  if (checkSource(message) === false) {
+    return;
+  }
+
+  if (message.messageType === MessageType.DispatchWrapper) {
+    dispatchers.forEach(handler => handler(message));
+  }
+  else if (message.messageType !== MessageType.Response) {
+    let dispatchResult;
+    subscriptions.forEach(handler => {
+      if (dispatchResult == null) {
+        dispatchResult = handler(message);
+      }
+      else {
+        handler(message);
+      }
+    });
+
+    if (dispatchResult !== undefined) {
+      const response =
+        MessageFactory.dispatchWrapper(
+          MessageFactory.response(message, dispatchResult, false));
+      messageJumpContext(response);
+    }
+  }
+  else {
+    subscriptions.forEach(handler => handler(message));
+  }
 };
 
 window.addEventListener('message',
   (event: MessageEvent) => {
-    const msg = event.data;
-
-    if (checkSource(msg) === false) {
-      return;
-    }
-
-    if (msg.messageType === MessageType.DispatchWrapper) {
-      dispatchers.forEach(handler => handler(msg));
-    }
-    else if (msg.messageType !== MessageType.Response) {
-      let dispatchResult;
-      subscriptions.forEach(handler => {
-        if (dispatchResult == null) {
-          dispatchResult = handler(msg);
-        }
-        else {
-          handler(msg);
-        }
-      });
-
-      if (dispatchResult !== undefined) {
-        const response =
-          MessageFactory.dispatchWrapper(
-            MessageFactory.response(msg, dispatchResult, true));
-        browserDispatch(response);
-      }
-    }
-    else {
-      subscriptions.forEach(handler => handler(msg));
-    }
+    browserDispatch(event.data);
   });
 

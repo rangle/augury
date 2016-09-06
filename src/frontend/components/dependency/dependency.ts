@@ -13,7 +13,7 @@ import {
   Node,
 } from '../../../tree';
 
-import {Stack} from '../../utils';
+import {Stack} from '../../../structures';
 
 @Component({
   selector: 'bt-dependency',

@@ -30,8 +30,13 @@ type Cache = WeakMap<any, any>;
 /// in order for our tree comparisons to work. If we just create a reference to
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
-export const transform = (parentNode: Node, path: Path, element: Source,
-    cache: Cache, html: boolean): Node => {
+export const transform = (
+    parentNode: Node,
+    path: Path,
+    element: Source,
+    cache: Cache,
+    html: boolean,
+    count: (n: number) => void): Node => {
   if (element == null) {
     return null;
   }
@@ -141,7 +146,7 @@ export const transform = (parentNode: Node, path: Path, element: Source,
     /// Show HTML elements or only components?
     if (html) {
       element.children.forEach((c, index) =>
-        node.children.push(transform(node, path.concat([index]), c, cache, html)));
+        node.children.push(transform(node, path.concat([index]), c, cache, html, count)));
     }
     else {
       let subindex = 0;
@@ -150,10 +155,12 @@ export const transform = (parentNode: Node, path: Path, element: Source,
         const components = componentChildren(outerChild);
 
         components.forEach(component => {
-          node.children.push(transform(node, path.concat([subindex++]), component, cache, html));
+          node.children.push(transform(node, path.concat([subindex++]), component, cache, html, count));
         });
       });
     }
+
+    count(1 + node.children.length);
 
     return node;
   });

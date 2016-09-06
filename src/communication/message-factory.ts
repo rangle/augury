@@ -48,19 +48,25 @@ export abstract class MessageFactory {
     });
   }
 
+  static push(): Message<void> {
+    return create({
+      messageType: MessageType.Push,
+    });
+  }
+
   static completeTree(tree: MutableTree): Message<MutableTree> {
     return create({
       messageType: MessageType.CompleteTree,
-      content: serializeBinary(tree.roots),
-      serialize: Serialize.Binary,
+      content: tree.roots,
+      serialize: Serialize.None,
     });
   }
 
   static treeDiff(changes: Change[]): Message<Change[]> {
     return create({
       messageType: MessageType.TreeDiff,
-      content: serializeBinary(changes),
-      serialize: Serialize.Binary,
+      content: changes,
+      serialize: Serialize.None,
     });
   }
 

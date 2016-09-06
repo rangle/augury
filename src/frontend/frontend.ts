@@ -1,8 +1,8 @@
 import {
   ChangeDetectorRef,
   Component,
-  NgZone,
   NgModule,
+  NgZone,
   enableProdMode,
 } from '@angular/core';
 
@@ -10,13 +10,12 @@ import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule} from '@angular/forms';
 
-import {Subscription} from '../communication';
-
 import {
   Message,
   MessageFactory,
   MessageType,
   MessageResponse,
+  Subscription,
 } from '../communication';
 
 import {
@@ -30,10 +29,7 @@ import {
 
 import {createTree} from '../tree/mutable-tree-factory';
 
-import {deserialize} from '../utils';
-
 import {
-  ComponentLoadState,
   ComponentInstanceState,
   ViewState,
   Options,
@@ -41,7 +37,13 @@ import {
   Theme,
 } from './state';
 
-import {Connection} from './channel/connection';
+import {
+  Connection,
+  DirectConnection,
+} from './channel';
+
+import {deserialize} from '../utils';
+
 import {UserActions} from './actions/user-actions/user-actions';
 import {TreeView} from './components/tree-view/tree-view';
 import {InfoPanel} from './components/info-panel/info-panel';
@@ -63,7 +65,7 @@ require('!style!css!postcss!../styles/app.css');
 class App {
   private Tab = Tab;
   private Theme = Theme;
-  private theme: Theme;
+
   private tree: MutableTree;
   private routerTree: Array<Route>;
   private routerException: string;
@@ -75,13 +77,13 @@ class App {
   private selectedTab: Tab = Tab.ComponentTree;
 
   constructor(
-    private changeDetector: ChangeDetectorRef,
     private connection: Connection,
-    private ngZone: NgZone,
+    private directConnection: DirectConnection,
     private options: Options,
-    private parseUtils: ParseUtils,
     private userActions: UserActions,
-    private viewState: ViewState
+    private viewState: ViewState,
+    private changeDetector: ChangeDetectorRef,
+    private zone: NgZone
   ) {
     this.componentState = new ComponentInstanceState(changeDetector);
 
@@ -121,9 +123,6 @@ class App {
     const options = this.options.simpleOptions();
 
     this.connection.send(MessageFactory.initialize(options))
-      .then(() => {
-        this.changeDetector.detectChanges();
-      })
       .catch(error => {
         this.exception = error.stack;
         this.changeDetector.detectChanges();
@@ -144,6 +143,10 @@ class App {
     };
 
     switch (msg.messageType) {
+      case MessageType.Push:
+        this.directConnection.readQueue(
+          (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
+        break;
       case MessageType.CompleteTree:
         this.createTree(msg.content);
         respond();
@@ -170,8 +173,6 @@ class App {
     this.tree = createTree(roots);
 
     this.restoreSelection();
-
-    this.changeDetector.detectChanges();
   }
 
   private updateTree(changes) {
@@ -185,41 +186,49 @@ class App {
     this.viewState.nodesChanged(changedIdentifiers);
 
     this.restoreSelection();
-
-    this.changeDetector.detectChanges();
   }
 
   private onReceiveMessage(msg: Message<any>,
       sendResponse: (response: MessageResponse<any>) => void) {
-    try {
-      this.processMessage(msg, sendResponse);
-    }
-    catch (error) {
-      this.exception = error.stack;
-    }
-    finally {
-      this.changeDetector.detectChanges();
-    }
+    const process = () => {
+      try {
+        this.processMessage(msg, sendResponse);
+      }
+      catch (error) {
+        this.exception = error.stack;
+        throw error;
+      }
+    };
+
+    this.zone.run(() => process());
   }
 
   private onComponentSelectionChange(node: Node, beforeLoad?: () => void) {
     this.selectedNode = node;
 
     if (node == null) {
+      this.viewState.unselect();
       return;
     }
 
-    const promise =
-      this.userActions.selectComponent(node, node.isComponent)
+    this.viewState.select(node);
+
+    if (node.isComponent) {
+      const m = MessageFactory.selectComponent(node, node.isComponent);
+
+      const promise = this.directConnection.handleImmediate(m)
         .then(response => {
           if (typeof beforeLoad === 'function') {
             beforeLoad();
           }
-
           return response;
         });
 
-    this.componentState.wait(node, promise);
+      this.componentState.wait(node, promise);
+    }
+    else {
+      this.componentState.done(node, null);
+    }
   }
 
   private onRouteSelectionChange(route: Route) {
@@ -227,8 +236,7 @@ class App {
   }
 
   private onInspectElement(node: Node) {
-    chrome.devtools.inspectedWindow.eval(
-      `inspect(window.pathLookupNode('${node.id}'))`);
+    chrome.devtools.inspectedWindow.eval(`inspect(inspectedApplication.nodeFromPath('${node.id}'))`);
   }
 
   private onSelectedTabChange(tab: Tab) {
@@ -240,12 +248,14 @@ class App {
       case Tab.RouterTree:
         this.userActions.renderRouterTree()
           .then(response => {
-            this.routerTree = response;
-            this.changeDetector.detectChanges();
+            this.zone.run(() => {
+              this.routerTree = response;
+            });
           })
           .catch(error => {
-            this.routerException = error.stack;
-            this.changeDetector.detectChanges();
+            this.zone.run(() => {
+              this.routerException = error.stack;
+            });
           });
         break;
       default:
@@ -290,6 +300,7 @@ class App {
   imports: [BrowserModule, FormsModule],
   providers: [
     Connection,
+    DirectConnection,
     UserActions,
     ViewState,
     Options,

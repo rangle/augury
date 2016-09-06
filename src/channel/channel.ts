@@ -33,37 +33,37 @@ const drainQueue = (port: chrome.runtime.Port, buffer: Array<any>) => {
 };
 
 chrome.runtime.onMessage.addListener(
- (message, sender, sendResponse) => {
+  (message, sender, sendResponse) => {
     if (message.messageType === MessageType.Initialize) {
-      sendResponse({ // note that this is separate from our message response system
-        extensionId: chrome.runtime.id
-      });
-   }
-
-  if (sender.tab) {
-    let sent = false;
-
-    const connection = connections.get(sender.tab.id);
-    if (connection) {
-      try {
-        connection.postMessage(message);
-        sent = true;
-      }
-      catch (err) {}
+        sendResponse({ // note that this is separate from our message response system
+          extensionId: chrome.runtime.id
+        });
     }
 
-    if (sent === false) {
-      let queue = messageBuffer.get(sender.tab.id);
-      if (queue == null) {
-        queue = new Array<any>();
-        messageBuffer.set(sender.tab.id, queue);
+    if (sender.tab) {
+      let sent = false;
+
+      const connection = connections.get(sender.tab.id);
+      if (connection) {
+        try {
+          connection.postMessage(message);
+          sent = true;
+        }
+        catch (err) {}
       }
 
-      queue.push(message);
+      if (sent === false) {
+        let queue = messageBuffer.get(sender.tab.id);
+        if (queue == null) {
+          queue = new Array<any>();
+          messageBuffer.set(sender.tab.id, queue);
+        }
+
+        queue.push(message);
+      }
     }
-  }
-  return true;
-});
+    return true;
+  });
 
 chrome.runtime.onConnect.addListener(port => {
   const listener = (message, sender) => {
@@ -87,5 +87,4 @@ chrome.runtime.onConnect.addListener(port => {
       }
     });
   });
-
 });

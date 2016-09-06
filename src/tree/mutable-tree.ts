@@ -21,14 +21,13 @@ export class MutableTree {
     apply(this, changes);
   }
 
-  /// Search for a node in the tree based on its path. An ID is a path that
-  /// has been serialized into a string. So we deserialize the path and then
-  /// traverse the tree using that information so that the search is much
-  /// faster because we do not have to compare every node in the tree. This
-  /// is not really a search. We just deserialize the ID, which is a path,
-  /// and then follow that path to the node that we need. There is no
-  /// searching involved, so this is a very fast operation.
-  search(id: string) {
+  /// Look up a node in the tree based on its ID. Recall that an ID is a
+  /// tree traversal path that has been serialized into a string. So we
+  /// deserialize the path and then traverse the tree using that information
+  /// instead of doing an actual search, so that the look up is much faster
+  /// because we do not have to do any comparisons. There is no searching
+  /// involved, so this is a very fast operation.
+  lookup(id: string) {
     return this.traverse(deserializePath(id));
   }
 
