@@ -34,8 +34,6 @@ const drainQueue = (port: chrome.runtime.Port, buffer: Array<any>) => {
 
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
-    console.log('got msg from backend', message);
-
     if (message.messageType === MessageType.Initialize) {
         sendResponse({ // note that this is separate from our message response system
           extensionId: chrome.runtime.id
@@ -69,8 +67,6 @@ chrome.runtime.onMessage.addListener(
 
 chrome.runtime.onConnect.addListener(port => {
   const listener = (message, sender) => {
-    console.log('got msg from frontend', message);
-
     if (connections.has(message.tabId) === false) {
       connections.set(message.tabId, port);
     }
