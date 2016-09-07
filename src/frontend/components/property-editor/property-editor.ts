@@ -10,7 +10,7 @@ import {
 
 const keycode = require('keycode');
 
-import {Highlightable} from '../highlightable';
+import {Highlightable} from '../../utils/highlightable';
 import {highlightTime} from '../../../utils/configuration';
 
 /// The types of values that this editor can emit to its owner
@@ -189,4 +189,3 @@ export class PropertyEditor {
     }
   }
 }
-

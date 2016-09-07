@@ -1,12 +1,11 @@
 import {
   Component,
   ElementRef,
-  Input,
   EventEmitter,
+  Input,
   Output,
 } from '@angular/core';
 
-import {NodeItem} from '../node-item/node-item';
 import {
   MutableTree,
   Node,
@@ -17,7 +16,6 @@ import {
   template: require('./component-tree.html'),
   styles: [require('to-string!./component-tree.css')],
   host: {'class': 'flex overflow-scroll'},
-  directives: [NodeItem]
 })
 export class ComponentTree {
   @Input() tree: MutableTree;

@@ -5,8 +5,6 @@ import {
   Input,
 } from '@angular/core';
 
-import StateValues from '../state-values/state-values';
-
 import {
   isObservable,
   isSubject,
@@ -18,12 +16,8 @@ const defaultExpansionDepth = 1;
 @Component({
   selector: 'bt-render-state',
   template: require('./render-state.html'),
-  directives: [
-    RenderState,
-    StateValues,
-  ],
 })
-export default class RenderState {
+export class RenderState {
   @Input() id: string;
   @Input() path: Array<string | number>;
   @Input() level: number;

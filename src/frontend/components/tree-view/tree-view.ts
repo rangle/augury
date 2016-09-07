@@ -1,13 +1,18 @@
-import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 
-import {NodeItem} from '../node-item/node-item';
-import {ComponentTree} from '../component-tree/component-tree';
-import {MutableTree, Node} from '../../../tree';
+import {
+  MutableTree,
+  Node,
+} from '../../../tree';
 
 @Component({
   selector: 'bt-tree-view',
   template: require('./tree-view.html'),
-  directives: [NodeItem, ComponentTree]
 })
 export class TreeView {
   @Input() tree: MutableTree;
