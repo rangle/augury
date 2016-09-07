@@ -6,19 +6,28 @@ import {
   enableProdMode,
 } from '@angular/core';
 
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {FormsModule} from '@angular/forms';
+import {
+  Connection,
+  DirectConnection,
+} from './channel';
 
 import {
   ApplicationError,
   ApplicationErrorType,
   Message,
   MessageFactory,
-  MessageType,
   MessageResponse,
+  MessageType,
   Subscription,
 } from '../communication';
+
+import {
+  ComponentInstanceState,
+  Options,
+  Tab,
+  Theme,
+  ViewState,
+} from './state';
 
 import {
   Change,
@@ -30,38 +39,45 @@ import {
 } from '../tree';
 
 import {createTree} from '../tree/mutable-tree-factory';
-
-import {
-  ComponentInstanceState,
-  ViewState,
-  Options,
-  Tab,
-  Theme,
-} from './state';
-
-import {
-  Connection,
-  DirectConnection,
-} from './channel';
-
 import {deserialize} from '../utils';
 
+import {BrowserModule} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+
 import {UserActions} from './actions/user-actions/user-actions';
-import {TreeView} from './components/tree-view/tree-view';
 import {RenderError} from './components/render-error/render-error';
 import {InfoPanel} from './components/info-panel/info-panel';
-import {AppTrees} from './components/app-trees/app-trees';
-import {Header} from './components/header/header';
-import {SplitPane} from './components/split-pane/split-pane';
 import {ParseUtils} from './utils/parse-utils';
 import {Route} from '../backend/utils';
+import {Accordion} from './components/accordion/accordion';
+import {AppTrees} from './components/app-trees/app-trees';
+import {ComponentInfo} from './components/component-info/component-info';
+import {ComponentTree} from './components/component-tree/component-tree';
+import {Dependency} from './components/dependency/dependency';
+import {Header} from './components/header/header';
+import {InjectorTree} from './components/injector-tree/injector-tree';
+import {NodeAttributes} from './components/node-item/node-attributes';
+import {NodeItem} from './components/node-item/node-item';
+import {NodeOpenTag} from './components/node-item/node-open-tag';
+import {PropertyEditor} from './components/property-editor/property-editor';
+import {PropertyValue} from './components/property-value/property-value';
+import {RenderState} from './components/render-state/render-state';
+import {RouterInfo} from './components/router-info/router-info';
+import {RouterTree} from './components/router-tree/router-tree';
+import {Search} from './components/search/search';
+import {Spinner} from './components/spinner/spinner';
+import {SplitPane} from './components/split-pane/split-pane';
+import {StateValues} from './components/state-values/state-values';
+import {TabMenu} from './components/tab-menu/tab-menu';
+import {TreeView} from './components/tree-view/tree-view';
 
 require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
   providers: [ParseUtils],
-  directives: [RenderError, AppTrees, Header, InfoPanel, SplitPane, TreeView],
   template: require('./frontend.html'),
   styles: [require('to-string!./frontend.css')],
 })
@@ -69,22 +85,23 @@ class App {
   private Tab = Tab;
   private Theme = Theme;
 
-  private tree: MutableTree;
-  private routerTree: Array<Route>;
   private componentState: ComponentInstanceState;
-  private subscription: Subscription;
+  private routerTree: Array<Route>;
   private selectedNode: Node;
   private selectedRoute: Route;
   private selectedTab: Tab = Tab.ComponentTree;
+  private subscription: Subscription;
+  private theme: Theme;
+  private tree: MutableTree;
   private error: ApplicationError;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private connection: Connection,
     private directConnection: DirectConnection,
     private options: Options,
     private userActions: UserActions,
     private viewState: ViewState,
-    private changeDetector: ChangeDetectorRef,
     private zone: NgZone
   ) {
     this.componentState = new ComponentInstanceState(changeDetector);
@@ -309,15 +326,46 @@ class App {
   }
 }
 
+const declarations = [
+  Accordion,
+  App,
+  AppTrees,
+  ComponentInfo,
+  ComponentTree,
+  Dependency,
+  Header,
+  InfoPanel,
+  InjectorTree,
+  NodeAttributes,
+  NodeItem,
+  NodeOpenTag,
+  PropertyEditor,
+  PropertyValue,
+  RenderState,
+  RouterInfo,
+  RouterTree,
+  Search,
+  Spinner,
+  SplitPane,
+  StateValues,
+  TabMenu,
+  TreeView,
+  RenderError,
+];
+
 @NgModule({
-  declarations: [App],
-  imports: [BrowserModule, FormsModule],
+  declarations,
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+  ],
   providers: [
     Connection,
     DirectConnection,
+    Options,
     UserActions,
     ViewState,
-    Options,
   ],
   bootstrap: [App]
 })

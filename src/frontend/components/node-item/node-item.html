@@ -1,17 +1,17 @@
 <div>
   <div class="node-item pl3 rounded border-box"
       [ngClass]="{'node-item-selected': selected, changed: viewState.nodeIsChanged(node)}"
-      (mouseout)="stop($event, onMouseOut)"
-      (mouseover)="stop($event, onMouseOver)"
-      (dblclick)="stop($event, onDblClick)"
-      (click)="stop($event, onClick)">
+      (mouseout)="onMouseOut($event)"
+      (mouseover)="onMouseOver($event)"
+      (dblclick)="onDblClick($event)"
+      (click)="onClick($event)">
     <div
       [ngClass]="{
         expander: true,
         rotate90: !expanded,
         transparent: node.children == null || node.children.length === 0
       }"
-      (click)="expandTree($event)">
+      (click)="onToggleExpand($event)">
     </div>
     <div class="inline">
       <node-open-tag [node]="node" [hasChildren]="hasChildren"></node-open-tag>
@@ -21,6 +21,7 @@
   <div class="border-box pl4" *ngIf="expanded && hasChildren">
     <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
       [node]="node"
+      [level]="level + 1"
       (selectionChange)="selectionChange.emit($event)"
       (inspectElement)="inspectElement.emit($event)">
     </bt-node-item>

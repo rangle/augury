@@ -5,8 +5,6 @@ import {
   Input,
 } from '@angular/core';
 
-import {TreeView} from '../tree-view/tree-view';
-import {RouterTree} from '../router-tree/router-tree';
 import {Route} from '../../../backend/utils';
 import {
   TabDescription,
@@ -22,11 +20,6 @@ type Node = any;
 
 @Component({
   selector: 'bt-app-trees',
-  directives: [
-    TabMenu,
-    TreeView,
-    RouterTree,
-  ],
   template: require('./app-trees.html'),
 })
 export class AppTrees {

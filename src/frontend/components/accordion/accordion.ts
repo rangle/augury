@@ -1,11 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'accordion',
   template: require('./accordion.html'),
 })
-export default class Accordion {
+export class Accordion {
   @Input() private sectionTitle: string;
   @Input() private defaultExpanded: boolean;
 

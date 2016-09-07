@@ -18,7 +18,7 @@
 
   <div [hidden]="!(node && node.name)">
     <accordion sectionTitle="Properties" *ngIf="hasProperties" [defaultExpanded]="true">
-      <section-content>
+      <div section-content>
         <ul class="list-reset m0"
           *ngIf="node && node.description">
           <bt-property-value
@@ -27,11 +27,11 @@
             [value]="property.value">
           </bt-property-value>
         </ul>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="Providers" *ngIf="hasProviders" [defaultExpanded]="true">
-      <section-content>
+      <div section-content>
         <span *ngFor="let provider of node.providers">
           <p class="m1 bold">{{provider.key}}</p>
           <bt-property-value
@@ -40,11 +40,11 @@
             [value]="property.value">
           </bt-property-value>
         </span>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="Directives" *ngIf="hasDirectives">
-      <section-content>
+      <div section-content>
         <ul class="list-reset m0">
           <li *ngFor="let directive of node.directives">
             <span class="inline-block info-key">
@@ -52,18 +52,18 @@
               </span>
           </li>
         </ul>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="Change Detection"
       *ngIf="node && node.changeDetection">
-      <section-content>
+      <div section-content>
         <span class="node-item-property">{{node.changeDetection}}</span>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="Input" *ngIf="inputs.length > 0">
-      <section-content>
+      <div section-content>
         <ul class="list-reset m0">
           <li *ngFor="let input of inputs">
             <span class="info-key inline-block">
@@ -75,11 +75,11 @@
             </span>
           </li>
         </ul>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="Output" *ngIf="outputs.length > 0">
-      <section-content>
+      <div section-content>
         <table class="m0">
           <tbody>
             <tr *ngFor="let output of outputs">
@@ -104,11 +104,11 @@
             </tr>
           </tbody>
         </table>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="State" *ngIf="hasState" [defaultExpanded]="hasState">
-      <section-content>
+      <div section-content>
         <div class="mxn4">
           <div [ngSwitch]="loadingState">
             <template [ngSwitchCase]="ComponentLoadState.Received">
@@ -124,17 +124,17 @@
             </template>
           </div>
         </div>
-      </section-content>
+      </div>
     </accordion>
 
     <accordion sectionTitle="Dependencies" *ngIf="hasDependencies">
-      <section-content>
+      <div section-content>
         <bt-dependency
           [tree]="tree"
           [selectedNode]="node"
           (selectionChange)="selectionChange.emit($event)">
         </bt-dependency>
-      </section-content>
+      </div>
     </accordion>
   </div>
 </div>

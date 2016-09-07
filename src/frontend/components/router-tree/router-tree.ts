@@ -1,8 +1,7 @@
 import {
   Component,
-  ViewEncapsulation,
-  Inject,
   ElementRef,
+  Inject,
   Input,
 } from '@angular/core';
 
@@ -27,7 +26,6 @@ interface TreeConfig {
   selector: 'bt-router-tree',
   template: require('./router-tree.html'),
   styles: [require('to-string!./router-tree.css')],
-  directives: [RouterInfo]
 })
 export class RouterTree {
   @Input() private routerTree: Array<Route>;

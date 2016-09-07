@@ -26,8 +26,13 @@ export class UserActions {
   ) {}
 
   /// Toggle the expansion state of a node
-  toggle(node: Node) {
-    switch (this.viewState.expandState(node)) {
+  toggle(node: Node, defaultState: ExpandState) {
+    let state = this.viewState.expandState(node);
+    if (state == null) {
+      state = defaultState;
+    }
+
+    switch (state) {
       case ExpandState.Collapsed:
         this.viewState.expandState(node, ExpandState.Expanded);
         break;

@@ -143,7 +143,7 @@ export abstract class MessageFactory {
       return response;
     };
 
-    const serialization = serializeResponse
+    const serialization = serializeResponse || response instanceof Error
       ? Serialize.Recreator
       : Serialize.None;
 
@@ -154,7 +154,7 @@ export abstract class MessageFactory {
       messageResponseId: message.messageId,
       serialize: serialization,
       content: response instanceof Error ? null : prepare(),
-      error: response instanceof Error ? response : null
+      error: response instanceof Error ? prepare() : null
     });
   }
 }

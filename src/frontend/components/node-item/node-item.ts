@@ -1,12 +1,13 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   Output,
 } from '@angular/core';
 
-import {UserActions} from '../../actions/user-actions/user-actions';
 import {Node} from '../../../tree/node';
+import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
   ExpandState,
@@ -16,18 +17,19 @@ import {
 import {NodeAttributes} from './node-attributes';
 import {NodeOpenTag} from './node-open-tag';
 
+/// The number of levels of tree nodes that we expand by default
+const defaultExpansionDepth = 3;
+
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
-  directives: [
-    NodeAttributes,
-    NodeOpenTag,
-    NodeItem,
-  ],
   styles: [require('to-string!./node-item.css')],
 })
 export class NodeItem {
   @Input() node;
+
+  // The depth of this node in the tree
+  @Input() level: number;
 
   /// Emitted when this node is selected
   @Output() private selectionChange = new EventEmitter<Node>();
@@ -36,6 +38,7 @@ export class NodeItem {
   @Output() private inspectElement = new EventEmitter<Node>();
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private viewState: ViewState,
     private userActions: UserActions
   ) {}
@@ -45,23 +48,19 @@ export class NodeItem {
   }
 
   private get expanded(): boolean {
-    return this.viewState.expandState(this.node) === ExpandState.Expanded;
+    const state = this.viewState.expandState(this.node);
+    if (state == null) { // user has not expanded or collapsed explicitly
+      return this.defaultExpanded;
+    }
+    return state === ExpandState.Expanded;
+  }
+
+  private get defaultExpanded(): boolean {
+    return this.level < defaultExpansionDepth;
   }
 
   private get hasChildren(): boolean {
     return this.node.children.length > 0;
-  }
-
-  /// Prevent propagation of mouse events so that parent handlers are not invoked
-  private stop(event: MouseEvent, handler: (event: MouseEvent) => void) {
-    try {
-      handler.bind(this)(event);
-    }
-    finally {
-      event.stopImmediatePropagation();
-      event.stopPropagation();
-      event.preventDefault();
-    }
   }
 
   /// Select the element in inspect window on double click
@@ -81,15 +80,16 @@ export class NodeItem {
     this.userActions.highlight(this.node);
   }
 
-  expandTree($event) {
-    this.userActions.toggle(this.node);
+  onToggleExpand($event) {
+    const defaultState =
+      this.defaultExpanded
+        ? ExpandState.Expanded
+        : ExpandState.Collapsed;
+
+    this.userActions.toggle(this.node, defaultState);
+
+    this.changeDetector.detectChanges();
   }
 
   trackById = (index: number, node: Node) => node.id;
 }
-
-const stop = (event: MouseEvent) => {
-  event.preventDefault();
-  event.stopPropagation();
-};
-
