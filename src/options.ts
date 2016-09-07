@@ -3,37 +3,50 @@ export enum Theme {
   Dark,
 }
 
-export interface SimpleOptions {
-  showElements?: boolean;
-  theme?: Theme;
+export enum ComponentView {
+  Hybrid,     // show all elements with Angular 2 properties set
+  All,        // show all components and elements
+  Components, // show components only
 }
 
+export interface SimpleOptions {
+  theme?: Theme;
+  componentView?: ComponentView;
+}
+
+export const defaultOptions = (): SimpleOptions => {
+  return {
+    theme: Theme.Light,
+    componentView: ComponentView.Hybrid,
+  };
+};
+
 export const loadOptions = (): Promise<SimpleOptions> => {
+  return loadFromStorage()
+    .then(result => {
+      const combined = Object.assign({}, defaultOptions(), result);
+
+      // for backward compatibility previous installs that saved as a string:
+      switch (<Theme | string>combined.theme) {
+        case 'light':
+          combined.theme = Theme.Light;
+          break;
+        case 'dark':
+          combined.theme = Theme.Dark;
+          break;
+      }
+
+      return combined;
+    });
+};
+
+const loadFromStorage = (): Promise<SimpleOptions> => {
   return new Promise(resolve => {
-    chrome.storage.sync.get(['theme', 'showElements'],
-      (result: {theme: string | Theme, showElements: boolean}) => {
-        const theme = (result || {theme: null}).theme;
-        if (theme != null) {
-          switch (theme) {
-            case 'light': // for previous installs that saved as a string
-            case Theme.Light:
-            default:
-              result.theme = Theme.Light;
-              break;
-            case 'dark':
-            case Theme.Dark:
-              result.theme = Theme.Dark;
-              break;
-          }
-        }
+    const keys = ['componentView', 'theme'];
 
-        const showElements = (result || {showElements: true}).showElements;
-        if (showElements != null) {
-          result.showElements = showElements;
-        }
-
-        resolve(result);
-      });
+    chrome.storage.sync.get(keys, (result: SimpleOptions) => {
+      resolve(result);
+    });
   });
 };
 

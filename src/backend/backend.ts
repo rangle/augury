@@ -57,9 +57,7 @@ let previousTree: MutableTree;
 let previousCount: number;
 
 const updateTree = (roots: Array<DebugElement>) => {
-  const showElements = treeRenderOptions.showElements;
-
-  const {tree, count} = createTreeFromElements(roots, showElements);
+  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
   if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
     messageBuffer.enqueue(MessageFactory.completeTree(tree));

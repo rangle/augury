@@ -14,10 +14,13 @@ import {
   Property,
 } from '../backend/utils/description';
 
+import {
+  ComponentView,
+  SimpleOptions,
+} from '../options';
+
 import {Node} from './node';
-
 import {Path, serializePath} from './path';
-
 import {functionName, serialize} from '../utils';
 
 type Source = DebugElement & DebugNode;
@@ -31,11 +34,10 @@ type Cache = WeakMap<any, any>;
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
 export const transform = (
-    parentNode: Node,
     path: Path,
     element: Source,
     cache: Cache,
-    html: boolean,
+    options: SimpleOptions,
     count: (n: number) => void): Node => {
   if (element == null) {
     return null;
@@ -143,21 +145,38 @@ export const transform = (
 
     node.children = [];
 
-    /// Show HTML elements or only components?
-    if (html) {
-      element.children.forEach((c, index) =>
-        node.children.push(transform(node, path.concat([index]), c, cache, html, count)));
-    }
-    else {
+    const transformChildren = (children: Array<Source>) => {
       let subindex = 0;
 
-      element.children.forEach(outerChild => {
-        const components = componentChildren(outerChild);
+      children.forEach(c =>
+          node.children.push(
+            transform(path.concat([subindex++]), c, cache, options, count)));
+    };
 
-        components.forEach(component => {
-          node.children.push(transform(node, path.concat([subindex++]), component, cache, html, count));
-        });
-      });
+    const getChildren = (test: (compareElement: Source) => boolean): Array<Source> => {
+      const children = element.children.map(c => matchingChildren(c, test));
+
+      return children.reduce((previous, current) => previous.concat(current), []);
+    };
+
+    const childComponents = () => {
+      return getChildren(e => e.componentInstance != null);
+    };
+
+    const childHybridComponents = () => {
+      return getChildren(e => e.providerTokens && e.providerTokens.length > 0);
+    };
+
+    switch (options.componentView) {
+      case ComponentView.Hybrid:
+        transformChildren(childHybridComponents());
+        break;
+      case ComponentView.All:
+        transformChildren(element.children);
+        break;
+      case ComponentView.Components:
+        transformChildren(childComponents());
+        break;
     }
 
     count(1 + node.children.length);
@@ -166,27 +185,29 @@ export const transform = (
   });
 };
 
-export const recursiveSearch = (children: Source[]): Array<Source> => {
+export const recursiveSearch =
+    (children: Source[], test: (element: Source) => boolean): Array<Source> => {
   const result = new Array<Source>();
 
   for (const c of children) {
-    if (c.componentInstance) {
+    if (test(c)) {
       result.push(c);
     }
     else {
       Array.prototype.splice.apply(result,
-        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children)));
+        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
     }
   }
 
   return result;
 };
 
-export const componentChildren = (element: Source): Array<Source> => {
-  if (element.componentInstance) {
+export const matchingChildren =
+    (element: Source, test: (element: Source) => boolean): Array<Source> => {
+  if (test(element)) {
     return [element];
   }
-  return recursiveSearch(element.children);
+  return recursiveSearch(element.children, test);
 };
 
 const getComponentProviders = (element: Source, name: string): Array<Property> => {

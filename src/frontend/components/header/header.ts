@@ -16,6 +16,7 @@ import {
   Node,
 } from '../../../tree';
 import {
+  ComponentView,
   Options,
   Tab,
   Theme,
@@ -34,8 +35,8 @@ type Route = any; // TODO(cbond): use real Route type
   ]
 })
 export class Header {
-  @ViewChild('theme-menu') menuElement: ElementRef;
-  @ViewChild('theme-menu-button') menuButtonElement: ElementRef;
+  @ViewChild('menuElement') private menuElement: ElementRef;
+  @ViewChild('menuButtonElement') private menuButtonElement: ElementRef;
 
   @Input() private selectedTab: Tab;
   @Input() private options: Options;
@@ -50,6 +51,7 @@ export class Header {
 
   @ViewChild(Search) private search: Search;
 
+  private ComponentView = ComponentView;
   private Tab = Tab;
   private Theme = Theme;
 
@@ -57,7 +59,7 @@ export class Header {
 
   constructor(private userActions: UserActions) {}
 
-  resetTheme() {
+  reset() {
     this.settingOpened = false;
   }
 
@@ -65,7 +67,7 @@ export class Header {
     if (this.menuElement && this.menuButtonElement &&
         !(this.menuElement.nativeElement.contains(event.target) ||
           this.menuButtonElement.nativeElement.contains(event.target))) {
-      this.resetTheme();
+      this.reset();
     }
   }
 
@@ -96,12 +98,14 @@ export class Header {
     this.settingOpened = !this.settingOpened;
   }
 
-  private onThemeChange = (theme: Theme, selected: boolean) => {
-    if (selected) {
-      this.options.theme = theme;
-    }
+  private onThemeChange = (theme: Theme) => {
+    this.options.theme = theme;
+    this.reset();
+  }
 
-    this.resetTheme();
+  private onComponentViewChanged = (view: ComponentView) => {
+    this.options.componentView = view;
+    this.reset();
   }
 
   private onRetrieveSearchResults = (query: string): Promise<Array<any>> => {

@@ -3,11 +3,13 @@ import {DebugElement} from '@angular/core';
 import {MutableTree} from './mutable-tree';
 import {transform} from './transformer';
 import {Node} from './node';
+import {SimpleOptions} from '../options';
 
-export const transformToTree = (root, index: number, includeElements: boolean, increment: (n: number) => void) => {
+export const transformToTree =
+    (root, index: number, options: SimpleOptions, increment: (n: number) => void) => {
   const map = new Map<string, Node>();
   try {
-    return transform(null, [index], root, map, includeElements, increment);
+    return transform([index], root, map, options, increment);
   }
   finally {
     map.clear(); // release references
@@ -29,13 +31,13 @@ export interface ElementTransformResult {
 }
 
 export const createTreeFromElements =
-    (roots: Array<DebugElement>, includeElements: boolean): ElementTransformResult => {
+    (roots: Array<DebugElement>, options: SimpleOptions): ElementTransformResult => {
   const tree = new MutableTree();
 
   /// Keep track of the number of nodes that we process as part of this transformation
   let count = 0;
 
-  tree.roots = roots.map((r, index) => transformToTree(r, index, includeElements, n => count += n));
+  tree.roots = roots.map((r, index) => transformToTree(r, index, options, n => count += n));
 
   return {tree, count};
 };
