@@ -24,6 +24,8 @@ import {
   MainRoute,
   highlight,
   parseRoutes,
+  getNodeFromPartialPath,
+  getNodeInstanceParent,
 } from './utils';
 
 import {serialize} from '../utils';
@@ -178,11 +180,14 @@ const tickApplication = (path: Path) => {
 };
 
 const updateProperty = (tree: MutableTree, path: Path, newValue) => {
-  const node = tree.traverse(path.slice(0, path.length - 1));
+  const node = getNodeFromPartialPath(tree, path);
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      probed.componentInstance[path.pop()] = newValue;
+      const instanceParent = getNodeInstanceParent(probed, path);
+      if (instanceParent) {
+        instanceParent[path[path.length - 1]] = newValue;
+      }
     }
   }
 
@@ -190,11 +195,14 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
 };
 
 const emitValue = (tree: MutableTree, path: Path, newValue) => {
-  const node = tree.traverse(path.slice(0, path.length - 1));
+  const node = getNodeFromPartialPath(tree, path);
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      probed.componentInstance[path.pop()].emit(newValue);
+      const instanceParent = getNodeInstanceParent(probed, path);
+      if (instanceParent) {
+        instanceParent[path[path.length - 1]].emit(newValue);
+      }
     }
   }
 
