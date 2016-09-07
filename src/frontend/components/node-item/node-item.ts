@@ -46,6 +46,7 @@ export class NodeItem {
   @Output() private inspectElement = new EventEmitter<Node>();
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private viewState: ViewState,
     private userActions: UserActions
   ) {}
@@ -57,25 +58,17 @@ export class NodeItem {
   private get expanded(): boolean {
     const state = this.viewState.expandState(this.node);
     if (state == null) { // user has not expanded or collapsed explicitly
-      return this.level < defaultExpansionDepth;
+      return this.defaultExpanded;
     }
     return state === ExpandState.Expanded;
   }
 
-  private get hasChildren(): boolean {
-    return this.node.children.length > 0;
+  private get defaultExpanded(): boolean {
+    return this.level < defaultExpansionDepth;
   }
 
-  /// Prevent propagation of mouse events so that parent handlers are not invoked
-  private stop(event: MouseEvent, handler: (event: MouseEvent) => void) {
-    try {
-      handler.bind(this)(event);
-    }
-    finally {
-      event.stopImmediatePropagation();
-      event.stopPropagation();
-      event.preventDefault();
-    }
+  private get hasChildren(): boolean {
+    return this.node.children.length > 0;
   }
 
   /// Select the element in inspect window on double click
@@ -95,15 +88,16 @@ export class NodeItem {
     this.userActions.highlight(this.node);
   }
 
-  expandTree($event) {
-    this.userActions.toggle(this.node);
+  onToggleExpand($event) {
+    const defaultState =
+      this.defaultExpanded
+        ? ExpandState.Expanded
+        : ExpandState.Collapsed;
+
+    this.userActions.toggle(this.node, defaultState);
+
+    this.changeDetector.detectChanges();
   }
 
   trackById = (index: number, node: Node) => node.id;
 }
-
-const stop = (event: MouseEvent) => {
-  event.preventDefault();
-  event.stopPropagation();
-};
-
