@@ -13,6 +13,8 @@ import {
 
 import {highlightTime} from '../../utils';
 
+import {ParseUtils} from '../utils/parse-utils';
+
 export enum ExpandState {
   Expanded,
   Collapsed,
@@ -86,6 +88,20 @@ export class ViewState {
 
   select(node: Node) {
     checkReferenceId(node);
+
+    if (node) {
+      const parseUtils = new ParseUtils();
+
+      const path = deserializePath(node.id);
+
+      // If this node is not even visible, we must expand its parents
+      for (const parentId of parseUtils.getParentNodeIds(node.id)) {
+        const collapsed = this.expansion.get(parentId) !== ExpandState.Expanded;
+        if (collapsed) {
+          this.expansion.set(parentId, ExpandState.Expanded);
+        }
+      }
+    }
 
     this.selected = node.id;
 

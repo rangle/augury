@@ -9,6 +9,8 @@ import {
 
 import {MessageType} from './message-type';
 
+import {ApplicationError} from './application-error';
+
 import {getRandomHash} from './hash';
 
 import {
@@ -112,6 +114,13 @@ export abstract class MessageFactory {
       content: {
         nodes: nodes.map(n => n.id),
       },
+    });
+  }
+
+  static applicationError(error: ApplicationError): Message<ApplicationError> {
+    return create({
+      messageType: MessageType.ApplicationError,
+      content: error,
     });
   }
 

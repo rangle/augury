@@ -12,6 +12,8 @@ import {
 } from './channel';
 
 import {
+  ApplicationError,
+  ApplicationErrorType,
   Message,
   MessageFactory,
   MessageResponse,
@@ -45,16 +47,16 @@ import {FormsModule} from '@angular/forms';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import {UserActions} from './actions/user-actions/user-actions';
+import {RenderError} from './components/render-error/render-error';
+import {InfoPanel} from './components/info-panel/info-panel';
 import {ParseUtils} from './utils/parse-utils';
 import {Route} from '../backend/utils';
-
 import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
 import {ComponentTree} from './components/component-tree/component-tree';
 import {Dependency} from './components/dependency/dependency';
 import {Header} from './components/header/header';
-import {InfoPanel} from './components/info-panel/info-panel';
 import {InjectorTree} from './components/injector-tree/injector-tree';
 import {NodeAttributes} from './components/node-item/node-attributes';
 import {NodeItem} from './components/node-item/node-item';
@@ -84,8 +86,6 @@ class App {
   private Theme = Theme;
 
   private componentState: ComponentInstanceState;
-  private exception: string;
-  private routerException: string;
   private routerTree: Array<Route>;
   private selectedNode: Node;
   private selectedRoute: Route;
@@ -93,6 +93,7 @@ class App {
   private subscription: Subscription;
   private theme: Theme;
   private tree: MutableTree;
+  private error: ApplicationError;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -142,7 +143,11 @@ class App {
 
     this.connection.send(MessageFactory.initialize(options))
       .catch(error => {
-        this.exception = error.stack;
+        this.error = new ApplicationError(
+          ApplicationErrorType.UncaughtException,
+          error.message,
+          error.stack);
+
         this.changeDetector.detectChanges();
       });
   }
@@ -182,6 +187,10 @@ class App {
         this.routerTree = msg.content;
         respond();
         break;
+      case MessageType.ApplicationError:
+        this.error = msg.content;
+        respond();
+        break;
     }
   }
 
@@ -213,8 +222,10 @@ class App {
         this.processMessage(msg, sendResponse);
       }
       catch (error) {
-        this.exception = error.stack;
-        throw error;
+        this.error = new ApplicationError(
+          ApplicationErrorType.UncaughtException,
+          error.message,
+          error.stack);
       }
     };
 
@@ -271,9 +282,11 @@ class App {
             });
           })
           .catch(error => {
-            this.zone.run(() => {
-              this.routerException = error.stack;
-            });
+            this.error = new ApplicationError(
+              ApplicationErrorType.UncaughtException,
+              error.message,
+              error.stack);
+            this.changeDetector.detectChanges();
           });
         break;
       default:
@@ -337,6 +350,7 @@ const declarations = [
   StateValues,
   TabMenu,
   TreeView,
+  RenderError,
 ];
 
 @NgModule({

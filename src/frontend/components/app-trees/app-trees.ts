@@ -27,7 +27,6 @@ export class AppTrees {
 
   @Input() private tree: Array<Node>;
   @Input() private routerTree: Array<Route>;
-  @Input() private routerException: string;
   @Input() private options: Options;
   @Input() private componentState: ComponentInstanceState;
 

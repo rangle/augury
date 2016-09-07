@@ -29,7 +29,6 @@ interface TreeConfig {
 })
 export class RouterTree {
   @Input() private routerTree: Array<Route>;
-  @Input() private routerException: string;
   @Input() private selectedNode;
 
   private treeConfig: TreeConfig;

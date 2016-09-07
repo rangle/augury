@@ -1,5 +1,3 @@
-///<amd-dependency path="../../../tree/node" />
-
 import {
   ChangeDetectorRef,
   Component,
