@@ -28,7 +28,7 @@ export const getPropertyPath = (path: Path): Path => {
   }
 
   if (index === path.length) { // not found
-    return null;
+    return [];
   }
 
   return path.slice(index);
@@ -63,5 +63,8 @@ export const getNodeInstanceParent = (element: DebugElement, path: Path) => {
   const propertyPath = getPropertyPath(path.slice(0, path.length - 1));
   if (propertyPath.length > 0) {
     return getInstanceFromPath(element, propertyPath);
+  }
+  else {
+    return element.componentInstance;
   }
 };
