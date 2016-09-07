@@ -53,13 +53,11 @@ export class SplitPane {
    * and set up the resizer element.
    */
   ngAfterViewInit() {
-    this.bounds = this.wrapperElement.nativeElement.getBoundingClientRect();
-
     // Proxy event handlers to preserve instance binding.
     this.guardMouseMoved = (e) => this.mouseMoved(e);
     this.guardMouseUp = (e) => this.mouseUp(e);
 
-    this.reshape();
+    this.windowResized();
   }
 
   /**

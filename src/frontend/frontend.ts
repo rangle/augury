@@ -1,5 +1,4 @@
 import {
-  CUSTOM_ELEMENTS_SCHEMA,
   ChangeDetectorRef,
   Component,
   NgModule,
@@ -354,8 +353,7 @@ const declarations = [
     UserActions,
     ViewState,
   ],
-  bootstrap: [App],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  bootstrap: [App]
 })
 class FrontendModule {}
 
