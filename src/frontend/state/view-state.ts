@@ -66,11 +66,7 @@ export class ViewState {
       this.publish();
     }
     else {
-      const state = this.expansion.get(node.id);
-
-      return state == null
-        ? ExpandState.Expanded
-        : state;
+      return this.expansion.get(node.id);
     }
   }
 
