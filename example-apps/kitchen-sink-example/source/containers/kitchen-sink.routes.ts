@@ -1,4 +1,7 @@
-import { Routes, RouterModule } from '@angular/router';
+import {
+  Routes,
+  RouterModule,
+} from '@angular/router';
 
 import Home from '../components/home';
 import InputOutput from '../components/input-output/input-output';
@@ -9,11 +12,12 @@ import ControlForm from '../components/form-controls/control-form';
 import TodoApp from '../components/todo-app/todo-app';
 import DITree from '../components/di-tree/di-tree';
 import ChangeDetection from '../components/change-detection/change-detection';
-import AngularDirectives from
-  '../components/angular-directives/angular-directives';
+import AngularDirectives from '../components/angular-directives/angular-directives';
 import Demo from '../components/demo/demo';
-import {StressTester, StressRecItem, StressItem}
- from '../components/stress-tester/stress-tester';
+import {
+  StressTester,
+  StressRecItem,
+} from '../components/stress-tester/stress-tester';
 import MetadataTest from '../components/metadata-test/metadata-test';
 
 export const KitchenSinkRoutes: Routes = [
@@ -33,19 +37,18 @@ export const KitchenSinkRoutes: Routes = [
 ];
 
 export const KitchenSinkDeclarations = [
+  AngularDirectives,
+  ChangeDetection,
+  ControlForm,
+  DITree,
+  Demo,
+  DynamicControls,
+  Form2,
   Home,
   InputOutput,
+  MetadataTest,
   MyForm,
-  Form2,
-  DynamicControls,
-  ControlForm,
-  TodoApp,
-  DITree,
-  ChangeDetection,
-  AngularDirectives,
-  Demo,
-  StressTester,
   StressRecItem,
-  StressItem,
-  MetadataTest
+  StressTester,
+  TodoApp,
 ];
