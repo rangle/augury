@@ -11,6 +11,8 @@ import {
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
 import {
+  ApplicationError,
+  ApplicationErrorType,
   Message,
   MessageFactory,
   MessageType,
@@ -92,7 +94,23 @@ const bind = (root: DebugElement) => {
   subject.next(void 0); // initial load
 };
 
-getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+const checkDebug = (fn: () => void) => {
+  if (typeof ng === 'undefined') {
+    // If getAllAngularTestabilities is defined but ng is not, it means the application
+    // is running in production mode and Augury is not going to work. Send an error
+    // to the frontend to deal with this case in a graceful way.
+    send<void, ApplicationError>(
+      MessageFactory.applicationError(
+        new ApplicationError(ApplicationErrorType.ProductionMode)));
+  }
+  else {
+    fn();
+  }
+};
+
+checkDebug(() => {
+  getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+});
 
 const messageHandler = (message: Message<any>) => {
   switch (message.messageType) {
@@ -104,7 +122,7 @@ const messageHandler = (message: Message<any>) => {
       previousTree = null;
 
       // Load the complete component tree
-      subject.next(void 0);
+      checkDebug(() => subject.next(void 0));
 
       return true;
 

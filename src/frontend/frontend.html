@@ -9,14 +9,16 @@
     (selectNode)="onComponentSelectionChange($event)"
     (selectRoute)="onRouteSelectionChange($event)">
   </augury-header>
-  <bt-app-trees #trees
+  <template [ngIf]="error">
+    <render-error [error]="error"></render-error>
+  </template>
+  <bt-app-trees #trees *ngIf="error == null"
     class="flex flex-column flex-auto"
     [componentState]="componentState"
     [selectedTab]="selectedTab"
     [selectedNode]="selectedNode"
     [selectedRoute]="selectedRoute"
     [routerTree]="routerTree"
-    [routerException]="routerException"
     [options]="options"
     [tree]="tree"
     (tabChange)="onSelectedTabChange($event)"
@@ -26,7 +28,4 @@
 </div>
 <template [ngIf]="!hasContent">
   No components were found on the page
-</template>
-<template [ngIf]="exception">
-  <pre>{{exception}}</pre>
 </template>

@@ -11,6 +11,8 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule} from '@angular/forms';
 
 import {
+  ApplicationError,
+  ApplicationErrorType,
   Message,
   MessageFactory,
   MessageType,
@@ -46,6 +48,7 @@ import {deserialize} from '../utils';
 
 import {UserActions} from './actions/user-actions/user-actions';
 import {TreeView} from './components/tree-view/tree-view';
+import {RenderError} from './components/render-error/render-error';
 import {InfoPanel} from './components/info-panel/info-panel';
 import {AppTrees} from './components/app-trees/app-trees';
 import {Header} from './components/header/header';
@@ -58,7 +61,7 @@ require('!style!css!postcss!../styles/app.css');
 @Component({
   selector: 'bt-app',
   providers: [ParseUtils],
-  directives: [AppTrees, Header, InfoPanel, SplitPane, TreeView],
+  directives: [RenderError, AppTrees, Header, InfoPanel, SplitPane, TreeView],
   template: require('./frontend.html'),
   styles: [require('to-string!./frontend.css')],
 })
@@ -68,13 +71,12 @@ class App {
 
   private tree: MutableTree;
   private routerTree: Array<Route>;
-  private routerException: string;
   private componentState: ComponentInstanceState;
   private subscription: Subscription;
-  private exception: string;
   private selectedNode: Node;
   private selectedRoute: Route;
   private selectedTab: Tab = Tab.ComponentTree;
+  private error: ApplicationError;
 
   constructor(
     private connection: Connection,
@@ -124,7 +126,11 @@ class App {
 
     this.connection.send(MessageFactory.initialize(options))
       .catch(error => {
-        this.exception = error.stack;
+        this.error = new ApplicationError(
+          ApplicationErrorType.UncaughtException,
+          error.message,
+          error.stack);
+
         this.changeDetector.detectChanges();
       });
   }
@@ -164,6 +170,10 @@ class App {
         this.routerTree = msg.content;
         respond();
         break;
+      case MessageType.ApplicationError:
+        this.error = msg.content;
+        respond();
+        break;
     }
   }
 
@@ -195,8 +205,10 @@ class App {
         this.processMessage(msg, sendResponse);
       }
       catch (error) {
-        this.exception = error.stack;
-        throw error;
+        this.error = new ApplicationError(
+          ApplicationErrorType.UncaughtException,
+          error.message,
+          error.stack);
       }
     };
 
@@ -253,9 +265,11 @@ class App {
             });
           })
           .catch(error => {
-            this.zone.run(() => {
-              this.routerException = error.stack;
-            });
+            this.error = new ApplicationError(
+              ApplicationErrorType.UncaughtException,
+              error.message,
+              error.stack);
+            this.changeDetector.detectChanges();
           });
         break;
       default:

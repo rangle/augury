@@ -1,10 +1,6 @@
-///<amd-dependency path="../../../tree/node" />
-
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
-  NgZone,
   Input,
   Output,
 } from '@angular/core';
