@@ -11,8 +11,6 @@ import {
   isLargeArray,
 } from '../../utils';
 
-const defaultExpansionDepth = 1;
-
 @Component({
   selector: 'bt-render-state',
   template: require('./render-state.html'),
@@ -37,13 +35,8 @@ export class RenderState {
     if (this.expansionState.hasOwnProperty(key)) {
       return this.expansionState[key];
     }
-    if (isObservable(this.state[key])) { // do not expand observables (default)
-      return false;
-    }
-    if (isLargeArray(this.state[key])) { // same for large arrays which take a long time to render
-      return false;
-    }
-    return this.level <= defaultExpansionDepth; // default depth
+
+    return false;
   }
 
   expandTree(key, $event) {
