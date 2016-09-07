@@ -4,9 +4,9 @@ export enum Theme {
 }
 
 export enum ComponentView {
+  Hybrid,     // show all elements with Angular 2 properties set
   All,        // show all components and elements
   Components, // show components only
-  Hybrid      // show all elements with Angular 2 properties set
 }
 
 export interface SimpleOptions {
@@ -26,9 +26,9 @@ export const loadOptions = (): Promise<SimpleOptions> => {
     .then(result => {
       const combined = Object.assign({}, defaultOptions(), result);
 
+      // for backward compatibility previous installs that saved as a string:
       switch (<Theme | string>combined.theme) {
-        case 'light': // for previous installs that saved as a string
-        default:
+        case 'light':
           combined.theme = Theme.Light;
           break;
         case 'dark':
