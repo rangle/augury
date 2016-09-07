@@ -4,16 +4,22 @@
       {{ node && node.name || 'No component selected' }}
       &nbsp;
       <a href=""
-        class="red-1 node-item-property"
+        class="red-1 node-item-property no-highlight"
         *ngIf="node && node.name && node.isComponent"
         (click)="viewComponentSource()">
         (View Source)
         </a>
     </h4>
-    <span class="h4 regular right primary-color"
+    <span class="h4 regular right primary-color no-highlight"
       *ngIf="node">
       ($a in Console)
     </span>
+  </div>
+
+  <div
+     *ngIf="node && node.changeDetection"
+     class="section-title bg-darken-1 bg-panel primary-color pointer border-bottom py2 px3">
+    <span class="info-key">Change Detection: </span>{{node.changeDetection}}
   </div>
 
   <div [hidden]="!(node && node.name)">
@@ -52,13 +58,6 @@
               </span>
           </li>
         </ul>
-      </div>
-    </accordion>
-
-    <accordion sectionTitle="Change Detection"
-      *ngIf="node && node.changeDetection">
-      <div section-content>
-        <span class="node-item-property">{{node.changeDetection}}</span>
       </div>
     </accordion>
 
