@@ -12,19 +12,17 @@ export const loadOptions = (): Promise<SimpleOptions> => {
   return new Promise(resolve => {
     chrome.storage.sync.get(['theme', 'showElements'],
       (result: {theme: string | Theme, showElements: boolean}) => {
-        const theme = (result || {theme: null}).theme;
-        if (theme != null) {
-          switch (theme) {
-            case 'light': // for previous installs that saved as a string
-            case Theme.Light:
-            default:
-              result.theme = Theme.Light;
-              break;
-            case 'dark':
-            case Theme.Dark:
-              result.theme = Theme.Dark;
-              break;
-          }
+        const theme = (result || {theme: Theme.Light}).theme;
+        switch (theme) {
+          case 'light': // for previous installs that saved as a string
+          case Theme.Light:
+          default:
+            result.theme = Theme.Light;
+            break;
+          case 'dark':
+          case Theme.Dark:
+            result.theme = Theme.Dark;
+            break;
         }
 
         const showElements = (result || {showElements: true}).showElements;
