@@ -132,6 +132,10 @@ bt-injector-tree {
     border-left-color: #CCC;
   }
 
+  & .descriptive-text {
+    color: #777;
+  }
+
   & bt-router-tree {
     & .node-route {
       stroke: #F05057;
@@ -242,6 +246,10 @@ bt-injector-tree {
 
   & .border-left {
     border-left-color: #3D3D3D;
+  }
+
+  & .descriptive-text {
+    color: #aaa;
   }
 
   & bt-router-tree {

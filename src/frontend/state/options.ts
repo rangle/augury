@@ -6,22 +6,21 @@ import {
 } from 'rxjs';
 
 import {
+  ComponentView,
   SimpleOptions,
   Theme,
+  defaultOptions,
   loadOptions,
   saveOptions,
 } from '../../options';
 
+export {ComponentView};
 export {SimpleOptions};
 export {Theme};
 
 @Injectable()
-export class Options implements SimpleOptions {
-  /// Show HTML elements in addition to components in the component tree
-  private cachedShowElements = false;
-
-  /// Theme (dark or light etc)
-  private cachedTheme = Theme.Light;
+export class Options {
+  private cachedOptions = defaultOptions();
 
   private subject = new Subject<Options>();
 
@@ -31,8 +30,7 @@ export class Options implements SimpleOptions {
 
   load() {
     return loadOptions().then(options => {
-      this.cachedTheme = options.theme;
-      this.cachedShowElements = options.showElements;
+      Object.assign(this.cachedOptions, options);
 
       this.publish();
 
@@ -41,37 +39,30 @@ export class Options implements SimpleOptions {
   }
 
   get theme(): Theme {
-    return this.cachedTheme;
+    return this.cachedOptions.theme;
   }
 
   set theme(theme: Theme) {
-    this.cachedTheme = theme;
-
-    saveOptions({ theme });
-
+    this.cachedOptions.theme = theme;
     this.publish();
   }
 
-  get showElements(): boolean {
-    return this.cachedShowElements;
+  get componentView(): ComponentView {
+    return this.cachedOptions.componentView;
   }
 
-  set showElements(show: boolean) {
-    this.cachedShowElements = show;
-
-    saveOptions({showElements: show});
-
+  set componentView(componentView: ComponentView) {
+    this.cachedOptions.componentView = componentView;
     this.publish();
   }
 
-  simpleOptions(): {showElements: boolean, theme: Theme} {
-    return {
-      showElements: this.showElements,
-      theme: this.theme,
-    };
+  simpleOptions(): SimpleOptions {
+    return this.cachedOptions;
   }
 
   private publish() {
+    saveOptions(this.cachedOptions);
+
     this.subject.next(this);
   }
 }

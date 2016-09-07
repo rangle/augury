@@ -18,4 +18,8 @@
   & li {
     padding-left: 1rem;
   }
+
+  & .descriptive-text {
+    max-width: 25em;
+  }
 }
