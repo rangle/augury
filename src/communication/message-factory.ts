@@ -143,7 +143,9 @@ export abstract class MessageFactory {
       return response;
     };
 
-    const serialization = serializeResponse || response instanceof Error
+    const prepareError = r => ({message: r.message, stack: r.stack});
+
+    const serialization = serializeResponse
       ? Serialize.Recreator
       : Serialize.None;
 
@@ -154,7 +156,7 @@ export abstract class MessageFactory {
       messageResponseId: message.messageId,
       serialize: serialization,
       content: response instanceof Error ? null : prepare(),
-      error: response instanceof Error ? prepare() : null
+      error: response instanceof Error ? prepareError(response) : null
     });
   }
 }

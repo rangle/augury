@@ -7,6 +7,7 @@ import {
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Highlightable} from '../../utils/highlightable';
 import {Path} from '../../../tree';
+import {InputOutput} from '../../utils';
 
 @Component({
   selector: 'bt-state-values',
@@ -15,7 +16,7 @@ import {Path} from '../../../tree';
 })
 export class StateValues extends Highlightable {
   @Input() id: string | number;
-  @Input() inputs;
+  @Input() inputs: InputOutput;
   @Input() level: number;
   @Input() path: Path;
   @Input() value;

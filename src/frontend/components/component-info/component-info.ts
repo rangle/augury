@@ -9,6 +9,7 @@ import {
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentLoadState} from '../../state';
 import {Property} from '../../../backend/utils/description';
+import {InputOutput} from '../../../frontend/utils';
 
 import {
   MutableTree,
@@ -17,16 +18,9 @@ import {
   deserializePath,
 } from '../../../tree';
 
-export enum EmitState {
-  None,
-  Emitted,
-  Failed,
-}
-
 @Component({
   selector: 'bt-component-info',
   template: require('./component-info.html'),
-  styles: [require('to-string!./component-info.css')],
 })
 export class ComponentInfo {
   @Input() node: Node;
@@ -36,13 +30,7 @@ export class ComponentInfo {
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
-  private input: Array<string>;
-
   private ComponentLoadState = ComponentLoadState;
-
-  private EmitState = EmitState;
-
-  private emitState = new Map<string, EmitState>();
 
   constructor(
     private userActions: UserActions
@@ -52,7 +40,7 @@ export class ComponentInfo {
     return deserializePath(this.node.id);
   }
 
-  private get inputs() {
+  private get inputs(): InputOutput {
     if (this.node == null || this.node.input == null) {
       return {};
     }
@@ -62,15 +50,22 @@ export class ComponentInfo {
         const [name, alias] = input.split(/:/);
         accum[name] = {alias};
         return accum;
-      }, {});
+      },
+      <InputOutput> {});
   }
 
-  private get outputs(): Array<string> {
+  private get outputs(): InputOutput {
     if (this.node == null) {
-      return [];
+      return {};
     }
 
-    return this.node.output;
+    return this.node.output.reduce(
+      (accum, output) => {
+        const [name, alias] = output.split(/:/);
+        accum[name] = {alias};
+        return accum;
+      },
+      <InputOutput> {});
   }
 
   private get hasState() {
@@ -116,34 +111,5 @@ export class ComponentInfo {
           throw new Error('This component has no instance and therefore no constructor');
         }
       }`);
-  }
-
-  private evaluate(data: string) {
-    try {
-      return (new Function(`return ${data}`))();
-    }
-    catch (e) {
-      return data;
-    }
-  }
-
-  private emitValue(outputProperty: string, data) {
-    data = this.evaluate(data);
-
-    const update = (state: EmitState) => this.emitState.set(outputProperty, state);
-
-    const timedReset = () => setTimeout(() => update(EmitState.None), 3000);
-
-    const path = deserializePath(this.node.id).concat([outputProperty]);
-
-    return this.userActions.emitValue(path, data)
-      .then(() => {
-        update(EmitState.Emitted);
-        timedReset();
-      })
-      .catch(error => {
-        update(EmitState.Failed);
-        timedReset();
-      });
   }
 }

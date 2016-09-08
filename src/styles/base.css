@@ -70,3 +70,8 @@ split-pane-secondary-content {
   -moz-transition: transform 250ms ease-in-out;
   transition: transform 250ms ease-in-out;
 }
+
+.decorator {
+  display: inline-block;
+  margin-right: -2px;
+}
