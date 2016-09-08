@@ -242,8 +242,9 @@ class App {
 
     this.viewState.select(node);
 
+    const m = MessageFactory.selectComponent(node, node.isComponent);
+
     if (node.isComponent) {
-      const m = MessageFactory.selectComponent(node, node.isComponent);
 
       const promise = this.directConnection.handleImmediate(m)
         .then(response => {
@@ -256,7 +257,10 @@ class App {
       this.componentState.wait(node, promise);
     }
     else {
-      this.componentState.done(node, null);
+      this.directConnection.handleImmediate(m)
+        .then(() => {
+          this.componentState.done(node, null);
+        });
     }
   }
 
