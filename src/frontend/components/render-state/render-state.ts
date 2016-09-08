@@ -17,8 +17,9 @@ import {
 })
 export class RenderState {
   @Input() id: string;
-  @Input() path: Array<string | number>;
+  @Input() inputs;
   @Input() level: number;
+  @Input() path: Array<string | number>;
   @Input() state;
 
   private expansionState = {};
