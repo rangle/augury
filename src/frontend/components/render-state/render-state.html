@@ -11,8 +11,7 @@
       <div [ngClass]="{
         expander: true,
         rotate90: !expanded(k),
-        transparent: keys(state[k]).length === 0,
-        'display-none': hideExpander(k)
+        transparent: keys(state[k]).length === 0
       }"></div>
       <span [ngSwitch]="classification(k)" class="primary-color">
         <span *ngSwitchCase="StateClassification.Input" class="decorator">@Input(<span class="info-value" [hidden]="!inputs[k].alias">'{{inputs[k].alias}}'</span>)</span>

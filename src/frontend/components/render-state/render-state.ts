@@ -114,12 +114,6 @@ export class RenderState {
     return typeof d;
   }
 
-  private hideExpander(k: string) {
-    return this.classification(k) === StateClassification.Output
-      || (this.keys(this.state[k]).length === 0
-            && this.classification(k) === StateClassification.Input);
-  }
-
   private evaluate(data: string) {
     try {
       return (new Function(`return ${data}`))();
