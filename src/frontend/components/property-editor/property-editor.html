@@ -1,7 +1,15 @@
 <div [ngClass]="{'property-editor': true, editing: state === State.Write}" (click)="onClick($event)">
-  <span [ngSwitch]="state">
+  <span class="info-key">
+    {{key}}:
+  </span>
+  <span [ngSwitch]="state" class="state-container">
     <span *ngSwitchCase="State.Read">
-      <span class="editable">{{value}}</span>
+      <span class="editable">
+        <span *ngIf="isUndefined()">undefined</span>
+        <span *ngIf="isNull()">null</span>
+        <span *ngIf="isEmptyString()">&quot;&quot;</span>
+        <span *ngIf="isRenderable()">{{value}}</span>
+      </span>
     </span>
     <span *ngSwitchDefault>
       <input type="text"

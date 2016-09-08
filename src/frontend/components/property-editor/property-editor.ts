@@ -31,6 +31,7 @@ export enum State {
   styles: [require('to-string!./property-editor.css')],
 })
 export class PropertyEditor {
+  @Input() key: string;
   @Input() private initialValue;
 
   @Output() private cancel = new EventEmitter<void>();
@@ -84,6 +85,24 @@ export class PropertyEditor {
       return false;
     }
     return changes.hasOwnProperty('initialValue');
+  }
+
+  private isUndefined(): boolean {
+    return this.value === undefined;
+  }
+
+  private isNull(): boolean {
+    return this.value === null;
+  }
+
+  private isEmptyString(): boolean {
+    return typeof this.value === 'string' && this.value.length === 0;
+  }
+
+  private isRenderable(): boolean {
+    return !this.isUndefined()
+        && !this.isNull()
+        && !this.isEmptyString();
   }
 
   private onKeypress(event: KeyboardEvent) {
