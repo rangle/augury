@@ -26,7 +26,8 @@ import {
   Options,
   Tab,
   Theme,
-  ViewState,
+  ComponentViewState,
+  ComponentPropertyState,
 } from './state';
 
 import {
@@ -101,7 +102,7 @@ class App {
     private directConnection: DirectConnection,
     private options: Options,
     private userActions: UserActions,
-    private viewState: ViewState,
+    private viewState: ComponentViewState,
     private zone: NgZone
   ) {
     this.componentState = new ComponentInstanceState(changeDetector);
@@ -369,7 +370,8 @@ const declarations = [
     DirectConnection,
     Options,
     UserActions,
-    ViewState,
+    ComponentViewState,
+    ComponentPropertyState,
   ],
   bootstrap: [App]
 })

@@ -11,7 +11,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
   ExpandState,
-  ViewState,
+  ComponentViewState,
 } from '../../state';
 
 import {NodeAttributes} from './node-attributes';
@@ -39,7 +39,7 @@ export class NodeItem {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private viewState: ViewState,
+    private viewState: ComponentViewState,
     private userActions: UserActions
   ) {}
 

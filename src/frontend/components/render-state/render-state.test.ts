@@ -2,10 +2,14 @@ import * as test from 'tape';
 
 import {RenderState} from './render-state';
 
+import {ComponentPropertyState} from '../../state';
+
 test('utils/render-state: init component', t => {
   t.plan(3);
 
-  const comp: RenderState = new RenderState(<any>{});
+  const propertyState = new ComponentPropertyState();
+
+  const comp: RenderState = new RenderState(<any>{}, propertyState);
   const value: any = {
     name: 'hello'
   };
