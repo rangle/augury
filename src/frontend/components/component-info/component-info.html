@@ -61,22 +61,6 @@
       </div>
     </accordion>
 
-    <accordion sectionTitle="Input" *ngIf="inputs.length > 0">
-      <div section-content>
-        <ul class="list-reset m0">
-          <li *ngFor="let input of inputs">
-            <span class="info-key inline-block">
-              {{input.key}}:
-            </span>
-            <span class="info-value inline-block"
-              *ngIf="input.value !== ''">
-              {{input.value}}
-            </span>
-          </li>
-        </ul>
-      </div>
-    </accordion>
-
     <accordion sectionTitle="Output" *ngIf="outputs.length > 0">
       <div section-content>
         <table class="m0">
@@ -112,10 +96,11 @@
           <div [ngSwitch]="loadingState">
             <template [ngSwitchCase]="ComponentLoadState.Received">
               <bt-render-state
-                [path]="path"
-                [id]="node.id"
-                [state]="state"
-                [level]="0">
+                 [id]="node.id"
+                 [inputs]="inputs"
+                 [level]="0"
+                 [path]="path"
+                 [state]="state">
               </bt-render-state>
             </template>
             <template [ngSwitchCase]="ComponentLoadState.Failed">

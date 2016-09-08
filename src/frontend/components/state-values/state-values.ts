@@ -15,9 +15,10 @@ import {Path} from '../../../tree';
 })
 export class StateValues extends Highlightable {
   @Input() id: string | number;
+  @Input() inputs;
+  @Input() level: number;
   @Input() path: Path;
   @Input() value;
-  @Input() level: number;
 
   private editable: boolean = false;
 
@@ -43,7 +44,7 @@ export class StateValues extends Highlightable {
     return oldValue !== newValue;
   }
 
-  private get propertyKey(): string | number {
+  private get k(): string | number {
     return this.path[this.path.length - 1];
   }
 

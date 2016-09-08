@@ -36,7 +36,7 @@ export class ComponentInfo {
 
   @Output() private selectionChange = new EventEmitter<Node>();
 
-  private input: Array<any>;
+  private input: Array<string>;
 
   private ComponentLoadState = ComponentLoadState;
 
@@ -52,16 +52,17 @@ export class ComponentInfo {
     return deserializePath(this.node.id);
   }
 
-  private get inputs(): Array<Property> {
+  private get inputs() {
     if (this.node == null || this.node.input == null) {
-      return [];
+      return {};
     }
 
-    return this.node.input.map(
-      property => {
-        let [key, value] = property.split(':');
-        return {key, value};
-      });
+    return this.node.input.reduce(
+      (accum, input) => {
+        const [name, alias] = input.split(/:/);
+        accum[name] = {alias};
+        return accum;
+      }, {});
   }
 
   private get outputs(): Array<string> {
