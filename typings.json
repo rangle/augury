@@ -12,11 +12,11 @@
   "dependencies": {},
   "globalDependencies": {
     "chrome": "registry:dt/chrome#0.0.0+20160724063844",
+    "clone": "registry:dt/clone#0.1.11+20160317120654",
     "d3": "registry:dt/d3#0.0.0+20160727131401",
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
     "filesystem": "registry:dt/filesystem#0.0.0+20160316155526",
     "filewriter": "registry:dt/filewriter#0.0.0+20160316155526",
-    "lodash": "registry:dt/lodash#4.14.0+20160817155621",
     "node": "registry:dt/node#6.0.0+20160823142437",
     "tape": "registry:dt/tape#4.2.2+20160317120654",
     "webrtc/mediastream": "registry:dt/webrtc/mediastream#0.0.0+20160317120654"
