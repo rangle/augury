@@ -1,12 +1,6 @@
 <div [ngClass]="{changed: isUpdated, property: true}">
-  <span class="info-key">
-    <div class="expander transparent"></div>
-    <span *ngIf="level === 0 && inputs[k]" class="primary-color decorator">
-      @Input(<span class="info-value" [hidden]="!inputs[k].alias">'{{inputs[k].alias}}'</span>)
-    </span>
-  </span>
   <bt-property-editor
-     [key]="k"
+     [key]="key"
      [initialValue]="value"
      (submit)="onValueChanged($event)">
   </bt-property-editor>

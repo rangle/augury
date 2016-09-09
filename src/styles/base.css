@@ -71,6 +71,10 @@ split-pane-secondary-content {
   transition: transform 250ms ease-in-out;
 }
 
+.expander.transparent {
+  margin-right: 1px;
+}
+
 .decorator {
   display: inline-block;
   margin-right: -2px;

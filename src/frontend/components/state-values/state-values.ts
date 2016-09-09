@@ -45,7 +45,7 @@ export class StateValues extends Highlightable {
     return oldValue !== newValue;
   }
 
-  private get k(): string | number {
+  private get key(): string | number {
     return this.path[this.path.length - 1];
   }
 

@@ -10,6 +10,7 @@ import {
 
 const keycode = require('keycode');
 
+import {InputOutput} from '../../utils';
 import {Highlightable} from '../../utils/highlightable';
 import {highlightTime} from '../../../utils/configuration';
 
@@ -32,6 +33,7 @@ export enum State {
 })
 export class PropertyEditor {
   @Input() key: string;
+  @Input() inputs: InputOutput;
   @Input() private initialValue;
 
   @Output() private cancel = new EventEmitter<void>();
