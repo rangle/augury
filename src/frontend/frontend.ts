@@ -176,7 +176,7 @@ class App {
         break;
       case MessageType.TreeDiff:
         if (this.tree == null) {
-          this.connection.send(MessageFactory.initialize(this.options)); // request tree
+          this.connection.send(MessageFactory.initialize(this.options.simpleOptions())); // request tree
         }
         else {
           this.updateTree(msg.content);
