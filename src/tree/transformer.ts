@@ -1,4 +1,4 @@
-import {cloneDeep} from 'lodash';
+import * as clone from 'clone';
 
 import {
   ChangeDetectionStrategy,
@@ -61,7 +61,7 @@ export const transform = (
   return load<Node>(serializedPath, () => {
     const key = (subkey: string) => serializePath(path.concat([subkey]));
 
-    const listeners = element.listeners.map(l => cloneDeep(l));
+    const listeners = element.listeners.map(l => clone(l));
 
     const name = (() => {
       if (element.componentInstance &&
@@ -113,26 +113,34 @@ export const transform = (
       ? getComponentDirectives(metadata)
       : [];
 
-    const assert = (): Node => {
-      throw new Error('Parent should already have been created and cached');
+    const cloneAndTransform = object => {
+      const copy = clone(object);
+
+      for (const k of Object.keys(copy)) {
+        if (copy[k] === undefined) { // undefined values cause json patch to misbehave
+          delete copy[k];
+        }
+      }
+
+      return copy;
     };
 
     const node: Node = {
       id: serializedPath,
       isComponent,
-      attributes: cloneDeep(element.attributes),
+      attributes: cloneAndTransform(element.attributes),
       children: null,
       changeDetection,
       description: Description.getComponentDescription(element),
       directives,
-      classes: cloneDeep(element.classes),
-      styles: cloneDeep(element.styles),
+      classes: cloneAndTransform(element.classes),
+      styles: cloneAndTransform(element.styles),
       injectors,
       input,
       output,
       name,
       listeners,
-      properties: cloneDeep(element.properties),
+      properties: cloneAndTransform(element.properties),
       providers,
       dependencies: dependencies(),
       source: element.source,
