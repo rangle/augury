@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.1.1](https://github.com/rangle/tree/1.1.1)
+* Assorted style fixes.
+* All-new "expand all" (Command/Ctrl-Click) and "collapse all" (Alt-Click) functionality in the Component Tree. ([629](https://github.com/rangle/augury/issues/629))
+* Fix flickering update issue and lodash name collision issue. ([630](https://github.com/rangle/augury/issues/630))
+* Fix recursive serialization issue that Eric found. ([618](https://github.com/rangle/augury/618))
+* Remember expand actions in "State" view between component selection changes. ([620](https://github.com/rangle/augury/issues/620))
+
 ## [1.1.0](https://github.com/rangle/augury/tree/1.1.0)
 * Port Augury to Angular 2.0.0 RC6 ([524](https://github.com/rangle/augury/issues/524), [563](https://github.com/rangle/augury/issues/563))
 * Remove support for the deprecated router ([590](https://github.com/rangle/augury/issues/590))
