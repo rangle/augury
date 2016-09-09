@@ -37,6 +37,7 @@ export class AppTrees {
   @Output() private tabChange = new EventEmitter<Tab>();
   @Output() private selectionChange = new EventEmitter<Node>();
   @Output() private inspectElement = new EventEmitter<Node>();
+  @Output() private expandAll = new EventEmitter<Node>();
 
   private tabs = [{
     title: 'Component Tree',

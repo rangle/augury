@@ -23,7 +23,8 @@
     [tree]="tree"
     (tabChange)="onSelectedTabChange($event)"
     (selectionChange)="onComponentSelectionChange($event)"
-    (inspectElement)="onInspectElement($event)">
+    (inspectElement)="onInspectElement($event)"
+    (expandAll)="onExpandAll($event)">
   </bt-app-trees>
 </div>
 <template [ngIf]="!hasContent">

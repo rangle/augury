@@ -10,7 +10,8 @@
        class="flex minheight-100pct"
        [tree]="tree"
        (selectionChange)="selectionChange.emit($event)"
-       (inspectElement)="inspectElement.emit($event)">
+       (inspectElement)="inspectElement.emit($event)"
+       (expandAll)="expandAll.emit($event)">
     </bt-tree-view>
   </div>
   <div split-pane-secondary-content class="flex flex-column flex-auto">

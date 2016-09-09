@@ -2,6 +2,7 @@
   <component-tree
     [tree]="tree"
     (selectionChange)="selectionChange.emit($event)"
-    (inspectElement)="inspectElement.emit($event)">
+    (inspectElement)="inspectElement.emit($event)"
+    (expandAll)="expandAll.emit($event)">
     </component-tree>
 </div>

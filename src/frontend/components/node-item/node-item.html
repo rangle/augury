@@ -23,7 +23,8 @@
       [node]="node"
       [level]="level + 1"
       (selectionChange)="selectionChange.emit($event)"
-      (inspectElement)="inspectElement.emit($event)">
+      (inspectElement)="inspectElement.emit($event)"
+      (expandAll)="expandAll.emit($event)">
     </bt-node-item>
   </div>
 </div>

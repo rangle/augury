@@ -37,6 +37,9 @@ export class NodeItem {
   /// Emitted when this node is selected for element inspection
   @Output() private inspectElement = new EventEmitter<Node>();
 
+  /// Expand this node and all its children
+  @Output() private expandAll = new EventEmitter<Node>();
+
   constructor(
     private changeDetector: ChangeDetectorRef,
     private viewState: ComponentViewState,
@@ -69,6 +72,12 @@ export class NodeItem {
   }
 
   onClick(event: MouseEvent) {
+    if (event.ctrlKey ||
+        event.altKey ||
+        event.metaKey) {
+      this.expandAll.emit(this.node);
+    }
+
     this.selectionChange.emit(this.node);
   }
 

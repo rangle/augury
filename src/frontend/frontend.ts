@@ -23,6 +23,7 @@ import {
 
 import {
   ComponentInstanceState,
+  ExpandState,
   Options,
   Tab,
   Theme,
@@ -271,6 +272,16 @@ class App {
 
   private onInspectElement(node: Node) {
     chrome.devtools.inspectedWindow.eval(`inspect(inspectedApplication.nodeFromPath('${node.id}'))`);
+  }
+
+  private onExpandAll(from: Node) {
+    const expand = (node: Node) => {
+      this.viewState.expandState(node, ExpandState.Expanded);
+
+      node.children.forEach(n => expand(n));
+    };
+
+    return expand(from);
   }
 
   private onSelectedTabChange(tab: Tab) {
