@@ -24,7 +24,8 @@
     (tabChange)="onSelectedTabChange($event)"
     (selectionChange)="onComponentSelectionChange($event)"
     (inspectElement)="onInspectElement($event)"
-    (expandAll)="onExpandAll($event)">
+    (collapseChildren)="onCollapseChildren($event)"
+    (expandChildren)="onExpandChildren($event)">
   </bt-app-trees>
 </div>
 <template [ngIf]="!hasContent">

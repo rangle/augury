@@ -11,7 +11,8 @@
        [tree]="tree"
        (selectionChange)="selectionChange.emit($event)"
        (inspectElement)="inspectElement.emit($event)"
-       (expandAll)="expandAll.emit($event)">
+       (collapseChildren)="collapseChildren.emit($event)"
+       (expandChildren)="expandChildren.emit($event)">
     </bt-tree-view>
   </div>
   <div split-pane-secondary-content class="flex flex-column flex-auto">

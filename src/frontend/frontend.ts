@@ -274,14 +274,12 @@ class App {
     chrome.devtools.inspectedWindow.eval(`inspect(inspectedApplication.nodeFromPath('${node.id}'))`);
   }
 
-  private onExpandAll(from: Node) {
-    const expand = (node: Node) => {
-      this.viewState.expandState(node, ExpandState.Expanded);
+  private onCollapseChildren(node: Node) {
+    this.recursiveExpansionState(node, ExpandState.Collapsed);
+  }
 
-      node.children.forEach(n => expand(n));
-    };
-
-    return expand(from);
+  private onExpandChildren(node: Node) {
+    this.recursiveExpansionState(node, ExpandState.Expanded);
   }
 
   private onSelectedTabChange(tab: Tab) {
@@ -339,6 +337,16 @@ class App {
     }
 
     return result;
+  }
+
+  private recursiveExpansionState(from: Node, state: ExpandState) {
+    const apply = (node: Node) => {
+      this.viewState.expandState(node, state);
+
+      node.children.forEach(n => apply(n));
+    };
+
+    apply(from);
   }
 }
 
