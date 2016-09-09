@@ -10,7 +10,7 @@ import {
 } from '../../utils';
 import {
   ExpandState,
-  ViewState,
+  ComponentViewState,
 } from '../../state';
 import {
   MutableTree,
@@ -22,7 +22,7 @@ import {
 export class UserActions {
   constructor(
     private connection: Connection,
-    private viewState: ViewState
+    private viewState: ComponentViewState
   ) {}
 
   /// Toggle the expansion state of a node

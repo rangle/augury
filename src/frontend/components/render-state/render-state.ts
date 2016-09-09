@@ -14,6 +14,11 @@ import {
   isLargeArray,
 } from '../../utils';
 
+import {
+  ComponentPropertyState,
+  ExpandState,
+} from '../../state';
+
 import {deserializePath} from '../../../tree';
 
 enum StateClassification {
@@ -43,13 +48,14 @@ export class RenderState {
 
   private StateClassification = StateClassification;
 
-  private expansionState = {};
-
   private EmitState = EmitState;
 
   private emitState = new Map<string, EmitState>();
 
-  constructor(private userActions: UserActions) {}
+  constructor(
+    private userActions: UserActions,
+    private propertyState: ComponentPropertyState
+  ) {}
 
   keys(obj): string[] {
     return (obj instanceof Object) ? Object.keys(obj) : [];
@@ -59,7 +65,7 @@ export class RenderState {
     switch (this.classification(key)) {
       case StateClassification.Input:
       case StateClassification.Property:
-        this.expansionState[key] = !this.expansionState[key];
+        this.propertyState.toggleExpand(this.path.concat([key]));
         break;
     }
   }
@@ -73,11 +79,7 @@ export class RenderState {
   }
 
   private expanded(key: string): boolean {
-    if (this.expansionState.hasOwnProperty(key)) {
-      return this.expansionState[key];
-    }
-
-    return false;
+    return this.propertyState.expansionState(this.path.concat([key])) === ExpandState.Expanded;
   }
 
   private classification(key: string): StateClassification {

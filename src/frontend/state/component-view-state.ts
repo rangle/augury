@@ -15,10 +15,7 @@ import {highlightTime} from '../../utils';
 
 import {ParseUtils} from '../utils/parse-utils';
 
-export enum ExpandState {
-  Expanded,
-  Collapsed,
-}
+import {ExpandState} from './expand-state';
 
 const checkReferenceId = (node: Node) => {
   if (node == null) {
@@ -27,7 +24,7 @@ const checkReferenceId = (node: Node) => {
 };
 
 @Injectable()
-export class ViewState {
+export class ComponentViewState {
   private subject = new Subject<void>();
 
   private expansion = new Map<string, ExpandState>();
