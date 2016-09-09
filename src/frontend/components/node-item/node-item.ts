@@ -31,11 +31,17 @@ export class NodeItem {
   // The depth of this node in the tree
   @Input() level: number;
 
-  /// Emitted when this node is selected
+  // Emitted when this node is selected
   @Output() private selectionChange = new EventEmitter<Node>();
 
-  /// Emitted when this node is selected for element inspection
+  // Emitted when this node is selected for element inspection
   @Output() private inspectElement = new EventEmitter<Node>();
+
+  // Expand this node and all its children
+  @Output() private expandChildren = new EventEmitter<Node>();
+
+  // Collapse this node and all its children
+  @Output() private collapseChildren = new EventEmitter<Node>();
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -69,6 +75,13 @@ export class NodeItem {
   }
 
   onClick(event: MouseEvent) {
+    if (event.ctrlKey || event.metaKey) {
+      this.expandChildren.emit(this.node);
+    }
+    else if (event.altKey) {
+      this.collapseChildren.emit(this.node);
+    }
+
     this.selectionChange.emit(this.node);
   }
 

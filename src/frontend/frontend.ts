@@ -23,6 +23,7 @@ import {
 
 import {
   ComponentInstanceState,
+  ExpandState,
   Options,
   Tab,
   Theme,
@@ -273,6 +274,14 @@ class App {
     chrome.devtools.inspectedWindow.eval(`inspect(inspectedApplication.nodeFromPath('${node.id}'))`);
   }
 
+  private onCollapseChildren(node: Node) {
+    this.recursiveExpansionState(node, ExpandState.Collapsed);
+  }
+
+  private onExpandChildren(node: Node) {
+    this.recursiveExpansionState(node, ExpandState.Expanded);
+  }
+
   private onSelectedTabChange(tab: Tab) {
     this.selectedTab = tab;
 
@@ -328,6 +337,16 @@ class App {
     }
 
     return result;
+  }
+
+  private recursiveExpansionState(from: Node, state: ExpandState) {
+    const apply = (node: Node) => {
+      this.viewState.expandState(node, state);
+
+      node.children.forEach(n => apply(n));
+    };
+
+    apply(from);
   }
 }
 

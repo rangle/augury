@@ -22,6 +22,8 @@ export class ComponentTree {
 
   @Output() private selectionChange = new EventEmitter<Node>();
   @Output() private inspectElement = new EventEmitter<Node>();
+  @Output() private expandChildren = new EventEmitter<Node>();
+  @Output() private collapseChildren = new EventEmitter<Node>();
 
   private prevSelectedNode: Element;
 
