@@ -47,7 +47,7 @@ export class StateValues extends Highlightable {
       return false;
     }
 
-    if (oldValue === 'function' && typeof newValue === 'function') {
+    if (typeof oldValue === 'function' && typeof newValue === 'function') {
       return functionName(oldValue) !== functionName(newValue);
     }
 
