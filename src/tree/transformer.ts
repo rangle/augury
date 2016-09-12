@@ -89,7 +89,7 @@ export const transform = (
       return parameters.map(param => functionName(param));
     };
 
-    const providers = getComponentProviders(element, name);
+    const providers = getComponentProviders(element, name).filter(p => p.key != null);
 
     const isComponent = element.componentInstance != null;
 
