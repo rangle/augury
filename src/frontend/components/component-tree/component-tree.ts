@@ -15,7 +15,7 @@ import {
   selector: 'component-tree',
   template: require('./component-tree.html'),
   styles: [require('to-string!./component-tree.css')],
-  host: {'class': 'flex overflow-scroll'},
+  host: {'class': 'flex overflow-auto'},
 })
 export class ComponentTree {
   @Input() tree: MutableTree;
