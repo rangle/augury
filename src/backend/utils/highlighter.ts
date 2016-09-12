@@ -66,6 +66,8 @@ export const highlight = (nodes: Array<Node>) => {
     clear();
   }
 
+  nodes = nodes.filter(n => n != null);
+
   const elements = new Array<HTMLElement>();
 
   const map = new Map<string, HTMLElement>();
