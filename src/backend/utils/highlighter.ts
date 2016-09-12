@@ -70,7 +70,7 @@ export const highlight = (nodes: Array<Node>) => {
 
   const map = new Map<string, HTMLElement>();
 
-  for (const node of nodes) {
+  for (const node of nodes.filter(n => n != null)) {
     const element = highlightNode(node.nativeElement(), node.name);
     elements.push(element);
 
