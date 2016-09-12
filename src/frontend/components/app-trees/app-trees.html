@@ -9,6 +9,7 @@
     <bt-tree-view
        class="flex minheight-100pct"
        [tree]="tree"
+       [selectedNode]="selectedNode"
        (selectionChange)="selectionChange.emit($event)"
        (inspectElement)="inspectElement.emit($event)"
        (collapseChildren)="collapseChildren.emit($event)"

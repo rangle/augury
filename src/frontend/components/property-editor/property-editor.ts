@@ -8,8 +8,6 @@ import {
   Output,
 } from '@angular/core';
 
-const keycode = require('keycode');
-
 import {InputOutput} from '../../utils';
 import {Highlightable} from '../../utils/highlightable';
 import {highlightTime} from '../../../utils/configuration';
@@ -109,11 +107,11 @@ export class PropertyEditor {
   }
 
   private onKeypress(event: KeyboardEvent) {
-    switch (keycode(event)) {
-      case 'enter':
+    switch (event.key) {
+      case 'Enter':
         this.accept();
         break;
-      case 'esc':
+      case 'Escape':
         this.reject();
         break;
     }
