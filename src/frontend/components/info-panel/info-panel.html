@@ -9,6 +9,7 @@
   [tree]="tree"
   [loadingState]="loadingState"
   [state]="state"
+  [metadata]="metadata"
   [hidden]="selectedTab !== StateTab.Properties"
   [ngClass]="{flex: selectedTab === StateTab.Properties}"
   (selectionChange)="selectionChange.emit($event)">

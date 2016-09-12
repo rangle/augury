@@ -22,7 +22,7 @@
        [tree]="tree"
        [node]="selectedNode"
        [loadingState]="componentState.loadingState(selectedNode)"
-       [state]="componentState.componentInstance(selectedNode)"
+       [instanceValue]="componentState.componentInstance(selectedNode)"
        (selectionChange)="selectionChange.emit($event)">
     </bt-info-panel>
   </div>

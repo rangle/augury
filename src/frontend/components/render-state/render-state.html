@@ -7,40 +7,42 @@
   <span class="property-container"
      (click)="expandTree(k, $event)"
      *ngIf="nest(k)">
-    <span class="info-key" [ngClass]="{output: classification(k) === StateClassification.Output}">
+    <span class="info-key" [ngClass]="{output: isEmittable(k)}">
       <div [ngClass]="{
         expander: true,
         rotate90: !expanded(k),
-        transparent: keys(state[k]).length === 0
+        transparent: !expandable(k)
       }"></div>
-      <span [ngSwitch]="classification(k)" class="primary-color">
-        <span *ngSwitchCase="StateClassification.Input" class="decorator">@Input(<span class="info-value" [hidden]="!inputs[k].alias">'{{inputs[k].alias}}'</span>)</span>
-        <span *ngSwitchCase="StateClassification.Output" class="decorator">@Output(<span class="info-value" [hidden]="!outputs[k].alias">'{{outputs[k].alias}}'</span>)</span>
+      <span class="primary-color">
+        <span *ngIf="has(k, PropertyMetadata.Input)" class="decorator">
+          @Input(<span class="info-value" [hidden]="!inputs[k].alias">'{{inputs[k].alias}}'</span>)
+        </span>
+        <span *ngIf="has(k, PropertyMetadata.Output)" class="decorator">
+          @Output(<span class="info-value" [hidden]="!outputs[k].alias">'{{outputs[k].alias}}'</span>)
+        </span>
       </span>
       {{k}}:
     </span>
-    <span [ngSwitch]="classification(k)" class="classification">
-      <span *ngSwitchCase="StateClassification.Output" class="emitter">
-        <input class="editable" type="text" #prop />
-        <div [ngSwitch]="emitState.get(k)" class="emit-state">
-          <span *ngSwitchCase="EmitState.Emitted" class="emitted">✔</span>
-          <span *ngSwitchCase="EmitState.Failed" class="failed">✘</span>
-        </div>
-        <button class="btn btn-primary bg-olive mb1"
-          (click)="emitValue(k, prop.value)">
-          Emit
-        </button>
-      </span>
-      <span *ngSwitchDefault class="info-value">
-        {{displayType(state[k])}}
-      </span>
+    <span *ngIf="isEmittable(k)" class="emitter">
+      <input class="editable" type="text" #prop />
+      <div [ngSwitch]="emitState.get(k)" class="emit-state">
+        <span *ngSwitchCase="EmitState.Emitted" class="emitted">✔</span>
+        <span *ngSwitchCase="EmitState.Failed" class="failed">✘</span>
+      </div>
+      <button class="btn btn-primary bg-olive mb1"
+        (click)="emitValue(k, prop.value)">
+        Emit
+      </button>
+    </span>
+    <span *ngIf="!isEmittable(k)" class="info-value">
+      {{displayType(k)}}
     </span>
   </span>
   <bt-state-values
      *ngIf="nest(k) === false"
      [id]="id"
      [inputs]="inputs"
-     [level]="level"
+     [metadata]="metadataForKey(k)"
      [path]="path.concat([k])"
      [value]="state[k]">
   </bt-state-values>
@@ -50,6 +52,7 @@
        [id]="id"
        [level]="level + 1"
        [path]="path.concat([k])"
+       [metadata]="metadata"
        [state]="state[k]">
     </bt-render-state>
   </div>

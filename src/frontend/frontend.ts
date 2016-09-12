@@ -259,10 +259,7 @@ class App {
       this.componentState.wait(node, promise);
     }
     else {
-      this.directConnection.handleImmediate(m)
-        .then(() => {
-          this.componentState.done(node, null);
-        });
+      this.componentState.wait(node, this.directConnection.handleImmediate(m).then(() => null));
     }
   }
 
