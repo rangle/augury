@@ -78,10 +78,13 @@ export class InjectorTree implements OnChanges {
   }
 
   private displayTree() {
-    this.parentHierarchy =
-      this.parseUtils.getParentHierarchy(this.tree, this.selectedNode);
-    this.parentHierarchyDisplay =
-      this.parentHierarchy.concat([this.selectedNode]);
+    this.parentHierarchy = this.parseUtils.getParentHierarchy(this.tree, this.selectedNode,
+      node => {
+        return node.isComponent === true;
+      });
+
+    this.parentHierarchyDisplay = this.parentHierarchy.concat([this.selectedNode]);
+
     this.addRootDependencies();
 
     let firstChild: Element;

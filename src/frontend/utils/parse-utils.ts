@@ -37,7 +37,7 @@ export class ParseUtils {
     return null;
   }
 
-  getParentHierarchy(tree: MutableTree, node: Node): Array<Node> {
+  getParentHierarchy(tree: MutableTree, node: Node, filter?: (n: Node) => boolean): Array<Node> {
     if (tree == null) {
       return [];
     }
@@ -53,6 +53,10 @@ export class ParseUtils {
         return array;
       },
       []);
+
+    if (typeof filter === 'function') {
+      return hierarchy.filter(n => filter(n));
+    }
 
     return hierarchy;
   }
