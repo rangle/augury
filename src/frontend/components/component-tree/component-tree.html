@@ -1,4 +1,4 @@
-<main class="monospace col-12 p1" *ngIf="tree">
+<main class="monospace col-12 p1" *ngIf="tree" (keydown)="onKeypress($event)" tabindex="0">
   <bt-node-item *ngFor="let node of tree.roots; trackBy: trackById"
     [node]="node"
     [level]="0"

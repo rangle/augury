@@ -18,7 +18,7 @@ import {NodeAttributes} from './node-attributes';
 import {NodeOpenTag} from './node-open-tag';
 
 /// The number of levels of tree nodes that we expand by default
-const defaultExpansionDepth = 3;
+export const defaultExpansionDepth = 3;
 
 @Component({
   selector: 'bt-node-item',
