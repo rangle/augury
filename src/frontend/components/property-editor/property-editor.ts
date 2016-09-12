@@ -33,6 +33,7 @@ export enum State {
 })
 export class PropertyEditor {
   @Input() key: string;
+  @Input() level: number;
   @Input() inputs: InputOutput;
   @Input() private initialValue;
 
