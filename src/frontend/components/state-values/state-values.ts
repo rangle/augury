@@ -6,8 +6,13 @@ import {
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Highlightable} from '../../utils/highlightable';
-import {Path} from '../../../tree';
 import {InputOutput} from '../../utils';
+import {functionName} from '../../../utils';
+import {
+  Path,
+  PropertyMetadata,
+  Metadata,
+} from '../../../tree';
 
 @Component({
   selector: 'bt-state-values',
@@ -16,9 +21,9 @@ import {InputOutput} from '../../utils';
 })
 export class StateValues extends Highlightable {
   @Input() id: string | number;
-  @Input() inputs: InputOutput;
-  @Input() level: number;
   @Input() path: Path;
+  @Input() inputs: InputOutput;
+  @Input() metadata: PropertyMetadata;
   @Input() value;
 
   private editable: boolean = false;
@@ -40,6 +45,10 @@ export class StateValues extends Highlightable {
 
     if (oldValue.toString() === 'CD_INIT_VALUE') {
       return false;
+    }
+
+    if (oldValue === 'function' && typeof newValue === 'function') {
+      return functionName(oldValue) !== functionName(newValue);
     }
 
     return oldValue !== newValue;

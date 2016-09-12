@@ -12,6 +12,7 @@ import {Property} from '../../../backend/utils/description';
 import {InputOutput} from '../../../frontend/utils';
 
 import {
+  Metadata,
   MutableTree,
   Node,
   Path,
@@ -26,6 +27,7 @@ export class ComponentInfo {
   @Input() node: Node;
   @Input() tree: MutableTree;
   @Input() state;
+  @Input() metadata: Metadata;
   @Input() loadingState: ComponentLoadState;
 
   @Output() private selectionChange = new EventEmitter<Node>();

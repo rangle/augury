@@ -7,9 +7,15 @@ import {
 } from '@angular/core';
 
 import {ComponentLoadState} from '../../state';
-import {Node} from '../../../tree';
 import {StateTab} from '../../state';
 import {UserActions} from '../../actions/user-actions/user-actions';
+import {
+  InstanceValue,
+  Metadata,
+  Path,
+  PropertyMetadata,
+  Node,
+} from '../../../tree';
 
 @Component({
   selector: 'bt-info-panel',
@@ -18,7 +24,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 export class InfoPanel {
   @Input() tree;
   @Input() node;
-  @Input() state;
+  @Input() instanceValue: InstanceValue;
   @Input() loadingState: ComponentLoadState;
 
   @Output() private selectionChange = new EventEmitter<Node>();
@@ -38,6 +44,21 @@ export class InfoPanel {
     }];
 
   constructor(private userActions: UserActions) {}
+
+  private get state() {
+    if (this.instanceValue) {
+      return this.instanceValue.instance;
+    }
+    return null;
+  }
+
+  private get metadata(): Metadata {
+    if (this.instanceValue) {
+      return this.instanceValue.metadata;
+    }
+
+    return new Map<string, PropertyMetadata>();
+  }
 
   private onSelectedTabChanged(tab: StateTab) {
     this.selectedTab = tab;

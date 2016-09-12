@@ -1,6 +1,11 @@
 import {ChangeDetectorRef} from '@angular/core';
 
-import {Node} from '../../tree';
+import {
+  InstanceValue,
+  Metadata,
+  PropertyMetadata,
+  Node,
+} from '../../tree';
 
 export enum ComponentLoadState {
   Idle,
@@ -11,14 +16,18 @@ export enum ComponentLoadState {
 class CachedValue {
   constructor(
     public state: ComponentLoadState,
-    public value
+    public value: InstanceValue
   ) {}
+}
+
+class LookupError {
+  constructor(public error: Error) {}
 }
 
 export class ComponentInstanceState {
   constructor(private changeDetector: ChangeDetectorRef) {}
 
-  private map = new Map<string, CachedValue>();
+  private map = new Map<string, LookupError | CachedValue>();
 
   has(node: Node): boolean {
     return this.map.has(node.id);
@@ -28,53 +37,54 @@ export class ComponentInstanceState {
     if (node == null) {
       return null;
     }
+
     const cache = this.map.get(node.id);
-    if (cache == null) {
+
+    if (cache == null || cache instanceof LookupError) {
       return ComponentLoadState.Failed;
     }
-    return cache.state;
+
+    return (<CachedValue> cache).state;
   }
 
-  componentInstance(node: Node) {
+  componentInstance(node: Node): InstanceValue {
     if (node == null) {
       return null;
     }
 
     const cache = this.map.get(node.id);
-    if (cache == null) {
+
+    if (cache == null || cache instanceof LookupError) {
       return null;
     }
 
-    switch (cache.state) {
+    const existing = <CachedValue> cache;
+
+    switch (existing.state) {
       case ComponentLoadState.Failed:
         return null;
       case ComponentLoadState.Received:
-        return cache.value;
+        return existing.value;
       default:
-        throw new Error(`Unknown state: ${cache.state}`);
+        throw new Error(`Unknown state: ${existing.state}`);
     }
   }
 
-  wait(node: Node, promise: Promise<any>) {
+  wait(node: Node, promise: Promise<InstanceValue>) {
     promise.then(response => {
-      this.done(node, response);
+      const metadata = toMap(response.metadata);
+
+      const value = {instance: response.instance, metadata};
+
+      this.map.set(node.id, new CachedValue(ComponentLoadState.Received, value));
+
+      this.changeDetector.detectChanges();
     })
     .catch(error => {
-      this.fail(node, error);
+      this.map.set(node.id, new LookupError(error));
+
+      this.changeDetector.detectChanges();
     });
-  }
-
-  write<T>(node: Node, state: ComponentLoadState, value) {
-    this.map.set(node.id, new CachedValue(state, value));
-    this.changeDetector.detectChanges();
-  }
-
-  done(node: Node, value) {
-    this.write(node, ComponentLoadState.Received, value);
-  }
-
-  fail(node: Node, error: Error) {
-    this.write(node, ComponentLoadState.Failed, error);
   }
 
   reset(identifiers?: Array<string>) {
@@ -88,3 +98,13 @@ export class ComponentInstanceState {
     }
   }
 }
+
+const toMap = (array): Metadata => {
+  const map = new Map<any, PropertyMetadata>();
+
+  for (const item of array) {
+    map.set(item[0], item[1]);
+  }
+
+  return map;
+};

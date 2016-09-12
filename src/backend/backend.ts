@@ -3,9 +3,12 @@ import {DebugElement} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {
+  Metadata,
   MutableTree,
   Node,
   Path,
+  instanceWithMetadata,
+  serializePath,
 } from '../tree';
 
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
@@ -31,9 +34,7 @@ import {
 } from './utils';
 
 import {serialize} from '../utils';
-
 import {MessageQueue} from '../structures';
-
 import {SimpleOptions} from '../options';
 
 declare const ng;
@@ -185,7 +186,10 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      return probed.componentInstance;
+      return instanceWithMetadata(
+        probed.componentInstance,
+        new Set<string>(node.input.map(binding => binding.replace(/:(.*)$/, ''))),
+        new Set<string>(node.output));
     }
   }
   return null;
@@ -225,7 +229,16 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
     if (probed) {
       const instanceParent = getNodeInstanceParent(probed, path);
       if (instanceParent) {
-        instanceParent[path[path.length - 1]].emit(newValue);
+        const emittable = instanceParent[path[path.length - 1]];
+        if (typeof emittable.emit === 'function') {
+          emittable.emit(newValue);
+        }
+        else if (typeof emittable.next === 'function') {
+          emittable.next(newValue);
+        }
+        else {
+          throw new Error(`Cannot emit value for ${serializePath(path)}`);
+        }
       }
     }
   }

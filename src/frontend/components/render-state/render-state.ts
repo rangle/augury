@@ -14,18 +14,20 @@ import {
   isLargeArray,
 } from '../../utils';
 
+import {getPropertyPath} from '../../../backend/utils';
+
 import {
   ComponentPropertyState,
   ExpandState,
 } from '../../state';
 
-import {deserializePath} from '../../../tree';
-
-enum StateClassification {
-  Input,
-  Output,
-  Property,
-}
+import {
+  Metadata,
+  Path,
+  PropertyMetadata,
+  deserializePath,
+  serializePath,
+} from '../../../tree';
 
 export enum EmitState {
   None,
@@ -42,15 +44,16 @@ export class RenderState {
   @Input() id: string;
   @Input() inputs: InputOutput;
   @Input() outputs: InputOutput;
+  @Input() metadata: Metadata;
   @Input() level: number;
   @Input() path: Array<string | number>;
   @Input() state;
 
-  private StateClassification = StateClassification;
-
   private EmitState = EmitState;
 
   private emitState = new Map<string, EmitState>();
+
+  private PropertyMetadata = PropertyMetadata;
 
   constructor(
     private userActions: UserActions,
@@ -61,13 +64,22 @@ export class RenderState {
     return (obj instanceof Object) ? Object.keys(obj) : [];
   }
 
-  expandTree(key) {
-    switch (this.classification(key)) {
-      case StateClassification.Input:
-      case StateClassification.Property:
-        this.propertyState.toggleExpand(this.path.concat([key]));
-        break;
+  expandTree(key: string) {
+    if (this.expandable(key)) {
+      this.propertyState.toggleExpand(this.path.concat([key]));
     }
+  }
+
+  private metadataForKey(key: string): PropertyMetadata {
+    const propertyPath = getPropertyPath(this.path).concat([key]);
+
+    return this.metadata.get(this.state[key]);
+  }
+
+  private has(key: string, flag: PropertyMetadata) {
+    const propertyPath = getPropertyPath(this.path).concat([key]);
+
+    return (this.metadataForKey(serializePath(propertyPath)) & flag) === flag;
   }
 
   private get none() {
@@ -82,38 +94,32 @@ export class RenderState {
     return this.propertyState.expansionState(this.path.concat([key])) === ExpandState.Expanded;
   }
 
-  private classification(key: string): StateClassification {
-    if (this.level === 0) {
-      if (this.inputs.hasOwnProperty(key)) {
-        return StateClassification.Input;
-      }
-      else if (this.outputs.hasOwnProperty(key)) {
-        return StateClassification.Output;
-      }
+  private displayType(key: string): string {
+    const object = this.state[key];
+
+    if (Array.isArray(object)) {
+      return `Array[${object.length}]`;
     }
-    return StateClassification.Property;
+    else if (object != null) {
+      if ((this.metadataForKey(key) & PropertyMetadata.Observable) !== 0) {
+        return 'Observable';
+      }
+      else if (Object.keys(object).length === 0) {
+        return '{}';
+      }
+      return 'Object';
+    }
+
+    if (object === null) {
+      return 'null';
+    }
+    else if (object === undefined) {
+      return 'undefined';
+    }
   }
 
-  private displayType(d): string {
-    if (Array.isArray(d)) {
-      return `Array[${d.length}]`;
-    }
-    else if (typeof d === 'object') {
-      if (d) {
-        if (isSubject(d)) {
-          return 'Subject';
-        }
-        else if (isObservable(d)) {
-          return 'Observable';
-        }
-        return 'Object';
-      } else if (d === null) {
-        return 'null';
-      } else if (d === undefined) {
-        return 'undefined';
-      }
-    }
-    return typeof d;
+  private expandable(key: string) {
+    return this.isEmittable(key) === false && Object.keys(this.state[key]).length > 0;
   }
 
   private evaluate(data: string) {
@@ -125,6 +131,13 @@ export class RenderState {
     }
   }
 
+  private isEmittable(key: string): boolean {
+    const flags = this.metadataForKey(key);
+
+    return (flags & PropertyMetadata.EventEmitter) !== 0
+        || (flags & PropertyMetadata.Subject) !== 0;
+  }
+
   private emitValue(outputProperty: string, data) {
     data = this.evaluate(data);
 
@@ -132,7 +145,7 @@ export class RenderState {
 
     const timedReset = () => setTimeout(() => update(EmitState.None), 3000);
 
-    const path = deserializePath(this.id).concat([outputProperty]);
+    const path = this.path.concat([outputProperty]);
 
     return this.userActions.emitValue(path, data)
       .then(() => {

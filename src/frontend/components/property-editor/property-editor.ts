@@ -1,5 +1,6 @@
 import {
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -13,6 +14,7 @@ const keycode = require('keycode');
 import {InputOutput} from '../../utils';
 import {Highlightable} from '../../utils/highlightable';
 import {highlightTime} from '../../../utils/configuration';
+import {PropertyMetadata} from '../../../tree';
 
 /// The types of values that this editor can emit to its owner
 export type EditorType = string | number | Object | Function;
@@ -30,11 +32,13 @@ export enum State {
   selector: 'bt-property-editor',
   template: require('./property-editor.html'),
   styles: [require('to-string!./property-editor.css')],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyEditor {
   @Input() key: string;
   @Input() level: number;
   @Input() inputs: InputOutput;
+  @Input() metadata: PropertyMetadata;
   @Input() private initialValue;
 
   @Output() private cancel = new EventEmitter<void>();
@@ -62,8 +66,10 @@ export class PropertyEditor {
     this.editor.focus();
   }
 
-  private ngOnChanges() {
-    this.value = this.initialValue;
+  private ngOnChanges(changes: SimpleChanges) {
+    if (this.hasChanged(changes)) {
+      this.value = this.initialValue;
+    }
   }
 
   private ngAfterViewChecked() {
@@ -72,15 +78,17 @@ export class PropertyEditor {
     }
   }
 
-  private parseValue(): EditorResult {
-    const value = this.value;
+  private get isInput(): boolean {
+    return (this.metadata & PropertyMetadata.Input) !== 0;
+  }
 
+  private parseValue(value): EditorResult {
     try {
-      return JSON.parse(value);
+      return new Function(`return ${value}`)();
     }
-    catch (e) {}
-
-    return value;
+    catch (e) {
+      return value;
+    }
   }
 
   private hasChanged(changes: SimpleChanges) {
@@ -139,7 +147,11 @@ export class PropertyEditor {
   }
 
   private accept() {
-    this.submit.emit(this.parseValue());
+    const parsed = this.parseValue(this.value);
+
+    this.submit.emit(parsed);
+
+    this.initialValue = parsed;
 
     this.transition(State.Read);
   }
