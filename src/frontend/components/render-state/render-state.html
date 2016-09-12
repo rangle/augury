@@ -15,10 +15,10 @@
       }"></div>
       <span class="primary-color">
         <span *ngIf="has(k, PropertyMetadata.Input)" class="decorator">
-          @Input(<span class="info-value" [hidden]="!inputs[k].alias">'{{inputs[k].alias}}'</span>)
+          @Input(<span class="info-value" *ngIf="inputs[k] && inputs[k].alias">'{{inputs[k].alias}}'</span>)
         </span>
         <span *ngIf="has(k, PropertyMetadata.Output)" class="decorator">
-          @Output(<span class="info-value" [hidden]="!outputs[k].alias">'{{outputs[k].alias}}'</span>)
+          @Output(<span class="info-value" *ngIf="outputs[k] && outputs[k].alias">'{{outputs[k].alias}}'</span>)
         </span>
       </span>
       {{k}}:
