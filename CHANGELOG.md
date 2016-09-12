@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.1.2](https://github.com/rangle/tree/1.1.2)
+* Resolve a bug that caused an internal communication pipe to become clogged with empty tree diff messages, which in turn caused UI latency
+* Resolve an issue with @Input() decoration not appearing in the "State" panel in some cases
+
 ## [1.1.1](https://github.com/rangle/tree/1.1.1)
 * Assorted style fixes.
 * All-new "expand all" (Command/Ctrl-Click) and "collapse all" (Alt-Click) functionality in the Component Tree. ([629](https://github.com/rangle/augury/issues/629))
