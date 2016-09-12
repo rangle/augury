@@ -67,7 +67,13 @@ const updateTree = (roots: Array<DebugElement>) => {
     messageBuffer.enqueue(MessageFactory.completeTree(tree));
   }
   else {
-    messageBuffer.enqueue(MessageFactory.treeDiff(previousTree.diff(tree)));
+    const changes = previousTree.diff(tree);
+    if (changes.length > 0) {
+      messageBuffer.enqueue(MessageFactory.treeDiff(previousTree.diff(tree)));
+    }
+    else {
+      return; // no changes
+    }
   }
 
   /// Send a message through the normal channels to indicate to the frontend
