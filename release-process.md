@@ -24,11 +24,11 @@ Document contains detailed description of Augury release process from merging to
   The first line must be a markdown header of the form `## Release ${TAG#v}`.
 * [Changelog Template](changelog-template.md)
 
-#### Update manifest.json & package.json
+#### Update manifest.json, package.json, and popup.html
 
 * Checkout the `dev` branch from which you wish to release
 * Choose a version tag (see above) henceforth referred to as `$TAG`.
-* Update the version number in `manifest.json` and `package.json`
+* Update the version number in `manifest.json`, `package.json`, and `popup.html`
 
 #### Commit & Push the updates:
 
