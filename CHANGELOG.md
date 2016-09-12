@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.1.3](http://github.com/rangle/tree/1.1.3)
+* Resolve another endless-flicker issue caused by providers with undefined keys
+
 ## [1.1.2](https://github.com/rangle/tree/1.1.2)
 * Resolve a bug that caused an internal communication pipe to become clogged with empty tree diff messages, which in turn caused UI latency
 * Resolve an issue with @Input() decoration not appearing in the "State" panel in some cases
