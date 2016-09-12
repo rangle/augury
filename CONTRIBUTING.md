@@ -97,7 +97,7 @@ If you do find a new issue, the best way to get a bug fixed is to provide a test
 * Commas last,
 * 2 spaces for indentation (no tabs)
 * Prefer `'` over `"`
-* 80 character line length
+* 120 character line length
 * ...
 
 More information can be found in `tslint.json` file of this repository.
