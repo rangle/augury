@@ -63,10 +63,6 @@ export class ComponentTree {
     }
   }
 
-  private ngOnInit() {
-    this.el.nativeElement.focus();
-  }
-
   private onKeypress(event: KeyboardEvent) {
     switch (event.key) {
       case 'ArrowUp':
