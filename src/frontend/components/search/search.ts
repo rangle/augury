@@ -71,15 +71,12 @@ export class Search {
       return;
     }
 
-    switch (event.keyCode) {
-      case 10: // LF
-      case 13: // CR
-      case 40: // down arrow
-        this.next();
-        break;
-      case 38: // up arrow
+    if (event.key === 'Enter') {
+      if (event.getModifierState('Shift')) {
         this.previous();
-        break;
+      } else {
+        this.next();
+      }
     }
   }
 

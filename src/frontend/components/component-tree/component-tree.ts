@@ -29,7 +29,7 @@ export class ComponentTree {
   @Input() private tree: MutableTree;
   @Input() private selectedNode: Node;
 
-  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
   @Output() private inspectElement = new EventEmitter<Node>();
   @Output() private expandChildren = new EventEmitter<Node>();
   @Output() private collapseChildren = new EventEmitter<Node>();
@@ -115,7 +115,7 @@ export class ComponentTree {
       node = this.tree.roots[0];
     }
 
-    this.selectionChange.emit(node);
+    this.selectNode.emit(node);
   }
 
   private getParent(node: Node): Node {

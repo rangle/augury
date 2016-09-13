@@ -1,7 +1,6 @@
 import {
   Component,
   EventEmitter,
-  Inject,
   Input,
   Output,
 } from '@angular/core';
@@ -12,9 +11,8 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 import {
   InstanceValue,
   Metadata,
-  Path,
-  PropertyMetadata,
   Node,
+  PropertyMetadata,
 } from '../../../tree';
 
 @Component({
@@ -27,7 +25,7 @@ export class InfoPanel {
   @Input() instanceValue: InstanceValue;
   @Input() loadingState: ComponentLoadState;
 
-  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
 
   private StateTab = StateTab;
 

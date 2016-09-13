@@ -14,9 +14,6 @@ import {
   ComponentViewState,
 } from '../../state';
 
-import {NodeAttributes} from './node-attributes';
-import {NodeOpenTag} from './node-open-tag';
-
 /// The number of levels of tree nodes that we expand by default
 export const defaultExpansionDepth = 3;
 
@@ -32,7 +29,7 @@ export class NodeItem {
   @Input() level: number;
 
   // Emitted when this node is selected
-  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
 
   // Emitted when this node is selected for element inspection
   @Output() private inspectElement = new EventEmitter<Node>();
@@ -82,7 +79,7 @@ export class NodeItem {
       this.collapseChildren.emit(this.node);
     }
 
-    this.selectionChange.emit(this.node);
+    this.selectNode.emit(this.node);
   }
 
   onMouseOut(event: MouseEvent) {

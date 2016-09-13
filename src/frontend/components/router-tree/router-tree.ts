@@ -1,13 +1,11 @@
 import {
   Component,
-  ElementRef,
-  Inject,
   Input,
+  ViewChild,
 } from '@angular/core';
 
-import {RouterInfo} from '../router-info/router-info';
 import {Route} from '../../../backend/utils';
-import {Node} from '../../../tree';
+import {UserActions} from '../../actions/user-actions/user-actions';
 
 import * as d3 from 'd3';
 
@@ -19,7 +17,6 @@ interface TreeConfig {
       d3.svg.diagonal.Node
     >;
   svg: d3.Selection<any>;
-  duration: number;
 }
 
 @Component({
@@ -28,22 +25,25 @@ interface TreeConfig {
   styles: [require('to-string!./router-tree.css')],
 })
 export class RouterTree {
+  @ViewChild('chartContainer') chartContainer;
   @Input() private routerTree: Array<Route>;
-  @Input() private selectedNode;
+  private selectedRoute: Route | any;
 
   private treeConfig: TreeConfig;
 
-  constructor(@Inject(ElementRef) elementRef: ElementRef) {
-    this.treeConfig = this.getTree(elementRef);
+  constructor(private userActions: UserActions) {}
+
+  ngAfterViewInit() {
+    this.treeConfig = this.getTree();
   }
 
-  private getTree(elementRef: ElementRef): TreeConfig {
+  private getTree(): TreeConfig {
     const tree = d3.layout.tree();
 
     const diagonal = d3.svg.diagonal()
       .projection((d) => [d.y, d.x]);
 
-    const svg = d3.select(elementRef.nativeElement)
+    const svg = d3.select(this.chartContainer.nativeElement)
       .append('svg')
       .attr('height', 500)
       .attr('width', 1000)
@@ -53,8 +53,7 @@ export class RouterTree {
     return {
       tree,
       diagonal,
-      svg,
-      duration: 500
+      svg
     };
   }
 
@@ -105,12 +104,10 @@ export class RouterTree {
       .attr('class', 'monospace');
 
     // Update the nodes
-    const nodeUpdate = node.transition()
-      .attr('transform', (d) => `translate(${d.y},${d.x})`);
-
-    nodeUpdate.select('circle')
+    node.attr('transform', (d) => `translate(${d.y},${d.x})`)
+      .select('circle')
       .style('fill', (d) => {
-        if (this.selectedNode && (d.id === this.selectedNode.id)) {
+        if (this.selectedRoute && (d.id === this.selectedRoute.id)) {
           return d.isAux ? '#2828AB' : '#F05057';
         }
         return d.isAux ? '#EBF2FC' : '#FFF0F0';
@@ -124,25 +121,29 @@ export class RouterTree {
     link
       .enter()
       .insert('path', 'g')
-      .attr('class', 'link');
-
-    // Transition links to their new position.
-    link.transition()
-      .duration(this.treeConfig.duration)
+      .attr('class', 'link')
       .attr('d', this.treeConfig.diagonal);
-
   }
 
   private ngOnChanges() {
     this.render();
   }
 
-  private onRollover(node) {
-    if (this.selectedNode) {
-      this.selectedNode = null;
+  private onRollover(route) {
+    if (this.selectedRoute) {
+      this.selectedRoute = null;
     } else {
-      this.selectedNode = node;
+      this.selectedRoute = route;
     }
+    this.render();
+  }
+
+  private onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
+    return this.userActions.searchRouter(this.routerTree, query);
+  }
+
+  private onSelectedSearchResultChanged(route: Route) {
+    this.selectedRoute = route;
     this.render();
   }
 }

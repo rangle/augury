@@ -1,28 +1,28 @@
-<div class="monospace border" *ngIf="selectedNode">
+<div class="monospace border" *ngIf="selectedRoute">
   <div class="modal_header border-bottom py3 px4">
     <div class="logo">
       <div class="logo_text monospace left-align">
-        {{selectedNode.name}}
+        {{selectedRoute.name}}
         </div>
     </div>
   </div>
   <div class="modal_content py3 px4">
-    <ul class="list-reset m0" *ngIf="selectedNode">
+    <ul class="list-reset m0" *ngIf="selectedRoute">
       <li>
         <span class="info-key">
           path:
           </span>
         <span class="info-value">
-          {{selectedNode.path}}
+          {{selectedRoute.path}}
           </span>
       </li>
       <!-- Note: (ericjim) specificity is not a concept in the alpha component router. -->
-      <li *ngIf="selectedNode.specificity">
+      <li *ngIf="selectedRoute.specificity">
         <span class="info-key">
           specificity:
           </span>
         <span class="info-value">
-          {{selectedNode.specificity}}
+          {{selectedRoute.specificity}}
           </span>
       </li>
       <li>
@@ -30,7 +30,7 @@
           handler:
           </span>
         <span class="info-value">
-          {{selectedNode.handler}}
+          {{selectedRoute.handler}}
           </span>
       </li>
       <li *ngIf="hasSelection">
@@ -38,7 +38,7 @@
           data:
         </span>
         <ul class="list-reset">
-          <li *ngFor="let el of selectedNode.data">
+          <li *ngFor="let el of selectedRoute.data">
             <span class="info-key">
               {{el.key}}:
               </span>

@@ -22,7 +22,7 @@
     <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
       [node]="node"
       [level]="level + 1"
-      (selectionChange)="selectionChange.emit($event)"
+      (selectNode)="selectNode.emit($event)"
       (inspectElement)="inspectElement.emit($event)"
       (collapseChildren)="collapseChildren.emit($event)"
       (expandChildren)="expandChildren.emit($event)">

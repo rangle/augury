@@ -3,7 +3,6 @@ import {
   EventEmitter,
   Input,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -23,7 +22,7 @@ export class Dependency {
   @Input() selectedNode: Node;
   @Input() tree: MutableTree;
 
-  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
 
   private selectedDependency: string;
 
@@ -66,10 +65,6 @@ export class Dependency {
     else {
       this.select(this.navigationStack.pop());
     }
-  }
-
-  private onSelectComponent(node: Node) {
-    this.selectionChange.emit(node);
   }
 
   private reset() {

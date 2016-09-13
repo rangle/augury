@@ -8,25 +8,25 @@ import {Route} from '../../../backend/utils';
 })
 
 export class RouterInfo {
-  @Input() private selectedNode: Route | any;
+  @Input() private selectedRoute: Route | any;
 
   private hasSelection() {
-    return this.selectedNode.data &&
-           this.selectedNode.data.length > 0;
+    return this.selectedRoute.data &&
+           this.selectedRoute.data.length > 0;
   }
 
   private ngOnChanges() {
-    if (!this.selectedNode || !this.selectedNode.data) {
+    if (!this.selectedRoute || !this.selectedRoute.data) {
       return;
     }
 
-    this.selectedNode._data = [];
+    this.selectedRoute._data = [];
 
-    for (let key in this.selectedNode.data.data) {
-      if (this.selectedNode.data.data.hasOwnProperty(key)) {
-        this.selectedNode._data.push({
+    for (let key in this.selectedRoute.data.data) {
+      if (this.selectedRoute.data.data.hasOwnProperty(key)) {
+        this.selectedRoute._data.push({
           key: key,
-          value: this.selectedNode.data.data[key]
+          value: this.selectedRoute.data.data[key]
         });
       }
     }

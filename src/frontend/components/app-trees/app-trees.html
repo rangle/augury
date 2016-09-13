@@ -10,7 +10,7 @@
        class="flex minheight-100pct"
        [tree]="tree"
        [selectedNode]="selectedNode"
-       (selectionChange)="selectionChange.emit($event)"
+       (selectNode)="selectNode.emit($event)"
        (inspectElement)="inspectElement.emit($event)"
        (collapseChildren)="collapseChildren.emit($event)"
        (expandChildren)="expandChildren.emit($event)">
@@ -23,14 +23,13 @@
        [node]="selectedNode"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
-       (selectionChange)="selectionChange.emit($event)">
+       (selectNode)="selectNode.emit($event)">
     </bt-info-panel>
   </div>
 </split-pane>
 
 <bt-router-tree
-   class="overflow-auto flex-auto"
-   [hidden]="selectedTab !== Tab.RouterTree"
+   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.RouterTree, 'display-none': selectedTab !== Tab.RouterTree }"
    [routerTree]="routerTree"
-   [selectedNode]="selectedRoute">
+   class="flex-auto overflow-auto">
 </bt-router-tree>

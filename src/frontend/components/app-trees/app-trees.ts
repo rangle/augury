@@ -6,10 +6,7 @@ import {
 } from '@angular/core';
 
 import {Route} from '../../../backend/utils';
-import {
-  TabDescription,
-  TabMenu,
-} from '../tab-menu/tab-menu';
+import {TabDescription} from '../tab-menu/tab-menu';
 import {
   ComponentInstanceState,
   Options,
@@ -34,13 +31,13 @@ export class AppTrees {
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;
 
-  @Output() private tabChange = new EventEmitter<Tab>();
-  @Output() private selectionChange = new EventEmitter<Node>();
-  @Output() private inspectElement = new EventEmitter<Node>();
-  @Output() private expandChildren = new EventEmitter<Node>();
   @Output() private collapseChildren = new EventEmitter<Node>();
+  @Output() private expandChildren = new EventEmitter<Node>();
+  @Output() private inspectElement = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
+  @Output() private tabChange = new EventEmitter<Tab>();
 
-  private tabs = [{
+  private tabs: Array<TabDescription> = [{
     title: 'Component Tree',
     selected: false,
     tab: Tab.ComponentTree,

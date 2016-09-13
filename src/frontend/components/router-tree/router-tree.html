@@ -1,4 +1,16 @@
-<bt-router-info
-  [selectedNode]="selectedNode"
-  [hidden]="selectedNode == null">
-</bt-router-info>
+<div class="flex-grow flex flex-column">
+  <bt-router-info
+     [hidden]="selectedRoute === null"
+     [selectedRoute]="selectedRoute">
+  </bt-router-info>
+  <div #chartContainer class="flex-auto overflow-scroll"></div>
+  <div class="bg-panel border-top">
+    <header class="flex py1 px2">
+      <search
+         (selectedResult)="onSelectedSearchResultChanged($event)"
+         [handler]="onRetrieveSearchResults"
+         [placeholder]="'Search routes'">
+      </search>
+    </header>
+  </div>
+</div>
