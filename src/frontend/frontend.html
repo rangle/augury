@@ -1,7 +1,6 @@
 <div *ngIf="hasContent"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'">
-  <augury-header [options]="options"></augury-header>
   <template [ngIf]="error">
     <render-error [error]="error"></render-error>
   </template>
