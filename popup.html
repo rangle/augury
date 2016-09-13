@@ -18,7 +18,7 @@
     }
 
     .modal_content {
-      padding: 20px 22px;
+      padding: 0 22px;
     }
 
     .modal_cta {
@@ -47,7 +47,7 @@
     .flex_container {
       display: flex;
       justify-content: space-between;
-      padding: 12px 22px;
+      padding: 10px 22px;
     }
 
     .flex {
@@ -68,31 +68,34 @@
     .icon:before {
       content: "";
       display: inline-block;
-      height: 25px;
       margin-right: 8px;
       vertical-align: middle;
-      width: 25px;
-    }
-
-    .icon span {
-      display: inline-block;
-      margin-top: 3px;
-    }
-
-    .github {
-      background-image: url(images/github.svg);
       background-repeat: no-repeat;
+      background-size: 33px 33px;
+      width: 33px;
+      height: 33px;
+    }
+
+    .github .icon:before{
+      background-image: url(images/github.svg);
+    }
+
+    .feedback .icon:before{
+      background-image: url(images/feedback.svg);
     }
 
     .website {
-      background-image: url(images/augury-bw.svg);
-      background-repeat: no-repeat;
+      position: relative;
+      top: 4px;
     }
 
-    .contribute {
-      background-image: url(images/contribute.svg);
-      background-repeat: no-repeat;
+    .website .icon:before{
+      background-image: url(images/augury-bw.svg);
+      background-size: 25px 25px;
+      width: 25px;
+      height: 25px;
     }
+
     /* Content */
 
     a:link,
@@ -123,12 +126,11 @@
 
 <body>
   <div class="modal_header">
-    <h1 class="logo"><img class="logo_icon" src="images/augury-logo.svg">Augury&nbsp;<span class="version_number">(1.1.1)</span></h1>
+    <h1 class="logo"><img class="logo_icon" src="images/augury-logo.svg">Augury&nbsp;<span class="version_number"></span></h1>
   </div>
 
   <div class="modal_content">
     <p>Augury is a Chrome Dev Tools extension for debugging Angular&nbsp;2 applications.</p>
-    <br>
     <p>Currently works with:</p>
     <ul>
       <li>Angular 2.0.0-rc.4 through rc.6</li>
@@ -139,7 +141,7 @@
   <div class="modal_cta">
     <div class="flex_container">
       <div class="flex github">
-        <a href="https://github.com/rangle/augury" target="__augury_github" class="icon github">
+        <a href="https://github.com/rangle/augury" target="__augury_github" class="icon">
           Github
         </a>
       </div>
@@ -148,13 +150,16 @@
           Website
         </a>
       </div>
-      <div class="flex contribute">
-        <a href="https://github.com/rangle/augury/blob/master/CONTRIBUTING.md" target="__augury_contribute" class="icon">
-          Contribute
+      <div class="flex feedback">
+        <a href="https://rangleio.typeform.com/to/GrdAGu" target="__augury_feedback" class="icon">
+          Feedback
         </a>
       </div>
     </div>
   </div>
+
+  <script src="popup.js"></script>
+
 </body>
 
 </html>

@@ -15,6 +15,7 @@ pids
 # Users Environment Variables
 .lock-wscript
 .idea/
+*.iml
 npm-debug*
 *~
 \#*#
