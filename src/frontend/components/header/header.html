@@ -1,5 +1,5 @@
 <div class="flex flex-column flex-stretch col-12">
-  <header class="flex flex-justify bg-panel border-bottom py3 px3">
+  <header class="flex flex-justify bg-panel border-bottom py2 px3">
     <h4 class="regular flex flex-center primary-color m0">
       <img src="../images/augury-logo.svg"
         class="mr2"
@@ -7,11 +7,6 @@
         Augury
     </h4>
     <div class="flex">
-      <search
-        [placeholder]="searchPlaceholder"
-        [handler]="onRetrieveSearchResults"
-        (selectedResult)="onSelectedSearchResultChanged($event)">
-      </search>
       <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
     </div>
   </header>

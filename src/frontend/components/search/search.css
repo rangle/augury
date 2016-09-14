@@ -13,10 +13,6 @@
 :host input {
   background-color: transparent;
   font-size: 1em;
-  padding: 5px 5px 5px 0;
+  padding: 4px 5px 4px 0;
   outline: none !important;
-}
-
-:host .invisible {
-  opacity: 0;
 }

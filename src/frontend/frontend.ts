@@ -41,7 +41,6 @@ import {
 } from '../tree';
 
 import {createTree} from '../tree/mutable-tree-factory';
-import {deserialize} from '../utils';
 
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
@@ -157,8 +156,7 @@ class App {
   private restoreSelection() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
 
-    this.onComponentSelectionChange(this.selectedNode,
-      () => this.componentState.reset());
+    this.onSelectNode(this.selectedNode, () => this.componentState.reset());
   }
 
   private processMessage(msg: Message<any>,
@@ -234,7 +232,7 @@ class App {
     this.zone.run(() => process());
   }
 
-  private onComponentSelectionChange(node: Node, beforeLoad?: () => void) {
+  private onSelectNode(node: Node, beforeLoad?: () => void) {
     this.selectedNode = node;
 
     if (node == null) {
@@ -261,10 +259,6 @@ class App {
     else {
       this.componentState.wait(node, this.directConnection.handleImmediate(m).then(() => null));
     }
-  }
-
-  private onRouteSelectionChange(route: Route) {
-    this.selectedRoute = route;
   }
 
   private onInspectElement(node: Node) {

@@ -2,14 +2,12 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
 } from '@angular/core';
 
-import {UserActions} from '../../actions/user-actions/user-actions';
 import {ComponentLoadState} from '../../state';
-import {Property} from '../../../backend/utils/description';
 import {InputOutput} from '../../../frontend/utils';
+import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
   Metadata,
@@ -30,13 +28,9 @@ export class ComponentInfo {
   @Input() metadata: Metadata;
   @Input() loadingState: ComponentLoadState;
 
-  @Output() private selectionChange = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
 
   private ComponentLoadState = ComponentLoadState;
-
-  constructor(
-    private userActions: UserActions
-  ) {}
 
   private get path(): Path {
     return deserializePath(this.node.id);

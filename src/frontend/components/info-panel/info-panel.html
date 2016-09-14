@@ -12,11 +12,11 @@
   [metadata]="metadata"
   [hidden]="selectedTab !== StateTab.Properties"
   [ngClass]="{flex: selectedTab === StateTab.Properties}"
-  (selectionChange)="selectionChange.emit($event)">
+  (selectNode)="selectNode.emit($event)">
 </bt-component-info>
 
 <bt-injector-tree
-  (selectComponent)="selectionChange.emit($event)"
+  (selectNode)="selectNode.emit($event)"
   [hidden]="selectedTab !== StateTab.InjectorGraph"
   [tree]="tree"
   [selectedNode]="node"

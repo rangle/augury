@@ -1,14 +1,7 @@
 <div *ngIf="hasContent"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'">
-  <augury-header
-    [options]="options"
-    [selectedTab]="selectedTab"
-    [tree]="tree"
-    [routerTree]="routerTree"
-    (selectNode)="onComponentSelectionChange($event)"
-    (selectRoute)="onRouteSelectionChange($event)">
-  </augury-header>
+  <augury-header [options]="options"></augury-header>
   <template [ngIf]="error">
     <render-error [error]="error"></render-error>
   </template>
@@ -17,12 +10,11 @@
     [componentState]="componentState"
     [selectedTab]="selectedTab"
     [selectedNode]="selectedNode"
-    [selectedRoute]="selectedRoute"
     [routerTree]="routerTree"
     [options]="options"
     [tree]="tree"
     (tabChange)="onSelectedTabChange($event)"
-    (selectionChange)="onComponentSelectionChange($event)"
+    (selectNode)="onSelectNode($event)"
     (inspectElement)="onInspectElement($event)"
     (collapseChildren)="onCollapseChildren($event)"
     (expandChildren)="onExpandChildren($event)">

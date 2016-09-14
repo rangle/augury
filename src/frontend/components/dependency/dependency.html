@@ -29,7 +29,7 @@
       *ngFor="let comp of dependentComponents">
       <a href="#"
         class="node-item-property"
-        (click)="onSelectComponent(comp)">
+        (click)="selectNode.emit(comp)">
         {{comp.name}} (a-id = {{comp.id}})
         </a>
       <ul>

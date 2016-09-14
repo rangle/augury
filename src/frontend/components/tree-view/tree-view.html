@@ -1,10 +1,22 @@
-<div class="flex flex-column flex-stretch bg-base col-12 flex-1 overflow-auto minwidth-100pct">
-  <component-tree
-    [tree]="tree"
-    [selectedNode]="selectedNode"
-    (selectionChange)="selectionChange.emit($event)"
-    (inspectElement)="inspectElement.emit($event)"
-    (collapseChildren)="collapseChildren.emit($event)"
-    (expandChildren)="expandChildren.emit($event)">
-  </component-tree>
+<div class="flex flex-column bg-base minwidth-100pct minheight-100pct">
+  <div class="flex flex-auto overflow-scroll">
+    <component-tree
+       (collapseChildren)="collapseChildren.emit($event)"
+       (expandChildren)="expandChildren.emit($event)"
+       (inspectElement)="inspectElement.emit($event)"
+       (selectNode)="selectNode.emit($event)"
+       [selectedNode]="selectedNode"
+       [tree]="tree"
+       class="flex-grow">
+    </component-tree>
+  </div>
+  <div class="bg-panel border-top">
+    <header class="flex py1 px2">
+      <search
+         (selectedResult)="onSelectedSearchResultChanged($event)"
+         [handler]="onRetrieveSearchResults"
+         [placeholder]="'Search components'">
+      </search>
+    </header>
+  </div>
 </div>
