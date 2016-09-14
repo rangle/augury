@@ -60,6 +60,10 @@ bt-injector-tree {
     color: #5A5A5A;
   }
 
+  & .legible-color {
+    color: #333;
+  }
+
   & .bg-primary {
     background-color: #5A5A5A;
   }
@@ -173,6 +177,10 @@ bt-injector-tree {
   & .primary-color,
   & .toggler {
     color: #A5A5A5;
+  }
+
+  & .legible-color {
+    color: #CCCCCC;
   }
 
   & .bg-primary {
