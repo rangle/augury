@@ -1,7 +1,6 @@
 import {
   Component,
   EventEmitter,
-  OnChanges,
   Input,
   Output,
 } from '@angular/core';

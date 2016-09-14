@@ -2,7 +2,88 @@
    [tabs]="tabs"
    (tabChange)="onTabSelectionChanged($event)"
    [selectedTab]="selectedTab">
+  <div postlude class="flex px3">
+    <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
+  </div>
 </bt-tab-menu>
+
+<form *ngIf="settingOpened">
+  <div #menuElement class="bg-base primary-color list-style-none list-reset border rounded right-0 absolute setting-dropdown">
+    <ul class="p3 m0">
+      <label>Theme</label>
+      <li class="list-style-none p3">
+        <input
+           type="radio"
+           id="light-theme"
+           [checked]="options.theme === Theme.Light"
+           [value]="Theme.Light"
+           (change)="onThemeChange(Theme.Light)"
+           name="theme" />
+        <label for="light-theme">Light mode</label>
+      </li>
+      <li class="list-style-none p3">
+        <input
+           type="radio"
+           id="dark-theme"
+           [checked]="options.theme === Theme.Dark"
+           [value]="Theme.Dark"
+           (change)="onThemeChange(Theme.Dark)"
+           name="theme" />
+        <label for="dark-theme">Dark mode</label>
+      </li>
+    </ul>
+    <ul class="p3 m0">
+      <label>Component rendering mode</label>
+      <li class="list-style-none p3">
+        <input
+           type="radio"
+           id="hybrid"
+           [checked]="options.componentView === ComponentView.Hybrid"
+           [value]="ComponentView.Hybrid"
+           (click)="onComponentViewChanged(ComponentView.Hybrid)"
+           name="component-view" />
+        <label for="hybrid">
+          Hybrid view
+          <label class="descriptive-text mw3 block m1">
+            Elements are included in the tree view only if they
+            have properties set in Angular 2
+          </label>
+        </label>
+      </li>
+      <li class="list-style-none p3">
+        <input
+           type="radio"
+           id="all-elements"
+           [checked]="options.componentView === ComponentView.All"
+           [value]="ComponentView.All"
+           (click)="onComponentViewChanged(ComponentView.All)"
+           name="component-view" />
+        <label for="all-elements">
+          All components and elements
+          <label class="descriptive-text mw3 block m1">
+            Show all components and elements in the tree view
+          </label>
+        </label>
+      </li>
+      <li class="list-style-none p3">
+        <input
+           type="radio"
+           id="components"
+           [checked]="options.componentView === ComponentView.Components"
+           [value]="ComponentView.Components"
+           (click)="onComponentViewChanged(ComponentView.Components)"
+           name="component-view" />
+        <label for="components">
+          Components only
+          <label class="descriptive-text mw3 block m1">
+            Show only components in the tree view
+          </label>
+        </label>
+      </li>
+    </ul>
+  </div>
+</form>
+
 
 <split-pane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
   <div split-pane-primary-content class="flex flex-column flex-auto">

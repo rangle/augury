@@ -57,7 +57,6 @@ import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
 import {ComponentTree} from './components/component-tree/component-tree';
 import {Dependency} from './components/dependency/dependency';
-import {Header} from './components/header/header';
 import {InjectorTree} from './components/injector-tree/injector-tree';
 import {NodeAttributes} from './components/node-item/node-attributes';
 import {NodeItem} from './components/node-item/node-item';
@@ -89,7 +88,6 @@ class App {
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
   private selectedNode: Node;
-  private selectedRoute: Route;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
   private theme: Theme;
@@ -109,8 +107,7 @@ class App {
 
     this.options.changes.subscribe(() => this.requestTree());
 
-    this.options.load()
-      .then(() => this.changeDetector.detectChanges());
+    this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
   }
@@ -276,26 +273,20 @@ class App {
   private onSelectedTabChange(tab: Tab) {
     this.selectedTab = tab;
 
-    switch (tab) {
-      case Tab.ComponentTree:
-        break;
-      case Tab.RouterTree:
-        this.userActions.renderRouterTree()
-          .then(response => {
-            this.zone.run(() => {
-              this.routerTree = response;
-            });
-          })
-          .catch(error => {
-            this.error = new ApplicationError(
-              ApplicationErrorType.UncaughtException,
-              error.message,
-              error.stack);
-            this.changeDetector.detectChanges();
+    if (tab === Tab.RouterTree) {
+      this.userActions.renderRouterTree()
+        .then(response => {
+          this.zone.run(() => {
+            this.routerTree = response;
           });
-        break;
-      default:
-        throw new Error(`Unknown tab: ${tab}`);
+        })
+        .catch(error => {
+          this.error = new ApplicationError(
+            ApplicationErrorType.UncaughtException,
+            error.message,
+            error.stack);
+          this.changeDetector.detectChanges();
+        });
     }
   }
 
@@ -348,7 +339,6 @@ const declarations = [
   ComponentInfo,
   ComponentTree,
   Dependency,
-  Header,
   InfoPanel,
   InjectorTree,
   NodeAttributes,
