@@ -39,7 +39,7 @@
     <accordion sectionTitle="Providers" *ngIf="hasProviders" [defaultExpanded]="true">
       <div section-content>
         <span *ngFor="let provider of node.providers">
-          <p class="m1 bold">{{provider.key}}</p>
+          <p class="m1 bold legible-color">{{provider.key}}</p>
           <bt-property-value
             *ngFor="let property of provider.value"
             [key]="property.key"
