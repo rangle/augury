@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
-import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
- from '@angular/forms';
-import {TodoService, TodoModel, FormatService} from './todo-service';
+import {
+  TodoService,
+  TodoModel,
+  FormatService,
+} from './todo-service';
 
 @Component({
   selector: 'todo-input',
@@ -21,7 +23,7 @@ export class TodoInput {
   constructor(
     public todoService: TodoService,
     public formatService: FormatService
-  ) { }
+  ) {}
 
   onSubmit() {
     this.todoService.addTodo(this.todoModel);

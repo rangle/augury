@@ -4,15 +4,12 @@ import {
 } from '@angular/core';
 
 import {
-  FORM_PROVIDERS,
-  REACTIVE_FORM_DIRECTIVES,
   FormControl,
   FormGroup,
 } from '@angular/forms';
 
 @Component({
   selector: 'stress-rec-item',
-  directives: [StressRecItem],
   template: `
     <ul *ngFor="let each of tree">
         <li *ngIf="each.length > 0">
@@ -27,8 +24,6 @@ export class StressRecItem {
 
 @Component({
   selector: 'stress-tester',
-  providers: [FORM_PROVIDERS],
-  directives: [REACTIVE_FORM_DIRECTIVES, StressRecItem],
   template: `
   <div>
     <p>Deep Tree Test</p>

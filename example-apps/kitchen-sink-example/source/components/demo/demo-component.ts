@@ -18,7 +18,6 @@ import DITree from '../di-tree/di-tree';
    <label>Message: <input type="text" [value]="msg"
    (change)="changeMsg($event)"></label>
  `,
- providers: [DITree]
 })
 export default class DemoComponent {
   @Input() msg: string;
@@ -40,5 +39,4 @@ export default class DemoComponent {
     this.msg = $event.target.value;
     this.newMsg.emit(this.msg);
   }
-
 }

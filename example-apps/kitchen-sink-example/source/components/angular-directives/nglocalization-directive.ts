@@ -1,16 +1,7 @@
-import {Component, provide} from '@angular/core';
-import {NgPlural, NgPluralCase, NgLocalization} from '@angular/common';
+import {Component} from '@angular/core';
 
-class MyLocalization extends NgLocalization {
-   getPluralCategory(value: any) {
-      if (value < 5) {
-         return 'few';
-      }
-   }
-}
 @Component({
-   selector: 'nglocalization-directive',
-   providers: [provide(NgLocalization, {useClass: MyLocalization})],
+  selector: 'nglocalization-directive',
   template: `
     <h4>Value = {{value}}</h4>
     <button class="btn btn-warning" (click)="inc()">Increment</button>
@@ -21,7 +12,6 @@ class MyLocalization extends NgLocalization {
       <template ngPluralCase="other">there is some number</template>
     </h4>
   `,
-  directives: [NgPlural, NgPluralCase]
 })
 export default class NgLocalizationDirective {
   value: any = 'init';

@@ -1,11 +1,11 @@
-import { provideRouter, RouterConfig, RouterModule }  from '@angular/router';
+import { RouterModule }  from '@angular/router';
 
 import { KitchenSinkRoutes, KitchenSinkDeclarations }
  from './containers/kitchen-sink.routes';
 import { RouterRoutes, RouterDeclarations }
  from './components/router/router.routes';
 
-export const routes: RouterConfig = [
+export const routes = [
   ...KitchenSinkRoutes,
   ...RouterRoutes
 ];

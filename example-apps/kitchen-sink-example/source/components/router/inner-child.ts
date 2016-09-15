@@ -1,12 +1,7 @@
 import {Component} from '@angular/core';
-import {
-  ROUTER_DIRECTIVES
-} from '@angular/router';
-
 
 @Component({
   selector: 'inner-child',
-  directives: [ROUTER_DIRECTIVES],
   template: `
   <div>
     <h3>InnerChild Component</h3>

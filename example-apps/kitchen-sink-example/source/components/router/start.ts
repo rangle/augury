@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 
 import {
-  ROUTER_DIRECTIVES,
   Router
 } from '@angular/router';
 
@@ -14,7 +13,6 @@ import RouterData2 from './router-data2';
 
 @Component({
   selector: 'start',
-  directives: [ROUTER_DIRECTIVES],
   template: `
   <div>
     <ul class="nav nav-pills">

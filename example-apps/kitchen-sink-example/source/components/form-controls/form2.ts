@@ -1,13 +1,12 @@
 import {Component} from '@angular/core';
 
-import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
- from '@angular/forms';
-
+import {
+  FormControl,
+  FormGroup
+} from '@angular/forms';
 
 @Component({
   selector: 'form2',
-  directives: [REACTIVE_FORM_DIRECTIVES],
-  providers: [FORM_PROVIDERS],
   template: `
   <div>
     <form (submit)="onSubmit(myform)" class="col-sm-8">
@@ -50,11 +49,9 @@ import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
   `
 })
 export default class Form2 {
-
   public myform: any = {};
 
   onSubmit(myform: any) {
     console.log(myform);
   }
-
 }

@@ -1,6 +1,4 @@
-import {Component, Input} from '@angular/core';
-import Counter from './counter';
-import {NgClass, NgIf} from '@angular/common';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'input-output',
@@ -43,8 +41,7 @@ import {NgClass, NgIf} from '@angular/common';
       color: gray;
       border: medium solid gray;
     }
-  `],
-  directives: [Counter, NgClass, NgIf]
+  `]
 })
 export default class InputOutput {
   message: string;

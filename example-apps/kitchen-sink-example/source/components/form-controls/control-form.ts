@@ -1,16 +1,15 @@
+import {Component} from '@angular/core';
 
-import { Component } from '@angular/core';
-
-import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
- from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 
 @Component({
   selector: 'control-form',
-  directives: [REACTIVE_FORM_DIRECTIVES],
-  providers: [FORM_PROVIDERS],
   template: `
     <div>
-        <form (submit)="onSubmit(formControl.value)"
+        <form (submit)="onSubmit(formGroup.value)"
            class="col-sm-8">
             <div class="form-group">
                 <label>Name</label>
