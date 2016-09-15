@@ -17,7 +17,7 @@ bt-router-tree .link {
 bt-injector-tree {
   & .stroke- {
     &root {
-      stroke: #9B9B9B;
+      stroke: #2828AB;
     }
 
     &component {
@@ -31,7 +31,7 @@ bt-injector-tree {
 
   & .fill- {
     &root {
-      fill: #9B9B9B;
+      fill: #2828AB;
     }
 
     &component {
@@ -143,10 +143,20 @@ bt-injector-tree {
   & bt-router-tree {
     & .node-route {
       stroke: #F05057;
+      fill: #FFF0F0;
+    }
+
+    & .node-route:hover {
+      fill: #F05057;
     }
 
     & .node-aux-route {
-      stroke: var(--bt-link-color);
+      stroke: #2828AB;
+      fill: #EBF2FC;
+    }
+
+    & .node-aux-route:hover {
+      fill: #2828AB;
     }
 
     & text {
@@ -159,7 +169,7 @@ bt-injector-tree {
   }
 
   & bt-injector-tree #suit > path {
-    stroke: #5A5A5A !important;
+    stroke: #2828AB !important;
   }
 }
 
@@ -263,10 +273,20 @@ bt-injector-tree {
   & bt-router-tree {
     & .node-route {
       stroke: #F05057;
+      fill: #FFF0F0;
+    }
+
+    & .node-route:hover {
+      fill: #F05057;
     }
 
     & .node-aux-route {
-      stroke: var(--bt-link-color)
+      stroke: #23A9AB;
+      fill: #EBF2FC;
+    }
+
+    & .node-aux-route:hover {
+      fill: #23A9AB;
     }
 
     & text {
@@ -278,7 +298,20 @@ bt-injector-tree {
     fill: #A5A5A5;
   }
 
+  & bt-injector-tree {
+
+    & .stroke- {
+      &root, &component {
+        stroke: #23a9ab;
+      }
+    }
+
+    & .fill-root {
+        fill: #23a9ab;
+    }
+  }
+
   & bt-injector-tree #suit > path {
-    stroke: #A5A5A5 !important;
+    stroke: #23a9ab !important;
   }
 }
