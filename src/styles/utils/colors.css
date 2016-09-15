@@ -17,7 +17,7 @@ bt-router-tree .link {
 bt-injector-tree {
   & .stroke- {
     &root {
-      stroke: #9B9B9B;
+      stroke: #2828AB;
     }
 
     &component {
@@ -31,7 +31,7 @@ bt-injector-tree {
 
   & .fill- {
     &root {
-      fill: #9B9B9B;
+      fill: #2828AB;
     }
 
     &component {
@@ -159,7 +159,7 @@ bt-injector-tree {
   }
 
   & bt-injector-tree #suit > path {
-    stroke: #5A5A5A !important;
+    stroke: #2828AB !important;
   }
 }
 
@@ -279,6 +279,6 @@ bt-injector-tree {
   }
 
   & bt-injector-tree #suit > path {
-    stroke: #A5A5A5 !important;
+    stroke: #2828AB !important;
   }
 }
