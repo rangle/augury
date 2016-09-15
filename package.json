@@ -34,13 +34,13 @@
     "lint": "tslint 'src/**/*.ts'"
   },
   "dependencies": {
-    "@angular/common": "2.0.0-rc.6",
-    "@angular/compiler": "2.0.0-rc.6",
-    "@angular/core": "2.0.0-rc.6",
-    "@angular/http": "2.0.0-rc.6",
-    "@angular/platform-browser": "2.0.0-rc.6",
-    "@angular/platform-browser-dynamic": "2.0.0-rc.6",
-    "@angular/forms": "2.0.0-rc.6",
+    "@angular/common": "2.0.0",
+    "@angular/compiler": "2.0.0",
+    "@angular/core": "2.0.0",
+    "@angular/http": "2.0.0",
+    "@angular/platform-browser": "2.0.0",
+    "@angular/platform-browser-dynamic": "2.0.0",
+    "@angular/forms": "2.0.0",
     "basscss": "^7.0.4",
     "basscss-border-colors": "^2.1.0",
     "basscss-type-scale": "^1.0.5",
@@ -51,7 +51,7 @@
     "d3": "^3.5.16",
     "file-loader": "^0.8.5",
     "immutable": "^3.7.6",
-    "rxjs": "5.0.0-beta.11",
+    "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.17"
   },
   "devDependencies": {
