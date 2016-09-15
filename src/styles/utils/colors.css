@@ -17,21 +17,21 @@ bt-router-tree .link {
 bt-injector-tree {
   & .stroke- {
     &root {
-      stroke: #2828AB;
+      stroke: var(--lmode-igraph-component-primary);
     }
 
     &component {
-      stroke: #2828AB;
+      stroke: var(--lmode-igraph-component-primary);
     }
 
     &service {
-      stroke: #FF0202;
+      stroke: var(--lmode-igraph-service-primary);
     }
   }
 
   & .fill- {
     &root {
-      fill: #2828AB;
+      fill: var(--lmode-igraph-component-primary);
     }
 
     &component {
@@ -142,21 +142,21 @@ bt-injector-tree {
 
   & bt-router-tree {
     & .node-route {
-      stroke: #F05057;
-      fill: #FFF0F0;
+      stroke: var(--lmode-rtree-node-primary);
+      fill: var(--lmode-rtree-node-secondary);
     }
 
     & .node-route:hover {
-      fill: #F05057;
+      fill: var(--lmode-rtree-node-primary);
     }
 
     & .node-aux-route {
-      stroke: #2828AB;
-      fill: #EBF2FC;
+      stroke: var(--lmode-rtree-aux-node-primary);
+      fill: var(--lmode-rtree-aux-node-secondary);
     }
 
     & .node-aux-route:hover {
-      fill: #2828AB;
+      fill: var(--lmode-rtree-aux-node-primary);
     }
 
     & text {
@@ -169,7 +169,7 @@ bt-injector-tree {
   }
 
   & bt-injector-tree #suit > path {
-    stroke: #2828AB !important;
+    stroke: var(--lmode-igraph-component-primary) !important;
   }
 }
 
@@ -272,21 +272,21 @@ bt-injector-tree {
 
   & bt-router-tree {
     & .node-route {
-      stroke: #F05057;
-      fill: #FFF0F0;
+      stroke: var(--dmode-rtree-node-primary);
+      fill: var(--dmode-rtree-node-secondary);
     }
 
     & .node-route:hover {
-      fill: #F05057;
+      fill: var(--dmode-rtree-node-primary);
     }
 
     & .node-aux-route {
-      stroke: #23A9AB;
-      fill: #EBF2FC;
+      stroke: var(--dmode-rtree-aux-node-primary);
+      fill: var(--dmode-rtree-aux-node-secondary);
     }
 
     & .node-aux-route:hover {
-      fill: #23A9AB;
+      fill: var(--dmode-rtree-aux-node-primary);
     }
 
     & text {
@@ -302,16 +302,16 @@ bt-injector-tree {
 
     & .stroke- {
       &root, &component {
-        stroke: #23a9ab;
+        stroke: var(--dmode-igraph-component-primary);
       }
     }
 
     & .fill-root {
-        fill: #23a9ab;
+        fill: var(--dmode-igraph-component-primary);
     }
   }
 
   & bt-injector-tree #suit > path {
-    stroke: #23a9ab !important;
+    stroke: var(--dmode-igraph-component-primary) !important;
   }
 }
