@@ -17,21 +17,21 @@ bt-router-tree .link {
 bt-injector-tree {
   & .stroke- {
     &root {
-      stroke: #9B9B9B;
+      stroke: var(--lmode-igraph-component-primary);
     }
 
     &component {
-      stroke: #2828AB;
+      stroke: var(--lmode-igraph-component-primary);
     }
 
     &service {
-      stroke: #FF0202;
+      stroke: var(--lmode-igraph-service-primary);
     }
   }
 
   & .fill- {
     &root {
-      fill: #9B9B9B;
+      fill: var(--lmode-igraph-component-primary);
     }
 
     &component {
@@ -142,11 +142,21 @@ bt-injector-tree {
 
   & bt-router-tree {
     & .node-route {
-      stroke: #F05057;
+      stroke: var(--lmode-rtree-node-primary);
+      fill: var(--lmode-rtree-node-secondary);
+    }
+
+    & .node-route:hover {
+      fill: var(--lmode-rtree-node-primary);
     }
 
     & .node-aux-route {
-      stroke: var(--bt-link-color);
+      stroke: var(--lmode-rtree-aux-node-primary);
+      fill: var(--lmode-rtree-aux-node-secondary);
+    }
+
+    & .node-aux-route:hover {
+      fill: var(--lmode-rtree-aux-node-primary);
     }
 
     & text {
@@ -159,7 +169,7 @@ bt-injector-tree {
   }
 
   & bt-injector-tree #suit > path {
-    stroke: #5A5A5A !important;
+    stroke: var(--lmode-igraph-component-primary) !important;
   }
 }
 
@@ -262,11 +272,21 @@ bt-injector-tree {
 
   & bt-router-tree {
     & .node-route {
-      stroke: #F05057;
+      stroke: var(--dmode-rtree-node-primary);
+      fill: var(--dmode-rtree-node-secondary);
+    }
+
+    & .node-route:hover {
+      fill: var(--dmode-rtree-node-primary);
     }
 
     & .node-aux-route {
-      stroke: var(--bt-link-color)
+      stroke: var(--dmode-rtree-aux-node-primary);
+      fill: var(--dmode-rtree-aux-node-secondary);
+    }
+
+    & .node-aux-route:hover {
+      fill: var(--dmode-rtree-aux-node-primary);
     }
 
     & text {
@@ -278,7 +298,20 @@ bt-injector-tree {
     fill: #A5A5A5;
   }
 
+  & bt-injector-tree {
+
+    & .stroke- {
+      &root, &component {
+        stroke: var(--dmode-igraph-component-primary);
+      }
+    }
+
+    & .fill-root {
+        fill: var(--dmode-igraph-component-primary);
+    }
+  }
+
   & bt-injector-tree #suit > path {
-    stroke: #A5A5A5 !important;
+    stroke: var(--dmode-igraph-component-primary) !important;
   }
 }
