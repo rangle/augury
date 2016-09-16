@@ -34,12 +34,6 @@ export class ComponentInfo {
 
   path: Path;
 
-  hasProviders: boolean = false;
-  hasDirectives: boolean = false;
-  hasDependencies: boolean = false;
-  hasProperties: boolean = false;
-  hasState: boolean = false;
-
   inputs: InputOutput;
   outputs: InputOutput;
 
@@ -66,13 +60,39 @@ export class ComponentInfo {
           this.inputs[name] = {alias};
         }
       }
-
-      this.hasProviders = this.node.providers.length !== 0;
-      this.hasDirectives = this.node.directives.length !== 0;
-      this.hasDependencies = this.node.dependencies.length !== 0;
-      this.hasProperties = this.node.description.length !== 0;
-      this.hasState = this.state !== null && Object.keys(this.state).length !== 0;
     }
+  }
+
+  private get hasState() {
+    if (this.node == null || this.state == null) {
+      return false;
+    }
+
+    return Object.keys(this.state).length > 0;
+  }
+
+  private get hasProviders() {
+    return this.node &&
+      this.node.providers &&
+      this.node.providers.length > 0;
+  }
+
+  private get hasDirectives() {
+    return this.node &&
+      this.node.directives &&
+      this.node.directives.length > 0;
+  }
+
+  private get hasDependencies() {
+    return this.node &&
+      this.node.dependencies &&
+      this.node.dependencies.length > 0;
+  }
+
+  private get hasProperties() {
+    return this.node &&
+      this.node.description &&
+      this.node.description.length > 0;
   }
 
   private viewComponentSource() {
