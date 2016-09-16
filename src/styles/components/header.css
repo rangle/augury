@@ -10,6 +10,7 @@
 
 .setting-dropdown {
   -webkit-user-select: none;
+  z-index: 200;
 
   & input {
     vertical-align: text-bottom;
