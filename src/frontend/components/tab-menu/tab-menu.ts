@@ -18,6 +18,7 @@ export interface TabDescription {
 export class TabMenu {
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
+  @Input() showLogo: boolean = false;
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
 
