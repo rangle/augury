@@ -1,14 +1,13 @@
 import { Component, Inject, OnInit, OnDestroy }
  from '@angular/core';
-import { ROUTER_DIRECTIVES, Router, ActivatedRoute}
+import {
+  Router,
+  ActivatedRoute,
+}
  from '@angular/router';
-
-import {CamelCasePipe} from '../pipes/camelcase';
 
 @Component({
   selector: 'kitchen-sink',
-  directives: [ROUTER_DIRECTIVES],
-  pipes: [CamelCasePipe],
   template: `
   <div class="row">
     <div class="col-md-3">
@@ -33,9 +32,6 @@ import {CamelCasePipe} from '../pipes/camelcase';
       </li>
       <li [ngClass]="{active: path.indexOf('start') > -1}">
         <a [routerLink]="['/start/main']">Router</a>
-      </li>
-      <li [ngClass]="{active: path=='dynamic-controls'}">
-        <a [routerLink]="['/dynamic-controls']">DynamicControls</a>
       </li>
       <li [ngClass]="{active: path=='todo-app'}">
         <a [routerLink]="['/todo-app']">TodoApp</a>

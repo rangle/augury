@@ -2,11 +2,11 @@ import * as clone from 'clone';
 
 import {
   ChangeDetectionStrategy,
-  ComponentMetadata,
+  Component,
   DebugElement,
   DebugNode,
-  InputMetadata,
-  OutputMetadata,
+  Input,
+  Output,
 } from '@angular/core';
 
 import {
@@ -235,12 +235,12 @@ const getComponentProviders = (element: Source, name: string): Array<Property> =
     }
 };
 
-const getMetadata = (element: Source): ComponentMetadata => {
+const getMetadata = (element: Source): Component => {
   const annotations =
     Reflect.getOwnMetadata('annotations', element.componentInstance.constructor);
   if (annotations) {
     for (const decorator of annotations) {
-      if (functionName(decorator.constructor) === functionName(ComponentMetadata)) {
+      if (functionName(decorator.constructor) === functionName(Component)) {
         return decorator;
       }
     }
@@ -248,19 +248,19 @@ const getMetadata = (element: Source): ComponentMetadata => {
   return null;
 };
 
-const getComponentDirectives = (metadata: ComponentMetadata): Array<string> => {
+const getComponentDirectives = (metadata: Component): Array<string> => {
   /* TODO: Figure out which directives are invoked by checking selectors against the template. */
   return [];
 };
 
-const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
+const getComponentInputs = (metadata: Component, element: Source) => {
   const inputs = metadata && metadata.inputs
     ? metadata.inputs
     : [];
 
   eachProperty(element,
     (key: string, meta) => {
-      if (functionName(meta.constructor) === functionName(InputMetadata) && inputs.indexOf(key) < 0) {
+      if (functionName(meta.constructor) === functionName(Input) && inputs.indexOf(key) < 0) {
         const property = meta.bindingPropertyName
           ? `${key}:${meta.bindingPropertyName}`
           : key;
@@ -271,14 +271,14 @@ const getComponentInputs = (metadata: ComponentMetadata, element: Source) => {
   return inputs;
 };
 
-const getComponentOutputs = (metadata: ComponentMetadata, element: Source): Array<string> => {
+const getComponentOutputs = (metadata: Component, element: Source): Array<string> => {
  const outputs = metadata && metadata.outputs
     ? metadata.outputs
     : [];
 
   eachProperty(element,
     (key: string, meta) => {
-      if (functionName(meta.constructor) === functionName(OutputMetadata) && outputs.indexOf(key) < 0) {
+      if (functionName(meta.constructor) === functionName(Output) && outputs.indexOf(key) < 0) {
         outputs.push(key);
       }
     });
@@ -297,7 +297,7 @@ const eachProperty = (element: Source, fn: (key: string, decorator) => void) => 
   }
 };
 
-const getChangeDetection = (metadata: ComponentMetadata): ChangeDetectionStrategy => {
+const getChangeDetection = (metadata: Component): ChangeDetectionStrategy => {
    if (metadata == null ||
        metadata.changeDetection == null) {
      return ChangeDetectionStrategy.Default;

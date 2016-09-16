@@ -14,10 +14,10 @@
         transparent: !expandable(k)
       }"></div>
       <span class="primary-color">
-        <span *ngIf="has(k, PropertyMetadata.Input)" class="decorator">
+        <span *ngIf="level === 0 && inputs[k]" class="decorator">
           @Input(<span class="info-value" *ngIf="inputs[k] && inputs[k].alias">'{{inputs[k].alias}}'</span>)
         </span>
-        <span *ngIf="has(k, PropertyMetadata.Output)" class="decorator">
+        <span *ngIf="level === 0 && outputs[k]" class="decorator">
           @Output(<span class="info-value" *ngIf="outputs[k] && outputs[k].alias">'{{outputs[k].alias}}'</span>)
         </span>
       </span>

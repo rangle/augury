@@ -32,68 +32,47 @@ export class ComponentInfo {
 
   private ComponentLoadState = ComponentLoadState;
 
-  private get path(): Path {
-    return deserializePath(this.node.id);
+  path: Path;
+
+  hasProviders: boolean = false;
+  hasDirectives: boolean = false;
+  hasDependencies: boolean = false;
+  hasProperties: boolean = false;
+  hasState: boolean = false;
+
+  inputs: InputOutput;
+  outputs: InputOutput;
+
+  ngOnInit() {
+    this.ngOnChanges();
   }
 
-  private get inputs(): InputOutput {
-    if (this.node == null || this.node.input == null) {
-      return {};
-    }
+  ngOnChanges() {
+    if (this.node) {
+      this.path = deserializePath(this.node.id);
 
-    return this.node.input.reduce(
-      (accum, input) => {
+      const listenerNames = {};
+      for (const listener of this.node.listeners) {
+        listenerNames[listener.name] = 1;
+      }
+
+      this.inputs = {};
+      this.outputs = {};
+      for (const input of this.node.input) {
         const [name, alias] = input.split(/:/);
-        accum[name] = {alias};
-        return accum;
-      },
-      <InputOutput> {});
-  }
+        if (listenerNames[name]) {
+          this.outputs[name] = {alias};
+        } else {
+          this.inputs[name] = {alias};
+        }
+      }
 
-  private get outputs(): InputOutput {
-    if (this.node == null) {
-      return {};
+      this.hasProviders = this.node.providers.length !== 0;
+      this.hasDirectives = this.node.directives.length !== 0;
+      this.hasDependencies = this.node.dependencies.length !== 0;
+      this.hasProperties = this.node.description.length !== 0;
+      this.hasState = this.state !== null && Object.keys(this.state).length !== 0;
     }
-
-    return this.node.output.reduce(
-      (accum, output) => {
-        const [name, alias] = output.split(/:/);
-        accum[name] = {alias};
-        return accum;
-      },
-      <InputOutput> {});
-  }
-
-  private get hasState() {
-    if (this.node == null || this.state == null) {
-      return false;
-    }
-
-    return Object.keys(this.state).length > 0;
-  }
-
-  private get hasProviders() {
-    return this.node &&
-        this.node.providers &&
-        this.node.providers.length > 0;
-  }
-
-  private get hasDirectives() {
-    return this.node &&
-           this.node.directives &&
-           this.node.directives.length > 0;
-  }
-
-  private get hasDependencies() {
-    return this.node &&
-           this.node.dependencies &&
-           this.node.dependencies.length > 0;
-  }
-
-  private get hasProperties() {
-    return this.node &&
-           this.node.description &&
-           this.node.description.length > 0;
   }
 
   private viewComponentSource() {

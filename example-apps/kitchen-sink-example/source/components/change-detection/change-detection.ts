@@ -1,12 +1,8 @@
 import {Component} from '@angular/core';
-
 import {User} from './user';
-import {UserInfoDefault} from './user-info-default';
-import {UserInfoPush} from './user-info-push';
 
 @Component({
   selector: 'change-detection',
-  directives: [UserInfoDefault, UserInfoPush],
   template: `
   <div>
     <button type="button" class="btn btn-danger"

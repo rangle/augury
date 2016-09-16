@@ -40,12 +40,6 @@ export class MetadataFromDecoratorWithCustomName {
 
 @Component({
   selector: 'metadata-test',
-  directives: [
-    MetadataFromArray,
-    MetadataFromDecorator,
-    MetadataFromArrayWithCustomName,
-    MetadataFromDecoratorWithCustomName
-  ],
   template: `
     <attr-from-array attrIn='Data from the array.'>
     </attr-from-array>
@@ -56,11 +50,9 @@ export class MetadataFromDecoratorWithCustomName {
     <attr-from-array-custom attrCustomIn='Data from array using a custom name.'>
     </attr-from-array-custom>
 
-    <attr-from-decorator-custom 
+    <attr-from-decorator-custom
       attrCustomIn='Data from decorator using a custom name.'>
     </attr-from-decorator-custom>
   `
 })
-export default class MetadataTest {
-}
-
+export class MetadataTest {}

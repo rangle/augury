@@ -1,10 +1,8 @@
 import {Component} from '@angular/core';
-import {NgFor} from '@angular/common';
 import {TodoService} from './todo-service';
 
 @Component({
   selector: 'todo-list',
-  directives: [NgFor],
   template: `
   <table class="table table-bordered">
     <tr>

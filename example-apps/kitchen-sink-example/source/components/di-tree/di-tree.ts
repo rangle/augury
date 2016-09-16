@@ -1,14 +1,9 @@
 import {Component} from '@angular/core';
 
-import Component1 from './component1';
-import Component2 from './component2';
-
 import Service1 from '../../services/service1';
 
 @Component({
   selector: 'di-tree',
-  directives: [Component1, Component2],
-  providers: [Service1],
   template: `
   <div>
     <p>di-app init: service1</p>
@@ -20,7 +15,6 @@ import Service1 from '../../services/service1';
   `
 })
 export default class DITree {
-
   service1Value: string;
 
   constructor(
@@ -28,6 +22,4 @@ export default class DITree {
   ) {
     this.service1Value = s1.value;
   }
-
-
 }

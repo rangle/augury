@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 
-import {FORM_PROVIDERS, REACTIVE_FORM_DIRECTIVES, FormControl, FormGroup}
- from '@angular/forms';
+import {
+  FormControl,
+  FormGroup
+} from '@angular/forms';
 
 @Component({
   selector: 'my-form',
-  providers: [FORM_PROVIDERS],
-  directives: [REACTIVE_FORM_DIRECTIVES],
   template: `
     <form (submit)="onSubmit()"
       novalidate class="col-sm-8">

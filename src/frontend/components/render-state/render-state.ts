@@ -46,7 +46,7 @@ export class RenderState {
   @Input() outputs: InputOutput;
   @Input() metadata: Metadata;
   @Input() level: number;
-  @Input() path: Array<string | number>;
+  @Input() path: Path;
   @Input() state;
 
   private EmitState = EmitState;
@@ -74,12 +74,6 @@ export class RenderState {
     const propertyPath = getPropertyPath(this.path).concat([key]);
 
     return this.metadata.get(this.state[key]);
-  }
-
-  private has(key: string, flag: PropertyMetadata) {
-    const propertyPath = getPropertyPath(this.path).concat([key]);
-
-    return (this.metadataForKey(serializePath(propertyPath)) & flag) === flag;
   }
 
   private get none() {

@@ -1,12 +1,9 @@
 import {Component} from '@angular/core';
 
 import {TodoService} from './todo-service';
-import {TodoInput} from './todo-input';
-import {TodoList} from './todo-list';
 
 @Component({
   selector: 'todo-app',
-  directives: [TodoInput, TodoList],
   template: `
   <div>
     <todo-input></todo-input>
