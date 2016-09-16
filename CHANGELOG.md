@@ -1,6 +1,15 @@
 # Change Log
+## [1.2.0](https://github.com/rangle/tree/1.2.0)
+* Augury now inspects applications built on Angular 2.0.0.
+* Property lines no longer jump around when entering and exiting edit. ([652](https://github.com/rangle/augury/issues/652))
+* Emitter widgets in the state editor no longer overlap the settings dropdown. ([661](https://github.com/rangle/augury/issues/661))
+* The Injector Graph and the Router Tree have been polished and refined. ([672](https://github.com/rangle/augury/pull/672))
+* Augury no longer loses context when the user clicks "(view source)" on a component. ([666](https://github.com/rangle/augury/issues/666))
+* The Find box has been moved directly into Component Tree and Router Tree. ([566](https://github.com/rangle/augury/issues/566))
+* Augury now filters normal HTML elements out of the Injector Graph ([633](https://github.com/rangle/augury/pull/633))
+* You can now navigate the Component Tree with your keyboard. ([635](https://github.com/rangle/augury/pull/635))
 
-## [1.1.3](http://github.com/rangle/tree/1.1.3)
+## [1.1.3](https://github.com/rangle/tree/1.1.3)
 * Resolve another endless-flicker issue caused by providers with undefined keys
 
 ## [1.1.2](https://github.com/rangle/tree/1.1.2)
