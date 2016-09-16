@@ -104,14 +104,7 @@ export class RouterTree {
       .attr('class', 'monospace');
 
     // Update the nodes
-    node.attr('transform', (d) => `translate(${d.y},${d.x})`)
-      .select('circle')
-      .style('fill', (d) => {
-        if (this.selectedRoute && (d.id === this.selectedRoute.id)) {
-          return d.isAux ? '#2828AB' : '#F05057';
-        }
-        return d.isAux ? '#EBF2FC' : '#FFF0F0';
-      });
+     node.attr('transform', (d) => `translate(${d.y},${d.x})`);
 
     // Declare the links
     const link = this.treeConfig.svg.selectAll('path.link')
