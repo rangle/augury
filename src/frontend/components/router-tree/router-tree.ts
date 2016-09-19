@@ -105,7 +105,9 @@ export class RouterTree {
       .attr('class', 'monospace');
 
     // Update the nodes
-     node.attr('transform', (d) => `translate(${d.y},${d.x})`);
+    node.attr('transform', (d) => `translate(${d.y},${d.x})`)
+      .select('circle')
+      .classed('selected', (d) => this.selectedRoute && ( d.id === this.selectedRoute.id ));
 
     // Declare the links
     const link = this.treeConfig.g.selectAll('path.link')
