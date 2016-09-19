@@ -86,7 +86,7 @@ If you do find a new issue, the best way to get a bug fixed is to provide a test
 
 *Before* submitting a pull request, please make sure the following is done…
 
-1. Fork the repo and create your branch from `master`.
+1. Fork the repo and create your branch from `dev`.
 2. If you've added code that should be tested, add tests.
 3. If you've changed APIs, development workflow or aspects of the architecrure, update the corresponding documentation.
 4. TypeScript linter is part of our build task, make sure your code lints before submitting your PRs.
