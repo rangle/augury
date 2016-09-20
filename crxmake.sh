@@ -10,7 +10,7 @@ npm -v
 dir="temp"
 key="key.pem"
 name="augury"
-files="manifest.json build src images index.html frontend.html popup.html"
+files="manifest.json build images index.html frontend.html popup.html popup.js"
 
 crx="$name.crx"
 pub="$name.pub"

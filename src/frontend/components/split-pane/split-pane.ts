@@ -17,7 +17,7 @@ const DEFAULT_SECONDARY_WIDTH = 384;
 
 @Component({
   selector: 'split-pane',
-  templateUrl: '/src/frontend/components/split-pane/split-pane.html'
+  template: require('./split-pane.html')
 })
 export class SplitPane {
   @ViewChild('wrapper') wrapperElement : ElementRef;
