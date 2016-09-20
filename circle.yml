@@ -8,7 +8,7 @@ dependencies:
   pre:
     - rm -rf node_modules typings
   post:
-    - npm run build; ./crxmake.sh
+    - npm run prod-build; ./crxmake.sh
 
 test:
   pre:

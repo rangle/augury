@@ -67,7 +67,6 @@ import {RenderState} from './components/render-state/render-state';
 import {RouterInfo} from './components/router-info/router-info';
 import {RouterTree} from './components/router-tree/router-tree';
 import {Search} from './components/search/search';
-import {Spinner} from './components/spinner/spinner';
 import {SplitPane} from './components/split-pane/split-pane';
 import {StateValues} from './components/state-values/state-values';
 import {TabMenu} from './components/tab-menu/tab-menu';
@@ -350,7 +349,6 @@ const declarations = [
   RouterInfo,
   RouterTree,
   Search,
-  Spinner,
   SplitPane,
   StateValues,
   TabMenu,

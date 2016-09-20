@@ -10,7 +10,7 @@ npm -v
 dir="temp"
 key="key.pem"
 name="augury"
-files="manifest.json build src images index.html frontend.html popup.html"
+files="manifest.json build images index.html frontend.html popup.html popup.js"
 
 crx="$name.crx"
 pub="$name.pub"
@@ -29,6 +29,7 @@ trap 'rm -f "$pub" "$sig"' EXIT
 rm -rf $dir
 mkdir $dir
 cp -R $files $dir/
+rm $dir/build/*.map
 
 # generate private key key.pem if it doesn't exist already
 if [ ! -f $key ]; then
