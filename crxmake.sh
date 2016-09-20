@@ -29,6 +29,7 @@ trap 'rm -f "$pub" "$sig"' EXIT
 rm -rf $dir
 mkdir $dir
 cp -R $files $dir/
+rm $dir/build/*.map
 
 # generate private key key.pem if it doesn't exist already
 if [ ! -f $key ]; then
