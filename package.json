@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/rangle/augury",
   "scripts": {
-    "prod-build": "webpack --optimize-minimize --optimize-dedupe",
+    "prod-build": "webpack --optimize-dedupe",
     "build": "webpack --colors --display-error-details --display-cached",
     "dev": "webpack --colors --display-error-details --display-cached --watch",
     "dev-build": "cross-env NODE_ENV=development npm run build",
