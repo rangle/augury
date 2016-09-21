@@ -25,7 +25,7 @@ import {functionName, serialize} from '../utils';
 
 type Source = DebugElement & DebugNode;
 
-type Cache = WeakMap<any, any>;
+type Cache = Map<string, any>;
 
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
 /// object that is our local representation of the combined data of those two

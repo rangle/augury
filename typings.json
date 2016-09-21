@@ -3,7 +3,6 @@
   "ambientDependencies": {
     "MediaStream": "github:DefinitelyTyped/DefinitelyTyped/webrtc/MediaStream.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "chrome": "github:DefinitelyTyped/DefinitelyTyped/chrome/chrome.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
-    "es6-shim": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#4de74cb527395c13ba20b438c3a7a419ad931f1c",
     "filesystem": "github:DefinitelyTyped/DefinitelyTyped/filesystem/filesystem.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "filewriter": "github:DefinitelyTyped/DefinitelyTyped/filewriter/filewriter.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#263705d313346e093d95cb62cef6fed848e46978",
@@ -14,7 +13,6 @@
     "chrome": "registry:dt/chrome#0.0.0+20160724063844",
     "clone": "registry:dt/clone#0.1.11+20160317120654",
     "d3": "registry:dt/d3#0.0.0+20160727131401",
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
     "filesystem": "registry:dt/filesystem#0.0.0+20160316155526",
     "filewriter": "registry:dt/filewriter#0.0.0+20160316155526",
     "node": "registry:dt/node#6.0.0+20160823142437",

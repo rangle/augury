@@ -30,24 +30,22 @@ import {
 
 import {SimpleOptions} from '../options';
 
-const create = <T>(properties: T) =>
-  Object.assign({
-    messageSource,
-    messageId: getRandomHash(),
-    serialize: Serialize.None,
-  },
-  properties);
+const completeMessage = <T>(properties): Message<T> => Object.assign({
+  messageId: getRandomHash(),
+  messageSource,
+  serialize: Serialize.None
+}, properties);
 
 export abstract class MessageFactory {
-  static initialize(options?: SimpleOptions): Message<void> {
-    return create({
+  static initialize(options?: SimpleOptions): Message<SimpleOptions> {
+    return completeMessage<SimpleOptions>({
       messageType: MessageType.Initialize,
       content: options,
     });
   }
 
   static frameworkLoaded(): Message<void> {
-    return create({
+    return completeMessage<void>({
       messageType: MessageType.FrameworkLoaded,
     });
   }
@@ -59,29 +57,29 @@ export abstract class MessageFactory {
   }
 
   static push(): Message<void> {
-    return create({
+    return completeMessage<void>({
       messageType: MessageType.Push,
     });
   }
 
   static completeTree(tree: MutableTree): Message<MutableTree> {
-    return create({
+    return completeMessage<MutableTree>({
       messageType: MessageType.CompleteTree,
+      serialize: Serialize.None,
       content: tree.roots,
-      serialize: Serialize.None,
     });
   }
 
-  static treeDiff(changes: Change[]): Message<Change[]> {
-    return create({
+  static treeDiff(changes: Array<Change>): Message<Array<Change>> {
+    return completeMessage<Array<Change>>({
       messageType: MessageType.TreeDiff,
-      content: changes,
       serialize: Serialize.None,
+      content: changes,
     });
   }
 
-  static selectComponent(node: Node, requestInstance?: boolean): Message<string> {
-    return create({
+  static selectComponent(node: Node, requestInstance?: boolean): Message<any> {
+    return completeMessage<any>({
       messageType: MessageType.SelectComponent,
       content: {
         path: deserializePath(node.id),
@@ -90,8 +88,8 @@ export abstract class MessageFactory {
     });
   }
 
-  static updateProperty(path: Path, newValue): Message<void> {
-    return create({
+  static updateProperty(path: Path, newValue): Message<{path: Path, newValue: any}> {
+    return completeMessage<{path: Path, newValue: any}>({
       messageType: MessageType.UpdateProperty,
       content: {
         path,
@@ -100,8 +98,8 @@ export abstract class MessageFactory {
     });
   }
 
-  static emitValue(path: Path, value): Message<void> {
-    return create({
+  static emitValue(path: Path, value): Message<{path: Path, value: any}> {
+    return completeMessage<{path: Path, value: any}>({
       messageType: MessageType.EmitValue,
       content: {
         path,
@@ -110,15 +108,15 @@ export abstract class MessageFactory {
     });
   }
 
-  static routerTree(content: Array<MainRoute>): Message<void> {
-    return create({
+  static routerTree(content: Array<MainRoute>): Message<Array<MainRoute>> {
+    return completeMessage<Array<MainRoute>>({
       messageType: MessageType.RouterTree,
       content: content,
     });
   }
 
-  static highlight(nodes: Array<Node>): Message<Node[]> {
-    return create({
+  static highlight(nodes: Array<Node>): Message<any> {
+    return completeMessage<any>({
       messageType: MessageType.Highlight,
       content: {
         nodes: nodes.map(n => n.id),
@@ -127,7 +125,7 @@ export abstract class MessageFactory {
   }
 
   static applicationError(error: ApplicationError): Message<ApplicationError> {
-    return create({
+    return completeMessage<ApplicationError>({
       messageType: MessageType.ApplicationError,
       content: error,
     });
@@ -137,14 +135,16 @@ export abstract class MessageFactory {
   /// queue instead of posting it to the Chrome communication channel. A message wrapped
   /// in this way takes a different path than a normal message.
   static dispatchWrapper<T>(message: Message<T>): Message<Message<T>> {
-    return create({
+    return completeMessage<Message<T>>({
       messageType: MessageType.DispatchWrapper,
       content: message,
     });
   }
 
-  static response<Response, T>(message: Message<T>, response: Response,
-      serializeResponse: boolean): MessageResponse<Response> {
+  static response<Response, T>(
+    message: Message<T>,
+    response: Response,
+    serializeResponse: boolean): MessageResponse<Response> {
     const prepare = (): any => {
       if (serializeResponse) {
         return serialize(response);
@@ -152,20 +152,18 @@ export abstract class MessageFactory {
       return response;
     };
 
-    const prepareError = r => ({message: r.message, stack: r.stack});
+    const prepareError = r => (<Error>{name: r.name, message: r.message, stack: r.stack});
 
-    const serialization = serializeResponse
-      ? Serialize.Recreator
-      : Serialize.None;
+    const serialization = serializeResponse ? Serialize.Recreator : Serialize.None;
 
-    return create({
+    return <MessageResponse<Response>> {
+      messageId: getRandomHash(),
       messageType: MessageType.Response,
-      messageId: null,
       messageSource: message.messageSource,
       messageResponseId: message.messageId,
       serialize: serialization,
-      content: response instanceof Error ? null : prepare(),
-      error: response instanceof Error ? prepareError(response) : null
-    });
+      content: response instanceof Error ? undefined : prepare(),
+      error: response instanceof Error ? prepareError(<any>response) : undefined
+    };
   }
 }
