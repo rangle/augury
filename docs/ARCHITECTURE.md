@@ -435,7 +435,7 @@ Each node has an ID property (`id`) that looks like this:
 ```
 
 This ID doubles as a **path** to that node inside of the `MutableTree`. First,
-recall that a `MutableTree can contain multiple application component trees.
+recall that a `MutableTree` can contain multiple application component trees.
 So the first number in the path is the index of the application that the node
 belongs to. Each subsequent number is an index into the `children` array inside
 of the parent node. Therefore, if you have an ID, you now how to traverse the
