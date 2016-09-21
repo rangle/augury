@@ -1,78 +1,76 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { GameService, Player } from '../../services/game.service';
+import { GameService, Character } from '../../services/game.service';
 
 @Component({
   selector: 'game',
   styles: [`
-    .label {
+    .content-container {
       text-align: center;
-      margin-top: 0px;
-      padding: 10px;
-      font-size: 35px;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      background: #fff;
+      padding: 50px 0;
+      vertical-align: middle;
+      font-size: 0;
+      box-sizing: border-box;
     }
-    .label-success {
-      color: #009100;
+    img {
+      max-width: 300px;
+      max-height: 400px;
+      vertical-align: middle;
+      padding: 0 50px;
     }
-    .label-error {
-      color: #E5373A;
+    .msg {
+      font-size: 30px;
+      text-align: center;
+      color: #DB4C2C;
+    }
+    start-button {
+      padding-top: 50px;
+    }
+    swipe {
+      width: 25%;
+      box-sizing: border-box;
+    }
+    p {
+      text-align: center;
+      font-size: 30px;
+      margin-top: 0;
     }
   `],
   template: `
-    <game-title 
-      [title]="title">
-    </game-title>
-    <div style="text-align: center; margin: 25px; padding-top: 30px;">
-    <label
-      [hidden]="msg.length == 0"
-      class="label"
-      [ngClass]="{'label-success': player.correct,
-      'label-error': !player.correct}">{{msg}}</label>
+    <game-title [title]="character.name"></game-title>
+    <div class="content-container">
+      <swipe [direction]="'left'" (onClick)="handleSwipe($event)" [hidden]="guessed || gameOver"></swipe>
+      <img [src]="character.img" />
+      <swipe [direction]="'right'" (onClick)="handleSwipe($event)" [hidden]="guessed || gameOver"></swipe>
     </div>
-    <div style="text-align: center; margin: 25px; padding-top: 30px;">
-      <game-button
-        [hidden]="gussed" 
-        [label]="'Yes'"
-        [type]="true"
-        (onClick)="makeGuess($event)">
-      </game-button>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <game-button
-      [hidden]="gussed"
-      [label]="'No'"
-      [type]="false"
-      (onClick)="makeGuess($event)">
-      </game-button>
-    </div>
-    <div style="text-align: center; margin: 25px; padding-top: 30px;"
+    <p class="msg">{{msg}}</p>
+    <p [hidden]="guessed || gameOver">Swipe left or right</p>
+    <div style="text-align: center;"
       *ngIf="gameOver">
       <h2>Click to play again or view High Scores</h2>
       <start-button
-        [label]="'Play Again'"
-        [count]="3"
-        (onClick)="onClick($event)">
+        [label]="'Try Again'"
+        [count]="5"
+        (onClick)="startAnotherGame($event)">
       </start-button>
       <scores-button
         [url]="'/scores/all'"
-        [label]="'View Scores'">
+        [label]="'View Matches'">
       </scores-button>
     </div>
-  `,
+    <div class="spacer" style="height: 100px;"></div>
+  `
 })
 export class GameComponent {
 
   private count: number;
   private countParam: number;
   private paramSub: any;
-  private player: Player;
-  private gussed: boolean = false;
-  private msg: string = '';
-  private title: string;
+  private character: Character;
   private gameOver: boolean = false;
+  private msg: string = "";
+  private guessed: boolean = false;
 
   constructor(
     private gameService: GameService,
@@ -86,8 +84,7 @@ export class GameComponent {
     this.paramSub = this.route.params.subscribe(params => {
       this.countParam = +params['count'];
       this.gameService.startGame(this.countParam);
-      this.player = this.gameService.getPlayerByIndex(this.count);
-      this.title = 'Is ' + this.player.name + ' Superhero?';
+      this.character = this.gameService.getCharacterByIndex(this.count);
     });
   }
 
@@ -95,38 +92,41 @@ export class GameComponent {
     this.paramSub.unsubscribe();
   }
 
-  onClick(count: any) {
+  startAnotherGame() {
     this.gameOver = false;
-    this.gussed = false;
+    this.guessed = false;
     this.count = 0;
-    this.msg = '';
-    this.player = this.gameService.getPlayerByIndex(this.count);
-    this.title = 'Is ' + this.player.name + ' Superhero?';
+    this.msg = "";
+    this.gameService.startGame(this.countParam);
+    this.character = this.gameService.getCharacterByIndex(this.count);
   }
 
-  makeGuess(guess: boolean) {
-    this.gussed = true;
-    if (guess === this.player.isHero) {
-      this.msg = 'You guessed wrong try next';
-      this.player.correct = false;
-    } else {
-      this.msg = 'Good try next one';
-      this.player.correct = true;
+  handleSwipe(doesLikeCharacter: boolean){
+
+    this.guessed = true;
+
+    if (doesLikeCharacter && this.character.likesMe) {
+      this.character.match = true;
+      this.msg = "It's a match!";
     }
+
     if (this.count < this.countParam - 1) {
-      setTimeout(this.nextGuess.bind(this), 1500);
+      if(this.character.match){
+        setTimeout(this.loadNextCharacter.bind(this), 1500);
+      }
+      else {
+        this.loadNextCharacter();
+      }
     } else {
-      this.gameService.saveScore(this.gameService.getScore());
       this.gameOver = true;
     }
   }
 
-  nextGuess() {
+  loadNextCharacter(){
     this.count++;
-    this.player = this.gameService.getPlayerByIndex(this.count);
-    this.title = 'Is ' + this.player.name + ' Superhero?';
-    this.gussed = false;
-    this.msg = '';
+    this.msg = "";
+    this.guessed = false;
+    this.character = this.gameService.getCharacterByIndex(this.count);
   }
 
 }

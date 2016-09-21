@@ -1,72 +1,53 @@
 import {Inject, Injectable} from '@angular/core';
+import { CharacterService } from './character.service';
 
-import { HerosService } from './heros.service';
-import { VillansService } from './villans.service';
-
-export interface Player {
+export interface Character {
   name: string;
-  isHero: boolean;
-  correct: boolean;
+  img: string;
+  likesMe: boolean;
+  match: boolean;
 }
 
 @Injectable()
 export class GameService {
 
-  private players: Array<Player>;
+  private characters: Array<Character>;
   private count: number;
 
   constructor(
-    @Inject(HerosService) private herosService: HerosService,
-    @Inject(VillansService) private villansService: VillansService
+    @Inject(CharacterService) private characterService: CharacterService
   ) { }
 
   startGame(count: number): void {
     this.count = count;
-    this.players = new Array<Player>();
+    this.characters = new Array<Character>();
     for (let i = 0; i < count; i++) {
-      const random = parseInt(Math.random() * 10 + '', 10);
-      if (random % 2) {
-        this.players.push({
-          name: this.herosService.getRandomHero(),
-          isHero: true,
-          correct: undefined
-        });
-      } else {
-        this.players.push({
-          name: this.villansService.getRandomVillan(),
-          isHero: false,
-          correct: undefined
-        });
-      }
+      let likesMe = Math.random() > 0.5;
+      let character = this.characterService.getRandomCharacter();
+      let name = character.name || character.aliases;
+      let img = character.image && character.image.medium_url ?
+                character.image.medium_url :
+                "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+
+      this.characters.push({
+        name: name,
+        img: img,
+        likesMe: likesMe,
+        match: undefined
+      });
     }
   }
 
-  getScore(): number {
-    if (this.players) {
-      return this.players.filter((player) => player.correct === true).length;
+
+  getCharacterByIndex(index: number): Character {
+    return this.characters[index];
+  }
+
+  getMatches(): Array<any> {
+    if (this.characters) {
+      return this.characters.filter((character) => character.match === true);
     } else {
-      return undefined;
+      return [];
     }
   }
-
-  getScores() {
-    return JSON.parse(localStorage.getItem('scores'));
-  }
-
-  getPlayerByIndex(index: number): Player {
-    return this.players[index];
-  }
-
-  saveScore(score: number) {
-    let scores = [];
-    if (localStorage.getItem('scores')) {
-      scores = JSON.parse(localStorage.getItem('scores'));
-    }
-    scores.push({
-      'game': 'Game ' + (scores.length + 1),
-      'score': score
-    });
-    localStorage.setItem('scores', JSON.stringify(scores));
-  }
-
 }

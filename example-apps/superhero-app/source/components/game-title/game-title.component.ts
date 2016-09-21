@@ -11,7 +11,7 @@ import {Component} from '@angular/core';
       padding: 0px;
       font-weight: 600;
       letter-spacing: 0.02em;
-      font-size: 70px;
+      font-size: 40px;
       padding-top: 30px;
     }
   `],

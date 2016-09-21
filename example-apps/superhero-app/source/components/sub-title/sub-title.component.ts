@@ -3,8 +3,10 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'sub-title',
   styles: [`
+    p {
+      text-align: center;
+    }
     .sub-title {
-        text-align: center;
         margin: 0px;
         padding: 0px;
         font-size: 35px;
@@ -13,7 +15,8 @@ import {Component} from '@angular/core';
     }
   `],
   template: `
-    <p class="sub-title">simply guess the superhero or villan and win!!!</p>
+    <p class="sub-title">Superhero Tinder</p>
+    <p>Are you fly enough to be matched up?</p>
   `
 })
 export class SubTitleComponent {

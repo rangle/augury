@@ -16,6 +16,7 @@ import {Component, EventEmitter} from '@angular/core';
       text-transform: uppercase;
       background: #E5373A;
       font-size: 16px;
+      margin-top: 50px;
     }
   `],
   template: `
