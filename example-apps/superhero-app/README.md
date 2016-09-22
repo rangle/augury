@@ -1,4 +1,4 @@
-# Kitchen Sink - Augury Example Application
+# Superhero App - Augury Example Application
 
 Use this application to get familiar with Augury
 
