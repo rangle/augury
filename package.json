@@ -47,7 +47,7 @@
     "basscss-type-scale": "^1.0.5",
     "basscss-typography": "^3.0.3",
     "core-js": "^2.2.2",
-    "cross-env": "^2.0.0",
+    "cross-env": "^3.0.0",
     "crypto": "0.0.3",
     "d3": "^3.5.16",
     "file-loader": "^0.8.5",
