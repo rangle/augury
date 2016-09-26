@@ -5,8 +5,7 @@ import { HttpModule } from '@angular/http';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { GameService } from './services/game.service';
-import { HerosService } from './services/heros.service';
-import { VillansService } from './services/villans.service';
+import { CharacterService } from './services/character.service';
 
 import { SuperherosApp } from './containers/superhero';
 
@@ -23,7 +22,7 @@ import { AMI_SUPERHERO_ROUTES, AMI_SUPERHERO_DECLARATIONS } from './containers/s
     HttpModule,
     AMI_SUPERHERO_ROUTES
   ],
-  providers: [HerosService, VillansService, GameService],
+  providers: [GameService, CharacterService],
   bootstrap: [SuperherosApp]
 })
 export class AppModule { }

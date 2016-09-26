@@ -61,6 +61,7 @@ module.exports = {
       { test: /\.woff/, loader: 'url' },
       { test: /\.woff2/, loader: 'url' },
       { test: /\.ttf/, loader: 'url' },
+      { test: /\.jpg/, loader: 'url-loader?mimetype=image/jpg' }
     ],
     noParse: [ /zone\.js\/dist\/.+/, /angular2\/bundles\/.+/ ]
   },
