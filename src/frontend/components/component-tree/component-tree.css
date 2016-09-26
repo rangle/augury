@@ -8,3 +8,7 @@
   display: table;
   white-space: nowrap;
 }
+
+:host {
+  width: 100%;
+}
