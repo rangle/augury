@@ -491,6 +491,6 @@ understanding the Augury UI code in the `frontend` directory.
 * [Event Pages](https://developer.chrome.com/extensions/event_pages)
 * [Content Scripts](https://developer.chrome.com/extensions/content_scripts)
 
-# Outdated architecture diagram
+# Updated Architecture Diagram
 
-![Augury Architecture Diagram](./anugury-architecture.png)
+TBD
