@@ -17,6 +17,7 @@ interface TreeConfig {
       d3.svg.diagonal.Node
     >;
   svg: d3.Selection<any>;
+  g: d3.Selection<any>;
 }
 
 @Component({
@@ -44,16 +45,15 @@ export class RouterTree {
       .projection((d) => [d.y, d.x]);
 
     const svg = d3.select(this.chartContainer.nativeElement)
-      .append('svg')
-      .attr('height', 500)
-      .attr('width', 1000)
-      .append('g')
-      .attr('transform', 'translate(100, 200)');
+      .append('svg');
+
+    const g = svg.append('g');
 
     return {
       tree,
       diagonal,
-      svg
+      svg,
+      g
     };
   }
 
@@ -64,6 +64,7 @@ export class RouterTree {
 
     const tree = this.treeConfig.tree;
     const data = this.routerTree;
+    const gEl = document.getElementsByTagName('g')[0];
     let i = 0;
 
     // Compute the new tree layout.
@@ -83,7 +84,7 @@ export class RouterTree {
     });
 
     // Declare the nodes
-    const node = this.treeConfig.svg.selectAll('g.node')
+    const node = this.treeConfig.g.selectAll('g.node')
       .data(nodes, (d: any) => d.id || (d.id = ++i));
 
     // Enter the nodes
@@ -107,7 +108,7 @@ export class RouterTree {
      node.attr('transform', (d) => `translate(${d.y},${d.x})`);
 
     // Declare the links
-    const link = this.treeConfig.svg.selectAll('path.link')
+    const link = this.treeConfig.g.selectAll('path.link')
       .data(links, (d: any) => d.target.id);
 
     // Enter any new links at the parent's previous position.
@@ -116,6 +117,16 @@ export class RouterTree {
       .insert('path', 'g')
       .attr('class', 'link')
       .attr('d', this.treeConfig.diagonal);
+
+    const gElBBox = gEl.getBBox();
+    const svgPadding = 20;
+
+    this.treeConfig.svg
+      .attr('height', gElBBox.height + 2 * svgPadding)
+      .attr('width', gElBBox.width + 2 * svgPadding);
+
+    this.treeConfig.g
+      .attr('transform', `translate(${ -gElBBox.x + svgPadding },${ -gElBBox.y + svgPadding})`);
   }
 
   private ngOnChanges() {
