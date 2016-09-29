@@ -1,0 +1,14 @@
+<div class="col-md-6 col-md-offset-2">
+  <ul class="nav nav-pills">
+    <li [ngClass]="{ active: path.indexOf('/input-output') === 0 }">
+      <a [routerLink]="['/input-output']">@Input and @Output</a>
+    </li>
+    <li [ngClass]="{active: path.indexOf('/router-toy') === 0 }">
+      <a [routerLink]="['/router-toy/main']">Router</a>
+    </li>
+    <li [ngClass]="{ active: path.indexOf('/injector-tree') === 0 }">
+      <a [routerLink]="['/injector-tree']">Injector Tree</a>
+    </li>
+  </ul>
+  <router-outlet></router-outlet>
+</div>
