@@ -141,7 +141,7 @@ const messageHandler = (message: Message<any>) => {
 
         const node = previousTree.traverse(path);
 
-        this.consoleReference(node);
+        this.consoleReference(node, () => window);
 
         // For component selection events, we respond with component instance
         // properties for the selected node. If we had to serialize the
@@ -273,10 +273,10 @@ export const routerTree = (): Array<MainRoute> => {
   return routes;
 };
 
-export const consoleReference = (node: Node) => {
+export const consoleReference = (node: Node, windowRef: Function) => {
   const propertyKey = '$a';
 
-  Object.defineProperty(window, propertyKey, {
+  Object.defineProperty(windowRef(), propertyKey, {
     get: () => {
       if (node) {
         return ng.probe(node.nativeElement());
