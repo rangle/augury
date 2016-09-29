@@ -66,7 +66,7 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 ## Examples
 
 - [Kitchen Sink Demo](./example-apps/kitchen-sink-example/README.md)
-- [Superhero Tinder](.example-apps/superhero-app/README.md)
+- [Superhero Tinder](./example-apps/superhero-app/README.md)
 
 ## Issues
 
