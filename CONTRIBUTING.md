@@ -14,7 +14,7 @@ judgement when applying them.
 1. [Environmnet setup](#environment-setup)
 1. [Contributing workflow](#contributing-workflow)
 1. [Making changes](#making-changes)
-1. [How do I get in touch?](#how-do-i-get-in-touch-)
+1. [How do I get in touch?](#how-do-i-get-in-touch)
 1. [License](#license)
 
 
