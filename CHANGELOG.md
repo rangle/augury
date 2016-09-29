@@ -1,4 +1,8 @@
 # Change Log
+## [1.2.1](https://github.com/rangle/tree/1.2.1)
+* The Router Tree no longer cuts off trees which are too large. ([401](https://github.com/rangle/augury/issues/401))
+* The Component Tree scrollbars no longer overlap the info pane. ([682](https://github.com/rangle/augury/issues/682))
+
 ## [1.2.0](https://github.com/rangle/tree/1.2.0)
 * Augury now inspects applications built on Angular 2.0.0.
 * Property lines no longer jump around when entering and exiting edit. ([652](https://github.com/rangle/augury/issues/652))
