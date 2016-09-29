@@ -146,7 +146,8 @@ bt-injector-tree {
       fill: var(--lmode-rtree-node-secondary);
     }
 
-    & .node-route:hover {
+    & .node-route:hover,
+    & .node-route.selected {
       fill: var(--lmode-rtree-node-primary);
     }
 
@@ -155,7 +156,8 @@ bt-injector-tree {
       fill: var(--lmode-rtree-aux-node-secondary);
     }
 
-    & .node-aux-route:hover {
+    & .node-aux-route:hover,
+    & .node-aux-route.selected {
       fill: var(--lmode-rtree-aux-node-primary);
     }
 
@@ -276,7 +278,8 @@ bt-injector-tree {
       fill: var(--dmode-rtree-node-secondary);
     }
 
-    & .node-route:hover {
+    & .node-route:hover,
+    & .node-route.selected {
       fill: var(--dmode-rtree-node-primary);
     }
 
@@ -285,7 +288,8 @@ bt-injector-tree {
       fill: var(--dmode-rtree-aux-node-secondary);
     }
 
-    & .node-aux-route:hover {
+    & .node-aux-route:hover,
+    & .node-aux-route.selected {
       fill: var(--dmode-rtree-aux-node-primary);
     }
 
