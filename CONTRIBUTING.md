@@ -101,7 +101,7 @@ At the moment, we offer limited backwards compatibility until Angular 2.0 stabil
 
 1. Fork the repo and create your branch from `dev`.
 2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, development workflow or aspects of the architecrure, update the corresponding documentation.
+3. If you've changed APIs, development workflow or aspects of the architecture, update the corresponding documentation.
 4. TypeScript linter is part of our build task, make sure your code lints before submitting your PRs.
 
 More information can be found in `tslint.json` file of this repository.
