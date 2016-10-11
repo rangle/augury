@@ -23,7 +23,7 @@ import {defaultExpansionDepth} from '../node-item/node-item';
   selector: 'component-tree',
   template: require('./component-tree.html'),
   styles: [require('to-string!./component-tree.css')],
-  host: {'class': 'flex overflow-auto'},
+  host: { 'class': 'flex overflow-auto' },
 })
 export class ComponentTree {
   @Input() private tree: MutableTree;
@@ -34,33 +34,29 @@ export class ComponentTree {
   @Output() private expandChildren = new EventEmitter<Node>();
   @Output() private collapseChildren = new EventEmitter<Node>();
 
+  private lastSelection: Element;
+
   constructor(
     private viewState: ComponentViewState,
     private el: ElementRef
   ) {}
 
-  private scrollToViewIfNeeded(node) {
-    const selectedNodeBound = node.getBoundingClientRect();
-    const treeViewBound = this.el.nativeElement.getBoundingClientRect();
-    const scrollBarHeight = this.el.nativeElement.offsetHeight -
-      this.el.nativeElement.clientHeight;
-    const topOffset = selectedNodeBound.top - treeViewBound.top;
-    const bottomOffset = selectedNodeBound.bottom - treeViewBound.bottom +
-      scrollBarHeight;
+  private scrollToViewIfNeeded() {
+    const view = this.el.nativeElement;
+    const node = document.getElementsByClassName('node-item-selected').item(0);
 
-    if (topOffset < 0) {              // node is too high
-      this.el.nativeElement.scrollTop += topOffset;
-    } else if (bottomOffset > 0) {    // node is too low
-      this.el.nativeElement.scrollTop += bottomOffset;
+    if (node && node !== this.lastSelection) {
+      this.lastSelection = node;
+      const nodeBound = node.getBoundingClientRect();
+      const viewBound = view.getBoundingClientRect();
+      const scrollBarHeight = view.offsetHeight - view.clientHeight;
+      view.scrollTop += Math.min(0, nodeBound.top - viewBound.top);
+      view.scrollTop += Math.max(0, nodeBound.bottom - viewBound.bottom + scrollBarHeight);
     }
   }
 
   private ngAfterViewChecked() {
-    const selectedNode = document.getElementsByClassName('node-item-selected').item(0);
-
-    if (selectedNode) {
-      this.scrollToViewIfNeeded(selectedNode);
-    }
+    this.scrollToViewIfNeeded();
   }
 
   private onKeypress(event: KeyboardEvent) {
@@ -78,6 +74,8 @@ export class ComponentTree {
         this.expandSelected();
         break;
     }
+
+    return false;
   }
 
   private navigateUp() {
