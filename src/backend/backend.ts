@@ -121,6 +121,12 @@ checkDebug(() => {
   getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 });
 
+const selectedComponentPropertyKey = '$a';
+const noSelectedComponentWarningText = 'There is no component selected.';
+
+Object.defineProperty(window, selectedComponentPropertyKey,
+  { value: noSelectedComponentWarningText });
+
 const messageHandler = (message: Message<any>) => {
   switch (message.messageType) {
     case MessageType.Initialize:
@@ -274,9 +280,7 @@ export const routerTree = (): Array<MainRoute> => {
 };
 
 export const consoleReference = (node: Node) => {
-  const propertyKey = '$a';
-
-  Object.defineProperty(window, propertyKey, {
+  Object.defineProperty(window, selectedComponentPropertyKey, {
     get: () => {
       if (node) {
         return ng.probe(node.nativeElement());
