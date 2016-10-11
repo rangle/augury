@@ -83,3 +83,11 @@ send(MessageFactory.initialize())
   .catch(error => {
     console.error('Augury initialization has failed', error);
   });
+
+const propertyKey = '$a';
+const warningText = `$a will only be set in the 'top' execution context, \
+which you can select via the dropdown in the console pane \
+(https://developers.google.com/web/tools/chrome-devtools/console/\
+#execution-context).`;
+
+Object.defineProperty(window, propertyKey, { value: warningText });
