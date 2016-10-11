@@ -39,30 +39,6 @@ export class ComponentTree {
     private el: ElementRef
   ) {}
 
-  private scrollToViewIfNeeded(node) {
-    const selectedNodeBound = node.getBoundingClientRect();
-    const treeViewBound = this.el.nativeElement.getBoundingClientRect();
-    const scrollBarHeight = this.el.nativeElement.offsetHeight -
-      this.el.nativeElement.clientHeight;
-    const topOffset = selectedNodeBound.top - treeViewBound.top;
-    const bottomOffset = selectedNodeBound.bottom - treeViewBound.bottom +
-      scrollBarHeight;
-
-    if (topOffset < 0) {              // node is too high
-      this.el.nativeElement.scrollTop += topOffset;
-    } else if (bottomOffset > 0) {    // node is too low
-      this.el.nativeElement.scrollTop += bottomOffset;
-    }
-  }
-
-  private ngAfterViewChecked() {
-    const selectedNode = document.getElementsByClassName('node-item-selected').item(0);
-
-    if (selectedNode) {
-      this.scrollToViewIfNeeded(selectedNode);
-    }
-  }
-
   private onKeypress(event: KeyboardEvent) {
     switch (event.key) {
       case 'ArrowUp':
