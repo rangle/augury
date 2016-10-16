@@ -58,6 +58,8 @@ export const KitchenSinkRoutes: Routes = [
   { path: 'demo', component: Demo },
   { path: 'stress-tester', component: StressTester },
   { path: 'metadata-test', component: MetadataTest },
+  { path: 'lazy-load',
+    loadChildren: '../components/lazy-load/lazy-load#LazyLoadedModule' },
 ];
 
 export const KitchenSinkDeclarations = [

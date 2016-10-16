@@ -53,7 +53,7 @@ module.exports = {
       loader: 'tslint'
     }],
     loaders: [
-      { test: /\.ts$/, loader: 'ts', exclude: /node_modules/ },
+      { test: /\.ts$/, loaders: ['ts', 'angular2-router-loader'], exclude: /node_modules/ },
       { test: /\.html$/, loader: 'raw' },
       { test: /\.css$/, loader: 'style-loader!css-loader?sourceMap' },
       { test: /\.svg/, loader: 'url' },

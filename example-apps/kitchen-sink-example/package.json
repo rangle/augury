@@ -6,7 +6,9 @@
     "start": "webpack-dev-server --display-error-details --display-cached",
     "build": "webpack --display-error-details --display-cached"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "angular2-router-loader": "^0.3.2"
+  },
   "dependencies": {
     "@angular/common": "2.0.0",
     "@angular/compiler": "2.0.0",

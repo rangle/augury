@@ -15,6 +15,9 @@ import {
       <li [ngClass]="{active: path==''}">
         <a [routerLink]="['/']">Home</a>
       </li>
+      <li [ngClass]="{active: path=='welcome'}">
+        <a [routerLink]="['/lazy-load/lazy1']">Lazy Loaded Module</a>
+      </li>
       <li [ngClass]="{active: path=='demo'}">
         <a [routerLink]="['/demo']">Demo</a>
       </li>
