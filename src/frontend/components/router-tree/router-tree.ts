@@ -129,6 +129,7 @@ export class RouterTree {
   }
 
   private ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable:no-string-literal
     if (changes['routerTree']) {
       d3.select(this.chartContainer.nativeElement).select('svg').remove();
       this.treeConfig = this.getTree();
