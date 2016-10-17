@@ -7,6 +7,10 @@ import {
   messageSource,
 } from './message';
 
+import {
+  MainRoute,
+} from '../backend/utils';
+
 import {MessageType} from './message-type';
 
 import {ApplicationError} from './application-error';
@@ -102,9 +106,10 @@ export abstract class MessageFactory {
     });
   }
 
-  static routerTree(): Message<void> {
+  static routerTree(content: Array<MainRoute>): Message<void> {
     return create({
       messageType: MessageType.RouterTree,
+      content: content,
     });
   }
 
@@ -160,4 +165,3 @@ export abstract class MessageFactory {
     });
   }
 }
-

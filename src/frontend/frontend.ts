@@ -271,22 +271,7 @@ class App {
 
   private onSelectedTabChange(tab: Tab) {
     this.selectedTab = tab;
-
-    if (tab === Tab.RouterTree) {
-      this.userActions.renderRouterTree()
-        .then(response => {
-          this.zone.run(() => {
-            this.routerTree = response;
-          });
-        })
-        .catch(error => {
-          this.error = new ApplicationError(
-            ApplicationErrorType.UncaughtException,
-            error.message,
-            error.stack);
-          this.changeDetector.detectChanges();
-        });
-    }
+    this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {

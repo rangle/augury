@@ -50,7 +50,6 @@ function assignChildrenToParent(parent, children): [any] {
 }
 
 function childRouteName(child): string {
-  // console.debug('child:', child);
   if (child.component) {
     return child.component.name;
   }
