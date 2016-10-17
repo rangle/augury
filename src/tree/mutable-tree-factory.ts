@@ -1,5 +1,3 @@
-import {DebugElement} from '@angular/core';
-
 import {MutableTree} from './mutable-tree';
 import {transform} from './transformer';
 import {Node} from './node';
@@ -31,7 +29,7 @@ export interface ElementTransformResult {
 }
 
 export const createTreeFromElements =
-    (roots: Array<DebugElement>, options: SimpleOptions): ElementTransformResult => {
+    (roots: Array<any /* DebugElement */>, options: SimpleOptions): ElementTransformResult => {
   const tree = new MutableTree();
 
   /// Keep track of the number of nodes that we process as part of this transformation

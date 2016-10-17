@@ -1,5 +1,3 @@
-import {EventEmitter} from '@angular/core';
-
 import {
   AsyncSubject,
   BehaviorSubject,
@@ -67,7 +65,7 @@ const loadMetadata =
 
   if (instance != null && isScalar(instance) === false) {
     switch (functionName(instance.constructor)) {
-      case functionName(EventEmitter):
+      case 'EventEmitter':
         flags |= PropertyMetadata.EventEmitter;
         break;
       case functionName(AsyncSubject):
