@@ -53,8 +53,10 @@ function childRouteName(child): string {
   if (child.component) {
     return child.component.name;
   }
-  if (child.loadChildren) {
+  else if (child.loadChildren) {
     return `${child.path} [Lazy]`;
   }
-  return 'no-name-route';
+  else {
+    return 'no-name-route';
+  }
 }
