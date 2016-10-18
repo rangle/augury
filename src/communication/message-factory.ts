@@ -51,7 +51,7 @@ export abstract class MessageFactory {
   }
 
   static ping(): Message<void> {
-    return create({
+    return completeMessage<void>({
       messageType: MessageType.Ping,
     });
   }

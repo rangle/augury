@@ -76,15 +76,10 @@ export class PropertyEditor {
     }
   }
 
-  private get isInput(): boolean {
-    return (this.metadata & PropertyMetadata.Input) !== 0;
-  }
-
   private parseValue(value): EditorResult {
     try {
       return new Function(`return ${value}`)();
-    }
-    catch (e) {
+    } catch (e) {
       return value;
     }
   }

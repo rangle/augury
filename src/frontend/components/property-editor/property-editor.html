@@ -1,7 +1,7 @@
 <div [ngClass]="{'property-editor': true, editing: state === State.Write}" (click)="onClick($event)">
   <span class="info-key">
     <div class="expander transparent"></div>
-    <span *ngIf="isInput" class="primary-color decorator">
+    <span *ngIf="inputs[key]" class="primary-color decorator">
       @Input(<span class="info-value" *ngIf="inputs[key] && inputs[key].alias">'{{inputs[key].alias}}'</span>)
     </span>
     {{key}}:
