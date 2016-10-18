@@ -60,7 +60,7 @@
     "basscss-layout": "^3.1.0",
     "clone": "^1.0.2",
     "css-loader": "^0.21.0",
-    "es6-promise": "^3.1.2",
+    "es6-promise": "^4.0.5",
     "es6-shim": "^0.35.0",
     "file-loader": "^0.8.5",
     "msgpack-lite": "^0.1.20",
