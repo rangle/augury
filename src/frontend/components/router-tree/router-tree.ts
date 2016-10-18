@@ -2,6 +2,7 @@ import {
   Component,
   Input,
   ViewChild,
+  SimpleChanges,
 } from '@angular/core';
 
 import {Route} from '../../../backend/utils';
@@ -34,10 +35,6 @@ export class RouterTree {
 
   constructor(private userActions: UserActions) {}
 
-  ngAfterViewInit() {
-    this.treeConfig = this.getTree();
-  }
-
   private getTree(): TreeConfig {
     const tree = d3.layout.tree();
 
@@ -58,7 +55,7 @@ export class RouterTree {
   }
 
   render() {
-    if (!this.routerTree) {
+    if (!this.routerTree || !this.treeConfig) {
       return;
     }
 
@@ -131,7 +128,12 @@ export class RouterTree {
       .attr('transform', `translate(${ -gElBBox.x + svgPadding },${ -gElBBox.y + svgPadding})`);
   }
 
-  private ngOnChanges() {
+  private ngOnChanges(changes: SimpleChanges) {
+    // tslint:disable:no-string-literal
+    if (changes['routerTree']) {
+      d3.select(this.chartContainer.nativeElement).select('svg').remove();
+      this.treeConfig = this.getTree();
+    }
     this.render();
   }
 

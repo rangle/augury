@@ -61,7 +61,7 @@ let previousTree: MutableTree;
 
 let previousCount: number;
 
-const updateTree = (roots: Array<DebugElement>) => {
+const updateComponentTree = (roots: Array<DebugElement>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
   if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
@@ -86,8 +86,8 @@ const updateTree = (roots: Array<DebugElement>) => {
   previousCount = count;
 };
 
-const update = () => {
-  updateTree(getAllAngularRootElements().map(r => ng.probe(r)));
+const updateRouterTree = (routes: Array<MainRoute>) => {
+  messageBuffer.enqueue(MessageFactory.routerTree(routes));
 };
 
 const subject = new Subject<void>();
@@ -98,7 +98,10 @@ const bind = (root: DebugElement) => {
     ngZone.onStable.subscribe(() => subject.next(void 0));
   }
 
-  subject.debounceTime(0).subscribe(() => update());
+  subject.debounceTime(0).subscribe(() => {
+    updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
+    updateRouterTree(routerTree());
+  });
 
   subject.next(void 0); // initial load
 };

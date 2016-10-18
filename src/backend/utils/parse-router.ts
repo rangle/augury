@@ -32,7 +32,7 @@ export function parseRoutes(router: any): MainRoute {
 function assignChildrenToParent(parent, children): [any] {
   return children.map((child) => {
     const childName = childRouteName(child);
-    const childDescendents: [any] = child.children;
+    const childDescendents: [any] = child._loadedConfig ? child._loadedConfig.routes : child.children;
 
     // only found in aux routes, otherwise property will be undefined
     const isAuxRoute = !!child.outlet;
@@ -50,5 +50,13 @@ function assignChildrenToParent(parent, children): [any] {
 }
 
 function childRouteName(child): string {
-  return child.component ? child.component.name : 'no-name-route';
+  if (child.component) {
+    return child.component.name;
+  }
+  else if (child.loadChildren) {
+    return `${child.path} [Lazy]`;
+  }
+  else {
+    return 'no-name-route';
+  }
 }

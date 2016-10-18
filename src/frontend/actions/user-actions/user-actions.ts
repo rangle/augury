@@ -105,8 +105,5 @@ export class UserActions {
     return this.connection.send(MessageFactory.highlight([node]));
   }
 
-  renderRouterTree(): Promise<Route[]> {
-    return this.connection.send<Route[], any>(MessageFactory.routerTree());
-  }
 }
 
