@@ -1,6 +1,9 @@
 import {DebugElement} from '@angular/core';
 
-import {Subject} from 'rxjs';
+import {
+  Subject,
+  Subscription,
+} from 'rxjs';
 
 import {
   Metadata,
@@ -79,7 +82,7 @@ const updateComponentTree = (roots: Array<DebugElement>) => {
 
   /// Send a message through the normal channels to indicate to the frontend
   /// that messages are waiting for it in {@link messageBuffer}
-  send<void, void>(MessageFactory.push());
+  send(MessageFactory.push());
 
   previousTree = tree;
 
@@ -92,16 +95,26 @@ const updateRouterTree = (routes: Array<MainRoute>) => {
 
 const subject = new Subject<void>();
 
+const subscriptions = new Array<Subscription>();
+
 const bind = (root: DebugElement) => {
-  const ngZone = root.injector.get(ng.coreTokens.NgZone);
-  if (ngZone) {
-    ngZone.onStable.subscribe(() => subject.next(void 0));
+  if (root.injector == null) {
+    // If injector is missing, we won't be able to debug this build
+    send(MessageFactory.applicationError(
+      new ApplicationError(ApplicationErrorType.DebugInformationMissing)));
+    return;
   }
 
-  subject.debounceTime(0).subscribe(() => {
-    updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
-    updateRouterTree(routerTree());
-  });
+  const ngZone = root.injector.get(ng.coreTokens.NgZone);
+  if (ngZone) {
+    subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
+  }
+
+  subscriptions.push(
+    subject.debounceTime(0).subscribe(() => {
+      updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
+      updateRouterTree(routerTree());
+    }));
 
   subject.next(void 0); // initial load
 };
@@ -111,20 +124,36 @@ const checkDebug = (fn: () => void) => {
     // If getAllAngularTestabilities is defined but ng is not, it means the application
     // is running in production mode and Augury is not going to work. Send an error
     // to the frontend to deal with this case in a graceful way.
-    send<void, ApplicationError>(
-      MessageFactory.applicationError(
-        new ApplicationError(ApplicationErrorType.ProductionMode)));
+    send(MessageFactory.applicationError(
+      new ApplicationError(ApplicationErrorType.ProductionMode)));
   }
   else {
     fn();
   }
 };
 
-checkDebug(() => {
-  getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
-});
+const resubscribe = () => {
+  messageBuffer.clear();
+
+  checkDebug(() => {
+    for (const subscription of subscriptions) {
+      subscription.unsubscribe();
+    }
+
+    subscriptions.splice(0, subscriptions.length);
+
+    getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+  });
+};
+
+// Check to see if the Augury tab is open and active before we start
+// subscribing to Angular state changes. Our internal state management
+// can cause a slight drag on performance which is unnecessary if
+// the Augury UI / frontend is not even open.
+send(MessageFactory.ping()).then(() => resubscribe());
 
 const selectedComponentPropertyKey = '$a';
+
 const noSelectedComponentWarningText = 'There is no component selected.';
 
 Object.defineProperty(window, selectedComponentPropertyKey,
@@ -140,7 +169,7 @@ const messageHandler = (message: Message<any>) => {
       previousTree = null;
 
       // Load the complete component tree
-      checkDebug(() => subject.next(void 0));
+      resubscribe();
 
       return true;
 

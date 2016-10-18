@@ -1,13 +1,11 @@
+import {DebugElement} from '@angular/core';
+
 import {
   Message,
   MessageResponse,
   Serialize,
   messageSource,
 } from './message';
-
-import {
-  MainRoute,
-} from '../backend/utils';
 
 import {MessageType} from './message-type';
 
@@ -49,12 +47,6 @@ export abstract class MessageFactory {
   static frameworkLoaded(): Message<void> {
     return create({
       messageType: MessageType.FrameworkLoaded,
-    });
-  }
-
-  static ping(): Message<void> {
-    return create({
-      messageType: MessageType.Ping,
     });
   }
 
@@ -110,10 +102,9 @@ export abstract class MessageFactory {
     });
   }
 
-  static routerTree(content: Array<MainRoute>): Message<void> {
+  static routerTree(): Message<void> {
     return create({
       messageType: MessageType.RouterTree,
-      content: content,
     });
   }
 
@@ -169,3 +160,4 @@ export abstract class MessageFactory {
     });
   }
 }
+

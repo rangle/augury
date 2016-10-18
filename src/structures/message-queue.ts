@@ -1,6 +1,11 @@
 export class MessageQueue<T> {
   private queue = new Array<T>();
 
+  /// Empty the queue
+  clear() {
+    this.queue.splice(0, this.queue.length);
+  }
+
   /// Add a new message to the queue
   enqueue(element: T) {
     this.queue.push(element);

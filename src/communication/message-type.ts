@@ -5,6 +5,9 @@ export enum MessageType {
   /// Angular framework has finished loading
   FrameworkLoaded,
 
+  /// Check to see if the other side (frontend or backend) is open and responsive
+  Ping,
+
   /// Response to a previous message
   Response,
 
