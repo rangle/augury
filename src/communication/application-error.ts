@@ -1,6 +1,9 @@
 export enum ApplicationErrorType {
   None,
 
+  // Augury cannot debug applications built with AoT
+  AheadOfTimeCompilation,
+
   // The application being debugged is running in production mode and therefore
   // is incompatible with Augury and cannot be debugged.
   ProductionMode,

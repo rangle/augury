@@ -161,7 +161,22 @@ class App {
       sendResponse(MessageFactory.response(msg, {processed: true}, false));
     };
 
+    // We may be in an error state and the page gets reloaded and exits the error state.
+    // (For example, the user goes from a production build to a debug build by reloading
+    // the tab.) So in the event we get more data, we want to reset our error state.
     switch (msg.messageType) {
+      case MessageType.Push:
+      case MessageType.CompleteTree:
+      case MessageType.TreeDiff:
+      case MessageType.RouterTree:
+        this.error = null;
+        break;
+    }
+
+    switch (msg.messageType) {
+      case MessageType.Ping:
+        respond();
+        break;
       case MessageType.Push:
         this.directConnection.readQueue(
           (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
