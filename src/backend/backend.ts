@@ -99,12 +99,9 @@ const subscriptions = new Array<Subscription>();
 
 const bind = (root: DebugElement) => {
   if (root.injector == null) {
-    // In AoT-enabled debug builds, the data we get back from {@link ng.probe}
-    // is useless: injector and componentInstance are both null, providerTokens
-    // are empty, and so forth. So we cannot debug such builds. We will just
-    // display a friendly error message instead.
+    // If injector is missing, we won't be able to debug this build
     send(MessageFactory.applicationError(
-      new ApplicationError(ApplicationErrorType.AheadOfTimeCompilation)));
+      new ApplicationError(ApplicationErrorType.DebugInformationMissing)));
     return;
   }
 
