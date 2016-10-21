@@ -13,8 +13,8 @@ function equals(a, b) {
     case 'number':
       return a === b;
     case 'object':
-      if (a === null) {
-        return b === null;
+      if (a == null) {
+        return b == null;
       }
       if (Array.isArray(a)) {
         if (!Array.isArray(b) || a.length !== b.length) {
@@ -212,22 +212,6 @@ export function apply(tree, patches: Array<any>, validate?: boolean): Array<any>
   return results;
 }
 
-function hasUndefined(obj): boolean {
-  if (obj === undefined) {
-      return true;
-  }
-
-  if (typeof obj === 'array' || typeof obj === 'object') {
-    for (const i in obj) {
-      if (hasUndefined(obj[i])) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
 function escapePathComponent (str) {
   if (str.indexOf('/') < 0 &&
       str.indexOf('~') < 0) {
@@ -247,21 +231,26 @@ function generatePatch(mirror, obj, patches, path) {
     const key = oldKeys[t];
     const oldVal = mirror[key];
 
-    if (obj.hasOwnProperty(key) && !(obj[key] === undefined && Array.isArray(obj) === false)) {
+    if (obj.hasOwnProperty(key) && !(obj[key] == null && Array.isArray(obj) === false)) {
       const newVal = obj[key];
       if (typeof oldVal === 'object' && oldVal != null && typeof newVal === 'object' && newVal != null) {
         generatePatch(oldVal, newVal, patches, path + '/' + escapePathComponent(key));
       }
       else {
-        if (oldVal !== newVal) {
+        if (oldVal == null && newVal == null) {
+          continue;
+        }
+        else if (oldVal !== newVal) {
           changed = true;
           patches.push({op: 'replace', path: path + '/' + escapePathComponent(key), value: newVal});
         }
       }
     }
     else {
-      patches.push({op: 'remove', path: path + '/' + escapePathComponent(key)});
-      deleted = true; // property has been deleted
+      if (oldVal != null) {
+        patches.push({op: 'remove', path: path + '/' + escapePathComponent(key)});
+        deleted = true; // property has been deleted
+      }
     }
   }
 
