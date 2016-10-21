@@ -1,4 +1,11 @@
 # Change Log
+## [1.2.2](https://github.com/rangle/tree/1.2.2)
+* Changes to OnPush components in the state editor are now reflected immediately in the app. ([559](https://github.com/rangle/augury/issues/559))
+* Resolve performance issue due to bug in which JSON patch library is not able to compare undefined values. ([727](https://github.com/rangle/augury/issues/727))
+* Resolve issue where some ES6 shims conflict with Augury (asana.com). ([734](https://github.com/rangle/augury/issues/734))
+* Router tree now supports lazy loaded modules. ([628](https://github.com/rangle/augury/issues/628))
+* `$a` is now defined as a warning message in the extension context. ([684](https://github.com/rangle/augury/issues/684))
+
 ## [1.2.1](https://github.com/rangle/tree/1.2.1)
 * The Router Tree no longer cuts off trees which are too large. ([401](https://github.com/rangle/augury/issues/401))
 * The Component Tree scrollbars no longer overlap the info pane. ([682](https://github.com/rangle/augury/issues/682))
