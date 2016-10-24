@@ -250,6 +250,12 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
       const instanceParent = getNodeInstanceParent(probed, path);
       if (instanceParent) {
         instanceParent[path[path.length - 1]] = newValue;
+        if (node.changeDetection === 'OnPush') {
+          probed.childNodes.map(childNode => {
+            childNode._debugInfo._view.changeDetectorRef.markForCheck();
+            childNode._debugInfo._view.changeDetectorRef.detectChanges();
+          });
+        }
       }
     }
   }

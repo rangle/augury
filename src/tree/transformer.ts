@@ -249,9 +249,11 @@ const getComponentDecorators = (metadata: Component, element: Source) => {
 };
 
 const getChangeDetection = (metadata: Component): ChangeDetectionStrategy => {
-   if (metadata == null ||
-       metadata.changeDetection == null) {
-     return ChangeDetectionStrategy.Default;
+  if (metadata &&
+    metadata.changeDetection !== undefined &&
+    metadata.changeDetection !== null) {
+    return metadata.changeDetection;
+  } else {
+    return ChangeDetectionStrategy.Default;
   }
-  return metadata.changeDetection;
 };
