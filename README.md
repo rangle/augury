@@ -22,6 +22,19 @@ export default class KitchenSink {
 ```
 [Example](https://github.com/rangle/augury/blob/dev/example-apps/kitchen-sink-example/source/containers/kitchen-sink.ts)
 
+## Support for AoT (Ahead-Of-Time) Compilation
+
+In order for Angular to expose the debug information for AoT applications, you will have to explicitly set the debug flag to `true` in your project's `tsconfig.json` as such:
+```json
+"angularCompilerOptions": {
+  "debug": true
+}
+```
+Note that this debug flag and `development mode` in Angular runtime are two completely different settings. 
+
+To learn more about AoT compilation, visit [this section of Angular documentation](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html).
+
+
 ## Development Environment
 
 To develop this extension, the following environment is used:
