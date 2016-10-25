@@ -1,4 +1,8 @@
 # Change Log
+## [1.2.3](https://github.com/rangle/tree/1.2.3)
+* Add AoT compilation section to readme. ([733](https://github.com/rangle/augury/issues/733))
+* Make sure events emitted form Augury are run in an NgZone as expected. ([752](https://github.com/rangle/augury/issues/752))
+
 ## [1.2.2](https://github.com/rangle/tree/1.2.2)
 * Changes to OnPush components in the state editor are now reflected immediately in the app. ([559](https://github.com/rangle/augury/issues/559))
 * Resolve performance issue due to bug in which JSON patch library is not able to compare undefined values. ([727](https://github.com/rangle/augury/issues/727))
