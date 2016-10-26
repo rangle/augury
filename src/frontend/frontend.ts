@@ -119,6 +119,7 @@ class App {
 
   private ngDoCheck() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
+    this.changeDetector.detectChanges();
   }
 
   private ngOnInit() {
