@@ -233,37 +233,20 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   return null;
 };
 
-const tickApplication = (path: Path) => {
-  if (path == null || path.length === 0) {
-    return;
-  }
-
-  const rootIndex: number = <number> path[0];
-
-  const app = ng.probe(getAllAngularRootElements()[rootIndex]);
-  const applicationRef = app.injector.get(ng.coreTokens.ApplicationRef);
-  applicationRef.tick();
-};
-
 const updateProperty = (tree: MutableTree, path: Path, newValue) => {
   const node = getNodeFromPartialPath(tree, path);
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      const instanceParent = getNodeInstanceParent(probed, path);
-      if (instanceParent) {
-        instanceParent[path[path.length - 1]] = newValue;
-        if (node.changeDetection === 'OnPush') {
-          probed.childNodes.map(childNode => {
-            childNode._debugInfo._view.changeDetectorRef.markForCheck();
-            childNode._debugInfo._view.changeDetectorRef.detectChanges();
-          });
+      const ngZone = probed.injector.get(ng.coreTokens.NgZone);
+      ngZone.run(() => {
+        const instanceParent = getNodeInstanceParent(probed, path);
+        if (instanceParent) {
+          instanceParent[path[path.length - 1]] = newValue;
         }
-      }
+      });
     }
   }
-
-  tickApplication(path);
 };
 
 const emitValue = (tree: MutableTree, path: Path, newValue) => {
@@ -289,8 +272,6 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
       }
     }
   }
-
-  tickApplication(path);
 };
 
 export const rootsWithRouters = () => {
