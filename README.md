@@ -60,7 +60,7 @@ To develop this extension, the following environment is used:
 5. Choose "Load unpacked extension".
 6. In the dialog, open the directory you just cloned.
 
-Try out the extension with one of our [example applications](#Examples).
+Try out the extension with one of our [example applications](#examples).
 
 ## Running Tests
 
