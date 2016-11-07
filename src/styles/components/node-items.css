@@ -3,17 +3,6 @@
 
 .node-item {
   cursor: pointer;
-
-  &:hover {
-    padding-left: 58px;
-    margin-left: -50px;
-  }
-}
-
-.node-item-selected,
-.node-item-selected:hover {
-  padding-left: 58px !important;
-  margin-left: -50px;
 }
 
 .node-item-name {
