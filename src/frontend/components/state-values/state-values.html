@@ -1,7 +1,6 @@
 <div [ngClass]="{changed: isUpdated, property: true}">
   <bt-property-editor
      [key]="key"
-     [metadata]="metadata"
      [initialValue]="value"
      (submit)="onValueChanged($event)">
   </bt-property-editor>

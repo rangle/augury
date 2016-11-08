@@ -32,9 +32,8 @@ export enum State {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyEditor {
-  @Input() key: string;
-  @Input() level: number;
-  @Input() metadata: ObjectType;
+  @Input() private key: string;
+  @Input() private level: number;
   @Input() private initialValue;
 
   @Output() private cancel = new EventEmitter<void>();
@@ -72,10 +71,6 @@ export class PropertyEditor {
     if (this.state === State.Write) {
       this.focus();
     }
-  }
-
-  private get isInput(): boolean {
-    return (this.metadata & ObjectType.Input) !== 0;
   }
 
   private parseValue(value): EditorResult {
