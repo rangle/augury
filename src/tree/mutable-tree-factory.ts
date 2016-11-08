@@ -7,7 +7,7 @@ export const transformToTree =
     (root, index: number, options: SimpleOptions, increment: (n: number) => void) => {
   const map = new Map<string, Node>();
   try {
-    return transform([index], root, map, options, increment);
+    return transform([index], root, options, map, increment);
   }
   finally {
     map.clear(); // release references
@@ -29,7 +29,7 @@ export interface ElementTransformResult {
 }
 
 export const createTreeFromElements =
-    (roots: Array<any /* DebugElement */>, options: SimpleOptions): ElementTransformResult => {
+    (roots: Array<any>, options: SimpleOptions): ElementTransformResult => {
   const tree = new MutableTree();
 
   /// Keep track of the number of nodes that we process as part of this transformation

@@ -3,10 +3,11 @@ import {
   EventEmitter,
   Input,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 
 import {ComponentLoadState} from '../../state';
-import {InputOutput} from '../../../frontend/utils';
+
 import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
@@ -22,44 +23,21 @@ import {
   template: require('./component-info.html'),
 })
 export class ComponentInfo {
-  @Input() node: Node;
-  @Input() tree: MutableTree;
-  @Input() state;
-  @Input() metadata: Metadata;
-  @Input() loadingState: ComponentLoadState;
+  @Input() private node: Node;
+  @Input() private tree: MutableTree;
+  @Input() private state;
+  @Input() private metadata: Metadata;
+  @Input() private loadingState: ComponentLoadState;
 
   @Output() private selectNode = new EventEmitter<Node>();
 
   private ComponentLoadState = ComponentLoadState;
 
-  path: Path;
+  private path: Path;
 
-  inputs: InputOutput;
-  outputs: InputOutput;
-
-  ngOnInit() {
-    this.ngOnChanges();
-  }
-
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.node) {
       this.path = deserializePath(this.node.id);
-
-      const listenerNames = {};
-      for (const listener of this.node.listeners) {
-        listenerNames[listener.name] = 1;
-      }
-
-      this.inputs = {};
-      this.outputs = {};
-      for (const input of this.node.input) {
-        const [name, alias] = input.split(/:/);
-        if (listenerNames[name]) {
-          this.outputs[name] = {alias};
-        } else {
-          this.inputs[name] = {alias};
-        }
-      }
     }
   }
 

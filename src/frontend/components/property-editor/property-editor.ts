@@ -9,10 +9,9 @@ import {
   Output,
 } from '@angular/core';
 
-import {InputOutput} from '../../utils';
 import {Highlightable} from '../../utils/highlightable';
 import {highlightTime} from '../../../utils/configuration';
-import {PropertyMetadata} from '../../../tree';
+import {ObjectType} from '../../../tree';
 
 /// The types of values that this editor can emit to its owner
 export type EditorType = string | number | Object | Function;
@@ -35,8 +34,7 @@ export enum State {
 export class PropertyEditor {
   @Input() key: string;
   @Input() level: number;
-  @Input() inputs: InputOutput;
-  @Input() metadata: PropertyMetadata;
+  @Input() metadata: ObjectType;
   @Input() private initialValue;
 
   @Output() private cancel = new EventEmitter<void>();
@@ -77,7 +75,7 @@ export class PropertyEditor {
   }
 
   private get isInput(): boolean {
-    return (this.metadata & PropertyMetadata.Input) !== 0;
+    return (this.metadata & ObjectType.Input) !== 0;
   }
 
   private parseValue(value): EditorResult {

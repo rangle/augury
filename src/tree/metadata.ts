@@ -1,3 +1,5 @@
+import md5 = require('md5');
+
 import {
   AsyncSubject,
   BehaviorSubject,
@@ -10,108 +12,122 @@ import {
 import {
   Path,
   serializePath,
+  deserializePath,
 } from './path';
 
-import {functionName} from '../utils';
+import {Node} from './node';
 
-export enum PropertyMetadata {
-  Input         = 0x1,
-  Output        = 0x2,
-  Subject       = 0x4,
-  Observable    = 0x8,
-  EventEmitter  = 0x10,
+import {
+  componentInputs,
+  componentOutputs,
+  componentMetadata,
+  componentQueryChildren,
+} from './decorators';
+
+import {
+  isScalar,
+  functionName,
+  recurse,
+} from '../utils';
+
+export enum ObjectType {
+  Input           = 0x1,
+  Output          = 0x2,
+  Subject         = 0x4,
+  Observable      = 0x8,
+  EventEmitter    = 0x10,
+  ViewChild       = 0x20,
+  ViewChildren    = 0x40,
+  ContentChild    = 0x80,
+  ContentChildren = 0x100,
 }
 
-export type Metadata = Map<any, PropertyMetadata>;
+export type Metadata = Map<string, [ObjectType, any]>;
 
-export interface InstanceValue {
-  instance;
-  metadata: any | Metadata;
+export interface InstanceWithMetadata {
+  instance: any;
+  metadata: Metadata;
 }
 
-export const instanceWithMetadata =
-    (instance, inputs: Set<string>, outputs: Set<string>): InstanceValue => {
-  const map = new Map<any, PropertyMetadata>();
-
-  if (instance != null) {
-    for (const key of Object.keys(instance)) {
-      loadMetadata(inputs, outputs, instance[key], key, map);
-    }
+export const instanceWithMetadata = (node: Node, instance): InstanceWithMetadata => {
+  if (node == null || instance == null) {
+    return null;
   }
 
-  const metadataArray = new Array<any>();
+  const metadata = new Map<string, [ObjectType, any]>();
 
-  map.forEach(
-    (value, key) => {
-      if (value !== 0) { // zero is not worth serializing and sending to UI
-        metadataArray.push([key, value]);
+  const nodePath = deserializePath(node.id);
+
+  const serialize = (path: Path): string => md5(serializePath(path));
+
+  recurse(nodePath, instance,
+    (path: Path, obj) => {
+      let type = objectType(obj);
+
+      const update = (p: Path, flag: ObjectType, additionalProps) => {
+        const serializedPath = serialize(p);
+
+        const existing = metadata.get(serializedPath);
+        if (existing) {
+          existing[0] |= flag;
+          Object.assign(existing, additionalProps);
+        }
+        else {
+          metadata.set(serializedPath, [flag, additionalProps]);
+        }
+      };
+
+      const component = componentMetadata(obj);
+      if (component) {
+        for (const input of componentInputs(component, obj)) {
+          update(path.concat([input.propertyKey]), ObjectType.Input, {alias: input.bindingPropertyName});
+        }
+        for (const output of componentOutputs(component, obj)) {
+          update(path.concat([output.propertyKey]), ObjectType.Output, {alias: output.bindingPropertyName});
+        }
+
+        const addQuery = (decoratorType: string, objectType: ObjectType) => {
+          for (const vc of componentQueryChildren(decoratorType, component, obj)) {
+            update(path.concat([vc.propertyKey]), objectType, {selector: vc.selector});
+          }
+        };
+
+        addQuery('@ViewChild', ObjectType.ViewChild);
+        addQuery('@ViewChildren', ObjectType.ViewChildren);
+        addQuery('@ContentChild', ObjectType.ContentChild);
+        addQuery('@ContentChildren', ObjectType.ContentChildren);
+      }
+
+      if (type !== 0) {
+        const serializedPath = serialize(path);
+
+        const existing = metadata.get(serializedPath);
+        if (existing) {
+          metadata.set(serializedPath, [existing[0] | type, existing[1]]);
+        }
+        else {
+          metadata.set(serializedPath, [type, null]);
+        }
       }
     });
 
-  // It is very important that both the instance and metadata objects are part
-  // of the same object so that they get serialized together in {@link serialize}.
-  // This is because both instance and metadata refer to the same object instances,
-  // so they must be serialized together for those references to remain intact.
-  return {instance, metadata: metadataArray};
+  return {instance, metadata};
 };
 
-const loadMetadata =
-    (inputs: Set<string>, outputs: Set<string>, instance, top: string, map: Metadata) => {
-  if (map.has(instance)) {
-    return;
-  }
-
-  let flags: PropertyMetadata = 0;
-
-  if (instance != null && isScalar(instance) === false) {
-    switch (functionName(instance.constructor)) {
+const objectType = (object): ObjectType => {
+  if (object != null && !isScalar(object)) {
+    switch (functionName(object.constructor)) {
       case 'EventEmitter':
-        flags |= PropertyMetadata.EventEmitter;
-        break;
+        return ObjectType.EventEmitter;
       case functionName(AsyncSubject):
       case functionName(BehaviorSubject):
       case functionName(ReplaySubject):
       case functionName(Subject):
-        flags |= PropertyMetadata.Subject | PropertyMetadata.Observable;
-        break;
+        return ObjectType.Subject | ObjectType.Observable;
       case functionName(Observable):
       case functionName(Subscriber):
-        flags |= PropertyMetadata.Observable;
-        break;
-      default:
-        for (const key of Object.keys(instance)) {
-          const value = instance[key];
-
-          map.set(instance, flags);
-
-          if (map.has(value) === false) {
-            loadMetadata(inputs, outputs, value, null, map);
-          }
-        }
-        break;
+        return ObjectType.Observable;
     }
   }
-
-  if (top) {
-    if (inputs.has(top)) {
-      flags |= PropertyMetadata.Input;
-    }
-    else if (outputs.has(top)) {
-      flags |= PropertyMetadata.Output;
-    }
-  }
-
-  map.set(instance, flags);
-};
-
-const isScalar = value => {
-  switch (typeof value) {
-    case 'string':
-    case 'boolean':
-    case 'function':
-    case 'undefined':
-      return true;
-    default:
-      return false;
-  }
+  return 0;
 };

@@ -3,7 +3,7 @@ import {functionName} from './function-name';
 /// The intent of serialize() is to create a function that is itself able to
 /// reconstruct {@param object} into an exact clone that includes circular
 /// references and objects that are not normally serializable by something like
-/// {@link JSON.serialize}. It returns a string containing the code for the
+/// {@link JSON.stringify}. It returns a string containing the code for the
 /// reconstructor function. That value can be passed to a Function constructor
 /// which will parse it into a function that can then be invoked to recreate
 /// the original object. In this way we are able to serialize an object for
@@ -15,6 +15,8 @@ class Operation {
   arrays = new Array<any>();
   hashes = new Array<any>();
   objref = new Array<any>();
+  sets   = new Array<any>();
+  maps   = new Array<any>();
 
   /// Nodes that have been visited and recorded (-> index)
   visits = new Map<any, number>();
@@ -24,6 +26,21 @@ class Operation {
 }
 
 const serializer = object => {
+  switch (typeof object) {
+    case 'object':
+      if (object) {
+        break;
+      }
+      // fallthrough
+    case 'string':
+    case 'number':
+    case 'boolean':
+    case 'undefined':
+      return JSON.stringify(object);
+    case 'function':
+      return object.toString();
+  }
+
   const operation = new Operation();
 
   /// Start the mapping operation at the root.
@@ -47,11 +64,18 @@ const serializer = object => {
 
   return `function() {
     var _ = [${operation.objref.join(',')}];
-      ${operation.arrays.map(link =>
+
+    ${operation.arrays.map(link =>
       `_[${encode(link.source)}][${encode(link.key)}] = _[${encode(link.target)}];`).join('')}
 
-      ${operation.hashes.map(link =>
+    ${operation.hashes.map(link =>
       `_[${encode(link.source)}][${encode(link.key)}] = _[${encode(link.target)}];`).join('')}
+
+    ${operation.maps.map(link =>
+      `_[${encode(link.source)}].set(${encode(link.key)}, _[${encode(link.target)}]);`).join('')}
+
+    ${operation.sets.map(link =>
+      `_[${encode(link.source)}].add(_[${encode(link.target)}]);`).join('')}
 
       return _[0];
     }();`;
@@ -62,9 +86,6 @@ export const serialize = value => `return ${serializer(value)}`;
 
 /// Deserialize a function string and invoke the resulting object recreator.
 export const deserialize = value => (new Function(value))();
-
-/// Use the object recreator to create a clone of a complex object
-export const complexClone = value => deserialize(serialize(value));
 
 function Reference(to) {
   this.source = null;
@@ -99,8 +120,10 @@ function map(operation: Operation, value) {
 
           /// If this is a function, there is really no way to serialize
           /// it in a way that will include its original context and
-          /// closures. Therefore instead of attempting to do that, we
-          /// just create an object of the same name.
+          /// closures. But we do serialize the function, because this
+          /// will allow people to pass functions from their tasks as
+          /// long as they do not reference closures that are not accessible
+          /// in the context they are running in.
           if (typeof value === 'function') {
             return `function ${functionName(value)}() {}`;
           }
@@ -111,42 +134,77 @@ function map(operation: Operation, value) {
           }
           else {
             index = operation.visits.size;
+
             operation.visits.set(value, index);
           }
+
+          const mapArray = (collection: Array<any>, array: Array<any>) => {
+            return `[${array.map((i, key) => {
+              const ref = map(operation, i);
+
+              if (ref instanceof Reference) {
+                ref.source = index;
+                ref.key = key;
+                collection.push(ref);
+              }
+
+              return ref;
+            }).filter(v => v instanceof Reference === false).join(',')}]`;
+          };
 
           switch (objectType) {
             case '[object Array]':
               operation.tails.push(() => {
-                operation.objref[index] = `[${value.map((i: number, key) => {
-                  const ref = map(operation, i);
+                operation.objref[index] = mapArray(operation.arrays, value);
+              });
+              break;
+            case '[object Set]':
+              operation.tails.push(() => {
+                operation.objref[index] = `new Set()`;
+
+                value.forEach((v, key) => {
+                  const ref = map(operation, v);
+
+                  if (ref instanceof Reference) {
+                    ref.source = index;
+
+                    operation.sets.push(ref);
+                  }
+                });
+              });
+              break;
+            case '[object Map]':
+              operation.tails.push(() => {
+                operation.objref[index] = `new Map()`;
+
+                value.forEach((v, key) => {
+                  const ref = map(operation, v);
 
                   if (ref instanceof Reference) {
                     ref.source = index;
                     ref.key = key;
-                    operation.arrays.push(ref);
-                    return 'null';
+
+                    operation.maps.push(ref);
                   }
-                  else {
-                    return ref;
-                  }
-                })}]`;
+                });
               });
               break;
             default:
               operation.tails.push(() => {
-                operation.objref[index] = `{${Object.keys(value).map(key => {
-                  const mapped = map(operation, value[key]);
+                operation.objref[index] = `{${Object.getOwnPropertyNames(value).map(key => {
+                    const mapped = map(operation, value[key]);
 
-                  if (mapped instanceof Reference) {
-                    mapped.source = index;
-                    mapped.key = key;
-                    operation.hashes.push(mapped);
-                    return mapped;
-                  }
+                    if (mapped instanceof Reference) {
+                      mapped.source = index;
+                      mapped.key = key;
 
-                  return `${JSON.stringify(key)}: ${mapped}`;
-                }).filter(
-                  v => v instanceof Reference === false).join(',')}}`;
+                      operation.hashes.push(mapped);
+
+                      return mapped;
+                    }
+
+                    return `${JSON.stringify(key)}: ${mapped}`;
+                  }).filter(v => v instanceof Reference === false).join(',')}}`;
               });
               break;
           }

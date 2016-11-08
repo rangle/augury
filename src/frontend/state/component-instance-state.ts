@@ -1,9 +1,9 @@
 import {ChangeDetectorRef} from '@angular/core';
 
 import {
-  InstanceValue,
+  InstanceWithMetadata,
   Metadata,
-  PropertyMetadata,
+  ObjectType,
   Node,
 } from '../../tree';
 
@@ -16,7 +16,7 @@ export enum ComponentLoadState {
 class CachedValue {
   constructor(
     public state: ComponentLoadState,
-    public value: InstanceValue
+    public value: InstanceWithMetadata
   ) {}
 }
 
@@ -47,7 +47,7 @@ export class ComponentInstanceState {
     return (<CachedValue> cache).state;
   }
 
-  componentInstance(node: Node): InstanceValue {
+  componentInstance(node: Node): InstanceWithMetadata {
     if (node == null) {
       return null;
     }
@@ -70,13 +70,9 @@ export class ComponentInstanceState {
     }
   }
 
-  wait(node: Node, promise: Promise<InstanceValue>) {
+  wait(node: Node, promise: Promise<InstanceWithMetadata>) {
     promise.then(response => {
-      const metadata = toMap(response.metadata);
-
-      const value = {instance: response.instance, metadata};
-
-      this.map.set(node.id, new CachedValue(ComponentLoadState.Received, value));
+      this.map.set(node.id, new CachedValue(ComponentLoadState.Received, response));
 
       this.changeDetector.detectChanges();
     })
@@ -98,13 +94,3 @@ export class ComponentInstanceState {
     }
   }
 }
-
-const toMap = (array): Metadata => {
-  const map = new Map<any, PropertyMetadata>();
-
-  for (const item of array) {
-    map.set(item[0], item[1]);
-  }
-
-  return map;
-};

@@ -6,11 +6,10 @@ import {
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Highlightable} from '../../utils/highlightable';
-import {InputOutput} from '../../utils';
 import {functionName} from '../../../utils';
 import {
   Path,
-  PropertyMetadata,
+  ObjectType,
   Metadata,
 } from '../../../tree';
 
@@ -22,8 +21,7 @@ import {
 export class StateValues extends Highlightable {
   @Input() id: string | number;
   @Input() path: Path;
-  @Input() inputs: InputOutput;
-  @Input() metadata: PropertyMetadata;
+  @Input() metadata: ObjectType;
   @Input() value;
 
   private editable: boolean = false;
