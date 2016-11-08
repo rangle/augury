@@ -5,32 +5,27 @@ export interface EventListener {
   callback: Function;
 }
 
-export interface Node {
-  id: string;
-  isComponent: boolean;
-  changeDetection: string;
-  description: Array<Property>;
-  nativeElement: () => HTMLElement; // null on frontend
-  listeners: Array<EventListener>;
-  dependencies: Array<string>;
-  directives: Array<string>;
-  injectors: Array<string>;
-  providers: Array<Property>;
-  input: Array<string>;
-  output: Array<string>;
-  source: string;
+export interface DecoratorDisplay {
   name: string;
+  arg?: any;
+}
+
+export interface DecoratorDisplayMap {
+  [key: string]: Array<DecoratorDisplay>;
+}
+
+export interface Node {
+  changeDetection: string;
   children: Array<Node>;
-  properties: {
-      [key: string]: any;
-  };
-  attributes: {
-      [key: string]: string;
-  };
-  classes: {
-      [key: string]: boolean;
-  };
-  styles: {
-      [key: string]: string;
-  };
+  decorators: DecoratorDisplayMap;
+  dependencies: Array<string>;
+  description: Array<Property>;
+  directives: Array<string>;
+  id: string;
+  injectors: Array<string>;
+  isComponent: boolean;
+  listeners: Array<EventListener>;
+  name: string;
+  nativeElement: () => HTMLElement; // null on frontend
+  providers: Array<Property>;
 }

@@ -43,21 +43,22 @@ export class ComponentInfo {
 
   ngOnChanges() {
     if (this.node) {
+      const decorators = this.node.decorators;
       this.path = deserializePath(this.node.id);
-
-      const listenerNames = {};
-      for (const listener of this.node.listeners) {
-        listenerNames[listener.name] = 1;
-      }
 
       this.inputs = {};
       this.outputs = {};
-      for (const input of this.node.input) {
-        const [name, alias] = input.split(/:/);
-        if (listenerNames[name]) {
-          this.outputs[name] = {alias};
-        } else {
-          this.inputs[name] = {alias};
+
+      for (const k of Object.keys(decorators)) {
+        for (const decorator of decorators[k]) {
+          switch (decorator.name) {
+          case '@Input':
+            this.inputs[k] = {alias: decorator.arg};
+            break;
+          case '@Output':
+            this.outputs[k] = {alias: decorator.arg};
+            break;
+          }
         }
       }
     }

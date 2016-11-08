@@ -224,10 +224,7 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      return instanceWithMetadata(
-        probed.componentInstance,
-        new Set<string>(node.input.map(binding => binding.replace(/:(.*)$/, ''))),
-        new Set<string>(node.output));
+      return instanceWithMetadata(probed.componentInstance);
     }
   }
   return null;

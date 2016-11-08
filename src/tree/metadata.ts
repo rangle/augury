@@ -15,11 +15,9 @@ import {
 import {functionName} from '../utils';
 
 export enum PropertyMetadata {
-  Input         = 0x1,
-  Output        = 0x2,
-  Subject       = 0x4,
-  Observable    = 0x8,
-  EventEmitter  = 0x10,
+  Subject       = 0b001,
+  Observable    = 0b010,
+  EventEmitter  = 0b100,
 }
 
 export type Metadata = Map<any, PropertyMetadata>;
@@ -29,13 +27,12 @@ export interface InstanceValue {
   metadata: any | Metadata;
 }
 
-export const instanceWithMetadata =
-    (instance, inputs: Set<string>, outputs: Set<string>): InstanceValue => {
+export const instanceWithMetadata = (instance): InstanceValue => {
   const map = new Map<any, PropertyMetadata>();
 
   if (instance != null) {
     for (const key of Object.keys(instance)) {
-      loadMetadata(inputs, outputs, instance[key], key, map);
+      loadMetadata(instance[key], key, map);
     }
   }
 
@@ -55,8 +52,7 @@ export const instanceWithMetadata =
   return {instance, metadata: metadataArray};
 };
 
-const loadMetadata =
-    (inputs: Set<string>, outputs: Set<string>, instance, top: string, map: Metadata) => {
+const loadMetadata = (instance, top: string, map: Metadata) => {
   if (map.has(instance)) {
     return;
   }
@@ -85,22 +81,12 @@ const loadMetadata =
           map.set(instance, flags);
 
           if (map.has(value) === false) {
-            loadMetadata(inputs, outputs, value, null, map);
+            loadMetadata(value, null, map);
           }
         }
         break;
     }
   }
-
-  if (top) {
-    if (inputs.has(top)) {
-      flags |= PropertyMetadata.Input;
-    }
-    else if (outputs.has(top)) {
-      flags |= PropertyMetadata.Output;
-    }
-  }
-
   map.set(instance, flags);
 };
 
