@@ -68,6 +68,7 @@
             <template [ngSwitchCase]="ComponentLoadState.Received">
               <bt-render-state
                  [id]="node.id"
+                 [componentMetadata]="componentMetadata"
                  [metadata]="metadata"
                  [level]="0"
                  [path]="path"

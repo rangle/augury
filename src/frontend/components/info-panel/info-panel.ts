@@ -9,6 +9,7 @@ import {ComponentLoadState} from '../../state';
 import {StateTab} from '../../state';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {
+  ComponentMetadata,
   InstanceWithMetadata,
   Metadata,
   Node,
@@ -55,6 +56,12 @@ export class InfoPanel {
     return this.instanceValue
       ? this.instanceValue.metadata
       : new Map<string, [ObjectType, any]>();
+  }
+
+  private get componentMetadata(): ComponentMetadata {
+    return this.instanceValue
+      ? this.instanceValue.componentMetadata
+      : new Map<string, [string, ObjectType, any]>();
   }
 
   private onSelectedTabChanged(tab: StateTab) {

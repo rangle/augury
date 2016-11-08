@@ -36,9 +36,12 @@ export enum ObjectType {
 
 export type Metadata = Map<any, [ObjectType, any]>;
 
+export type ComponentMetadata = Map<any, [string, ObjectType, any]>;
+
 export interface InstanceWithMetadata {
   instance: any;
   metadata: Metadata;
+  componentMetadata: ComponentMetadata;
 }
 
 // It is imperative that the metadata and the instance value itself travel together
@@ -53,35 +56,34 @@ export const instanceWithMetadata = (node: Node, instance) => {
     return null;
   }
 
-  const metadata = new Map<string, [ObjectType, any]>();
+  const objectMetadata = new Map<any, [ObjectType, any]>();
+
+  const components = new Map<any, [[string, ObjectType, any]]>();
 
   recurse(instance,
     obj => {
-      let type = objectType(obj);
-
-      const update = (flag: ObjectType, additionalProps) => {
-        const existing = metadata.get(obj);
+      const update = (key: string, flag: ObjectType, additionalProps) => {
+        const existing = components.get(obj);
         if (existing) {
-          existing[0] |= flag;
-          Object.assign(existing, additionalProps);
+          existing.push([key, flag, additionalProps]);
         }
         else {
-          metadata.set(obj, [flag, additionalProps]);
+          components.set(obj, [[key, flag, additionalProps]]);
         }
       };
 
       const component = componentMetadata(obj);
       if (component) {
         for (const input of componentInputs(component, obj)) {
-          update(ObjectType.Input, {alias: input.bindingPropertyName});
+          update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});
         }
         for (const output of componentOutputs(component, obj)) {
-          update(ObjectType.Output, {alias: output.bindingPropertyName});
+          update(output.propertyKey, ObjectType.Output, {alias: output.bindingPropertyName});
         }
 
         const addQuery = (decoratorType: string, objectType: ObjectType) => {
           for (const vc of componentQueryChildren(decoratorType, component, obj)) {
-            update(objectType, {selector: vc.selector});
+            update(vc.propertyKey, objectType, {selector: vc.selector});
           }
         };
 
@@ -91,18 +93,23 @@ export const instanceWithMetadata = (node: Node, instance) => {
         addQuery('@ContentChildren', ObjectType.ContentChildren);
       }
 
+      const type = objectType(obj);
       if (type !== 0) {
-        const existing = metadata.get(obj);
+        const existing = objectMetadata.get(obj);
         if (existing) {
-          metadata.set(obj, [existing[0] | type, existing[1]]);
+          objectMetadata.set(obj, [existing[0] | type, existing[1]]);
         }
         else {
-          metadata.set(obj, [type, null]);
+          objectMetadata.set(obj, [type, null]);
         }
       }
     });
 
-  return {instance, metadata: Array.from(<any> metadata)};
+  return {
+    instance,
+    metadata: Array.from(<any> objectMetadata),
+    componentMetadata: Array.from(<any> components),
+  };
 };
 
 const objectType = (object): ObjectType => {

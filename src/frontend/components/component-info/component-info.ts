@@ -11,6 +11,7 @@ import {ComponentLoadState} from '../../state';
 import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
+  ComponentMetadata,
   Metadata,
   MutableTree,
   Node,
@@ -27,6 +28,7 @@ export class ComponentInfo {
   @Input() private tree: MutableTree;
   @Input() private state;
   @Input() private metadata: Metadata;
+  @Input() private componentMetadata: ComponentMetadata;
   @Input() private loadingState: ComponentLoadState;
 
   @Output() private selectNode = new EventEmitter<Node>();
