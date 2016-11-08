@@ -5,6 +5,13 @@ export interface EventListener {
   callback: Function;
 }
 
+export interface InputProperty {
+  propertyKey: string;
+  bindingPropertyName?: string;
+}
+
+export interface OutputProperty extends InputProperty {} // outputs can be aliased too
+
 export interface Node {
   id: string;
   isComponent: boolean;
@@ -16,8 +23,8 @@ export interface Node {
   directives: Array<string>;
   injectors: Array<string>;
   providers: Array<Property>;
-  input: Array<string>;
-  output: Array<string>;
+  input: Array<InputProperty>;
+  output: Array<OutputProperty>;
   source: string;
   name: string;
   children: Array<Node>;

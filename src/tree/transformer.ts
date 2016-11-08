@@ -23,9 +23,14 @@ import {Node} from './node';
 import {Path, serializePath} from './path';
 import {functionName, serialize} from '../utils';
 
-type Source = DebugElement & DebugNode;
-
-type Cache = WeakMap<any, any>;
+import {
+  classDecorators,
+  componentMetadata,
+  componentInputs,
+  componentOutputs,
+  parameterTypes,
+  propertyDecorators,
+} from './decorators';
 
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
 /// object that is our local representation of the combined data of those two
@@ -33,169 +38,108 @@ type Cache = WeakMap<any, any>;
 /// in order for our tree comparisons to work. If we just create a reference to
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
-export const transform = (
-    path: Path,
-    element: Source,
-    cache: Cache,
-    options: SimpleOptions,
-    count: (n: number) => void): Node => {
+export const transform = (path: Path,
+                          element: DebugElement,
+                          options: SimpleOptions,
+                          cache: Map<string, Node>,
+                          count: (n: number) => void): Node => {
   if (element == null) {
     return null;
   }
 
-  const load = <T>(key: string, creator: () => T) => {
-    if (key == null) {
-      return null;
-    }
-
-    let value = cache.get(key);
-    if (value == null) {
-      value = creator();
-    }
-
-    return value;
-  };
-
   const serializedPath = serializePath(path);
 
-  return load<Node>(serializedPath, () => {
-    const key = (subkey: string) => serializePath(path.concat([subkey]));
+  const existing = cache.get(serializedPath);
+  if (existing) {
+    return existing;
+  }
 
-    const listeners = element.listeners.map(l => clone(l));
+  const listeners = element.listeners.map(l => clone(l));
 
-    const name = (() => {
-      if (element.componentInstance &&
-          element.componentInstance.constructor) {
-        return functionName(element.componentInstance.constructor);
-      }
-      else if (element.name) {
-        return element.name;
-      }
-      else {
-        return element.nativeElement.tagName.toLowerCase();
-      }
-    })();
+  const name = getComponentName(element);
 
-    const injectors = element.providerTokens.map(t => functionName(t));
+  const injectors = element.providerTokens.map(t => functionName(t));
 
-    const dependencies = () => {
-      if (element.componentInstance == null) {
-        return [];
-      }
+  const providers = getComponentProviders(element, name).filter(p => p.key != null);
 
-      const parameters = Reflect.getOwnMetadata('design:paramtypes',
-        element.componentInstance.constructor) || [];
+  const isComponent = element.componentInstance != null;
 
-      return parameters.map(param => functionName(param));
-    };
+  const metadata = componentMetadata(element.componentInstance);
 
-    const providers = getComponentProviders(element, name).filter(p => p.key != null);
+  const changeDetection = isComponent
+    ? ChangeDetectionStrategy[getChangeDetection(metadata)]
+    : null;
 
-    const isComponent = element.componentInstance != null;
+  const node: Node = {
+    id: serializedPath,
+    isComponent,
+    attributes: clone(element.attributes),
+    children: null,
+    changeDetection,
+    description: Description.getComponentDescription(element),
+    directives: [],
+    classes: clone(element.classes),
+    styles: clone(element.styles),
+    injectors,
+    input: componentInputs(metadata, element.componentInstance),
+    output: componentOutputs(metadata, element.componentInstance),
+    name,
+    listeners,
+    properties: clone(element.properties),
+    providers,
+    dependencies: getDependencies(element.componentInstance),
+    source: element.source,
+    nativeElement: () => element.nativeElement // this will be null in the frontend
+  };
 
-    const metadata = isComponent
-      ? getMetadata(element)
-      : null;
+  /// Set before we search for children so that the value is cached and the
+  /// reference will be correct when transform runs on the child
+  cache.set(serializedPath, node);
 
-    const changeDetection = isComponent
-      ? ChangeDetectionStrategy[getChangeDetection(metadata)]
-      : null;
+  node.children = [];
 
-    const input = isComponent
-      ? getComponentInputs(metadata, element)
-      : [];
+  const transformChildren = (children: Array<DebugElement>) => {
+    let subindex = 0;
 
-    const output = isComponent
-      ? getComponentOutputs(metadata, element)
-      : [];
+    children.forEach(c =>
+        node.children.push(
+          transform(path.concat([subindex++]), c, options, cache, count)));
+  };
 
-    const directives = isComponent
-      ? getComponentDirectives(metadata)
-      : [];
+  const getChildren = (test: (compareElement: DebugElement) => boolean): Array<DebugElement> => {
+    const children = element.children.map(c => matchingChildren(c, test));
 
-    const cloneAndTransform = object => {
-      const copy = clone(object);
+    return children.reduce((previous, current) => previous.concat(current), []);
+  };
 
-      for (const k of Object.keys(copy)) {
-        if (copy[k] === undefined) { // undefined values cause json patch to misbehave
-          delete copy[k];
-        }
-      }
+  const childComponents = () => {
+    return getChildren(e => e.componentInstance != null);
+  };
 
-      return copy;
-    };
+  const childHybridComponents = () => {
+    return getChildren(e => e.providerTokens && e.providerTokens.length > 0);
+  };
 
-    const node: Node = {
-      id: serializedPath,
-      isComponent,
-      attributes: cloneAndTransform(element.attributes),
-      children: null,
-      changeDetection,
-      description: Description.getComponentDescription(element),
-      directives,
-      classes: cloneAndTransform(element.classes),
-      styles: cloneAndTransform(element.styles),
-      injectors,
-      input,
-      output,
-      name,
-      listeners,
-      properties: cloneAndTransform(element.properties),
-      providers,
-      dependencies: dependencies(),
-      source: element.source,
-      nativeElement: () => element.nativeElement // this will be null in the frontend
-    };
+  switch (options.componentView) {
+    case ComponentView.Hybrid:
+      transformChildren(childHybridComponents());
+      break;
+    case ComponentView.All:
+      transformChildren(element.children);
+      break;
+    case ComponentView.Components:
+      transformChildren(childComponents());
+      break;
+  }
 
-    /// Set before we search for children so that the value is cached and the
-    /// reference will be correcet when transform runs on the child
-    cache.set(serializedPath, node);
+  count(1 + node.children.length);
 
-    node.children = [];
-
-    const transformChildren = (children: Array<Source>) => {
-      let subindex = 0;
-
-      children.forEach(c =>
-          node.children.push(
-            transform(path.concat([subindex++]), c, cache, options, count)));
-    };
-
-    const getChildren = (test: (compareElement: Source) => boolean): Array<Source> => {
-      const children = element.children.map(c => matchingChildren(c, test));
-
-      return children.reduce((previous, current) => previous.concat(current), []);
-    };
-
-    const childComponents = () => {
-      return getChildren(e => e.componentInstance != null);
-    };
-
-    const childHybridComponents = () => {
-      return getChildren(e => e.providerTokens && e.providerTokens.length > 0);
-    };
-
-    switch (options.componentView) {
-      case ComponentView.Hybrid:
-        transformChildren(childHybridComponents());
-        break;
-      case ComponentView.All:
-        transformChildren(element.children);
-        break;
-      case ComponentView.Components:
-        transformChildren(childComponents());
-        break;
-    }
-
-    count(1 + node.children.length);
-
-    return node;
-  });
+  return node;
 };
 
 export const recursiveSearch =
-    (children: Source[], test: (element: Source) => boolean): Array<Source> => {
-  const result = new Array<Source>();
+    (children: DebugElement[], test: (element: DebugElement) => boolean): Array<DebugElement> => {
+  const result = new Array<DebugElement>();
 
   for (const c of children) {
     if (test(c)) {
@@ -211,14 +155,14 @@ export const recursiveSearch =
 };
 
 export const matchingChildren =
-    (element: Source, test: (element: Source) => boolean): Array<Source> => {
+    (element: DebugElement, test: (element: DebugElement) => boolean): Array<DebugElement> => {
   if (test(element)) {
     return [element];
   }
   return recursiveSearch(element.children, test);
 };
 
-const getComponentProviders = (element: Source, name: string): Array<Property> => {
+const getComponentProviders = (element: DebugElement, name: string): Array<Property> => {
     let providers = new Array<Property>();
 
     if (element.providerTokens && element.providerTokens.length > 0) {
@@ -235,66 +179,16 @@ const getComponentProviders = (element: Source, name: string): Array<Property> =
     }
 };
 
-const getMetadata = (element: Source): Component => {
-  const annotations =
-    Reflect.getOwnMetadata('annotations', element.componentInstance.constructor);
-  if (annotations) {
-    for (const decorator of annotations) {
-      if (functionName(decorator.constructor) === functionName(Component)) {
-        return decorator;
-      }
-    }
+const getComponentName = (element: DebugElement): string => {
+  if (element.componentInstance &&
+      element.componentInstance.constructor) {
+    return functionName(element.componentInstance.constructor);
   }
-  return null;
-};
-
-const getComponentDirectives = (metadata: Component): Array<string> => {
-  /* TODO: Figure out which directives are invoked by checking selectors against the template. */
-  return [];
-};
-
-const getComponentInputs = (metadata: Component, element: Source) => {
-  const inputs = metadata && metadata.inputs
-    ? metadata.inputs
-    : [];
-
-  eachProperty(element,
-    (key: string, meta) => {
-      if (functionName(meta.constructor) === functionName(Input) && inputs.indexOf(key) < 0) {
-        const property = meta.bindingPropertyName
-          ? `${key}:${meta.bindingPropertyName}`
-          : key;
-        inputs.push(property);
-      }
-    });
-
-  return inputs;
-};
-
-const getComponentOutputs = (metadata: Component, element: Source): Array<string> => {
- const outputs = metadata && metadata.outputs
-    ? metadata.outputs
-    : [];
-
-  eachProperty(element,
-    (key: string, meta) => {
-      if (functionName(meta.constructor) === functionName(Output) && outputs.indexOf(key) < 0) {
-        outputs.push(key);
-      }
-    });
-
-  return outputs;
-};
-
-const eachProperty = (element: Source, fn: (key: string, decorator) => void) => {
-  const propMetadata = Reflect.getOwnMetadata('propMetadata', element.componentInstance.constructor);
-  if (propMetadata) {
-    for (const key of Object.keys(propMetadata)) {
-      for (const meta of propMetadata[key]) {
-        fn(key, meta);
-      }
-    }
+  else if (element.name) {
+    return element.name;
   }
+
+  return element.nativeElement.tagName.toLowerCase();
 };
 
 const getChangeDetection = (metadata: Component): ChangeDetectionStrategy => {
@@ -305,4 +199,11 @@ const getChangeDetection = (metadata: Component): ChangeDetectionStrategy => {
   } else {
     return ChangeDetectionStrategy.Default;
   }
+};
+
+const getDependencies = (instance): Array<string> => {
+  if (instance == null) {
+    return [];
+  }
+  return parameterTypes(instance).map(param => functionName(param));
 };

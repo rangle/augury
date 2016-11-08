@@ -9,10 +9,11 @@ import {ComponentLoadState} from '../../state';
 import {StateTab} from '../../state';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {
-  InstanceValue,
+  InstanceWithMetadata,
   Metadata,
   Node,
-  PropertyMetadata,
+  ObjectType,
+  Path,
 } from '../../../tree';
 
 @Component({
@@ -22,7 +23,7 @@ import {
 export class InfoPanel {
   @Input() tree;
   @Input() node;
-  @Input() instanceValue: InstanceValue;
+  @Input() instanceValue: InstanceWithMetadata;
   @Input() loadingState: ComponentLoadState;
 
   @Output() private selectNode = new EventEmitter<Node>();
@@ -51,11 +52,9 @@ export class InfoPanel {
   }
 
   private get metadata(): Metadata {
-    if (this.instanceValue) {
-      return this.instanceValue.metadata;
-    }
-
-    return new Map<string, PropertyMetadata>();
+    return this.instanceValue
+      ? this.instanceValue.metadata
+      : new Map<string, [ObjectType, any]>();
   }
 
   private onSelectedTabChanged(tab: StateTab) {

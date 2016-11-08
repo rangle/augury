@@ -4,9 +4,7 @@
   <span *ngIf="none">
     No state to show
   </span>
-  <span class="property-container"
-     (click)="expandTree(k, $event)"
-     *ngIf="nest(k)">
+  <span class="property-container" (click)="expandTree(k, $event)">
     <span class="info-key" [ngClass]="{output: isEmittable(k)}">
       <div [ngClass]="{
         expander: true,
@@ -14,11 +12,23 @@
         transparent: !expandable(k)
       }"></div>
       <span class="primary-color">
-        <span *ngIf="level === 0 && inputs[k]" class="decorator">
-          @Input(<span class="info-value" *ngIf="inputs[k] && inputs[k].alias">'{{inputs[k].alias}}'</span>)
+        <span *ngIf="isObjectType(k, ObjectType.Input)" class="decorator">
+          @Input(<span class="info-value" *ngIf="getAlias(k)">'{{getAlias(k)}}'</span>)
         </span>
-        <span *ngIf="level === 0 && outputs[k]" class="decorator">
-          @Output(<span class="info-value" *ngIf="outputs[k] && outputs[k].alias">'{{outputs[k].alias}}'</span>)
+        <span *ngIf="isObjectType(k, ObjectType.Output)" class="decorator">
+          @Output(<span class="info-value" *ngIf="getAlias(k)">'{{getAlias(k)}}'</span>)
+        </span>
+        <span *ngIf="isObjectType(k, ObjectType.ViewChild)" class="decorator">
+          @ViewChild({{getSelector(k)}})
+        </span>
+        <span *ngIf="isObjectType(k, ObjectType.ViewChildren)" class="decorator">
+          @ViewChildren({{getSelector(k)}})
+        </span>
+        <span *ngIf="isObjectType(k, ObjectType.ContentChild)" class="decorator">
+          @ContentChild({{getSelector(k)}})
+        </span>
+        <span *ngIf="isObjectType(k, ObjectType.ContentChildren)" class="decorator">
+          @ContentChildren({{getSelector(k)}})
         </span>
       </span>
       {{k}}:
@@ -34,18 +44,17 @@
         Emit
       </button>
     </span>
-    <span *ngIf="!isEmittable(k)" class="info-value">
+    <span *ngIf="!isEmittable(k) && nest(k)" class="info-value">
       {{displayType(k)}}
     </span>
+    <bt-state-values
+      *ngIf="!isEmittable(k) && !nest(k)"
+      [id]="id"
+      [metadata]="metadata"
+      [path]="path.concat([k])"
+      [value]="state[k]">
+    </bt-state-values>
   </span>
-  <bt-state-values
-     *ngIf="nest(k) === false"
-     [id]="id"
-     [inputs]="inputs"
-     [metadata]="metadataForKey(k)"
-     [path]="path.concat([k])"
-     [value]="state[k]">
-  </bt-state-values>
   <div *ngIf="expanded(k)">
     <bt-render-state
        *ngIf="nest(k)"

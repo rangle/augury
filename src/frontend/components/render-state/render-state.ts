@@ -1,3 +1,5 @@
+import md5 = require('md5');
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +10,6 @@ import {
 import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
-  InputOutput,
   isObservable,
   isSubject,
   isLargeArray,
@@ -24,7 +25,7 @@ import {
 import {
   Metadata,
   Path,
-  PropertyMetadata,
+  ObjectType,
   deserializePath,
   serializePath,
 } from '../../../tree';
@@ -42,8 +43,6 @@ export enum EmitState {
 })
 export class RenderState {
   @Input() id: string;
-  @Input() inputs: InputOutput;
-  @Input() outputs: InputOutput;
   @Input() metadata: Metadata;
   @Input() level: number;
   @Input() path: Path;
@@ -51,9 +50,9 @@ export class RenderState {
 
   private EmitState = EmitState;
 
-  private emitState = new Map<string, EmitState>();
+  private ObjectType = ObjectType;
 
-  private PropertyMetadata = PropertyMetadata;
+  private emitState = new Map<string, EmitState>();
 
   constructor(
     private userActions: UserActions,
@@ -68,12 +67,6 @@ export class RenderState {
     if (this.expandable(key)) {
       this.propertyState.toggleExpand(this.path.concat([key]));
     }
-  }
-
-  private metadataForKey(key: string): PropertyMetadata {
-    const propertyPath = getPropertyPath(this.path).concat([key]);
-
-    return this.metadata.get(this.state[key]);
   }
 
   private get none() {
@@ -95,10 +88,7 @@ export class RenderState {
       return `Array[${object.length}]`;
     }
     else if (object != null) {
-      if ((this.metadataForKey(key) & PropertyMetadata.Observable) !== 0) {
-        return 'Observable';
-      }
-      else if (Object.keys(object).length === 0) {
+      if (Object.keys(object).length === 0) {
         return '{}';
       }
       return 'Object';
@@ -113,7 +103,10 @@ export class RenderState {
   }
 
   private expandable(key: string) {
-    return this.isEmittable(key) === false && Object.keys(this.state[key]).length > 0;
+    if (this.isEmittable(key) || !this.nest(key)) {
+      return false;
+    }
+    return Object.keys(this.state[key] || {}).length > 0;
   }
 
   private evaluate(data: string) {
@@ -125,11 +118,45 @@ export class RenderState {
     }
   }
 
-  private isEmittable(key: string): boolean {
-    const flags = this.metadataForKey(key);
+  private getMetadata(key: string): [ObjectType, any] {
+    return this.metadata.get(md5(serializePath(this.path.concat([key]))));
+  }
 
-    return (flags & PropertyMetadata.EventEmitter) !== 0
-        || (flags & PropertyMetadata.Subject) !== 0;
+  private isEmittable(key: string): boolean {
+    const metadata = this.getMetadata(key);
+    if (metadata) {
+      return (metadata[0] & ObjectType.EventEmitter) !== 0
+          || (metadata[0] & ObjectType.Subject) !== 0;
+    }
+    return false;
+  }
+
+  private isObjectType(key: string, type: ObjectType): boolean {
+    const metadata = this.getMetadata(key);
+    if (metadata) {
+      return (metadata[0] & type) !== 0;
+    }
+    return false;
+  }
+
+  private getAlias(key: string): string {
+    const metadata = this.getMetadata(key);
+    if (metadata) {
+      const additionalProperties = metadata[1];
+      if (additionalProperties) {
+        return additionalProperties.alias;
+      }
+    }
+  }
+
+  private getSelector(key: string): string {
+    const metadata = this.getMetadata(key);
+    if (metadata) {
+      const additionalProperties = metadata[1];
+      if (additionalProperties) {
+        return additionalProperties.selector;
+      }
+    }
   }
 
   private emitValue(outputProperty: string, data) {
