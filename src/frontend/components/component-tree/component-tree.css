@@ -1,6 +1,6 @@
 :host > main {
   min-height: min-content;
-  display: flex;
+  display: block;
 }
 
 :host > main > bt-node-item {
