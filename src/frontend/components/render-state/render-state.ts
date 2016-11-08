@@ -17,6 +17,8 @@ import {
 
 import {getPropertyPath} from '../../../backend/utils';
 
+import {functionName} from '../../../utils';
+
 import {
   ComponentPropertyState,
   ExpandState,
@@ -88,13 +90,17 @@ export class RenderState {
       return `Array[${object.length}]`;
     }
     else if (object != null) {
-      if (Object.keys(object).length === 0) {
-        return '{}';
-      }
-      return 'Object';
-    }
+      const constructor = functionName(object.constructor) || typeof object;
 
-    if (object === null) {
+      if (/object/i.test(constructor)) {
+        if (Object.keys(object).length === 0) {
+          return '{}'; // special case to denote an empty object
+        }
+      }
+
+      return constructor;
+    }
+    else if (object === null) {
       return 'null';
     }
     else if (object === undefined) {
