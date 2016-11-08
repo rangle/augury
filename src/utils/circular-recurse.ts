@@ -1,29 +1,36 @@
 import {Path} from '../tree';
 
-export type Apply = (path: Path, value) => void;
+import {isScalar} from './scalar';
 
-export const recurse = (initialPath: Path, object, exec: Apply) => {
+export type Apply = (value) => void;
+
+// Recursive traversal of an object tree, but will not traverse circular references or DOM elements
+export const recurse = (object, apply: Apply) => {
   const visited = new Set();
 
-  const apply = (path: Path, value, fn: Apply) => {
-    if (value == null || visited.has(value)) {
+  const visit = value => {
+    if (value == null || isScalar(value) || /Element/.test(Object.prototype.toString.call(value))) {
+      return;
+    }
+
+    if (visited.has(value)) { // circular loop
       return;
     }
 
     visited.add(value);
 
-    fn(path, value);
+    apply(value);
 
     if (Array.isArray(value) || value instanceof Set) {
-      (<any>value).forEach((v, k) => apply(path.concat([k]), v, fn));
+      (<any>value).forEach((v, k) => visit(v));
     }
     else if (value instanceof Map) {
-      value.forEach((v, k) => apply(path.concat([k]), v, fn));
+      value.forEach((v, k) => visit(v));
     }
     else {
-      Object.keys(value).forEach(k => apply(path.concat([k]), value[k], fn));
+      Object.keys(value).forEach(k => visit(value[k]));
     }
   };
 
-  apply(initialPath, object, exec);
+  visit(object);
 };

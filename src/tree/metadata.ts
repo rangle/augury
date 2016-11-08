@@ -1,5 +1,3 @@
-import md5 = require('md5');
-
 import {
   AsyncSubject,
   BehaviorSubject,
@@ -8,12 +6,6 @@ import {
   Observable,
   Subject,
 } from 'rxjs';
-
-import {
-  Path,
-  serializePath,
-  deserializePath,
-} from './path';
 
 import {Node} from './node';
 
@@ -42,53 +34,54 @@ export enum ObjectType {
   ContentChildren = 0x100,
 }
 
-export type Metadata = Map<string, [ObjectType, any]>;
+export type Metadata = Map<any, [ObjectType, any]>;
 
 export interface InstanceWithMetadata {
   instance: any;
   metadata: Metadata;
 }
 
-export const instanceWithMetadata = (node: Node, instance): InstanceWithMetadata => {
+// It is imperative that the metadata and the instance value itself travel together
+// through the serializer, otherwise we are going to have to serialize the entire
+// object structure twice, once for the instance and once for the metadata. But if
+// we put them together as part of the same object, the serializer will be smart
+// enough not to duplicate objects. If someone breaks apart the instance and the
+// metadata into two objects, a lot of code that depends on reference equality is
+// going to get broken! So do not change this!
+export const instanceWithMetadata = (node: Node, instance) => {
   if (node == null || instance == null) {
     return null;
   }
 
   const metadata = new Map<string, [ObjectType, any]>();
 
-  const nodePath = deserializePath(node.id);
-
-  const serialize = (path: Path): string => md5(serializePath(path));
-
-  recurse(nodePath, instance,
-    (path: Path, obj) => {
+  recurse(instance,
+    obj => {
       let type = objectType(obj);
 
-      const update = (p: Path, flag: ObjectType, additionalProps) => {
-        const serializedPath = serialize(p);
-
-        const existing = metadata.get(serializedPath);
+      const update = (flag: ObjectType, additionalProps) => {
+        const existing = metadata.get(obj);
         if (existing) {
           existing[0] |= flag;
           Object.assign(existing, additionalProps);
         }
         else {
-          metadata.set(serializedPath, [flag, additionalProps]);
+          metadata.set(obj, [flag, additionalProps]);
         }
       };
 
       const component = componentMetadata(obj);
       if (component) {
         for (const input of componentInputs(component, obj)) {
-          update(path.concat([input.propertyKey]), ObjectType.Input, {alias: input.bindingPropertyName});
+          update(ObjectType.Input, {alias: input.bindingPropertyName});
         }
         for (const output of componentOutputs(component, obj)) {
-          update(path.concat([output.propertyKey]), ObjectType.Output, {alias: output.bindingPropertyName});
+          update(ObjectType.Output, {alias: output.bindingPropertyName});
         }
 
         const addQuery = (decoratorType: string, objectType: ObjectType) => {
           for (const vc of componentQueryChildren(decoratorType, component, obj)) {
-            update(path.concat([vc.propertyKey]), objectType, {selector: vc.selector});
+            update(objectType, {selector: vc.selector});
           }
         };
 
@@ -99,19 +92,17 @@ export const instanceWithMetadata = (node: Node, instance): InstanceWithMetadata
       }
 
       if (type !== 0) {
-        const serializedPath = serialize(path);
-
-        const existing = metadata.get(serializedPath);
+        const existing = metadata.get(obj);
         if (existing) {
-          metadata.set(serializedPath, [existing[0] | type, existing[1]]);
+          metadata.set(obj, [existing[0] | type, existing[1]]);
         }
         else {
-          metadata.set(serializedPath, [type, null]);
+          metadata.set(obj, [type, null]);
         }
       }
     });
 
-  return {instance, metadata};
+  return {instance, metadata: Array.from(<any> metadata)};
 };
 
 const objectType = (object): ObjectType => {

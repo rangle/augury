@@ -263,7 +263,10 @@ class App {
           if (typeof beforeLoad === 'function') {
             beforeLoad();
           }
-          return response;
+
+          const {instance, metadata} = response;
+
+          return {instance, metadata: new Map(metadata)};
         });
 
       this.componentState.wait(node, promise);

@@ -1,5 +1,3 @@
-import md5 = require('md5');
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -125,7 +123,7 @@ export class RenderState {
   }
 
   private getMetadata(key: string): [ObjectType, any] {
-    return this.metadata.get(md5(serializePath(this.path.concat([key]))));
+    return this.metadata.get(this.state[key]);
   }
 
   private isEmittable(key: string): boolean {
