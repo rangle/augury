@@ -35,7 +35,7 @@ export class ComponentInfo {
 
   private path: Path;
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.node) {
       this.path = deserializePath(this.node.id);
     }
