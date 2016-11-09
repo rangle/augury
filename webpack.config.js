@@ -74,7 +74,6 @@ module.exports = {
       // Support for .ts files.
       test: /\.ts$/,
       loader: 'ts',
-      exclude: /node_modules/,
       query: {
         'ignoreDiagnostics': []
       },
