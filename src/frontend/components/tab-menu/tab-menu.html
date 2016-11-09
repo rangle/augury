@@ -1,7 +1,8 @@
 <header class="flex flex-justify bg-panel border-bottom">
   <div class="flex">
-    <img *ngIf="showLogo" src="../images/augury-logo.svg"
+    <img *ngIf="showMainItems" src="../images/augury-logo.svg"
          class="logo">
+   <div *ngIf="showMainItems" (click)="selectElement()" class="select-element"><img src="images/select-element.svg" /></div>
     <div
        class="primary-color tab-menu-title px2 py2 border-transparent mt1"
        [ngClass]="{'bg-base border-top border-right border-left selected': t.selected}"

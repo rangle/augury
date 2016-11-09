@@ -126,6 +126,22 @@ export abstract class MessageFactory {
     });
   }
 
+  static selectElement(): Message<Node[]> {
+    return create({
+      messageType: MessageType.SelectElement,
+      content: {
+      },
+    });
+  }
+
+  static clearSelectElement(): Message<Node[]> {
+    return create({
+      messageType: MessageType.ClearSelectElement,
+      content: {
+      },
+    });
+  }
+
   static applicationError(error: ApplicationError): Message<ApplicationError> {
     return create({
       messageType: MessageType.ApplicationError,

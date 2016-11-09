@@ -47,4 +47,11 @@ export enum MessageType {
 
   /// Set the nodes that should be highlighted on the page
   Highlight,
+
+
+  /// Set the nodes that can be selected on the page
+  SelectElement,
+
+  /// Disable selecting nodes on the page
+  ClearSelectElement,
 }

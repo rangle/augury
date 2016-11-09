@@ -211,6 +211,22 @@ const messageHandler = (message: Message<any>) => {
       return tryWrap(() => {
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
       });
+   case MessageType.SelectElement:
+      if (previousTree == null) {
+        return;
+      }
+      return tryWrap(() => {
+        // override base operations
+        extendWindowOperations(window || global || this, WindowOperations);
+      });
+   case MessageType.ClearSelectElement:
+      if (previousTree == null) {
+        return;
+      }
+      return tryWrap(() => {
+        // override base operations
+        defaultWindowOperations(window || global || this, WindowOperations);
+      })
   }
   return undefined;
 };
@@ -327,7 +343,7 @@ export const tryWrap = (fn: Function) => {
 /// in a safe way and ensure that we do not overwrite any existing properties or functions
 /// that share the same names. If we do encounter such things we throw an exception and
 /// complain about it instead of continuing with bootstrapping.
-export const defineWindowOperations = <T>(target, classImpl: T) => {
+export const extendWindowOperations = <T>(target, classImpl: T) => {
   for (const key of Object.keys(classImpl)) {
     if (target[key] != null) {
       throw new Error(`A window function or object named ${key} would be overwritten`);
@@ -337,12 +353,28 @@ export const defineWindowOperations = <T>(target, classImpl: T) => {
   Object.assign(target, classImpl);
 };
 
-export class WindowOperations {
+// default operations that were overriden back to null
+export const defaultWindowOperations = <T>(target, classImpl: T) => {
+  for (const key of Object.keys(classImpl)) {
+    target[key] = null;
+  }
+};
+
+export const WindowOperations = {
+  onclick: (e) => {
+    console.log(e.target, previousTree.lookup(e.target.name));
+    // const node = previousTree.traverse(e.target);
+    // console.log(node, 'node');
+    // this.consoleReference(node);
+  },
+};
+
+export const ApplicationOperations = {
   /// Note that the ID is a serialized path, and the first element in that path is the
   /// index of the application that the node belongs to. So even though we have this
   /// global lookup operation for things like 'inspect' and 'view source', it will find
   /// the correct node even if multiple applications are instantiated on the same page.
-  nodeFromPath(id: string): Element {
+  nodeFromPath: (id: string): Element => {
       if (previousTree == null) {
       throw new Error('No tree exists');
     }
@@ -353,28 +385,26 @@ export class WindowOperations {
       return null;
     }
     return node.nativeElement();
-  }
+  },
 
   /// Post a response to a message from the frontend and dispatch it through normal channels
-  response<T>(response: Message<T>) {
+  response: <T>(response: Message<T>) => {
     browserDispatch(response);
-  }
-
+  },
   /// Run the message handler and return the result immediately instead of posting a response
-  handleImmediate<T>(message: Message<T>) {
+  handleImmediate: <T>(message: Message<T>) => {
     const result = messageHandler(message);
     if (result) {
       return serialize(result);
     }
     return null;
-  }
-
+  },
   /// Read all messages in the buffer and remove them
-  readMessageQueue(): Array<Message<any>> {
+  readMessageQueue: (): Array<Message<any>> => {
     return messageBuffer.dequeue();
   }
-}
+};
 
-const windowOperationsImpl = new WindowOperations();
 
-defineWindowOperations(window || global || this, {inspectedApplication: windowOperationsImpl});
+// add custom operations
+extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});
