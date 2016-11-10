@@ -362,12 +362,10 @@ export const defaultWindowOperations = <T>(target, classImpl: T) => {
 
 export const WindowOperations = {
   onclick: (e) => {
-    if(e.target) {
-     return tryWrap(() => {
-        const node = previousTree.traverse(e.target);
-        this.consoleReference(node);
-      });
-    }
+    console.log(e.target, previousTree.lookup(e.target.name));
+    // const node = previousTree.traverse(e.target);
+    // console.log(node, 'node');
+    // this.consoleReference(node);
   },
 };
 
