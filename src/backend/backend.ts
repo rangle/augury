@@ -361,11 +361,29 @@ export const defaultWindowOperations = <T>(target, classImpl: T) => {
 };
 
 export const WindowOperations = {
-  onclick: (e) => {
-    console.log(e.target, previousTree.lookup(e.target.name));
-    // const node = previousTree.traverse(e.target);
-    // console.log(node, 'node');
-    // this.consoleReference(node);
+  onmouseover: (e) => {
+    let result;
+    // recurse the tree
+    previousTree.recurse(0, find);
+
+    // if a result was found
+    if(result) {
+      //  this.consoleReference(result);
+        // clear previous
+
+
+      return tryWrap(() => {
+        // highlight new
+         highlight([result]);
+       // return getComponentInstance(previousTree, result);
+      });
+    }
+
+    function find(node) {
+      if(node.nativeElement() == e.target) {
+        result = node;
+      }
+    }
   },
 };
 
