@@ -191,20 +191,30 @@ function map(operation: Operation, value) {
               break;
             default:
               operation.tails.push(() => {
-                operation.objref[index] = `{${Object.getOwnPropertyNames(value).map(key => {
-                    const mapped = map(operation, value[key]);
+                const ctor = functionName((value || {}).constructor) || '';
 
+                const mapProps = (key: string) => {
+                  const mapped = map(operation, value[key]);
                     if (mapped instanceof Reference) {
                       mapped.source = index;
                       mapped.key = key;
-
                       operation.hashes.push(mapped);
-
                       return mapped;
                     }
 
                     return `${JSON.stringify(key)}: ${mapped}`;
-                  }).filter(v => v instanceof Reference === false).join(',')}}`;
+                };
+
+                const keys = Object.keys(value)
+                      .map(key => mapProps(key))
+                      .filter(v => v instanceof Reference === false).join(',');
+
+                if (nonstandardType(ctor)) { // retain object type information
+                  operation.objref[index] = `new (function ${ctor}() {Object.assign(this, {${keys}});})()`;
+                }
+                else {
+                  operation.objref[index] = `{${keys}}`;
+                }
               });
               break;
           }
@@ -213,3 +223,17 @@ function map(operation: Operation, value) {
       }
   }
 }
+
+const nonstandardType = (type: string) => {
+  switch (type.toLowerCase()) {
+    case 'object':
+    case 'function':
+    case 'string':
+    case 'number':
+    case 'regexp':
+    case 'date':
+      return false;
+    default:
+      return true;
+  }
+};

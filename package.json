@@ -63,7 +63,6 @@
     "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
     "file-loader": "^0.8.5",
-    "md5": "^2.2.1",
     "msgpack-lite": "^0.1.20",
     "object-assign": "4.0.1",
     "postcss-cssnext": "^2.5.2",
