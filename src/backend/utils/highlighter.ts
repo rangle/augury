@@ -51,8 +51,8 @@ const highlightNode = (node, label: string): HTMLElement => {
   return overlay;
 };
 
-const clear = () => {
-  highlights.forEach(
+export const clear = (map) => {
+  map.forEach(
     (value, key) => {
       try {
         value.remove();
@@ -62,12 +62,11 @@ const clear = () => {
 };
 
 export const highlight = (nodes: Array<Node>) => {
-  if (nodes == null || nodes.length === 0) {
-    clear();
+  if (nodes == null || nodes.length === 0 && highlights) {
+    clear(highlights);
   }
 
   const elements = new Array<HTMLElement>();
-
   const map = new Map<string, HTMLElement>();
 
   for (const node of nodes.filter(n => n != null)) {
@@ -79,5 +78,8 @@ export const highlight = (nodes: Array<Node>) => {
 
   highlights = map;
 
-  return elements;
+  return {
+    elements,
+    map
+  };
 };

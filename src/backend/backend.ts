@@ -31,6 +31,7 @@ import {send} from './indirect-connection';
 import {
   MainRoute,
   highlight,
+  clear as clearHighlights,
   parseRoutes,
   getNodeFromPartialPath,
   getNodeInstanceParent,
@@ -63,6 +64,8 @@ const messageBuffer = new MessageQueue<Message<any>>();
 let previousTree: MutableTree;
 
 let previousCount: number;
+let currentNode : Node;
+let currentHighlights;
 
 const updateComponentTree = (roots: Array<DebugElement>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
@@ -211,7 +214,7 @@ const messageHandler = (message: Message<any>) => {
       return tryWrap(() => {
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
       });
-   case MessageType.SelectElement:
+   case MessageType.SelectDOMNode:
       if (previousTree == null) {
         return;
       }
@@ -219,14 +222,15 @@ const messageHandler = (message: Message<any>) => {
         // override base operations
         extendWindowOperations(window || global || this, WindowOperations);
       });
-   case MessageType.ClearSelectElement:
+   case MessageType.EndDOMSelection:
       if (previousTree == null) {
         return;
       }
-      return tryWrap(() => {
-        // override base operations
-        defaultWindowOperations(window || global || this, WindowOperations);
-      })
+      // override base operations
+      defaultWindowOperations(window || global || this, WindowOperations);
+      if(currentHighlights) {
+        clearHighlights(currentHighlights.map);
+      }
   }
   return undefined;
 };
@@ -361,27 +365,28 @@ export const defaultWindowOperations = <T>(target, classImpl: T) => {
 };
 
 export const WindowOperations = {
+  onmousedown: (e) => {
+    messageBuffer.enqueue(MessageFactory.selectTreeNode(currentNode));
+    send(MessageFactory.push());
+  },
   onmouseover: (e) => {
-    let result;
+    // remove previous node
+    currentNode = null;
+
     // recurse the tree
-    previousTree.recurse(0, find);
+    previousTree.recurseAll(find);
 
-    // if a result was found
-    if(result) {
-      //  this.consoleReference(result);
-        // clear previous
+    if(currentHighlights) {
+      clearHighlights(currentHighlights.map)
+    }
 
-
-      return tryWrap(() => {
-        // highlight new
-         highlight([result]);
-       // return getComponentInstance(previousTree, result);
-      });
+    if(currentNode) {
+      currentHighlights = highlight([currentNode]);
     }
 
     function find(node) {
-      if(node.nativeElement() == e.target) {
-        result = node;
+      if(node.nativeElement() === e.target) {
+        currentNode = node;
       }
     }
   },

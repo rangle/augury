@@ -45,10 +45,10 @@ export class TabMenu {
   private selectElement(event) {
     if (this.isSelectElementActive) {
       this.isSelectElementActive = false;
-      return this.userActions.clearSelectElement();
+      return this.userActions.endDOMSelection();
     }
     this.isSelectElementActive = true;
-    this.userActions.selectElement();
+    this.userActions.selectDOMNode();
   }
 
   private onSelect(tab: TabDescription) {

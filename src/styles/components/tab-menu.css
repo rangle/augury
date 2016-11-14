@@ -11,3 +11,7 @@
   width: 16px;
   height: 16px;
 }
+
+.select-element-active {
+  background-color: green;
+}
