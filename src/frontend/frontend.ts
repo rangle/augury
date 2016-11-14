@@ -199,6 +199,10 @@ class App {
         this.routerTree = msg.content;
         respond();
         break;
+      case MessageType.SelectTreeNode:
+        this.viewState.select(msg.content);
+        this.viewState.expandState(msg.content, ExpandState.Expanded);
+        break;
       case MessageType.ApplicationError:
         this.error = msg.content;
         respond();

@@ -50,8 +50,11 @@ export enum MessageType {
 
 
   /// Set the nodes that can be selected on the page
-  SelectElement,
+  SelectDOMNode,
 
   /// Disable selecting nodes on the page
-  ClearSelectElement,
+  EndDOMSelection,
+
+  /// Select Node on the current MutableTree based on DOMElement
+  SelectTreeNode,
 }
