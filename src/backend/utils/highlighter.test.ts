@@ -5,7 +5,8 @@ import {highlight} from './highlighter';
 test('utils/highlighter: passing undefined', t => {
   t.plan(1);
   const hls = highlight([]);
-  t.deepEqual(hls, [], 'get undefined highlight');
+  console.log(hls);
+  t.deepEqual(hls, undefined, 'get undefined highlight');
   t.end();
 });
 
@@ -49,7 +50,7 @@ test('utils/highlighter: test highlight', t => {
     <any> [{id: '1', nativeElement: () => div, name: 'foo'}]);
 
   highlight([]);
-
+  console.log(hls, document.getElementsByTagName('div'));
   t.deepEqual(document.getElementsByTagName('div').length, 3,
     'remove all highlight');
   t.end();

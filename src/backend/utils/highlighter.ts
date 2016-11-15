@@ -32,7 +32,8 @@ const offsets = (node): Offsets => {
 const highlightNode = (node, label: string): HTMLElement => {
   if (node == null) {
     return;
-  };
+  }
+  ;
 
   const overlay = document.createElement('div');
   overlay.setAttribute('style', styles);
@@ -57,13 +58,15 @@ export const clear = (map) => {
       try {
         value.remove();
       }
-      catch (e) {}
+      catch (e) {
+      }
     });
 };
 
 export const highlight = (nodes: Array<Node>) => {
-  if (nodes == null || nodes.length === 0 && highlights) {
+  if (nodes == null || nodes.length === 0) {
     clear(highlights);
+    return;
   }
 
   const elements = new Array<HTMLElement>();
