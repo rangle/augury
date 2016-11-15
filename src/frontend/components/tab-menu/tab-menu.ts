@@ -29,7 +29,7 @@ export class TabMenu {
   @Input() selectedTab;
   @Input() tree;
   @Input() showMainItems: boolean = false;
-  @Input() activateDOMSelection: boolean = false;
+  @Input() DOMSelectionActive: boolean = false;
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() DOMSelectionChange: EventEmitter<any> = new EventEmitter<any>();
@@ -45,14 +45,18 @@ export class TabMenu {
   }
 
   private selectElement() {
-    if (this.activateDOMSelection) {
+    if (this.DOMSelectionActive) {
       this.userActions.endDOMSelection();
-      this.activateDOMSelection = false;
+      this.DOMSelectionActive = false;
     } else {
       this.userActions.selectDOMNode();
-      this.activateDOMSelection = true;
+      this.DOMSelectionActive = true;
+
+      if (this.selectedTab !== this.tabs[0].tab) {
+        this.onSelect(this.tabs[0]);
+      }
     }
-    return this.DOMSelectionChange.emit(this.activateDOMSelection);
+    return this.DOMSelectionChange.emit(this.DOMSelectionActive);
   }
 
   private onSelect(tab: TabDescription) {
@@ -61,8 +65,6 @@ export class TabMenu {
     });
 
     tab.selected = true;
-
-    const selected = this.tabs.filter((t) => t.selected);
 
     this.tabChange.emit(tab.tab);
   }
