@@ -38,12 +38,14 @@ export class AppTrees {
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;
   @Input() private selectedTab: Tab;
+  @Input() private activateDOMSelection: boolean;
 
   @Output() private collapseChildren = new EventEmitter<Node>();
   @Output() private expandChildren = new EventEmitter<Node>();
   @Output() private inspectElement = new EventEmitter<Node>();
   @Output() private selectNode = new EventEmitter<Node>();
   @Output() private tabChange = new EventEmitter<Tab>();
+  @Output() private DOMSelectionChange = new EventEmitter<boolean>();
 
   @ViewChild('menuButtonElement') private menuButtonElement;
   @ViewChild('menuElement') private menuElement;
@@ -62,6 +64,10 @@ export class AppTrees {
 
   onTabSelectionChanged(index: number) {
     this.tabChange.emit(this.tabs[index].tab);
+  }
+
+  onDOMSelectionChange(state: boolean) {
+    this.DOMSelectionChange.emit(state);
   }
 
   reset() {

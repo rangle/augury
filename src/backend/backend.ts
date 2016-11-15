@@ -64,7 +64,9 @@ const messageBuffer = new MessageQueue<Message<any>>();
 let previousTree: MutableTree;
 
 let previousCount: number;
-let currentNode : Node;
+
+// DOM selection variables
+let currentNode: Node;
 let currentHighlights;
 
 const updateComponentTree = (roots: Array<DebugElement>) => {
@@ -160,7 +162,7 @@ const selectedComponentPropertyKey = '$a';
 const noSelectedComponentWarningText = 'There is no component selected.';
 
 Object.defineProperty(window, selectedComponentPropertyKey,
-  { value: noSelectedComponentWarningText });
+  {value: noSelectedComponentWarningText});
 
 const messageHandler = (message: Message<any>) => {
   switch (message.messageType) {
@@ -214,7 +216,7 @@ const messageHandler = (message: Message<any>) => {
       return tryWrap(() => {
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
       });
-   case MessageType.SelectDOMNode:
+    case MessageType.SelectDOMNode:
       if (previousTree == null) {
         return;
       }
@@ -222,13 +224,13 @@ const messageHandler = (message: Message<any>) => {
         // override base operations
         extendWindowOperations(window || global || this, WindowOperations);
       });
-   case MessageType.EndDOMSelection:
+    case MessageType.EndDOMSelection:
       if (previousTree == null) {
         return;
       }
       // override base operations
       defaultWindowOperations(window || global || this, WindowOperations);
-      if(currentHighlights) {
+      if (currentHighlights) {
         clearHighlights(currentHighlights.map);
       }
   }
@@ -298,8 +300,8 @@ export const rootsWithRouters = () => {
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
     if (element == null ||
-        element.componentInstance == null ||
-        element.componentInstance.router == null) {
+      element.componentInstance == null ||
+      element.componentInstance.router == null) {
       continue;
     }
     routers.push(element.componentInstance.router);
@@ -365,9 +367,12 @@ export const defaultWindowOperations = <T>(target, classImpl: T) => {
 };
 
 export const WindowOperations = {
-  onmousedown: (e) => {
-    messageBuffer.enqueue(MessageFactory.selectTreeNode(currentNode));
-    send(MessageFactory.push());
+  onmousedown: () => {
+    if (currentNode) {
+      messageBuffer.enqueue(MessageFactory.selectTreeNode(currentNode));
+      messageBuffer.enqueue(MessageFactory.endDOMSelection());
+      send(MessageFactory.push());
+    }
   },
   onmouseover: (e) => {
     // remove previous node
@@ -376,16 +381,16 @@ export const WindowOperations = {
     // recurse the tree
     previousTree.recurseAll(find);
 
-    if(currentHighlights) {
-      clearHighlights(currentHighlights.map)
+    if (currentHighlights) {
+      clearHighlights(currentHighlights.map);
     }
 
-    if(currentNode) {
+    if (currentNode) {
       currentHighlights = highlight([currentNode]);
     }
 
     function find(node) {
-      if(node.nativeElement() === e.target) {
+      if (node.nativeElement() === e.target) {
         currentNode = node;
       }
     }
@@ -398,7 +403,7 @@ export const ApplicationOperations = {
   /// global lookup operation for things like 'inspect' and 'view source', it will find
   /// the correct node even if multiple applications are instantiated on the same page.
   nodeFromPath: (id: string): Element => {
-      if (previousTree == null) {
+    if (previousTree == null) {
       throw new Error('No tree exists');
     }
 

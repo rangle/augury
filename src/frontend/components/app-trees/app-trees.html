@@ -2,7 +2,9 @@
    showMainItems="true"
    [tabs]="tabs"
    [tree]="tree"
+   [activateDOMSelection]="activateDOMSelection"
    (tabChange)="onTabSelectionChanged($event)"
+   (DOMSelectionChange)="onDOMSelectionChange($event)"
    [selectedTab]="selectedTab">
   <div postlude class="flex px3">
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>

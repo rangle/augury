@@ -105,7 +105,7 @@ module.exports = {
 
   postcss: function() {
     return [
-      require('postcss-import'),
+      require('postcss-import')({addConfigTo: webpack}),
       require('postcss-cssnext')
     ];
   },
