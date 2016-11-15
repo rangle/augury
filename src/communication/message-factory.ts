@@ -129,16 +129,14 @@ export abstract class MessageFactory {
   static selectDOMNode(): Message<void> {
     return create({
       messageType: MessageType.SelectDOMNode,
-      content: {
-      },
+      content: {}
     });
   }
 
   static endDOMSelection(): Message<void> {
     return create({
       messageType: MessageType.EndDOMSelection,
-      content: {
-      },
+      content: {},
     });
   }
 

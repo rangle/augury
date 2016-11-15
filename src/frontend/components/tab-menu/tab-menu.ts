@@ -29,11 +29,13 @@ export class TabMenu {
   @Input() selectedTab;
   @Input() tree;
   @Input() showMainItems: boolean = false;
+  @Input() activateDOMSelection: boolean = false;
+
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() DOMSelectionChange: EventEmitter<any> = new EventEmitter<any>();
 
-  private isSelectElementActive: boolean = false;
-
-  constructor(private userActions: UserActions) {}
+  constructor(private userActions: UserActions) {
+  }
 
   private ngOnInit() {
     const t = this.tabs.filter(tab => tab.tab === this.selectedTab);
@@ -42,13 +44,15 @@ export class TabMenu {
     }
   }
 
-  private selectElement(event) {
-    if (this.isSelectElementActive) {
-      this.isSelectElementActive = false;
-      return this.userActions.endDOMSelection();
+  private selectElement() {
+    if (this.activateDOMSelection) {
+      this.userActions.endDOMSelection();
+      this.activateDOMSelection = false;
+    } else {
+      this.userActions.selectDOMNode();
+      this.activateDOMSelection = true;
     }
-    this.isSelectElementActive = true;
-    this.userActions.selectDOMNode();
+    return this.DOMSelectionChange.emit(this.activateDOMSelection);
   }
 
   private onSelect(tab: TabDescription) {

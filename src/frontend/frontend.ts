@@ -92,6 +92,7 @@ class App {
   private theme: Theme;
   private tree: MutableTree;
   private error: ApplicationError;
+  private activateDOMSelection: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -202,6 +203,11 @@ class App {
       case MessageType.SelectTreeNode:
         this.viewState.select(msg.content);
         this.viewState.expandState(msg.content, ExpandState.Expanded);
+        this.activateDOMSelection = true;
+        break;
+      case MessageType.EndDOMSelection:
+        this.userActions.endDOMSelection();
+        this.activateDOMSelection = false;
         break;
       case MessageType.ApplicationError:
         this.error = msg.content;
@@ -298,6 +304,10 @@ class App {
   private onSelectedTabChange(tab: Tab) {
     this.selectedTab = tab;
     this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
+  }
+
+  private onDOMSelectionChange(state: boolean) {
+    this.activateDOMSelection = state;
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {
