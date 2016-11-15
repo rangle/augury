@@ -33,7 +33,6 @@ const highlightNode = (node, label: string): HTMLElement => {
   if (node == null) {
     return;
   }
-  ;
 
   const overlay = document.createElement('div');
   overlay.setAttribute('style', styles);
