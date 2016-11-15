@@ -7,6 +7,13 @@ import {
   Subject,
 } from 'rxjs';
 
+import {
+  AnonymousSubject,
+  SubjectSubscriber,
+} from 'rxjs/Subject';
+
+import {GroupedObservable} from 'rxjs/operator/groupBy';
+
 import {Node} from './node';
 
 import {
@@ -118,12 +125,15 @@ const objectType = (object): ObjectType => {
       case 'EventEmitter':
         return ObjectType.EventEmitter;
       case functionName(AsyncSubject):
+      case functionName(AnonymousSubject):
       case functionName(BehaviorSubject):
       case functionName(ReplaySubject):
       case functionName(Subject):
+      case functionName(Subscriber):
+      case functionName(SubjectSubscriber):
         return ObjectType.Subject | ObjectType.Observable;
       case functionName(Observable):
-      case functionName(Subscriber):
+      case functionName(GroupedObservable):
         return ObjectType.Observable;
     }
   }
