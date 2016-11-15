@@ -87,6 +87,14 @@ bt-injector-tree {
     background-color: #E5E5E5;
   }
 
+  & .select-element > svg {
+    fill: #333;
+  }
+
+  & .select-element-active > svg {
+    fill: #4280EC;
+  }
+
   & .node-item:hover {
     background-color: #EBF2FC;
   }
@@ -176,8 +184,6 @@ bt-injector-tree {
 }
 
 .dark {
-  background-color: #242424;
-
   & .bg-base {
     background-color: #242424;
   }
@@ -216,6 +222,14 @@ bt-injector-tree {
   & .tab-menu-title:hover {
     color: #CCCCCC;
     background-color: #313131;
+  }
+
+  & .select-element > svg {
+    fill: #ccc;
+  }
+
+  & .select-element-active > svg {
+    fill: #4280EC;
   }
 
   & .node-item:hover {
@@ -298,12 +312,12 @@ bt-injector-tree {
     }
   }
 
+
   & bt-injector-tree text {
     fill: #A5A5A5;
   }
 
   & bt-injector-tree {
-
     & .stroke- {
       &root, &component {
         stroke: var(--dmode-igraph-component-primary);
@@ -318,4 +332,5 @@ bt-injector-tree {
   & bt-injector-tree #suit > path {
     stroke: var(--dmode-igraph-component-primary) !important;
   }
+
 }
