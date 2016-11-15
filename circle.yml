@@ -14,9 +14,9 @@ test:
   pre:
     - git grep --color TODO | cat
 
-deployment:
-  release:
-    branch: master
-    commands:
-      - npm run pack
-      - ./s3-upload.sh
+#deployment:
+#  release:
+#    branch: master
+#    commands:
+#      - npm run pack
+#      - ./s3-upload.sh
