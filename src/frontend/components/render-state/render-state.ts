@@ -1,5 +1,3 @@
-import md5 = require('md5');
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,12 +15,15 @@ import {
 
 import {getPropertyPath} from '../../../backend/utils';
 
+import {functionName} from '../../../utils';
+
 import {
   ComponentPropertyState,
   ExpandState,
 } from '../../state';
 
 import {
+  ComponentMetadata,
   Metadata,
   Path,
   ObjectType,
@@ -43,6 +44,7 @@ export enum EmitState {
 })
 export class RenderState {
   @Input() id: string;
+  @Input() componentMetadata: ComponentMetadata;
   @Input() metadata: Metadata;
   @Input() level: number;
   @Input() path: Path;
@@ -88,13 +90,17 @@ export class RenderState {
       return `Array[${object.length}]`;
     }
     else if (object != null) {
-      if (Object.keys(object).length === 0) {
-        return '{}';
-      }
-      return 'Object';
-    }
+      const constructor = functionName(object.constructor) || typeof object;
 
-    if (object === null) {
+      if (/object/i.test(constructor)) {
+        if (Object.keys(object).length === 0) {
+          return '{}'; // special case to denote an empty object
+        }
+      }
+
+      return constructor;
+    }
+    else if (object === null) {
       return 'null';
     }
     else if (object === undefined) {
@@ -118,12 +124,19 @@ export class RenderState {
     }
   }
 
-  private getMetadata(key: string): [ObjectType, any] {
-    return this.metadata.get(md5(serializePath(this.path.concat([key]))));
+  private getComponentMetadata(key: string): [ObjectType, any] {
+    const properties = this.componentMetadata.get(this.state);
+    if (properties) {
+      const matchingProperty = properties.find(p => p[0] === key);
+      if (matchingProperty) {
+        return [matchingProperty[1], matchingProperty[2]];
+      }
+    }
+    return null;
   }
 
   private isEmittable(key: string): boolean {
-    const metadata = this.getMetadata(key);
+    const metadata = this.metadata.get(this.state[key]);
     if (metadata) {
       return (metadata[0] & ObjectType.EventEmitter) !== 0
           || (metadata[0] & ObjectType.Subject) !== 0;
@@ -131,16 +144,15 @@ export class RenderState {
     return false;
   }
 
-  private isObjectType(key: string, type: ObjectType): boolean {
-    const metadata = this.getMetadata(key);
+  private isComponentObjectType(key: string, type: ObjectType): boolean {
+    const metadata = this.getComponentMetadata(key);
     if (metadata) {
       return (metadata[0] & type) !== 0;
     }
-    return false;
   }
 
   private getAlias(key: string): string {
-    const metadata = this.getMetadata(key);
+    const metadata = this.getComponentMetadata(key);
     if (metadata) {
       const additionalProperties = metadata[1];
       if (additionalProperties) {
@@ -150,7 +162,7 @@ export class RenderState {
   }
 
   private getSelector(key: string): string {
-    const metadata = this.getMetadata(key);
+    const metadata = this.getComponentMetadata(key);
     if (metadata) {
       const additionalProperties = metadata[1];
       if (additionalProperties) {

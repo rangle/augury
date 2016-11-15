@@ -257,13 +257,19 @@ class App {
     const m = MessageFactory.selectComponent(node, node.isComponent);
 
     if (node.isComponent) {
-
       const promise = this.directConnection.handleImmediate(m)
         .then(response => {
           if (typeof beforeLoad === 'function') {
             beforeLoad();
           }
-          return response;
+
+          const {instance, metadata, componentMetadata} = response;
+
+          return {
+            instance,
+            metadata: new Map(metadata),
+            componentMetadata: new Map(componentMetadata),
+          };
         });
 
       this.componentState.wait(node, promise);

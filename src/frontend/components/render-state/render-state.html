@@ -12,22 +12,22 @@
         transparent: !expandable(k)
       }"></div>
       <span class="primary-color">
-        <span *ngIf="isObjectType(k, ObjectType.Input)" class="decorator">
+        <span *ngIf="isComponentObjectType(k, ObjectType.Input)" class="decorator">
           @Input(<span class="info-value" *ngIf="getAlias(k)">'{{getAlias(k)}}'</span>)
         </span>
-        <span *ngIf="isObjectType(k, ObjectType.Output)" class="decorator">
+        <span *ngIf="isComponentObjectType(k, ObjectType.Output)" class="decorator">
           @Output(<span class="info-value" *ngIf="getAlias(k)">'{{getAlias(k)}}'</span>)
         </span>
-        <span *ngIf="isObjectType(k, ObjectType.ViewChild)" class="decorator">
+        <span *ngIf="isComponentObjectType(k, ObjectType.ViewChild)" class="decorator">
           @ViewChild({{getSelector(k)}})
         </span>
-        <span *ngIf="isObjectType(k, ObjectType.ViewChildren)" class="decorator">
+        <span *ngIf="isComponentObjectType(k, ObjectType.ViewChildren)" class="decorator">
           @ViewChildren({{getSelector(k)}})
         </span>
-        <span *ngIf="isObjectType(k, ObjectType.ContentChild)" class="decorator">
+        <span *ngIf="isComponentObjectType(k, ObjectType.ContentChild)" class="decorator">
           @ContentChild({{getSelector(k)}})
         </span>
-        <span *ngIf="isObjectType(k, ObjectType.ContentChildren)" class="decorator">
+        <span *ngIf="isComponentObjectType(k, ObjectType.ContentChildren)" class="decorator">
           @ContentChildren({{getSelector(k)}})
         </span>
       </span>
@@ -61,6 +61,7 @@
        [id]="id"
        [level]="level + 1"
        [path]="path.concat([k])"
+       [componentMetadata]="componentMetadata"
        [metadata]="metadata"
        [state]="state[k]">
     </bt-render-state>

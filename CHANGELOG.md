@@ -1,4 +1,10 @@
 # Change Log
+## [1.2.4](https://github.com/rangle/tree/1.2.4)
+* Add new support for decorators: `@ViewChild`, `@ViewChildren`, `@ContentChild`, and `@ContentChildren`. Now we display these decorators, along with the type selector information, in the UI.
+* Add proper type information to State panel view. Instead of displaying `Object`, for example, we display the real type of that object, for example `NgModuleLoader`. We do this by retaining the type information across serialization. (Objects are serialized in the backend and then transmitted to the frontend, and the type information was being lost during this process. Now it is retained.)
+* Refactor the decorator metadata system so that it works for nested objects. In 1.2.3, if you have a `@ViewChild(Foo)` reference on your component, and you expand that object in the State view, any `@Input()` or `@Output()` decorators on the `Foo` object are now displayed in the UI. (Previously decorator metadata was only generated for toplevel components.)
+* Resolve display issue that prevented pages containing multiple Angular applications from working properly. Now if you have multiple Angular root components on your page, you will be able to see both of them in the _Component Tree_ tab.
+
 ## [1.2.3](https://github.com/rangle/tree/1.2.3)
 * Add AoT compilation section to readme. ([733](https://github.com/rangle/augury/issues/733))
 * Make sure events emitted form Augury are run in an NgZone as expected. ([752](https://github.com/rangle/augury/issues/752))
