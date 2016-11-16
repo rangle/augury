@@ -1,12 +1,8 @@
 import {
   Message,
   MessageHandler,
-  MessageFactory,
-  MessageResponse,
   MessageType,
-  Subscription,
   deserializeMessage,
-  testResponse,
 } from '../communication';
 
 const subscriptions = new Set<MessageHandler>();

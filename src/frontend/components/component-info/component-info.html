@@ -36,6 +36,18 @@
       </div>
     </accordion>
 
+    <accordion sectionTitle="Instance Providers" *ngIf="hasInstanceProviders" [defaultExpanded]="true">
+      <div section-content>
+        <ul class="list-reset m0">
+            <bt-property-value
+              *ngFor="let property of providers"
+              [key]="property"
+              [value]="property">
+            </bt-property-value>
+        </ul>
+      </div>
+    </accordion>
+
     <accordion sectionTitle="Providers" *ngIf="hasProviders" [defaultExpanded]="true">
       <div section-content>
         <span *ngFor="let provider of node.providers">
