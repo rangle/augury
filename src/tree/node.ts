@@ -14,6 +14,7 @@ export interface OutputProperty extends InputProperty {} // outputs can be alias
 
 export interface Node {
   id: string;
+  name: string;
   isComponent: boolean;
   changeDetection: string;
   description: Array<Property>;
@@ -23,10 +24,10 @@ export interface Node {
   directives: Array<string>;
   injectors: Array<string>;
   providers: Array<Property>;
+  providerTokens: any;
   input: Array<InputProperty>;
   output: Array<OutputProperty>;
   source: string;
-  name: string;
   children: Array<Node>;
   properties: {
       [key: string]: any;

@@ -89,7 +89,6 @@ class App {
   private selectedNode: Node;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
-  private theme: Theme;
   private tree: MutableTree;
   private error: ApplicationError;
 
@@ -158,6 +157,7 @@ class App {
 
   private processMessage(msg: Message<any>,
       sendResponse: (response: MessageResponse<any>) => void) {
+
     const respond = () => {
       sendResponse(MessageFactory.response(msg, {processed: true}, false));
     };

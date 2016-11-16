@@ -72,24 +72,25 @@ export const transform = (path: Path,
 
   const node: Node = {
     id: serializedPath,
-    isComponent,
-    attributes: clone(element.attributes),
-    children: null,
-    changeDetection,
-    description: Description.getComponentDescription(element),
-    directives: [],
-    classes: clone(element.classes),
-    styles: clone(element.styles),
-    injectors,
-    input: componentInputs(metadata, element.componentInstance),
-    output: componentOutputs(metadata, element.componentInstance),
     name,
     listeners,
-    properties: clone(element.properties),
+    isComponent,
     providers,
-    dependencies: getDependencies(element.componentInstance),
+    providerTokens: serialize(element.providerTokens),
+    attributes: clone(element.attributes),
+    classes: clone(element.classes),
+    styles: clone(element.styles),
+    children: null, // initial value
+    directives: [],
     source: element.source,
-    nativeElement: () => element.nativeElement // this will be null in the frontend
+    injectors,
+    changeDetection,
+    nativeElement: () => element.nativeElement, // this will be null in the frontend
+    description: Description.getComponentDescription(element),
+    input: componentInputs(metadata, element.componentInstance),
+    output: componentOutputs(metadata, element.componentInstance),
+    properties: clone(element.properties),
+    dependencies: getDependencies(element.componentInstance)
   };
 
   /// Set before we search for children so that the value is cached and the
@@ -102,8 +103,8 @@ export const transform = (path: Path,
     let subindex = 0;
 
     children.forEach(c =>
-        node.children.push(
-          transform(path.concat([subindex++]), c, options, cache, count)));
+      node.children.push(
+        transform(path.concat([subindex++]), c, options, cache, count)));
   };
 
   const getChildren = (test: (compareElement: DebugElement) => boolean): Array<DebugElement> => {
@@ -138,50 +139,50 @@ export const transform = (path: Path,
 };
 
 export const recursiveSearch =
-    (children: DebugElement[], test: (element: DebugElement) => boolean): Array<DebugElement> => {
-  const result = new Array<DebugElement>();
+  (children: DebugElement[], test: (element: DebugElement) => boolean): Array<DebugElement> => {
+    const result = new Array<DebugElement>();
 
-  for (const c of children) {
-    if (test(c)) {
-      result.push(c);
+    for (const c of children) {
+      if (test(c)) {
+        result.push(c);
+      }
+      else {
+        Array.prototype.splice.apply(result,
+          (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
+      }
     }
-    else {
-      Array.prototype.splice.apply(result,
-        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
-    }
-  }
 
-  return result;
-};
+    return result;
+  };
 
 export const matchingChildren =
-    (element: DebugElement, test: (element: DebugElement) => boolean): Array<DebugElement> => {
-  if (test(element)) {
-    return [element];
-  }
-  return recursiveSearch(element.children, test);
-};
+  (element: DebugElement, test: (element: DebugElement) => boolean): Array<DebugElement> => {
+    if (test(element)) {
+      return [element];
+    }
+    return recursiveSearch(element.children, test);
+  };
 
 const getComponentProviders = (element: DebugElement, name: string): Array<Property> => {
-    let providers = new Array<Property>();
+  let providers = new Array<Property>();
 
-    if (element.providerTokens && element.providerTokens.length > 0) {
-      providers = element.providerTokens.map(provider =>
-        Description.getProviderDescription(provider,
-          element.injector.get(provider)));
-    }
+  if (element.providerTokens && element.providerTokens.length > 0) {
+    providers = element.providerTokens.map(provider =>
+      Description.getProviderDescription(provider,
+        element.injector.get(provider)));
+  }
 
-    if (name) {
-      return providers.filter(provider => provider.key !== name);
-    }
-    else {
-      return providers;
-    }
+  if (name) {
+    return providers.filter(provider => provider.key !== name);
+  }
+  else {
+    return providers;
+  }
 };
 
 const getComponentName = (element: DebugElement): string => {
   if (element.componentInstance &&
-      element.componentInstance.constructor) {
+    element.componentInstance.constructor) {
     return functionName(element.componentInstance.constructor);
   }
   else if (element.name) {
