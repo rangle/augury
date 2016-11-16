@@ -61,26 +61,27 @@ export const transform = (path: Path,
     ? getChangeDetection(metadata)
     : null;
 
-  const node = {
+  const node: Node = {
     id: serializedPath,
-    isComponent,
-    attributes: clone(element.attributes),
-    children: null,
-    changeDetection,
-    description: Description.getComponentDescription(element),
-    directives: [],
-    classes: clone(element.classes),
-    styles: clone(element.styles),
-    injectors,
-    input: componentInputs(metadata, element.componentInstance),
-    output: componentOutputs(metadata, element.componentInstance),
     name,
     listeners,
-    properties: clone(element.properties),
+    isComponent,
     providers,
-    dependencies: getDependencies(element.componentInstance),
+    attributes: clone(element.attributes),
+    classes: clone(element.classes),
+    styles: clone(element.styles),
+    children: null, // initial value
+    directives: [],
     source: element.source,
-    nativeElement: () => element.nativeElement // this will be null in the frontend
+    injectors,
+    changeDetection,
+    nativeElement: () => element.nativeElement, // this will be null in the frontend
+    description: Description.getComponentDescription(element),
+    input: componentInputs(metadata, element.componentInstance),
+    output: componentOutputs(metadata, element.componentInstance),
+    properties: clone(element.properties),
+    dependencies: getDependencies(element.componentInstance),
+
   };
 
   /// Set before we search for children so that the value is cached and the
@@ -93,8 +94,8 @@ export const transform = (path: Path,
     let subindex = 0;
 
     children.forEach(c =>
-        node.children.push(
-          transform(path.concat([subindex++]), c, options, cache, count)));
+      node.children.push(
+        transform(path.concat([subindex++]), c, options, cache, count)));
   };
 
   const getChildren = (test: (compareElement) => boolean): Array<any> => {
@@ -132,47 +133,47 @@ export const recursiveSearch =
     (children: any[], test: (element) => boolean): Array<any> => {
   const result = new Array<any>();
 
-  for (const c of children) {
-    if (test(c)) {
-      result.push(c);
+    for (const c of children) {
+      if (test(c)) {
+        result.push(c);
+      }
+      else {
+        Array.prototype.splice.apply(result,
+          (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
+      }
     }
-    else {
-      Array.prototype.splice.apply(result,
-        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
-    }
-  }
 
-  return result;
-};
+    return result;
+  };
 
 export const matchingChildren =
-    (element, test: (element) => boolean): Array<any> => {
-  if (test(element)) {
-    return [element];
-  }
-  return recursiveSearch(element.children, test);
-};
+  (element, test: (element) => boolean): Array<any> => {
+    if (test(element)) {
+      return [element];
+    }
+    return recursiveSearch(element.children, test);
+  };
 
 const getComponentProviders = (element, name: string): Array<Property> => {
-    let providers = new Array<Property>();
+  let providers = new Array<Property>();
 
-    if (element.providerTokens && element.providerTokens.length > 0) {
-      providers = element.providerTokens.map(provider =>
-        Description.getProviderDescription(provider,
-          element.injector.get(provider)));
-    }
+  if (element.providerTokens && element.providerTokens.length > 0) {
+    providers = element.providerTokens.map(provider =>
+      Description.getProviderDescription(provider,
+        element.injector.get(provider)));
+  }
 
-    if (name) {
-      return providers.filter(provider => provider.key !== name);
-    }
-    else {
-      return providers;
-    }
+  if (name) {
+    return providers.filter(provider => provider.key !== name);
+  }
+  else {
+    return providers;
+  }
 };
 
 const getComponentName = (element): string => {
   if (element.componentInstance &&
-      element.componentInstance.constructor) {
+    element.componentInstance.constructor) {
     return functionName(element.componentInstance.constructor);
   }
   else if (element.name) {
@@ -188,7 +189,7 @@ const getChangeDetection = (metadata): number => {
     metadata.changeDetection !== null) {
     return metadata.changeDetection;
   } else {
-    return 1;
+    return 1; // Changed
   }
 };
 

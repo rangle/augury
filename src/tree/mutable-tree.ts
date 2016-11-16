@@ -1,6 +1,5 @@
 import {Change} from './change';
 import {Node} from './node';
-import {deserialize} from '../utils';
 import {Path, deserializePath} from './path';
 import {apply, compare} from '../utils/patch';
 

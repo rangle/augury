@@ -3,7 +3,6 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
 import {
-  Metadata,
   MutableTree,
   Node,
   Path,
@@ -235,7 +234,7 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      return instanceWithMetadata(node, probed.componentInstance);
+      return instanceWithMetadata(probed, node, probed.componentInstance);
     }
   }
   return null;

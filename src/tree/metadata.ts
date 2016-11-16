@@ -40,6 +40,7 @@ export type ComponentMetadata = Map<any, [string, ObjectType, any]>;
 export interface InstanceWithMetadata {
   instance: any;
   metadata: Metadata;
+  providers: Array<any>;
   componentMetadata: ComponentMetadata;
 }
 
@@ -50,7 +51,7 @@ export interface InstanceWithMetadata {
 // enough not to duplicate objects. If someone breaks apart the instance and the
 // metadata into two objects, a lot of code that depends on reference equality is
 // going to get broken! So do not change this!
-export const instanceWithMetadata = (node: Node, instance) => {
+export const instanceWithMetadata = (debugElement, node: Node, instance) => {
   if (node == null || instance == null) {
     return null;
   }
@@ -58,6 +59,8 @@ export const instanceWithMetadata = (node: Node, instance) => {
   const objectMetadata = new Map<any, [ObjectType, any]>();
 
   const components = new Map<any, [[string, ObjectType, any]]>();
+
+  const providers = debugElement.providerTokens.map(t => debugElement.injector.get(t));
 
   recurse(instance,
     obj => {
@@ -106,6 +109,7 @@ export const instanceWithMetadata = (node: Node, instance) => {
 
   return {
     instance,
+    providers,
     metadata: Array.from(<any> objectMetadata),
     componentMetadata: Array.from(<any> components),
   };

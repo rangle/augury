@@ -89,7 +89,6 @@ class App {
   private selectedNode: Node;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
-  private theme: Theme;
   private tree: MutableTree;
   private error: ApplicationError;
   private activateDOMSelection: boolean = false;
@@ -268,27 +267,33 @@ class App {
 
     const m = MessageFactory.selectComponent(node, node.isComponent);
 
-    if (node.isComponent) {
-      const promise = this.directConnection.handleImmediate(m)
-        .then(response => {
-          if (typeof beforeLoad === 'function') {
-            beforeLoad();
-          }
+    const promise = this.directConnection.handleImmediate(m)
+      .then(response => {
+        if (typeof beforeLoad === 'function') {
+          beforeLoad();
+        }
 
-          const {instance, metadata, componentMetadata} = response;
+        const {
+          instance,
+          metadata,
+          providers,
+          componentMetadata,
+        } = response;
 
-          return {
-            instance,
-            metadata: new Map(metadata),
-            componentMetadata: new Map(componentMetadata),
-          };
-        });
+        return {
+          instance,
+          providers,
+          metadata: new Map(metadata),
+          componentMetadata: new Map(componentMetadata),
+        };
+      });
 
-      this.componentState.wait(node, promise);
-    }
-    else {
-      this.componentState.wait(node, this.directConnection.handleImmediate(m).then(() => null));
-    }
+    this.componentState.wait(node, promise);
+
+    // }
+    // else {
+    //   this.componentState.wait(node, this.directConnection.handleImmediate(m).then(() => null));
+    // }
   }
 
   private onInspectElement(node: Node) {
