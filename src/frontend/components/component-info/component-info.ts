@@ -6,6 +6,8 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
+import {deserialize} from '../../../utils';
+
 import {ComponentLoadState} from '../../state';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -40,6 +42,8 @@ export class ComponentInfo {
   ngOnChanges() {
     if (this.node) {
       this.path = deserializePath(this.node.id);
+      console.log(deserialize(this.node.providerTokens));
+
     }
   }
 

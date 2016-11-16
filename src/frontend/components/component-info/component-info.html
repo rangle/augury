@@ -36,6 +36,17 @@
       </div>
     </accordion>
 
+    <accordion sectionTitle="Properties" *ngIf="hasProperties" [defaultExpanded]="true">
+      <div section-content>
+        <ul class="list-reset m0"
+            *ngIf="node && node.providerTokens">
+          <div>
+            {{$a}}
+          </div>
+        </ul>
+      </div>
+    </accordion>
+
     <accordion sectionTitle="Providers" *ngIf="hasProviders" [defaultExpanded]="true">
       <div section-content>
         <span *ngFor="let provider of node.providers">

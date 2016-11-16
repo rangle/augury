@@ -6,7 +6,6 @@ import {
 } from 'rxjs';
 
 import {
-  Metadata,
   MutableTree,
   Node,
   Path,
@@ -272,8 +271,6 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
 };
 
 export const rootsWithRouters = () => {
-  const roots = getAllAngularRootElements().map(e => ng.probe(e));
-
   const routers = [];
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
