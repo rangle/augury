@@ -3,11 +3,12 @@
   "scripts": {
     "postinstall": "npm run typings",
     "typings": "rimraf typings && typings install",
-    "start": "webpack-dev-server --display-error-details --display-cached",
+    "start": "webpack-dashboard -- webpack-dev-server --display-error-details --display-cached",
     "build": "webpack --display-error-details --display-cached"
   },
   "devDependencies": {
-    "angular2-router-loader": "^0.3.2"
+    "angular2-router-loader": "^0.3.2",
+    "webpack-dashboard": "^0.2.0"
   },
   "dependencies": {
     "@angular/common": "2.0.0",
