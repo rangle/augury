@@ -1,4 +1,3 @@
-import {Node} from './node';
 
 export type Path = Array<string | number>;
 
