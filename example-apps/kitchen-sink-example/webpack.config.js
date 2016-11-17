@@ -3,6 +3,7 @@
 const path = require("path");
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 
 module.exports = {
   stats: {
@@ -44,7 +45,8 @@ module.exports = {
       template: './source/index.html',
       inject: 'body',
       minify: false
-    })
+    }),
+    new DashboardPlugin()
   ],
 
   module: {
