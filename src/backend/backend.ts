@@ -1,7 +1,5 @@
-import {
-  Subject,
-  Subscription,
-} from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 
 import {
   Metadata,
