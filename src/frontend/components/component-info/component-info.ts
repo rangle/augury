@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   SimpleChanges,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {ComponentLoadState} from '../../state';
@@ -32,6 +33,8 @@ export class ComponentInfo {
   @Input() private loadingState: ComponentLoadState;
 
   @Output() private selectNode = new EventEmitter<Node>();
+
+  private changeDetectionStrategies = ChangeDetectionStrategy;
 
   private ComponentLoadState = ComponentLoadState;
 
