@@ -16,12 +16,12 @@ import {ApplicationError} from './application-error';
 import {getRandomHash} from './hash';
 
 import {
-  Change,
-  MutableTree,
-  Node,
   Path,
   deserializePath,
-} from '../tree';
+} from '../tree/path';
+import { MutableTree } from '../tree/mutable-tree';
+import { Change } from '../tree/change';
+import { Node } from '../tree/node';
 
 import {
   serialize,
