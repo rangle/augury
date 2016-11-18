@@ -66,7 +66,7 @@ let previousCount: number;
 let currentNode: Node;
 let currentHighlights;
 
-const updateComponentTree = (roots: Array<DebugElement>) => {
+const updateComponentTree = (roots: Array<any>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
   if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
