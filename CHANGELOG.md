@@ -1,4 +1,9 @@
 # Change Log
+## [1.2.5](https://github.com/rangle/tree/1.2.5)
+* Update kitcken sink example app to Angular 2.2.0. [792](https://github.com/rangle/augury/issues/792)
+* Resolve conflict with Jira boards. [766](https://github.com/rangle/augury/issues/766)
+* Remove Angular core dependency from backend bundle. [782](https://github.com/rangle/augury/issues/782)
+
 ## [1.2.4](https://github.com/rangle/tree/1.2.4)
 * Add new support for decorators: `@ViewChild`, `@ViewChildren`, `@ContentChild`, and `@ContentChildren`. Now we display these decorators, along with the type selector information, in the UI.
 * Add proper type information to State panel view. Instead of displaying `Object`, for example, we display the real type of that object, for example `NgModuleLoader`. We do this by retaining the type information across serialization. (Objects are serialized in the backend and then transmitted to the frontend, and the type information was being lost during this process. Now it is retained.)
