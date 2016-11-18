@@ -1,18 +1,10 @@
-import {
-  AsyncSubject,
-  BehaviorSubject,
-  ReplaySubject,
-  Subscriber,
-  Observable,
-  Subject,
-} from 'rxjs';
-
-import {
-  AnonymousSubject,
-  SubjectSubscriber,
-} from 'rxjs/Subject';
-
-import {GroupedObservable} from 'rxjs/operator/groupBy';
+import { Subscriber } from 'rxjs/Subscriber';
+import { Observable } from 'rxjs/Observable';
+import { Subject, AnonymousSubject, SubjectSubscriber } from 'rxjs/Subject';
+import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { GroupedObservable } from 'rxjs/operator/groupBy';
 
 import {Node} from './node';
 

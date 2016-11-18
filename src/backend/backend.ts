@@ -1,9 +1,6 @@
-import {DebugElement} from '@angular/core';
-
-import {
-  Subject,
-  Subscription,
-} from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
 
 import {
   Metadata,
@@ -64,7 +61,7 @@ let previousTree: MutableTree;
 
 let previousCount: number;
 
-const updateComponentTree = (roots: Array<DebugElement>) => {
+const updateComponentTree = (roots: Array<any>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
   if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
@@ -97,7 +94,7 @@ const subject = new Subject<void>();
 
 const subscriptions = new Array<Subscription>();
 
-const bind = (root: DebugElement) => {
+const bind = (root) => {
   if (root.injector == null) {
     // If injector is missing, we won't be able to debug this build
     send(MessageFactory.applicationError(
