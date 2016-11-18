@@ -126,24 +126,22 @@ export abstract class MessageFactory {
     });
   }
 
-  static selectDOMNode(): Message<void> {
+  static findDOMElement(): Message<void> {
     return create({
-      messageType: MessageType.SelectDOMNode,
-      content: {}
+      messageType: MessageType.FindElement,
+      content: {
+        start: true
+      }
     });
   }
 
-  static endDOMSelection(): Message<void> {
+  static foundDOMElement(node: Node): Message<void> {
     return create({
-      messageType: MessageType.EndDOMSelection,
-      content: {},
-    });
-  }
-
-  static selectTreeNode(node: Node): Message<void> {
-    return create({
-      messageType: MessageType.SelectTreeNode,
-      content: node,
+      messageType: MessageType.FindElement,
+      content: {
+        node,
+        stop: true
+      },
     });
   }
 

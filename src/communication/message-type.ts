@@ -48,13 +48,6 @@ export enum MessageType {
   /// Set the nodes that should be highlighted on the page
   Highlight,
 
-
-  /// Set the nodes that can be selected on the page
-  SelectDOMNode,
-
-  /// Disable selecting nodes on the page
-  EndDOMSelection,
-
-  /// Select Node on the current MutableTree based on DOMElement
-  SelectTreeNode,
+  /// Find a corresponding mutable tree node based on a DOM node
+  FindElement,
 }

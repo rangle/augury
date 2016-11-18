@@ -1,5 +1,5 @@
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
+import {Subscription} from 'rxjs/Subscription';
+import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
 import {
@@ -10,6 +10,8 @@ import {
   instanceWithMetadata,
   serializePath,
 } from '../tree';
+
+import {onElementFound, onFindElement} from './utils/find-element';
 
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
@@ -58,13 +60,10 @@ const deltaThreshold = 512;
 const messageBuffer = new MessageQueue<Message<any>>();
 
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
-let previousTree: MutableTree;
-
-let previousCount: number;
-
-// DOM selection variables
-let currentNode: Node;
-let currentHighlights;
+let previousTree: MutableTree,
+  previousCount: number,
+  onMouseOver,
+  onMouseDown;
 
 const updateComponentTree = (roots: Array<any>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
@@ -213,26 +212,19 @@ const messageHandler = (message: Message<any>) => {
       return tryWrap(() => {
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
       });
-    case MessageType.SelectDOMNode:
+
+    case MessageType.FindElement:
       if (previousTree == null) {
         return;
       }
+
       return tryWrap(() => {
-        // override base operations
-        extendWindowOperations(window || global || this, WindowOperations);
+        findElement(message);
       });
-    case MessageType.EndDOMSelection:
-      if (previousTree == null) {
-        return;
-      }
-      // override base operations
-      defaultWindowOperations(window || global || this, WindowOperations);
-      if (currentHighlights) {
-        clearHighlights(currentHighlights.map);
-      }
   }
   return undefined;
 };
+
 
 browserSubscribe(messageHandler);
 
@@ -291,8 +283,6 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
 };
 
 export const rootsWithRouters = () => {
-  const roots = getAllAngularRootElements().map(e => ng.probe(e));
-
   const routers = [];
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
@@ -356,44 +346,6 @@ export const extendWindowOperations = <T>(target, classImpl: T) => {
   Object.assign(target, classImpl);
 };
 
-// default operations that were overriden back to null
-export const defaultWindowOperations = <T>(target, classImpl: T) => {
-  for (const key of Object.keys(classImpl)) {
-    target[key] = null;
-  }
-};
-
-export const WindowOperations = {
-  onmousedown: () => {
-    if (currentNode) {
-      messageBuffer.enqueue(MessageFactory.selectTreeNode(currentNode));
-      messageBuffer.enqueue(MessageFactory.endDOMSelection());
-      send(MessageFactory.push());
-    }
-  },
-  onmouseover: (e) => {
-    // remove previous node
-    currentNode = null;
-
-    // recurse the tree
-    previousTree.recurseAll(find);
-
-    if (currentHighlights) {
-      clearHighlights(currentHighlights.map);
-    }
-
-    if (currentNode) {
-      currentHighlights = highlight([currentNode]);
-    }
-
-    function find(node) {
-      if (node.nativeElement() === e.target) {
-        currentNode = node;
-      }
-    }
-  },
-};
-
 export const ApplicationOperations = {
   /// Note that the ID is a serialized path, and the first element in that path is the
   /// index of the application that the node belongs to. So even though we have this
@@ -429,6 +381,42 @@ export const ApplicationOperations = {
     return messageBuffer.dequeue();
   }
 };
+
+/* We want to find the right element based on the selected DOM node
+ * To do this we execute the findElement function on receiving the FindElement message
+ * In turn this function will bind an event listener to the window that listens to
+ * DOM trigger on mouseover. Onmousedown it will trigger a cancellation of the selection and
+ * if a node was found highlight it in the augury mutable tree
+ *
+ * The function references of the event handlers are stored on the global scope of backend.ts
+ * so we can remove them by reference.
+ */
+const findElement = (message) => {
+  let currentNode: Node,
+    currentHighlights: any;
+
+  if (message.content.start) {
+    onMouseOver = (e) => {
+      const result = onFindElement(e, previousTree, currentHighlights);
+      currentNode = result.currentNode;
+      currentHighlights = result.currentHighlights;
+    };
+
+    onMouseDown = () => {
+      onElementFound(currentNode, currentHighlights, messageBuffer);
+    };
+
+    window.addEventListener('mouseover', onMouseOver, false);
+    window.addEventListener('mousedown', onMouseDown, false);
+  }
+
+  // selection has ended
+  if (message.content.stop) {
+    window.removeEventListener('mouseover', onMouseOver, false);
+    window.removeEventListener('mousedown', onMouseDown, false);
+  }
+};
+
 
 // add custom operations
 extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});

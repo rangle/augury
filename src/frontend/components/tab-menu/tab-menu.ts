@@ -46,10 +46,10 @@ export class TabMenu {
 
   private selectElement() {
     if (this.DOMSelectionActive) {
-      this.userActions.endDOMSelection();
+      this.userActions.cancelFindElement();
       this.DOMSelectionActive = false;
     } else {
-      this.userActions.selectDOMNode();
+      this.userActions.findElement();
       this.DOMSelectionActive = true;
 
       if (this.selectedTab !== this.tabs[0].tab) {

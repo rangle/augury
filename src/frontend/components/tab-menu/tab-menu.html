@@ -3,13 +3,18 @@
     <img *ngIf="showMainItems" src="../images/augury-logo.svg" class="logo">
     <div *ngIf="showMainItems" (click)="selectElement()" class="select-element"
          [ngClass]="{'select-element-active': DOMSelectionActive}">
-      <svg width="16px" height="16px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g id="point" transform="translate(1.000000, 1.000000)">
-          <path
-            d="M6.56047012,22.0173143 L0.996394205,21.9689396 C0.446100881,21.9641553 0,21.521612 0,20.9596252 L0,1.00065163 C0,0.448006995 0.45528388,-2.84217094e-14 0.993260896,-2.84217094e-14 L20.8048191,-2.84217094e-14 C21.3533819,-2.84217094e-14 21.79808,0.438413103 21.79808,1.00033649 L21.79808,6.68182351"
-            id="frame" stroke-linecap="square"></path>
-          <polygon id="cursor" transform="translate(16.606521, 16.179952) rotate(-38.000000) translate(-16.606521, -16.179952) "
-                   points="15.2744666 5.33101694 24.1283078 17.6502571 18.2743353 18.4138656 19.119601 26.5701025 16.8009186 27.0288875 15.6046217 18.8273234 9.08473352 19.727678"></polygon>
+      <svg width="16px" height="16px" viewBox="0 0 28 26" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="pointer" transform="translate(2.000000, 2.000000)">
+            <g id="point">
+              <path class="path"
+                    d="M10.4848307,22.0014302 L0.996394205,21.9689396 C0.446100881,21.9641553 0,21.521612 0,20.9596252 L0,1.00065163 C0,0.448006995 0.45528388,0 0.993260896,0 L20.8048191,0 C21.3533819,0 21.79808,0.438413103 21.79808,1.00033649 L21.9493556,9.67706599"
+                    id="frame" stroke="#000000"></path>
+              <polygon class="polygon" id="cursor" fill="#000000"
+                       transform="translate(18.259351, 16.690224) rotate(-38.000000) translate(-18.259351, -16.690224) "
+                       points="17.2853408 8.69022414 23.7593509 17.7744263 19.4788724 18.3375109 20.0969384 24.3519163 18.4014965 24.6902241 17.5267532 18.6423945 12.7593509 19.3063155"></polygon>
+            </g>
+          </g>
         </g>
       </svg>
     </div>

@@ -52,6 +52,10 @@ const highlightNode = (node, label: string): HTMLElement => {
 };
 
 export const clear = (map) => {
+  if (!map) {
+    return;
+  }
+
   map.forEach(
     (value, key) => {
       try {
