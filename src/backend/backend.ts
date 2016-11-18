@@ -1,9 +1,6 @@
-import {DebugElement} from '@angular/core';
-
-import {
-  Subject,
-  Subscription,
-} from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
 
 import {
   Metadata,
@@ -102,7 +99,7 @@ const subject = new Subject<void>();
 
 const subscriptions = new Array<Subscription>();
 
-const bind = (root: DebugElement) => {
+const bind = (root) => {
   if (root.injector == null) {
     // If injector is missing, we won't be able to debug this build
     send(MessageFactory.applicationError(
@@ -432,7 +429,6 @@ export const ApplicationOperations = {
     return messageBuffer.dequeue();
   }
 };
-
 
 // add custom operations
 extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});

@@ -1,9 +1,4 @@
 import {
-  Component,
-  DebugElement,
-} from '@angular/core';
-
-import {
   InputProperty,
   OutputProperty,
 } from './node';
@@ -33,15 +28,16 @@ export const iteratePropertyDecorators = (instance, fn: (key: string, decorator)
   }
 };
 
-export const componentMetadata = (instance): Component => {
+export const componentMetadata = (instance) => {
   if (instance == null) {
     return null;
   }
 
-  return classDecorators(instance).find(d => functionName(d.constructor) === functionName(Component));
+  return classDecorators(instance).find(d =>
+    d.constructor.toString() === '@Component');
 };
 
-export const componentInputs = (metadata: Component, instance): Array<InputProperty> => {
+export const componentInputs = (metadata, instance): Array<InputProperty> => {
   const inputs: Array<InputProperty> =
     ((metadata && metadata.inputs) || []).map(p => ({propertyKey: p}));
 
@@ -57,7 +53,7 @@ export const componentInputs = (metadata: Component, instance): Array<InputPrope
   return inputs;
 };
 
-export const componentOutputs = (metadata: Component, instance): Array<OutputProperty> => {
+export const componentOutputs = (metadata, instance): Array<OutputProperty> => {
   const outputs: Array<OutputProperty> =
     ((metadata && metadata.outputs) || []).map(p => ({propertyKey: p}));
 
@@ -76,7 +72,7 @@ export interface Query {
   selector: string;
 }
 
-export const componentQueryChildren = (type: string, metadata: Component, instance): Array<Query> => {
+export const componentQueryChildren = (type: string, metadata, instance): Array<Query> => {
   const queries = new Array<Query>();
 
   iteratePropertyDecorators(instance,

@@ -1,15 +1,6 @@
 import * as clone from 'clone';
 
 import {
-  ChangeDetectionStrategy,
-  Component,
-  DebugElement,
-  DebugNode,
-  Input,
-  Output,
-} from '@angular/core';
-
-import {
   Description,
   Property,
 } from '../backend/utils/description';
@@ -39,7 +30,7 @@ import {
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
 export const transform = (path: Path,
-                          element: DebugElement,
+                          element,
                           options: SimpleOptions,
                           cache: Map<string, Node>,
                           count: (n: number) => void): Node => {
@@ -67,10 +58,10 @@ export const transform = (path: Path,
   const metadata = componentMetadata(element.componentInstance);
 
   const changeDetection = isComponent
-    ? ChangeDetectionStrategy[getChangeDetection(metadata)]
+    ? getChangeDetection(metadata)
     : null;
 
-  const node: Node = {
+  const node = {
     id: serializedPath,
     isComponent,
     attributes: clone(element.attributes),
@@ -98,7 +89,7 @@ export const transform = (path: Path,
 
   node.children = [];
 
-  const transformChildren = (children: Array<DebugElement>) => {
+  const transformChildren = (children: Array<any>) => {
     let subindex = 0;
 
     children.forEach(c =>
@@ -106,7 +97,7 @@ export const transform = (path: Path,
           transform(path.concat([subindex++]), c, options, cache, count)));
   };
 
-  const getChildren = (test: (compareElement: DebugElement) => boolean): Array<DebugElement> => {
+  const getChildren = (test: (compareElement) => boolean): Array<any> => {
     const children = element.children.map(c => matchingChildren(c, test));
 
     return children.reduce((previous, current) => previous.concat(current), []);
@@ -138,8 +129,8 @@ export const transform = (path: Path,
 };
 
 export const recursiveSearch =
-    (children: DebugElement[], test: (element: DebugElement) => boolean): Array<DebugElement> => {
-  const result = new Array<DebugElement>();
+    (children: any[], test: (element) => boolean): Array<any> => {
+  const result = new Array<any>();
 
   for (const c of children) {
     if (test(c)) {
@@ -155,14 +146,14 @@ export const recursiveSearch =
 };
 
 export const matchingChildren =
-    (element: DebugElement, test: (element: DebugElement) => boolean): Array<DebugElement> => {
+    (element, test: (element) => boolean): Array<any> => {
   if (test(element)) {
     return [element];
   }
   return recursiveSearch(element.children, test);
 };
 
-const getComponentProviders = (element: DebugElement, name: string): Array<Property> => {
+const getComponentProviders = (element, name: string): Array<Property> => {
     let providers = new Array<Property>();
 
     if (element.providerTokens && element.providerTokens.length > 0) {
@@ -179,7 +170,7 @@ const getComponentProviders = (element: DebugElement, name: string): Array<Prope
     }
 };
 
-const getComponentName = (element: DebugElement): string => {
+const getComponentName = (element): string => {
   if (element.componentInstance &&
       element.componentInstance.constructor) {
     return functionName(element.componentInstance.constructor);
@@ -191,13 +182,13 @@ const getComponentName = (element: DebugElement): string => {
   return element.nativeElement.tagName.toLowerCase();
 };
 
-const getChangeDetection = (metadata: Component): ChangeDetectionStrategy => {
+const getChangeDetection = (metadata): number => {
   if (metadata &&
     metadata.changeDetection !== undefined &&
     metadata.changeDetection !== null) {
     return metadata.changeDetection;
   } else {
-    return ChangeDetectionStrategy.Default;
+    return 1;
   }
 };
 

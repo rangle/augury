@@ -15,7 +15,7 @@ export interface OutputProperty extends InputProperty {} // outputs can be alias
 export interface Node {
   id: string;
   isComponent: boolean;
-  changeDetection: string;
+  changeDetection: number;
   description: Array<Property>;
   nativeElement: () => HTMLElement; // null on frontend
   listeners: Array<EventListener>;

@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 
-import {
-  Observable,
-  Subject,
-} from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import {
   MutableTree,
