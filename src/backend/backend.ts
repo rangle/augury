@@ -397,9 +397,15 @@ const findElement = (message) => {
 
   if (message.content.start) {
     onMouseOver = (e) => {
-      const result = onFindElement(e, previousTree, currentHighlights);
-      currentNode = result.currentNode;
-      currentHighlights = result.currentHighlights;
+      if (currentHighlights) {
+        clearHighlights(currentHighlights.map);
+      }
+
+      currentNode = onFindElement(e, previousTree);
+
+      if (currentNode) {
+        currentHighlights = highlight([currentNode]);
+      }
     };
 
     onMouseDown = () => {

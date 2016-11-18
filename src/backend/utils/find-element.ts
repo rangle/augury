@@ -9,32 +9,20 @@ import {
 
 import {send} from '../indirect-connection';
 
-// Find a mutable tree dom node based on its DOM target
-export function onFindElement(e, tree, highlights) {
+// Find a mutable tree  node based on its DOM target
+export function onFindElement(e, tree) {
+  let foundNode = null;
+
   const findNode = (node) => {
     if (node.nativeElement() === e.target) {
       foundNode = node;
     }
   };
 
-  // remove previous node
-  let foundNode = null;
-
-  if (highlights) {
-    clearHighlights(highlights.map);
-  }
-
   // recurse the tree
   tree.recurseAll(findNode);
 
-  if (foundNode) {
-    highlights = highlight([foundNode]);
-  }
-
-  return {
-    currentHighlights: highlights,
-    currentNode: foundNode
-  };
+  return foundNode;
 }
 
 export function onElementFound(node, highlights, buffer) {
