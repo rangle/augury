@@ -3,3 +3,11 @@
   cursor: pointer;
   font-size: 11.5px;
 }
+
+.select-element {
+  width: 16px;
+  height: 16px;
+  margin-top: 4px;
+  margin-right: 10px;
+  padding: 3px;
+}

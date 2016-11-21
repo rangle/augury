@@ -1,5 +1,5 @@
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
+import {Subscription} from 'rxjs/Subscription';
+import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
 import {
@@ -10,6 +10,8 @@ import {
   instanceWithMetadata,
   serializePath,
 } from '../tree';
+
+import {onElementFound, onFindElement} from './utils/find-element';
 
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
@@ -28,6 +30,7 @@ import {send} from './indirect-connection';
 import {
   MainRoute,
   highlight,
+  clear as clearHighlights,
   parseRoutes,
   getNodeFromPartialPath,
   getNodeInstanceParent,
@@ -57,9 +60,10 @@ const deltaThreshold = 512;
 const messageBuffer = new MessageQueue<Message<any>>();
 
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
-let previousTree: MutableTree;
-
-let previousCount: number;
+let previousTree: MutableTree,
+  previousCount: number,
+  onMouseOver,
+  onMouseDown;
 
 const updateComponentTree = (roots: Array<any>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
@@ -154,7 +158,7 @@ const selectedComponentPropertyKey = '$a';
 const noSelectedComponentWarningText = 'There is no component selected.';
 
 Object.defineProperty(window, selectedComponentPropertyKey,
-  { value: noSelectedComponentWarningText });
+  {value: noSelectedComponentWarningText});
 
 const messageHandler = (message: Message<any>) => {
   switch (message.messageType) {
@@ -208,9 +212,19 @@ const messageHandler = (message: Message<any>) => {
       return tryWrap(() => {
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
       });
+
+    case MessageType.FindElement:
+      if (previousTree == null) {
+        return;
+      }
+
+      return tryWrap(() => {
+        findElement(message);
+      });
   }
   return undefined;
 };
+
 
 browserSubscribe(messageHandler);
 
@@ -269,14 +283,12 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
 };
 
 export const rootsWithRouters = () => {
-  const roots = getAllAngularRootElements().map(e => ng.probe(e));
-
   const routers = [];
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
     if (element == null ||
-        element.componentInstance == null ||
-        element.componentInstance.router == null) {
+      element.componentInstance == null ||
+      element.componentInstance.router == null) {
       continue;
     }
     routers.push(element.componentInstance.router);
@@ -324,7 +336,7 @@ export const tryWrap = (fn: Function) => {
 /// in a safe way and ensure that we do not overwrite any existing properties or functions
 /// that share the same names. If we do encounter such things we throw an exception and
 /// complain about it instead of continuing with bootstrapping.
-export const defineWindowOperations = <T>(target, classImpl: T) => {
+export const extendWindowOperations = <T>(target, classImpl: T) => {
   for (const key of Object.keys(classImpl)) {
     if (target[key] != null) {
       throw new Error(`A window function or object named ${key} would be overwritten`);
@@ -334,13 +346,13 @@ export const defineWindowOperations = <T>(target, classImpl: T) => {
   Object.assign(target, classImpl);
 };
 
-export class WindowOperations {
+export const ApplicationOperations = {
   /// Note that the ID is a serialized path, and the first element in that path is the
   /// index of the application that the node belongs to. So even though we have this
   /// global lookup operation for things like 'inspect' and 'view source', it will find
   /// the correct node even if multiple applications are instantiated on the same page.
-  nodeFromPath(id: string): Element {
-      if (previousTree == null) {
+  nodeFromPath: (id: string): Element => {
+    if (previousTree == null) {
       throw new Error('No tree exists');
     }
 
@@ -350,28 +362,67 @@ export class WindowOperations {
       return null;
     }
     return node.nativeElement();
-  }
+  },
 
   /// Post a response to a message from the frontend and dispatch it through normal channels
-  response<T>(response: Message<T>) {
+  response: <T>(response: Message<T>) => {
     browserDispatch(response);
-  }
-
+  },
   /// Run the message handler and return the result immediately instead of posting a response
-  handleImmediate<T>(message: Message<T>) {
+  handleImmediate: <T>(message: Message<T>) => {
     const result = messageHandler(message);
     if (result) {
       return serialize(result);
     }
     return null;
-  }
-
+  },
   /// Read all messages in the buffer and remove them
-  readMessageQueue(): Array<Message<any>> {
+  readMessageQueue: (): Array<Message<any>> => {
     return messageBuffer.dequeue();
   }
-}
+};
 
-const windowOperationsImpl = new WindowOperations();
+/* We want to find the right element based on the selected DOM node
+ * To do this we execute the findElement function on receiving the FindElement message
+ * In turn this function will bind an event listener to the window that listens to
+ * DOM trigger on mouseover. Onmousedown it will trigger a cancellation of the selection and
+ * if a node was found highlight it in the augury mutable tree
+ *
+ * The function references of the event handlers are stored on the global scope of backend.ts
+ * so we can remove them by reference.
+ */
+const findElement = (message) => {
+  let currentNode: Node,
+    currentHighlights: any;
 
-defineWindowOperations(window || global || this, {inspectedApplication: windowOperationsImpl});
+  if (message.content.start) {
+    onMouseOver = (e) => {
+      if (currentHighlights) {
+        clearHighlights(currentHighlights.map);
+      }
+
+      currentNode = onFindElement(e, previousTree);
+
+      if (currentNode) {
+        currentHighlights = highlight([currentNode]);
+      }
+    };
+
+    onMouseDown = () => {
+      onElementFound(currentNode, currentHighlights, messageBuffer);
+    };
+
+    window.addEventListener('mouseover', onMouseOver, false);
+    window.addEventListener('mousedown', onMouseDown, false);
+  }
+
+  // selection has ended
+  if (message.content.stop) {
+    window.removeEventListener('mouseover', onMouseOver, false);
+    window.removeEventListener('mousedown', onMouseDown, false);
+  }
+};
+
+
+// add custom operations
+extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});

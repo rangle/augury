@@ -126,6 +126,25 @@ export abstract class MessageFactory {
     });
   }
 
+  static findDOMElement(): Message<void> {
+    return create({
+      messageType: MessageType.FindElement,
+      content: {
+        start: true
+      }
+    });
+  }
+
+  static foundDOMElement(node: Node): Message<void> {
+    return create({
+      messageType: MessageType.FindElement,
+      content: {
+        node,
+        stop: true
+      },
+    });
+  }
+
   static applicationError(error: ApplicationError): Message<ApplicationError> {
     return create({
       messageType: MessageType.ApplicationError,

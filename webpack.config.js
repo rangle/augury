@@ -74,7 +74,6 @@ module.exports = {
       // Support for .ts files.
       test: /\.ts$/,
       loader: 'ts',
-      exclude: /node_modules/,
       query: {
         'ignoreDiagnostics': []
       },
@@ -106,7 +105,7 @@ module.exports = {
 
   postcss: function() {
     return [
-      require('postcss-import'),
+      require('postcss-import')({addConfigTo: webpack}),
       require('postcss-cssnext')
     ];
   },

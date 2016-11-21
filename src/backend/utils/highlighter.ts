@@ -32,7 +32,7 @@ const offsets = (node): Offsets => {
 const highlightNode = (node, label: string): HTMLElement => {
   if (node == null) {
     return;
-  };
+  }
 
   const overlay = document.createElement('div');
   overlay.setAttribute('style', styles);
@@ -51,23 +51,28 @@ const highlightNode = (node, label: string): HTMLElement => {
   return overlay;
 };
 
-const clear = () => {
-  highlights.forEach(
+export const clear = (map) => {
+  if (!map) {
+    return;
+  }
+
+  map.forEach(
     (value, key) => {
       try {
         value.remove();
       }
-      catch (e) {}
+      catch (e) {
+      }
     });
 };
 
 export const highlight = (nodes: Array<Node>) => {
   if (nodes == null || nodes.length === 0) {
-    clear();
+    clear(highlights);
+    return;
   }
 
   const elements = new Array<HTMLElement>();
-
   const map = new Map<string, HTMLElement>();
 
   for (const node of nodes.filter(n => n != null)) {
@@ -79,5 +84,8 @@ export const highlight = (nodes: Array<Node>) => {
 
   highlights = map;
 
-  return elements;
+  return {
+    elements,
+    map
+  };
 };

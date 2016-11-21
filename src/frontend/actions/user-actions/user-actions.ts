@@ -105,5 +105,12 @@ export class UserActions {
     return this.connection.send(MessageFactory.highlight([node]));
   }
 
+  findElement() {
+    return this.connection.send(MessageFactory.findDOMElement());
+  }
+
+  cancelFindElement() {
+    return this.connection.send(MessageFactory.foundDOMElement(null));
+  }
 }
 

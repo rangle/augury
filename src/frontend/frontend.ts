@@ -92,16 +92,15 @@ class App {
   private theme: Theme;
   private tree: MutableTree;
   private error: ApplicationError;
+  private activateDOMSelection: boolean = false;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private connection: Connection,
-    private directConnection: DirectConnection,
-    private options: Options,
-    private userActions: UserActions,
-    private viewState: ComponentViewState,
-    private zone: NgZone
-  ) {
+  constructor(private changeDetector: ChangeDetectorRef,
+              private connection: Connection,
+              private directConnection: DirectConnection,
+              private options: Options,
+              private userActions: UserActions,
+              private viewState: ComponentViewState,
+              private zone: NgZone) {
     this.componentState = new ComponentInstanceState(changeDetector);
 
     this.options.changes.subscribe(() => this.requestTree());
@@ -113,8 +112,8 @@ class App {
 
   private hasContent() {
     return this.tree &&
-           this.tree.roots &&
-           this.tree.roots.length > 0;
+      this.tree.roots &&
+      this.tree.roots.length > 0;
   }
 
   private ngDoCheck() {
@@ -157,7 +156,7 @@ class App {
   }
 
   private processMessage(msg: Message<any>,
-      sendResponse: (response: MessageResponse<any>) => void) {
+                         sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
       sendResponse(MessageFactory.response(msg, {processed: true}, false));
     };
@@ -199,6 +198,19 @@ class App {
         this.routerTree = msg.content;
         respond();
         break;
+      case MessageType.FindElement:
+        if (msg.content.node) {
+          this.viewState.select(msg.content.node);
+          this.viewState.expandState(msg.content.node, ExpandState.Expanded);
+          this.activateDOMSelection = true;
+          if (msg.content.stop) {
+            this.userActions.cancelFindElement();
+            this.activateDOMSelection = false;
+          }
+          break;
+        }
+        break;
+
       case MessageType.ApplicationError:
         this.error = msg.content;
         respond();
@@ -228,7 +240,7 @@ class App {
   }
 
   private onReceiveMessage(msg: Message<any>,
-      sendResponse: (response: MessageResponse<any>) => void) {
+                           sendResponse: (response: MessageResponse<any>) => void) {
     const process = () => {
       try {
         this.processMessage(msg, sendResponse);
@@ -294,6 +306,10 @@ class App {
   private onSelectedTabChange(tab: Tab) {
     this.selectedTab = tab;
     this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
+  }
+
+  private onDOMSelectionChange(state: boolean) {
+    this.activateDOMSelection = state;
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {
@@ -380,7 +396,8 @@ const declarations = [
   ],
   bootstrap: [App]
 })
-class FrontendModule {}
+class FrontendModule {
+}
 
 declare const PRODUCTION: boolean;
 if (PRODUCTION) {

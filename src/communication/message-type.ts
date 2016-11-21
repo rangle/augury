@@ -47,4 +47,7 @@ export enum MessageType {
 
   /// Set the nodes that should be highlighted on the page
   Highlight,
+
+  /// Find a corresponding mutable tree node based on a DOM node
+  FindElement,
 }
