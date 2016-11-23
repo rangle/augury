@@ -232,20 +232,21 @@ bt-injector-tree {
     background-color: #313131;
   }
 
+
+  & .select-element > svg > * > * > * > polygon {
+    fill: #FFCC33;
+  }
+
+  & .select-element > svg > * > * > * > path {
+    stroke: #FFCC33;
+  }
+
   & .select-element-active > svg > * > * > * > polygon {
-    fill: #ccc;
+    fill: #A28AD0;
   }
 
   & .select-element-active > svg > * > * > * > path {
-    stroke: #ccc;
-  }
-
-  & .select-element-active > svg > * > * > * > polygon {
-    fill: #4280EC;
-  }
-  
-  & .select-element-active > svg > * > * > * > path {
-    stroke: #4280EC;
+    stroke: #A28AD0;
   }
 
 
