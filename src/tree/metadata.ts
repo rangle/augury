@@ -1,10 +1,10 @@
-import { Subscriber } from 'rxjs/Subscriber';
-import { Observable } from 'rxjs/Observable';
-import { Subject, AnonymousSubject, SubjectSubscriber } from 'rxjs/Subject';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GroupedObservable } from 'rxjs/operator/groupBy';
+import {Subscriber} from 'rxjs/Subscriber';
+import {Observable} from 'rxjs/Observable';
+import {Subject, AnonymousSubject, SubjectSubscriber} from 'rxjs/Subject';
+import {AsyncSubject} from 'rxjs/AsyncSubject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {GroupedObservable} from 'rxjs/operator/groupBy';
 
 import {Node} from './node';
 
@@ -22,14 +22,14 @@ import {
 } from '../utils';
 
 export enum ObjectType {
-  Input           = 0x1,
-  Output          = 0x2,
-  Subject         = 0x4,
-  Observable      = 0x8,
-  EventEmitter    = 0x10,
-  ViewChild       = 0x20,
-  ViewChildren    = 0x40,
-  ContentChild    = 0x80,
+  Input = 0x1,
+  Output = 0x2,
+  Subject = 0x4,
+  Observable = 0x8,
+  EventEmitter = 0x10,
+  ViewChild = 0x20,
+  ViewChildren = 0x40,
+  ContentChild = 0x80,
   ContentChildren = 0x100,
 }
 
@@ -52,7 +52,8 @@ export interface InstanceWithMetadata {
 // metadata into two objects, a lot of code that depends on reference equality is
 // going to get broken! So do not change this!
 export const instanceWithMetadata = (debugElement, node: Node, instance) => {
-  if (node == null || instance == null) {
+
+  if (node == null) {
     return null;
   }
 
@@ -62,51 +63,52 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
 
   const providers = debugElement.providerTokens.map(t => debugElement.injector.get(t));
 
-  recurse(instance,
-    obj => {
-      const update = (key: string, flag: ObjectType, additionalProps) => {
-        const existing = components.get(obj);
-        if (existing) {
-          existing.push([key, flag, additionalProps]);
-        }
-        else {
-          components.set(obj, [[key, flag, additionalProps]]);
-        }
-      };
-
-      const component = componentMetadata(obj);
-      if (component) {
-        for (const input of componentInputs(component, obj)) {
-          update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});
-        }
-        for (const output of componentOutputs(component, obj)) {
-          update(output.propertyKey, ObjectType.Output, {alias: output.bindingPropertyName});
-        }
-
-        const addQuery = (decoratorType: string, objectType: ObjectType) => {
-          for (const vc of componentQueryChildren(decoratorType, component, obj)) {
-            update(vc.propertyKey, objectType, {selector: vc.selector});
+  if (instance) {
+    recurse(instance,
+      obj => {
+        const update = (key: string, flag: ObjectType, additionalProps) => {
+          const existing = components.get(obj);
+          if (existing) {
+            existing.push([key, flag, additionalProps]);
+          }
+          else {
+            components.set(obj, [[key, flag, additionalProps]]);
           }
         };
 
-        addQuery('@ViewChild', ObjectType.ViewChild);
-        addQuery('@ViewChildren', ObjectType.ViewChildren);
-        addQuery('@ContentChild', ObjectType.ContentChild);
-        addQuery('@ContentChildren', ObjectType.ContentChildren);
-      }
+        const component = componentMetadata(obj);
+        if (component) {
+          for (const input of componentInputs(component, obj)) {
+            update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});
+          }
+          for (const output of componentOutputs(component, obj)) {
+            update(output.propertyKey, ObjectType.Output, {alias: output.bindingPropertyName});
+          }
 
-      const type = objectType(obj);
-      if (type !== 0) {
-        const existing = objectMetadata.get(obj);
-        if (existing) {
-          objectMetadata.set(obj, [existing[0] | type, existing[1]]);
-        }
-        else {
-          objectMetadata.set(obj, [type, null]);
-        }
-      }
-    });
+          const addQuery = (decoratorType: string, objectType: ObjectType) => {
+            for (const vc of componentQueryChildren(decoratorType, component, obj)) {
+              update(vc.propertyKey, objectType, {selector: vc.selector});
+            }
+          };
 
+          addQuery('@ViewChild', ObjectType.ViewChild);
+          addQuery('@ViewChildren', ObjectType.ViewChildren);
+          addQuery('@ContentChild', ObjectType.ContentChild);
+          addQuery('@ContentChildren', ObjectType.ContentChildren);
+        }
+
+        const type = objectType(obj);
+        if (type !== 0) {
+          const existing = objectMetadata.get(obj);
+          if (existing) {
+            objectMetadata.set(obj, [existing[0] | type, existing[1]]);
+          }
+          else {
+            objectMetadata.set(obj, [type, null]);
+          }
+        }
+      });
+  }
   return {
     instance,
     providers,

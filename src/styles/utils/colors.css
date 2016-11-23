@@ -233,19 +233,19 @@ bt-injector-tree {
   }
 
   & .select-element-active > svg * > polygon {
-    fill: #ccc;
+    fill: #FFCC33;
   }
 
   & .select-element-active > svg * > path {
-    stroke: #ccc;
+    stroke: #FFCC33;
   }
 
   & .select-element-active > svg * > polygon {
-    fill: #4280EC;
+    fill: #A28AD0;
   }
 
   & .select-element-active > svg * > path {
-    stroke: #4280EC;
+    stroke: #A28AD0;
   }
 
 
