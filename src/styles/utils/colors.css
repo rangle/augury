@@ -87,11 +87,11 @@ bt-injector-tree {
     background-color: #E5E5E5;
   }
 
-  & .select-element-active > svg > * > * > * > polygon {
+  & .select-element > svg > * > * > * > polygon {
      fill: #5A5A5A;
   }
 
-  & .select-element-active > svg > * > * > * > path {
+  & .select-element > svg > * > * > * > path {
     stroke: #5A5A5A;
   }
 
