@@ -1,0 +1,30 @@
+<div class="clearfix">
+  <h1>
+    {{title}}
+  </h1>
+  <div class="sm-col sm-col-12 md-col-6 p1">
+    Message Board
+    <div>
+      <app-messageboard [message]="message"></app-messageboard>
+    </div>
+    Message Entry
+    <div>
+      <app-messageentry (messageEvent)="onMessageEvent($event)"></app-messageentry>
+    </div>
+  </div>
+  <div class="sm-col sm-col-12 md-col-6 border-left">
+    <div class="col col-12 px2">
+      Counter
+      <h3>Parent Count: {{count}}</h3>
+      <div class="border-bottom py2">
+        <app-counter (countEvent)="onCountEvent($event)"></app-counter>
+      </div>
+    </div>
+    <div class="col col-12 p2">
+      <div>
+        Toggler
+      </div>
+      <app-toggle></app-toggle>
+    </div>
+  </div>
+</div>
