@@ -109,7 +109,7 @@ bt-injector-tree {
 
   & .node-item-selected,
   & .node-item-selected:hover {
-    background-color: #DDD;
+    background-color: #A28AD0;
   }
 
   & .node-item-name {
@@ -124,9 +124,14 @@ bt-injector-tree {
     color: #1A1AA6;
   }
 
+  & .node-item-selected * > .node-item-value {
+    color: white;
+  }
+
   & .info-key {
     color: #8F1F87;
   }
+
 
   & .info-value {
     color: black;
@@ -243,7 +248,7 @@ bt-injector-tree {
   & .select-element-active > svg > * > * > * > polygon {
     fill: #4280EC;
   }
-  
+
   & .select-element-active > svg > * > * > * > path {
     stroke: #4280EC;
   }
