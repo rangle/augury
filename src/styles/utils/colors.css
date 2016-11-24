@@ -245,7 +245,6 @@ bt-injector-tree {
   }
 
   & .select-element-active > svg * > path {
-
     stroke: #4280EC;
   }
 
