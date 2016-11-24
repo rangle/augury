@@ -87,19 +87,19 @@ bt-injector-tree {
     background-color: #E5E5E5;
   }
 
-  & .select-element-active > svg > * > * > * > polygon {
+  & .select-element-active > svg  * > polygon {
      fill: #5A5A5A;
   }
 
-  & .select-element-active > svg > * > * > * > path {
+  & .select-element-active > svg * > path {
     stroke: #5A5A5A;
   }
 
-  & .select-element-active > svg > * > * > * > polygon {
+  & .select-element-active > svg * > polygon {
     fill: #4280EC;
   }
 
-  & .select-element-active > svg > * > * > * > path {
+  & .select-element-active > svg * > path {
     stroke: #4280EC;
   }
 
@@ -232,19 +232,24 @@ bt-injector-tree {
     background-color: #313131;
   }
 
-  & .select-element-active > svg > * > * > * > polygon {
+  & .select-element-active > svg  * > polygon {
     fill: #ccc;
   }
 
-  & .select-element-active > svg > * > * > * > path {
+  & .select-element-active > svg * > path {
     stroke: #ccc;
   }
 
-  & .select-element-active > svg > * > * > * > polygon {
+  & .select-element-active > svg * > polygon {
     fill: #4280EC;
   }
+<<<<<<< Updated upstream
   
   & .select-element-active > svg > * > * > * > path {
+=======
+
+  & .select-element-active > svg * > path {
+>>>>>>> Stashed changes
     stroke: #4280EC;
   }
 
