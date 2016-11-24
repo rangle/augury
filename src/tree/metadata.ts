@@ -63,58 +63,67 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
 
   const providers = debugElement.providerTokens.map(t => debugElement.injector.get(t));
 
-  if (instance) {
-    recurse(instance,
-      obj => {
-        const update = (key: string, flag: ObjectType, additionalProps) => {
-          const existing = components.get(obj);
-          if (existing) {
-            existing.push([key, flag, additionalProps]);
-          }
-          else {
-            components.set(obj, [[key, flag, additionalProps]]);
+  const result = {
+    instance,
+    providers,
+    metadata: [],
+    componentMetadata: [],
+  };
+
+  if (!instance) {
+    return result;
+  }
+
+  recurse(instance,
+    obj => {
+      const update = (key: string, flag: ObjectType, additionalProps) => {
+        const existing = components.get(obj);
+        if (existing) {
+          existing.push([key, flag, additionalProps]);
+        }
+        else {
+          components.set(obj, [[key, flag, additionalProps]]);
+        }
+      };
+
+      const component = componentMetadata(obj);
+      if (component) {
+        for (const input of componentInputs(component, obj)) {
+          update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});
+        }
+        for (const output of componentOutputs(component, obj)) {
+          update(output.propertyKey, ObjectType.Output, {alias: output.bindingPropertyName});
+        }
+
+        const addQuery = (decoratorType: string, objectType: ObjectType) => {
+          for (const vc of componentQueryChildren(decoratorType, component, obj)) {
+            update(vc.propertyKey, objectType, {selector: vc.selector});
           }
         };
 
-        const component = componentMetadata(obj);
-        if (component) {
-          for (const input of componentInputs(component, obj)) {
-            update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});
-          }
-          for (const output of componentOutputs(component, obj)) {
-            update(output.propertyKey, ObjectType.Output, {alias: output.bindingPropertyName});
-          }
+        addQuery('@ViewChild', ObjectType.ViewChild);
+        addQuery('@ViewChildren', ObjectType.ViewChildren);
+        addQuery('@ContentChild', ObjectType.ContentChild);
+        addQuery('@ContentChildren', ObjectType.ContentChildren);
+      }
 
-          const addQuery = (decoratorType: string, objectType: ObjectType) => {
-            for (const vc of componentQueryChildren(decoratorType, component, obj)) {
-              update(vc.propertyKey, objectType, {selector: vc.selector});
-            }
-          };
-
-          addQuery('@ViewChild', ObjectType.ViewChild);
-          addQuery('@ViewChildren', ObjectType.ViewChildren);
-          addQuery('@ContentChild', ObjectType.ContentChild);
-          addQuery('@ContentChildren', ObjectType.ContentChildren);
+      const type = objectType(obj);
+      if (type !== 0) {
+        const existing = objectMetadata.get(obj);
+        if (existing) {
+          objectMetadata.set(obj, [existing[0] | type, existing[1]]);
         }
-
-        const type = objectType(obj);
-        if (type !== 0) {
-          const existing = objectMetadata.get(obj);
-          if (existing) {
-            objectMetadata.set(obj, [existing[0] | type, existing[1]]);
-          }
-          else {
-            objectMetadata.set(obj, [type, null]);
-          }
+        else {
+          objectMetadata.set(obj, [type, null]);
         }
-      });
-  }
-  return {
-    instance,
-    providers,
-    metadata: Array.from(<any> objectMetadata),
-    componentMetadata: Array.from(<any> components),
-  };
+      }
+    });
+
+  // set result to actual values
+  result.metadata = Array.from(<any> objectMetadata);
+  result.componentMetadata = Array.from(<any> components);
+
+  return result;
 };
 
 const objectType = (object): ObjectType => {
