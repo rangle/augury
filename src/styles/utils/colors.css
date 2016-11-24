@@ -87,7 +87,7 @@ bt-injector-tree {
     background-color: #E5E5E5;
   }
 
-  & .select-element-active > svg  * > polygon {
+  & .select-element-active > svg * > polygon {
      fill: #5A5A5A;
   }
 
@@ -232,7 +232,7 @@ bt-injector-tree {
     background-color: #313131;
   }
 
-  & .select-element-active > svg  * > polygon {
+  & .select-element-active > svg * > polygon {
     fill: #ccc;
   }
 
