@@ -109,7 +109,7 @@ bt-injector-tree {
 
   & .node-item-selected,
   & .node-item-selected:hover {
-    background-color: #DDD;
+    background-color: #A28AD0;
   }
 
   & .node-item-name {
@@ -122,6 +122,10 @@ bt-injector-tree {
 
   & .node-item-value {
     color: #1A1AA6;
+  }
+
+  & .node-item-selected * > .node-item-value {
+    color: white;
   }
 
   & .info-key {
