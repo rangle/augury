@@ -1,5 +1,10 @@
 import {DebugElement} from '@angular/core';
 
+export interface Dependency {
+  type: string;
+  decorators: Array<string>;
+}
+
 export interface Property {
   key: string;
   value;

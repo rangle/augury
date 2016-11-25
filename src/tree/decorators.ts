@@ -14,6 +14,9 @@ export const propertyDecorators = (instance): Array<any> =>
 export const parameterTypes = (instance): Array<any> =>
   Reflect.getOwnMetadata('design:paramtypes', instance.constructor) || [];
 
+export const injectedParameterDecorators = (instance): Array<any> =>
+  Reflect.getOwnMetadata('parameters', instance.constructor) || [];
+
 export const iteratePropertyDecorators = (instance, fn: (key: string, decorator) => void) => {
   if (instance == null) {
     return;
