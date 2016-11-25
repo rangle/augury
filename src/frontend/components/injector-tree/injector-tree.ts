@@ -199,7 +199,13 @@ export class InjectorTree implements OnChanges {
       this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'arrow stroke-component');
     }
 
-    this.selectedNode.dependencies.forEach((dependency) => {
+    this.selectedNode.dependencies.forEach((dependency: any) => {
+      const providedForSelf = this.selectedNode.providers.reduce((prev, curr, idx, p) =>
+        prev ? prev : p[idx].key === dependency, false);
+      if (providedForSelf) {
+        return;
+      }
+
       const parent = this.parseUtils.getDependencyLink
         (this.tree, this.selectedNode.id, dependency);
       if (parent) {
