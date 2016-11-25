@@ -3,6 +3,7 @@ import {
   Input,
   ViewChild,
   SimpleChanges,
+  ElementRef
 } from '@angular/core';
 
 import {Route} from '../../../backend/utils';
@@ -33,7 +34,7 @@ export class RouterTree {
 
   private treeConfig: TreeConfig;
 
-  constructor(private userActions: UserActions) {}
+  constructor(private userActions: UserActions, private element: ElementRef) {}
 
   private getTree(): TreeConfig {
     const tree = d3.layout.tree();
@@ -61,7 +62,7 @@ export class RouterTree {
 
     const tree = this.treeConfig.tree;
     const data = this.routerTree;
-    const gEl = document.getElementsByTagName('g')[0];
+    const gEl =  this.element.nativeElement.querySelector('g');
     let i = 0;
 
     // Compute the new tree layout.
