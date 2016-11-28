@@ -15,21 +15,20 @@ const drainQueue = (port: chrome.runtime.Port, buffer: Array<any>) => {
     return;
   }
 
-  const remove = new Array<number>();
+  let removed = 0;
 
   const send = (m: Message<any>, index: number) => {
-    try {
-      port.postMessage(m);
-      remove.push(index);
-    }
-    catch (error) {} // retry later
+    port.postMessage(m);
+    ++removed;
   };
 
-  buffer.forEach(send);
-
-  for (const index of remove.reverse()) {
-    buffer.splice(index, 1);
+  try {
+    buffer.forEach(send);
+  } catch (error) {
+    // port disconnected, re-try on connect.
   }
+
+  buffer.splice(0, removed);
 };
 
 chrome.runtime.onMessage.addListener(
