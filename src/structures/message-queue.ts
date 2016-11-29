@@ -3,7 +3,7 @@ export class MessageQueue<T> {
 
   /// Empty the queue
   clear() {
-    this.queue.splice(0, this.queue.length);
+    this.queue = [];
   }
 
   /// Add a new message to the queue
@@ -13,6 +13,8 @@ export class MessageQueue<T> {
 
   /// Read all the messages in the queue and remove them in one operation
   dequeue(): Array<T> {
-    return this.queue.splice(0, this.queue.length);
+    const q = this.queue;
+    this.queue = [];
+    return q;
   }
 }
