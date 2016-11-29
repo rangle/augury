@@ -4,7 +4,7 @@ import {
   ElementRef
 } from '@angular/core';
 
-declare const JSONFormatter:any;
+declare const JSONFormatter: any;
 
 @Component({
   selector: 'bt-render-object',
@@ -12,14 +12,14 @@ declare const JSONFormatter:any;
   styles: [require('to-string!style!./render-object.css')],
 })
 export class RenderObject {
-  @Input() private object:any;
+  @Input() private object: any;
 
-  constructor(private elementRef:ElementRef) {
+  constructor(private elementRef: ElementRef) {
   }
 
   ngAfterViewChecked() {
     const el = this.elementRef.nativeElement;
-    
+
     if (el.hasChildNodes()) {
       while (el.hasChildNodes()) {
         el.removeChild(el.lastChild);
@@ -40,7 +40,7 @@ export class RenderObject {
     );
   }
 
-  static generateOutput(obj:Object):any {
+  static generateOutput(obj: Object): any {
     let formatter = new JSONFormatter(obj, 0, {
       hoverPreviewEnabled: false,
       hoverPreviewArrayCount: 0,
