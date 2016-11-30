@@ -35,8 +35,7 @@ export class InjectorTree implements OnChanges {
 
   @Input() tree: MutableTree;
   @Input() selectedNode: Node;
-
-  @Output() selectComponent: EventEmitter<any> = new EventEmitter<any>();
+  @Input() selectNode: EventEmitter<any>;
 
   private parentHierarchy;
   private parentHierarchyDisplay;
@@ -48,7 +47,7 @@ export class InjectorTree implements OnChanges {
   ) { }
 
   private onSelectComponent(component: any): void {
-    this.selectComponent.emit(component);
+    this.selectNode.emit(component);
   }
 
   ngOnChanges() {
