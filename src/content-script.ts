@@ -3,7 +3,6 @@ import {
   MessageFactory,
   MessageType,
   messageJumpContext,
-  browserSubscribe,
   browserSubscribeDispatch,
   browserSubscribeOnce,
 } from './communication';

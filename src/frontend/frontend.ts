@@ -64,6 +64,7 @@ import {NodeOpenTag} from './components/node-item/node-open-tag';
 import {PropertyEditor} from './components/property-editor/property-editor';
 import {PropertyValue} from './components/property-value/property-value';
 import {RenderState} from './components/render-state/render-state';
+import {RenderObject} from './components/render-object/render-object';
 import {RouterInfo} from './components/router-info/router-info';
 import {RouterTree} from './components/router-tree/router-tree';
 import {Search} from './components/search/search';
@@ -89,7 +90,6 @@ class App {
   private selectedNode: Node;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
-  private theme: Theme;
   private tree: MutableTree;
   private error: ApplicationError;
   private activateDOMSelection: boolean = false;
@@ -268,27 +268,28 @@ class App {
 
     const m = MessageFactory.selectComponent(node, node.isComponent);
 
-    if (node.isComponent) {
-      const promise = this.directConnection.handleImmediate(m)
-        .then(response => {
-          if (typeof beforeLoad === 'function') {
-            beforeLoad();
-          }
+    const promise = this.directConnection.handleImmediate(m)
+      .then(response => {
+        if (typeof beforeLoad === 'function') {
+          beforeLoad();
+        }
 
-          const {instance, metadata, componentMetadata} = response;
+        const {
+          instance,
+          metadata,
+          providers,
+          componentMetadata,
+        } = response;
 
-          return {
-            instance,
-            metadata: new Map(metadata),
-            componentMetadata: new Map(componentMetadata),
-          };
-        });
+        return {
+          instance,
+          providers,
+          metadata: new Map(metadata),
+          componentMetadata: new Map(componentMetadata),
+        };
+      });
 
-      this.componentState.wait(node, promise);
-    }
-    else {
-      this.componentState.wait(node, this.directConnection.handleImmediate(m).then(() => null));
-    }
+    this.componentState.wait(node, promise);
   }
 
   private onInspectElement(node: Node) {
@@ -369,6 +370,7 @@ const declarations = [
   PropertyEditor,
   PropertyValue,
   RenderState,
+  RenderObject,
   RouterInfo,
   RouterTree,
   Search,
