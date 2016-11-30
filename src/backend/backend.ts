@@ -3,7 +3,6 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
 import {
-  Metadata,
   MutableTree,
   Node,
   Path,
@@ -187,9 +186,7 @@ const messageHandler = (message: Message<any>) => {
         // properties of each node on the tree that would be a performance
         // killer, so we only send the componentInstance values for the
         // node that has been selected.
-        if (message.content.requestInstance) {
-          return getComponentInstance(previousTree, node);
-        }
+        return getComponentInstance(previousTree, node);
       });
 
     case MessageType.UpdateProperty:
@@ -235,7 +232,7 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
-      return instanceWithMetadata(node, probed.componentInstance);
+      return instanceWithMetadata(probed, node, probed.componentInstance);
     }
   }
   return null;

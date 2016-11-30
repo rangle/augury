@@ -34,5 +34,5 @@ if (!handler()) {
   };
 
   unsubscribe = subscribe();
-};
+}
 

@@ -1,0 +1,56 @@
+.dark * > .json-formatter-key {
+  color: #A28AD0!important;
+}
+.dark * .json-formatter-string {
+  color: #FFCC33!important;
+}
+.dark * .json-formatter-constructor-name {
+  color: #BDC6CF!important;
+  font-weight: bold;
+}
+.dark * .json-formatter-number {
+  color: #A28AD0!important;
+}
+.dark * .json-formatter-bracket {
+  color: #A28AD0!important;
+}
+.dark * > .json-formatter-row a {
+  color: #A5A5A5!important;
+}
+.dark * > .json-formatter-empty {
+  color: #FFCC33!important;
+}
+.dark * > .json-formatter-null {
+  color: #FFCC33!important;
+}
+.dark * > .json-formatter-false {
+  color: #FFCC33!important;
+}
+.dark * > .json-formatter-function {
+  color: #FFCC33!important;
+}
+.dark * > .json-formatter-undefined {
+  color: #FFCC33!important;
+}
+.dark * > .json-formatter-boolean {
+  color: #FFCC33!important;
+}
+
+.light * > .json-formatter-key {
+  color: #8F1F87!important;
+}
+.light * .json-formatter-string {
+  color: black!important;
+}
+.light * .json-formatter-constructor-name {
+  color: black!important;
+}
+.light * .json-formatter-number {
+  color: black!important;
+}
+.light * .json-formatter-bracket {
+  color: black!important;
+}
+.light * > .json-formatter-row a {
+  color: black!important;
+}

@@ -9,7 +9,6 @@ import {
 
 import {ComponentLoadState} from '../../state';
 
-import {UserActions} from '../../actions/user-actions/user-actions';
 
 import {
   ComponentMetadata,
@@ -28,6 +27,7 @@ export class ComponentInfo {
   @Input() private node: Node;
   @Input() private tree: MutableTree;
   @Input() private state;
+  @Input() private providers: Array<any>;
   @Input() private metadata: Metadata;
   @Input() private componentMetadata: ComponentMetadata;
   @Input() private loadingState: ComponentLoadState;
@@ -37,7 +37,6 @@ export class ComponentInfo {
   private changeDetectionStrategies = ChangeDetectionStrategy;
 
   private ComponentLoadState = ComponentLoadState;
-
   private path: Path;
 
   ngOnChanges() {
@@ -76,6 +75,10 @@ export class ComponentInfo {
     return this.node &&
       this.node.description &&
       this.node.description.length > 0;
+  }
+
+  private get hasInstanceProviders() {
+    return this.providers && this.providers.length > 0;
   }
 
   private viewComponentSource() {

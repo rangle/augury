@@ -1,10 +1,10 @@
-import { Subscriber } from 'rxjs/Subscriber';
-import { Observable } from 'rxjs/Observable';
-import { Subject, AnonymousSubject, SubjectSubscriber } from 'rxjs/Subject';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { GroupedObservable } from 'rxjs/operator/groupBy';
+import {Subscriber} from 'rxjs/Subscriber';
+import {Observable} from 'rxjs/Observable';
+import {Subject, AnonymousSubject, SubjectSubscriber} from 'rxjs/Subject';
+import {AsyncSubject} from 'rxjs/AsyncSubject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {GroupedObservable} from 'rxjs/operator/groupBy';
 
 import {Node} from './node';
 
@@ -22,14 +22,14 @@ import {
 } from '../utils';
 
 export enum ObjectType {
-  Input           = 0x1,
-  Output          = 0x2,
-  Subject         = 0x4,
-  Observable      = 0x8,
-  EventEmitter    = 0x10,
-  ViewChild       = 0x20,
-  ViewChildren    = 0x40,
-  ContentChild    = 0x80,
+  Input = 0x1,
+  Output = 0x2,
+  Subject = 0x4,
+  Observable = 0x8,
+  EventEmitter = 0x10,
+  ViewChild = 0x20,
+  ViewChildren = 0x40,
+  ContentChild = 0x80,
   ContentChildren = 0x100,
 }
 
@@ -40,6 +40,7 @@ export type ComponentMetadata = Map<any, [string, ObjectType, any]>;
 export interface InstanceWithMetadata {
   instance: any;
   metadata: Metadata;
+  providers: Array<any>;
   componentMetadata: ComponentMetadata;
 }
 
@@ -50,14 +51,28 @@ export interface InstanceWithMetadata {
 // enough not to duplicate objects. If someone breaks apart the instance and the
 // metadata into two objects, a lot of code that depends on reference equality is
 // going to get broken! So do not change this!
-export const instanceWithMetadata = (node: Node, instance) => {
-  if (node == null || instance == null) {
+export const instanceWithMetadata = (debugElement, node: Node, instance) => {
+
+  if (node == null) {
     return null;
   }
 
   const objectMetadata = new Map<any, [ObjectType, any]>();
 
   const components = new Map<any, [[string, ObjectType, any]]>();
+
+  const providers = debugElement.providerTokens.map(t => debugElement.injector.get(t));
+
+  const result = {
+    instance,
+    providers,
+    metadata: [],
+    componentMetadata: [],
+  };
+
+  if (!instance) {
+    return result;
+  }
 
   recurse(instance,
     obj => {
@@ -104,11 +119,11 @@ export const instanceWithMetadata = (node: Node, instance) => {
       }
     });
 
-  return {
-    instance,
-    metadata: Array.from(<any> objectMetadata),
-    componentMetadata: Array.from(<any> components),
-  };
+  // set result to actual values
+  result.metadata = Array.from(<any> objectMetadata);
+  result.componentMetadata = Array.from(<any> components);
+
+  return result;
 };
 
 const objectType = (object): ObjectType => {
