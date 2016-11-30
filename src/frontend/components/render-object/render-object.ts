@@ -13,12 +13,18 @@ declare const JSONFormatter: any;
 })
 export class RenderObject {
   @Input() private object: any;
+  private previousObject: any;
 
   constructor(private elementRef: ElementRef) {
   }
 
   ngAfterViewChecked() {
     const el = this.elementRef.nativeElement;
+    if (this.previousObject === this.object) {
+      return;
+    }
+
+    this.previousObject = this.object;
 
     if (el.hasChildNodes()) {
       while (el.hasChildNodes()) {
@@ -26,7 +32,7 @@ export class RenderObject {
       }
     }
 
-    this.render(el);
+    return this.render(el);
   }
 
   render(el) {
