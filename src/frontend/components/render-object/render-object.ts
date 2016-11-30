@@ -17,8 +17,19 @@ export class RenderObject {
   constructor(private elementRef: ElementRef) {
   }
 
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
     const el = this.elementRef.nativeElement;
+
+    if (el.hasChildNodes()) {
+      while (el.hasChildNodes()) {
+        el.removeChild(el.lastChild);
+      }
+    }
+
+    this.render(el);
+  }
+
+  render(el) {
     if (Array.isArray(this.object)) {
       return this.object
         .map(RenderObject.generateOutput)

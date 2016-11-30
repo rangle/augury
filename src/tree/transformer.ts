@@ -129,22 +129,21 @@ export const transform = (path: Path,
   return node;
 };
 
-export const recursiveSearch =
-    (children: any[], test: (element) => boolean): Array<any> => {
+export const recursiveSearch = (children: any[], test: (element) => boolean): Array<any> => {
   const result = new Array<any>();
 
-    for (const c of children) {
-      if (test(c)) {
-        result.push(c);
-      }
-      else {
-        Array.prototype.splice.apply(result,
-          (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
-      }
+  for (const c of children) {
+    if (test(c)) {
+      result.push(c);
     }
+    else {
+      Array.prototype.splice.apply(result,
+        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
+    }
+  }
 
-    return result;
-  };
+  return result;
+};
 
 export const matchingChildren =
   (element, test: (element) => boolean): Array<any> => {
@@ -189,7 +188,7 @@ const getChangeDetection = (metadata): number => {
     metadata.changeDetection !== null) {
     return metadata.changeDetection;
   } else {
-    return 1; // Changed
+    return 1;
   }
 };
 
