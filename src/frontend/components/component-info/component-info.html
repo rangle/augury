@@ -4,21 +4,21 @@
       {{ node && node.name || 'No component selected' }}
       &nbsp;
       <a href="#"
-        class="red-1 node-item-property no-highlight"
-        *ngIf="node && node.name && node.isComponent"
-        (click)="viewComponentSource()">
+         class="red-1 node-item-property no-highlight"
+         *ngIf="node && node.name && node.isComponent"
+         (click)="viewComponentSource()">
         (View Source)
-        </a>
+      </a>
     </h4>
     <span class="h4 regular right primary-color no-highlight"
-      *ngIf="node">
+          *ngIf="node">
       ($a in Console)
     </span>
   </div>
 
   <div
-     *ngIf="node && node.changeDetection"
-     class="section-title bg-darken-1 bg-panel primary-color pointer border-bottom py2 px3">
+    *ngIf="node && node.changeDetection"
+    class="section-title bg-darken-1 bg-panel primary-color pointer border-bottom py2 px3">
     <span class="info-key">Change Detection: </span>{{changeDetectionStrategies[node.changeDetection]}}
   </div>
 
@@ -26,7 +26,7 @@
     <accordion sectionTitle="Properties" *ngIf="hasProperties" [defaultExpanded]="true">
       <div section-content>
         <ul class="list-reset m0"
-          *ngIf="node && node.description">
+            *ngIf="node && node.description">
           <bt-property-value
             *ngFor="let property of node.description"
             [key]="property.key"
@@ -36,16 +36,11 @@
       </div>
     </accordion>
 
-    <accordion sectionTitle="Providers" *ngIf="hasProviders" [defaultExpanded]="true">
+    <accordion sectionTitle="Instance Providers" *ngIf="hasInstanceProviders && !hasState" [defaultExpanded]="true">
       <div section-content>
-        <span *ngFor="let provider of node.providers">
-          <p class="m1 bold legible-color">{{provider.key}}</p>
-          <bt-property-value
-            *ngFor="let property of provider.value"
-            [key]="property.key"
-            [value]="property.value">
-          </bt-property-value>
-        </span>
+        <bt-render-object
+          [object]="providers">
+        </bt-render-object>
       </div>
     </accordion>
 
@@ -67,12 +62,12 @@
           <div [ngSwitch]="loadingState">
             <template [ngSwitchCase]="ComponentLoadState.Received">
               <bt-render-state
-                 [id]="node.id"
-                 [componentMetadata]="componentMetadata"
-                 [metadata]="metadata"
-                 [level]="0"
-                 [path]="path"
-                 [state]="state">
+                [id]="node.id"
+                [componentMetadata]="componentMetadata"
+                [metadata]="metadata"
+                [level]="0"
+                [path]="path"
+                [state]="state">
               </bt-render-state>
             </template>
             <template [ngSwitchCase]="ComponentLoadState.Failed">

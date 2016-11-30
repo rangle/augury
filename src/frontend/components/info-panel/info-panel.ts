@@ -58,6 +58,12 @@ export class InfoPanel {
       : new Map<string, [ObjectType, any]>();
   }
 
+  private get providers(): Array<any> {
+    return this.instanceValue
+      ? this.instanceValue.providers
+      : [];
+  }
+
   private get componentMetadata(): ComponentMetadata {
     return this.instanceValue
       ? this.instanceValue.componentMetadata
