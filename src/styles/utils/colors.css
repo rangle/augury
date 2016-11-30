@@ -236,11 +236,11 @@ bt-injector-tree {
     background-color: #313131;
   }
 
-  & .select-element-active > svg * > polygon {
+  & .select-element > svg * > polygon {
     fill: #FFCC33;
   }
 
-  & .select-element-active > svg * > path {
+  & .select-element > svg * > path {
     stroke: #FFCC33;
   }
 
