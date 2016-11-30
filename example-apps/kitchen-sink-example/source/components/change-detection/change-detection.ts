@@ -12,12 +12,12 @@ import {User} from './user';
 
     <button type="button" class="btn btn-primary"
       (click)="makeUserOnline(0)">
-      Make User Online (muttable)
+      Make User Online (mutable)
     </button>
 
     <button type="button" class="btn btn-success"
       (click)="makeUserOnline(1)">
-      Make User Online (imuttable)
+      Make User Online (immutable)
     </button>
 
     <user-info-default [user]="user">
