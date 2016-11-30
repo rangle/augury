@@ -27,7 +27,7 @@ export class InfoPanel {
   @Input() instanceValue: InstanceWithMetadata;
   @Input() loadingState: ComponentLoadState;
 
-  @Output() private selectNode = new EventEmitter<Node>();
+  @Output() private selectNode: EventEmitter<any> = new EventEmitter<any>();
 
   private StateTab = StateTab;
 
