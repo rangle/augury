@@ -6,7 +6,7 @@ export class Stack<T> {
   }
 
   clear() {
-    this.elements.splice(0, this.elements.length);
+    this.elements = [];
   }
 
   push(element: T) {
