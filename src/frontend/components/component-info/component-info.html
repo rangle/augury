@@ -19,7 +19,7 @@
   <div
     *ngIf="node && node.changeDetection"
     class="section-title bg-darken-1 bg-panel primary-color pointer border-bottom py2 px3">
-    <span class="info-key">Change Detection: </span>{{node.changeDetection}}
+    <span class="info-key">Change Detection: </span>{{changeDetectionStrategies[node.changeDetection]}}
   </div>
 
   <div [hidden]="!(node && node.name)">
@@ -29,6 +29,7 @@
             *ngIf="node && node.description">
           <bt-property-value
             *ngFor="let property of node.description"
+
             [key]="property.key"
             [value]="property.value">
           </bt-property-value>
