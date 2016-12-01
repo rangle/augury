@@ -9,7 +9,7 @@ export class AppComponent {
   title = 'Angular Input Output';
   count: number;
 
-  @Input() message = "Message Board";
+  @Input() message = "Jumbo Shrimp!";
 
   onCountEvent(data) {
     this.count = data;
