@@ -1,17 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/basscss/css/basscss.css";
+@import "../node_modules/basscss-btn/css/btn.css";
+@import "../node_modules/basscss-btn-sizes/css/btn-sizes.css";
+@import "../node_modules/basscss-btn-primary/css/btn-primary.css";
+@import "../node_modules/basscss-btn-outline/css/btn-outline.css";
+@import "../node_modules/basscss-forms/index.css";
+
 :root {
   font-family: 'Roboto', sans-serif;
 }
 
-.input {
-  font-family: inherit;
-  font-size: inherit;
-  display: block;
-  width: 100%;
-  height: 2.5rem;
-  padding: .5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
