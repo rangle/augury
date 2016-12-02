@@ -24,6 +24,10 @@ import {
   browserSubscribe,
 } from '../communication';
 
+import {
+  parameterTypes,
+} from '../tree/decorators';
+
 import {send} from './indirect-connection';
 
 import {
@@ -283,12 +287,13 @@ export const rootsWithRouters = () => {
   const routers = [];
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
-    if (element == null ||
-      element.componentInstance == null ||
-      element.componentInstance.router == null) {
-      continue;
+    const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
+      prev ? prev : p[idx].name === 'Router' ? p[idx] : null, null);
+    if (routerFn &&
+        element.componentInstance.router &&
+        element.componentInstance.router instanceof routerFn) {
+      routers.push(element.componentInstance.router);
     }
-    routers.push(element.componentInstance.router);
   }
 
   return routers;
