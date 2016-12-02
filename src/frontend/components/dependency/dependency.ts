@@ -32,7 +32,7 @@ export class Dependency {
 
   constructor(private userActions: UserActions) {}
 
-  private get dependencies(): Array<string> {
+  private get dependencies(): Array<{[key: string]: any}> {
     if (this.selectedNode == null) {
       return [];
     }
@@ -83,9 +83,11 @@ export class Dependency {
     const dependents = new Array<Node>();
 
     this.tree.recurseAll(node => {
-      if (node.dependencies.indexOf(dependency) >= 0) {
-        dependents.push(node);
-      }
+      this.dependencies.map((dep: any) => {
+        if (dep.type === dependency) {
+          dependents.push(node);
+        }
+      });
     });
 
     return dependents;

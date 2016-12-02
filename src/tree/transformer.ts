@@ -3,6 +3,7 @@ import * as clone from 'clone';
 import {
   Description,
   Property,
+  Dependency,
 } from '../backend/utils/description';
 
 import {
@@ -21,6 +22,7 @@ import {
   componentOutputs,
   parameterTypes,
   propertyDecorators,
+  injectedParameterDecorators,
 } from './decorators';
 
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
@@ -192,9 +194,14 @@ const getChangeDetection = (metadata): number => {
   }
 };
 
-const getDependencies = (instance): Array<string> => {
+const getDependencies = (instance): Array<Dependency> => {
   if (instance == null) {
     return [];
   }
-  return parameterTypes(instance).map(param => functionName(param));
+  const paramTypes = parameterTypes(instance);
+  const parameterDecorators = injectedParameterDecorators(instance);
+  return paramTypes.map((param, i) => ({
+    type: functionName(param),
+    decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
+  }));
 };
