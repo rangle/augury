@@ -35,8 +35,7 @@ export class InjectorTree implements OnChanges {
 
   @Input() tree: MutableTree;
   @Input() selectedNode: Node;
-
-  @Output() selectComponent: EventEmitter<any> = new EventEmitter<any>();
+  @Input() selectNode: EventEmitter<any>;
 
   private parentHierarchy;
   private parentHierarchyDisplay;
@@ -48,7 +47,7 @@ export class InjectorTree implements OnChanges {
   ) { }
 
   private onSelectComponent(component: any): void {
-    this.selectComponent.emit(component);
+    this.selectNode.emit(component);
   }
 
   ngOnChanges() {
@@ -66,12 +65,12 @@ export class InjectorTree implements OnChanges {
     }
 
     this.selectedNode.dependencies.forEach(
-      dependency => {
-        if (this.selectedNode.injectors.indexOf(dependency) < 0) {
+      (dependency: any) => {
+        if (this.selectedNode.injectors.indexOf(dependency.type) < 0) {
           const parent = this.parseUtils.getDependencyLink
-            (this.tree, this.selectedNode.id, dependency);
+            (this.tree, this.selectedNode.id, dependency.type);
           if (!parent) {
-            rootElement.injectors.push(dependency);
+            rootElement.injectors.push(dependency.type);
           }
         }
       });
@@ -199,11 +198,17 @@ export class InjectorTree implements OnChanges {
       this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'arrow stroke-component');
     }
 
-    this.selectedNode.dependencies.forEach((dependency) => {
+    this.selectedNode.dependencies.forEach((dependency: any) => {
+      const providedForSelf = this.selectedNode.providers.reduce((prev, curr, idx, p) =>
+        prev ? prev : p[idx].key === dependency.type && dependency.decorators.indexOf('@SkipSelf') < 0, false);
+      if (providedForSelf) {
+        return;
+      }
+
       const parent = this.parseUtils.getDependencyLink
-        (this.tree, this.selectedNode.id, dependency);
+        (this.tree, this.selectedNode.id, dependency.type);
       if (parent) {
-        const service = positions[parent.id].injectors[dependency];
+        const service = positions[parent.id].injectors[dependency.type];
         if (service) {
           x1 = positions[this.selectedNode.id].x + 5;
           y1 = positions[this.selectedNode.id].y - 10;

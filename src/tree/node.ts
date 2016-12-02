@@ -1,4 +1,4 @@
-import {Property} from '../backend/utils/description';
+import {Property, Dependency} from '../backend/utils/description';
 
 export interface EventListener {
   name: string;
@@ -20,7 +20,7 @@ export interface Node {
   description: Array<Property>;
   nativeElement: () => HTMLElement; // null on frontend
   listeners: Array<EventListener>;
-  dependencies: Array<string>;
+  dependencies: Array<Dependency>;
   directives: Array<string>;
   injectors: Array<string>;
   providers: Array<Property>;
