@@ -1,4 +1,16 @@
 # Change Log
+## [1.2.6](https://github.com/rangle/tree/1.2.6)
+* Added mouse selection and hover highlighting of dom elements. [641](https://github.com/rangle/augury/issues/641)
+* Updated architecture overview image [#824](https://github.com/rangle/augury/issues/824)
+* Minor code optimizations [#830](https://github.com/rangle/augury/issues/830) & [#831](https://github.com/rangle/augury/issues/831)
+* Added more complete provider descriptions for non-components [#662](https://github.com/rangle/augury/issues/662)
+* Fixed issue with breadcrumb link in the injector graph [#837](https://github.com/rangle/augury/issues/837)
+* Fixed typo in 'kitchen sink' example app
+* Fixed issue with dependency origin in injector graph and added support for `@SkipSelf` [#802](https://github.com/rangle/augury/issues/802)
+* Optimized redundant posting out of message queue logic [#832](https://github.com/rangle/augury/issues/832)
+* Added first of new example apps (Input/Output demo) [#804](https://github.com/rangle/augury/issues/804)
+* Added safeguards to Router resolution [#848](https://github.com/rangle/augury/issues/848)
+
 ## [1.2.5](https://github.com/rangle/tree/1.2.5)
 * Update kitcken sink example app to Angular 2.2.0. [792](https://github.com/rangle/augury/issues/792)
 * Resolve conflict with Jira boards. [766](https://github.com/rangle/augury/issues/766)
