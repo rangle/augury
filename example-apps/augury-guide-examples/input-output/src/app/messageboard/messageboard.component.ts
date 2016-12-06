@@ -5,9 +5,7 @@ import { Component, Input } from '@angular/core';
   template: `
     <h1>{{message}}</h1>
   `,
-  styles: [`
-    border: 2px;
-  `]
+  styles: []
 })
 export class MessageBoardComponent {
   @Input() message: string;
