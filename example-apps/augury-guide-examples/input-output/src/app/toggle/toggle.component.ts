@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-toggle',
   template: `
     <div class="flex items-center">
-      <img *ngIf="state" src="../../assets/lights-on.png" class="self-center p1">
-      <img *ngIf="!state" src="../../assets/lights-off.png" class="self-center p1">
+      <img [hidden]="state" src="../../assets/lights-on.png" class="self-center p1">
+      <img [hidden]="!state" src="../../assets/lights-off.png" class="self-center p1">
       <button (click)="onToggleState()" class="f6 link dim br3 ph3 pv2 dib white bg-light-purple">{{label}}</button>
     </div>
   `,
