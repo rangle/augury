@@ -27,6 +27,9 @@ bt-injector-tree {
     &service {
       stroke: var(--lmode-igraph-service-primary);
     }
+    &dependency {
+      stroke: var(--lmode-igraph-dep-link);
+    }
   }
 
   & .fill- {

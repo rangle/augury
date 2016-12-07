@@ -11,11 +11,13 @@
    */
   --lmode-igraph-component-primary: #2828AB;
   --lmode-igraph-component-secondary: #EBF2FC;
+  --lmode-igraph-dep-link: #C6E3FF;
   --lmode-igraph-service-primary: #F05057;
   --lmode-igraph-service-secondary: #FFF0F0;
 
   --dmode-igraph-component-primary: #23a9ab;
   --dmode-igraph-component-secondary: #EBF2FC;
+  --dmode-igraph-dep-link: #C6E3FF;
   --dmode-igraph-service-primary: #F05057;
   --dmode-igraph-service-secondary: #FFF0F0;
 
