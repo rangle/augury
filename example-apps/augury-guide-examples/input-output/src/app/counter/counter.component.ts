@@ -7,10 +7,10 @@ import { Component,
   selector: 'app-counter',
   template: `
     <h3>Count: {{ count }}</h3>
-    <button (click)="onDecrement()" class="btn btn-primary">
+    <button (click)="onDecrement()" class="f6 link dim br3 ph3 pv2 mb2 dib white bg-light-purple">
       -
     </button>
-    <button (click)="onIncrement()" class="btn btn-primary">
+    <button (click)="onIncrement()" class="f6 link dim br3 ph3 pv2 mb2 dib white bg-light-purple">
       +
     </button>
   `,

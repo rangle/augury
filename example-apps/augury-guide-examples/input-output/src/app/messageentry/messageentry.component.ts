@@ -11,11 +11,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
         type="text"
         ngModel
         name="message"
-        class="input self-center"
+        class="input-reset ba br3 b--black-20 pa2 mb2 db w-50"
         placeholder="Type a message" />
       <button
         type="submit"
-        class="btn btn-primary self-center caps">
+        class="f6 link dim br3 ph3 pv2 mb2 dib white bg-light-purple">
         Send
       </button>
     </form>
