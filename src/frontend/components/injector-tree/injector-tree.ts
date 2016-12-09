@@ -20,7 +20,7 @@ import {
 } from '../../../tree';
 
 const START_X: number = 20;
-const START_Y: number = 30;
+const START_Y: number = 70;
 const NODE_INCREMENT_X: number = 100;
 const NODE_INCREMENT_Y: number = 60;
 const NODE_RADIUS: number = 8;
@@ -83,6 +83,14 @@ export class InjectorTree implements OnChanges {
     if (this.tree == null) {
       return;
     }
+
+    // render legend
+    this.graphUtils.addText(this.svg, 5, 15, 'Dependency Origin');
+    this.graphUtils.addLine(this.svg, 30, 33, 83, 30, 'stroke-dependency origin dashed5');
+
+    // this.addNodeAndText(80, 25, 'Self-Provided', 'fill-component stroke-component');
+    this.graphUtils.addText(this.svg, 150, 15, 'Self Provided');
+    this.graphUtils.addCircle(this.svg, 195, 30, NODE_RADIUS, 'fill-dependency stroke-dependency provided-here');
 
     let posX, posY, x1, y1, x2, y2;
 
