@@ -1,9 +1,11 @@
 import {Component, Inject} from '@angular/core';
 
 import Service2 from '../../services/service2';
+import Service4 from '../../services/service4';
 
 @Component({
   selector: 'component2',
+  providers: [ Service4],
   template: `
     <p>component2 init service2</p>
     {{service2Value}}

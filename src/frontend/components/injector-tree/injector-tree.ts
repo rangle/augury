@@ -90,16 +90,37 @@ export class InjectorTree implements OnChanges {
       const nodeX = START_X;
       const nodeY = START_Y + NODE_INCREMENT_Y * hierarchyIdx;
 
-      node.dependencies.forEach((dependency, j: number) => {
-        const injectorX = nodeX + NODE_INCREMENT_X + NODE_INCREMENT_X * j;
+      node.dependencies.forEach((dependency, depIndex: number) => {
+        const parent = this.parseUtils.getDependencyProvider(this.tree, node.id, dependency);
+        const injectorX = nodeX + NODE_INCREMENT_X + NODE_INCREMENT_X * depIndex;
 
         x1 = injectorX - NODE_INCREMENT_X + NODE_RADIUS;
         y1 = nodeY;
         x2 = injectorX - NODE_RADIUS;
         y2 = nodeY;
-        this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-service');
+        this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency');
 
-        this.addNodeAndText(injectorX, nodeY, dependency.type, 'fill-service stroke-service');
+        const selfProvides = parent === node;
+
+        this.addNodeAndText(injectorX, nodeY, dependency.type,
+          `fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`);
+
+        // draw dependency links (if injectable was provided higher than current node)
+        if (selfProvides) {
+          // provides dependency for itself
+          return;
+        }
+
+        // no parent means 'root'. TODO:(steven.kampen) Improve with NgModule context
+        const parentIdx = !parent ? 0 : this.parentHierarchy.reduce((prev, curr, idx, p) =>
+          prev >= 0 ? prev : p[idx].name === parent.name ? idx : prev, -1);
+
+        x1 = START_X + NODE_INCREMENT_X * (depIndex + 1);
+        y1 = START_Y + hierarchyIdx * NODE_INCREMENT_Y;
+        x2 = START_X;
+        y2 = START_Y + NODE_INCREMENT_Y * parentIdx;
+
+        this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency origin dashed5');
 
       });
 
@@ -111,27 +132,6 @@ export class InjectorTree implements OnChanges {
         this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'arrow stroke-component');
       }
 
-      // draw dependency links (if injectable was provided higher than current node)
-      node.dependencies.forEach((dependency: any, depIndex: number) => {
-        const providedForSelf = node.providers.reduce((prev, curr, idx, p) =>
-          prev ? prev : p[idx].key === dependency.type && dependency.decorators.indexOf('@SkipSelf') < 0, false);
-        if (providedForSelf) {
-          return;
-        }
-
-        const parent = this.parseUtils.getDependencyLink(this.tree, node.id, dependency.type);
-
-        // no parent means 'root'. TODO:(steven.kampen) Improve with NgModule context
-        const parentIdx = !parent ? 0 : this.parentHierarchy.reduce((prev, curr, idx, p) =>
-          prev >= 0 ? prev : p[idx].name === parent.name ? idx : prev, -1);
-
-        x1 = START_X + NODE_INCREMENT_X * (depIndex + 1);
-        y1 = START_Y + hierarchyIdx * NODE_INCREMENT_Y;
-        x2 = START_X;
-        y2 = START_Y + NODE_INCREMENT_Y * parentIdx;
-
-        this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency dashed5');
-      });
       this.addNodeAndText(nodeX, nodeY, node.name, 'fill-component stroke-component');
     });
 

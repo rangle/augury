@@ -24,14 +24,13 @@ bt-injector-tree {
       stroke: var(--lmode-igraph-component-primary);
     }
 
-    &service {
-      stroke: var(--lmode-igraph-service-primary);
-    }
     &dependency {
-      stroke: var(--lmode-igraph-dep-link);
+      stroke: var(--lmode-igraph-dependency-primary);
     }
   }
-
+  & .stroke-dependency.origin {
+    stroke: var(--lmode-igraph-dependency-legend-origin);
+  }
   & .fill- {
     &root {
       fill: var(--lmode-igraph-component-primary);
@@ -41,9 +40,12 @@ bt-injector-tree {
       fill: #EBF2FC;
     }
 
-    &service {
+    &dependency {
       fill: #FFF0F0;
     }
+  }
+  & .fill-dependency.provided-here {
+    fill: var(--lmode-igraph-dependency-legend-provided);
   }
 }
 

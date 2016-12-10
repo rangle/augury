@@ -6,6 +6,8 @@ import {
   serializePath,
 } from '../../tree';
 
+import {Dependency} from '../../backend/utils/description';
+
 export class ParseUtils {
   getParentNodeIds(nodeId: string) {
     const path = deserializePath(nodeId);
@@ -19,17 +21,32 @@ export class ParseUtils {
     return result;
   }
 
-  getDependencyLink (tree: MutableTree, nodeId: string, dependency: string) {
+  getNodeDependency(node: Node, dependencyName: string) {
+    return node.dependencies.reduce((prev, curr, idx, p) =>
+      prev ? prev : p[idx].type === dependencyName ? p[idx] : null, null);
+  }
+
+  checkNodeProvidesDependency(node: Node, dependency: Dependency) {
+    return node.providers.reduce((prev, curr, idx, p) =>
+      prev ? prev : p[idx].key === dependency.type, false);
+  }
+
+  getDependencyProvider(tree: MutableTree, nodeId: string, dependency: Dependency) {
     if (tree == null) {
       return null;
+    }
+
+    const node = tree.lookup(nodeId);
+    if (this.checkNodeProvidesDependency(node, dependency)
+      && dependency.decorators.indexOf('@SkipSelf') < 0) {
+      return node;
     }
 
     const nodeIds = this.getParentNodeIds(nodeId);
 
     for (const id of nodeIds) {
       const matchingNode = tree.lookup(id);
-      if (matchingNode &&
-          matchingNode.injectors.indexOf(dependency) >= 0) {
+      if (this.checkNodeProvidesDependency(matchingNode, dependency)) {
         return matchingNode;
       }
     }

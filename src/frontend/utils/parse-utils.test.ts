@@ -116,6 +116,12 @@ test('utils/parse-utils: getParentNodeIds', t => {
 
 test('utils/parse-utils: getDependencyLink', t => {
   t.plan(1);
+  const node = {
+    id: '0 2 2',
+    name: 'four',
+    injectors: ['service1'],
+    providers: []
+  };
   const mockData = [{
     id: '0',
     name: 'mockData',
@@ -131,22 +137,18 @@ test('utils/parse-utils: getDependencyLink', t => {
       children: [{
         id: '0 2 1',
         name: 'three'
-      }, {
-        id: '0 2 2',
-        name: 'four',
-        injectors: ['service1']
-      }]
+      }, node]
     }]
   }];
 
   const nodeId = '0 2 2';
-  const dependency = 'service1';
+  const dependency = { type: 'service1', decorators: [] };
 
   const parseUtils: ParseUtils = new ParseUtils();
 
   const tree = createTree(<any> mockData);
 
-  const output = parseUtils.getDependencyLink(tree, nodeId, dependency);
+  const output = parseUtils.getDependencyProvider(tree, (<any>node), dependency);
 
   t.deepEqual(mockData[0], output, 'result should be equal to output');
   t.end();
