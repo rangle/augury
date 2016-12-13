@@ -34,6 +34,7 @@ export class AppTrees {
   @Input() private options: Options;
   @Input() private routerTree: Array<Route>;
   @Input() private tree: Array<Node>;
+  @Input() private ngModules: Array<any>;
 
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;
@@ -60,6 +61,10 @@ export class AppTrees {
     title: 'Router Tree',
     selected: false,
     tab: Tab.RouterTree,
+  }, {
+    title: 'NgModules',
+    selected: false,
+    tab: Tab.NgModules,
   }];
 
   onTabSelectionChanged(index: number) {

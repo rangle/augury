@@ -56,6 +56,8 @@ import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
 import {ComponentTree} from './components/component-tree/component-tree';
+import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
+import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
 import {Dependency} from './components/dependency/dependency';
 import {InjectorTree} from './components/injector-tree/injector-tree';
 import {NodeAttributes} from './components/node-item/node-attributes';
@@ -87,6 +89,7 @@ class App {
 
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
+  private ngModules: Array<any> = null;
   private selectedNode: Node;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
@@ -196,6 +199,10 @@ class App {
         break;
       case MessageType.RouterTree: // TODO(cbond): support router tree diff
         this.routerTree = msg.content;
+        respond();
+        break;
+      case MessageType.NgModules:
+        this.ngModules = msg.content;
         respond();
         break;
       case MessageType.FindElement:
@@ -361,6 +368,8 @@ const declarations = [
   AppTrees,
   ComponentInfo,
   ComponentTree,
+  NgModuleInfo,
+  NgModuleConfigView,
   Dependency,
   InfoPanel,
   InjectorTree,
