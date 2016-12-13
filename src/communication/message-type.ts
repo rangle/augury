@@ -33,6 +33,9 @@ export enum MessageType {
   /// Transmit the delta of two trees
   TreeDiff,
 
+  /// Send the list of NgModules
+  NgModules,
+
   /// Send the complete router tree (TODO(cbond: support diff))
   RouterTree,
 

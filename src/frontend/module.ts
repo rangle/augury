@@ -26,6 +26,8 @@ import {TreeView} from './components/tree-view/tree-view';
 import {RenderError} from './components/render-error/render-error';
 import {InfoPanel} from './components/info-panel/info-panel';
 import {UserActions} from './actions/user-actions/user-actions';
+import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
+import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
 
 import {
   Connection,
@@ -69,6 +71,8 @@ import {App} from './app';
     StateValues,
     TabMenu,
     TreeView,
+    NgModuleInfo,
+    NgModuleConfigView,
   ],
   providers: [
     Connection,

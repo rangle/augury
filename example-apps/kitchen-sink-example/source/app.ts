@@ -8,6 +8,14 @@ import {
 
 import {RouterModule} from '@angular/router';
 
+
+@NgModule({
+  imports: [
+    FormsModule,
+  ],
+})
+class TestModule {}
+
 import {
   APP_BASE_HREF,
   HashLocationStrategy,
@@ -26,10 +34,6 @@ import Service2 from './services/service2';
 import Service3 from './services/service3';
 import Service4 from './services/service4';
 
-import DITree from './components/di-tree/di-tree';
-
-import Home from './components/home';
-
 class MyLocalization extends NgLocalization {
    getPluralCategory(value: any) {
       if (value < 5) {
@@ -40,6 +44,7 @@ class MyLocalization extends NgLocalization {
 
 @NgModule({
   imports:      [
+    TestModule,
     BrowserModule,
     FormsModule,
     RouterModule,
@@ -61,7 +66,6 @@ class MyLocalization extends NgLocalization {
     Service2,
     Service3,
     Service4,
-    DITree,
   ]
 })
 class AppModule {}

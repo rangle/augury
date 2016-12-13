@@ -1,0 +1,23 @@
+<main class="flex-grow flex flex-column">
+  <div *ngIf="ngModules">
+    <div *ngFor="let moduleName of ngModules.names">
+      <h3>{{moduleName}}</h3>
+      <ng-module-config-view
+        [config]="ngModules.configs[moduleName]"
+        configKey="imports">
+      </ng-module-config-view>
+      <ng-module-config-view
+        [config]="ngModules.configs[moduleName]"
+        configKey="exports">
+      </ng-module-config-view>
+      <ng-module-config-view
+        [config]="ngModules.configs[moduleName]"
+        configKey="declarations">
+      </ng-module-config-view>
+      <ng-module-config-view
+        [config]="ngModules.configs[moduleName]"
+        configKey="providers">
+      </ng-module-config-view>
+    </div>
+  </div>
+</main>

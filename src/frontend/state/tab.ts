@@ -3,7 +3,10 @@ export enum Tab {
   ComponentTree,
 
   /// A tree of router paths
-  RouterTree
+  RouterTree,
+
+  /// A list of loaded NgModules
+  NgModules,
 }
 
 export enum StateTab {

@@ -54,6 +54,7 @@ export class App {
 
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
+  private ngModules: Array<any> = null;
   private selectedNode: Node;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
@@ -163,6 +164,10 @@ export class App {
         break;
       case MessageType.RouterTree: // TODO(cbond): support router tree diff
         this.routerTree = msg.content;
+        respond();
+        break;
+      case MessageType.NgModules:
+        this.ngModules = msg.content;
         respond();
         break;
       case MessageType.FindElement:
