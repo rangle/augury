@@ -86,7 +86,7 @@ export class InjectorTree implements OnChanges {
 
     // render legend
     this.graphUtils.addText(this.svg, 5, 15, 'Dependency Origin');
-    this.graphUtils.addLine(this.svg, 30, 33, 83, 30, 'stroke-dependency origin dashed5');
+    this.graphUtils.addLine(this.svg, 33, 30, 83, 30, 'stroke-dependency origin dashed5');
 
     // this.addNodeAndText(80, 25, 'Self-Provided', 'fill-component stroke-component');
     this.graphUtils.addText(this.svg, 150, 15, 'Self Provided');
