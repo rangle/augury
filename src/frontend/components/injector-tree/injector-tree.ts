@@ -24,6 +24,7 @@ const START_Y: number = 70;
 const NODE_INCREMENT_X: number = 100;
 const NODE_INCREMENT_Y: number = 60;
 const NODE_RADIUS: number = 8;
+const MAX_LABEL_CHARS = 14;
 
 @Component({
   selector: 'bt-injector-tree',
@@ -74,9 +75,9 @@ export class InjectorTree implements OnChanges {
     this.render();
   }
 
-  private addNodeAndText(posX: number, posY: number, title: any, clazz: string) {
+  private addNodeAndText(posX: number, posY: number, title: any, clazz: string, maxChars: number = 0) {
       this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz);
-      this.graphUtils.addText(this.svg, posX - 6, posY - 15, title);
+      this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars);
   }
 
   private render() {
@@ -87,8 +88,6 @@ export class InjectorTree implements OnChanges {
     // render legend
     this.graphUtils.addText(this.svg, 5, 15, 'Dependency Origin');
     this.graphUtils.addLine(this.svg, 33, 30, 83, 30, 'stroke-dependency origin dashed5');
-
-    // this.addNodeAndText(80, 25, 'Self-Provided', 'fill-component stroke-component');
     this.graphUtils.addText(this.svg, 150, 15, 'Self Provided');
     this.graphUtils.addCircle(this.svg, 195, 30, NODE_RADIUS, 'fill-dependency stroke-dependency provided-here');
 
@@ -110,8 +109,10 @@ export class InjectorTree implements OnChanges {
 
         const selfProvides = parent === node;
 
+        // draw injected dependency name and node circle
         this.addNodeAndText(injectorX, nodeY, dependency.type,
-          `fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`);
+          `fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
+          depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS);
 
         // draw dependency links (if injectable was provided higher than current node)
         if (selfProvides) {
@@ -128,6 +129,7 @@ export class InjectorTree implements OnChanges {
         x2 = START_X;
         y2 = START_Y + NODE_INCREMENT_Y * parentIdx;
 
+        // draw dependency origin line
         this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency origin dashed5');
 
       });
@@ -137,10 +139,13 @@ export class InjectorTree implements OnChanges {
         y1 = START_Y + NODE_INCREMENT_Y * (hierarchyIdx - 1) + NODE_RADIUS;
         x2 = nodeX;
         y2 = nodeY - (20 + NODE_RADIUS);
+        // draw parent to child component line
         this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'arrow stroke-component');
       }
 
-      this.addNodeAndText(nodeX, nodeY, node.name, 'fill-component stroke-component');
+      // draw component name and node circle
+      this.addNodeAndText(nodeX, nodeY, node.name, 'fill-component stroke-component',
+        hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS);
     });
 
     this.svg.append('defs').selectAll('marker')
