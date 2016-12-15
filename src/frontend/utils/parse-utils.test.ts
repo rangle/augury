@@ -114,40 +114,49 @@ test('utils/parse-utils: getParentNodeIds', t => {
   t.end();
 });
 
-test('utils/parse-utils: getDependencyLink', t => {
+test('utils/parse-utils: getDependencyProvider', t => {
   t.plan(1);
+  const node = {
+    id: '0 1 1',
+    name: 'four',
+    injectors: ['service1'],
+    providers: [],
+  };
   const mockData = [{
     id: '0',
     name: 'mockData',
     injectors: ['service1'],
-    children: [{
-      id: '0 1',
-      name: 'one',
-      injectors: ['service2']
-    }, {
-      id: '0 2',
-      name: 'two',
-      injectors: ['service3'],
-      children: [{
-        id: '0 2 1',
-        name: 'three'
-      }, {
-        id: '0 2 2',
-        name: 'four',
-        injectors: ['service1']
-      }]
-    }]
+    providers: [{ key: 'service1' }],
+    children: [
+      {
+        id: '0 0',
+        name: 'one',
+        injectors: ['service2'],
+        providers: [],
+      },
+      {
+        id: '0 1',
+        name: 'two',
+        injectors: ['service3'],
+        providers: [],
+        children: [
+          {
+            id: '0 1 0',
+            name: 'three'
+          },
+          node,
+        ],
+      },
+    ]
   }];
 
-  const nodeId = '0 2 2';
-  const dependency = 'service1';
+  const dependency = { type: 'service1', decorators: [] };
 
   const parseUtils: ParseUtils = new ParseUtils();
 
   const tree = createTree(<any> mockData);
 
-  const output = parseUtils.getDependencyLink(tree, nodeId, dependency);
-
+  const output = parseUtils.getDependencyProvider(tree, node.id, dependency);
   t.deepEqual(mockData[0], output, 'result should be equal to output');
   t.end();
 });

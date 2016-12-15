@@ -1,10 +1,11 @@
 export class GraphUtils {
-  addText(svg: any, x: number, y: number, text: string) {
+  addText(svg: any, x: number, y: number, text: string, maxChars = 0) {
+    const fittedText = maxChars > 0 && text.length > maxChars ? `${text.slice(0, maxChars - 3)}...` : text;
     svg
       .append('text')
       .attr('x', x)
       .attr('y', y)
-      .text(text);
+      .text(fittedText);
   }
 
   addCircle(svg: any, x: number, y: number, r: number, clazz: string) {

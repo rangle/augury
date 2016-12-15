@@ -5,7 +5,7 @@ import Service4 from '../../services/service4';
 
 @Component({
   selector: 'component5',
-  providers: [Service3, Service4],
+  providers: [Service3],
   template: `
     <p>component5 init: service3, service4</p>
     {{service3Value}}
