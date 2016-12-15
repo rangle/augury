@@ -1,0 +1,11 @@
+:host th.config-label {
+  text-transform: capitalize;
+}
+:host table {
+  table-layout: fixed;
+  width: 100%;
+}
+:host table td {
+  max-width: 0;
+  overflow: hidden;
+}

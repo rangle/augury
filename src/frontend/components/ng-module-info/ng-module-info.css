@@ -1,3 +1,4 @@
 :host > main {
-  padding: .8em 1em;
+}
+:host > main > span.module-title {
 }
