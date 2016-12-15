@@ -1,5 +1,19 @@
-<h4>{{configKey | uppercase}}</h4>
-<bt-render-object *ngIf="config[configKey].length"
-  [object]="config[configKey]">
-</bt-render-object>
-<span *ngIf="!config[configKey].length">None</span>
+<table class="minwidth-100pct">
+  <thead>
+    <tr>
+      <th *ngFor="let key of keys" class="config-label primary-color pt1 pb2 m0">
+        {{key}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td *ngFor="let key of keys">
+        <bt-render-object *ngIf="config[key].length"
+          [object]="config[key]">
+        </bt-render-object>
+        <span *ngIf="!config[key].length" class="descriptive-text"><em>None</em></span>
+      </td>
+    </tr>
+  </tbody>
+<table>
