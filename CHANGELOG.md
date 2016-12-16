@@ -1,4 +1,7 @@
 # Change Log
+## [1.2.7](https://github.com/rangle/tree/1.2.7)
+* Fixed/improved injector graph to show just injected providers and their provider origin. [624](https://github.com/rangle/augury/issues/624)
+
 ## [1.2.6](https://github.com/rangle/tree/1.2.6)
 * Added mouse selection and hover highlighting of dom elements. [641](https://github.com/rangle/augury/issues/641)
 * Updated architecture overview image [#824](https://github.com/rangle/augury/issues/824)
