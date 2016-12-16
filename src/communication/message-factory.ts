@@ -110,6 +110,13 @@ export abstract class MessageFactory {
     });
   }
 
+  static ngModules(content: {[key: string]: any}): Message<void> {
+    return create({
+      messageType: MessageType.NgModules,
+      content: content,
+    });
+  }
+
   static routerTree(content: Array<MainRoute>): Message<void> {
     return create({
       messageType: MessageType.RouterTree,
