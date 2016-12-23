@@ -37,14 +37,20 @@ export class InjectorTree implements OnChanges {
   @Input() tree: MutableTree;
   @Input() selectedNode: Node;
   @Input() selectNode: EventEmitter<any>;
+  @Input() focusedNode: any;
 
   private parentHierarchy;
   private svg: any;
+  private breadcrumbs: Array<any>;
 
   constructor(
     private graphUtils: GraphUtils,
     private parseUtils: ParseUtils
   ) { }
+
+  private onFocusNode(hierarchyIndex: number, dependecyIndex: number) {
+    this.focusedNode = true;
+  }
 
   private onSelectComponent(component: any): void {
     this.selectNode.emit(component);
@@ -62,6 +68,8 @@ export class InjectorTree implements OnChanges {
 
     this.parentHierarchy = [{ name: 'root', dependencies: [] }].concat(mainHierarchy).concat([this.selectedNode]);
 
+    this.breadcrumbs = this.parentHierarchy.slice(1, this.parentHierarchy.length);
+
     let firstChild: Element;
     while (firstChild = this.graphContainer.nativeElement.firstChild) {
       this.graphContainer.nativeElement.removeChild(firstChild);
@@ -75,9 +83,10 @@ export class InjectorTree implements OnChanges {
     this.render();
   }
 
-  private addNodeAndText(posX: number, posY: number, title: any, clazz: string, maxChars: number = 0) {
-      this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz);
-      this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars);
+  private addNodeAndText(posX: number, posY: number, title: any, clazz: string, maxChars: number = 0,
+      clickFn: () => void) {
+    this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz, clickFn);
+    this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars, clickFn);
   }
 
   private render() {
@@ -92,6 +101,8 @@ export class InjectorTree implements OnChanges {
     this.graphUtils.addCircle(this.svg, 195, 30, NODE_RADIUS, 'fill-dependency stroke-dependency provided-here');
 
     let posX, posY, x1, y1, x2, y2;
+
+    const nodesToDraw = [];
 
     this.parentHierarchy.forEach((node, hierarchyIdx: number) => {
       const nodeX = START_X;
@@ -108,30 +119,24 @@ export class InjectorTree implements OnChanges {
         this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency');
 
         const selfProvides = parent === node;
-
-        // draw injected dependency name and node circle
-        this.addNodeAndText(injectorX, nodeY, dependency.type,
-          `fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
-          depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS);
-
         // draw dependency links (if injectable was provided higher than current node)
-        if (selfProvides) {
-          // provides dependency for itself
-          return;
+        if (!selfProvides) {
+          const parentIdx = !parent ? 0 : this.parentHierarchy.reduce((prev, curr, idx, p) =>
+            prev >= 0 ? prev : p[idx].name === parent.name ? idx : prev, -1);
+
+          x1 = START_X + NODE_INCREMENT_X * (depIndex + 1);
+          y1 = START_Y + hierarchyIdx * NODE_INCREMENT_Y;
+          x2 = START_X;
+          y2 = START_Y + NODE_INCREMENT_Y * parentIdx;
+
+          // draw dependency origin line
+          this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency origin dashed5');
         }
 
-        // no parent means 'root'. TODO:(steven.kampen) Improve with NgModule context
-        const parentIdx = !parent ? 0 : this.parentHierarchy.reduce((prev, curr, idx, p) =>
-          prev >= 0 ? prev : p[idx].name === parent.name ? idx : prev, -1);
-
-        x1 = START_X + NODE_INCREMENT_X * (depIndex + 1);
-        y1 = START_Y + hierarchyIdx * NODE_INCREMENT_Y;
-        x2 = START_X;
-        y2 = START_Y + NODE_INCREMENT_Y * parentIdx;
-
-        // draw dependency origin line
-        this.graphUtils.addLine(this.svg, x1, y1, x2, y2, 'stroke-dependency origin dashed5');
-
+        // draw injected dependency name and node circle
+        nodesToDraw.push([injectorX, nodeY, dependency.type,
+          `node-circle fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
+          depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS, () => this.onFocusNode(0, 0)]);
       });
 
       if (hierarchyIdx > 0) {
@@ -144,8 +149,12 @@ export class InjectorTree implements OnChanges {
       }
 
       // draw component name and node circle
-      this.addNodeAndText(nodeX, nodeY, node.name, 'fill-component stroke-component',
-        hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS);
+      nodesToDraw.push([nodeX, nodeY, node.name, 'node-circle fill-component stroke-component',
+        hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS, () => this.onFocusNode(0, 0)]);
+    });
+
+    nodesToDraw.forEach((params) => {
+      this.addNodeAndText(params[0], params[1], params[2], params[3], params[4], params[5]);
     });
 
     this.svg.append('defs').selectAll('marker')
