@@ -23,6 +23,7 @@ import {
 })
 export class InfoPanel {
   @Input() tree;
+  @Input() ngModules: {[key: string]: any};
   @Input() node;
   @Input() instanceValue: InstanceWithMetadata;
   @Input() loadingState: ComponentLoadState;

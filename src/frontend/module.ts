@@ -8,7 +8,7 @@ import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
 import {ComponentTree} from './components/component-tree/component-tree';
-import {Dependency} from './components/dependency/dependency';
+import {DependencyInfo} from './components/dependency-info/dependency-info';
 import {InjectorTree} from './components/injector-tree/injector-tree';
 import {NodeAttributes} from './components/node-item/node-attributes';
 import {NodeItem} from './components/node-item/node-item';
@@ -54,7 +54,7 @@ import {App} from './app';
     AppTrees,
     ComponentInfo,
     ComponentTree,
-    Dependency,
+    DependencyInfo,
     InfoPanel,
     InjectorTree,
     NodeAttributes,

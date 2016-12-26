@@ -12,23 +12,25 @@ import {
   Node,
 } from '../../../tree';
 
+import {Dependency} from '../../../backend/utils/description';
+
 import {Stack} from '../../../structures';
 
 @Component({
-  selector: 'bt-dependency',
-  template: require('./dependency.html'),
+  selector: 'bt-dependency-info',
+  template: require('./dependency-info.html'),
 })
-export class Dependency {
+export class DependencyInfo {
   @Input() selectedNode: Node;
   @Input() tree: MutableTree;
 
   @Output() private selectNode = new EventEmitter<Node>();
 
-  private selectedDependency: string;
+  private selectedDependency: Dependency;
 
   private dependentComponents: Array<any> = [];
 
-  private navigationStack = new Stack<string>();
+  private navigationStack = new Stack<Dependency>();
 
   constructor(private userActions: UserActions) {}
 
@@ -44,13 +46,13 @@ export class Dependency {
            this.dependentComponents.length > 0;
   }
 
-  private select(dependency: string) {
+  private select(dependency: Dependency) {
     this.selectedDependency = dependency;
 
     this.dependentComponents = this.getDependencies(dependency);
   }
 
-  private onDependencySelected(dependency: string) {
+  private onDependencySelected(dependency: Dependency) {
     if (this.selectedDependency) {
       this.navigationStack.push(this.selectedDependency);
     }
@@ -75,7 +77,7 @@ export class Dependency {
     this.dependentComponents = [];
   }
 
-  private getDependencies(dependency: string): Array<Node> {
+  private getDependencies(dependency: Dependency): Array<Node> {
     if (this.tree == null) {
       return [];
     }
@@ -84,7 +86,7 @@ export class Dependency {
 
     this.tree.recurseAll(node => {
       this.dependencies.map((dep: any) => {
-        if (dep.type === dependency) {
+        if (dep.id === dependency.id) {
           dependents.push(node);
         }
       });

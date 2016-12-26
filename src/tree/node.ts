@@ -22,7 +22,6 @@ export interface Node {
   listeners: Array<EventListener>;
   dependencies: Array<Dependency>;
   directives: Array<string>;
-  injectors: Array<string>;
   providers: Array<Property>;
   input: Array<InputProperty>;
   output: Array<OutputProperty>;

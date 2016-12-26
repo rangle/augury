@@ -34,7 +34,7 @@ export class AppTrees {
   @Input() private options: Options;
   @Input() private routerTree: Array<Route>;
   @Input() private tree: Array<Node>;
-  @Input() private ngModules: Array<any>;
+  @Input() private ngModules: {[key: string]: any};
 
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;

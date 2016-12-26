@@ -25,6 +25,8 @@ import {
   injectedParameterDecorators,
 } from './decorators';
 
+import {AUGURY_TOKEN_ID_METADATA_KEY} from '../backend/utils/parse-modules';
+
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
 /// object that is our local representation of the combined data of those two
 /// types. It is important that our object be a deep-cloned copy of the element
@@ -51,13 +53,11 @@ export const transform = (path: Path,
 
   const name = getComponentName(element);
 
-  const injectors = element.providerTokens.map(t => functionName(t));
-
   const providers = getComponentProviders(element, name).filter(p => p.key != null);
 
   const isComponent = element.componentInstance != null;
 
-  const metadata = componentMetadata(element.componentInstance);
+  const metadata = element.componentInstance ? componentMetadata(element.componentInstance.constructor) : null;
 
   const changeDetection = isComponent
     ? getChangeDetection(metadata)
@@ -75,7 +75,6 @@ export const transform = (path: Path,
     children: null, // initial value
     directives: [],
     source: element.source,
-    injectors,
     changeDetection,
     nativeElement: () => element.nativeElement, // this will be null in the frontend
     description: Description.getComponentDescription(element),
@@ -200,8 +199,9 @@ const getDependencies = (instance): Array<Dependency> => {
   }
   const paramTypes = parameterTypes(instance);
   const parameterDecorators = injectedParameterDecorators(instance);
-  return paramTypes.map((param, i) => ({
-    type: functionName(param),
+  return paramTypes.map((paramType, i) => ({
+    id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
+    name: functionName(paramType),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
 };

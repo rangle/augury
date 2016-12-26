@@ -21,6 +21,7 @@
   (selectNode)="selectNode.emit($event)"
   [hidden]="selectedTab !== StateTab.InjectorGraph"
   [tree]="tree"
+  [ngModules]="ngModules"
   [selectedNode]="node"
   [selectNode]="selectNode"
   [ngClass]="{'flex flex-auto': selectedTab === StateTab.InjectorGraph}">

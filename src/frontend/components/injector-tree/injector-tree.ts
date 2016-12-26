@@ -35,6 +35,7 @@ export class InjectorTree implements OnChanges {
   @ViewChild('graphContainer') graphContainer;
 
   @Input() tree: MutableTree;
+  @Input() ngModules: {[key: string]: any};
   @Input() selectedNode: Node;
   @Input() selectNode: EventEmitter<any>;
   @Input() focusedNode: any;
@@ -134,7 +135,7 @@ export class InjectorTree implements OnChanges {
         }
 
         // draw injected dependency name and node circle
-        nodesToDraw.push([injectorX, nodeY, dependency.type,
+        nodesToDraw.push([injectorX, nodeY, dependency.name,
           `node-circle fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
           depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS, () => this.onFocusNode(0, 0)]);
       });

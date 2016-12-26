@@ -71,7 +71,7 @@ let previousTree: MutableTree,
   onMouseOver,
   onMouseDown;
 
-const updateParsedModules = (roots: Array<any>) => {
+const parseInitialModules = (roots: Array<any>) => {
   if (roots.length) {
     messageBuffer.enqueue(MessageFactory.ngModules(parseModules(roots[0])));
   }
@@ -123,15 +123,16 @@ const bind = (root) => {
     subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
   }
 
+  // parse components and routes each time
   subscriptions.push(
     subject.debounceTime(0).subscribe(() => {
-      const rootElements = getAllAngularRootElements().map(r => ng.probe(r));
-      updateParsedModules(rootElements);
-      updateComponentTree(rootElements);
+      updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
       updateRouterTree(routerTree());
     }));
 
-  subject.next(void 0); // initial load
+  // initial load
+  subject.next(void 0);
+  parseInitialModules(getAllAngularRootElements().map(r => ng.probe(r)));
 };
 
 const checkDebug = (fn: () => void) => {

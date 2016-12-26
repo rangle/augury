@@ -88,7 +88,7 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
         }
       };
 
-      const component = componentMetadata(obj);
+      const component = obj ? componentMetadata(obj.constructor) : null;
       if (component) {
         for (const input of componentInputs(component, obj)) {
           update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});

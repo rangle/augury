@@ -5,8 +5,8 @@ import {
 
 import {functionName} from '../utils';
 
-export const classDecorators = (instance): Array<any> =>
-  Reflect.getOwnMetadata('annotations', instance.constructor) || [];
+export const classDecorators = (token): Array<any> =>
+  Reflect.getOwnMetadata('annotations', token) || [];
 
 export const propertyDecorators = (instance): Array<any> =>
   Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
@@ -31,13 +31,12 @@ export const iteratePropertyDecorators = (instance, fn: (key: string, decorator)
   }
 };
 
-export const componentMetadata = (instance) => {
-  if (instance == null) {
+export const componentMetadata = (token) => {
+  if (!token) {
     return null;
   }
 
-  return classDecorators(instance).find(d =>
-    d.constructor.toString() === '@Component');
+  return classDecorators(token).find(d => d.toString() === '@Component');
 };
 
 export const componentInputs = (metadata, instance): Array<InputProperty> => {
