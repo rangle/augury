@@ -5,7 +5,11 @@
   table-layout: fixed;
   width: 100%;
 }
-:host table td {
-  max-width: 0;
+:host table td div.label-wrapper {
+  text-overflow: ellipsis;
   overflow: hidden;
+}
+:host table td div.list-container {
+  max-height: 18em;
+  overflow-y: auto;
 }

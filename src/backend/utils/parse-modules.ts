@@ -50,7 +50,7 @@ const buildModuleDescription = (module, config) => {
     exports: flatten(config.exports || []).map(ex => parseModuleName(ex)),
     declarations: flatten(config.declarations || []).map(d => d.name),
     providers: flatten(config.providers || []).map(
-      p => typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString() : p.name),
+      p => typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString().replace(' ', ':') : p.name),
   };
 };
 
