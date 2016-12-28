@@ -43,14 +43,23 @@ const resolveTokenIdMetaData = (token) => {
   }
 };
 
+const parseProviderName = p =>
+  typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString().replace(' ', ':') : p.name;
+
 const buildModuleDescription = (module, config) => {
+  const flattenedDeclarations = flatten(config.declarations || []);
+  const flattenedProvidersFromDeclarations = flattenedDeclarations.reduce((prev, curr, i, declarations) => {
+    const componentDecoratorConfig = componentMetadata(declarations[i]);
+    return componentDecoratorConfig ? prev.concat(flatten(componentDecoratorConfig.providers || [])) : prev;
+  }, []);
+
   return {
     name: parseModuleName(module),
     imports: flatten(config.imports || []).map(im => parseModuleName(im)),
     exports: flatten(config.exports || []).map(ex => parseModuleName(ex)),
-    declarations: flatten(config.declarations || []).map(d => d.name),
-    providers: flatten(config.providers || []).map(
-      p => typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString().replace(' ', ':') : p.name),
+    declarations: flattenedDeclarations.map(d => d.name),
+    providers: flatten(config.providers || []).map(parseProviderName),
+    providersInDeclarations: flattenedProvidersFromDeclarations.map(parseProviderName),
   };
 };
 

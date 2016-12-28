@@ -10,7 +10,7 @@ import {
 })
 export class NgModuleConfigView {
   @Input() private config: {[key: string]: Array<string>};
-  private keys: Array<string> = ['imports', 'exports', 'providers', 'declarations'];
+  private keys: Array<string> = ['imports', 'exports', 'providers', 'declarations', 'providersInDeclarations'];
 
   constructor() {}
 
