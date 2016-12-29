@@ -46,7 +46,7 @@ const resolveTokenIdMetaData = (token) => {
 const parseProviderName = p =>
   typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString().replace(' ', ':') : p.name;
 
-const buildModuleDescription = (module, config) => {
+const buildModuleDescription = (module, adjacentProviders: Array<any> = [], config) => {
   const flattenedDeclarations = flatten(config.declarations || []);
   const flattenedProvidersFromDeclarations = flattenedDeclarations.reduce((prev, curr, i, declarations) => {
     const componentDecoratorConfig = componentMetadata(declarations[i]);
@@ -58,7 +58,7 @@ const buildModuleDescription = (module, config) => {
     imports: flatten(config.imports || []).map(im => parseModuleName(im)),
     exports: flatten(config.exports || []).map(ex => parseModuleName(ex)),
     declarations: flattenedDeclarations.map(d => d.name),
-    providers: flatten(config.providers || []).map(parseProviderName),
+    providers: flatten((config.providers || []).concat(flatten(adjacentProviders))).map(parseProviderName),
     providersInDeclarations: flattenedProvidersFromDeclarations.map(parseProviderName),
   };
 };
@@ -96,6 +96,24 @@ const getProvidersFromDeclarations = (declarations: Array<any>) => {
   return providers;
 };
 
+const flattenProviders = (providers: Array<any> = []) => {
+  const flatArray: Array<any> = [];
+  providers.forEach(item => {
+    if (Array.isArray(item)) {
+      Array.prototype.push.apply(flatArray, flattenProviders(item));
+    } else if (typeof item === 'object') {
+      if (Array.isArray(item.provide)) {
+        Array.prototype.push.apply(flatArray, flattenProviders(item.provide || []));
+      } else {
+        flatArray.push(item.provide);
+      }
+    } else {
+      flatArray.push(item);
+    }
+  });
+  return flatArray;
+};
+
 const flatten = (l: Array<any>) => {
   const flatArray: Array<any> = [];
   l.forEach(item => {
@@ -108,11 +126,11 @@ const flatten = (l: Array<any>) => {
   return flatArray;
 };
 
-const _parseModule = (module: any, modules: {} = {}, moduleNames: Array<string> = []) => {
+const _parseModule = (module: any, providers: Array<any> = [], modules: {} = {}, moduleNames: Array<string> = []) => {
   if (!modules[module]) {
     const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module);
     moduleNames.push(parseModuleName(module));
-    modules[module] = buildModuleDescription(module, ngModuleDecoratorConfig);
+    modules[module] = buildModuleDescription(module, providers, ngModuleDecoratorConfig);
 
     // collect all providers from this module
     const moduleProviders: Array<any> = (ngModuleDecoratorConfig.providers || [])
@@ -128,7 +146,7 @@ const _parseModule = (module: any, modules: {} = {}, moduleNames: Array<string> 
 
       const importModuleDecorator = resolveNgModuleDecoratorConfig(importedModule);
       if (importModuleDecorator) {
-        _parseModule(importedModule, modules, moduleNames);
+        _parseModule(importedModule, im.ngModule ? flattenProviders(im.providers || []) : [], modules, moduleNames);
       }
     });
   }
