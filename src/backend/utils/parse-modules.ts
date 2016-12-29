@@ -16,7 +16,7 @@ const resolveNgModuleDecoratorConfig = (m) => {
 
 export const parseModules = (firstRootDebugElement: any): {[key: string]: any} => {
   const bootstrappedModule = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef)._injector.instance;
-  const [modules, moduleNames] = _parseModule(bootstrappedModule.constructor);
+  const [modules, moduleNames, tokenIdMap] = _parseModule(bootstrappedModule.constructor);
   const serializableModules = {};
   for (const m in modules) {
     if (modules.hasOwnProperty(m)) {
@@ -26,6 +26,7 @@ export const parseModules = (firstRootDebugElement: any): {[key: string]: any} =
   return {
     names: moduleNames,
     configs: serializableModules,
+    tokenIdMap,
   };
 };
 
@@ -41,6 +42,7 @@ const resolveTokenIdMetaData = (token) => {
   if (!Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token)) {
     Reflect.defineMetadata(AUGURY_TOKEN_ID_METADATA_KEY, randomId(), token);
   }
+  return { token: token, augury_token_id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token) };
 };
 
 const parseProviderName = p =>
@@ -58,42 +60,9 @@ const buildModuleDescription = (module, adjacentProviders: Array<any> = [], conf
     imports: flatten(config.imports || []).map(im => parseModuleName(im)),
     exports: flatten(config.exports || []).map(ex => parseModuleName(ex)),
     declarations: flattenedDeclarations.map(d => d.name),
-    providers: flatten((config.providers || []).concat(flatten(adjacentProviders))).map(parseProviderName),
+    providers: flatten((config.providers || []).concat(adjacentProviders)).map(parseProviderName),
     providersInDeclarations: flattenedProvidersFromDeclarations.map(parseProviderName),
   };
-};
-
-const addTokenIdMetaData = (providers: Array<any>) => {
-  providers.forEach((provider) => {
-    if (typeof provider === 'object') {
-      if (provider.provide) {
-        addTokenIdMetaData([provider.provide]);
-      }
-    } else if (Array.isArray(provider)) {
-      provider.forEach(addTokenIdMetaData);
-    } else {
-      // make sure the token has an generated augury ID
-      resolveTokenIdMetaData(provider);
-    }
-  });
-};
-
-const getProvidersFromDeclarations = (declarations: Array<any>) => {
-  const providers: Array<any> = [];
-  declarations.forEach((declaration) => {
-    if (Array.isArray(declaration)) {
-      Array.prototype.push.apply(providers, getProvidersFromDeclarations(declaration));
-    } else {
-      // get component decorator config
-      const componentDecoratorConfig = componentMetadata(declaration);
-
-      // read providers
-      if (componentDecoratorConfig) {
-        Array.prototype.push.apply(providers, componentDecoratorConfig.providers || []);
-      }
-    }
-  });
-  return providers;
 };
 
 const flattenProviders = (providers: Array<any> = []) => {
@@ -126,18 +95,34 @@ const flatten = (l: Array<any>) => {
   return flatArray;
 };
 
-const _parseModule = (module: any, providers: Array<any> = [], modules: {} = {}, moduleNames: Array<string> = []) => {
+const _parseModule = (module: any, adjacentProviders: Array<any> = [], modules: {} = {},
+  moduleNames: Array<string> = [], tokenIdMap: { [key: string]: any } = {}) => {
+
   if (!modules[module]) {
     const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module);
     moduleNames.push(parseModuleName(module));
-    modules[module] = buildModuleDescription(module, providers, ngModuleDecoratorConfig);
+    modules[module] = buildModuleDescription(module, adjacentProviders, ngModuleDecoratorConfig);
 
     // collect all providers from this module
-    const moduleProviders: Array<any> = (ngModuleDecoratorConfig.providers || [])
-      .concat(getProvidersFromDeclarations(ngModuleDecoratorConfig.declarations || []));
+    const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
+      .filter(declaration => componentMetadata(declaration));
+
+    const moduleComponentProviders = moduleComponents.reduce((prev, curr, i, components) =>
+      prev.concat(flattenProviders(componentMetadata(components[i]).providers || [])), []);
 
     // add augury ids
-    addTokenIdMetaData(moduleProviders);
+    flattenProviders(ngModuleDecoratorConfig.providers || [])
+      .concat(adjacentProviders)
+      .concat(moduleComponentProviders)
+      .concat(moduleComponents)
+      .map(resolveTokenIdMetaData)
+      .map((tokenAndId) => {
+        tokenIdMap[tokenAndId.augury_token_id] = {
+          name: tokenAndId.token.name,
+          type: componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
+          module: module.name,
+        };
+      });
 
     // parse modules imported by this module
     const flatImports = flatten(ngModuleDecoratorConfig.imports || []);
@@ -146,10 +131,11 @@ const _parseModule = (module: any, providers: Array<any> = [], modules: {} = {},
 
       const importModuleDecorator = resolveNgModuleDecoratorConfig(importedModule);
       if (importModuleDecorator) {
-        _parseModule(importedModule, im.ngModule ? flattenProviders(im.providers || []) : [], modules, moduleNames);
+        _parseModule(importedModule, im.ngModule ?
+          flattenProviders(im.providers || []) : [], modules, moduleNames, tokenIdMap);
       }
     });
   }
 
-  return [modules, moduleNames];
+  return [modules, moduleNames, tokenIdMap];
 };

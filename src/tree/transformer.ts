@@ -65,6 +65,8 @@ export const transform = (path: Path,
 
   const node: Node = {
     id: serializedPath,
+    augury_token_id: element.componentInstance ?
+      Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, element.componentInstance.constructor) : null,
     name,
     listeners,
     isComponent,

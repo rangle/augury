@@ -14,6 +14,7 @@ export interface OutputProperty extends InputProperty {} // outputs can be alias
 
 export interface Node {
   id: string;
+  augury_token_id: string;
   name: string;
   isComponent: boolean;
   changeDetection: number;

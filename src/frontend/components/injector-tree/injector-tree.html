@@ -35,10 +35,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="selectedNode && focusedNode"
+  <div *ngIf="selectedNode && focusedComponent >= 0"
     class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-grow flex-column focused-node-info-panel">
     <h3 class="monospace primary-color">
-      Info
+      Component: {{parentHierarchy[focusedComponent].name}} - Provided by module: {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id].module}}<br/>
+      <span *ngIf="focusedDependency >= 0">--> Injectable: {{parentHierarchy[focusedComponent].dependencies[focusedDependency].name}} - Provided by module: {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id].module}}</span>
     </h3>
   </div>
 </div>

@@ -38,7 +38,8 @@ export class InjectorTree implements OnChanges {
   @Input() ngModules: {[key: string]: any};
   @Input() selectedNode: Node;
   @Input() selectNode: EventEmitter<any>;
-  @Input() focusedNode: any;
+  focusedComponent: number;
+  focusedDependency: number;
 
   private parentHierarchy;
   private svg: any;
@@ -49,9 +50,15 @@ export class InjectorTree implements OnChanges {
     private parseUtils: ParseUtils
   ) { }
 
-  private onFocusNode(hierarchyIndex: number, dependecyIndex: number) {
-    this.focusedNode = true;
+  private onFocusNode(componentIndex: number, dependecyIndex: number) {
+    this.focusedComponent = componentIndex;
+    this.focusedDependency = dependecyIndex;
   }
+
+  private unFocusNode = () => {
+    this.focusedComponent = -1;
+    this.focusedDependency = -1;
+  };
 
   private onSelectComponent(component: any): void {
     this.selectNode.emit(component);
@@ -137,7 +144,8 @@ export class InjectorTree implements OnChanges {
         // draw injected dependency name and node circle
         nodesToDraw.push([injectorX, nodeY, dependency.name,
           `node-circle fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
-          depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS, () => this.onFocusNode(0, 0)]);
+          depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS,
+          () => this.onFocusNode(hierarchyIdx, depIndex)]);
       });
 
       if (hierarchyIdx > 0) {
@@ -151,7 +159,8 @@ export class InjectorTree implements OnChanges {
 
       // draw component name and node circle
       nodesToDraw.push([nodeX, nodeY, node.name, 'node-circle fill-component stroke-component',
-        hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS, () => this.onFocusNode(0, 0)]);
+        hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS,
+        () => this.onFocusNode(hierarchyIdx, -1)]);
     });
 
     nodesToDraw.forEach((params) => {
