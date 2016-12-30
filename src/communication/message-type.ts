@@ -42,6 +42,9 @@ export enum MessageType {
   /// Update the value of a property inside the component tree
   UpdateProperty,
 
+  /// Update a property on a provider reference
+  UpdateProviderProperty,
+
   /// Emit a new value through an EventEmitter
   EmitValue,
 

@@ -64,7 +64,6 @@ import {NodeOpenTag} from './components/node-item/node-open-tag';
 import {PropertyEditor} from './components/property-editor/property-editor';
 import {PropertyValue} from './components/property-value/property-value';
 import {RenderState} from './components/render-state/render-state';
-import {RenderObject} from './components/render-object/render-object';
 import {RouterInfo} from './components/router-info/router-info';
 import {RouterTree} from './components/router-tree/router-tree';
 import {Search} from './components/search/search';
@@ -370,7 +369,6 @@ const declarations = [
   PropertyEditor,
   PropertyValue,
   RenderState,
-  RenderObject,
   RouterInfo,
   RouterTree,
   Search,

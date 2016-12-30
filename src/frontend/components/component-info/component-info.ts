@@ -9,7 +9,6 @@ import {
 
 import {ComponentLoadState} from '../../state';
 
-
 import {
   ComponentMetadata,
   Metadata,
@@ -18,6 +17,10 @@ import {
   Path,
   deserializePath,
 } from '../../../tree';
+
+import {functionName} from '../../../utils';
+
+import {UserActions} from '../../actions/user-actions/user-actions';
 
 @Component({
   selector: 'bt-component-info',
@@ -37,7 +40,10 @@ export class ComponentInfo {
   private changeDetectionStrategies = ChangeDetectionStrategy;
 
   private ComponentLoadState = ComponentLoadState;
+
   private path: Path;
+
+  constructor(private actions: UserActions) {}
 
   ngOnChanges() {
     if (this.node) {
@@ -51,12 +57,6 @@ export class ComponentInfo {
     }
 
     return Object.keys(this.state).length > 0;
-  }
-
-  private get hasProviders() {
-    return this.node &&
-      this.node.providers &&
-      this.node.providers.length > 0;
   }
 
   private get hasDirectives() {
@@ -81,7 +81,14 @@ export class ComponentInfo {
     return this.providers && this.providers.length > 0;
   }
 
-  private viewComponentSource() {
+  private get instanceProvidersObject() {
+    if (this.hasInstanceProviders === false) {
+      return {};
+    }
+    return this.providers.reduce((p, c) => Object.assign(p, {[c[0]]: c[1]}), {});
+  }
+
+  private onViewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
       var root = ng.probe(inspectedApplication.nodeFromPath('${this.node.id}'));
       if (root) {
@@ -92,5 +99,13 @@ export class ComponentInfo {
           throw new Error('This component has no instance and therefore no constructor');
         }
       }`);
+  }
+
+  private onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
+    this.actions.updateProperty(event.path.concat(event.propertyKey), event.newValue);
+  }
+
+  private onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
+    this.actions.updateProvider(event.path, event.propertyKey, event.newValue);
   }
 }
