@@ -115,9 +115,6 @@ module.exports = {
       'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
       'VERSION': JSON.stringify(pkg.version)
     }),
-    new webpack.ProvidePlugin({
-      "JSONFormatter": "json-formatter-js"
-    }),
     new OccurenceOrderPlugin(),
     new DedupePlugin()
   ],

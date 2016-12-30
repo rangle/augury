@@ -11,6 +11,3 @@ import '@angular/http';
 
 // RxJS
 import 'rxjs';
-
-// JSON formatter
-import 'json-formatter-js';
