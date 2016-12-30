@@ -42,7 +42,7 @@ module.exports = {
   entry: {
     'frontend': [
       'webpack.vendor.ts',
-      './src/frontend/frontend'
+      './src/frontend/module'
     ],
     'backend': ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],

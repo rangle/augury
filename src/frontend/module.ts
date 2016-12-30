@@ -1,0 +1,90 @@
+import {NgModule, enableProdMode} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+
+import {Accordion} from './components/accordion/accordion';
+import {AppTrees} from './components/app-trees/app-trees';
+import {ComponentInfo} from './components/component-info/component-info';
+import {ComponentTree} from './components/component-tree/component-tree';
+import {Dependency} from './components/dependency/dependency';
+import {InjectorTree} from './components/injector-tree/injector-tree';
+import {NodeAttributes} from './components/node-item/node-attributes';
+import {NodeItem} from './components/node-item/node-item';
+import {NodeOpenTag} from './components/node-item/node-open-tag';
+import {PropertyEditor} from './components/property-editor/property-editor';
+import {PropertyValue} from './components/property-value/property-value';
+import {RenderState} from './components/render-state/render-state';
+import {RouterInfo} from './components/router-info/router-info';
+import {RouterTree} from './components/router-tree/router-tree';
+import {Search} from './components/search/search';
+import {SplitPane} from './components/split-pane/split-pane';
+import {StateValues} from './components/state-values/state-values';
+import {TabMenu} from './components/tab-menu/tab-menu';
+import {TreeView} from './components/tree-view/tree-view';
+import {RenderError} from './components/render-error/render-error';
+import {InfoPanel} from './components/info-panel/info-panel';
+import {UserActions} from './actions/user-actions/user-actions';
+
+import {
+  Connection,
+  DirectConnection,
+} from './channel';
+
+import {
+  ComponentViewState,
+  ComponentPropertyState,
+  Options,
+} from './state';
+
+import {App} from './app';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+  ],
+  declarations: [
+    Accordion,
+    App,
+    AppTrees,
+    ComponentInfo,
+    ComponentTree,
+    Dependency,
+    InfoPanel,
+    InjectorTree,
+    NodeAttributes,
+    NodeItem,
+    NodeOpenTag,
+    PropertyEditor,
+    PropertyValue,
+    RenderError,
+    RouterInfo,
+    RenderState,
+    RouterTree,
+    Search,
+    SplitPane,
+    StateValues,
+    TabMenu,
+    TreeView,
+  ],
+  providers: [
+    Connection,
+    DirectConnection,
+    Options,
+    UserActions,
+    ComponentViewState,
+    ComponentPropertyState,
+  ],
+  bootstrap: [App]
+})
+class FrontendModule {}
+
+declare const PRODUCTION: boolean;
+if (PRODUCTION) {
+  enableProdMode();
+}
+
+platformBrowserDynamic().bootstrapModule(FrontendModule);
