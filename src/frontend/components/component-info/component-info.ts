@@ -20,6 +20,8 @@ import {
 
 import {functionName} from '../../../utils';
 
+import {UserActions} from '../../actions/user-actions/user-actions';
+
 @Component({
   selector: 'bt-component-info',
   template: require('./component-info.html'),
@@ -40,6 +42,8 @@ export class ComponentInfo {
   private ComponentLoadState = ComponentLoadState;
 
   private path: Path;
+
+  constructor(private actions: UserActions) {}
 
   ngOnChanges() {
     if (this.node) {
@@ -84,13 +88,7 @@ export class ComponentInfo {
     return this.providers.reduce((p, c) => Object.assign(p, {[c[0]]: c[1]}), {});
   }
 
-  private providerPath = (nodePath: Path, propertyKey: string): Path => {
-    const providerIndex = this.providers.findIndex(ip => ip[0] === propertyKey);
-
-    return [...nodePath, 'providers', providerIndex];
-  };
-
-  private viewComponentSource() {
+  private onViewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
       var root = ng.probe(inspectedApplication.nodeFromPath('${this.node.id}'));
       if (root) {
@@ -101,5 +99,13 @@ export class ComponentInfo {
           throw new Error('This component has no instance and therefore no constructor');
         }
       }`);
+  }
+
+  private onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
+    this.actions.updateProperty(event.path.concat(event.propertyKey), event.newValue);
+  }
+
+  private onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
+    this.actions.updateProvider(event.path, event.propertyKey, event.newValue);
   }
 }

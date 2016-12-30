@@ -4,6 +4,7 @@ import {
   MutableTree,
   Node,
   Path,
+  tokenName,
 } from '../../tree';
 
 // The path we get is a series of numbers followed by the names of properties
@@ -49,6 +50,17 @@ export const getInstanceFromPath = (instance, path: Path) => {
   return instance;
 };
 
+export const getNodeProvider = (element: DebugElement, providerToken: string, propertyPath: Path) => {
+  const token = element.providerTokens.find(t => tokenName(t) === providerToken);
+  if (token == null) {
+    return null;
+  }
+
+  const path = getPropertyPath(propertyPath.slice(0, propertyPath.length - 1));
+
+  return getInstanceFromPath(element.injector.get(token), path);
+};
+
 // We want to retrieve the parent of the object described in {@param path}
 export const getNodeInstanceParent = (element: DebugElement, path: Path) => {
   if (path.length === 0) {
@@ -57,21 +69,14 @@ export const getNodeInstanceParent = (element: DebugElement, path: Path) => {
 
   const propertyPath = getPropertyPath(path.slice(0, path.length - 1));
   if (propertyPath.length > 0) {
-    if (propertyPath[0] === 'providers') {
-      const providerRoot = element.injector.get(element.providerTokens[propertyPath[1]]);
-
-      return getInstanceFromPath(providerRoot, propertyPath.slice(2));
-    }
-    else {
-      return getInstanceFromPath(element.componentInstance, propertyPath);
-    }
+    return getInstanceFromPath(element.componentInstance, propertyPath);
   }
   else {
     return element.componentInstance;
   }
 };
 
-const propertyIndex = (path: Path): number => {
+export const propertyIndex = (path: Path): number => {
   let index = 0;
   while (index < path.length) {
     if (typeof path[index] !== 'number') {

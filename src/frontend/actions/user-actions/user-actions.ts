@@ -48,6 +48,12 @@ export class UserActions {
     return this.connection.send(MessageFactory.updateProperty(path, newValue));
   }
 
+  updateProvider(path: Path, providerKey: Path, newValue) {
+    const [token, ...propertyPath] = providerKey;
+
+    return this.connection.send(MessageFactory.updateProviderProperty(path, token, propertyPath, newValue));
+  }
+
   /// Emit a new value through an EventEmitter object
   emitValue(path: Path, value?) {
     return this.connection.send(MessageFactory.emitValue(path, value));

@@ -2,11 +2,14 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Highlightable} from '../../utils/highlightable';
 import {functionName} from '../../../utils';
+import {propertyIndex} from '../../../backend/utils';
 import {
   Path,
   ObjectType,
@@ -22,6 +25,8 @@ export class StateValues extends Highlightable {
   @Input() path: Path;
   @Input() metadata: ObjectType;
   @Input() value;
+
+  @Output() updateValue = new EventEmitter<{path: Path, propertyKey: Path, newValue}>();
 
   private editable: boolean = false;
 
@@ -57,7 +62,13 @@ export class StateValues extends Highlightable {
 
   private onValueChanged(newValue) {
     if (newValue !== this.value) {
-      this.userActions.updateProperty(this.path, newValue);
+      const index = propertyIndex(this.path);
+
+      const path = this.path.slice(0, index);
+
+      const propertyKey = this.path.slice(index);
+
+      this.updateValue.emit({path, propertyKey, newValue});
     }
   }
 }

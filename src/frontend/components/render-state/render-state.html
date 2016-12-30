@@ -49,8 +49,9 @@
       *ngIf="!isEmittable(k) && !nest(k)"
       [id]="id"
       [metadata]="metadata"
-      [path]="transformedPath(k)"
-      [value]="state[k]">
+      [path]="path.concat(k)"
+      [value]="state[k]"
+      (updateValue)="updateValue.emit($event)">
     </bt-state-values>
   </span>
   <div *ngIf="expanded(k)">
@@ -58,10 +59,11 @@
        *ngIf="nest(k)"
        [id]="id"
        [level]="level + 1"
-       [path]="transformedPath(k)"
+       [path]="path.concat(k)"
        [componentMetadata]="componentMetadata"
        [metadata]="metadata"
-       [state]="state[k]">
+       [state]="state[k]"
+       (updateValue)="updateValue.emit($event)">
     </bt-render-state>
   </div>
 </div>

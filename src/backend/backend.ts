@@ -37,6 +37,7 @@ import {
   parseRoutes,
   getNodeFromPartialPath,
   getNodeInstanceParent,
+  getNodeProvider,
 } from './utils';
 
 import {serialize} from '../utils';
@@ -198,6 +199,13 @@ const messageHandler = (message: Message<any>) => {
         message.content.path,
         message.content.newValue));
 
+    case MessageType.UpdateProviderProperty:
+      return tryWrap(() => updateProviderProperty(previousTree,
+        message.content.path,
+        message.content.token,
+        message.content.propertyPath,
+        message.content.newValue));
+
     case MessageType.EmitValue:
       return tryWrap(() => emitValue(previousTree,
         message.content.path,
@@ -242,20 +250,34 @@ const getComponentInstance = (tree: MutableTree, node: Node) => {
   return null;
 };
 
-const updateProperty = (tree: MutableTree, path: Path, newValue) => {
+const updateNode = (tree: MutableTree, path: Path, fn: (element) => void) => {
   const node = getNodeFromPartialPath(tree, path);
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
       const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-      ngZone.run(() => {
-        const instanceParent = getNodeInstanceParent(probed, path);
-        if (instanceParent) {
-          instanceParent[path[path.length - 1]] = newValue;
-        }
-      });
+
+      ngZone.run(() => fn(probed));
     }
   }
+};
+
+const updateProperty = (tree: MutableTree, path: Path, newValue) => {
+  updateNode(tree, path, probed => {
+    const instanceParent = getNodeInstanceParent(probed, path);
+    if (instanceParent) {
+      instanceParent[path[path.length - 1]] = newValue;
+    }
+  });
+};
+
+const updateProviderProperty = (tree: MutableTree, path: Path, token: string, propertyPath: Path, newValue) => {
+  updateNode(tree, path, probed => {
+    const provider = getNodeProvider(probed, token, propertyPath);
+    if (provider) {
+      provider[propertyPath[propertyPath.length - 1]] = newValue;
+    }
+  });
 };
 
 const emitValue = (tree: MutableTree, path: Path, newValue) => {

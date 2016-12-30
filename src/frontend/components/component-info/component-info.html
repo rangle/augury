@@ -6,7 +6,7 @@
       <a href="#"
          class="red-1 node-item-property no-highlight"
          *ngIf="node && node.name && node.isComponent"
-         (click)="viewComponentSource()">
+         (click)="onViewComponentSource()">
         (View Source)
       </a>
     </h4>
@@ -43,8 +43,8 @@
           [metadata]="metadata"
           [level]="0"
           [path]="path"
-          [pathTransformer]="providerPath"
           [state]="instanceProvidersObject"
+          (updateValue)="onUpdateProvider($event)"
           [indent]="false">
         </bt-render-state>
       </div>
@@ -72,7 +72,8 @@
                 [metadata]="metadata"
                 [level]="0"
                 [path]="path"
-                [state]="state">
+                [state]="state"
+                (updateValue)="onUpdateProperty($event)">
               </bt-render-state>
             </template>
             <template [ngSwitchCase]="ComponentLoadState.Failed">

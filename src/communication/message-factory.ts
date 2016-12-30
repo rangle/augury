@@ -90,13 +90,26 @@ export abstract class MessageFactory {
     });
   }
 
-  static updateProperty(path: Path, newValue): Message<void> {
+  static updateProperty(path: Path, newValue): Message<{path: string, newValue}> {
     return create({
       messageType: MessageType.UpdateProperty,
       content: {
         path,
         newValue,
-      }
+      },
+    });
+  }
+
+  static updateProviderProperty(path: Path, token: number | string, propertyPath: Path, newValue):
+      Message<{path: Path, token: string, propertyPath: Path, newValue}> {
+    return create({
+      messageType: MessageType.UpdateProviderProperty,
+      content: {
+        path,
+        token,
+        propertyPath,
+        newValue,
+      },
     });
   }
 

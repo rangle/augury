@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  Output,
 } from '@angular/core';
 
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -12,8 +13,6 @@ import {
   isSubject,
   isLargeArray,
 } from '../../utils';
-
-import {getPropertyPath} from '../../../backend/utils';
 
 import {functionName} from '../../../utils';
 
@@ -48,9 +47,10 @@ export class RenderState {
   @Input() metadata: Metadata;
   @Input() level: number;
   @Input() path: Path;
-  @Input() pathTransformer: (nodePath: Path, propertyKey: string) => Path;
   @Input() state;
   @Input() indent: boolean = true;
+
+  @Output() updateValue = new EventEmitter<{path: Path, propertyKey: Path, newValue}>();
 
   private EmitState = EmitState;
 
@@ -69,7 +69,7 @@ export class RenderState {
 
   expandTree(key: string) {
     if (this.expandable(key)) {
-      this.propertyState.toggleExpand(this.transformedPath(key));
+      this.propertyState.toggleExpand(this.path.concat(key));
     }
   }
 
@@ -77,18 +77,12 @@ export class RenderState {
     return this.state == null || Object.keys(this.state).length === 0;
   }
 
-  private transformedPath(key: string): Path {
-    return typeof this.pathTransformer === 'function'
-      ? this.pathTransformer(this.path, key)
-      : this.path.concat([key]);
-  }
-
   private nest(key: string): boolean {
     return typeof this.state[key] === 'object' && this.state[key] != null;
   }
 
   private expanded(key: string): boolean {
-    return this.propertyState.expansionState(this.transformedPath(key)) === ExpandState.Expanded;
+    return this.propertyState.expansionState(this.path.concat(key)) === ExpandState.Expanded;
   }
 
   private displayType(key: string): string {
@@ -186,7 +180,7 @@ export class RenderState {
 
     const timedReset = () => setTimeout(() => update(EmitState.None), 3000);
 
-    const path = this.transformedPath(outputProperty);
+    const path = this.path.concat(outputProperty);
 
     return this.userActions.emitValue(path, data)
       .then(() => {
