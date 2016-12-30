@@ -1,6 +1,4 @@
-<div
-   *ngFor="let k of keys(state)"
-   class="pl4">
+<div *ngFor="let k of keys(state)" [ngClass]="{pl4: indent}">
   <span *ngIf="none">
     No state to show
   </span>
@@ -51,7 +49,7 @@
       *ngIf="!isEmittable(k) && !nest(k)"
       [id]="id"
       [metadata]="metadata"
-      [path]="path.concat([k])"
+      [path]="transformedPath(k)"
       [value]="state[k]">
     </bt-state-values>
   </span>
@@ -60,7 +58,7 @@
        *ngIf="nest(k)"
        [id]="id"
        [level]="level + 1"
-       [path]="path.concat([k])"
+       [path]="transformedPath(k)"
        [componentMetadata]="componentMetadata"
        [metadata]="metadata"
        [state]="state[k]">

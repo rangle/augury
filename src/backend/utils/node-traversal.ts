@@ -10,7 +10,9 @@ import {
 // (in the case of emit or updateProperty). So we want to just pull the node
 // path and omit the property names (although they are used later).
 export const getNodeFromPartialPath = (tree: MutableTree, path: Path): Node => {
-  return tree.traverse(path.filter(p => typeof p === 'number'));
+  const pindex = propertyIndex(path);
+
+  return tree.traverse(path.slice(0, pindex));
 };
 
 // When we are emitting values or updating properties for a component, the path
@@ -19,13 +21,7 @@ export const getNodeFromPartialPath = (tree: MutableTree, path: Path): Node => {
 // property inside the componentInstance. The second path describes the piece
 // of state that we wish to change or emit.
 export const getPropertyPath = (path: Path): Path => {
-  let index = 0;
-  while (index < path.length) {
-    if (typeof path[index] !== 'number') {
-      break;
-    }
-    ++index;
-  }
+  const index = propertyIndex(path);
 
   if (index === path.length) { // not found
     return [];
@@ -36,8 +32,7 @@ export const getPropertyPath = (path: Path): Path => {
 
 // Get the value of an instance variable from a combination of a node path and
 // a property path. (See the comment for {@link getPropertyPath} for details)
-export const getInstanceFromPath = (element: DebugElement, path: Path) => {
-  let instance = element.componentInstance;
+export const getInstanceFromPath = (instance, path: Path) => {
   if (instance == null) {
     return null;
   }
@@ -62,9 +57,27 @@ export const getNodeInstanceParent = (element: DebugElement, path: Path) => {
 
   const propertyPath = getPropertyPath(path.slice(0, path.length - 1));
   if (propertyPath.length > 0) {
-    return getInstanceFromPath(element, propertyPath);
+    if (propertyPath[0] === 'providers') {
+      const providerRoot = element.injector.get(element.providerTokens[propertyPath[1]]);
+
+      return getInstanceFromPath(providerRoot, propertyPath.slice(2));
+    }
+    else {
+      return getInstanceFromPath(element.componentInstance, propertyPath);
+    }
   }
   else {
     return element.componentInstance;
   }
+};
+
+const propertyIndex = (path: Path): number => {
+  let index = 0;
+  while (index < path.length) {
+    if (typeof path[index] !== 'number') {
+      break;
+    }
+    ++index;
+  }
+  return index;
 };

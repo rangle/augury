@@ -53,7 +53,6 @@
     "expose-loader": "^0.7.1",
     "file-loader": "^0.8.5",
     "immutable": "^3.7.6",
-    "json-formatter-js": "git@github.com:mobinni/json-formatter-js.git#bugfix/function_regex",
     "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.17"
   },

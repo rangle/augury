@@ -36,11 +36,17 @@
       </div>
     </accordion>
 
-    <accordion sectionTitle="Instance Providers" *ngIf="hasInstanceProviders && !hasState" [defaultExpanded]="true">
+    <accordion sectionTitle="Instance Providers" *ngIf="hasInstanceProviders" [defaultExpanded]="true">
       <div section-content>
-        <bt-render-object
-          [object]="providers">
-        </bt-render-object>
+        <bt-render-state
+          [componentMetadata]="componentMetadata"
+          [metadata]="metadata"
+          [level]="0"
+          [path]="path"
+          [pathTransformer]="providerPath"
+          [state]="instanceProvidersObject"
+          [indent]="false">
+        </bt-render-state>
       </div>
     </accordion>
 
@@ -62,7 +68,6 @@
           <div [ngSwitch]="loadingState">
             <template [ngSwitchCase]="ComponentLoadState.Received">
               <bt-render-state
-                [id]="node.id"
                 [componentMetadata]="componentMetadata"
                 [metadata]="metadata"
                 [level]="0"

@@ -19,7 +19,6 @@ import {
   styles: [require('to-string!./state-values.css')],
 })
 export class StateValues extends Highlightable {
-  @Input() id: string | number;
   @Input() path: Path;
   @Input() metadata: ObjectType;
   @Input() value;

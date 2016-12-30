@@ -9,7 +9,6 @@ import {
 
 import {ComponentLoadState} from '../../state';
 
-
 import {
   ComponentMetadata,
   Metadata,
@@ -18,6 +17,8 @@ import {
   Path,
   deserializePath,
 } from '../../../tree';
+
+import {functionName} from '../../../utils';
 
 @Component({
   selector: 'bt-component-info',
@@ -37,6 +38,7 @@ export class ComponentInfo {
   private changeDetectionStrategies = ChangeDetectionStrategy;
 
   private ComponentLoadState = ComponentLoadState;
+
   private path: Path;
 
   ngOnChanges() {
@@ -51,12 +53,6 @@ export class ComponentInfo {
     }
 
     return Object.keys(this.state).length > 0;
-  }
-
-  private get hasProviders() {
-    return this.node &&
-      this.node.providers &&
-      this.node.providers.length > 0;
   }
 
   private get hasDirectives() {
@@ -80,6 +76,19 @@ export class ComponentInfo {
   private get hasInstanceProviders() {
     return this.providers && this.providers.length > 0;
   }
+
+  private get instanceProvidersObject() {
+    if (this.hasInstanceProviders === false) {
+      return {};
+    }
+    return this.providers.reduce((p, c) => Object.assign(p, {[c[0]]: c[1]}), {});
+  }
+
+  private providerPath = (nodePath: Path, propertyKey: string): Path => {
+    const providerIndex = this.providers.findIndex(ip => ip[0] === propertyKey);
+
+    return [...nodePath, 'providers', providerIndex];
+  };
 
   private viewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
