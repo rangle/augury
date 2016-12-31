@@ -75,7 +75,7 @@ export class ComponentTree {
         break;
     }
 
-    return false;
+    return true;
   }
 
   private navigateUp() {
