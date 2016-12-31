@@ -76,7 +76,7 @@ export class InjectorTree implements OnChanges {
 
     this.parentHierarchy = [{ name: 'root', dependencies: [] }].concat(mainHierarchy).concat([this.selectedNode]);
 
-    this.breadcrumbs = this.parentHierarchy.slice(1, this.parentHierarchy.length);
+    this.breadcrumbs = this.parentHierarchy.slice(1);
 
     let firstChild: Element;
     while (firstChild = this.graphContainer.nativeElement.firstChild) {
