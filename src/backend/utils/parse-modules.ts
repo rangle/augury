@@ -38,9 +38,13 @@ const randomId = () => {
   return Math.random().toString(36).substring(7);
 };
 
-const resolveTokenIdMetaData = (token) => {
+const resolveTokenIdMetaData = (token, tokenIdMap: { [key: string]: any }) => {
   if (!Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token)) {
-    Reflect.defineMetadata(AUGURY_TOKEN_ID_METADATA_KEY, randomId(), token);
+    let tokenId = randomId();
+    while (tokenIdMap[tokenId]) {
+      tokenId = randomId();
+    }
+    Reflect.defineMetadata(AUGURY_TOKEN_ID_METADATA_KEY, tokenId, token);
   }
   return { token: token, augury_token_id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token) };
 };
@@ -115,8 +119,8 @@ const _parseModule = (module: any, adjacentProviders: Array<any> = [], modules: 
       .concat(adjacentProviders)
       .concat(moduleComponentProviders)
       .concat(moduleComponents)
-      .map(resolveTokenIdMetaData)
-      .map((tokenAndId) => {
+      .map(t => resolveTokenIdMetaData(t, tokenIdMap))
+      .map(tokenAndId => {
         tokenIdMap[tokenAndId.augury_token_id] = {
           name: tokenAndId.token.name,
           type: componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
