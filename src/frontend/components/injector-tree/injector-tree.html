@@ -7,7 +7,7 @@
   <div class="flex-column monospace pt2"
     [hidden]="!selectedNode"
     [ngClass]="{flex: selectedNode}">
-    <div *ngIf="breadcrumbs && breadcrumbs.length > 0" class="flex flex-none flex-column border-bottom pl4 pb3">
+    <div *ngIf="breadcrumbs?.length > 0" class="flex flex-none flex-column border-bottom pl4 pb3">
       <h3 class="monospace primary-color">
         Component Hierarchy
       </h3>
