@@ -59,7 +59,7 @@
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "basscss-layout": "^3.1.0",
-    "clone": "^1.0.2",
+    "clone": "^2.1.0",
     "css-loader": "^0.25.0",
     "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
