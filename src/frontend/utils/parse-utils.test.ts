@@ -119,25 +119,21 @@ test('utils/parse-utils: getDependencyProvider', t => {
   const node = {
     id: '0 1 1',
     name: 'four',
-    injectors: ['service1'],
     providers: [],
   };
   const mockData = [{
     id: '0',
     name: 'mockData',
-    injectors: ['service1'],
-    providers: [{ key: 'service1' }],
+    providers: [{ id: 'service1_id', key: 'service1' }],
     children: [
       {
         id: '0 0',
         name: 'one',
-        injectors: ['service2'],
         providers: [],
       },
       {
         id: '0 1',
         name: 'two',
-        injectors: ['service3'],
         providers: [],
         children: [
           {
@@ -150,7 +146,7 @@ test('utils/parse-utils: getDependencyProvider', t => {
     ]
   }];
 
-  const dependency = { type: 'service1', decorators: [] };
+  const dependency = { id: 'service1_id', name: 'service1', decorators: [] };
 
   const parseUtils: ParseUtils = new ParseUtils();
 

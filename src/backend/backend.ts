@@ -12,6 +12,8 @@ import {
 
 import {onElementFound, onFindElement} from './utils/find-element';
 
+import {parseModules} from './utils/parse-modules';
+
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
 import {
@@ -69,6 +71,12 @@ let previousTree: MutableTree,
   onMouseOver,
   onMouseDown;
 
+const parseInitialModules = (roots: Array<any>) => {
+  if (roots.length) {
+    messageBuffer.enqueue(MessageFactory.ngModules(parseModules(roots[0])));
+  }
+};
+
 const updateComponentTree = (roots: Array<any>) => {
   const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
@@ -115,13 +123,16 @@ const bind = (root) => {
     subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
   }
 
+  // parse components and routes each time
   subscriptions.push(
     subject.debounceTime(0).subscribe(() => {
       updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
       updateRouterTree(routerTree());
     }));
 
-  subject.next(void 0); // initial load
+  // initial load
+  subject.next(void 0);
+  parseInitialModules(getAllAngularRootElements().map(r => ng.probe(r)));
 };
 
 const checkDebug = (fn: () => void) => {

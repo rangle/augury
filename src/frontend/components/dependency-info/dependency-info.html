@@ -5,8 +5,8 @@
       *ngFor="let dep of dependencies">
       <a href="#"
         class="node-item-property"
-        (click)="onDependencySelected(dep.type)">
-        {{dep.type}}
+        (click)="onDependencySelected(dep.id)">
+        {{dep.name}}
         </a>
     </li>
   </ul>
@@ -36,8 +36,8 @@
         <li *ngFor="let dep of comp.dependencies">
           <a href="#"
             class="node-item-property"
-            (click)="onDependencySelected(dep.type)">
-            {{dep.type}}
+            (click)="onDependencySelected(dep.id)">
+            {{dep.name}}
             </a>
         </li>
       </ul>

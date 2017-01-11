@@ -3,8 +3,9 @@ bt-injector-tree {
     stroke-width: 1.5px;
   }
 
-  & .circle-injector-tree {
+  & .node-circle {
     stroke: none;
+    cursor: pointer;
   }
 
   & .arrow {
@@ -17,5 +18,13 @@ bt-injector-tree {
 
   & #suit {
     stroke-width: 1.414px;
+  }
+
+  & .graph-panel {
+    overflow-y: auto;
+  }
+
+  & .focused-node-info-panel {
+    overflow-y: auto;
   }
 }

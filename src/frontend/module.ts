@@ -8,7 +8,7 @@ import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
 import {ComponentTree} from './components/component-tree/component-tree';
-import {Dependency} from './components/dependency/dependency';
+import {DependencyInfo} from './components/dependency-info/dependency-info';
 import {InjectorTree} from './components/injector-tree/injector-tree';
 import {NodeAttributes} from './components/node-item/node-attributes';
 import {NodeItem} from './components/node-item/node-item';
@@ -26,6 +26,8 @@ import {TreeView} from './components/tree-view/tree-view';
 import {RenderError} from './components/render-error/render-error';
 import {InfoPanel} from './components/info-panel/info-panel';
 import {UserActions} from './actions/user-actions/user-actions';
+import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
+import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
 
 import {
   Connection,
@@ -52,7 +54,7 @@ import {App} from './app';
     AppTrees,
     ComponentInfo,
     ComponentTree,
-    Dependency,
+    DependencyInfo,
     InfoPanel,
     InjectorTree,
     NodeAttributes,
@@ -69,6 +71,8 @@ import {App} from './app';
     StateValues,
     TabMenu,
     TreeView,
+    NgModuleInfo,
+    NgModuleConfigView,
   ],
   providers: [
     Connection,

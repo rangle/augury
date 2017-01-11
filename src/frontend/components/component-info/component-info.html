@@ -86,11 +86,11 @@
 
     <accordion sectionTitle="Dependencies" *ngIf="hasDependencies">
       <div section-content>
-        <bt-dependency
+        <bt-dependency-info
           [tree]="tree"
           [selectedNode]="node"
           (selectNode)="selectNode.emit($event)">
-        </bt-dependency>
+        </bt-dependency-info>
       </div>
     </accordion>
   </div>

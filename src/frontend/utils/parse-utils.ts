@@ -21,14 +21,14 @@ export class ParseUtils {
     return result;
   }
 
-  getNodeDependency(node: Node, dependencyName: string) {
+  getNodeDependency(node: Node, dependencyId: string) {
     return node.dependencies.reduce((prev, curr, idx, p) =>
-      prev ? prev : p[idx].type === dependencyName ? p[idx] : null, null);
+      prev ? prev : p[idx].id === dependencyId ? p[idx] : null, null);
   }
 
   checkNodeProvidesDependency(node: Node, dependency: Dependency) {
     return node.providers.reduce((prev, curr, idx, p) =>
-      prev ? prev : p[idx].key === dependency.type, false);
+      prev ? prev : p[idx].id === dependency.id, false);
   }
 
   getDependencyProvider(tree: MutableTree, nodeId: string, dependency: Dependency) {

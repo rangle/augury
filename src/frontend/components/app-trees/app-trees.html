@@ -105,6 +105,7 @@
     <bt-info-panel
        class="flex flex-column flex-auto bg-base"
        [tree]="tree"
+       [ngModules]="ngModules"
        [node]="selectedNode"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
@@ -118,3 +119,9 @@
    [routerTree]="routerTree"
    class="flex-auto overflow-auto">
 </bt-router-tree>
+
+<ng-module-info
+   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.NgModules, 'display-none': selectedTab !== Tab.NgModules }"
+   [ngModules]="ngModules"
+   class="flex-auto overflow-auto bg-darken-1">
+</ng-module-info>

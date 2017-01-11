@@ -1,0 +1,15 @@
+:host th.config-label {
+  text-transform: capitalize;
+}
+:host table {
+  table-layout: fixed;
+  width: 100%;
+}
+:host table td div.label-wrapper {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+:host table td div.list-container {
+  max-height: 18em;
+  overflow-y: auto;
+}

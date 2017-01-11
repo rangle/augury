@@ -1,18 +1,25 @@
 import {DebugElement} from '@angular/core';
+import {AUGURY_TOKEN_ID_METADATA_KEY} from './parse-modules';
 
 export interface Dependency {
-  type: string;
+  id: string;
+  name: string;
   decorators: Array<string>;
 }
 
 export interface Property {
+  id?: string;
   key: string;
   value;
 }
 
 export abstract class Description {
   public static getProviderDescription(provider, instance): Property {
-    const p = properties => ({ key: provider.name, value: properties });
+    const p = properties => ({
+      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, provider),
+      key: provider.name,
+      value: properties,
+    });
 
     switch (provider.name) {
       case 'RouterOutlet':
