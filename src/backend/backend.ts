@@ -322,13 +322,19 @@ export const routersFromRoots = () => {
 };
 
 export const routerTree = (): Array<MainRoute> => {
-  let routes = new Array<MainRoute>();
+  let routers = new Array<MainRoute>();
 
-  for (const router of routersFromRoots()) {
-    routes = routes.concat(parseRoutes(router));
+  if (ng.coreTokens.Router) {
+    for (const rootElement of getAllAngularRootElements()) {
+      routers = routers.concat(ng.probe(rootElement).injector.get(ng.coreTokens.Router));
+    }
+  } else {
+    for (const router of routersFromRoots()) {
+      routers = routers.concat(router);
+    }
   }
 
-  return routes;
+  return routers.map(parseRoutes);
 };
 
 export const consoleReference = (node: Node) => {
