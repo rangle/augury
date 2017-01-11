@@ -305,7 +305,7 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
   }
 };
 
-export const rootsWithRouters = () => {
+export const routersFromRoots = () => {
   const routers = [];
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
@@ -324,7 +324,7 @@ export const rootsWithRouters = () => {
 export const routerTree = (): Array<MainRoute> => {
   let routes = new Array<MainRoute>();
 
-  for (const router of rootsWithRouters()) {
+  for (const router of routersFromRoots()) {
     routes = routes.concat(parseRoutes(router));
   }
 
