@@ -35,11 +35,35 @@
       </div>
     </div>
   </div>
-  <div *ngIf="selectedNode && focusedComponent >= 0"
-    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-grow flex-column focused-node-info-panel">
-    <h3 class="monospace primary-color">
-      Component: {{parentHierarchy[focusedComponent].name}} - Provided by module: {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id].module}}<br/>
-      <span *ngIf="focusedDependency >= 0">--> Injectable: {{parentHierarchy[focusedComponent].dependencies[focusedDependency].name}} - Provided by module: {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id].module}}</span>
-    </h3>
+  <div *ngIf="selectedNode && focusedComponent > 0 && focusedDependency < 0"
+    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-column focused-node-info-panel">
+    <span class="node-item-property">
+      {{parentHierarchy[focusedComponent].name}}
+    </span>
+
+    <ul class="list-reset m0">
+      <li>
+        <span class="info-key">NgModule:</span>
+        <span class="info-value">{{ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id].module}}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="selectedNode && focusedDependency >= 0"
+    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-column focused-node-info-panel">
+    <span class="node-item-property">
+      {{parentHierarchy[focusedComponent].dependencies[focusedDependency].name}}
+    </span>
+
+    <ul class="list-reset m0">
+      <li>
+        <span class="info-key">Injected By:</span>
+        <span class="info-value">{{parentHierarchy[focusedComponent].name}}</span>
+      </li>
+      <li>
+        <span class="info-key">NgModule:</span>
+        <span class="info-value">{{ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id].module}}</span>
+      </li>
+    </ul>
   </div>
 </div>

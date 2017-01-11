@@ -38,8 +38,8 @@ export class InjectorTree implements OnChanges {
   @Input() ngModules: {[key: string]: any};
   @Input() selectedNode: Node;
   @Input() selectNode: EventEmitter<any>;
-  focusedComponent: number;
-  focusedDependency: number;
+  focusedComponent: number = -1;
+  focusedDependency: number = -1;
 
   private parentHierarchy;
   private svg: any;
@@ -53,6 +53,11 @@ export class InjectorTree implements OnChanges {
   private onFocusNode(componentIndex: number, dependecyIndex: number) {
     this.focusedComponent = componentIndex;
     this.focusedDependency = dependecyIndex;
+  }
+
+  private onUnFocusNode() {
+    this.focusedComponent = -1;
+    this.focusedDependency = -1;
   }
 
   private unFocusNode = () => {
@@ -92,9 +97,9 @@ export class InjectorTree implements OnChanges {
   }
 
   private addNodeAndText(posX: number, posY: number, title: any, clazz: string, maxChars: number = 0,
-      clickFn: () => void) {
-    this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz, clickFn);
-    this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars, clickFn);
+      mouseOverFn: () => void, mouseOutFn: () => void) {
+    this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz, mouseOverFn, mouseOutFn);
+    this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars);
   }
 
   private render() {
@@ -145,7 +150,8 @@ export class InjectorTree implements OnChanges {
         nodesToDraw.push([injectorX, nodeY, dependency.name,
           `node-circle fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
           depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS,
-          () => this.onFocusNode(hierarchyIdx, depIndex)]);
+          () => this.onFocusNode(hierarchyIdx, depIndex),
+          () => this.onUnFocusNode()]);
       });
 
       if (hierarchyIdx > 0) {
@@ -160,11 +166,11 @@ export class InjectorTree implements OnChanges {
       // draw component name and node circle
       nodesToDraw.push([nodeX, nodeY, node.name, 'node-circle fill-component stroke-component',
         hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS,
-        () => this.onFocusNode(hierarchyIdx, -1)]);
+        () => this.onFocusNode(hierarchyIdx, -1), () => this.onUnFocusNode()]);
     });
 
     nodesToDraw.forEach((params) => {
-      this.addNodeAndText(params[0], params[1], params[2], params[3], params[4], params[5]);
+      this.addNodeAndText(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
     });
 
     this.svg.append('defs').selectAll('marker')

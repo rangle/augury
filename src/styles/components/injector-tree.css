@@ -25,7 +25,6 @@ bt-injector-tree {
   }
 
   & .focused-node-info-panel {
-    min-height: 25%;
     overflow-y: auto;
   }
 }
