@@ -15,6 +15,7 @@ const resolveNgModuleDecoratorConfig = (m) => {
 };
 
 export const parseModules = (firstRootDebugElement: any): {[key: string]: any} => {
+  // TODO(steven.kampen): This uses a private API. Can it be improved?
   const bootstrappedModule = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef)._injector.instance;
   const [modules, moduleNames, tokenIdMap] = _parseModule(bootstrappedModule.constructor);
   const serializableModules = {};
