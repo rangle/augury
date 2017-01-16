@@ -65,7 +65,7 @@
     "es6-shim": "^0.35.0",
     "file-loader": "^0.8.5",
     "msgpack-lite": "^0.1.20",
-    "object-assign": "4.0.1",
+    "object-assign": "4.1.1",
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^8.1.0",
     "postcss-loader": "^1.0.0",
