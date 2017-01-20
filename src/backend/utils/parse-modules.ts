@@ -145,7 +145,7 @@ const _parseModule = (module: any, modules: {} = {},
       .concat(moduleComponents)
       .map(t => resolveTokenIdMetaData(t, tokenIdMap))
       .map(tokenAndId => {
-        const isString = typeof tokenAndId.token === 'string';
+        const isString = (typeof tokenAndId.token) === 'string';
         tokenIdMap[tokenAndId.augury_token_id] = {
           name: !isString ? tokenAndId.token.name : tokenAndId.token,
           type: !isString && componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
