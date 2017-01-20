@@ -125,7 +125,7 @@ function map(operation: Operation, value) {
           /// long as they do not reference closures that are not accessible
           /// in the context they are running in.
           if (typeof value === 'function') {
-            return `function ${functionName(value)}() {}`;
+            return `function ${functionName(value).split(' ').join('_')}() {}`;
           }
 
           let index = operation.visits.get(value);
