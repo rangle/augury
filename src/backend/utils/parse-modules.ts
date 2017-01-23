@@ -40,14 +40,18 @@ const randomId = () => {
 };
 
 const resolveTokenIdMetaData = (token, tokenIdMap: { [key: string]: any }) => {
-  if (!Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token)) {
-    let tokenId = randomId();
-    while (tokenIdMap[tokenId]) {
-      tokenId = randomId();
+  let tokenId = '';
+  if (typeof token === 'string') {
+    tokenId = token;
+  } else {
+    if (!Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token)) {
+      while (tokenIdMap[tokenId]) {
+        tokenId = randomId();
+      }
+      Reflect.defineMetadata(AUGURY_TOKEN_ID_METADATA_KEY, tokenId, token);
     }
-    Reflect.defineMetadata(AUGURY_TOKEN_ID_METADATA_KEY, tokenId, token);
   }
-  return { token: token, augury_token_id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token) };
+  return { token: token, augury_token_id: tokenId };
 };
 
 const parseProviderName = p =>
@@ -141,9 +145,10 @@ const _parseModule = (module: any, modules: {} = {},
       .concat(moduleComponents)
       .map(t => resolveTokenIdMetaData(t, tokenIdMap))
       .map(tokenAndId => {
+        const isString = (typeof tokenAndId.token) === 'string';
         tokenIdMap[tokenAndId.augury_token_id] = {
-          name: tokenAndId.token.name,
-          type: componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
+          name: !isString ? tokenAndId.token.name : tokenAndId.token,
+          type: !isString && componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
           module: module.name,
         };
       });
