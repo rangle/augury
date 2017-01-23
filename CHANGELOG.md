@@ -1,4 +1,8 @@
 # Change Log
+## [1.2.9](https://github.com/rangle/tree/1.2.9)
+* Fix injecting router breaking component state. [699](https://github.com/rangle/augury/issues/699)
+* Fix for string based providers in NgModule parsing. [922](https://github.com/rangle/augury/issues/922)
+
 ## [1.2.8](https://github.com/rangle/tree/1.2.8)
 * Automatically resolve router when possible. [829](https://github.com/rangle/augury/issues/829)
 * Add NgModules tab feature. [764](https://github.com/rangle/augury/issues/764)
