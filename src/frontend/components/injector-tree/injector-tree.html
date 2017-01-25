@@ -44,7 +44,9 @@
     <ul class="list-reset m0">
       <li>
         <span class="info-key">NgModule:</span>
-        <span class="info-value">{{ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id].module}}</span>
+        <span class="info-value" *ngIf="ngModules && ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id]">
+          {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id].module}}
+        </span>
       </li>
     </ul>
   </div>
@@ -62,7 +64,9 @@
       </li>
       <li>
         <span class="info-key">NgModule:</span>
-        <span class="info-value">{{ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id].module}}</span>
+        <span *ngIf="ngModules && ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id]" class="info-value">
+          {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id].module}}
+        </span>
       </li>
     </ul>
   </div>

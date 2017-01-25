@@ -40,18 +40,19 @@ const randomId = () => {
 };
 
 const resolveTokenIdMetaData = (token, tokenIdMap: { [key: string]: any }) => {
-  let tokenId = '';
+  let tokenId = null;
   if (typeof token === 'string') {
     tokenId = token;
   } else {
     if (!Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token)) {
+      tokenId = randomId();
       while (tokenIdMap[tokenId]) {
         tokenId = randomId();
       }
       Reflect.defineMetadata(AUGURY_TOKEN_ID_METADATA_KEY, tokenId, token);
     }
   }
-  return { token: token, augury_token_id: tokenId };
+  return { token: token, augury_token_id: tokenId || Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token) };
 };
 
 const parseProviderName = p =>

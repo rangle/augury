@@ -68,12 +68,16 @@ const messageBuffer = new MessageQueue<Message<any>>();
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
 let previousTree: MutableTree,
   previousCount: number,
+  initialModules: { [key: string]: any },
   onMouseOver,
   onMouseDown;
 
-const parseInitialModules = (roots: Array<any>) => {
-  if (roots.length) {
-    messageBuffer.enqueue(MessageFactory.ngModules(parseModules(roots[0])));
+const parseInitialModules = () => {
+  const roots = getAllAngularRootElements().map(r => ng.probe(r));
+  if (!initialModules && roots.length) {
+    initialModules = parseModules(roots[0]);
+    messageBuffer.enqueue(MessageFactory.ngModules(initialModules));
+    send(MessageFactory.push());
   }
 };
 
@@ -132,7 +136,6 @@ const bind = (root) => {
 
   // initial load
   subject.next(void 0);
-  parseInitialModules(getAllAngularRootElements().map(r => ng.probe(r)));
 };
 
 const checkDebug = (fn: () => void) => {
@@ -159,6 +162,8 @@ const resubscribe = () => {
     subscriptions.splice(0, subscriptions.length);
 
     getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+
+    setTimeout(parseInitialModules);
   });
 };
 
