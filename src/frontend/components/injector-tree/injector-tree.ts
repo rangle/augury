@@ -63,7 +63,7 @@ export class InjectorTree implements OnChanges {
   private unFocusNode = () => {
     this.focusedComponent = -1;
     this.focusedDependency = -1;
-  };
+  }
 
   private onSelectComponent(component: any): void {
     this.selectNode.emit(component);
