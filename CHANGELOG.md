@@ -1,4 +1,7 @@
 # Change Log
+## [1.2.10](https://github.com/rangle/tree/1.2.10)
+* Fix issue with NgModule references in injector graph. [918](https://github.com/rangle/augury/issues/918)
+
 ## [1.2.9](https://github.com/rangle/tree/1.2.9)
 * Fix injecting router breaking component state. [699](https://github.com/rangle/augury/issues/699)
 * Fix for string based providers in NgModule parsing. [922](https://github.com/rangle/augury/issues/922)
