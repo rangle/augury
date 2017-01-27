@@ -45,8 +45,7 @@ To develop this extension, the following environment is used:
 
 * Node 4.2.3
 * NPM 3.5.3
-* TypeScript 1.8.9
-* typings 1.3.2
+* TypeScript 2.1.5
 
 ## Installation
 
@@ -73,8 +72,7 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 
 - `build` Build the extension
 - `webpack` Run webpack
-- `clean` Clean `node_modules` and `typings`,
-- `postinstall` install typings
+- `clean` Clean `node_modules`
 - `start` Clean build and run webpack in watch mode
 - `test` Bundle all *.test.ts and run it through a headless browser
 - `prepack` Run npm build before running npm pack
