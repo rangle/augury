@@ -50,7 +50,6 @@
     "crypto": "0.0.3",
     "d3": "^4.4.4",
     "expose-loader": "^0.7.1",
-    "file-loader": "^0.9.0",
     "immutable": "^3.7.6",
     "rxjs": "^5.0.3",
     "zone.js": "^0.7.6"
@@ -74,7 +73,7 @@
     "d3-shape": "^1.0.4",
     "es6-promise": "^4.0.5",
     "es6-shim": "^0.35.0",
-    "file-loader": "^0.9.0",
+    "file-loader": "^0.10.0",
     "msgpack-lite": "^0.1.20",
     "object-assign": "4.1.1",
     "postcss-cssnext": "^2.5.2",
