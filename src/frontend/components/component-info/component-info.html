@@ -23,19 +23,6 @@
   </div>
 
   <div [hidden]="!(node && node.name)">
-    <accordion sectionTitle="Properties" *ngIf="hasProperties" [defaultExpanded]="true">
-      <div section-content>
-        <ul class="list-reset m0"
-            *ngIf="node && node.description">
-          <bt-property-value
-            *ngFor="let property of node.description"
-            [key]="property.key"
-            [value]="property.value">
-          </bt-property-value>
-        </ul>
-      </div>
-    </accordion>
-
     <accordion sectionTitle="Instance Providers" *ngIf="hasInstanceProviders" [defaultExpanded]="true">
       <div section-content>
         <bt-render-state
