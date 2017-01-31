@@ -39,12 +39,14 @@
         </span>
         <ul class="list-reset">
           <li *ngFor="let el of selectedRoute.data">
-            <span class="info-key">
-              {{el.key}}:
+            <div class="pl4">
+              <span class="info-key">
+                {{el.key}}:
               </span>
-            <span class="info-value">
-              {{el.value}}
+              <span class="info-value">
+                {{el.value}}
               </span>
+            </div>
           </li>
         </ul>
       </li>
