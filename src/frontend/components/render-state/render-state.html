@@ -1,4 +1,4 @@
-<div *ngFor="let k of keys(state)" [ngClass]="{pl4: indent}">
+<div *ngFor="let k of keys(state)" [ngClass]="{pl4: expandable(k)}">
   <span *ngIf="none">
     No state to show
   </span>
