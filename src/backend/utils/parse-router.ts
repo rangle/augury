@@ -39,8 +39,11 @@ function assignChildrenToParent(parentPath, children): [any] {
 
     const pathFragment = child.outlet ? `(${child.outlet}:${child.path})` : child.path;
 
-    const routeConfig = {
+    const routeConfig: Route = {
       handler: childName,
+      data: [],
+      hash: null,
+      specificity: null,
       name: childName,
       path: `${parentPath ? parentPath : ''}/${pathFragment}`.split('//').join('/'),
       isAux: isAuxRoute,
@@ -49,6 +52,17 @@ function assignChildrenToParent(parentPath, children): [any] {
 
     if (childDescendents) {
       routeConfig.children = assignChildrenToParent(routeConfig.path, childDescendents);
+    }
+
+    if (child.data) {
+      for (const el in child.data) {
+        if (child.data.hasOwnProperty(el)) {
+          routeConfig.data.push({
+            key: el,
+            value: child.data[el],
+          });
+        }
+      }
     }
 
     return routeConfig;
