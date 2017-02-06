@@ -29,7 +29,7 @@ export function parseRoutes(router: any): MainRoute {
   return root;
 }
 
-function assignChildrenToParent(parent, children): [any] {
+function assignChildrenToParent(parentPath, children): [any] {
   return children.map((child) => {
     const childName = childRouteName(child);
     const childDescendents: [any] = child._loadedConfig ? child._loadedConfig.routes : child.children;
@@ -37,15 +37,35 @@ function assignChildrenToParent(parent, children): [any] {
     // only found in aux routes, otherwise property will be undefined
     const isAuxRoute = !!child.outlet;
 
-    return {
+    const pathFragment = child.outlet ? `(${child.outlet}:${child.path})` : child.path;
+
+    const routeConfig: Route = {
       handler: childName,
+      data: [],
+      hash: null,
+      specificity: null,
       name: childName,
-      parent: parent,
-      path: `/${child.path}`,
+      path: `${parentPath ? parentPath : ''}/${pathFragment}`.split('//').join('/'),
       isAux: isAuxRoute,
-      children: childDescendents ?
-        assignChildrenToParent(this, childDescendents) : []
+      children: [],
     };
+
+    if (childDescendents) {
+      routeConfig.children = assignChildrenToParent(routeConfig.path, childDescendents);
+    }
+
+    if (child.data) {
+      for (const el in child.data) {
+        if (child.data.hasOwnProperty(el)) {
+          routeConfig.data.push({
+            key: el,
+            value: child.data[el],
+          });
+        }
+      }
+    }
+
+    return routeConfig;
   });
 }
 
