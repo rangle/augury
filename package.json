@@ -62,7 +62,7 @@
     "@types/d3-selection": "^1.0.9",
     "@types/d3-shape": "^1.0.7",
     "@types/es6-shim": "^0.31.32",
-    "@types/node": "^7.0.3",
+    "@types/node": "^7.0.5",
     "@types/tape": "^4.2.28",
     "autoprefixer": "^6.3.6",
     "basscss-layout": "^3.1.0",
