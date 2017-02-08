@@ -48,7 +48,6 @@ export class RenderState {
   @Input() level: number;
   @Input() path: Path;
   @Input() state;
-  @Input() indent: boolean = true;
 
   @Output() updateValue = new EventEmitter<{path: Path, propertyKey: Path, newValue}>();
 
