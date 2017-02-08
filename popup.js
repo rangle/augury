@@ -14,7 +14,7 @@ function subVersionNumbers() {
 
 function generateGithubIssuesBodyText() {
   const date = (new Date()).toUTCString();
-  let body =`Augury: ${chrome.runtime.getManifest().version}
+  const body = `Augury: ${chrome.runtime.getManifest().version}
 Date: ${date}
 OS: ${navigator.platform}
 
