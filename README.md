@@ -68,7 +68,7 @@ npm run dev-build
 1. Choose "Load unpacked extension".
 1. In the dialog, open the directory you just cloned.
 
-Try out the extension with one of our [example applications](#examples).
+Try out the extension with one of the example app from the [Guide](https://augury.angular.io/pages/guides/).
 
 ### Running tests
 
