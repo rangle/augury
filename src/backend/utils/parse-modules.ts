@@ -8,7 +8,8 @@ declare const ng;
 const resolveNgModuleDecoratorConfig = (m) => {
   if (m.decorators) {
     return m.decorators.reduce((prev, curr, idx, decorators) =>
-      prev ? prev : decorators[idx].type.prototype.toString() === '@NgModule' ? decorators[idx].args[0] : null, null);
+      prev ? prev : decorators[idx].type.prototype.toString() === '@NgModule' ?
+        (decorators[idx].args || [])[0] : null, null);
   }
 
   return Reflect.getMetadata('annotations', m).find(decorator => decorator.toString() === '@NgModule');
