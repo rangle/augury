@@ -18,19 +18,24 @@ function generateGithubIssuesBodyText() {
 Date: ${date}
 OS: ${navigator.platform}
 
-Demo Test Application
-Git repository for demo app showing issues (optional but very helpful for difficult issues).
+Demo test application:
+-- Git repository for demo app showing the issue (optional but very helpful for difficult issues).
+-- If a code snippet will completely show the issue, please include it.
 
 Description of issue:
-(Include images if possible)
+-- Include (clipped) screenshot images if possible.
 
-Angular Version: ???
+Angular version (required): ???
 
-Steps to Reproduce:
+Steps to reproduce:
 
 1.
 2.
-3.`;
+3.
+
+Additional details:
+
+`;
 
   window.open(`https://github.com/rangle/augury/issues/new?body=${window.encodeURI(body)}`);
 }
