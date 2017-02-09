@@ -20,7 +20,7 @@ const handler = () => {
 if (!handler()) {
   const subscribe = () => {
     if (MutationObserver) {
-      const observer = new MutationObserver((mutations, observer) => handler());
+      const observer = new MutationObserver(mutations => handler());
       observer.observe(document, { childList: true, subtree: true });
 
       return () => observer.disconnect();

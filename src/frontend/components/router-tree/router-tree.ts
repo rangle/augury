@@ -11,129 +11,100 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 
 import * as d3 from 'd3';
 
-interface TreeConfig {
-  tree: d3.layout.Tree<d3.layout.tree.Node>;
-  diagonal:
-    d3.svg.Diagonal<
-      d3.svg.diagonal.Link<d3.svg.diagonal.Node>,
-      d3.svg.diagonal.Node
-    >;
-  svg: d3.Selection<any>;
-  g: d3.Selection<any>;
-}
-
 @Component({
   selector: 'bt-router-tree',
   template: require('./router-tree.html'),
   styles: [require('to-string!./router-tree.css')],
 })
 export class RouterTree {
-  @ViewChild('chartContainer') chartContainer;
+  @ViewChild('svgContainer') private svg: ElementRef;
+  @ViewChild('mainGroup') private g: ElementRef;
   @Input() private routerTree: Array<Route>;
   private selectedRoute: Route | any;
-
-  private treeConfig: TreeConfig;
+  private tree: d3.TreeLayout<{}>;
 
   constructor(private userActions: UserActions, private element: ElementRef) {}
 
-  private getTree(): TreeConfig {
-    const tree = d3.layout.tree();
-
-    const diagonal = d3.svg.diagonal()
-      .projection((d) => [d.y, d.x]);
-
-    const svg = d3.select(this.chartContainer.nativeElement)
-      .append('svg');
-
-    const g = svg.append('g');
-
-    return {
-      tree,
-      diagonal,
-      svg,
-      g
-    };
-  }
-
   render() {
-    if (!this.routerTree || !this.treeConfig) {
+    if (!this.routerTree) {
       return;
     }
 
-    const tree = this.treeConfig.tree;
-    const data = this.routerTree;
-    const gEl =  this.element.nativeElement.querySelector('g');
-    let i = 0;
+    this.tree = d3.tree();
 
-    // Compute the new tree layout.
-    tree.nodeSize([20, 10]);
+    const svg = d3.select(this.svg.nativeElement);
+    const g = d3.select(this.g.nativeElement);
 
-    let nodes = [];
-    for (const root of data) {
-      nodes = nodes.concat(tree.nodes(root));
-    }
-    nodes.reverse();
-
-    const links = tree.links(nodes);
-
-    // Normalize for fixed-depth.
-    nodes.forEach((d) => {
-      d.y = d.depth * 150;
-    });
-
-    // Declare the nodes
-    const node = this.treeConfig.g.selectAll('g.node')
-      .data(nodes, (d: any) => d.id || (d.id = ++i));
-
-    // Enter the nodes
-    const nodeEnter = node.enter().append('g')
-      .attr('class', 'node')
-      .on('mouseover', n => this.onRollover(n))
-      .on('mouseout', n => this.onRollover(n));
-
-    nodeEnter.append('circle')
-      .attr('class', (d) => d.isAux ? 'node-aux-route' : 'node-route')
-      .attr('r', 6);
-
-    nodeEnter.append('text')
-      .attr('x', (d) => d.children || d._children ? -13 : 13)
-      .attr('dy', '.35em')
-      .attr('text-anchor', (d) => d.children || d._children ? 'end' : 'start')
-      .text((d) => d.name)
-      .attr('class', 'monospace');
-
-    // Update the nodes
-    node.attr('transform', (d) => `translate(${d.y},${d.x})`)
-      .select('circle')
-      .classed('selected', (d) => this.selectedRoute && ( d.id === this.selectedRoute.id ));
-
-    // Declare the links
-    const link = this.treeConfig.g.selectAll('path.link')
-      .data(links, (d: any) => d.target.id);
-
-    // Enter any new links at the parent's previous position.
-    link
-      .enter()
-      .insert('path', 'g')
-      .attr('class', 'link')
-      .attr('d', this.treeConfig.diagonal);
-
-    const gElBBox = gEl.getBBox();
     const svgPadding = 20;
 
-    this.treeConfig.svg
-      .attr('height', gElBBox.height + 2 * svgPadding)
-      .attr('width', gElBBox.width + 2 * svgPadding);
+    // Compute the new tree layout.
+    this.tree.nodeSize([20, 150]);
 
-    this.treeConfig.g
-      .attr('transform', `translate(${ -gElBBox.x + svgPadding },${ -gElBBox.y + svgPadding})`);
+    const root: Route = {
+      name: 'root',
+      children: this.routerTree,
+      hash: null,
+      path: null,
+      specificity: null,
+      handler: null,
+      data: {},
+      isAux: false,
+    };
+
+    const nodes = this.tree(d3.hierarchy(
+      root.children.length > 1 ? root : root.children[0], d => d.children));
+
+    g.selectAll('.link')
+      .data(nodes.descendants().slice(1))
+      .enter().append('path')
+        .attr('class', 'link')
+        .attr('d', d => `
+            M${d.y},${d.x}
+            C${(d.y + d.parent.y) / 2},
+              ${d.x} ${(d.y + d.parent.y) / 2},
+              ${d.parent.x} ${d.parent.y},
+              ${d.parent.x}`);
+
+    // Declare the nodes
+    const node = g.selectAll('g.node')
+      .data(nodes.descendants())
+      .enter().append('g')
+      .attr('class', 'node')
+      .on('mouseover', n => this.onRollover(n.data))
+      .on('mouseout', n => this.onRollover(n.data))
+      .attr('transform', d => `translate(${d.y},${d.x})`);
+
+    node.append('circle')
+      .attr('class', d => (<any>d.data).isAux ? 'node-aux-route' : 'node-route')
+      .attr('r', 6);
+
+    node.append('text')
+      .attr('x', (d) => d.children ? -13 : 13)
+      .attr('dy', '.35em')
+      .attr('text-anchor', (d) => d.children ? 'end' : 'start')
+      .text(d => (<any>d.data).name)
+      .attr('class', 'monospace');
+
+    // reset transform
+    g.attr('transform', 'translate(0, 0)');
+
+    const svgRect = this.svg.nativeElement.getBoundingClientRect();
+    const gElRect = this.g.nativeElement.getBoundingClientRect();
+
+    g.attr('transform', `translate(
+      ${svgRect.left - gElRect.left + svgPadding},
+      ${svgRect.top - gElRect.top + svgPadding}
+    )`);
+
+    svg
+      .attr('height', gElRect.height + svgPadding * 2)
+      .attr('width', gElRect.width + svgPadding * 2);
+
   }
 
   private ngOnChanges(changes: SimpleChanges) {
-    // tslint:disable:no-string-literal
-    if (changes['routerTree']) {
-      d3.select(this.chartContainer.nativeElement).select('svg').remove();
-      this.treeConfig = this.getTree();
+    if ((<any>changes).routerTree && this.g) {
+      d3.select(this.g.nativeElement).selectAll('*').remove();
     }
     this.render();
   }
