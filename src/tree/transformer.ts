@@ -141,7 +141,7 @@ export const recursiveSearch = (children: any[], test: (element) => boolean): Ar
     }
     else {
       Array.prototype.splice.apply(result,
-        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
+        (<Array<any>> [result.length, 0]).concat(recursiveSearch(c.children, test)));
     }
   }
 
