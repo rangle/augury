@@ -1,4 +1,15 @@
 # Change Log
+## [1.2.11](https://github.com/rangle/tree/1.2.11)
+* Remove "Properties" accordion. [663](https://github.com/rangle/augury/issues/663)
+* Fix route data parsing. [914](https://github.com/rangle/augury/issues/914)
+* Fix nested route paths. [917](https://github.com/rangle/augury/issues/917)
+* Improve router tree style in dark mode. [880](https://github.com/rangle/augury/issues/880)
+* Improve indenting in object accordions. [857](https://github.com/rangle/augury/issues/857)
+* Fix issue with no-arg NgModules. [958](https://github.com/rangle/augury/issues/958)
+* Add issue reporting links.
+* Add support for `@Inject` decorated constructor injection. [851](https://github.com/rangle/augury/issues/851)
+* Fix incorrect component order in "Hybrid" component tree mode. [925](https://github.com/rangle/augury/issues/925)
+
 ## [1.2.10](https://github.com/rangle/tree/1.2.10)
 * Fix issue with NgModule references in injector graph. [918](https://github.com/rangle/augury/issues/918)
 
