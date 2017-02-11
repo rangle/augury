@@ -202,11 +202,11 @@ const getDependencies = (instance): Array<Dependency> => {
 
   const parameterDecorators = injectedParameterDecorators(instance);
   const normalizedParamTypes = parameterTypes(instance).map((type, i) =>
-    type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0]);
+    type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0].token);
 
   return normalizedParamTypes.map((paramType, i) => ({
     id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
-    name: functionName(paramType),
+    name: functionName(paramType) || paramType.toString(),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
 };
