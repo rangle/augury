@@ -1,6 +1,6 @@
 export class GraphUtils {
   addText(svg: any, x: number, y: number, text: string, maxChars: number = 0) {
-    const fittedText = maxChars > 0 && text.length > maxChars ? `${text.slice(0, maxChars - 3)}...` : text;
+    const fittedText = maxChars > 0 && text && text.length > maxChars ? `${text.slice(0, maxChars - 3)}...` : text;
     svg
       .append('text')
       .attr('x', x)
