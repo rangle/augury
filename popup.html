@@ -75,13 +75,22 @@
       height: 33px;
     }
 
-    .github .icon:before{
+    .github .icon:before {
       background-image: url(images/github.svg);
     }
 
-    .feedback .icon:before{
+    .gitissue .icon:before {
+      background-image: url(images/report-issue.svg);
+      background-size: 25px 25px;
+      width: 25px;
+      height: 25px;
+      margin-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .feedback .icon:before {
       background-image: url(images/feedback.svg);
-      background-size: 33px 33px;
+      background-size: 30px 33px;
       width: 33px;
       height: 33px;
     }
@@ -91,12 +100,16 @@
       top: 4px;
     }
 
-    .website .icon:before{
+    .website .icon:before {
       background-image: url(images/augury-bw.svg);
       background-size: 25px 25px;
       width: 25px;
       height: 25px;
       padding-bottom: 4px;
+    }
+
+    .guide .icon:before {
+      background-image: url(images/guide.svg);
     }
 
     /* Content */
@@ -138,7 +151,7 @@
 
   <div class="modal_cta">
     <div class="flex_container">
-      <div class="flex website">
+      <div class="flex guide">
         <a href="https://augury.angular.io/pages/guides/" target="__augury_website" class="icon">
           Guides
         </a>
@@ -148,8 +161,8 @@
           Website
         </a>
       </div>
-      <div class="flex github">
-        <a class="icon" id="create_issue">
+      <div class="flex gitissue">
+        <a id="create_issue" target="__augury_github" class="icon">
           Issues
         </a>
       </div>
