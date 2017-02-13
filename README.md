@@ -31,7 +31,7 @@ In order for Angular to expose the debug information for AoT applications, you w
   "debug": true
 }
 ```
-Note that this debug flag and `development mode` in Angular runtime are two completely different settings. 
+Note that this debug flag and `development mode` in Angular runtime are two completely different settings.
 
 To learn more about AoT compilation, visit [this section of Angular documentation](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html).
 
@@ -82,6 +82,16 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 
 - [Kitchen Sink Demo](./example-apps/kitchen-sink-example/README.md)
 - [Superhero Tinder](./example-apps/superhero-app/README.md)
+
+## Versioning
+
+Augury follows the [Semantic version](http://semver.org/) standard, which is: MAJOR.MINOR.PATCH
+
+Taken from the semver site, the rules for versioning is as follows:
+
+* MAJOR version when you make incompatible API changes.
+* MINOR version when you add functionality in a backwards-compatible manner.
+* PATCH version when you make backwards-compatible bug fixes.
 
 ## Issues
 
