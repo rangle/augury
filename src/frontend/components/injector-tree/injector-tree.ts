@@ -63,7 +63,7 @@ export class InjectorTree implements OnChanges {
   private unFocusNode = () => {
     this.focusedComponent = -1;
     this.focusedDependency = -1;
-  };
+  }
 
   private onSelectComponent(component: any): void {
     this.selectNode.emit(component);
@@ -147,7 +147,7 @@ export class InjectorTree implements OnChanges {
         }
 
         // draw injected dependency name and node circle
-        nodesToDraw.push([injectorX, nodeY, dependency.name,
+        nodesToDraw.push([injectorX, nodeY, dependency.name || 'no-name',
           `node-circle fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
           depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS,
           () => this.onFocusNode(hierarchyIdx, depIndex),
@@ -164,7 +164,7 @@ export class InjectorTree implements OnChanges {
       }
 
       // draw component name and node circle
-      nodesToDraw.push([nodeX, nodeY, node.name, 'node-circle fill-component stroke-component',
+      nodesToDraw.push([nodeX, nodeY, node.name || 'no-name', 'node-circle fill-component stroke-component',
         hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS,
         () => this.onFocusNode(hierarchyIdx, -1), () => this.onUnFocusNode()]);
     });

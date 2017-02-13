@@ -141,7 +141,7 @@ export const recursiveSearch = (children: any[], test: (element) => boolean): Ar
     }
     else {
       Array.prototype.splice.apply(result,
-        (<Array<any>> [result.length - 1, 0]).concat(recursiveSearch(c.children, test)));
+        (<Array<any>> [result.length, 0]).concat(recursiveSearch(c.children, test)));
     }
   }
 
@@ -199,11 +199,14 @@ const getDependencies = (instance): Array<Dependency> => {
   if (instance == null) {
     return [];
   }
-  const paramTypes = parameterTypes(instance);
+
   const parameterDecorators = injectedParameterDecorators(instance);
-  return paramTypes.map((paramType, i) => ({
+  const normalizedParamTypes = parameterTypes(instance).map((type, i) =>
+    type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0].token);
+
+  return normalizedParamTypes.map((paramType, i) => ({
     id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
-    name: functionName(paramType),
+    name: functionName(paramType) || paramType.toString(),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
 };
