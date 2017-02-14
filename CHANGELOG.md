@@ -1,4 +1,7 @@
 # Change Log
+## [1.2.12](https://github.com/rangle/tree/1.2.12)
+* Hotfix for empty (root only) routers. [970](https://github.com/rangle/augury/issues/970)
+
 ## [1.2.11](https://github.com/rangle/tree/1.2.11)
 * Remove "Properties" accordion. [663](https://github.com/rangle/augury/issues/663)
 * Fix route data parsing. [914](https://github.com/rangle/augury/issues/914)
