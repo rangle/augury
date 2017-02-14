@@ -52,7 +52,7 @@ export class RouterTree {
     };
 
     const nodes = this.tree(d3.hierarchy(
-      root.children.length > 1 ? root : root.children[0], d => d.children));
+      (root.children.length === 0 || root.children.length > 1) ? root : root.children[0], d => d.children));
 
     g.selectAll('.link')
       .data(nodes.descendants().slice(1))
