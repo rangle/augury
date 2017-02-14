@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="127.18"
+   height="127.18"
+   viewBox="0 0 127.18 127.18"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="report-issue.svg">
+  <title
+     id="title4135">Github Report Issue</title>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1370"
+     inkscape:window-height="841"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="1.8556377"
+     inkscape:cx="173.25581"
+     inkscape:cy="20.478136"
+     inkscape:window-x="6"
+     inkscape:window-y="110"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2"
+     inkscape:showpageshadow="false" />
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Github Report Issue</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Rajinder Yadav</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <circle
+     cy="63.59"
+     cx="63.59"
+     id="path4136"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:4.46316814;stroke-miterlimit:4;stroke-dasharray:none"
+     r="61.358418" />
+  <g
+     transform="scale(1.200844,0.83274761)"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:118.31771088px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="text4138">
+    <path
+       d="m 44.044897,33.718995 20.798035,0 0,33.103539 -2.946388,24.14883 -14.905259,0 -2.946388,-24.14883 0,-33.103539 z m 0,65.687127 20.798035,0 0,20.566948 -20.798035,0 0,-20.566948 z"
+       id="path4146"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
