@@ -80,7 +80,7 @@
     "postcss-import": "^9.1.0",
     "postcss-loader": "^1.0.0",
     "raw-loader": "^0.5.1",
-    "reflect-metadata": "0.1.9",
+    "reflect-metadata": "0.1.10",
     "rimraf": "2.5.4",
     "style-loader": "^0.13.1",
     "tap-spec": "^4.1.1",
