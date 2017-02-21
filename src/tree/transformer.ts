@@ -88,7 +88,6 @@ export const transform = (path: Path,
     dependencies: getDependencies(element.componentInstance),
     quickViewAttribute: []
   };
-  
   node.quickViewAttribute = getQuickViewAttribute(node);
 
   /// Set before we search for children so that the value is cached and the
