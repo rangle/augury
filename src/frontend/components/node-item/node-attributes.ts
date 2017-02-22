@@ -9,11 +9,4 @@ import {Property} from '../../../backend/utils';
 })
 export class NodeAttributes {
   @Input() private attributes: Array<Property>;
-
-  private show: boolean = false;
-
-  onShow(event) {
-    event.stopPropagation();
-    this.show = true;
-  }
 }
