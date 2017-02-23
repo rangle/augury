@@ -6,7 +6,7 @@ import {
 } from './message';
 
 import {
-  MainRoute,
+  Route,
 } from '../backend/utils';
 
 import {MessageType} from './message-type';
@@ -130,7 +130,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static routerTree(content: Array<MainRoute>): Message<void> {
+  static routerTree(content: Array<Route>): Message<void> {
     return create({
       messageType: MessageType.RouterTree,
       content: content,

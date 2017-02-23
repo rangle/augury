@@ -1,9 +1,17 @@
 import {classDecorators, componentMetadata} from '../../tree/decorators';
 import {functionName} from '../../utils/function-name';
+import {Route} from '../utils/parse-router';
 
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
 declare const ng;
+
+export interface NgModulesRegistry {
+  modules: { [key: string]: any };
+  configs: { [key: string]: any };
+  names: Array<string>;
+  tokenIdMap: { [key: string]: any };
+}
 
 const resolveNgModuleDecoratorConfig = (m) => {
   if (m.decorators) {
@@ -15,21 +23,55 @@ const resolveNgModuleDecoratorConfig = (m) => {
   return Reflect.getMetadata('annotations', m).find(decorator => decorator.toString() === '@NgModule');
 };
 
-export const parseModules = (firstRootDebugElement: any): {[key: string]: any} => {
+export const parseModulesFromRouter = (router, existingModules: NgModulesRegistry) => {
+  const foundModules = [];
+
+  const _parse = (config) => {
+    config.forEach(route => {
+      if (route._loadedConfig) {
+        foundModules.push(route._loadedConfig.injector.instance);
+        _parse(route._loadedConfig.routes || []);
+      }
+      _parse(route.children || []);
+    });
+  };
+
+  _parse(router.config);
+
+  foundModules.forEach(module => {
+
+    _parseModule(
+      module.constructor,
+      existingModules.modules,
+      existingModules.names,
+      existingModules.tokenIdMap);
+
+    updateRegistryConfigs(existingModules);
+
+  });
+};
+
+
+export const parseModulesFromRootElement = (firstRootDebugElement: any, registry: NgModulesRegistry) => {
   // TODO(steven.kampen): This uses a private API. Can it be improved?
   const bootstrappedModule = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef)._injector.instance;
-  const [modules, moduleNames, tokenIdMap] = _parseModule(bootstrappedModule.constructor);
-  const serializableModules = {};
-  for (const m in modules) {
-    if (modules.hasOwnProperty(m)) {
-      serializableModules[modules[m].name] = modules[m];
+
+  _parseModule(
+    bootstrappedModule.constructor,
+    registry.modules,
+    registry.names,
+    registry.tokenIdMap);
+
+  updateRegistryConfigs(registry);
+
+};
+
+const updateRegistryConfigs = (registry: NgModulesRegistry) => {
+  for (const m in registry.modules) {
+    if (registry.modules.hasOwnProperty(m)) {
+      registry.configs[registry.modules[m].name] = registry.modules[m];
     }
   }
-  return {
-    names: moduleNames,
-    configs: serializableModules,
-    tokenIdMap,
-  };
 };
 
 const parseModuleName = (m) => {
@@ -106,8 +148,11 @@ const flatten = (l: Array<any>) => {
   return flatArray;
 };
 
-const _parseModule = (module: any, modules: {} = {},
-  moduleNames: Array<string> = [], tokenIdMap: { [key: string]: any } = {}) => {
+const _parseModule = (
+  module: any,
+  modules: {} = {},
+  moduleNames: Array<string> = [],
+  tokenIdMap: {} = {}) => {
 
   if (!modules[module]) {
     const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module);
