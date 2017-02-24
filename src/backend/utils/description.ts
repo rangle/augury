@@ -21,27 +21,32 @@ export abstract class Description {
       value: properties,
     });
 
-    switch (provider.name) {
-      case 'RouterOutlet':
-        return p(Description._getRouterOutletDesc(instance));
-      case 'RouterLink':
-        return p(Description._getRouterLinkDesc(instance));
-      case 'NgClass':
-        return p(Description._getClassDesc(instance));
-      case 'NgStyle':
-        return p(Description._getNgClassDesc(instance));
-      case 'NgFormModel':
-        return p(Description._getNgFormModelDesc(instance));
-      case 'NgFormControl':
-        return p(Description._getFormControlDesc(instance));
-      case 'NgControlStatus':
-        return p(Description._getControlStatusDesc(instance));
-      case 'NgModel':
-        return p(Description._getNgModelDesc(instance));
-      case 'NgForm':
-        return p(Description._getNgFormDesc(instance));
+    try {
+      switch (provider.name) {
+        case 'RouterOutlet':
+          return p(Description._getRouterOutletDesc(instance));
+        case 'RouterLink':
+          return p(Description._getRouterLinkDesc(instance));
+        case 'NgClass':
+          return p(Description._getClassDesc(instance));
+        case 'NgStyle':
+          return p(Description._getNgClassDesc(instance));
+        case 'NgFormModel':
+          return p(Description._getNgFormModelDesc(instance));
+        case 'NgFormControl':
+          return p(Description._getFormControlDesc(instance));
+        case 'NgControlStatus':
+          return p(Description._getControlStatusDesc(instance));
+        case 'NgModel':
+          return p(Description._getNgModelDesc(instance));
+        case 'NgForm':
+          return p(Description._getNgFormDesc(instance));
+        default:
+          return p([]);
+      }
+    } catch (e) {
+      return p([]);
     }
-    return p([]);
   }
 
   public static getComponentDescription(debugElement: any): Array<Property> {
@@ -49,36 +54,40 @@ export abstract class Description {
       return [];
     }
 
-    const element: any = debugElement.nativeElement;
+    try {
+      const element: any = debugElement.nativeElement;
 
-    const componentName = debugElement.componentInstance
-      ? debugElement.componentInstance.constructor.name
-      : element.tagName.toLowerCase();
+      const componentName = debugElement.componentInstance
+        ? debugElement.componentInstance.constructor.name
+        : element.tagName.toLowerCase();
 
-    switch (componentName) {
-      case 'a':
-        return [
-          { key: 'text', value: element.text },
-          { key: 'url', value: element.hash }
-        ];
-      case 'NgSelectOption':
-        return Description._getSelectOptionDesc(element);
-      case 'NgIf':
-        return Description._getNgIfDesc(debugElement.componentInstance);
-      case 'NgControlName':
-        return Description._getControlNameDesc
+      switch (componentName) {
+        case 'a':
+          return [
+            {key: 'text', value: element.text},
+            {key: 'url', value: element.hash}
+          ];
+        case 'NgSelectOption':
+          return Description._getSelectOptionDesc(element);
+        case 'NgIf':
+          return Description._getNgIfDesc(debugElement.componentInstance);
+        case 'NgControlName':
+          return Description._getControlNameDesc
           (debugElement.componentInstance);
-      case 'NgSwitch':
-        return Description._getNgSwitchDesc(debugElement.componentInstance);
-      case 'NgSwitchWhen':
-        return Description._getNgSwitchWhenDesc
+        case 'NgSwitch':
+          return Description._getNgSwitchDesc(debugElement.componentInstance);
+        case 'NgSwitchWhen':
+          return Description._getNgSwitchWhenDesc
           (debugElement.componentInstance);
-      case 'NgSwitchDefault':
-        return Description._getNgSwitchWhenDesc
+        case 'NgSwitchDefault':
+          return Description._getNgSwitchWhenDesc
           (debugElement.componentInstance);
+        default:
+          return [];
+      }
+    } catch (e) {
+      return [];
     }
-
-    return [];
   }
 
   private static _getNgClassDesc(instance: any): Array<Property> {

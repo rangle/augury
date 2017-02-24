@@ -214,9 +214,8 @@ const getDependencies = (instance): Array<Dependency> => {
 };
 
 const getQuickViewAttribute = (element): Array<Property> => {
-  if (!element.isComponent) {
+  if (element && !element.isComponent) {
     return quickViewAttribute(element);
-  } else {
-    return [];
   }
+  return [];
 };
