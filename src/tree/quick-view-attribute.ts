@@ -8,7 +8,7 @@ export const quickViewAttribute = (node): Array<Property> => {
   switch (node.name) {
     case 'a':
       // links
-      if (node && node.description) {
+      if (node.description) {
         return node.description;
       }
       return [];
