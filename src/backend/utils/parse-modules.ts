@@ -154,10 +154,12 @@ const _parseModule = (
   moduleNames: Array<string> = [],
   tokenIdMap: {} = {}) => {
 
-  if (!modules[module]) {
+  const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
+
+  if (!modules[auguryModuleId]) {
     const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module);
     moduleNames.push(parseModuleName(module));
-    modules[module] = buildModuleDescription(module, ngModuleDecoratorConfig);
+    modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
 
     // collect all providers from this module
     const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
@@ -183,7 +185,7 @@ const _parseModule = (
       }
     });
 
-    providersFromModuleImports.forEach(p => modules[module].providers.push(parseProviderName(p)));
+    providersFromModuleImports.forEach(p => modules[auguryModuleId].providers.push(parseProviderName(p)));
 
     // add augury ids
     flattenProviders(ngModuleDecoratorConfig.providers || [])
