@@ -1,3 +1,0 @@
-#Angular Input Output Example
-
-
