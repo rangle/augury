@@ -3,19 +3,27 @@
      [hidden]="selectedRoute === null"
      [selectedRoute]="selectedRoute">
   </bt-router-info>
-  <div class="flex-auto overflow-scroll">
-    <svg #svgContainer>
-      <g #mainGroup>
-      </g>
-    </svg>
+  <div class="p2 no-routes" [hidden]="routerTree?.length !== 0">
+    <p class="h1">
+      There are no routes to display.
+    </p>
+    <p class="h3">If you have routes defined and not seeing anything, for version of Angular older than 2.3.0, please see the <a (click)="showReadme()">README.</a></p>
   </div>
-  <div class="bg-panel border-top">
-    <header class="flex py1 px2">
-      <search
-         (selectedResult)="onSelectedSearchResultChanged($event)"
-         [handler]="onRetrieveSearchResults"
-         [placeholder]="'Search routes'">
-      </search>
-    </header>
+  <div class="flex-auto overflow-scroll" [hidden]="routerTree?.length === 0">
+    <div>
+      <svg #svgContainer>
+        <g #mainGroup>
+        </g>
+      </svg>
+    </div>
+    <div class="bg-panel border-top">
+      <header class="flex py1 px2">
+        <search
+          (selectedResult)="onSelectedSearchResultChanged($event)"
+          [handler]="onRetrieveSearchResults"
+          [placeholder]="'Search routes'">
+        </search>
+      </header>
+    </div>
   </div>
 </div>

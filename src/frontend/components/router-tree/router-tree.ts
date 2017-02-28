@@ -126,4 +126,9 @@ export class RouterTree {
     this.selectedRoute = route;
     this.render();
   }
+
+  showReadme() {
+    window.open('https://github.com/rangle/augury#known-issues');
+  }
+
 }
