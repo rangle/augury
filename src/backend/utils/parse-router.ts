@@ -9,21 +9,20 @@ export interface Route {
   isAux: boolean;
 }
 
-export interface MainRoute {
-  name: string;
-  children: Array<Route>;
-}
-
 // *** Component Router ***
-export function parseRoutes(router: any): MainRoute {
+export function parseRoutes(router: any): Route {
   const rootName = router.rootComponentType.name;
   const rootChildren: [any] = router.config;
 
-  const root = {
+  const root: Route = {
     handler: rootName,
     name: rootName,
     path: '/',
-    children: rootChildren ? assignChildrenToParent(null, rootChildren) : []
+    children: rootChildren ? assignChildrenToParent(null, rootChildren) : [],
+    isAux: false,
+    specificity: null,
+    data: null,
+    hash: null,
   };
 
   return root;

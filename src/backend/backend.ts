@@ -1,6 +1,7 @@
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import {compare} from '../utils/patch';
 
 import {
   MutableTree,
@@ -12,7 +13,11 @@ import {
 
 import {onElementFound, onFindElement} from './utils/find-element';
 
-import {parseModules} from './utils/parse-modules';
+import {
+  parseModulesFromRootElement,
+  parseModulesFromRouter,
+  NgModulesRegistry,
+} from './utils/parse-modules';
 
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
@@ -33,7 +38,7 @@ import {
 import {send} from './indirect-connection';
 
 import {
-  MainRoute,
+  Route,
   highlight,
   clear as clearHighlights,
   parseRoutes,
@@ -67,17 +72,33 @@ const messageBuffer = new MessageQueue<Message<any>>();
 
 /// NOTE(cbond): We collect roots from all applications (mulit-app support)
 let previousTree: MutableTree,
+  previousRoutes: Array<Route>,
   previousCount: number,
-  initialModules: { [key: string]: any },
   onMouseOver,
   onMouseDown;
 
+const parsedModulesData: NgModulesRegistry = {
+  modules: {},
+  names: [],
+  configs: {},
+  tokenIdMap: {},
+};
+
+const sendNgModulesMessage = () => {
+  const ngModulesMessage = {
+    names: parsedModulesData.names,
+    tokenIdMap: parsedModulesData.tokenIdMap,
+    configs: parsedModulesData.configs,
+  };
+  messageBuffer.enqueue(MessageFactory.ngModules(ngModulesMessage));
+  send(MessageFactory.push());
+};
+
 const parseInitialModules = () => {
   const roots = getAllAngularRootElements().map(r => ng.probe(r));
-  if (!initialModules && roots.length) {
-    initialModules = parseModules(roots[0]);
-    messageBuffer.enqueue(MessageFactory.ngModules(initialModules));
-    send(MessageFactory.push());
+  if (roots.length) {
+    parseModulesFromRootElement(roots[0], parsedModulesData);
+    sendNgModulesMessage();
   }
 };
 
@@ -106,8 +127,34 @@ const updateComponentTree = (roots: Array<any>) => {
   previousCount = count;
 };
 
-const updateRouterTree = (routes: Array<MainRoute>) => {
-  messageBuffer.enqueue(MessageFactory.routerTree(routes));
+const updateLazyLoadedNgModules = (routers) => {
+
+  routers.forEach(router => {
+    parseModulesFromRouter(router, parsedModulesData);
+  });
+
+  sendNgModulesMessage();
+};
+
+const updateRouterTree = () => {
+  const routers: Array<any> = routerTree();
+  const parsedRoutes = routers.map(parseRoutes);
+
+  let routesChanged = !previousRoutes ? true : false;
+
+  if (previousRoutes) {
+    const changes = compare(previousRoutes, parsedRoutes);
+    if (changes.length > 0) {
+      routesChanged = true;
+    }
+  }
+
+  previousRoutes = parsedRoutes;
+
+  if (routesChanged) {
+    updateLazyLoadedNgModules(routers);
+    messageBuffer.enqueue(MessageFactory.routerTree(parsedRoutes));
+  }
 };
 
 const subject = new Subject<void>();
@@ -131,7 +178,7 @@ const bind = (root) => {
   subscriptions.push(
     subject.debounceTime(0).subscribe(() => {
       updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
-      updateRouterTree(routerTree());
+      updateRouterTree();
     }));
 
   // initial load
@@ -226,9 +273,6 @@ const messageHandler = (message: Message<any>) => {
       return tryWrap(() => emitValue(previousTree,
         message.content.path,
         message.content.value));
-
-    case MessageType.RouterTree:
-      return tryWrap(() => routerTree());
 
     case MessageType.Highlight:
       if (previousTree == null) {
@@ -337,8 +381,8 @@ export const routersFromRoots = () => {
   return routers;
 };
 
-export const routerTree = (): Array<MainRoute> => {
-  let routers = new Array<MainRoute>();
+export const routerTree = (): Array<any> => {
+  let routers = new Array<any>();
 
   if (ng.coreTokens.Router) {
     for (const rootElement of getAllAngularRootElements()) {
@@ -350,7 +394,7 @@ export const routerTree = (): Array<MainRoute> => {
     }
   }
 
-  return routers.map(parseRoutes);
+  return routers;
 };
 
 export const consoleReference = (node: Node) => {
