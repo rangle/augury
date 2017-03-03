@@ -25,6 +25,8 @@ import {
   injectedParameterDecorators,
 } from './decorators';
 
+import {quickViewAttribute} from './quickview';
+
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../backend/utils/parse-modules';
 
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
@@ -84,8 +86,9 @@ export const transform = (path: Path,
     output: componentOutputs(metadata, element.componentInstance),
     properties: clone(element.properties),
     dependencies: getDependencies(element.componentInstance),
-
+    quickViewAttribute: []
   };
+  node.quickViewAttribute = getQuickViewAttribute(node);
 
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child
@@ -209,4 +212,12 @@ const getDependencies = (instance): Array<Dependency> => {
     name: functionName(paramType) || paramType.toString(),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
+};
+
+const getQuickViewAttribute = (element): Array<Property> => {
+  if (!element.isComponent) {
+    return quickViewAttribute(element);
+  } else {
+    return [];
+  }
 };
