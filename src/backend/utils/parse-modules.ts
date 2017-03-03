@@ -159,10 +159,10 @@ const _parseModule = (
   if (!modules[auguryModuleId]) {
     const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module);
     moduleNames.push(parseModuleName(module));
-    modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
+    modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig || {});
 
     // collect all providers from this module
-    const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
+    const moduleComponents = flatten((ngModuleDecoratorConfig || {}).declarations || [])
       .filter(declaration => componentMetadata(declaration));
 
     const moduleComponentProviders = moduleComponents.reduce((prev, curr, i, components) =>
@@ -171,7 +171,7 @@ const _parseModule = (
     const providersFromModuleImports = [];
 
     // parse modules imported by this module
-    const flatImports = flatten(ngModuleDecoratorConfig.imports || []);
+    const flatImports = flatten((ngModuleDecoratorConfig.imports || {}) || []);
     flatImports.forEach((im: any): any => {
       const importedModule = im.ngModule || im;
 
