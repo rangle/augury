@@ -171,7 +171,7 @@ const _parseModule = (
     const providersFromModuleImports = [];
 
     // parse modules imported by this module
-    const flatImports = flatten((ngModuleDecoratorConfig.imports || {}) || []);
+    const flatImports = flatten((ngModuleDecoratorConfig || {}).imports || []);
     flatImports.forEach((im: any): any => {
       const importedModule = im.ngModule || im;
 
