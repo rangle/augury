@@ -169,18 +169,18 @@ test('utils/description: NgSwitch', t => {
   };
 
   const description = Description.getComponentDescription(compEl);
-
+  console.log(description);
   t.deepEqual(description, [
     {
-      key: 'useDefault',
-      value: true
-    }, {
-      key: 'switchValue',
-      value: true
-    }, {
-      key: 'valuesCount',
-      value: 10
-    }], 'get NgSwitch description');
+      key: 'useDefault', value: true
+    },
+    {
+      key: 'switchDefault', value: true
+    },
+    {
+      key: 'valuesCount', value: 10
+    }
+  ], 'get NgSwitch description');
   t.end();
 });
 
@@ -256,12 +256,11 @@ test('utils/description: NgSwitchWhen', t => {
   };
 
   const description = Description.getComponentDescription(compEl);
-
   t.deepEqual(description, [
     {
-      key: 'value',
-      value: 'switchValue'
-    }], 'get NgSwitchWhen description');
+      key: 'value', value: 'switchValue'
+    }
+  ], 'get NgSwitchWhen description');
   t.end();
 });
 
