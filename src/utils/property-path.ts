@@ -2,13 +2,19 @@
 // checking the existence of certain nested properties in the angular debug object, which
 // may change in the future.
 export const pathExists = (object: any, ...args: any[]): boolean => {
+  return getAtPath(object, ...args).exists;
+};
+
+export const getAtPath = (obj: any, ...args: any[]): any => {
   for (let i = 0; i < args.length; i++) {
-    if (!object || object[args[i]] === undefined) {
-      return false;
+    if (!obj || !(args[i] in obj)) {
+      return { exists: false, value: void 0 };
     }
 
-    object = object[args[i]];
+    obj = obj[args[i]];
   }
-
-  return true;
+  return {
+    exists: true,
+    value: obj,
+  };
 };
