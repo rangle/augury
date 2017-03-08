@@ -35,36 +35,6 @@ const getPropsIfTheyExist = (object: any, props: Array<any[]>): Array<any> => {
   return properties;
 };
 export abstract class Description {
-  public static getProviderDescription(provider, instance): Property {
-    const p = properties => ({
-      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, provider),
-      key: provider.name,
-      value: properties,
-    });
-
-    switch (provider.name) {
-      case 'RouterOutlet':
-        return p(Description._getRouterOutletDesc(instance));
-      case 'RouterLink':
-        return p(Description._getRouterLinkDesc(instance));
-      case 'NgClass':
-        return p(Description._getClassDesc(instance));
-      case 'NgStyle':
-        return p(Description._getNgClassDesc(instance));
-      case 'NgFormModel':
-        return p(Description._getNgFormModelDesc(instance));
-      case 'NgFormControl':
-        return p(Description._getFormControlDesc(instance));
-      case 'NgControlStatus':
-        return p(Description._getControlStatusDesc(instance));
-      case 'NgModel':
-        return p(Description._getNgModelDesc(instance));
-      case 'NgForm':
-        return p(Description._getNgFormDesc(instance));
-      default:
-        return p([]);
-    }
-  }
 
   public static getComponentDescription(debugElement: any): Array<Property> {
     if (debugElement == null) {
@@ -109,51 +79,10 @@ export abstract class Description {
     return properties;
   }
 
-  private static _getNgClassDesc(instance: any): Array<Property> {
-    const styles = [];
-    for (let key in instance._rawStyle) {
-      if (instance._rawStyle[key]) {
-        styles.push({
-          key: key,
-          value: instance._rawStyle[key]
-        });
-      }
-    }
-    return styles;
-  }
-
-  private static _getRouterLinkDesc(instance: any): Array<Property> {
-    // this is just a patch until we upgrade to work with new router
-    if (instance._navigationInstruction) {
-      return getPropsIfTheyExist(instance, [
-        ['routeName', '_navigationInstruction', 'component', 'routeName'],
-        ['componentType', '_navigationInstruction', 'component', 'componentType', 'name'],
-        ['visibleHref'],
-        ['isRouteActive'],
-        ['routeParams', '_routeParams'],
-      ]);
-    } else {
-      return getPropsIfTheyExist(instance, [
-        ['href'],
-        ['isRouteActive', 'isActive'],
-      ]);
-    }
-  }
-
   private static _getSelectOptionDesc(element: HTMLElement): Array<Property> {
     return getPropsIfTheyExist(element, [
       ['label', 'innerText'],
     ]).concat([{key: 'value', value: element.getAttribute('value')}]);
-  }
-
-  private static _getControlStatusDesc(instance: any): Array<Property> {
-    return getPropsIfTheyExist(instance, [
-      ['ngClassDirty'],
-      ['ngClassPristine'],
-      ['ngClassInvalid'],
-      ['ngClassTouched'],
-      ['ngClassUntouched'],
-    ]);
   }
 
   private static _getControlNameDesc(instance: any): Array<Property> {
@@ -162,30 +91,6 @@ export abstract class Description {
       ['value'],
       ['valid'],
     ]);
-  }
-
-  private static _getNgFormDesc(instance: any): Array<Property> {
-    const properties = getPropsIfTheyExist(instance, [
-      ['status', 'form', 'status'],
-      ['dirty', 'form', 'dirty'],
-    ]);
-
-    return pathExists(instance, 'value')
-      ? properties.concat([{key: 'value', value: JSON.stringify(instance.value)}])
-      : properties;
-  }
-
-  private static _getRouterOutletDesc(instance: any): Array<Property> {
-    const properties = getPropsIfTheyExist(instance, [
-      ['name'],
-      ['routeName', '_currentInstruction', 'routeName'],
-      ['hostComponent', '_currentInstruction', 'componentType', 'name'],
-    ]);
-    properties
-      .filter(element => element.key === 'routeName' || element.key === 'hostComponent')
-      .forEach(element => element.value = element.value || '');
-
-    return properties;
   }
 
   private static _getNgSwitchDesc(instance: any): Array<Property> {
@@ -206,50 +111,6 @@ export abstract class Description {
     return getPropsIfTheyExist(instance, [
       ['value', '_value'],
     ]);
-  }
-
-  private static _getClassDesc(instance: any): Array<Property> {
-    const appliedClasses = [];
-    for (let key in instance._rawClass) {
-      if (instance._rawClass[key]) {
-        appliedClasses.push(key);
-      }
-    }
-    return [{
-      key: 'applied',
-      value: appliedClasses.map(String).join(',')
-    }];
-  }
-
-  private static _getFormControlDesc(instance: any): Array<Property> {
-    return getPropsIfTheyExist(instance, [
-      ['value'],
-      ['dirty'],
-      ['pristine'],
-      ['status', 'control', 'status'],
-    ]);
-  }
-
-  private static _getNgModelDesc(instance: any): Array<Property> {
-    return getPropsIfTheyExist(instance, [
-      ['value'],
-      ['viewModel'],
-      ['dirty'],
-      ['pristine'],
-      ['status', 'control', 'status'],
-    ]);
-  }
-
-  private static _getNgFormModelDesc(instance: any): Array<Property> {
-    const properties = getPropsIfTheyExist(instance, [
-      ['status', 'form', 'status'],
-      ['dirty', 'form', 'dirty'],
-      ['pristine', 'form', 'pristine'],
-      ['status', 'control', 'status'],
-    ]);
-    return pathExists(instance, 'value')
-      ? properties.concat([{key: 'value', value: JSON.stringify(instance.value)}])
-      : properties;
   }
 
   private static _getNgIfDesc(instance: any): Array<Property> {
