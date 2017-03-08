@@ -15,8 +15,6 @@ import {Node} from './node';
 import {Path, serializePath} from './path';
 import {functionName, serialize} from '../utils';
 
-import {quickViewAttribute} from './quick-view-attribute';
-
 import {
   classDecorators,
   componentMetadata,
@@ -86,9 +84,7 @@ export const transform = (path: Path,
     output: componentOutputs(metadata, element.componentInstance),
     properties: clone(element.properties),
     dependencies: getDependencies(element.componentInstance),
-    quickViewAttribute: []
   };
-  node.quickViewAttribute = getQuickViewAttribute(node);
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child
   cache.set(serializedPath, node);
@@ -211,11 +207,4 @@ const getDependencies = (instance): Array<Dependency> => {
     name: functionName(paramType) || paramType.toString(),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
-};
-
-const getQuickViewAttribute = (element): Array<Property> => {
-  if (element && !element.isComponent) {
-    return quickViewAttribute(element);
-  }
-  return [];
 };
