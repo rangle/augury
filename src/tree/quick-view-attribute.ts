@@ -6,6 +6,11 @@ import {Property} from '../backend/utils/description';
 
 export const quickViewAttribute = (node): Array<Property> => {
   switch (node.name) {
+    case 'router-outlet':
+      if (node.description) {
+        return node.description;
+      }
+      return [];
     case 'a':
       // links
       if (node.description) {

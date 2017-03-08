@@ -90,6 +90,10 @@ export abstract class Description {
           ['text'],
           ['hash'],
         ]);
+      case 'router-outlet':
+        const routerOutletProvider = debugElement.providerTokens.reduce((prev, curr) =>
+          prev ? prev : curr.name === 'RouterOutlet' ? curr : null, null);
+        return getPropsIfTheyExist(debugElement.injector.get(routerOutletProvider), [['name']]);
       case 'NgSelectOption':
         return (element) ? Description._getSelectOptionDesc(element) : [];
       case 'NgIf':
