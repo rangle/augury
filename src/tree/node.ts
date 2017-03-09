@@ -28,7 +28,6 @@ export interface Node {
   output: Array<OutputProperty>;
   source: string;
   children: Array<Node>;
-  quickViewAttribute: Array<Property>;
   properties: {
       [key: string]: any;
   };

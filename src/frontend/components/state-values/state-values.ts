@@ -45,7 +45,7 @@ export class StateValues extends Highlightable {
     const oldValue = changes.value.previousValue;
     const newValue = changes.value.currentValue;
 
-    if (oldValue.toString() === 'CD_INIT_VALUE') {
+    if (oldValue && oldValue.toString() === 'CD_INIT_VALUE') {
       return false;
     }
 

@@ -111,7 +111,7 @@ test('utils/description: NgSelectOption', t => {
   const ngSelectOption: NgSelectOption = new NgSelectOption();
 
   const compEl = {
-    'nativeElement': div,
+    nativeElement: div,
     componentInstance: ngSelectOption
   };
 
@@ -127,7 +127,7 @@ test('utils/description: NgSelectOption', t => {
       value: 'value'
     }
   ], 'get NgSelectOption description');
-  t.end();
+
 });
 
 test('utils/description: NgIf', t => {
@@ -169,7 +169,7 @@ test('utils/description: NgSwitch', t => {
   };
 
   const description = Description.getComponentDescription(compEl);
-  console.log(description);
+
   t.deepEqual(description, [
     {
       key: 'useDefault', value: true

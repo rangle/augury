@@ -71,12 +71,6 @@ export class ComponentInfo {
       this.node.dependencies.length > 0;
   }
 
-  private get hasProperties() {
-    return this.node &&
-      this.node.description &&
-      this.node.description.length > 0;
-  }
-
   private get hasInstanceProviders() {
     return this.providers && this.providers.length > 0;
   }

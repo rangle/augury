@@ -15,8 +15,6 @@ import {Node} from './node';
 import {Path, serializePath} from './path';
 import {functionName, serialize} from '../utils';
 
-import {quickViewAttribute} from './quick-view-attribute';
-
 import {
   classDecorators,
   componentMetadata,
@@ -55,8 +53,6 @@ export const transform = (path: Path,
 
   const name = getComponentName(element);
 
-  const providers = getComponentProviders(element, name).filter(p => p.key != null);
-
   const isComponent = element.componentInstance != null;
 
   const metadata = element.componentInstance ? componentMetadata(element.componentInstance.constructor) : null;
@@ -72,7 +68,7 @@ export const transform = (path: Path,
     name,
     listeners,
     isComponent,
-    providers,
+    providers: [],
     attributes: clone(element.attributes),
     classes: clone(element.classes),
     styles: clone(element.styles),
@@ -86,9 +82,7 @@ export const transform = (path: Path,
     output: componentOutputs(metadata, element.componentInstance),
     properties: clone(element.properties),
     dependencies: getDependencies(element.componentInstance),
-    quickViewAttribute: []
   };
-  node.quickViewAttribute = getQuickViewAttribute(node);
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child
   cache.set(serializedPath, node);
@@ -158,23 +152,6 @@ export const matchingChildren =
     return recursiveSearch(element.children, test);
   };
 
-const getComponentProviders = (element, name: string): Array<Property> => {
-  let providers = new Array<Property>();
-
-  if (element.providerTokens && element.providerTokens.length > 0) {
-    providers = element.providerTokens.map(provider =>
-      Description.getProviderDescription(provider,
-        element.injector.get(provider)));
-  }
-
-  if (name) {
-    return providers.filter(provider => provider.key !== name);
-  }
-  else {
-    return providers;
-  }
-};
-
 const getComponentName = (element): string => {
   if (element.componentInstance &&
     element.componentInstance.constructor) {
@@ -211,11 +188,4 @@ const getDependencies = (instance): Array<Dependency> => {
     name: functionName(paramType) || paramType.toString(),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
-};
-
-const getQuickViewAttribute = (element): Array<Property> => {
-  if (element && !element.isComponent) {
-    return quickViewAttribute(element);
-  }
-  return [];
 };
