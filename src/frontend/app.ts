@@ -59,7 +59,7 @@ export class App {
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
   private tree: MutableTree;
-  private error: ApplicationError;
+  private error: ApplicationError = new ApplicationError(ApplicationErrorType.NotNgApp);
   private activateDOMSelection: boolean = false;
 
   constructor(private changeDetector: ChangeDetectorRef,

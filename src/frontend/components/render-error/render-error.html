@@ -14,6 +14,11 @@
         running <span class="monospace">ng</span> with the <span class="monospace">--aot=false</span> flag)
       </p>
     </div>
+    <div *ngSwitchCase="ApplicationErrorType.NotNgApp">
+      <p>
+        This application is not an Angular application.
+      </p>
+    </div>
     <div *ngSwitchCase="ApplicationErrorType.ProductionMode">
       <p>
         This application is either not an Angular 2 application or is running in production mode
