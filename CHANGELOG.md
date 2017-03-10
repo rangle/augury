@@ -1,4 +1,13 @@
 # Change Log
+## [1.3.0](https://github.com/rangle/tree/1.3.0)
+* Fix for Chrome popup icons.
+* Added Github issue report generation to Chrome popup.
+* Add "no routes" message. [817](https://github.com/rangle/augury/issues/817)
+* Removed last of example applications from this repo. [896](https://github.com/rangle/augury/issues/896)
+* Added support for lazy loaded NgModules. [916](https://github.com/rangle/augury/issues/916)
+* Fixed exception arising from empty modules config. [999](https://github.com/rangle/augury/issues/999)
+* Added router-outlet "name" attribute to component tree view. [921](https://github.com/rangle/augury/issues/921)
+
 ## [1.2.12](https://github.com/rangle/tree/1.2.12)
 * Hotfix for empty (root only) routers. [970](https://github.com/rangle/augury/issues/970)
 
