@@ -211,6 +211,9 @@ const resubscribe = () => {
     getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
     setTimeout(parseInitialModules);
+
+    previousRoutes = null;
+    setTimeout(updateRouterTree);
   });
 };
 
