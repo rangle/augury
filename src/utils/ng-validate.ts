@@ -1,20 +1,29 @@
+console.log('ng-validated.ts loaded');
 import {messageJumpContext} from '../communication/message-dispatch';
 import {MessageFactory} from '../communication/message-factory';
+import {send} from '../backend/indirect-connection';
 
 declare const getAllAngularTestabilities: Function;
 
 let unsubscribe: () => void;
 
 const handler = () => {
+  // variable getAllAngularTestabilities will be defined by Angular
+  // in debug mode for an Angular application.
   if (typeof getAllAngularTestabilities === 'function') {
+    console.log('sending message: framework loaded');
     messageJumpContext(MessageFactory.frameworkLoaded());
 
     if (unsubscribe) {
       unsubscribe();
     }
 
+    console.log('Angular application is running...');
     return true;
   }
+  console.log('Not an Angular application.');
+  send(MessageFactory.notNgApp());
+  return false;
 };
 
 if (!handler()) {

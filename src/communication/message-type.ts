@@ -8,6 +8,8 @@ export enum MessageType {
   /// Check to see if the other side (frontend or backend) is open and responsive
   Ping,
 
+  NotNgApp,
+
   /// Response to a previous message
   Response,
 
