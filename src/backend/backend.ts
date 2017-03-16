@@ -1,5 +1,3 @@
-console.log('backend.ts loaded');
-
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';

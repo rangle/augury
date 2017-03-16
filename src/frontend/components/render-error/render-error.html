@@ -15,14 +15,17 @@
       </p>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.NotNgApp">
-      <p>
+      <p class="h1 message-gray">
         This application is not an Angular application.
+      </p>
+      <p class="h3 message-gray">
+        This application cannot be inspected using Augury.
       </p>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.ProductionMode">
       <p>
         This application is either not an Angular 2 application or is running in production mode
-        and therefore cannot be debugged using Augury.
+        and therefore cannot be inspected using Augury.
       </p>
       <p class="pt3">
         If this is an Angular application, please rebuild your application in debug mode or remove the

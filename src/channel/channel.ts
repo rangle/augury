@@ -1,4 +1,3 @@
-console.log('loaded channel.ts');
 import {
   Message,
   MessageType,

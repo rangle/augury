@@ -49,7 +49,7 @@ require('!style!css!postcss!../styles/app.css');
   template: require('./app.html'),
   styles: [require('to-string!./app.css')],
 })
-export class App implements OnInit {
+export class App {
   private Tab = Tab;
   private Theme = Theme;
 
@@ -90,7 +90,7 @@ export class App implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  ngOnInit() {
+  private ngOnInit() {
     this.subscription = this.connection.subscribe(this.onReceiveMessage.bind(this));
 
     this.connection.reconnect().then(() => this.requestTree());
@@ -147,7 +147,6 @@ export class App implements OnInit {
         respond();
         break;
       case MessageType.NotNgApp:
-      console.log('set not ng-app');
         this.error = new ApplicationError(ApplicationErrorType.NotNgApp);
         respond();
         break;

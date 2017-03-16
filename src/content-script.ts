@@ -1,4 +1,3 @@
-console.log('content-script.ts loaded');
 import {
   Message,
   MessageFactory,
@@ -46,7 +45,6 @@ export const injectSettings = (options: SimpleOptions) => {
 
 browserSubscribeOnce(MessageType.FrameworkLoaded,
   () => {
-    console.log('processing: framework loaded');
     loadOptions().then(options => {
       // We want to load the tree rendering options that the UI has saved
       // because that allows us to send the correct tree immediately upon
@@ -55,7 +53,6 @@ browserSubscribeOnce(MessageType.FrameworkLoaded,
       // of code we would have to wait for the frontend to start and load its
       // options and then request the tree, which would add a lot of latency
       // to startup.
-      console.log('injecting backend.js');
       injectSettings(options);
       injectScript('build/backend.js');
     });
@@ -79,7 +76,6 @@ subscribe((message: Message<any>) => messageJumpContext(message));
 
 send(MessageFactory.initialize())
   .then((response: {extensionId: string}) => {
-    console.log('injecting ng-validat.js');
     injectScript('build/ng-validate.js');
   })
   .catch(error => {
