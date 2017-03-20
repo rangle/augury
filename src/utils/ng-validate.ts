@@ -1,11 +1,15 @@
-import {messageJumpContext} from '../communication/message-dispatch';
+import {messageJumpContext, browserSubscribeOnce} from '../communication/message-dispatch';
 import {MessageFactory} from '../communication/message-factory';
+import {MessageType} from '../communication/message-type';
+import {send} from '../backend/indirect-connection';
 
 declare const getAllAngularTestabilities: Function;
 
 let unsubscribe: () => void;
 
 const handler = () => {
+  // variable getAllAngularTestabilities will be defined by Angular
+  // in debug mode for an Angular application.
   if (typeof getAllAngularTestabilities === 'function') {
     messageJumpContext(MessageFactory.frameworkLoaded());
 
@@ -15,6 +19,11 @@ const handler = () => {
 
     return true;
   }
+  browserSubscribeOnce(MessageType.Initialize, () => {
+    send(MessageFactory.notNgApp());
+  });
+
+  return false;
 };
 
 if (!handler()) {

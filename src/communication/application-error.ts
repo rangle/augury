@@ -8,6 +8,9 @@ export enum ApplicationErrorType {
   // is incompatible with Augury and cannot be debugged.
   ProductionMode,
 
+  // The application being debugged in not an Angular App.
+  NotNgApp,
+
   // An uncaught exception prevents the application from being debugged
   UncaughtException,
 }

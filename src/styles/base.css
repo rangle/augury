@@ -79,3 +79,7 @@ split-pane-secondary-content {
   display: inline-block;
   margin-right: -2px;
 }
+
+.message-gray {
+  color: #b0b0b0;
+}

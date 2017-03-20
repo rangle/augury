@@ -4,7 +4,7 @@
   <template [ngIf]="error">
     <render-error [error]="error"></render-error>
   </template>
-  <bt-app-trees #trees *ngIf="error == null"
+  <bt-app-trees #trees *ngIf="error === null"
     class="flex flex-column flex-auto"
     [componentState]="componentState"
     [selectedTab]="selectedTab"

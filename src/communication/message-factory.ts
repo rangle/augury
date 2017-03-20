@@ -58,6 +58,12 @@ export abstract class MessageFactory {
     });
   }
 
+  static notNgApp(): Message<void> {
+    return create({
+      messageType: MessageType.NotNgApp,
+    });
+  }
+
   static push(): Message<void> {
     return create({
       messageType: MessageType.Push,

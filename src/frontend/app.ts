@@ -59,7 +59,7 @@ export class App {
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
   private tree: MutableTree;
-  private error: ApplicationError;
+  private error: ApplicationError = null;
   private activateDOMSelection: boolean = false;
 
   constructor(private changeDetector: ChangeDetectorRef,
@@ -143,6 +143,10 @@ export class App {
 
     switch (msg.messageType) {
       case MessageType.Ping:
+        respond();
+        break;
+      case MessageType.NotNgApp:
+        this.error = new ApplicationError(ApplicationErrorType.NotNgApp);
         respond();
         break;
       case MessageType.Push:
