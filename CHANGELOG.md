@@ -1,4 +1,9 @@
 # Change Log
+## [1.4.0](https://github.com/rangle/tree/1.4.0)
+* Fix security issue with malicious message sources [1030](https://github.com/rangle/augury/pulls/1030)
+* Fixed empty routes on Augury reopen. [1018](https://github.com/rangle/augury/issues/1018)
+* Add "not Angular 2" message. [304](https://github.com/rangle/augury/issues/304)
+
 ## [1.3.0](https://github.com/rangle/tree/1.3.0)
 * Fix for Chrome popup icons.
 * Added Github issue report generation to Chrome popup.
