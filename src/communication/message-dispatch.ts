@@ -113,6 +113,8 @@ export const browserDispatch = <T>(message: Message<T>) => {
 
 window.addEventListener('message',
   (event: MessageEvent) => {
-    browserDispatch(event.data);
+    if (event.source === window) {
+      browserDispatch(event.data);
+    }
   });
 
