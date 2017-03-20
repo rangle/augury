@@ -1,5 +1,6 @@
-import {messageJumpContext} from '../communication/message-dispatch';
+import {messageJumpContext, browserSubscribeOnce} from '../communication/message-dispatch';
 import {MessageFactory} from '../communication/message-factory';
+import {MessageType} from '../communication/message-type';
 import {send} from '../backend/indirect-connection';
 
 declare const getAllAngularTestabilities: Function;
@@ -18,7 +19,10 @@ const handler = () => {
 
     return true;
   }
-  send(MessageFactory.notNgApp());
+  browserSubscribeOnce(MessageType.Initialize, () => {
+    send(MessageFactory.notNgApp());
+  });
+
   return false;
 };
 
