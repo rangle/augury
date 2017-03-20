@@ -2,7 +2,6 @@ import {
   ChangeDetectorRef,
   Component,
   NgZone,
-  OnInit
 } from '@angular/core';
 
 import {
@@ -38,9 +37,9 @@ import {
   serializePath,
 } from '../tree';
 
-import { createTree } from '../tree/mutable-tree-factory';
-import { UserActions } from './actions/user-actions/user-actions';
-import { Route } from '../backend/utils';
+import {createTree} from '../tree/mutable-tree-factory';
+import {UserActions} from './actions/user-actions/user-actions';
+import {Route} from '../backend/utils';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -64,12 +63,12 @@ export class App {
   private activateDOMSelection: boolean = false;
 
   constructor(private changeDetector: ChangeDetectorRef,
-    private connection: Connection,
-    private directConnection: DirectConnection,
-    private options: Options,
-    private userActions: UserActions,
-    private viewState: ComponentViewState,
-    private zone: NgZone) {
+              private connection: Connection,
+              private directConnection: DirectConnection,
+              private options: Options,
+              private userActions: UserActions,
+              private viewState: ComponentViewState,
+              private zone: NgZone) {
     this.componentState = new ComponentInstanceState(changeDetector);
 
     this.options.changes.subscribe(() => this.requestTree());
@@ -125,9 +124,9 @@ export class App {
   }
 
   private processMessage(msg: Message<any>,
-    sendResponse: (response: MessageResponse<any>) => void) {
+                         sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
-      sendResponse(MessageFactory.response(msg, { processed: true }, false));
+      sendResponse(MessageFactory.response(msg, {processed: true}, false));
     };
 
     // We may be in an error state and the page gets reloaded and exits the error state.
@@ -217,7 +216,7 @@ export class App {
   }
 
   private onReceiveMessage(msg: Message<any>,
-    sendResponse: (response: MessageResponse<any>) => void) {
+                           sendResponse: (response: MessageResponse<any>) => void) {
     const process = () => {
       try {
         this.processMessage(msg, sendResponse);

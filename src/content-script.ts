@@ -54,6 +54,7 @@ browserSubscribeOnce(MessageType.FrameworkLoaded,
       // options and then request the tree, which would add a lot of latency
       // to startup.
       injectSettings(options);
+
       injectScript('build/backend.js');
     });
 
