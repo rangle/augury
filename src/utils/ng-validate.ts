@@ -19,9 +19,14 @@ const handler = () => {
 
     return true;
   }
+
+  // We do this to make sure message is display when Augury is first opened.
   browserSubscribeOnce(MessageType.Initialize, () => {
     send(MessageFactory.notNgApp());
   });
+
+  // Called each time browser is refreshed.
+  send(MessageFactory.notNgApp());
 
   return false;
 };
