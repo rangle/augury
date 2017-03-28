@@ -139,17 +139,17 @@ function map(operation: Operation, value) {
           }
 
           const mapArray = (collection: Array<any>, array: Array<any>) => {
-            return `[${array.map((i, key) => {
-              const ref = map(operation, i);
+            return `[${array.map((v, i) => {
+              const ref = map(operation, v);
 
               if (ref instanceof Reference) {
                 ref.source = index;
-                ref.key = key;
+                ref.key = i;
                 collection.push(ref);
               }
 
               return ref;
-            }).filter(v => v instanceof Reference === false).join(',')}]`;
+            }).map(v => v instanceof Reference === false ? v : undefined).join(',')}]`;
           };
 
           switch (objectType) {
