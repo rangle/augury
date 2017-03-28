@@ -60,6 +60,17 @@ export abstract class Description {
           ['text'],
           ['hash'],
         ]);
+      case 'form':
+          return getPropsIfTheyExist(element, [
+            ['method']
+          ]);
+      case 'input':
+        return getPropsIfTheyExist(element, [
+          ['id'],
+          ['name'],
+          ['type'],
+          ['required']
+        ]);
       case 'router-outlet':
         const routerOutletProvider = debugElement.providerTokens.reduce((prev, curr) =>
           prev ? prev : curr.name === 'RouterOutlet' ? curr : null, null);
