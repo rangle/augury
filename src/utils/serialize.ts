@@ -191,7 +191,9 @@ function map(operation: Operation, value) {
               break;
             default:
               operation.tails.push(() => {
-                const ctor = functionName((value || {}).constructor) || '';
+                const constructor = value && value.constructor ?
+                  value.constructor : ({}).constructor;
+                const ctor = functionName(constructor) || '';
 
                 const mapProps = (key: string) => {
                   const mapped = map(operation, value[key]);
