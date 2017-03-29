@@ -62,6 +62,13 @@ const serializer = object => {
   /// create a function that can recreate the object.
   const encode = v => JSON.stringify(v);
 
+  const mapString = (link) => {
+    const source = encode(link.source);
+    const key = link.key instanceof Reference ? `_[${encode(link.key.target)}]` : `${link.key}`;
+    const v = link.target !== null ? `_[${encode(link.target)}]` : `${link.value}`;
+    return `_[${source}].set(${key}, ${v});`;
+  };
+
   return `function() {
     var _ = [${operation.objref.join(',')}];
 
@@ -71,8 +78,7 @@ const serializer = object => {
     ${operation.hashes.map(link =>
       `_[${encode(link.source)}][${encode(link.key)}] = _[${encode(link.target)}];`).join('')}
 
-    ${operation.maps.map(link =>
-      `_[${encode(link.source)}].set(${encode(link.key)}, _[${encode(link.target)}]);`).join('')}
+    ${operation.maps.map(link => `${mapString(link)}`).join('')}
 
     ${operation.sets.map(link =>
       `_[${encode(link.source)}].add(_[${encode(link.target)}]);`).join('')}
@@ -87,9 +93,10 @@ export const serialize = value => `return ${serializer(value)}`;
 /// Deserialize a function string and invoke the resulting object recreator.
 export const deserialize = value => (new Function(value))();
 
-function Reference(to) {
+function Reference(to: number = null, value = undefined) {
   this.source = null;
   this.target = to;
+  this.value = value;
 }
 
 function map(operation: Operation, value) {
@@ -139,17 +146,17 @@ function map(operation: Operation, value) {
           }
 
           const mapArray = (collection: Array<any>, array: Array<any>) => {
-            return `[${array.map((i, key) => {
-              const ref = map(operation, i);
+            return `[${array.map((v, i) => {
+              const ref = map(operation, v);
 
               if (ref instanceof Reference) {
                 ref.source = index;
-                ref.key = key;
+                ref.key = i;
                 collection.push(ref);
               }
 
               return ref;
-            }).filter(v => v instanceof Reference === false).join(',')}]`;
+            }).map(v => v instanceof Reference === false ? v : undefined).join(',')}]`;
           };
 
           switch (objectType) {
@@ -178,14 +185,15 @@ function map(operation: Operation, value) {
                 operation.objref[index] = `new Map()`;
 
                 value.forEach((v, key) => {
-                  const ref = map(operation, v);
+                  let ref = map(operation, v);
+                  const keyRef = map(operation, key);
 
-                  if (ref instanceof Reference) {
-                    ref.source = index;
-                    ref.key = key;
-
-                    operation.maps.push(ref);
+                  if (ref instanceof Reference === false) {
+                    ref = new Reference(null, ref);
                   }
+                  ref.source = index;
+                  ref.key = ref instanceof Reference ? keyRef : key;
+                  operation.maps.push(ref);
                 });
               });
               break;
@@ -226,6 +234,9 @@ function map(operation: Operation, value) {
   }
 }
 
+(<any> window).serialize = serialize;
+(<any> window).deserialize = deserialize;
+
 const nonstandardType = (type: string) => {
   switch (type.toLowerCase()) {
     case 'object':
@@ -239,3 +250,15 @@ const nonstandardType = (type: string) => {
       return true;
   }
 };
+
+const testObjA = { 'testPropOnA': null, 'c': null, 'arr_test': [{'wahhhh': {'td': 't'}}, 3, 2, 1]};
+const testObjB = new Map();
+const testObjC = { 'backtoA': testObjA };
+testObjA.c = testObjC;
+testObjA.testPropOnA = testObjB;
+testObjB.set(testObjC, testObjA);
+// testObjB.set('qeqweqw', testObjA);
+// testObjB.set({'something': testObjA}, {'stringval': 4});
+
+(<any>window).testObj = testObjA;
+
