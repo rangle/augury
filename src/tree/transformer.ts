@@ -4,6 +4,8 @@ import {
   Description,
   Property,
   Dependency,
+  getComponentName,
+  isDebugElementComponent,
 } from '../backend/utils/description';
 
 import {
@@ -53,7 +55,7 @@ export const transform = (path: Path,
 
   const name = getComponentName(element);
 
-  const isComponent = element.componentInstance != null;
+  const isComponent = isDebugElementComponent(element);
 
   const metadata = element.componentInstance ? componentMetadata(element.componentInstance.constructor) : null;
 
@@ -81,7 +83,7 @@ export const transform = (path: Path,
     input: componentInputs(metadata, element.componentInstance),
     output: componentOutputs(metadata, element.componentInstance),
     properties: clone(element.properties),
-    dependencies: getDependencies(element.componentInstance),
+    dependencies: isDebugElementComponent(element) ? getDependencies(element.componentInstance) : [],
   };
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child
@@ -152,18 +154,6 @@ export const matchingChildren =
     return recursiveSearch(element.children, test);
   };
 
-const getComponentName = (element): string => {
-  if (element.componentInstance &&
-    element.componentInstance.constructor) {
-    return functionName(element.componentInstance.constructor);
-  }
-  else if (element.name) {
-    return element.name;
-  }
-
-  return element.nativeElement.tagName.toLowerCase();
-};
-
 const getChangeDetection = (metadata): number => {
   if (metadata &&
     metadata.changeDetection !== undefined &&
@@ -175,10 +165,6 @@ const getChangeDetection = (metadata): number => {
 };
 
 const getDependencies = (instance): Array<Dependency> => {
-  if (instance == null) {
-    return [];
-  }
-
   const parameterDecorators = injectedParameterDecorators(instance);
   const normalizedParamTypes = parameterTypes(instance).map((type, i) =>
     type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0].token);
