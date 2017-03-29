@@ -1,6 +1,6 @@
-import {DebugElement} from '@angular/core';
 import {AUGURY_TOKEN_ID_METADATA_KEY} from './parse-modules';
 import {pathExists, getAtPath} from '../../utils/property-path';
+import {functionName} from '../../utils';
 
 export interface Dependency {
   id: string;
@@ -13,6 +13,33 @@ export interface Property {
   key: string;
   value;
 }
+
+export const isDebugElementComponent = (element) => !!element.componentInstance &&
+  !componentInstanceExistsInParentChain(element);
+
+export const getComponentName = (element): string => {
+  if (element.componentInstance &&
+    element.componentInstance.constructor &&
+    !componentInstanceExistsInParentChain(element)) {
+    return functionName(element.componentInstance.constructor);
+  }
+  else if (element.name) {
+    return element.name;
+  }
+
+  return element.nativeElement.tagName.toLowerCase();
+};
+
+const componentInstanceExistsInParentChain = (debugElement) => {
+  const componentInstanceRef = debugElement.componentInstance;
+  while (componentInstanceRef && debugElement.parent) {
+    if (componentInstanceRef === debugElement.parent.componentInstance) {
+      return true;
+    }
+    debugElement = debugElement.parent;
+  }
+  return false;
+};
 
 /*
 *  addPropsIfTheyExist([
@@ -44,7 +71,7 @@ export abstract class Description {
     let componentName: any;
     const element: any = pathExists(debugElement, 'nativeElement') ? debugElement.nativeElement : null;
 
-    if (debugElement.componentInstance) {
+    if (debugElement.componentInstance && !componentInstanceExistsInParentChain(debugElement)) {
       componentName = pathExists(debugElement, 'componentInstance', 'constructor', 'name') ?
         debugElement.componentInstance.constructor.name : null;
     } else {

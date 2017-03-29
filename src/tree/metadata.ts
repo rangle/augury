@@ -21,6 +21,8 @@ import {
   recurse,
 } from '../utils';
 
+import {isDebugElementComponent} from '../backend/utils/description';
+
 export enum ObjectType {
   Input = 0x1,
   Output = 0x2,
@@ -56,6 +58,8 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
     return null;
   }
 
+  const isComponent = isDebugElementComponent(debugElement);
+
   const objectMetadata = new Map<any, [ObjectType, any]>();
 
   const components = new Map<any, [[string, ObjectType, any]]>();
@@ -66,13 +70,13 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
       .filter(provider => provider[1] !== instance);
 
   const result: any = {
-    instance,
+    instance: isComponent ? instance : null,
     providers,
     metadata: objectMetadata,
     componentMetadata: components,
   };
 
-  if (!instance) {
+  if (!isComponent) {
     return result;
   }
 

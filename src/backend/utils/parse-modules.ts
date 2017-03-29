@@ -29,7 +29,9 @@ export const parseModulesFromRouter = (router, existingModules: NgModulesRegistr
   const _parse = (config) => {
     config.forEach(route => {
       if (route._loadedConfig) {
-        foundModules.push(route._loadedConfig.injector.instance);
+        foundModules.push(route._loadedConfig.module ?
+          route._loadedConfig.module.instance :
+          route._loadedConfig.injector.instance);
         _parse(route._loadedConfig.routes || []);
       }
       _parse(route.children || []);
