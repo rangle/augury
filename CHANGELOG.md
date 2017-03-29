@@ -1,4 +1,10 @@
 # Change Log
+## [1.5.0](https://github.com/rangle/tree/1.5.0)
+* Fix buggy serialization of maps and arrays [992](https://github.com/rangle/augury/pulls/992)
+* Update to work with changes in non-public Angular APIs [1039](https://github.com/rangle/augury/pulls/1039)
+* Add descriptive attributes to form elements in component tree [1016](https://github.com/rangle/augury/pulls/1016)
+* Fix error message not persisting on Augury close/open [304](https://github.com/rangle/augury/pulls/304)
+
 ## [1.4.0](https://github.com/rangle/tree/1.4.0)
 * Fix security issue with malicious message sources [1030](https://github.com/rangle/augury/pulls/1030)
 * Fixed empty routes on Augury reopen. [1018](https://github.com/rangle/augury/issues/1018)
