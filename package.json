@@ -1,6 +1,6 @@
 {
   "name": "augury",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Chrome Developer Tools Extension for inspecting Angular 2.0 applications",
   "repository": {
     "type": "git",

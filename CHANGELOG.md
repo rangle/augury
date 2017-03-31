@@ -1,4 +1,8 @@
 # Change Log
+## [1.6.0](https://github.com/rangle/tree/1.6.0)
+* Fix issue with state discrepency after property change [1050](https://github.com/rangle/augury/pulls/1050)
+* Fix another serialization bug.
+
 ## [1.5.0](https://github.com/rangle/tree/1.5.0)
 * Fix buggy serialization of maps and arrays [992](https://github.com/rangle/augury/pulls/992)
 * Update to work with changes in non-public Angular APIs [1039](https://github.com/rangle/augury/pulls/1039)
