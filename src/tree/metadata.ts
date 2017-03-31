@@ -136,7 +136,9 @@ export const tokenName = (token): string => functionName(token) || token.toStrin
 
 const objectType = (object): ObjectType => {
   if (object != null && !isScalar(object)) {
-    switch (functionName(object.constructor)) {
+    const constructor = object && object.constructor ?
+      object.constructor : ({}).constructor;
+    switch (functionName(constructor)) {
       case 'EventEmitter':
         return ObjectType.EventEmitter;
       case functionName(AsyncSubject):
