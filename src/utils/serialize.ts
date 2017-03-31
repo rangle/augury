@@ -234,9 +234,6 @@ function map(operation: Operation, value) {
   }
 }
 
-(<any> window).serialize = serialize;
-(<any> window).deserialize = deserialize;
-
 const nonstandardType = (type: string) => {
   switch (type.toLowerCase()) {
     case 'object':
@@ -250,15 +247,3 @@ const nonstandardType = (type: string) => {
       return true;
   }
 };
-
-const testObjA = { 'testPropOnA': null, 'c': null, 'arr_test': [{'wahhhh': {'td': 't'}}, 3, 2, 1]};
-const testObjB = new Map();
-const testObjC = { 'backtoA': testObjA };
-testObjA.c = testObjC;
-testObjA.testPropOnA = testObjB;
-testObjB.set(testObjC, testObjA);
-// testObjB.set('qeqweqw', testObjA);
-// testObjB.set({'something': testObjA}, {'stringval': 4});
-
-(<any>window).testObj = testObjA;
-
