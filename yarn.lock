@@ -30,6 +30,10 @@
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-2.4.5.tgz#fa1bc891b1309bca83845787b9a08db36a787fee"
 
+"@angular/router@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-3.0.0.tgz#cdf91b3a5d85ad39aff4fd882455c9b8c3129cd9"
+
 "@juliangruber/tap-finished@0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@juliangruber/tap-finished/-/tap-finished-0.0.2.tgz#a9aad63d5e4425ff8a6d9a6a94ab287a1b595dbe"
@@ -289,10 +293,6 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
-
-angulartics2@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-2.0.0.tgz#95273deb4536bfb01bd1baf36b3bdd80ae2958c4"
 
 ansi-align@^1.1.0:
   version "1.1.0"
