@@ -44,7 +44,7 @@ module.exports = {
       'webpack.vendor.ts',
       './src/frontend/module'
     ],
-    'backend': ['./src/backend/backend'],
+    'backend': ['./analytics.js', './src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
     'devtools': ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
@@ -104,7 +104,7 @@ module.exports = {
 
   postcss: function () {
     return [
-      require('postcss-import')({addConfigTo: webpack}),
+      require('postcss-import')({ addConfigTo: webpack }),
       require('postcss-cssnext')
     ];
   },
