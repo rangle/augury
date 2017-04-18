@@ -17,17 +17,17 @@
 
 ## Introduction
 
-[Augury](https://augury.angular.io/) is a Google Chrome Dev Tools extension for debugging Angular 2 applications.
+[Augury](https://augury.angular.io/) is a Google Chrome Dev Tools extension for debugging Angular 2+ applications.
 
 You can install the extension from [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd).
 
 ## Inspecting Code
 
-Augury only works with Angular 2.0+ applications. A hard requirement is that the Angular application is running in development mode, this is due to a security restriction. If you plan to read the original source code, it is a good idea to generate source maps. Otherwise you will be forced to work with the compiled JavaScript code.
+Augury only works with Angular 2+ applications. A hard requirement is that the Angular application is running in development mode, this is due to a security restriction. If you plan to read the original source code, it is a good idea to generate source maps. Otherwise you will be forced to work with the compiled JavaScript code.
 
 ## Supported version
 
-Augury works with application built starting with Angular 2.0.
+Augury works with application built starting with Angular 2+.
 
 ---
 ## Working on Augury
@@ -37,6 +37,7 @@ Augury works with application built starting with Angular 2.0.
 To develop the Augury extension, the following environment is used:
 
 * Node
+* Yarn
 * NPM
 * TypeScript
 
@@ -45,7 +46,7 @@ To develop the Augury extension, the following environment is used:
 ```bash
 git clone git://github.com/rangle/augury
 cd augury
-npm install
+yarn
 npm run dev-build
 ```
 

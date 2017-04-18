@@ -52,7 +52,7 @@ Don't forget to squash your commits. [git-scm.com](https://git-scm.com/book/en/v
 
 ### Building and testing
 
-1. Run `npm install`.
+1. Run `yarn`.
 1. Run `npm run build` (errors related to typing files conflicts can be ignored for now).
 1. Navigate to chrome://extensions and enable Developer Mode.
 1. Choose "Load unpacked extension".
@@ -61,7 +61,7 @@ Don't forget to squash your commits. [git-scm.com](https://git-scm.com/book/en/v
 You can test out the extension with a quick example app. In a different terminal window:
 
 1. Navigate to augury/example-apps/kitchen-sink-example.
-1. Run `npm install`.
+1. Run `yarn`.
 1. Run `npm start` on the kitchen-sink-example root folder.
 
 ### Coding style
