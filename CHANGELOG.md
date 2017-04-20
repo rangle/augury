@@ -1,4 +1,8 @@
 # Change Log
+## [1.7.0](https://github.com/rangle/tree/1.7.0)
+* Removed unnecessary Chrome extension permissions (`<all_urls>` & `tabs`).
+* Switched from npm to yarn.
+
 ## [1.6.0](https://github.com/rangle/tree/1.6.0)
 * Fix issue with state discrepency after property change [1050](https://github.com/rangle/augury/pulls/1050)
 * Fix another serialization bug.
