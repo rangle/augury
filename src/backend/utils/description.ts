@@ -62,6 +62,13 @@ const getPropsIfTheyExist = (object: any, props: Array<any[]>): Array<any> => {
   return properties;
 };
 export abstract class Description {
+  public static getProviderDescription(provider, instance): Property {
+    return {
+      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, provider),
+      key: provider.name,
+      value: null,
+    };
+  }
 
   public static getComponentDescription(debugElement: any): Array<Property> {
     if (debugElement == null) {
