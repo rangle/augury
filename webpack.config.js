@@ -44,7 +44,8 @@ module.exports = {
       'webpack.vendor.ts',
       './src/frontend/module'
     ],
-    'backend': ['./analytics.js', './src/backend/backend'],
+    'background': ['./src/channel/channel', './analytics.js'],
+    'backend': ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
     'devtools': ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
