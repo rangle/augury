@@ -4,3 +4,6 @@
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
 ga('create', 'UA-41067508-12', 'auto');
+ga('set', 'checkProtocolTask', function(){});
+ga('require', 'displayfeatures');
+ga('send', 'pageview', '/app.html');
