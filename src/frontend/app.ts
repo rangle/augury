@@ -44,6 +44,7 @@ import {
 import {createTree} from '../tree/mutable-tree-factory';
 import {UserActions} from './actions/user-actions/user-actions';
 import {Route} from '../backend/utils';
+import Analytics from '../backend/utils/analytics';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -91,6 +92,9 @@ export class App {
     this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
+
+
+    // (new Analytics()).sendEvent('app', 'initialized', '');
   }
 
   private hasContent() {
