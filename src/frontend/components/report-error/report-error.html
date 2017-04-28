@@ -1,0 +1,13 @@
+<div class="flex flex-column flex-grow" *ngIf="error">
+  <div class="stack-trace flex flex-none">
+    <p>
+      An uncaught exception prevents Augury from continuing. A stack trace is reproduced below.
+      <button (click)="reportError.emit(true)">Send Report</button>
+    </p>
+  </div>
+  <div class="stack-trace flex flex-grow">
+    <pre>
+      {{error.error.stack}}
+    </pre>
+  </div>
+</div>

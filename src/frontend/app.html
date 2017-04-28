@@ -1,9 +1,11 @@
 <div *ngIf="hasContent"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'">
-  <template [ngIf]="error">
-    <render-error [error]="error"></render-error>
-  </template>
+  <div *ngIf="error">
+    <render-error
+      (reportError)="onReportError()"
+      [error]="error"></render-error>
+  </div>
   <bt-app-trees #trees *ngIf="error === null"
     class="flex flex-column flex-auto"
     [componentState]="componentState"

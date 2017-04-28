@@ -1,5 +1,5 @@
 <div class="p3 m3" *ngIf="error">
-  <div [ngSwitch]="error.error" style="font-size: 1.25em">
+  <div [ngSwitch]="error.errorType" style="font-size: 1.25em">
     <div *ngSwitchCase="ApplicationErrorType.DebugInformationMissing">
       <p>
         Debug information is missing from this build.
@@ -13,6 +13,9 @@
         Try disabling AoT (if you are using the <span class="monospace">ng</span> command-line tool, try
         running <span class="monospace">ng</span> with the <span class="monospace">--aot=false</span> flag)
       </p>
+    </div>
+    <div class="flex flex-column" *ngSwitchCase="ApplicationErrorType.UncaughtException">
+      <report-error [error]="error" (reportError)="reportError.emit(true)"></report-error>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.NotNgApp">
       <p class="h1 message-gray">
@@ -31,17 +34,6 @@
         If this is an Angular application, please rebuild your application in debug mode or remove the
         call to <span class="monospace">enableProdMode()</span>.
       </p>
-    </div>
-    <div *ngSwitchCase="ApplicationErrorType.UncaughtException">
-      <p>
-        An uncaught exception prevents Augury from continuing. A stack trace is reproduced below.
-      </p>
-      <p class="pt3" *ngIf="error.details">
-        {{error.details}}
-      </p>
-      <pre class="pt3">
-        {{error.stackTrace}}
-      </pre>
     </div>
   </div>
 </div>

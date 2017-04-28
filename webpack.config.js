@@ -48,7 +48,7 @@ module.exports = {
     'ng-validate': ['./src/utils/ng-validate'],
     'devtools': ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
-    'channel': ['./src/channel/channel']
+    'background': ['./src/channel/channel', './src/sentry-connection/sentry-connection']
   },
 
   // Config for our build files
@@ -113,7 +113,8 @@ module.exports = {
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
-      'VERSION': JSON.stringify(pkg.version)
+      'VERSION': JSON.stringify(pkg.version),
+      'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
     }),
     new OccurenceOrderPlugin(),
     new DedupePlugin()
