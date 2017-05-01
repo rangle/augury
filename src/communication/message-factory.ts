@@ -81,6 +81,16 @@ export abstract class MessageFactory {
     });
   }
 
+  static stateProperty(property: string, value: any): Message<any> {
+    return create({
+      messageType: MessageType.StateUpdate,
+      content: {
+        property,
+        value,
+      }
+    });
+  }
+
   static treeDiff(changes: Change[]): Message<Change[]> {
     return create({
       messageType: MessageType.TreeDiff,

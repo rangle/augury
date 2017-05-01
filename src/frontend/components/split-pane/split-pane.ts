@@ -6,7 +6,7 @@
 
 import {
   Component,
-  ElementRef,
+  ElementRef, Input,
   ViewChild,
 } from '@angular/core';
 
@@ -20,6 +20,9 @@ const DEFAULT_SECONDARY_WIDTH = 384;
   template: require('./split-pane.html')
 })
 export class SplitPane {
+
+  @Input() zoneBusyTime: number;
+
   @ViewChild('wrapper') wrapperElement : ElementRef;
   @ViewChild('resizer') resizerElement : ElementRef;
   @ViewChild('overlay') overlayElement : ElementRef;

@@ -5,6 +5,9 @@
   <div
      #primary
      class="col overflow-hidden flex maxheight-100pct">
+    <div class="status-bar minwidth-100pct" style="max-height: 30px">
+      Zone Busy Time: {{zoneBusyTime ? zoneBusyTime / 1000 : 'N/A'}}s
+    </div>
     <ng-content select="[split-pane-primary-content]"></ng-content>
   </div>
   <div

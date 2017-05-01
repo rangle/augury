@@ -1,7 +1,8 @@
-import {Subscription} from 'rxjs/Subscription';
-import {Subject} from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
-import {compare} from '../utils/patch';
+import { compare } from '../utils/patch';
+import { DebugElement } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import {
   MutableTree,
@@ -11,7 +12,7 @@ import {
   serializePath,
 } from '../tree';
 
-import {onElementFound, onFindElement} from './utils/find-element';
+import { onElementFound, onFindElement } from './utils/find-element';
 
 import {
   parseModulesFromRootElement,
@@ -19,7 +20,7 @@ import {
   NgModulesRegistry,
 } from './utils/parse-modules';
 
-import {createTreeFromElements} from '../tree/mutable-tree-factory';
+import { createTreeFromElements } from '../tree/mutable-tree-factory';
 
 import {
   ApplicationError,
@@ -35,7 +36,7 @@ import {
   parameterTypes,
 } from '../tree/decorators';
 
-import {send} from './indirect-connection';
+import { send } from './indirect-connection';
 
 import {
   Route,
@@ -47,9 +48,9 @@ import {
   getNodeProvider,
 } from './utils';
 
-import {serialize} from '../utils';
-import {MessageQueue} from '../structures';
-import {SimpleOptions} from '../options';
+import { serialize } from '../utils';
+import { MessageQueue } from '../structures';
+import { SimpleOptions } from '../options';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -114,7 +115,7 @@ const sendNgModulesMessage = () => {
 
 const parseInitialModules = () => {
   runAndHandleUncaughtExceptions(() => {
-    const roots = getAllAngularRootElements().map(r => ng.probe(r));
+    const roots = getAllAngularRootElements().map((rootElement): DebugElement => ng.probe(rootElement));
     if (roots.length) {
       parseModulesFromRootElement(roots[0], parsedModulesData);
       sendNgModulesMessage();
@@ -123,7 +124,7 @@ const parseInitialModules = () => {
 };
 
 const updateComponentTree = (roots: Array<any>) => {
-  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+  const { tree, count } = createTreeFromElements(roots, treeRenderOptions);
 
   if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
     messageBuffer.enqueue(MessageFactory.completeTree(tree));
@@ -145,6 +146,11 @@ const updateComponentTree = (roots: Array<any>) => {
   previousTree = tree;
 
   previousCount = count;
+};
+
+// fires message with the latest zone unstable to stable time diff
+const updateZoneBusyTime = (timeElapsedForZone: number) => {
+  send(MessageFactory.stateProperty('zoneBusyTime', timeElapsedForZone));
 };
 
 const updateLazyLoadedNgModules = (routers) => {
@@ -177,11 +183,10 @@ const updateRouterTree = () => {
   }
 };
 
-const subject = new Subject<void>();
+let subscriptions = new Array<Subscription>();
 
-const subscriptions = new Array<Subscription>();
 
-const bind = (root) => {
+const bind = (root: DebugElement) => {
   if (root.injector == null) {
     // If injector is missing, we won't be able to debug this build
     send(MessageFactory.applicationError(
@@ -191,18 +196,22 @@ const bind = (root) => {
 
   const ngZone = root.injector.get(ng.coreTokens.NgZone);
   if (ngZone) {
-    subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
+    // on an unstable event, grab the date, on a stable event grab the date, get the diff in millseconds
+    // use this millisecond diff to send a message to the front regarding the zonebusy time
+    subscriptions.push(Observable.from(ngZone.onUnstable)
+      .map(() => (new Date()))
+      .audit(() => Observable.from(ngZone.onStable))
+      .map((startTime: Date) => (new Date()).getTime() - startTime.getTime())
+      .subscribe(updateZoneBusyTime));
+
+    subscriptions.push(Observable.from(ngZone.onStable)// converts the observable-like eventEmitter into a observable
+      .startWith(0) // allows for an initial call before onStable is fired, todo: refactor further
+      .subscribe(() => {
+        // parse components and routes each time
+        updateComponentTree(getAllAngularRootElements().map((rootElement): DebugElement => ng.probe(rootElement)));
+        updateRouterTree();
+      }));
   }
-
-  // parse components and routes each time
-  subscriptions.push(
-    subject.debounceTime(0).subscribe(() => {
-      updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
-      updateRouterTree();
-    }));
-
-  // initial load
-  subject.next(void 0);
 };
 
 const checkDebug = (fn: () => void) => {
@@ -250,7 +259,7 @@ const selectedComponentPropertyKey = '$a';
 const noSelectedComponentWarningText = 'There is no component selected.';
 
 Object.defineProperty(window, selectedComponentPropertyKey,
-  {value: noSelectedComponentWarningText});
+  { value: noSelectedComponentWarningText });
 
 const messageHandler = (message: Message<any>) => {
   return runAndHandleUncaughtExceptions(() => {
@@ -393,8 +402,8 @@ export const routersFromRoots = () => {
     const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
       prev ? prev : p[idx].name === 'Router' ? p[idx] : null, null);
     if (routerFn &&
-        element.componentInstance.router &&
-        element.componentInstance.router instanceof routerFn) {
+      element.componentInstance.router &&
+      element.componentInstance.router instanceof routerFn) {
       routers.push(element.componentInstance.router);
     }
   }
@@ -420,7 +429,7 @@ export const routerTree = (): Array<any> => {
 
 export const consoleReference = (node: Node) => {
   Object.defineProperty(window, selectedComponentPropertyKey, {
-    get: () => {
+    get: (): DebugElement => {
       if (node) {
         return ng.probe(node.nativeElement());
       }
@@ -523,4 +532,4 @@ const findElement = (message) => {
 
 
 // add custom operations
-extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});
+extendWindowOperations(window || global || this, { inspectedApplication: ApplicationOperations });

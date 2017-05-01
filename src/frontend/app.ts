@@ -66,6 +66,7 @@ export class App {
   private error: ApplicationError = null;
   private activateDOMSelection: boolean = false;
   private unsubscribeUncaughtErrorListener;
+  private zoneBusyTime: number;
 
   constructor(private changeDetector: ChangeDetectorRef,
               private connection: Connection,
@@ -191,6 +192,10 @@ export class App {
           }
           break;
         }
+        break;
+
+      case MessageType.StateUpdate:
+        this[msg.content.property] = msg.content.value;
         break;
 
       case MessageType.ApplicationError:

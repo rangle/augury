@@ -40,6 +40,7 @@ export class AppTrees {
   @Input() private selectedRoute: Route;
   @Input() private selectedTab: Tab;
   @Input() private activateDOMSelection: boolean;
+  @Input() private zoneBusyTime: number;
 
   @Output() private collapseChildren = new EventEmitter<Node>();
   @Output() private expandChildren = new EventEmitter<Node>();
