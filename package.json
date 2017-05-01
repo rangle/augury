@@ -82,7 +82,7 @@
     "raw-loader": "^0.5.1",
     "reflect-metadata": "0.1.9",
     "rimraf": "2.5.4",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.17.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2",
     "tape-run": "^2.1.3",
