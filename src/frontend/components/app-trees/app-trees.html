@@ -89,7 +89,7 @@
 </form>
 
 
-<split-pane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
+<split-pane #splitPane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
   <div split-pane-primary-content class="flex flex-column flex-auto">
     <bt-tree-view
        class="flex minheight-100pct"
