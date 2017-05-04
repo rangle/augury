@@ -183,6 +183,16 @@ export abstract class MessageFactory {
     });
   }
 
+  static analyticsEvent(eventType, ...data) {
+    return create({
+      messageType: MessageType.AnalyticsSend,
+      content: {
+        eventType,
+        data
+      }
+    });
+  }
+
   static applicationError(error: ApplicationError): Message<ApplicationError> {
     return create({
       messageType: MessageType.ApplicationError,

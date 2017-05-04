@@ -56,6 +56,7 @@ import {
 import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
+import AnalyticsSend from '../analytics';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -267,27 +268,32 @@ const messageHandler = (message: Message<any>) => {
         return getComponentInstance(previousTree, node);
 
       case MessageType.UpdateProperty:
-        return updateProperty(previousTree,
+        return tryWrap(() => updateProperty(previousTree,
           message.content.path,
-          message.content.newValue);
+          message.content.newValue));
 
       case MessageType.UpdateProviderProperty:
-        return updateProviderProperty(previousTree,
+        return tryWrap(() => updateProviderProperty(previousTree,
           message.content.path,
           message.content.token,
           message.content.propertyPath,
-          message.content.newValue);
+          message.content.newValue));
+
+      case MessageType.AnalyticsSend:
+        return AnalyticsSend(message.content.eventType, message.content.data);
 
       case MessageType.EmitValue:
-        return emitValue(previousTree,
+        return tryWrap(() => emitValue(previousTree,
           message.content.path,
-          message.content.value);
+          message.content.value));
 
       case MessageType.Highlight:
         if (previousTree == null) {
           return;
         }
-        highlight(message.content.nodes.map(id => previousTree.lookup(id)));
+        return tryWrap(() => {
+          highlight(message.content.nodes.map(id => previousTree.lookup(id)));
+        });
 
       case MessageType.FindElement:
         if (previousTree == null) {
