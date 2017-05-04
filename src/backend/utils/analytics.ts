@@ -1,3 +1,5 @@
+// todo: remove, deprecated
+
 export default class AnalyticsService {
   private GA;
 

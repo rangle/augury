@@ -50,6 +50,7 @@ import {
 import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
+import AnalyticsSend from '../analytics';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -271,6 +272,9 @@ const messageHandler = (message: Message<any>) => {
         message.content.token,
         message.content.propertyPath,
         message.content.newValue));
+
+    case MessageType.AnalyticsSend:
+      return AnalyticsSend(message.content.eventType, message.content.data);
 
     case MessageType.EmitValue:
       return tryWrap(() => emitValue(previousTree,
