@@ -44,7 +44,6 @@ import {
 import {createTree} from '../tree/mutable-tree-factory';
 import {UserActions} from './actions/user-actions/user-actions';
 import {Route} from '../backend/utils';
-import Analytics from '../backend/utils/analytics';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -94,7 +93,9 @@ export class App {
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
 
 
-    // (new Analytics()).sendEvent('app', 'initialized', '');
+    // sends a basic 'page view' event on app load, might be better not to do it here, and have it in the backend
+    // todo: will discuss restricting these to specific view events, ie, clicking the modules tab
+    this.connection.send(MessageFactory.analyticsEvent('pageview', 'index'));
   }
 
   private hasContent() {
