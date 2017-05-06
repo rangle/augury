@@ -1,9 +1,9 @@
 # Augury Release Process
-Document contains detailed description of Augury release process from merging to master, creating tags and publishing to chrome store. 
+Document contains detailed description of Augury release process from merging to master, creating tags and publishing to chrome store.
 
 ## Types of branches
 - **master**: Always contains the code for the latest main release. Code from `dev` branch must be merged into master before release.
-- **dev**: Contains the code for the latest dev build. All development must occur in this branch and pushed to `master` before release. 
+- **dev**: Contains the code for the latest dev build. All development must occur in this branch and pushed to `master` before release.
 
 ## All HEADs must pass Continuous Integration (CI)
 
@@ -59,4 +59,4 @@ Upload the latest build file `batarangle.crx` to Chrome Store and update version
 ## Post Release
 
 * Download and install latest build from chrome store.
-* Perform sanity checks on the build by checking it against any angular2 application   
+* Perform sanity checks on the build by checking it against any Angular application
