@@ -186,6 +186,10 @@ const updateRouterTree = () => {
 let subscriptions = new Array<Subscription>();
 
 
+// flattens list of objects with children
+let flatten = list => list.filter(n => n.children)
+  .reduce((a, b) => a.concat(Array.isArray(b.children) ? [b].concat(flatten(b.children)) : b), []);
+
 const bind = (root: DebugElement) => {
   if (root.injector == null) {
     // If injector is missing, we won't be able to debug this build
@@ -194,15 +198,30 @@ const bind = (root: DebugElement) => {
     return;
   }
 
+  let allComponentsInView = root.childNodes.filter((n: any) => n.children)
+    .reduce((a, b: any) => a.concat(b.children ? [b].concat(flatten(b.children)) : b), [])
+    .filter(x => x.componentInstance);
+
+
+  let componentZones = allComponentsInView.map((debugNode: DebugElement) =>
+    ({zone: root.injector.get(ng.coreTokens.NgZone), name: debugNode.name}));
+
   const ngZone = root.injector.get(ng.coreTokens.NgZone);
   if (ngZone) {
     // on an unstable event, grab the date, on a stable event grab the date, get the diff in millseconds
     // use this millisecond diff to send a message to the front regarding the zonebusy time
     subscriptions.push(Observable.from(ngZone.onUnstable)
-      .map(() => (new Date()))
+      .map((val) => (new Date()))
       .audit(() => Observable.from(ngZone.onStable))
       .map((startTime: Date) => (new Date()).getTime() - startTime.getTime())
       .subscribe(updateZoneBusyTime));
+
+    let t = componentZones.map(({zone, name}) => Observable.from(zone.onUnstable).map(val => (new Date())).audit(() =>
+      Observable.from(ngZone.onStable)).map(startTime =>
+      ({msZoneBusyTime: (new Date()).getTime() - startTime.getTime(), name})));
+
+    Observable.merge(...t)
+      .subscribe(res => console.log(res));
 
     subscriptions.push(Observable.from(ngZone.onStable)// converts the observable-like eventEmitter into a observable
       .startWith(0) // allows for an initial call before onStable is fired, todo: refactor further
