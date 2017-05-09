@@ -1,4 +1,4 @@
-import {NgModule, enableProdMode} from '@angular/core';
+import {NgModule, ErrorHandler, enableProdMode} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -24,10 +24,13 @@ import {StateValues} from './components/state-values/state-values';
 import {TabMenu} from './components/tab-menu/tab-menu';
 import {TreeView} from './components/tree-view/tree-view';
 import {RenderError} from './components/render-error/render-error';
+import {ReportError} from './components/report-error/report-error';
 import {InfoPanel} from './components/info-panel/info-panel';
 import {UserActions} from './actions/user-actions/user-actions';
 import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
+
+import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
 
 import {
   Connection,
@@ -63,6 +66,7 @@ import {App} from './app';
     PropertyEditor,
     PropertyValue,
     RenderError,
+    ReportError,
     RouterInfo,
     RenderState,
     RouterTree,
@@ -81,6 +85,7 @@ import {App} from './app';
     UserActions,
     ComponentViewState,
     ComponentPropertyState,
+    { provide: ErrorHandler, useClass: UncaughtErrorHandler },
   ],
   bootstrap: [App]
 })

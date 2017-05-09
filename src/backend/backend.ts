@@ -84,6 +84,24 @@ const parsedModulesData: NgModulesRegistry = {
   tokenIdMap: {},
 };
 
+class SerializeableError {
+  name: string;
+  message: string;
+  stack: string;
+}
+
+const runAndHandleUncaughtExceptions = (fn: () => any) => {
+  try {
+    return fn();
+  } catch (e) {
+    const err = new SerializeableError();
+    err.name = e.name;
+    err.stack = e.stack;
+    err.message = e.message;
+    send(MessageFactory.uncaughtApplicationError(err));
+  };
+};
+
 const sendNgModulesMessage = () => {
   const ngModulesMessage = {
     names: parsedModulesData.names,
@@ -95,11 +113,13 @@ const sendNgModulesMessage = () => {
 };
 
 const parseInitialModules = () => {
-  const roots = getAllAngularRootElements().map(r => ng.probe(r));
-  if (roots.length) {
-    parseModulesFromRootElement(roots[0], parsedModulesData);
-    sendNgModulesMessage();
-  }
+  runAndHandleUncaughtExceptions(() => {
+    const roots = getAllAngularRootElements().map(r => ng.probe(r));
+    if (roots.length) {
+      parseModulesFromRootElement(roots[0], parsedModulesData);
+      sendNgModulesMessage();
+    }
+  });
 };
 
 const updateComponentTree = (roots: Array<any>) => {
@@ -199,21 +219,23 @@ const checkDebug = (fn: () => void) => {
 };
 
 const resubscribe = () => {
-  messageBuffer.clear();
+  runAndHandleUncaughtExceptions(() => {
+    messageBuffer.clear();
 
-  checkDebug(() => {
-    for (const subscription of subscriptions) {
-      subscription.unsubscribe();
-    }
+    checkDebug(() => {
+      for (const subscription of subscriptions) {
+        subscription.unsubscribe();
+      }
 
-    subscriptions.splice(0, subscriptions.length);
+      subscriptions.splice(0, subscriptions.length);
 
-    getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+      getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
-    setTimeout(parseInitialModules);
+      setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules()));
 
-    previousRoutes = null;
-    setTimeout(updateRouterTree);
+      previousRoutes = null;
+      setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree()));
+    });
   });
 };
 
@@ -221,7 +243,7 @@ const resubscribe = () => {
 // subscribing to Angular state changes. Our internal state management
 // can cause a slight drag on performance which is unnecessary if
 // the Augury UI / frontend is not even open.
-send(MessageFactory.ping()).then(() => resubscribe());
+send(MessageFactory.ping()).then(resubscribe);
 
 const selectedComponentPropertyKey = '$a';
 
@@ -231,21 +253,21 @@ Object.defineProperty(window, selectedComponentPropertyKey,
   {value: noSelectedComponentWarningText});
 
 const messageHandler = (message: Message<any>) => {
-  switch (message.messageType) {
-    case MessageType.Initialize:
-      // Update our tree settings closure
-      Object.assign(treeRenderOptions, message.content);
+  return runAndHandleUncaughtExceptions(() => {
+    switch (message.messageType) {
+      case MessageType.Initialize:
+        // Update our tree settings closure
+        Object.assign(treeRenderOptions, message.content);
 
-      // Clear out existing tree representation and start over
-      previousTree = null;
+        // Clear out existing tree representation and start over
+        previousTree = null;
 
-      // Load the complete component tree
-      resubscribe();
+        // Load the complete component tree
+        resubscribe();
 
-      return true;
+        return true;
 
-    case MessageType.SelectComponent:
-      return tryWrap(() => {
+      case MessageType.SelectComponent:
         const path: Path = message.content.path;
 
         const node = previousTree.traverse(path);
@@ -258,43 +280,39 @@ const messageHandler = (message: Message<any>) => {
         // killer, so we only send the componentInstance values for the
         // node that has been selected.
         return getComponentInstance(previousTree, node);
-      });
 
-    case MessageType.UpdateProperty:
-      return tryWrap(() => updateProperty(previousTree,
-        message.content.path,
-        message.content.newValue));
+      case MessageType.UpdateProperty:
+        return updateProperty(previousTree,
+          message.content.path,
+          message.content.newValue);
 
-    case MessageType.UpdateProviderProperty:
-      return tryWrap(() => updateProviderProperty(previousTree,
-        message.content.path,
-        message.content.token,
-        message.content.propertyPath,
-        message.content.newValue));
+      case MessageType.UpdateProviderProperty:
+        return updateProviderProperty(previousTree,
+          message.content.path,
+          message.content.token,
+          message.content.propertyPath,
+          message.content.newValue);
 
-    case MessageType.EmitValue:
-      return tryWrap(() => emitValue(previousTree,
-        message.content.path,
-        message.content.value));
+      case MessageType.EmitValue:
+        return emitValue(previousTree,
+          message.content.path,
+          message.content.value);
 
-    case MessageType.Highlight:
-      if (previousTree == null) {
-        return;
-      }
-      return tryWrap(() => {
+      case MessageType.Highlight:
+        if (previousTree == null) {
+          return;
+        }
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
-      });
 
-    case MessageType.FindElement:
-      if (previousTree == null) {
-        return;
-      }
+      case MessageType.FindElement:
+        if (previousTree == null) {
+          return;
+        }
 
-      return tryWrap(() => {
         findElement(message);
-      });
-  }
-  return undefined;
+    }
+    return undefined;
+  });
 };
 
 
@@ -409,19 +427,6 @@ export const consoleReference = (node: Node) => {
       return null;
     }
   });
-};
-
-export const tryWrap = (fn: Function) => {
-  try {
-    let result = fn();
-    if (result === undefined) {
-      result = true;
-    }
-    return result;
-  }
-  catch (error) {
-    return error;
-  }
 };
 
 /// We need to define some operations that are accessible from the global scope so that

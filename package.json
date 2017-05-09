@@ -79,6 +79,7 @@
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^9.1.0",
     "postcss-loader": "^1.0.0",
+    "raven-js": "^3.14.2",
     "raw-loader": "^0.5.1",
     "reflect-metadata": "0.1.9",
     "rimraf": "2.5.4",

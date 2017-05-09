@@ -13,7 +13,7 @@
   "devtools_page": "index.html",
   "background": {
     "scripts": [
-      "build/channel.js"
+      "build/background.js"
     ],
     "persistent": false
   },
