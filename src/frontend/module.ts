@@ -84,7 +84,8 @@ import {App} from './app';
   ],
   bootstrap: [App]
 })
-class FrontendModule {}
+class FrontendModule {
+}
 
 declare const PRODUCTION: boolean;
 if (PRODUCTION) {

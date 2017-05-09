@@ -44,11 +44,11 @@ module.exports = {
       'webpack.vendor.ts',
       './src/frontend/module'
     ],
+    'background': ['./src/channel/channel', './src/analytics.ts'],
     'backend': ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
     'devtools': ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
-    'channel': ['./src/channel/channel']
   },
 
   // Config for our build files
@@ -104,7 +104,7 @@ module.exports = {
 
   postcss: function () {
     return [
-      require('postcss-import')({addConfigTo: webpack}),
+      require('postcss-import')({ addConfigTo: webpack }),
       require('postcss-cssnext')
     ];
   },

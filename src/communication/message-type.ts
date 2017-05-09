@@ -58,4 +58,6 @@ export enum MessageType {
 
   /// Find a corresponding mutable tree node based on a DOM node
   FindElement,
+
+  AnalyticsSend,
 }

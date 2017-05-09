@@ -76,6 +76,11 @@ export class App {
     this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
+
+
+    // sends a basic 'page view' event on app load, might be better not to do it here, and have it in the backend
+    // todo: will discuss restricting these to specific view events, ie, clicking the modules tab
+    this.connection.send(MessageFactory.analyticsEvent('pageview', 'index'));
   }
 
   private hasContent() {
