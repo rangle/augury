@@ -6,6 +6,9 @@ import {
   ElementRef
 } from '@angular/core';
 
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
+
 import {Route} from '../../../backend/utils';
 import {UserActions} from '../../actions/user-actions/user-actions';
 
@@ -17,13 +20,51 @@ import * as d3 from 'd3';
   styles: [require('to-string!./router-tree.css')],
 })
 export class RouterTree {
+  @ViewChild('routeTree') private routeTreeComponent;
+  @ViewChild('resizer') private resizerElement;
   @ViewChild('svgContainer') private svg: ElementRef;
   @ViewChild('mainGroup') private g: ElementRef;
   @Input() private routerTree: Array<Route>;
   private selectedRoute: Route | any;
   private tree: d3.TreeLayout<{}>;
+  private sub: Subscription;
+  private routerTreeBaseHeight: number = 120; // init size of element
 
   constructor(private userActions: UserActions, private element: ElementRef) {}
+
+  ngAfterViewInit() {
+    // On drag, get delta of mouse Y and apply it to base height. Then, update
+    // base height.
+    this.sub = this._dragEvent()
+      .do(delta => this.resizeElement(delta + this.routerTreeBaseHeight))
+      .audit(() => Observable.fromEvent(document, 'mouseup'))
+      .subscribe(delta => {
+        this.routerTreeBaseHeight += delta;
+      });
+  }
+
+  _dragEvent() {
+    return Observable.fromEvent(this.resizerElement.nativeElement, 'mousedown')
+      .map((e: any) => e.clientY)
+      .mergeMap(yPos => this._mouseUpEvent(yPos));
+  }
+
+  _mouseUpEvent(yPos) {
+    return Observable.fromEvent(document, 'mousemove')
+      .takeUntil(Observable.fromEvent(document, 'mouseup'))
+      .map((e: any) => e.clientY - yPos);
+  }
+
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
+
+  resizeElement(mouseDelta) {
+    this.routeTreeComponent.nativeElement.style.height = `${mouseDelta}px`;
+  }
 
   render() {
     if (!this.routerTree) {

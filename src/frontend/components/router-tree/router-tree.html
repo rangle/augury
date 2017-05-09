@@ -10,11 +10,16 @@
     <p class="h3">If you have routes defined and not seeing anything, for version of Angular older than 2.3.0, please see the <a (click)="showReadme()">README.</a></p>
   </div>
   <div class="flex-auto overflow-scroll" [hidden]="routerTree?.length === 0">
-    <div>
+    <div #routeTree>
       <svg #svgContainer>
         <g #mainGroup>
         </g>
       </svg>
+    </div>
+    <div
+       #resizer
+       style="height: 6px; left: 0; right: 0; cursor: ns-resize; z-index: 500;
+       position: absolute;">
     </div>
     <div class="bg-panel border-top">
       <header class="flex py1 px2">
