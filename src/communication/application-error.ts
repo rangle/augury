@@ -16,8 +16,12 @@ export enum ApplicationErrorType {
 }
 
 export interface ApplicationError {
+
   /// The class of error being represented
-  error: ApplicationErrorType;
+  errorType: ApplicationErrorType;
+
+  /// The class of error being represented
+  error?: Error;
 
   /// Additional details about the error
   details: string;
@@ -27,9 +31,10 @@ export interface ApplicationError {
 }
 
 export class ApplicationError implements ApplicationError {
-  constructor(error: ApplicationErrorType, details?: string, stack?: string) {
+  constructor(errorType: ApplicationErrorType, error?: Error, details?: string, stack?: string) {
+    this.errorType = errorType;
     this.error = error;
-    this.details = details;
-    this.stackTrace = stack || new Error().stack;
+    this.details = details || error ? error.message : null;
+    this.stackTrace = stack || error ? error.stack : new Error().stack;
   }
 }

@@ -16,6 +16,9 @@ export enum MessageType {
   /// An error has occurred in the backend and is being transmitted to the frontend
   ApplicationError,
 
+  /// User signals "report this error".
+  SendUncaughtError,
+
   /// Post a message to the browser event queue so that it can be unwrapped and
   /// posted to the extension from the content-script. There is no pipe that is
   /// direct from the backend to the frontend, so this allows us to bounce the

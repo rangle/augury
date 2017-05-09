@@ -2,7 +2,11 @@ import {
   ChangeDetectorRef,
   Component,
   NgZone,
+  ErrorHandler,
 } from '@angular/core';
+
+import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
+import {reportUncaughtError} from '../utils/error-handling';
 
 import {
   Connection,
@@ -61,6 +65,7 @@ export class App {
   private tree: MutableTree;
   private error: ApplicationError = null;
   private activateDOMSelection: boolean = false;
+  private unsubscribeUncaughtErrorListener;
 
   constructor(private changeDetector: ChangeDetectorRef,
               private connection: Connection,
@@ -68,7 +73,17 @@ export class App {
               private options: Options,
               private userActions: UserActions,
               private viewState: ComponentViewState,
-              private zone: NgZone) {
+              private zone: NgZone,
+              private errorHandler: ErrorHandler) {
+
+    // this should be our special ErrorHandler subclass which we can listen to
+    if (this.errorHandler instanceof UncaughtErrorHandler) {
+      this.unsubscribeUncaughtErrorListener = (<UncaughtErrorHandler>this.errorHandler)
+        .addListener((err: Error) => {
+          this.error = new ApplicationError(ApplicationErrorType.UncaughtException, err);
+        });
+    }
+
     this.componentState = new ComponentInstanceState(changeDetector);
 
     this.options.changes.subscribe(() => this.requestTree());
@@ -100,6 +115,10 @@ export class App {
       this.subscription.unsubscribe();
     }
 
+    if (this.unsubscribeUncaughtErrorListener) {
+      this.unsubscribeUncaughtErrorListener();
+    }
+
     this.connection.close();
   }
 
@@ -110,8 +129,7 @@ export class App {
       .catch(error => {
         this.error = new ApplicationError(
           ApplicationErrorType.UncaughtException,
-          error.message,
-          error.stack);
+          error);
 
         this.changeDetector.detectChanges();
       });
@@ -128,18 +146,6 @@ export class App {
     const respond = () => {
       sendResponse(MessageFactory.response(msg, {processed: true}, false));
     };
-
-    // We may be in an error state and the page gets reloaded and exits the error state.
-    // (For example, the user goes from a production build to a debug build by reloading
-    // the tab.) So in the event we get more data, we want to reset our error state.
-    switch (msg.messageType) {
-      case MessageType.Push:
-      case MessageType.CompleteTree:
-      case MessageType.TreeDiff:
-      case MessageType.RouterTree:
-        this.error = null;
-        break;
-    }
 
     switch (msg.messageType) {
       case MessageType.Ping:
@@ -217,19 +223,8 @@ export class App {
 
   private onReceiveMessage(msg: Message<any>,
                            sendResponse: (response: MessageResponse<any>) => void) {
-    const process = () => {
-      try {
-        this.processMessage(msg, sendResponse);
-      }
-      catch (error) {
-        this.error = new ApplicationError(
-          ApplicationErrorType.UncaughtException,
-          error.message,
-          error.stack);
-      }
-    };
 
-    this.zone.run(() => process());
+    this.zone.run(() => this.processMessage(msg, sendResponse));
   }
 
   private onSelectNode(node: Node, beforeLoad?: () => void) {
@@ -278,6 +273,14 @@ export class App {
 
   private onExpandChildren(node: Node) {
     this.recursiveExpansionState(node, ExpandState.Expanded);
+  }
+
+  private onReportError() {
+    if (this.error && this.error.errorType === ApplicationErrorType.UncaughtException) {
+      reportUncaughtError(this.error.error);
+      this.error = null;
+      // this.requestTree();
+    }
   }
 
   private onSelectedTabChange(tab: Tab) {

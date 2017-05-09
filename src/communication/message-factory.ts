@@ -11,7 +11,10 @@ import {
 
 import {MessageType} from './message-type';
 
-import {ApplicationError} from './application-error';
+import {
+  ApplicationError,
+  ApplicationErrorType,
+} from './application-error';
 
 import {getRandomHash} from './hash';
 
@@ -175,6 +178,22 @@ export abstract class MessageFactory {
     return create({
       messageType: MessageType.ApplicationError,
       content: error,
+    });
+  }
+
+  static uncaughtApplicationError(error: Error): Message<ApplicationError> {
+    return create({
+      messageType: MessageType.ApplicationError,
+      content: serialize(new ApplicationError(ApplicationErrorType.UncaughtException, error)),
+      serialize: Serialize.Recreator,
+    });
+  }
+
+  static sendUncaughtError(error: Error): Message<Error> {
+    return create({
+      messageType: MessageType.SendUncaughtError,
+      content: serialize(error),
+      serialize: Serialize.Recreator,
     });
   }
 

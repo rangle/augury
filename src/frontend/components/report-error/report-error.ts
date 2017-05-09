@@ -11,12 +11,11 @@ import {
 } from '../../../communication';
 
 @Component({
-  selector: 'render-error',
-  template: require('./render-error.html'),
+  selector: 'report-error',
+  template: require('./report-error.html'),
+  styles: [require('to-string!./report-error.css')],
 })
-export class RenderError {
+export class ReportError {
   @Input() private error: ApplicationError;
   @Output() private reportError: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  private ApplicationErrorType = ApplicationErrorType;
 }
