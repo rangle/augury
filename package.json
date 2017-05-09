@@ -78,7 +78,7 @@
     "object-assign": "4.1.1",
     "postcss-cssnext": "^2.5.2",
     "postcss-import": "^9.1.0",
-    "postcss-loader": "^1.0.0",
+    "postcss-loader": "^2.0.1",
     "raw-loader": "^0.5.1",
     "reflect-metadata": "0.1.9",
     "rimraf": "2.5.4",
