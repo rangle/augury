@@ -1,7 +1,7 @@
 <div *ngIf="hasContent"
   class="clearfix vh-100 overflow-hidden flex flex-column"
   [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'">
-  <div *ngIf="error">
+  <div class="vh-100" *ngIf="error">
     <render-error
       (reportError)="onReportError()"
       [error]="error"></render-error>

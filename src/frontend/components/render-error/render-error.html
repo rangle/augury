@@ -1,39 +1,48 @@
-<div class="p3 m3" *ngIf="error">
+<div class="vh-100" *ngIf="error">
   <div [ngSwitch]="error.errorType" style="font-size: 1.25em">
     <div *ngSwitchCase="ApplicationErrorType.DebugInformationMissing">
-      <p>
-        Debug information is missing from this build.
-      </p>
-      <p class="pt3">
-        One possible cause may be if your application was built with AoT (ahead-of-time compilation).
-        Augury cannot debug builds that use AoT because Angular does not provide the same debugging
-        information that it does for non-AoT builds.
-      </p>
-      <p class="pt3">
-        Try disabling AoT (if you are using the <span class="monospace">ng</span> command-line tool, try
-        running <span class="monospace">ng</span> with the <span class="monospace">--aot=false</span> flag)
-      </p>
+      <div class="p3 m3">
+        <p>
+          Debug information is missing from this build.
+        </p>
+        <p class="pt3">
+          One possible cause may be if your application was built with AoT (ahead-of-time compilation).
+          Augury cannot debug builds that use AoT because Angular does not provide the same debugging
+          information that it does for non-AoT builds.
+        </p>
+        <p class="pt3">
+          Try disabling AoT (if you are using the <span class="monospace">ng</span> command-line tool, try
+          running <span class="monospace">ng</span> with the <span class="monospace">--aot=false</span> flag)
+        </p>
+      </div>
     </div>
-    <div class="flex flex-column" *ngSwitchCase="ApplicationErrorType.UncaughtException">
-      <report-error [error]="error" (reportError)="reportError.emit(true)"></report-error>
+    <div class="vh-100" *ngSwitchCase="ApplicationErrorType.UncaughtException">
+      <report-error
+        [error]="error"
+        (reportError)="reportError.emit(true)">
+      </report-error>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.NotNgApp">
-      <p class="h1 message-gray">
-        This application is not an Angular application.
-      </p>
-      <p class="h3 message-gray">
-        This application cannot be inspected using Augury.
-      </p>
+      <div class="p3 m3">
+        <p class="h1 message-gray">
+          This application is not an Angular application.
+        </p>
+        <p class="h3 message-gray">
+          This application cannot be inspected using Augury.
+        </p>
+      </div>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.ProductionMode">
-      <p>
-        This application is running in production mode
-        and therefore cannot be inspected using Augury.
-      </p>
-      <p class="pt3">
-        If this is an Angular application, please rebuild your application in debug mode or remove the
-        call to <span class="monospace">enableProdMode()</span>.
-      </p>
+      <div class="p3 m3">
+        <p>
+          This application is running in production mode
+          and therefore cannot be inspected using Augury.
+        </p>
+        <p class="pt3">
+          If this is an Angular application, please rebuild your application in debug mode or remove the
+          call to <span class="monospace">enableProdMode()</span>.
+        </p>
+      </div>
     </div>
   </div>
 </div>
