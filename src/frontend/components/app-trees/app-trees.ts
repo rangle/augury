@@ -48,6 +48,7 @@ export class AppTrees {
   @Output() private tabChange = new EventEmitter<Tab>();
   @Output() private DOMSelectionChange = new EventEmitter<boolean>();
 
+  @ViewChild('splitPane') private splitPane;
   @ViewChild('menuButtonElement') private menuButtonElement;
   @ViewChild('menuElement') private menuElement;
 
@@ -68,6 +69,7 @@ export class AppTrees {
   }];
 
   onTabSelectionChanged(index: number) {
+    this.splitPane.handleTabNavigation();
     this.tabChange.emit(this.tabs[index].tab);
   }
 

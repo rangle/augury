@@ -61,6 +61,13 @@ export class SplitPane {
   }
 
   /**
+   * Automatically resize window panes after tab change
+   */
+  handleTabNavigation () {
+    setTimeout(this.windowResized.bind(this));
+  }
+
+  /**
    * Capture the starting mouse position, and set up
    * the mouse move capture div for a resize drag.
    */
