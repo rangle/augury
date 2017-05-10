@@ -1,7 +1,7 @@
 import {
   Component,
   EventEmitter,
-  Input,
+  Input, OnInit,
   Output,
 } from '@angular/core';
 import {
@@ -18,45 +18,22 @@ export interface TabDescription {
   tab;
 }
 
-import {UserActions} from '../../actions/user-actions/user-actions';
-
 @Component({
   selector: 'bt-tab-menu',
   template: require('./tab-menu.html'),
 })
-export class TabMenu {
+export class TabMenu implements OnInit {
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
   @Input() tree;
-  @Input() showMainItems: boolean = false;
-  @Input() DOMSelectionActive: boolean = false;
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
-  @Output() DOMSelectionChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private userActions: UserActions) {
-  }
-
-  private ngOnInit() {
+  ngOnInit() {
     const t = this.tabs.filter(tab => tab.tab === this.selectedTab);
     if (t.length > 0) {
       this.onSelect(t[0]);
     }
-  }
-
-  private selectElement() {
-    if (this.DOMSelectionActive) {
-      this.userActions.cancelFindElement();
-      this.DOMSelectionActive = false;
-    } else {
-      this.userActions.findElement();
-      this.DOMSelectionActive = true;
-
-      if (this.selectedTab !== this.tabs[0].tab) {
-        this.onSelect(this.tabs[0]);
-      }
-    }
-    return this.DOMSelectionChange.emit(this.DOMSelectionActive);
   }
 
   private onSelect(tab: TabDescription) {

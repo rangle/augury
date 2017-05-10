@@ -1,12 +1,16 @@
 <bt-tab-menu
-   showMainItems="true"
    [tabs]="tabs"
    [tree]="tree"
-   [DOMSelectionActive]="activateDOMSelection"
    (tabChange)="onTabSelectionChanged($event)"
-   (DOMSelectionChange)="onDOMSelectionChange($event)"
    [selectedTab]="selectedTab">
-  <div postlude class="flex px3">
+  <div prelude class="flex px3" [ngStyle]="{order: 1}">
+    <select-component-button
+      class="flex"
+      [DOMSelectionActive]="activateDOMSelection"
+      (DOMSelectionChange)="onDOMSelectionChange($event)"
+    ></select-component-button>
+  </div>
+  <div postlude class="flex px3" [ngStyle]="{order: 3}">
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
 </bt-tab-menu>

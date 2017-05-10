@@ -29,18 +29,19 @@ import {InfoPanel} from './components/info-panel/info-panel';
 import {UserActions} from './actions/user-actions/user-actions';
 import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
+import {SelectComponentButton} from './components/select-component-button/select-component-button';
 
 import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
 
 import {
-  Connection,
-  DirectConnection,
+Connection,
+DirectConnection,
 } from './channel';
 
 import {
-  ComponentViewState,
-  ComponentPropertyState,
-  Options,
+ComponentViewState,
+ComponentPropertyState,
+Options,
 } from './state';
 
 import {App} from './app';
@@ -71,6 +72,7 @@ import {App} from './app';
     RenderState,
     RouterTree,
     Search,
+    SelectComponentButton,
     SplitPane,
     StateValues,
     TabMenu,
