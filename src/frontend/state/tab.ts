@@ -17,3 +17,7 @@ export enum StateTab {
   InjectorGraph
 }
 
+export enum ComponentTreeTabs {
+  ComponentTreeMain,
+  ComponentTreeZoneBusy,
+}

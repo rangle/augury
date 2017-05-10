@@ -1,6 +1,5 @@
 <bt-tab-menu
    [tabs]="tabs"
-   [tree]="tree"
    (tabChange)="onTabSelectionChanged($event)"
    [selectedTab]="selectedTab">
   <div prelude class="flex px3" [ngStyle]="{order: 1}">
@@ -93,31 +92,50 @@
 </form>
 
 
-<split-pane [zoneBusyTime]="zoneBusyTime"
-            [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
+
+<bt-tab-menu
+  [tabs]="componentTreeSubTabs"
+  (tabChange)="onComponentTreeTabChange($event)"
+  [selectedTab]="componentTreeSubTab"
+></bt-tab-menu>
+
+<span [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
+
+  <div [ngClass]="{ 'flex-auto flex': selectedComponentTreeTab === ComponentTreeTabs.ComponentTreeZoneBusy,
+  'display-none': selectedComponentTreeTab !== ComponentTreeTabs.ComponentTreeZoneBusy }">
+    <div class="status-bar minwidth-100pct" style="max-height: 30px">
+      Zone Busy Time: {{zoneBusyTime ? zoneBusyTime / 1000 : 'N/A'}}s
+    </div>
+  </div>
+
+
+  <split-pane [ngClass]="{ 'flex-auto flex': selectedComponentTreeTab === ComponentTreeTabs.ComponentTreeMain,
+  'display-none': selectedComponentTreeTab !== ComponentTreeTabs.ComponentTreeMain }">
   <div split-pane-primary-content class="flex flex-column flex-auto">
     <bt-tree-view
-       class="flex minheight-100pct"
-       [tree]="tree"
-       [selectedNode]="selectedNode"
-       (selectNode)="selectNode.emit($event)"
-       (inspectElement)="inspectElement.emit($event)"
-       (collapseChildren)="collapseChildren.emit($event)"
-       (expandChildren)="expandChildren.emit($event)">
+      class="flex minheight-100pct"
+      [tree]="tree"
+      [selectedNode]="selectedNode"
+      (selectNode)="selectNode.emit($event)"
+      (inspectElement)="inspectElement.emit($event)"
+      (collapseChildren)="collapseChildren.emit($event)"
+      (expandChildren)="expandChildren.emit($event)">
     </bt-tree-view>
   </div>
   <div split-pane-secondary-content class="flex flex-column flex-auto">
     <bt-info-panel
-       class="flex flex-column flex-auto bg-base"
-       [tree]="tree"
-       [ngModules]="ngModules"
-       [node]="selectedNode"
-       [loadingState]="componentState.loadingState(selectedNode)"
-       [instanceValue]="componentState.componentInstance(selectedNode)"
-       (selectNode)="selectNode.emit($event)">
+      class="flex flex-column flex-auto bg-base"
+      [tree]="tree"
+      [ngModules]="ngModules"
+      [node]="selectedNode"
+      [loadingState]="componentState.loadingState(selectedNode)"
+      [instanceValue]="componentState.componentInstance(selectedNode)"
+      (selectNode)="selectNode.emit($event)">
     </bt-info-panel>
   </div>
 </split-pane>
+</span>
+
 
 <bt-router-tree
    [ngClass]="{ 'flex-auto flex': selectedTab === Tab.RouterTree, 'display-none': selectedTab !== Tab.RouterTree }"

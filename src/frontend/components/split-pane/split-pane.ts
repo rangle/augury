@@ -21,8 +21,6 @@ const DEFAULT_SECONDARY_WIDTH = 384;
 })
 export class SplitPane {
 
-  @Input() zoneBusyTime: number;
-
   @ViewChild('wrapper') wrapperElement : ElementRef;
   @ViewChild('resizer') resizerElement : ElementRef;
   @ViewChild('overlay') overlayElement : ElementRef;

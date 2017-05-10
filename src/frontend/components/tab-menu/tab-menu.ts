@@ -4,13 +4,7 @@ import {
   Input, OnInit,
   Output,
 } from '@angular/core';
-import {
-  InstanceWithMetadata,
-  Metadata,
-  Node,
-  ObjectType,
-  Path,
-} from '../../../tree';
+
 
 export interface TabDescription {
   title: string;
@@ -25,7 +19,6 @@ export interface TabDescription {
 export class TabMenu implements OnInit {
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
-  @Input() tree;
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
 

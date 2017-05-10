@@ -15,6 +15,7 @@ import {
   Tab,
   Theme,
 } from '../../state';
+import { ComponentTreeTabs } from '../../state/tab';
 
 type Node = any;
 
@@ -28,14 +29,17 @@ type Node = any;
 export class AppTrees {
   private ComponentView = ComponentView;
   private Tab = Tab;
+  private ComponentTreeTabs = ComponentTreeTabs;
   private Theme = Theme;
+
+  private selectedComponentTreeTab: ComponentTreeTabs = 0;
 
   @Input() private componentState: ComponentInstanceState;
   @Input() private options: Options;
   @Input() private routerTree: Array<Route>;
   @Input() private tree: Array<Node>;
-  @Input() private ngModules: {[key: string]: any};
 
+  @Input() private ngModules: {[key: string]: any};
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;
   @Input() private selectedTab: Tab;
@@ -68,8 +72,23 @@ export class AppTrees {
     tab: Tab.NgModules,
   }];
 
+  private componentTreeSubTabs: Array<TabDescription> = [{
+    title: 'Component Tree',
+    selected: false,
+    tab: ComponentTreeTabs.ComponentTreeMain
+  },
+    {
+    title: 'Busy Zones',
+    selected: false,
+    tab: ComponentTreeTabs.ComponentTreeZoneBusy
+  }];
+
   onTabSelectionChanged(index: number) {
     this.tabChange.emit(this.tabs[index].tab);
+  }
+
+  onComponentTreeTabChange(tabIndex: number) {
+    this.selectedComponentTreeTab = tabIndex;
   }
 
   onDOMSelectionChange(state: boolean) {
