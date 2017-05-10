@@ -111,6 +111,10 @@ export class UserActions {
     return this.connection.send(MessageFactory.highlight([node]));
   }
 
+  triggerEvent(node: Node, listener) {
+    return this.connection.send(MessageFactory.emitEvent(node.id, listener.name));
+  }
+
   findElement() {
     return this.connection.send(MessageFactory.findDOMElement());
   }

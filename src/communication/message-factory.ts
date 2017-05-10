@@ -141,6 +141,16 @@ export abstract class MessageFactory {
     });
   }
 
+  static emitEvent(nodeId, listenerName: string) {
+    return create({
+      messageType: MessageType.EmitEvent,
+      content: {
+        nodeId,
+        listenerName,
+      }
+    });
+  }
+
   static ngModules(content: {[key: string]: any}): Message<{[key: string]: any}> {
     return create({
       messageType: MessageType.NgModules,
