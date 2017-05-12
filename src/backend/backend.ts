@@ -245,7 +245,7 @@ const resubscribe = () => {
 // the Augury UI / frontend is not even open.
 send(MessageFactory.ping()).then(resubscribe);
 
-const selectedComponentPropertyKey = '$a';
+const selectedComponentPropertyKey = '$$el';
 
 const noSelectedComponentWarningText = 'There is no component selected.';
 
