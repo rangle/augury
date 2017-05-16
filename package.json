@@ -52,7 +52,7 @@
     "expose-loader": "^0.7.1",
     "immutable": "^3.7.6",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.7.6"
+    "zone.js": "^0.8.6"
   },
   "devDependencies": {
     "@types/chrome": "0.0.38",
