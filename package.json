@@ -93,7 +93,7 @@
     "tslint-loader": "^3.3.0",
     "typescript": "2.1.6",
     "url-loader": "^0.5.7",
-    "webpack": "1.14.0",
+    "webpack": "2.4.0",
     "webpack-dev-server": "1.16.2"
   },
   "license": "MIT"
