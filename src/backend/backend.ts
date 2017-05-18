@@ -198,8 +198,13 @@ const bind = (root: DebugElement) => {
     return;
   }
 
-  let allComponentsInView = root.childNodes.filter((n: any) => n.children)
-    .reduce((a, b: any) => a.concat(b.children ? [b].concat(flatten(b.children)) : b), [])
+  let allComponentsInView = root.childNodes
+  // only keep nodes with this property
+    .filter((node: DebugElement) => node.children)
+    .reduce((flattenedNodeList, nextNode: DebugElement) =>
+      // flattens the tree of nodes into an array of nodes
+      flattenedNodeList.concat(nextNode.children ? [nextNode].concat(flatten(nextNode.children)) : nextNode), [])
+    // only keep @Component elements, removes things like li elements that have angular bindings
     .filter(x => x.componentInstance);
 
 
@@ -216,11 +221,15 @@ const bind = (root: DebugElement) => {
       .map((startTime: Date) => (new Date()).getTime() - startTime.getTime())
       .subscribe(updateZoneBusyTime));
 
-    let t = componentZones.map(({zone, name}) => Observable.from(zone.onUnstable).map(val => (new Date())).audit(() =>
+    // creates an observable of zoneBusies
+    let componentsZoneBusyObservable = Observable.merge(...componentZones.map(({zone, name}) =>
+      Observable.from(zone.onUnstable).map(val => (new Date())).audit(() =>
       Observable.from(ngZone.onStable)).map(startTime =>
-      ({msZoneBusyTime: (new Date()).getTime() - startTime.getTime(), name})));
+      ({msZoneBusyTime: (new Date()).getTime() - startTime.getTime(), name}))));
 
-    Observable.merge(...t)
+    componentsZoneBusyObservable
+      // .buffer(Observable.from(ngZone.onStable))
+      // .filter(list => Boolean(list.length))
       .subscribe(res => console.log(res));
 
     subscriptions.push(Observable.from(ngZone.onStable)// converts the observable-like eventEmitter into a observable
