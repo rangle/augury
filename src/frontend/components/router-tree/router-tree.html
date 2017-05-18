@@ -9,8 +9,8 @@
     </p>
     <p class="h3">If you have routes defined and not seeing anything, for version of Angular older than 2.3.0, please see the <a (click)="showReadme()">README.</a></p>
   </div>
-  <div class="flex-auto overflow-scroll" [hidden]="routerTree?.length === 0">
-    <div #routeTree>
+  <div class="flex flex-column flex-auto overflow-scroll" [hidden]="routerTree?.length === 0">
+    <div class="flex-auto overflow-scroll" #routeTree>
       <svg #svgContainer>
         <g #mainGroup>
         </g>
