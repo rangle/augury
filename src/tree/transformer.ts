@@ -70,7 +70,7 @@ export const transform = (path: Path,
     name,
     listeners,
     isComponent,
-    providers: [],
+    providers: getComponentProviders(element, name).filter(p => p.key != null),
     attributes: clone(element.attributes),
     classes: clone(element.classes),
     styles: clone(element.styles),
@@ -153,6 +153,23 @@ export const matchingChildren =
     }
     return recursiveSearch(element.children, test);
   };
+
+const getComponentProviders = (element, name: string): Array<Property> => {
+  let providers = new Array<Property>();
+
+  if (element.providerTokens && element.providerTokens.length > 0) {
+    providers = element.providerTokens.map(provider =>
+      Description.getProviderDescription(provider,
+        element.injector.get(provider)));
+  }
+
+  if (name) {
+    return providers.filter(provider => provider.key !== name);
+  }
+  else {
+    return providers;
+  }
+};
 
 const getChangeDetection = (metadata): number => {
   if (metadata &&
