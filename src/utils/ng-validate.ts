@@ -4,13 +4,15 @@ import {MessageType} from '../communication/message-type';
 import {send} from '../backend/indirect-connection';
 
 declare const getAllAngularTestabilities: Function;
+declare const getAllAngularRootElements: Function;
+declare const ng: any;
 
 let unsubscribe: () => void;
 
 const handler = () => {
   // variable getAllAngularTestabilities will be defined by Angular
   // in debug mode for an Angular application.
-  if (typeof getAllAngularTestabilities === 'function') {
+  if (ng && (<any>window).getAllAngularRootElements && ng.probe(getAllAngularRootElements()[0])) {
     messageJumpContext(MessageFactory.frameworkLoaded());
 
     if (unsubscribe) {
