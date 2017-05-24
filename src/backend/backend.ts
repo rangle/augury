@@ -283,32 +283,30 @@ const messageHandler = (message: Message<any>) => {
         return getComponentInstance(previousTree, node);
 
       case MessageType.UpdateProperty:
-        return tryWrap(() => updateProperty(previousTree,
+        return updateProperty(previousTree,
           message.content.path,
-          message.content.newValue));
+          message.content.newValue);
 
       case MessageType.UpdateProviderProperty:
-        return tryWrap(() => updateProviderProperty(previousTree,
+        return updateProviderProperty(previousTree,
           message.content.path,
           message.content.token,
           message.content.propertyPath,
-          message.content.newValue));
-
-      case MessageType.AnalyticsSend:
-        return AnalyticsSend(message.content.eventType, message.content.data);
+          message.content.newValue);
 
       case MessageType.EmitValue:
-        return tryWrap(() => emitValue(previousTree,
+        return emitValue(previousTree,
           message.content.path,
-          message.content.value));
+          message.content.value);
 
       case MessageType.Highlight:
         if (previousTree == null) {
           return;
         }
-        return tryWrap(() => {
-          highlight(message.content.nodes.map(id => previousTree.lookup(id)));
-        });
+        highlight(message.content.nodes.map(id => previousTree.lookup(id)));
+
+      case MessageType.AnalyticsSend:
+        return AnalyticsSend(message.content.eventType, message.content.data);
 
       case MessageType.FindElement:
         if (previousTree == null) {

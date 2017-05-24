@@ -30,6 +30,7 @@ import {
   Tab,
   Theme,
   ComponentViewState,
+  AnalyticsConsent,
 } from './state';
 
 import {
@@ -55,6 +56,7 @@ require('!style!css!postcss!../styles/app.css');
 export class App {
   private Tab = Tab;
   private Theme = Theme;
+  private AnalyticsConsent = AnalyticsConsent;
 
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
@@ -88,14 +90,16 @@ export class App {
 
     this.options.changes.subscribe(() => this.requestTree());
 
-    this.options.load().then(() => this.changeDetector.detectChanges());
+    this.options.load().then(() => {
+      // sends a basic 'page view' event on app load, might be better not to do it here, and have it in the backend
+      // todo: will discuss restricting these to specific view events, ie, clicking the modules tab
+      if (this.options.analyticsConsent === AnalyticsConsent.Yes) {
+        this.connection.send(MessageFactory.analyticsEvent('pageview', 'index'));
+      }
+      return this.changeDetector.detectChanges();
+    });
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
-
-
-    // sends a basic 'page view' event on app load, might be better not to do it here, and have it in the backend
-    // todo: will discuss restricting these to specific view events, ie, clicking the modules tab
-    this.connection.send(MessageFactory.analyticsEvent('pageview', 'index'));
   }
 
   private hasContent() {
