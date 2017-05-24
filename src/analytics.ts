@@ -19,10 +19,9 @@ const initializeGA = function (i, s, o, g, r) {
 
 const GA = initializeGA(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-GA('create', 'UA-41067508-12', 'auto');
+GA('create', 'UA-82659841-1', 'auto');
 GA('set', 'checkProtocolTask', function () {
 });
 GA('require', 'displayfeatures');
-
 
 export default (eventType, data) => (window as any).ga('send', eventType, ...data);

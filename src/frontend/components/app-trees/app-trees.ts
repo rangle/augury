@@ -14,6 +14,7 @@ import {
   Options,
   Tab,
   Theme,
+  AnalyticsConsent,
 } from '../../state';
 
 type Node = any;
@@ -29,6 +30,7 @@ export class AppTrees {
   private ComponentView = ComponentView;
   private Tab = Tab;
   private Theme = Theme;
+  private AnalyticsConsent = AnalyticsConsent;
 
   @Input() private componentState: ComponentInstanceState;
   @Input() private options: Options;
@@ -53,6 +55,7 @@ export class AppTrees {
   @ViewChild('menuElement') private menuElement;
 
   private settingOpened: boolean = false;
+  private showAnalyticsConsent: boolean = false;
 
   private tabs: Array<TabDescription> = [{
     title: 'Component Tree',
@@ -67,6 +70,14 @@ export class AppTrees {
     selected: false,
     tab: Tab.NgModules,
   }];
+
+  private ngOnInit() {
+    this.options.load().then((results) => {
+      if (results.analyticsConsent === AnalyticsConsent.NotSet) {
+        this.showAnalyticsConsent = true;
+      }
+    });
+  }
 
   onTabSelectionChanged(index: number) {
     this.splitPane.handleTabNavigation();
@@ -101,5 +112,14 @@ export class AppTrees {
   private onComponentViewChanged = (view: ComponentView) => {
     this.options.componentView = view;
     this.reset();
+  }
+
+  private onAnalyticsConsentChange = (analyticsConsent: AnalyticsConsent) => {
+    this.options.analyticsConsent = analyticsConsent;
+    this.reset();
+  }
+
+  private onHideAnalyticsPopup = () => {
+    this.showAnalyticsConsent = false;
   }
 }

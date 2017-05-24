@@ -29,6 +29,7 @@ import {InfoPanel} from './components/info-panel/info-panel';
 import {UserActions} from './actions/user-actions/user-actions';
 import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
+import {AnalyticsPopup} from './components/analytics-popup/analytics-popup';
 
 import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
 
@@ -77,6 +78,7 @@ import {App} from './app';
     TreeView,
     NgModuleInfo,
     NgModuleConfigView,
+    AnalyticsPopup,
   ],
   providers: [
     Connection,
