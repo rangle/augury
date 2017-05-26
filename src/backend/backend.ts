@@ -205,37 +205,22 @@ const bind = (root) => {
   subject.next(void 0);
 };
 
-const checkDebug = (fn: () => void) => {
-  if (typeof ng === 'undefined') {
-    // If getAllAngularTestabilities is defined but ng is not, it means the application
-    // is running in production mode and Augury is not going to work. Send an error
-    // to the frontend to deal with this case in a graceful way.
-    send(MessageFactory.applicationError(
-      new ApplicationError(ApplicationErrorType.ProductionMode)));
-  }
-  else {
-    fn();
-  }
-};
-
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
     messageBuffer.clear();
 
-    checkDebug(() => {
-      for (const subscription of subscriptions) {
-        subscription.unsubscribe();
-      }
+    for (const subscription of subscriptions) {
+      subscription.unsubscribe();
+    }
 
-      subscriptions.splice(0, subscriptions.length);
+    subscriptions.splice(0, subscriptions.length);
 
-      getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+    getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
-      setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules()));
+    setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules()));
 
-      previousRoutes = null;
-      setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree()));
-    });
+    previousRoutes = null;
+    setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree()));
   });
 };
 
