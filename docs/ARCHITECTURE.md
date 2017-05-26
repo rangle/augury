@@ -3,7 +3,7 @@
 ## Outline
 
 Augury is broadly separated into two separate but related concerns: _backend_
-and _frontend_. The backend is responsible for querying data from Angular 2;
+and _frontend_. The backend is responsible for querying data from Angular;
 updating component state when the user does so from the Augury UI; firing
 `EventEmitter` or rxjs `Subject` events; and things of that nature. Generally
 speaking, the backend deals in data.
@@ -92,12 +92,12 @@ send(MessageFactory.initialize()).then(() => injectScript('build/ng-validate.js'
 This basically means _send an initialization message to the background script,
 and if it responds, then begin the bootstrapping process.
 
-`ng-validate.ts` is a piece of code that essentially verifies that Angular 2 is
+`ng-validate.ts` is a piece of code that essentially verifies that Angular is
 running and attached to some piece of the current page. (There can be multiple
-Angular 2 applications on the same page, but there must be at least one in
+Angular applications on the same page, but there must be at least one in
 order to use Augury.)
 
-If the validator detects that Angular 2 is running, it will post a
+If the validator detects that Angular is running, it will post a
 `MessageType.FrameworkLoaded` message to the browser event queue. If you go
 back to `content-script.ts`, you will see this piece of code:
 
@@ -133,7 +133,7 @@ _backend_.
 #### Backend (`backend.ts`)
 
 The backend is the piece of Augury that actually integrates with the target
-Angular 2 application that is being debugged (or _inspected_). This is the
+Angular application that is being debugged (or _inspected_). This is the
 piece of Augury that:
 
 * Queries Angular for the complete component tree (the same tree that gets
@@ -186,7 +186,7 @@ application updates itself so that we can compare it to the last tree we
 generated and produce a delta (the changes between those two trees). On the
 **frontend**, we maintain a single `MutableTree` instance that we _patch_ when
 a new delta comes across the wire. This approach is optimized for the way that
-Angular 2 does change detection and renders components. The mutable tree on
+Angular does change detection and renders components. The mutable tree on
 the frontend allows us to only re-render pieces of the tree that have actually
 been updated since the last time we rendered. Therefore even if there is a
 massive component tree, as long as the entire thing is not changing very often,
@@ -247,7 +247,7 @@ The frontend is not actually bootstrapped until the user opens Developer Tools
 and navigates to the Augury tab. At that point you will see a loading indicator
 and Augury will load the current component tree in short order.
 
-### Angular 2 component tree
+### Angular component tree
 
 Chrome extensions are not built to send large amounts of data between two
 different execution contexts. Therefore we try to minimize the amount of data
@@ -478,11 +478,11 @@ action, check out `NodeItem` and `ComponentPropertyState`.)
 # Frontend architecture
 
 The frontend is much simpler than the backend. In essence, it is not dissimilar
-from any other Angular 2 application that you may come across. It contains
+from any other Angular application that you may come across. It contains
 plenty of `@Component()` classes and composes those together into a UI that the
-developer interacts with when debugging Angular 2 applications.
+developer interacts with when debugging Angular applications.
 
-If you have worked with Angular 2 applications, you should have no trouble
+If you have worked with Angular applications, you should have no trouble
 understanding the Augury UI code in the `frontend` directory.
 
 # References

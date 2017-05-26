@@ -88,9 +88,9 @@ Remember, no contribution is too small and no issue is too trivial. If you see a
 
 :beetle: We are using [GitHub Issues](https://github.com/rangle/augury/issues) for our public bugs. We will keep track on this and will to make it clear when we have an internal fix in progress. Before filing for a new task, try to make sure your problem doesn't already exist.
 
-If you do find a new issue, the best way to get a bug fixed is to provide a test case with either one of the example apps bundled in the repo, or by making your own Angular 2.0 application illustrating the reduced use case. Don't forget to include the version of Angular 2.0 app you're using!
+If you do find a new issue, the best way to get a bug fixed is to provide a test case with either one of the example apps bundled in the repo, or by making your own Angular application illustrating the reduced use case. Don't forget to include the version of Angular app you're using!
 
-At the moment, we offer limited backwards compatibility until Angular 2.0 stabilizes. Please check [README](./README.md#supported-version) for the version Augury currently supports.
+At the moment, we offer limited backwards compatibility until Angular stabilizes. Please check [README](./README.md#supported-version) for the version Augury currently supports.
 
 
 ### Pull requests
@@ -114,7 +114,7 @@ So you want to make some changes to the application. Again, we recommend taking 
 
 ### Front-End
 
-So you want to develop on the front-end (make some logic or visual changes to the extension). This is a self contained Angular2 app running as an extension, so getting acquainted with [Angular2](https://angular.io/) is a good idea. We are using a [Flux](https://facebook.github.io/flux/) style application architecture with the help of [RxJS](https://github.com/Reactive-Extensions/RxJS).
+So you want to develop on the front-end (make some logic or visual changes to the extension). This is a self contained Angular app running as an extension, so getting acquainted with [Angular](https://angular.io/) is a good idea. We are using a [Flux](https://facebook.github.io/flux/) style application architecture with the help of [RxJS](https://github.com/Reactive-Extensions/RxJS).
 
 _frontend structure overview_
 * Actions
@@ -132,7 +132,7 @@ The extension is separated into various components, which can be found in batara
 
 #### Controllers
 
-Each of these components will have their .ts file containing the component class and Angular 2 decorators (like @Component or @View). If you want to modify any logic that deals with interaction with the component, this is most likely where you would find it. Most of the logic, constructor, dependencies and related actions are placed within the component class. Any necessary actions, stores or other classes can be imported into the file.
+Each of these components will have their .ts file containing the component class and Angular decorators (like @Component or @View). If you want to modify any logic that deals with interaction with the component, this is most likely where you would find it. Most of the logic, constructor, dependencies and related actions are placed within the component class. Any necessary actions, stores or other classes can be imported into the file.
 
 #### Templates
 

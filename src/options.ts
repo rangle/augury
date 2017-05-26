@@ -4,7 +4,7 @@ export enum Theme {
 }
 
 export enum ComponentView {
-  Hybrid,     // show all elements with Angular 2 properties set
+  Hybrid,     // show all elements with Angular properties set
   All,        // show all components and elements
   Components, // show components only
 }
