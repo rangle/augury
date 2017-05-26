@@ -2,15 +2,15 @@
   <div [ngSwitch]="error.errorType" style="font-size: 1.25em">
     <div *ngSwitchCase="ApplicationErrorType.DebugInformationMissing">
       <div class="p3 m3">
-        <p>
+        <p class="legible-color">
           Debug information is missing from this build.
         </p>
-        <p class="pt3">
+        <p class="legible-color pt3">
           One possible cause may be if your application was built with AoT (ahead-of-time compilation).
           Augury cannot debug builds that use AoT because Angular does not provide the same debugging
           information that it does for non-AoT builds.
         </p>
-        <p class="pt3">
+        <p class="legible-color pt3">
           Try disabling AoT (if you are using the <span class="monospace">ng</span> command-line tool, try
           running <span class="monospace">ng</span> with the <span class="monospace">--aot=false</span> flag)
         </p>
@@ -24,21 +24,21 @@
     </div>
     <div *ngSwitchCase="ApplicationErrorType.NotNgApp">
       <div class="p3 m3">
-        <p class="h1 message-gray">
+        <p class="legible-color h1 message-gray">
           This application is not an Angular application.
         </p>
-        <p class="h3 message-gray">
+        <p class="legible-color h3 message-gray">
           This application cannot be inspected using Augury.
         </p>
       </div>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.ProductionMode">
       <div class="p3 m3">
-        <p>
+        <p class="legible-color">
           This application is running in production mode
           and therefore cannot be inspected using Augury.
         </p>
-        <p class="pt3">
+        <p class="legible-color pt3">
           If this is an Angular application, please rebuild your application in debug mode or remove the
           call to <span class="monospace">enableProdMode()</span>.
         </p>
