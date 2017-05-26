@@ -61,7 +61,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static notNgApp(): Message<void> {
+  static notNgApp(): Message<ApplicationError> {
     return create({
       messageType: MessageType.NotNgApp,
     });
