@@ -6,9 +6,6 @@ import {send} from '../backend/indirect-connection';
 
 import {isAngular, isDebugMode} from '../backend/utils/app-check';
 import {ApplicationError, ApplicationErrorType} from '../communication';
-(<any> window).isAngular = isAngular;
-(<any> window).isDebugMode = isDebugMode;
-
 
 declare const getAllAngularTestabilities: Function;
 declare const getAllAngularRootElements: Function;

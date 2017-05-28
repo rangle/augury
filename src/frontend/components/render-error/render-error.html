@@ -1,21 +1,5 @@
 <div class="vh-100" *ngIf="error">
   <div [ngSwitch]="error.errorType" style="font-size: 1.25em">
-    <div *ngSwitchCase="ApplicationErrorType.DebugInformationMissing">
-      <div class="p3 m3">
-        <p class="legible-color">
-          Debug information is missing from this build.
-        </p>
-        <p class="legible-color pt3">
-          One possible cause may be if your application was built with AoT (ahead-of-time compilation).
-          Augury cannot debug builds that use AoT because Angular does not provide the same debugging
-          information that it does for non-AoT builds.
-        </p>
-        <p class="legible-color pt3">
-          Try disabling AoT (if you are using the <span class="monospace">ng</span> command-line tool, try
-          running <span class="monospace">ng</span> with the <span class="monospace">--aot=false</span> flag)
-        </p>
-      </div>
-    </div>
     <div class="vh-100" *ngSwitchCase="ApplicationErrorType.UncaughtException">
       <report-error
         [error]="error"
