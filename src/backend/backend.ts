@@ -182,13 +182,6 @@ const subject = new Subject<void>();
 const subscriptions = new Array<Subscription>();
 
 const bind = (root) => {
-  if (root.injector == null) {
-    // If injector is missing, we won't be able to debug this build
-    send(MessageFactory.applicationError(
-      new ApplicationError(ApplicationErrorType.DebugInformationMissing)));
-    return;
-  }
-
   const ngZone = root.injector.get(ng.coreTokens.NgZone);
   if (ngZone) {
     subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
