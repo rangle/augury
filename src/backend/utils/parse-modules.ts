@@ -20,7 +20,8 @@ const resolveNgModuleDecoratorConfig = (m) => {
         (decorators[idx].args || [])[0] : null, null);
   }
 
-  return Reflect.getMetadata('annotations', m).find(decorator => decorator.toString() === '@NgModule');
+  return (Reflect.getMetadata('annotations', m) || [])
+    .find(decorator => decorator.toString() === '@NgModule');
 };
 
 export const parseModulesFromRouter = (router, existingModules: NgModulesRegistry) => {
