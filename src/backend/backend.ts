@@ -347,17 +347,19 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
       const instanceParent = getNodeInstanceParent(probed, path);
       if (instanceParent) {
         const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-        ngZone.run(() => {
-          const emittable = instanceParent[path[path.length - 1]];
-          if (typeof emittable.emit === 'function') {
-            emittable.emit(newValue);
-          }
-          else if (typeof emittable.next === 'function') {
-            emittable.next(newValue);
-          }
-          else {
-            throw new Error(`Cannot emit value for ${serializePath(path)}`);
-          }
+        setTimeout(() => {
+          ngZone.run(() => {
+            const emittable = instanceParent[path[path.length - 1]];
+            if (typeof emittable.emit === 'function') {
+              emittable.emit(newValue);
+            }
+            else if (typeof emittable.next === 'function') {
+              emittable.next(newValue);
+            }
+            else {
+              throw new Error(`Cannot emit value for ${serializePath(path)}`);
+            }
+          });
         });
       }
     }
