@@ -1,9 +1,6 @@
 export enum ApplicationErrorType {
   None,
 
-  // Debug information is missing (injector, componentInstance)
-  DebugInformationMissing,
-
   // The application being debugged is running in production mode and therefore
   // is incompatible with Augury and cannot be debugged.
   ProductionMode,
