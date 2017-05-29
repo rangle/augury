@@ -9,7 +9,10 @@ export const recurse = (object, apply: Apply) => {
   const visited = new Set();
 
   const visit = value => {
-    if (value == null || isScalar(value) || /Element/.test(Object.prototype.toString.call(value))) {
+    if (value == null ||
+      isScalar(value) ||
+      /Element/.test(Object.prototype.toString.call(value)) ||
+      value.top === window) {
       return;
     }
 
