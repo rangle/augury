@@ -51,7 +51,7 @@
     "d3": "^4.5.0",
     "expose-loader": "^0.7.1",
     "immutable": "^3.7.6",
-    "rxjs": "^5.1.0",
+    "rxjs": "^5.3.2",
     "zone.js": "^0.7.6"
   },
   "devDependencies": {
