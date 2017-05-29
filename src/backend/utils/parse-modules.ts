@@ -20,7 +20,8 @@ const resolveNgModuleDecoratorConfig = (m) => {
         (decorators[idx].args || [])[0] : null, null);
   }
 
-  return Reflect.getMetadata('annotations', m).find(decorator => decorator.toString() === '@NgModule');
+  return (Reflect.getMetadata('annotations', m) || [])
+    .find(decorator => decorator.toString() === '@NgModule');
 };
 
 export const parseModulesFromRouter = (router, existingModules: NgModulesRegistry) => {
@@ -159,12 +160,12 @@ const _parseModule = (
   const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
 
   if (!modules[auguryModuleId]) {
-    const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module);
+    const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module) || {};
     moduleNames.push(parseModuleName(module));
-    modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig || {});
+    modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
 
     // collect all providers from this module
-    const moduleComponents = flatten((ngModuleDecoratorConfig || {}).declarations || [])
+    const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
       .filter(declaration => componentMetadata(declaration));
 
     const moduleComponentProviders = moduleComponents.reduce((prev, curr, i, components) =>
@@ -173,7 +174,7 @@ const _parseModule = (
     const providersFromModuleImports = [];
 
     // parse modules imported by this module
-    const flatImports = flatten((ngModuleDecoratorConfig || {}).imports || []);
+    const flatImports = flatten(ngModuleDecoratorConfig.imports || []);
     flatImports.forEach((im: any): any => {
       const importedModule = im.ngModule || im;
 
