@@ -1,32 +1,45 @@
 import {messageJumpContext, browserSubscribeOnce} from '../communication/message-dispatch';
 import {MessageFactory} from '../communication/message-factory';
 import {MessageType} from '../communication/message-type';
+import {Message} from '../communication/message';
 import {send} from '../backend/indirect-connection';
 
+import {isAngular, isDebugMode} from '../backend/utils/app-check';
+import {ApplicationError, ApplicationErrorType} from '../communication';
+
 declare const getAllAngularTestabilities: Function;
+declare const getAllAngularRootElements: Function;
+declare const ng: any;
 
 let unsubscribe: () => void;
 
+let errorToSend: Message<ApplicationError>;
+
+const sendError = () => {
+  if (errorToSend) {
+    send(errorToSend);
+  }
+};
+
 const handler = () => {
-  // variable getAllAngularTestabilities will be defined by Angular
-  // in debug mode for an Angular application.
-  if (typeof getAllAngularTestabilities === 'function') {
-    messageJumpContext(MessageFactory.frameworkLoaded());
-
-    if (unsubscribe) {
-      unsubscribe();
+  if (isAngular()) {
+    if (isDebugMode()) {
+      messageJumpContext(MessageFactory.frameworkLoaded());
+      if (unsubscribe) {
+        unsubscribe();
+      }
+      errorToSend = null;
+      return true;
     }
-
-    return true;
+    errorToSend = MessageFactory.applicationError(
+      new ApplicationError(ApplicationErrorType.ProductionMode));
+  } else {
+    errorToSend = MessageFactory.notNgApp();
   }
 
-  // We do this to make sure message is display when Augury is first opened.
-  browserSubscribeOnce(MessageType.Initialize, () => {
-    send(MessageFactory.notNgApp());
-  });
+  browserSubscribeOnce(MessageType.Initialize, sendError);
 
-  // Called each time browser is refreshed.
-  send(MessageFactory.notNgApp());
+  sendError();
 
   return false;
 };

@@ -183,13 +183,6 @@ const subject = new Subject<void>();
 const subscriptions = new Array<Subscription>();
 
 const bind = (root) => {
-  if (root.injector == null) {
-    // If injector is missing, we won't be able to debug this build
-    send(MessageFactory.applicationError(
-      new ApplicationError(ApplicationErrorType.DebugInformationMissing)));
-    return;
-  }
-
   const ngZone = root.injector.get(ng.coreTokens.NgZone);
   if (ngZone) {
     subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
@@ -206,37 +199,22 @@ const bind = (root) => {
   subject.next(void 0);
 };
 
-const checkDebug = (fn: () => void) => {
-  if (typeof ng === 'undefined') {
-    // If getAllAngularTestabilities is defined but ng is not, it means the application
-    // is running in production mode and Augury is not going to work. Send an error
-    // to the frontend to deal with this case in a graceful way.
-    send(MessageFactory.applicationError(
-      new ApplicationError(ApplicationErrorType.ProductionMode)));
-  }
-  else {
-    fn();
-  }
-};
-
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
     messageBuffer.clear();
 
-    checkDebug(() => {
-      for (const subscription of subscriptions) {
-        subscription.unsubscribe();
-      }
+    for (const subscription of subscriptions) {
+      subscription.unsubscribe();
+    }
 
-      subscriptions.splice(0, subscriptions.length);
+    subscriptions.splice(0, subscriptions.length);
 
-      getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
+    getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
-      setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules()));
+    setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules()));
 
-      previousRoutes = null;
-      setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree()));
-    });
+    previousRoutes = null;
+    setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree()));
   });
 };
 
@@ -373,17 +351,19 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
       const instanceParent = getNodeInstanceParent(probed, path);
       if (instanceParent) {
         const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-        ngZone.run(() => {
-          const emittable = instanceParent[path[path.length - 1]];
-          if (typeof emittable.emit === 'function') {
-            emittable.emit(newValue);
-          }
-          else if (typeof emittable.next === 'function') {
-            emittable.next(newValue);
-          }
-          else {
-            throw new Error(`Cannot emit value for ${serializePath(path)}`);
-          }
+        setTimeout(() => {
+          ngZone.run(() => {
+            const emittable = instanceParent[path[path.length - 1]];
+            if (typeof emittable.emit === 'function') {
+              emittable.emit(newValue);
+            }
+            else if (typeof emittable.next === 'function') {
+              emittable.next(newValue);
+            }
+            else {
+              throw new Error(`Cannot emit value for ${serializePath(path)}`);
+            }
+          });
         });
       }
     }

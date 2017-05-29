@@ -1,20 +1,31 @@
 # Change Log
+## [1.8.0](https://github.com/rangle/tree/1.8.0)
+* Improve production mode and Angular framework checks [1071](https://github.com/rangle/augury/issues/1071).
+* Fixed error message colour in dark mode [833](https://github.com/rangle/augury/issues/833).
+* Removed "Angular 2" references from projects [1046](https://github.com/rangle/augury/issues/1046).
+* Fixed broken "Self Provided" in dependency graph [1078](https://github.com/rangle/augury/issues/1078).
+* Fixed empty space under router tree [1025](https://github.com/rangle/augury/issues/1025).
+* Changed `$a` to `$$el` to avoid conflicts [1044](https://github.com/rangle/augury/issues/1044).
+* Improve UI resizing on Augury tab change [1026](https://github.com/rangle/augury/issues/1026).
+* Add error reporting [955](https://github.com/rangle/augury/issues/955).
+* Add click & drag vertical resizing to router panel [1062](https://github.com/rangle/augury/issues/1062).
+
 ## [1.7.0](https://github.com/rangle/tree/1.7.0)
 * Removed unnecessary Chrome extension permissions (`<all_urls>` & `tabs`).
 * Switched from npm to yarn.
 
 ## [1.6.0](https://github.com/rangle/tree/1.6.0)
-* Fix issue with state discrepency after property change [1050](https://github.com/rangle/augury/pulls/1050)
+* Fix issue with state discrepency after property change [1050](https://github.com/rangle/augury/issues/1050)
 * Fix another serialization bug.
 
 ## [1.5.0](https://github.com/rangle/tree/1.5.0)
-* Fix buggy serialization of maps and arrays [992](https://github.com/rangle/augury/pulls/992)
-* Update to work with changes in non-public Angular APIs [1039](https://github.com/rangle/augury/pulls/1039)
-* Add descriptive attributes to form elements in component tree [1016](https://github.com/rangle/augury/pulls/1016)
-* Fix error message not persisting on Augury close/open [304](https://github.com/rangle/augury/pulls/304)
+* Fix buggy serialization of maps and arrays [992](https://github.com/rangle/augury/issues/992)
+* Update to work with changes in non-public Angular APIs [1039](https://github.com/rangle/augury/issues/1039)
+* Add descriptive attributes to form elements in component tree [1016](https://github.com/rangle/augury/issues/1016)
+* Fix error message not persisting on Augury close/open [304](https://github.com/rangle/augury/issues/304)
 
 ## [1.4.0](https://github.com/rangle/tree/1.4.0)
-* Fix security issue with malicious message sources [1030](https://github.com/rangle/augury/pulls/1030)
+* Fix security issue with malicious message sources [1030](https://github.com/rangle/augury/issues/1030)
 * Fixed empty routes on Augury reopen. [1018](https://github.com/rangle/augury/issues/1018)
 * Add "not Angular 2" message. [304](https://github.com/rangle/augury/issues/304)
 
@@ -100,11 +111,11 @@
 * Augury now inspects applications built on Angular 2.0.0.
 * Property lines no longer jump around when entering and exiting edit. ([652](https://github.com/rangle/augury/issues/652))
 * Emitter widgets in the state editor no longer overlap the settings dropdown. ([661](https://github.com/rangle/augury/issues/661))
-* The Injector Graph and the Router Tree have been polished and refined. ([672](https://github.com/rangle/augury/pull/672))
+* The Injector Graph and the Router Tree have been polished and refined. ([672](https://github.com/rangle/augury/issues/672))
 * Augury no longer loses context when the user clicks "(view source)" on a component. ([666](https://github.com/rangle/augury/issues/666))
 * The Find box has been moved directly into Component Tree and Router Tree. ([566](https://github.com/rangle/augury/issues/566))
-* Augury now filters normal HTML elements out of the Injector Graph ([633](https://github.com/rangle/augury/pull/633))
-* You can now navigate the Component Tree with your keyboard. ([635](https://github.com/rangle/augury/pull/635))
+* Augury now filters normal HTML elements out of the Injector Graph ([633](https://github.com/rangle/augury/issues/633))
+* You can now navigate the Component Tree with your keyboard. ([635](https://github.com/rangle/augury/issues/635))
 
 ## [1.1.3](https://github.com/rangle/tree/1.1.3)
 * Resolve another endless-flicker issue caused by providers with undefined keys
