@@ -1,3 +1,4 @@
+
 <bt-tab-menu
    showMainItems="true"
    [tabs]="tabs"
@@ -9,6 +10,21 @@
     <span *ngIf="ngVersion" class="ngVersion">
       Angular Version: {{ngVersion}}
     </span>
+    <div class="feedback-button primary-color" (click)="onReportIssuesClick()">
+      <img
+        [src]="'../images/report-issue' + (options.theme === Theme.Dark ? '-light.svg' : '.svg')"
+        class="feedback-icon">
+      Report an Issue
+    </div>
+    <div class="feedback-button primary-color" (click)="onFeedbackClick()">
+      <img
+        [src]="'../images/feedback' + (options.theme === Theme.Dark ? '-light.svg' : '.svg')"
+        class="feedback-icon">
+      {{showFeedbackPane ? 'Close Feedback Form' : 'Feedback'}}
+    </div>
+    <div class="feedback-form bg-base" *ngIf="showFeedbackPane">
+      <bt-feedback-form (onCloseForm)="onFeedbackClick()"></bt-feedback-form>
+    </div>
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
 </bt-tab-menu>
