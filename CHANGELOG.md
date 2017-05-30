@@ -1,4 +1,10 @@
 # Change Log
+## [1.9.0](https://github.com/rangle/tree/1.9.0)
+* Fix another issue with prod mode checking in some Angular versions [1131](https://github.com/rangle/augury/issues/1131).
+* Stop catching errors that happen in the inspected app after emitting value [1135](https://github.com/rangle/augury/issues/1135).
+* Don't try to parse child iframes within inspected app [1137](https://github.com/rangle/augury/issues/1137).
+* Improve NgModule config resolution to avoid undefined reference errors [1133](https://github.com/rangle/augury/issues/1133).
+
 ## [1.8.0](https://github.com/rangle/tree/1.8.0)
 * Improve production mode and Angular framework checks [1071](https://github.com/rangle/augury/issues/1071).
 * Fixed error message colour in dark mode [833](https://github.com/rangle/augury/issues/833).
