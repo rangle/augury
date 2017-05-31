@@ -59,6 +59,7 @@ export class App {
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
   private ngModules: Array<any> = null;
+  private ngVersion: string;
   private selectedNode: Node;
   private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
@@ -80,7 +81,11 @@ export class App {
     if (this.errorHandler instanceof UncaughtErrorHandler) {
       this.unsubscribeUncaughtErrorListener = (<UncaughtErrorHandler>this.errorHandler)
         .addListener((err: Error) => {
-          this.error = new ApplicationError(ApplicationErrorType.UncaughtException, err);
+          this.error = new ApplicationError(ApplicationErrorType.UncaughtException, {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          });
         });
     }
 
@@ -180,6 +185,10 @@ export class App {
         this.ngModules = msg.content;
         respond();
         break;
+      case MessageType.NgVersion:
+        this.ngVersion = msg.content;
+        respond();
+        break;
       case MessageType.FindElement:
         if (msg.content.node) {
           this.viewState.select(msg.content.node);
@@ -277,9 +286,8 @@ export class App {
 
   private onReportError() {
     if (this.error && this.error.errorType === ApplicationErrorType.UncaughtException) {
-      reportUncaughtError(this.error.error);
+      reportUncaughtError(this.error.error, this.ngVersion);
       this.error = null;
-      // this.requestTree();
     }
   }
 

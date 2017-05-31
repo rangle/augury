@@ -32,6 +32,9 @@ export enum MessageType {
   /// of backend -> content script -> channel -> frontend.
   Push,
 
+  // Send the inspected application ng version
+  NgVersion,
+
   /// Transmit a complete component tree
   CompleteTree,
 

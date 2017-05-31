@@ -1,6 +1,8 @@
 import {
-  subscribeToUncaughtExceptions,
-} from '../utils/error-handling';
+  Message,
+  MessageType,
+  deserializeMessage,
+} from '../communication';
 
 import * as Raven from 'raven-js';
 
@@ -10,10 +12,21 @@ if (SENTRY_KEY && SENTRY_KEY.length > 0) {
     .config(SENTRY_KEY, { release: chrome.runtime.getManifest().version })
     .install();
 
-  subscribeToUncaughtExceptions(err => {
-    const e = new Error(err.name);
-    e.message = err.message;
-    e.stack = err.stack;
-    Raven.captureException(e);
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message && message.messageType === MessageType.SendUncaughtError) {
+      deserializeMessage(message);
+      reportError(message.content);
+    }
   });
 }
+
+const reportError = (errMsg) => {
+  const e = new Error(errMsg.error.message);
+  e.name = errMsg.error.name;
+  e.stack = errMsg.error.stack;
+  Raven.captureException(e, {
+    tags: {
+      ngVersion: errMsg.ngVersion,
+    },
+  });
+};

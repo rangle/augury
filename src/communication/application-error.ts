@@ -1,3 +1,5 @@
+import {SerializeableError} from '../utils/error-handling';
+
 export enum ApplicationErrorType {
   None,
 
@@ -18,7 +20,7 @@ export interface ApplicationError {
   errorType: ApplicationErrorType;
 
   /// The class of error being represented
-  error?: Error;
+  error?: SerializeableError;
 
   /// Additional details about the error
   details: string;
@@ -28,7 +30,7 @@ export interface ApplicationError {
 }
 
 export class ApplicationError implements ApplicationError {
-  constructor(errorType: ApplicationErrorType, error?: Error, details?: string, stack?: string) {
+  constructor(errorType: ApplicationErrorType, error?: SerializeableError, details?: string, stack?: string) {
     this.errorType = errorType;
     this.error = error;
     this.details = details || error ? error.message : null;

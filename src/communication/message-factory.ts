@@ -5,6 +5,8 @@ import {
   messageSource,
 } from './message';
 
+import {SerializeableError} from '../utils/error-handling';
+
 import {
   Route,
 } from '../backend/utils';
@@ -70,6 +72,13 @@ export abstract class MessageFactory {
   static push(): Message<void> {
     return create({
       messageType: MessageType.Push,
+    });
+  }
+
+  static ngVersion(ngVersion: string): Message<string> {
+    return create({
+      messageType: MessageType.NgVersion,
+      content: ngVersion,
     });
   }
 
@@ -181,19 +190,20 @@ export abstract class MessageFactory {
     });
   }
 
-  static uncaughtApplicationError(error: Error): Message<ApplicationError> {
+  static uncaughtApplicationError(error: SerializeableError): Message<ApplicationError> {
     return create({
       messageType: MessageType.ApplicationError,
-      content: serialize(new ApplicationError(ApplicationErrorType.UncaughtException, error)),
-      serialize: Serialize.Recreator,
+      content: new ApplicationError(ApplicationErrorType.UncaughtException, error),
     });
   }
 
-  static sendUncaughtError(error: Error): Message<Error> {
+  static sendUncaughtError(error: SerializeableError, ngVersion: string): Message<any> {
     return create({
       messageType: MessageType.SendUncaughtError,
-      content: serialize(error),
-      serialize: Serialize.Recreator,
+      content: {
+        error,
+        ngVersion,
+      },
     });
   }
 
