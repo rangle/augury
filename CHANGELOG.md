@@ -1,4 +1,8 @@
 # Change Log
+## [1.10.0](https://github.com/rangle/tree/1.10.0)
+* Add Augury release version to sentry error reports ([1148](https://github.com/rangle/augury/issues/1148)).
+* Parse Angular version when possible and add to sentry error reports ([1146](https://github.com/rangle/augury/issues/1146)).
+
 ## [1.9.0](https://github.com/rangle/tree/1.9.0)
 * Fix another issue with prod mode checking in some Angular versions [1131](https://github.com/rangle/augury/issues/1131).
 * Stop catching errors that happen in the inspected app after emitting value [1135](https://github.com/rangle/augury/issues/1135).
