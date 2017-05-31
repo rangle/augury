@@ -7,7 +7,7 @@ import * as Raven from 'raven-js';
 declare const SENTRY_KEY: string;
 if (SENTRY_KEY && SENTRY_KEY.length > 0) {
   Raven
-    .config(SENTRY_KEY)
+    .config(SENTRY_KEY, { release: chrome.runtime.getManifest().version })
     .install();
 
   subscribeToUncaughtExceptions(err => {
