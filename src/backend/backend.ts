@@ -3,6 +3,8 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {compare} from '../utils/patch';
 
+import {SerializeableError} from '../utils/error-handling';
+
 import {
   MutableTree,
   Node,
@@ -18,6 +20,10 @@ import {
   parseModulesFromRouter,
   NgModulesRegistry,
 } from './utils/parse-modules';
+
+import {
+  parseNgVersion,
+} from './utils/parse-ng-version';
 
 import {createTreeFromElements} from '../tree/mutable-tree-factory';
 
@@ -84,22 +90,21 @@ const parsedModulesData: NgModulesRegistry = {
   tokenIdMap: {},
 };
 
-class SerializeableError {
-  name: string;
-  message: string;
-  stack: string;
-}
-
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {
     return fn();
   } catch (e) {
-    const err = new SerializeableError();
-    err.name = e.name;
-    err.stack = e.stack;
-    err.message = e.message;
-    send(MessageFactory.uncaughtApplicationError(err));
+    send(MessageFactory.uncaughtApplicationError({
+      name: e.name,
+      stack: e.stack,
+      message: e.message,
+    }));
   };
+};
+
+const sendNgVersionMessage = () => {
+  const ngVersion = parseNgVersion();
+  send(MessageFactory.ngVersion(ngVersion));
 };
 
 const sendNgModulesMessage = () => {
@@ -200,6 +205,8 @@ const bind = (root) => {
 
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
+    runAndHandleUncaughtExceptions(() => sendNgVersionMessage());
+
     messageBuffer.clear();
 
     for (const subscription of subscriptions) {
