@@ -10,11 +10,13 @@ import {
   defaultOptions,
   loadOptions,
   saveOptions,
+  AnalyticsConsent,
 } from '../../options';
 
 export {ComponentView};
 export {SimpleOptions};
 export {Theme};
+export {AnalyticsConsent};
 
 @Injectable()
 export class Options {
@@ -45,6 +47,15 @@ export class Options {
     this.publish();
   }
 
+  get analyticsConsent(): AnalyticsConsent {
+    return this.cachedOptions.analyticsConsent;
+  }
+
+  set analyticsConsent(analyticsConsent: AnalyticsConsent) {
+    this.cachedOptions.analyticsConsent = analyticsConsent;
+    this.publish();
+  }
+
   get componentView(): ComponentView {
     return this.cachedOptions.componentView;
   }
@@ -60,7 +71,6 @@ export class Options {
 
   private publish() {
     saveOptions(this.cachedOptions);
-
     this.subject.next(this);
   }
 }
