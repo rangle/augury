@@ -27,11 +27,28 @@ import {RenderError} from './components/render-error/render-error';
 import {ReportError} from './components/report-error/report-error';
 import {InfoPanel} from './components/info-panel/info-panel';
 import {UserActions} from './actions/user-actions/user-actions';
+import {MainActions} from './actions/main-actions';
 import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
+
+import reduxLogger from 'redux-logger';
+
+import {
+  applyMiddleware,
+  combineReducers,
+  compose,
+  createStore,
+  Store,
+} from 'redux';
+
+import {NgReduxModule, NgRedux} from '@angular-redux/store';
+import {rootReducer} from './store/reducers';
+import {createLogger} from 'redux-logger';
+
 import {AnalyticsPopup} from './components/analytics-popup/analytics-popup';
 
 import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
+import {IAppState} from './store/model';
 
 import {
   Connection,
@@ -51,6 +68,7 @@ import {App} from './app';
     BrowserModule,
     CommonModule,
     FormsModule,
+    NgReduxModule,
   ],
   declarations: [
     Accordion,
@@ -85,6 +103,7 @@ import {App} from './app';
     DirectConnection,
     Options,
     UserActions,
+    MainActions,
     ComponentViewState,
     ComponentPropertyState,
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
@@ -92,6 +111,12 @@ import {App} from './app';
   bootstrap: [App]
 })
 class FrontendModule {
+  constructor(ngRedux: NgRedux<IAppState>) {
+    const store = createStore(
+      rootReducer,
+      compose(applyMiddleware(reduxLogger)));
+      ngRedux.provideStore(store as Store<IAppState>);
+  }
 }
 
 declare const PRODUCTION: boolean;

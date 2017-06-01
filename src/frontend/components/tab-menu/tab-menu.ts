@@ -19,6 +19,7 @@ export interface TabDescription {
 }
 
 import {UserActions} from '../../actions/user-actions/user-actions';
+import {MainActions} from '../../actions/main-actions';
 
 @Component({
   selector: 'bt-tab-menu',
@@ -34,14 +35,11 @@ export class TabMenu {
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() DOMSelectionChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private userActions: UserActions) {
+  constructor(private userActions: UserActions, private mainActions: MainActions) {
   }
 
   private ngOnInit() {
     const t = this.tabs.filter(tab => tab.tab === this.selectedTab);
-    if (t.length > 0) {
-      this.onSelect(t[0]);
-    }
   }
 
   private selectElement() {
@@ -60,12 +58,6 @@ export class TabMenu {
   }
 
   private onSelect(tab: TabDescription) {
-    this.tabs.forEach((t) => {
-      t.selected = false;
-    });
-
-    tab.selected = true;
-
-    this.tabChange.emit(tab.tab);
+    this.mainActions.selectTab(tab.tab);
   }
 }

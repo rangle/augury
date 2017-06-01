@@ -34,6 +34,7 @@
     "lint": "tslint 'src/**/*.ts'"
   },
   "dependencies": {
+    "@angular-redux/store": "^6.4.1",
     "@angular/common": "2.4.5",
     "@angular/compiler": "2.4.5",
     "@angular/core": "2.4.5",
@@ -42,6 +43,7 @@
     "@angular/platform-browser": "2.4.5",
     "@angular/platform-browser-dynamic": "2.4.5",
     "@angular/router": "3.0.0",
+    "@types/redux-logger": "^3.0.0",
     "basscss": "^7.0.4",
     "basscss-border-colors": "^2.1.0",
     "basscss-type-scale": "^1.0.5",
@@ -52,6 +54,9 @@
     "d3": "^4.5.0",
     "expose-loader": "^0.7.1",
     "immutable": "^3.7.6",
+    "redux": "^3.6.0",
+    "redux-logger": "^3.0.6",
+    "redux-observable": "^0.14.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.7.6"
   },
