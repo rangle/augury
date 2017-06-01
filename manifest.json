@@ -31,7 +31,7 @@
     "build/*"
   ],
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com 'unsafe-eval'; object-src 'self'",
   "icons": {
     "16": "images/icon16.png",
     "48": "images/icon48.png",

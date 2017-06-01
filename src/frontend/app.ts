@@ -98,9 +98,9 @@ export class App {
     this.options.load().then(() => {
       // sends a basic 'page view' event on app load, might be better not to do it here, and have it in the backend
       // todo: will discuss restricting these to specific view events, ie, clicking the modules tab
-      if (this.options.analyticsConsent === AnalyticsConsent.Yes) {
-        this.connection.send(MessageFactory.analyticsEvent('pageview', 'index'));
-      }
+      this.connection.send(
+        MessageFactory.googleTagManagerEvent(this.options.analyticsConsent, {'event': 'initialize-augury'}));
+
       return this.changeDetector.detectChanges();
     });
 
@@ -303,6 +303,7 @@ export class App {
   private onSelectedTabChange(tab: Tab) {
     this.selectedTab = tab;
     this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
+    // this.connection.send(MessageFactory.googleTagManagerEvent({'event': 'auguryTabChange'}));
   }
 
   private onDOMSelectionChange(state: boolean) {
