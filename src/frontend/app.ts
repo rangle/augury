@@ -50,6 +50,7 @@ import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
+import {TabDescription} from "./components/tab-menu/tab-menu";
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -102,14 +103,7 @@ export class App {
 
     this.options.changes.subscribe(() => this.requestTree());
 
-    this.options.load().then(() => {
-      // sends a basic 'page view' event on app load, might be better not to do it here, and have it in the backend
-      // todo: will discuss restricting these to specific view events, ie, clicking the modules tab
-      this.connection.send(
-        MessageFactory.googleTagManagerEvent(this.options.analyticsConsent, {'event': 'initialize-augury'}));
-
-      return this.changeDetector.detectChanges();
-    });
+    this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
   }

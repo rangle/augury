@@ -34,6 +34,7 @@ import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-c
 
 import reduxLogger from 'redux-logger';
 import {createEpicMiddleware} from 'redux-observable';
+import {SendAnalytics} from './middleware/send-analytics';
 
 import {
   applyMiddleware,
@@ -109,19 +110,22 @@ import {App} from './app';
     MainActions,
     ComponentViewState,
     ComponentPropertyState,
+    SendAnalytics,
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
   ],
   bootstrap: [App]
 })
 class FrontendModule {
-  constructor(ngRedux: NgRedux<IAppState>) {
+  constructor(
+    ngRedux: NgRedux<IAppState>,
+    sendAnalytics: SendAnalytics) {
     const store = createStore(
       rootReducer,
       compose(applyMiddleware(reduxLogger),
-        applyMiddleware(createEpicMiddleware(rootEpic))));
+        applyMiddleware(createEpicMiddleware(rootEpic)),
+        applyMiddleware(sendAnalytics.middleware)));
 
     ngRedux.provideStore(store as Store<IAppState>);
-
   }
 }
 
