@@ -6,16 +6,11 @@ import GoogleTagManagerSend from '../../gtm';
 
 @Injectable()
 export class SendAnalytics {
-  constructor(
-    private options: Options,
-    private mainActions: MainActions) {
-  }
+  constructor(private options: Options) {}
 
   middleware = store => next => action => {
-    console.log(this.options.analyticsConsent);
     if (action.type === MainActions.SEND_ANALYTICS &&
       this.options.analyticsConsent === AnalyticsConsent.Yes) {
-      console.log('firing');
       GoogleTagManagerSend({
         'event': action.payload.event,
         'desc': action.payload.desc

@@ -50,7 +50,6 @@ import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
-import {TabDescription} from "./components/tab-menu/tab-menu";
 
 require('!style!css!postcss!../styles/app.css');
 
