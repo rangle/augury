@@ -22,6 +22,7 @@ import {Search} from './components/search/search';
 import {SplitPane} from './components/split-pane/split-pane';
 import {StateValues} from './components/state-values/state-values';
 import {TabMenu} from './components/tab-menu/tab-menu';
+import {ComponentsTabMenu} from './components/components-tab-menu/components-tab-menu';
 import {TreeView} from './components/tree-view/tree-view';
 import {RenderError} from './components/render-error/render-error';
 import {ReportError} from './components/report-error/report-error';
@@ -93,6 +94,7 @@ import {App} from './app';
     SplitPane,
     StateValues,
     TabMenu,
+    ComponentsTabMenu,
     TreeView,
     NgModuleInfo,
     NgModuleConfigView,

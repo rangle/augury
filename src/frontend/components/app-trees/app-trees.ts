@@ -13,6 +13,7 @@ import {
   ComponentView,
   Options,
   Tab,
+  StateTab,
   Theme,
   AnalyticsConsent,
 } from '../../state';
@@ -41,6 +42,7 @@ export class AppTrees {
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;
   @Input() private selectedTab: Tab;
+  @Input() private selectedComponentsSubTab: StateTab;
   @Input() private activateDOMSelection: boolean;
 
   @Output() private collapseChildren = new EventEmitter<Node>();
@@ -59,15 +61,12 @@ export class AppTrees {
 
   private tabs: Array<TabDescription> = [{
     title: 'Component Tree',
-    selected: false,
     tab: Tab.ComponentTree,
   }, {
     title: 'Router Tree',
-    selected: false,
     tab: Tab.RouterTree,
   }, {
     title: 'NgModules',
-    selected: false,
     tab: Tab.NgModules,
   }];
 

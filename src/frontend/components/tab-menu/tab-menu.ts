@@ -14,7 +14,6 @@ import {
 
 export interface TabDescription {
   title: string;
-  selected: boolean;
   tab;
 }
 

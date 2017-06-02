@@ -5,8 +5,7 @@ import {
   Output,
 } from '@angular/core';
 
-import {ComponentLoadState} from '../../state';
-import {StateTab} from '../../state';
+import {ComponentLoadState, StateTab} from '../../state';
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {
   ComponentMetadata,
@@ -27,22 +26,11 @@ export class InfoPanel {
   @Input() node;
   @Input() instanceValue: InstanceWithMetadata;
   @Input() loadingState: ComponentLoadState;
+  @Input() selectedStateTab: StateTab;
 
   @Output() private selectNode: EventEmitter<any> = new EventEmitter<any>();
 
   private StateTab = StateTab;
-
-  private selectedTab = StateTab.Properties;
-
-  private tabs = [{
-      title: 'Properties',
-      selected: false,
-      tab: StateTab.Properties,
-    }, {
-      title: 'Injector Graph',
-      selected: false,
-      tab: StateTab.InjectorGraph,
-    }];
 
   constructor(private userActions: UserActions) {}
 
@@ -69,9 +57,5 @@ export class InfoPanel {
     return this.instanceValue
       ? this.instanceValue.componentMetadata
       : new Map<string, [[string, ObjectType, any]]>();
-  }
-
-  private onSelectedTabChanged(tab: StateTab) {
-    this.selectedTab = tab;
   }
 }

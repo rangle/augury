@@ -45,6 +45,9 @@ import {
 import {createTree} from '../tree/mutable-tree-factory';
 import {UserActions} from './actions/user-actions/user-actions';
 import {Route} from '../backend/utils';
+import {select} from '@angular-redux/store';
+import {NgRedux} from '@angular-redux/store';
+import {IAppState} from './store/model';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -63,14 +66,17 @@ export class App {
   private ngModules: Array<any> = null;
   private ngVersion: string;
   private selectedNode: Node;
-  private selectedTab: Tab = Tab.ComponentTree;
+  // private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
   private tree: MutableTree;
   private error: ApplicationError = null;
   private activateDOMSelection: boolean = false;
   private unsubscribeUncaughtErrorListener;
+  @select(store => store.main.selectedTab) selectedTab;
+  @select(store => store.main.selectedComponentsSubTab) selectedComponentsSubTab;
 
-  constructor(private changeDetector: ChangeDetectorRef,
+  constructor(private ngRedux: NgRedux<IAppState>,
+              private changeDetector: ChangeDetectorRef,
               private connection: Connection,
               private directConnection: DirectConnection,
               private options: Options,

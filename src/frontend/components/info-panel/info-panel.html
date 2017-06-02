@@ -1,8 +1,6 @@
-<bt-tab-menu
-  [tabs]="tabs"
-  (tabChange)="onSelectedTabChanged($event)"
-  [selectedTab]="selectedTab">
-</bt-tab-menu>
+<bt-components-tab-menu
+  [selectedStateTab]="selectedStateTab">
+</bt-components-tab-menu>
 
 <bt-component-info
   [node]="node"
@@ -12,17 +10,17 @@
   [providers]="providers"
   [componentMetadata]="componentMetadata"
   [metadata]="metadata"
-  [hidden]="selectedTab !== StateTab.Properties"
-  [ngClass]="{flex: selectedTab === StateTab.Properties}"
+  [hidden]="selectedStateTab !== StateTab.Properties"
+  [ngClass]="{flex: selectedStateTab === StateTab.Properties}"
   (selectNode)="selectNode.emit($event)">
 </bt-component-info>
 
 <bt-injector-tree
   (selectNode)="selectNode.emit($event)"
-  [hidden]="selectedTab !== StateTab.InjectorGraph"
+  [hidden]="selectedStateTab !== StateTab.InjectorGraph"
   [tree]="tree"
   [ngModules]="ngModules"
   [selectedNode]="node"
   [selectNode]="selectNode"
-  [ngClass]="{'flex flex-auto': selectedTab === StateTab.InjectorGraph}">
+  [ngClass]="{'flex flex-auto': selectedStateTab === StateTab.InjectorGraph}">
 </bt-injector-tree>

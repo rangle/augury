@@ -4,8 +4,7 @@
    [tree]="tree"
    [DOMSelectionActive]="activateDOMSelection"
    (tabChange)="onTabSelectionChanged($event)"
-   (DOMSelectionChange)="onDOMSelectionChange($event)"
-   [selectedTab]="selectedTab">
+   (DOMSelectionChange)="onDOMSelectionChange($event)">
   <div postlude class="flex px3">
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
@@ -144,6 +143,7 @@
        [tree]="tree"
        [ngModules]="ngModules"
        [node]="selectedNode"
+       [selectedStateTab]="selectedComponentsSubTab"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
        (selectNode)="selectNode.emit($event)">

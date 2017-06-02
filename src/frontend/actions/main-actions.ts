@@ -1,15 +1,24 @@
 import {Injectable} from '@angular/core';
 import {dispatch} from '@angular-redux/store';
-import {Tab} from '../state/tab';
+import {Tab, StateTab} from '../state';
 import {IAppState} from '../store/model';
 
 @Injectable()
 export class MainActions {
   static readonly SELECT_TAB = 'SELECT_TAB';
+  static readonly SELECT_COMPONENTS_SUB_TAB = 'SELECT_COMPONENTS_SUB_TAB';
 
   @dispatch()
   selectTab = (tab: Tab) => ({
     type: MainActions.SELECT_TAB,
     payload: tab,
   })
+
+  @dispatch()
+  selectComponentsSubTab = (tab: StateTab) => ({
+    type: MainActions.SELECT_COMPONENTS_SUB_TAB,
+    payload: tab,
+  })
+
 }
+
