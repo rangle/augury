@@ -33,6 +33,7 @@ import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
 
 import reduxLogger from 'redux-logger';
+import {createEpicMiddleware} from 'redux-observable';
 
 import {
   applyMiddleware,
@@ -44,7 +45,7 @@ import {
 
 import {NgReduxModule, NgRedux} from '@angular-redux/store';
 import {rootReducer} from './store/reducers';
-import {createLogger} from 'redux-logger';
+import {rootEpic} from './epics';
 
 import {AnalyticsPopup} from './components/analytics-popup/analytics-popup';
 
@@ -116,8 +117,11 @@ class FrontendModule {
   constructor(ngRedux: NgRedux<IAppState>) {
     const store = createStore(
       rootReducer,
-      compose(applyMiddleware(reduxLogger)));
-      ngRedux.provideStore(store as Store<IAppState>);
+      compose(applyMiddleware(reduxLogger),
+        applyMiddleware(createEpicMiddleware(rootEpic))));
+
+    ngRedux.provideStore(store as Store<IAppState>);
+
   }
 }
 
