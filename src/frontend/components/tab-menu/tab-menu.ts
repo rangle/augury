@@ -45,10 +45,6 @@ export class TabMenu {
     } else {
       this.userActions.findElement();
       this.DOMSelectionActiveChange.emit(true);
-
-      if (this.selectedTab !== this.tabs[0].tab) {
-        this.onSelect(this.tabs[0]);
-      }
     }
   }
 

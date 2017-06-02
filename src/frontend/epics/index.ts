@@ -1,7 +1,13 @@
 import {combineEpics} from 'redux-observable';
 
-import { gtmEpic } from './gtm';
+import {
+  domSelectionGtmEpic,
+  tabChangeGtmEpic,
+  subTabChangeGtmEpic,
+} from './gtm';
 
 export const rootEpic = combineEpics(
-  gtmEpic,
+  domSelectionGtmEpic,
+  tabChangeGtmEpic,
+  subTabChangeGtmEpic,
 );
