@@ -1,10 +1,9 @@
 <bt-tab-menu
    showMainItems="true"
    [tabs]="tabs"
-   [tree]="tree"
-   [DOMSelectionActive]="activateDOMSelection"
+   [DOMSelectionActive]="DOMSelectionActive"
    (tabChange)="onTabSelectionChanged($event)"
-   (DOMSelectionChange)="onDOMSelectionChange($event)">
+   (DOMSelectionActiveChange)="onDOMSelectionActiveChange($event)">
   <div postlude class="flex px3">
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
@@ -146,7 +145,8 @@
        [selectedStateTab]="selectedComponentsSubTab"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
-       (selectNode)="selectNode.emit($event)">
+       (selectNode)="selectNode.emit($event)"
+       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)">
     </bt-info-panel>
   </div>
 </split-pane>

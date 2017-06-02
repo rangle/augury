@@ -29,6 +29,7 @@ export class InfoPanel {
   @Input() selectedStateTab: StateTab;
 
   @Output() private selectNode: EventEmitter<any> = new EventEmitter<any>();
+  @Output() private componentsSubTabMenuChange: EventEmitter<StateTab> = new EventEmitter<StateTab>();
 
   private StateTab = StateTab;
 

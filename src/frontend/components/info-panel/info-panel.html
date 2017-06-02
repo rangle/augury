@@ -1,5 +1,6 @@
 <bt-components-tab-menu
-  [selectedStateTab]="selectedStateTab">
+  [selectedStateTab]="selectedStateTab"
+  (tabChange)="componentsSubTabMenuChange.emit($event)">
 </bt-components-tab-menu>
 
 <bt-component-info

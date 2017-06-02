@@ -20,7 +20,6 @@ export interface StateTabDescription {
 }
 
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {MainActions} from '../../actions/main-actions';
 
 @Component({
   selector: 'bt-components-tab-menu',
@@ -28,6 +27,7 @@ import {MainActions} from '../../actions/main-actions';
 })
 export class ComponentsTabMenu {
   @Input() selectedStateTab;
+  @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
 
   private tabs: Array<StateTabDescription> = [{
     title: 'Properties',
@@ -37,10 +37,10 @@ export class ComponentsTabMenu {
     tab: StateTab.InjectorGraph,
   }];
 
-  constructor(private userActions: UserActions, private mainActions: MainActions) {
+  constructor(private userActions: UserActions) {
   }
 
   private onSelect(tab: StateTabDescription) {
-    this.mainActions.selectComponentsSubTab(tab.tab);
+    this.tabChange.emit(tab.tab);
   }
 }

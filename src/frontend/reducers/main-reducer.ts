@@ -6,6 +6,7 @@ import * as R from 'ramda';
 const INITIAL_STATE: IAuguryState = {
   selectedTab: Tab.ComponentTree,
   selectedComponentsSubTab: StateTab.Properties,
+  DOMSelectionActive: false,
 };
 
 export function mainReducer(state: IAuguryState = INITIAL_STATE,
@@ -19,6 +20,11 @@ export function mainReducer(state: IAuguryState = INITIAL_STATE,
   switch (action.type) {
     case MainActions.SELECT_COMPONENTS_SUB_TAB:
       return R.assoc('selectedComponentsSubTab', action.payload, state);
+  }
+
+  switch (action.type) {
+    case MainActions.DOM_SELECTION_ACTIVE_CHANGE:
+      return R.assoc('DOMSelectionActive', action.payload, state);
   }
 
   return state;

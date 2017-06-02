@@ -1,7 +1,7 @@
 <header class="flex flex-justify bg-panel border-bottom">
   <div class="flex">
-    <img *ngIf="showMainItems" src="../images/augury-logo.svg" class="logo">
-    <div *ngIf="showMainItems" (click)="selectElement()" class="select-element"
+    <img src="../images/augury-logo.svg" class="logo">
+    <div (click)="selectElement()" class="select-element"
          [ngClass]="{'select-element-active': DOMSelectionActive}">
       <svg width="16px" height="16px" viewBox="0 0 28 26" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

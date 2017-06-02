@@ -7,4 +7,5 @@ export interface IAppState {
 export interface IAuguryState {
   selectedTab: Tab;
   selectedComponentsSubTab: StateTab;
+  DOMSelectionActive: boolean;
 }

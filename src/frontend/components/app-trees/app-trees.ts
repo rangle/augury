@@ -43,14 +43,16 @@ export class AppTrees {
   @Input() private selectedRoute: Route;
   @Input() private selectedTab: Tab;
   @Input() private selectedComponentsSubTab: StateTab;
-  @Input() private activateDOMSelection: boolean;
+  @Input() private DOMSelectionActive: boolean;
 
   @Output() private collapseChildren = new EventEmitter<Node>();
   @Output() private expandChildren = new EventEmitter<Node>();
   @Output() private inspectElement = new EventEmitter<Node>();
   @Output() private selectNode = new EventEmitter<Node>();
   @Output() private tabChange = new EventEmitter<Tab>();
-  @Output() private DOMSelectionChange = new EventEmitter<boolean>();
+  @Output() private componentsSubTabMenuChange = new EventEmitter<StateTab>();
+
+  @Output() private DOMSelectionActiveChange = new EventEmitter<boolean>();
 
   @ViewChild('splitPane') private splitPane;
   @ViewChild('menuButtonElement') private menuButtonElement;
@@ -83,8 +85,8 @@ export class AppTrees {
     this.tabChange.emit(this.tabs[index].tab);
   }
 
-  onDOMSelectionChange(state: boolean) {
-    this.DOMSelectionChange.emit(state);
+  onDOMSelectionActiveChange(state: boolean) {
+    this.DOMSelectionActiveChange.emit(state);
   }
 
   reset() {

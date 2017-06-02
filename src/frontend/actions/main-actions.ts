@@ -7,6 +7,7 @@ import {IAppState} from '../store/model';
 export class MainActions {
   static readonly SELECT_TAB = 'SELECT_TAB';
   static readonly SELECT_COMPONENTS_SUB_TAB = 'SELECT_COMPONENTS_SUB_TAB';
+  static readonly DOM_SELECTION_ACTIVE_CHANGE = 'DOM_SELECTION_ACTIVE_CHANGE';
 
   @dispatch()
   selectTab = (tab: Tab) => ({
@@ -20,5 +21,10 @@ export class MainActions {
     payload: tab,
   })
 
-}
+  @dispatch()
+  setDOMSelectionActive = (state: boolean) => ({
+    type: MainActions.DOM_SELECTION_ACTIVE_CHANGE,
+    payload: state,
+  })
 
+}
