@@ -34,10 +34,6 @@ export class TabMenu {
   constructor(private userActions: UserActions) {
   }
 
-  private ngOnInit() {
-    const t = this.tabs.filter(tab => tab.tab === this.selectedTab);
-  }
-
   private selectElement() {
     if (this.DOMSelectionActive) {
       this.userActions.cancelFindElement();
