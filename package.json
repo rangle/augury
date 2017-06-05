@@ -74,7 +74,7 @@
     "autoprefixer": "^6.3.6",
     "basscss-layout": "^3.1.0",
     "clone": "^2.1.0",
-    "css-loader": "^0.26.1",
+    "css-loader": "^0.28.2",
     "d3-hierarchy": "^1.1.1",
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
