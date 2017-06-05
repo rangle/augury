@@ -1,4 +1,7 @@
 # Change Log
+## [1.11.0](https://github.com/rangle/tree/1.11.0)
+* Add analytics ([1005](https://github.com/rangle/augury/issues/1005), [1142](https://github.com/rangle/augury/issues/1142)).
+
 ## [1.10.0](https://github.com/rangle/tree/1.10.0)
 * Add Augury release version to sentry error reports ([1148](https://github.com/rangle/augury/issues/1148)).
 * Parse Angular version when possible and add to sentry error reports ([1146](https://github.com/rangle/augury/issues/1146)).
