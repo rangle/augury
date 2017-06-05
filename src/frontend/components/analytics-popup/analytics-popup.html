@@ -1,0 +1,15 @@
+<div class="p3 flex flex-justify border">
+  <div>
+    <span>We would like to gather some data to help improve Augury but first we need your consent. Do you agree to let us collect your usage information?</span>
+  </div>
+  <form class="right-align">
+    <button class="btn btn-outline border-none pointer py1"
+      (click)="onAnalyticsConsentChange(AnalyticsConsent.Yes)">
+      Yes
+    </button>
+    <button class="btn btn-outline border-none pointer py1"
+      (click)="onAnalyticsConsentChange(AnalyticsConsent.No)">
+      No
+    </button>
+  </form>
+</div>

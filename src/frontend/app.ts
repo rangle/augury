@@ -28,8 +28,10 @@ import {
   ExpandState,
   Options,
   Tab,
+  StateTab,
   Theme,
   ComponentViewState,
+  AnalyticsConsent,
 } from './state';
 
 import {
@@ -44,6 +46,10 @@ import {
 import {createTree} from '../tree/mutable-tree-factory';
 import {UserActions} from './actions/user-actions/user-actions';
 import {Route} from '../backend/utils';
+import {select} from '@angular-redux/store';
+import {NgRedux} from '@angular-redux/store';
+import {IAppState} from './store/model';
+import {MainActions} from './actions/main-actions';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -53,22 +59,25 @@ require('!style!css!postcss!../styles/app.css');
   styles: [require('to-string!./app.css')],
 })
 export class App {
-  private Tab = Tab;
   private Theme = Theme;
+  private AnalyticsConsent = AnalyticsConsent;
 
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
   private ngModules: Array<any> = null;
   private ngVersion: string;
   private selectedNode: Node;
-  private selectedTab: Tab = Tab.ComponentTree;
   private subscription: Subscription;
   private tree: MutableTree;
   private error: ApplicationError = null;
-  private activateDOMSelection: boolean = false;
   private unsubscribeUncaughtErrorListener;
+  @select(store => store.main.selectedTab) selectedTab;
+  @select(store => store.main.selectedComponentsSubTab) selectedComponentsSubTab;
+  @select(store => store.main.DOMSelectionActive) DOMSelectionActive;
 
-  constructor(private changeDetector: ChangeDetectorRef,
+  constructor(private ngRedux: NgRedux<IAppState>,
+              private mainActions: MainActions,
+              private changeDetector: ChangeDetectorRef,
               private connection: Connection,
               private directConnection: DirectConnection,
               private options: Options,
@@ -193,10 +202,10 @@ export class App {
         if (msg.content.node) {
           this.viewState.select(msg.content.node);
           this.viewState.expandState(msg.content.node, ExpandState.Expanded);
-          this.activateDOMSelection = true;
+          this.mainActions.setDOMSelectionActive(true);
           if (msg.content.stop) {
             this.userActions.cancelFindElement();
-            this.activateDOMSelection = false;
+            this.mainActions.setDOMSelectionActive(false);
           }
           break;
         }
@@ -292,12 +301,16 @@ export class App {
   }
 
   private onSelectedTabChange(tab: Tab) {
-    this.selectedTab = tab;
     this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
+    this.mainActions.selectTab(tab);
   }
 
-  private onDOMSelectionChange(state: boolean) {
-    this.activateDOMSelection = state;
+  private onSelectedComponentsSubTabMenuChange(tab: StateTab) {
+    this.mainActions.selectComponentsSubTab(tab);
+  }
+
+  private onDOMSelectionActiveChange(state: boolean) {
+    this.mainActions.setDOMSelectionActive(state);
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {

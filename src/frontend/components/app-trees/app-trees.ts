@@ -13,7 +13,9 @@ import {
   ComponentView,
   Options,
   Tab,
+  StateTab,
   Theme,
+  AnalyticsConsent,
 } from '../../state';
 
 type Node = any;
@@ -29,6 +31,7 @@ export class AppTrees {
   private ComponentView = ComponentView;
   private Tab = Tab;
   private Theme = Theme;
+  private AnalyticsConsent = AnalyticsConsent;
 
   @Input() private componentState: ComponentInstanceState;
   @Input() private options: Options;
@@ -39,42 +42,51 @@ export class AppTrees {
   @Input() private selectedNode: Node;
   @Input() private selectedRoute: Route;
   @Input() private selectedTab: Tab;
-  @Input() private activateDOMSelection: boolean;
+  @Input() private selectedComponentsSubTab: StateTab;
+  @Input() private DOMSelectionActive: boolean;
 
   @Output() private collapseChildren = new EventEmitter<Node>();
   @Output() private expandChildren = new EventEmitter<Node>();
   @Output() private inspectElement = new EventEmitter<Node>();
   @Output() private selectNode = new EventEmitter<Node>();
   @Output() private tabChange = new EventEmitter<Tab>();
-  @Output() private DOMSelectionChange = new EventEmitter<boolean>();
+  @Output() private componentsSubTabMenuChange = new EventEmitter<StateTab>();
+
+  @Output() private DOMSelectionActiveChange = new EventEmitter<boolean>();
 
   @ViewChild('splitPane') private splitPane;
   @ViewChild('menuButtonElement') private menuButtonElement;
   @ViewChild('menuElement') private menuElement;
 
   private settingOpened: boolean = false;
+  private showAnalyticsConsent: boolean = false;
 
   private tabs: Array<TabDescription> = [{
     title: 'Component Tree',
-    selected: false,
     tab: Tab.ComponentTree,
   }, {
     title: 'Router Tree',
-    selected: false,
     tab: Tab.RouterTree,
   }, {
     title: 'NgModules',
-    selected: false,
     tab: Tab.NgModules,
   }];
+
+  private ngOnInit() {
+    this.options.load().then((results) => {
+      if (results.analyticsConsent === AnalyticsConsent.NotSet) {
+        this.showAnalyticsConsent = true;
+      }
+    });
+  }
 
   onTabSelectionChanged(index: number) {
     this.splitPane.handleTabNavigation();
     this.tabChange.emit(this.tabs[index].tab);
   }
 
-  onDOMSelectionChange(state: boolean) {
-    this.DOMSelectionChange.emit(state);
+  onDOMSelectionActiveChange(state: boolean) {
+    this.DOMSelectionActiveChange.emit(state);
   }
 
   reset() {
@@ -101,5 +113,14 @@ export class AppTrees {
   private onComponentViewChanged = (view: ComponentView) => {
     this.options.componentView = view;
     this.reset();
+  }
+
+  private onAnalyticsConsentChange = (analyticsConsent: AnalyticsConsent) => {
+    this.options.analyticsConsent = analyticsConsent;
+    this.reset();
+  }
+
+  private onHideAnalyticsPopup = () => {
+    this.showAnalyticsConsent = false;
   }
 }

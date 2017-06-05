@@ -1,11 +1,10 @@
 <bt-tab-menu
    showMainItems="true"
    [tabs]="tabs"
-   [tree]="tree"
-   [DOMSelectionActive]="activateDOMSelection"
+   [DOMSelectionActive]="DOMSelectionActive"
+   [selectedTab]="selectedTab"
    (tabChange)="onTabSelectionChanged($event)"
-   (DOMSelectionChange)="onDOMSelectionChange($event)"
-   [selectedTab]="selectedTab">
+   (DOMSelectionActiveChange)="onDOMSelectionActiveChange($event)">
   <div postlude class="flex px3">
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
@@ -85,9 +84,46 @@
         </label>
       </li>
     </ul>
+    <ul class="p3 m0">
+      <label>
+        Usage Data
+        <label class="descriptive-text mw3 block m1">
+          Allow us to collect usage data to help improve Augury
+        </label>
+      </label>
+      <li class="list-style-none p3">
+        <input
+          type="radio"
+          id="analytics-yes"
+          [checked]="options.analyticsConsent === AnalyticsConsent.Yes"
+          [value]="AnalyticsConsent.Yes"
+          (click)="onAnalyticsConsentChange(AnalyticsConsent.Yes)"
+          name="analytics" />
+        <label for="analytics">
+          Yes
+        </label>
+      </li>
+      <li class="list-style-none p3">
+        <input
+          type="radio"
+          id="analytics-no"
+          [checked]="options.analyticsConsent === AnalyticsConsent.No"
+          [value]="AnalyticsConsent.No"
+          (click)="onAnalyticsConsentChange(AnalyticsConsent.No)"
+          name="analytics" />
+        <label for="analytics">
+          No
+        </label>
+      </li>
+    </ul>
   </div>
 </form>
 
+<bt-analytics-popup
+  *ngIf="showAnalyticsConsent"
+  [options]="options"
+  (hideComponent)="onHideAnalyticsPopup()">
+</bt-analytics-popup>
 
 <split-pane #splitPane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
   <div split-pane-primary-content class="flex flex-column flex-auto">
@@ -107,9 +143,11 @@
        [tree]="tree"
        [ngModules]="ngModules"
        [node]="selectedNode"
+       [selectedStateTab]="selectedComponentsSubTab"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
-       (selectNode)="selectNode.emit($event)">
+       (selectNode)="selectNode.emit($event)"
+       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)">
     </bt-info-panel>
   </div>
 </split-pane>
