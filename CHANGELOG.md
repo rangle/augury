@@ -1,4 +1,10 @@
 # Change Log
+## [1.12.0](https://github.com/rangle/tree/1.12.0)
+* Fix undefined ref error in dependency-info. [1158](https://github.com/rangle/augury/issues/1158)
+* Add `isAngular` and `isDebug` checks to backend script reinitialization. [1160](https://github.com/rangle/augury/issues/1160)
+* Stop catching user app errors after property change. [1156](https://github.com/rangle/augury/issues/1156)
+* Check for bootstrap module existence during NgModule parsing. [1162](https://github.com/rangle/augury/issues/62)
+
 ## [1.11.0](https://github.com/rangle/tree/1.11.0)
 * Add analytics ([1005](https://github.com/rangle/augury/issues/1005), [1142](https://github.com/rangle/augury/issues/1142)).
 
