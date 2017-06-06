@@ -206,7 +206,7 @@ const bind = (root) => {
 
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
-    runAndHandleUncaughtExceptions(() => sendNgVersionMessage());
+    sendNgVersionMessage();
 
     messageBuffer.clear();
 
