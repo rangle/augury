@@ -2,6 +2,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {compare} from '../utils/patch';
+import {isAngular, isDebugMode} from './utils/app-check';
 
 import {SerializeableError} from '../utils/error-handling';
 
@@ -249,7 +250,15 @@ const messageHandler = (message: Message<any>) => {
         previousTree = null;
 
         // Load the complete component tree
-        resubscribe();
+        if (!isAngular()) {
+          send(MessageFactory.notNgApp());
+        } else if (!isDebugMode()) {
+          send(MessageFactory.applicationError(
+            new ApplicationError(ApplicationErrorType.ProductionMode)));
+        }
+        else {
+          resubscribe();
+        }
 
         return true;
 
