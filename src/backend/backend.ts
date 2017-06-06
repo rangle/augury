@@ -206,7 +206,7 @@ const bind = (root) => {
 
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
-    runAndHandleUncaughtExceptions(() => sendNgVersionMessage());
+    sendNgVersionMessage();
 
     messageBuffer.clear();
 
@@ -329,8 +329,7 @@ const updateNode = (tree: MutableTree, path: Path, fn: (element) => void) => {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
       const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-
-      ngZone.run(() => fn(probed));
+      setTimeout(() => ngZone.run(() => fn(probed)));
     }
   }
 };
