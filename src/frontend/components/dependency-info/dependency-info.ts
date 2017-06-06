@@ -86,7 +86,7 @@ export class DependencyInfo {
 
     this.tree.recurseAll(node => {
       this.dependencies.map((dep: any) => {
-        if (dep.id === dependency.id) {
+        if (dep && dependency && dep.id === dependency.id) {
           dependents.push(node);
         }
       });
