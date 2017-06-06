@@ -59,13 +59,15 @@ export const parseModulesFromRootElement = (firstRootDebugElement: any, registry
   // TODO(steven.kampen): This uses a private API. Can it be improved?
   const bootstrappedModule = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef)._injector.instance;
 
-  _parseModule(
-    bootstrappedModule.constructor,
-    registry.modules,
-    registry.names,
-    registry.tokenIdMap);
+  if (bootstrappedModule) {
+    _parseModule(
+      bootstrappedModule.constructor,
+      registry.modules,
+      registry.names,
+      registry.tokenIdMap);
 
-  updateRegistryConfigs(registry);
+    updateRegistryConfigs(registry);
+  }
 
 };
 
