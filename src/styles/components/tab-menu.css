@@ -2,6 +2,7 @@
   -webkit-user-select: none;
   cursor: pointer;
   font-size: 11.5px;
+  white-space: nowrap;
 }
 
 .select-element {
