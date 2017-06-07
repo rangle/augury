@@ -44,12 +44,15 @@ module.exports = {
       'webpack.vendor.ts',
       './src/frontend/module'
     ],
-    'background': ['./src/channel/channel', './src/gtm.ts'],
     'backend': ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
     'devtools': ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
-    'background': ['./src/channel/channel', './src/sentry-connection/sentry-connection']
+    'background': [
+      './src/channel/channel',
+      './src/sentry-connection/sentry-connection',
+      './src/gtm-connection/gtm-connection'
+    ]
   },
 
   // Config for our build files

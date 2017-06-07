@@ -56,8 +56,7 @@ import {
 
 import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
-import {AnalyticsConsent, SimpleOptions} from '../options';
-import GoogleTagManagerSend from '../gtm';
+import {SimpleOptions} from '../options';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -298,12 +297,6 @@ const messageHandler = (message: Message<any>) => {
           return;
         }
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
-
-      case MessageType.GoogleTagManagerSend:
-        if (message.content.consent === AnalyticsConsent.Yes) {
-          return GoogleTagManagerSend(message.content.tag);
-        }
-        return;
 
       case MessageType.FindElement:
         if (previousTree == null) {
