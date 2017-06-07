@@ -101,7 +101,7 @@ const runAndHandleUncaughtExceptions = (fn: () => any) => {
       stack: e.stack,
       message: e.message,
     }));
-  };
+  }
 };
 
 const sendNgVersionMessage = () => {
