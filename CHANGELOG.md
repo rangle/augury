@@ -1,4 +1,8 @@
 # Change Log
+## [1.13.0](https://github.com/rangle/tree/1.13.0)
+* Fix issue with GTM initializing in user app context ([235](https://github.com/rangle/augury/issues/235)).
+* Add `white-space: nowrap;` to tab menu items ([235](https://github.com/rangle/augury/issues/235)).
+
 ## [1.12.0](https://github.com/rangle/tree/1.12.0)
 * Fix undefined ref error in dependency-info. [1158](https://github.com/rangle/augury/issues/1158)
 * Add `isAngular` and `isDebug` checks to backend script reinitialization. [1160](https://github.com/rangle/augury/issues/1160)
