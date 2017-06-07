@@ -31,7 +31,8 @@
           [level]="0"
           [path]="path"
           [state]="instanceProvidersObject"
-          (updateValue)="onUpdateProvider($event)">
+          (updateValue)="onUpdateProvider($event)"
+          (emitValueChange)="emitValue.emit($event)">
         </bt-render-state>
       </div>
     </accordion>
@@ -58,7 +59,8 @@
               [level]="0"
               [path]="path"
               [state]="state"
-              (updateValue)="onUpdateProperty($event)">
+              (updateValue)="onUpdateProperty($event)"
+              (emitValueChange)="emitValue.emit($event)">
             </bt-render-state>
           </template>
           <template [ngSwitchCase]="ComponentLoadState.Failed">
