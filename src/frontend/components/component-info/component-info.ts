@@ -36,6 +36,8 @@ export class ComponentInfo {
   @Input() private loadingState: ComponentLoadState;
 
   @Output() private selectNode = new EventEmitter<Node>();
+  @Output() private emitValue = new EventEmitter<{path: Path, data: any}>();
+  @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
   private changeDetectionStrategies = ChangeDetectionStrategy;
 
@@ -97,6 +99,7 @@ export class ComponentInfo {
 
   private onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
     this.actions.updateProperty(event.path.concat(event.propertyKey), event.newValue);
+    this.updateProperty.emit({ path: event.path.concat(event.propertyKey), newValue: event.newValue });
     if (this.node) {
       this.selectNode.emit(this.node);
     }
@@ -104,6 +107,7 @@ export class ComponentInfo {
 
   private onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
     this.actions.updateProvider(event.path, event.propertyKey, event.newValue);
+
     if (this.node) {
       this.selectNode.emit(this.node);
     }

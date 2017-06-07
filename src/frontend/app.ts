@@ -105,6 +105,9 @@ export class App {
     this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
+
+    this.mainActions.initializeAugury();
+
   }
 
   private hasContent() {
@@ -315,6 +318,14 @@ export class App {
 
   private onDOMSelectionActiveChange(state: boolean) {
     this.mainActions.setDOMSelectionActive(state);
+  }
+
+  private onEmitValue(data) {
+    this.mainActions.emitValue(data.path, data.data);
+  }
+
+  private onUpdateProperty(data) {
+    this.mainActions.updateProperty(data.path, data.data);
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {

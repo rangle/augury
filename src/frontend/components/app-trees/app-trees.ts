@@ -18,6 +18,8 @@ import {
   AnalyticsConsent,
 } from '../../state';
 
+import {Path} from '../../../tree';
+
 type Node = any;
 
 @Component({
@@ -62,6 +64,9 @@ export class AppTrees {
   @Output() private componentsSubTabMenuChange = new EventEmitter<StateTab>();
 
   @Output() private domSelectionActiveChange = new EventEmitter<boolean>();
+
+  @Output() private emitValue = new EventEmitter<{path: Path, data: any}>();
+  @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
   @ViewChild('splitPane') private splitPane;
   @ViewChild('menuButtonElement') private menuButtonElement;
