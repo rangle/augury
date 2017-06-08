@@ -33,7 +33,7 @@ import {
   serializeBinary,
 } from '../utils';
 
-import {AnalyticsConsent, SimpleOptions} from '../options';
+import {SimpleOptions} from '../options';
 
 const create = <T>(properties: T) =>
   Object.assign({
@@ -183,12 +183,12 @@ export abstract class MessageFactory {
     });
   }
 
-  static googleTagManagerEvent(consent, tag) {
+  static analyticsEvent(event, desc) {
     return create({
       messageType: MessageType.GoogleTagManagerSend,
       content: {
-        consent,
-        tag
+        event,
+        desc
       }
     });
   }

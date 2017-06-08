@@ -14,6 +14,6 @@ const initializeGTM = function (w, d, s, l, i) {
   f.parentNode.insertBefore(j, f);
 };
 
-const GoogleTagManager = initializeGTM(window, document, 'script', 'dataLayer', 'GTM-NTK59FH');
+const googleTagManager = initializeGTM(window, document, 'script', 'dataLayer', 'GTM-NTK59FH');
 
 export default (tag) => (window as any).dataLayer.push(tag);

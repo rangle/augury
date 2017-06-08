@@ -56,8 +56,7 @@ import {
 
 import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
-import {AnalyticsConsent, SimpleOptions} from '../options';
-import GoogleTagManagerSend from '../gtm';
+import {SimpleOptions} from '../options';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -299,12 +298,6 @@ const messageHandler = (message: Message<any>) => {
         }
         highlight(message.content.nodes.map(id => previousTree.lookup(id)));
 
-      case MessageType.GoogleTagManagerSend:
-        if (message.content.consent === AnalyticsConsent.Yes) {
-          return GoogleTagManagerSend(message.content.tag);
-        }
-        return;
-
       case MessageType.FindElement:
         if (previousTree == null) {
           return;
@@ -446,7 +439,7 @@ export const extendWindowOperations = <T>(target, classImpl: T) => {
   Object.assign(target, classImpl);
 };
 
-export const ApplicationOperations = {
+export const applicationOperations = {
   /// Note that the ID is a serialized path, and the first element in that path is the
   /// index of the application that the node belongs to. So even though we have this
   /// global lookup operation for things like 'inspect' and 'view source', it will find
@@ -525,4 +518,4 @@ const findElement = (message) => {
 
 
 // add custom operations
-extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});
+extendWindowOperations(window || global || this, {inspectedApplication: applicationOperations});

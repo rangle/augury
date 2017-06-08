@@ -138,4 +138,4 @@ export class Search {
   reset() {
     this.onSearchChanged('');
   }
-};
+}
