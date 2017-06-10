@@ -11,7 +11,7 @@ export interface Route {
 
 // *** Component Router ***
 export function parseRoutes(router: any): Route {
-  const rootName = router.rootComponentType.name;
+  const rootName = router.rootComponentType ? router.rootComponentType.name : 'no-name';
   const rootChildren: [any] = router.config;
 
   const root: Route = {
