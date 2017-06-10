@@ -264,16 +264,18 @@ const messageHandler = (message: Message<any>) => {
       case MessageType.SelectComponent:
         const path: Path = message.content.path;
 
-        const node = previousTree.traverse(path);
+        if (previousTree) {
+          const node = previousTree.traverse(path);
+          this.consoleReference(node);
 
-        this.consoleReference(node);
-
-        // For component selection events, we respond with component instance
-        // properties for the selected node. If we had to serialize the
-        // properties of each node on the tree that would be a performance
-        // killer, so we only send the componentInstance values for the
-        // node that has been selected.
-        return getComponentInstance(previousTree, node);
+          // For component selection events, we respond with component instance
+          // properties for the selected node. If we had to serialize the
+          // properties of each node on the tree that would be a performance
+          // killer, so we only send the componentInstance values for the
+          // node that has been selected.
+          return getComponentInstance(previousTree, node);
+        }
+        return;
 
       case MessageType.UpdateProperty:
         return updateProperty(previousTree,
