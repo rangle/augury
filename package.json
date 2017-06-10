@@ -26,10 +26,10 @@
     "dev": "webpack --colors --display-error-details --display-cached --watch",
     "dev-build": "cross-env NODE_ENV=development npm run build",
     "webpack": "webpack",
-    "clean": "rimraf node_modules",
+    "clean": "rimraf build",
     "start": "rimraf build && cross-env NODE_ENV=development webpack --watch",
     "test": "npm run lint && webpack --config webpack.test.config.js && cat build/test.js | tape-run | tap-spec",
-    "prepack": "npm run build",
+    "prepack": "npm run clean && npm run build",
     "pack": "./crxmake.sh",
     "lint": "tslint 'src/**/*.ts'"
   },
