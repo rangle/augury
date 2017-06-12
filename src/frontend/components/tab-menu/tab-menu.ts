@@ -26,21 +26,21 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 export class TabMenu {
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
-  @Input() DOMSelectionActive;
+  @Input() domSelectionActive;
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
-  @Output() DOMSelectionActiveChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() domSelectionActiveChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private userActions: UserActions) {
   }
 
   private selectElement() {
-    if (this.DOMSelectionActive) {
+    if (this.domSelectionActive) {
       this.userActions.cancelFindElement();
-      this.DOMSelectionActiveChange.emit(false);
+      this.domSelectionActiveChange.emit(false);
     } else {
       this.userActions.findElement();
-      this.DOMSelectionActiveChange.emit(true);
+      this.domSelectionActiveChange.emit(true);
     }
   }
 

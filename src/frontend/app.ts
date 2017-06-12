@@ -73,7 +73,7 @@ export class App {
   private unsubscribeUncaughtErrorListener;
   @select(store => store.main.selectedTab) selectedTab;
   @select(store => store.main.selectedComponentsSubTab) selectedComponentsSubTab;
-  @select(store => store.main.DOMSelectionActive) DOMSelectionActive;
+  @select(store => store.main.DOMSelectionActive) domSelectionActive;
 
   constructor(private ngRedux: NgRedux<IAppState>,
               private mainActions: MainActions,
