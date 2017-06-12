@@ -26,6 +26,14 @@ type Node = any;
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   },
+  styles: [`
+    .ngVersion {
+      line-height: 31px;
+      font-weight: bold;
+      color: #5128a5;
+      padding-right: 5px;
+    }
+  `]
 })
 export class AppTrees {
   private ComponentView = ComponentView;
@@ -33,6 +41,7 @@ export class AppTrees {
   private Theme = Theme;
   private AnalyticsConsent = AnalyticsConsent;
 
+  @Input() private ngVersion: String;
   @Input() private componentState: ComponentInstanceState;
   @Input() private options: Options;
   @Input() private routerTree: Array<Route>;
