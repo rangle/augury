@@ -6,6 +6,9 @@
    (tabChange)="onTabSelectionChanged($event)"
    (DOMSelectionActiveChange)="onDOMSelectionActiveChange($event)">
   <div postlude class="flex px3">
+    <span *ngIf="ngVersion" class="ngVersion">
+      Angular Version: {{ngVersion}}
+    </span>
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
 </bt-tab-menu>

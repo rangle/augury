@@ -8,6 +8,7 @@
   </div>
   <bt-app-trees #trees *ngIf="error === null"
     class="flex flex-column flex-auto"
+    [ngVersion]="ngVersion"
     [componentState]="componentState"
     [selectedTab]="selectedTab | async"
     [selectedComponentsSubTab]="selectedComponentsSubTab | async"
