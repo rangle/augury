@@ -259,6 +259,10 @@ export class App {
 
     const promise = this.directConnection.handleImmediate(m)
       .then(response => {
+        if (!response) {
+          return;
+        }
+
         if (typeof beforeLoad === 'function') {
           beforeLoad();
         }
