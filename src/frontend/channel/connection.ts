@@ -134,9 +134,7 @@ export class Connection {
   }
 
   send<Response, T>(message: Message<T>): Promise<Response> {
-    reconnect();
-
-    return send(message);
+    return reconnect().then(() => send(message));
   }
 
   close() {
