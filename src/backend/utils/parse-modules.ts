@@ -103,8 +103,12 @@ const resolveTokenIdMetaData = (token, tokenIdMap: { [key: string]: any }) => {
   return { token: token, augury_token_id: tokenId || Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token) };
 };
 
-const parseProviderName = p =>
-  typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString().replace(' ', ':') : p.name;
+const parseProviderName = p => {
+  if (typeof p === 'object' && p.provide) {
+    return p.provide.name || p.provide.toString().replace(' ', ':');
+  }
+  return p.name;
+};
 
 const buildModuleDescription = (module, config) => {
   const flattenedDeclarations = flatten(config.declarations || []);
