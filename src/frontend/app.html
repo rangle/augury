@@ -25,7 +25,9 @@
     (selectNode)="onSelectNode($event)"
     (inspectElement)="onInspectElement($event)"
     (collapseChildren)="onCollapseChildren($event)"
-    (expandChildren)="onExpandChildren($event)">
+    (expandChildren)="onExpandChildren($event)"
+    (emitValue)="onEmitValue($event)"
+    (updateProperty)="onUpdateProperty($event)">
   </bt-app-trees>
 </div>
 <template [ngIf]="!hasContent">

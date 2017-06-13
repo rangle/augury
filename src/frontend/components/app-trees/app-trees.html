@@ -150,7 +150,9 @@
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
        (selectNode)="selectNode.emit($event)"
-       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)">
+       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)"
+       (emitValue)="emitValue.emit($event)"
+       (updateProperty)="updateProperty.emit($event)">
     </bt-info-panel>
   </div>
 </split-pane>
