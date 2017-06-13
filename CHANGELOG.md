@@ -1,6 +1,18 @@
 # Change Log
+## [1.14.0](https://github.com/rangle/tree/1.14.0)
+* Add some more analytics events ([1164](https://github.com/rangle/augury/issues/1164)).
+* Update typescript and loaders.
+* Add inspected app Angular version to UI ([1165](https://github.com/rangle/augury/issues/1165)).
+* Add AoT info to architecture doc ([1170](https://github.com/rangle/augury/issues/1170)).
+* Fix issue with build script not cleaning build directory ([1179](https://github.com/rangle/augury/issues/1179)).
+* Fix promise issue with `reconnect()` within `connection.send()` ([1182](https://github.com/rangle/augury/issues/1182)).
+* Fix issue with `SelectComponent` being called with null component tree ([1184](https://github.com/rangle/augury/issues/1184)).
+* Suppress TypeError when `rootComponentType` is null ([1186](https://github.com/rangle/augury/issues/1186)).
+* Supress TypeError when provider is null for any reason ([1188](https://github.com/rangle/augury/issues/1188)).
+* Improve reported error details when error occurs in `remoteExecute` ([1193](https://github.com/rangle/augury/issues/1193)).
+
 ## [1.13.0](https://github.com/rangle/tree/1.13.0)
-* Fix issue with GTM initializing in user app context ([235](https://github.com/rangle/augury/issues/235)).
+* Fix issue with GTM initializing in user app context ([1168](https://github.com/rangle/augury/issues/1168)).
 * Add `white-space: nowrap;` to tab menu items ([235](https://github.com/rangle/augury/issues/235)).
 
 ## [1.12.0](https://github.com/rangle/tree/1.12.0)
