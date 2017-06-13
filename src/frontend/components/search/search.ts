@@ -21,7 +21,7 @@ export enum SearchState {
 @Component({
   selector: 'search',
   template: require('./search.html'),
-  styles: [require('to-string!./search.css')],
+  styles: [require('./search.css')],
 })
 export class Search {
   /// A function that is capable of executing a search and returning results

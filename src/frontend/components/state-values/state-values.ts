@@ -19,7 +19,7 @@ import {
 @Component({
   selector: 'bt-state-values',
   template: require('./state-values.html'),
-  styles: [require('to-string!./state-values.css')],
+  styles: [require('./state-values.css')],
 })
 export class StateValues extends Highlightable {
   @Input() path: Path;

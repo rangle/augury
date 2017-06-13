@@ -1,36 +1,24 @@
-import * as test from 'tape';
-import {serialize, deserialize} from './serialize';
+import { serialize, deserialize } from './serialize';
 
-test('utils/serialize: Serialize Array', t => {
-  t.plan(1);
-
+test('utils/serialize: Serialize Array', () => {
   const arrayObject = [1, 2, 3, 4];
 
-  t.deepEqual(arrayObject, deserialize(serialize(arrayObject)), 'Serialize/deserialize simple array');
-
+  expect(arrayObject).toEqual(deserialize(serialize(arrayObject)));
 });
 
-test('utils/serialize: Serialize Complex Array', t => {
-  t.plan(1);
+test('utils/serialize: Serialize Complex Array', () => {
+  const arrayObject = [{ a_key: 'a_value' }, 2, 3, 4];
 
-  const arrayObject = [{a_key: 'a_value'}, 2, 3, 4];
-
-  t.deepEqual(arrayObject, deserialize(serialize(arrayObject)), 'Serialize/deserialize complex array');
-
+  expect(arrayObject).toEqual(deserialize(serialize(arrayObject)));
 });
 
-test('utils/serialize: Serialize Simple Object', t => {
-  t.plan(1);
+test('utils/serialize: Serialize Simple Object', () => {
+  const simpleObj = { a_key: 'a_value' };
 
-  const simpleObj = {a_key: 'a_value'};
-
-  t.deepEqual(simpleObj, deserialize(serialize(simpleObj)), 'Serialize/deserialize simple object');
-
+  expect(simpleObj).toEqual(deserialize(serialize(simpleObj)));
 });
 
-test('utils/serialize: Serialize Map Object (string key & value)', t => {
-  t.plan(2);
-
+test('utils/serialize: Serialize Map Object (string key & value)', () => {
   const map = new Map();
 
   const mapKey = 'str_key';
@@ -40,33 +28,28 @@ test('utils/serialize: Serialize Map Object (string key & value)', t => {
 
   const o = deserialize(serialize(map));
   o.forEach((v, k) => {
-    t.deepEqual(mapKey, k, 'Serialize/deserialize key');
-    t.deepEqual(mapVal, v, 'Serialize/deserialize value');
+    expect(mapKey).toEqual(k);
+    expect(mapVal).toEqual(v);
   });
-
 });
 
-test('utils/serialize: Serialize Map Object (object key & value)', t => {
-  t.plan(2);
-
+test('utils/serialize: Serialize Map Object (object key & value)', () => {
   const map = new Map();
 
-  const mapKey = {'test': 'test_val'};
-  const mapVal = {'str_key': 'str_value'};
+  const mapKey = { test: 'test_val' };
+  const mapVal = { str_key: 'str_value' };
 
   map.set(mapKey, mapVal);
 
   const o = deserialize(serialize(map));
 
   o.forEach((v, k) => {
-    t.deepEqual(mapKey, k, 'Serialize/deserialize key');
-    t.deepEqual(mapVal, v, 'Serialize/deserialize value');
+    expect(mapKey).toEqual(k);
+    expect(mapVal).toEqual(v);
   });
-
 });
 
-test('utils/serialize: Serialize Map Object (number key & value)', t => {
-  t.plan(2);
+test('utils/serialize: Serialize Map Object (number key & value)', () => {
   const map = new Map();
 
   const mapKey = 100;
@@ -76,8 +59,7 @@ test('utils/serialize: Serialize Map Object (number key & value)', t => {
 
   const o = deserialize(serialize(map));
   o.forEach((v, k) => {
-    t.deepEqual(mapKey, k, 'Serialize/deserialize key');
-    t.deepEqual(mapVal, v, 'Serialize/deserialize value');
+    expect(mapKey).toEqual(k);
+    expect(mapVal).toEqual(v);
   });
-
 });

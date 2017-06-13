@@ -22,7 +22,7 @@ import {defaultExpansionDepth} from '../node-item/node-item';
 @Component({
   selector: 'component-tree',
   template: require('./component-tree.html'),
-  styles: [require('to-string!./component-tree.css')],
+  styles: [require('./component-tree.css')],
   host: { 'class': 'flex overflow-auto' },
 })
 export class ComponentTree {

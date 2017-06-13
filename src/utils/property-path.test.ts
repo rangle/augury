@@ -1,29 +1,17 @@
-import * as test from 'tape';
+import { pathExists, getAtPath } from './property-path';
 
-import {
-  pathExists,
-  getAtPath,
-} from './property-path';
-
-test('utils/property-path: pathExists', t => {
-  t.plan(2);
-
+test('utils/property-path: pathExists', () => {
   const testObject = {
-    testProp: 'a_value'
+    testProp: 'a_value',
   };
 
-  t.true(pathExists(testObject, 'testProp'), 'exists');
-  t.false(pathExists(testObject, 'nonExistentTestProp'), 'does not exist');
-
+  expect(pathExists(testObject, 'testProp')).toBe(true);
+  expect(pathExists(testObject, 'nonExistentTestProp')).toBe(false);
 });
 
-test('utils/property-path: getAtPath', t => {
-  t.plan(1);
-
+test('utils/property-path: getAtPath', () => {
   const testObject = {
-    testProp: 'a_value'
+    testProp: 'a_value',
   };
-
-  t.equal(getAtPath(testObject, 'testProp').value, 'a_value');
-
+  expect(getAtPath(testObject, 'testProp').value).toBe('a_value');
 });

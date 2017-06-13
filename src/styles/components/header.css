@@ -11,18 +11,15 @@
 .setting-dropdown {
   -webkit-user-select: none;
   z-index: 200;
-
-  & input {
-    vertical-align: text-bottom;
-  }
-
-  & li {
-    padding-left: 1rem;
-  }
-
-  & .descriptive-text {
-    max-width: 25em;
-  }
+}
+.setting-dropdown input {
+  vertical-align: text-bottom;
+}
+.setting-dropdown li {
+  padding-left: 1rem;
+}
+.setting-dropdown .descriptive-text {
+  max-width: 25em;
 }
 
 .logo {

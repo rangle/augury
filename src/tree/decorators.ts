@@ -1,12 +1,8 @@
-import {
-  InputProperty,
-  OutputProperty,
-} from './node';
+import { InputProperty, OutputProperty } from './node';
 
-import {functionName} from '../utils';
+import { functionName } from '../utils/function-name';
 
-export const classDecorators = (token): Array<any> =>
-  Reflect.getOwnMetadata('annotations', token) || [];
+export const classDecorators = (token): Array<any> => Reflect.getOwnMetadata('annotations', token) || [];
 
 export const propertyDecorators = (instance): Array<any> =>
   Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
@@ -31,7 +27,7 @@ export const iteratePropertyDecorators = (instance, fn: (key: string, decorator)
   }
 };
 
-export const componentMetadata = (token) => {
+export const componentMetadata = token => {
   if (!token) {
     return null;
   }
@@ -40,31 +36,27 @@ export const componentMetadata = (token) => {
 };
 
 export const componentInputs = (metadata, instance): Array<InputProperty> => {
-  const inputs: Array<InputProperty> =
-    ((metadata && metadata.inputs) || []).map(p => ({propertyKey: p}));
+  const inputs: Array<InputProperty> = ((metadata && metadata.inputs) || []).map(p => ({ propertyKey: p }));
 
-  iteratePropertyDecorators(instance,
-    (key: string, meta) => {
-      if (inputs.find(i => i.propertyKey === key) == null) {
-        if (meta.toString() === '@Input') {
-          inputs.push({propertyKey: key, bindingPropertyName: meta.bindingPropertyName});
-        }
+  iteratePropertyDecorators(instance, (key: string, meta) => {
+    if (inputs.find(i => i.propertyKey === key) == null) {
+      if (meta.toString() === '@Input') {
+        inputs.push({ propertyKey: key, bindingPropertyName: meta.bindingPropertyName });
       }
-    });
+    }
+  });
 
   return inputs;
 };
 
 export const componentOutputs = (metadata, instance): Array<OutputProperty> => {
-  const outputs: Array<OutputProperty> =
-    ((metadata && metadata.outputs) || []).map(p => ({propertyKey: p}));
+  const outputs: Array<OutputProperty> = ((metadata && metadata.outputs) || []).map(p => ({ propertyKey: p }));
 
-  iteratePropertyDecorators(instance,
-    (key: string, meta) => {
-      if (meta.toString() === '@Output') {
-        outputs.push({propertyKey: key, bindingPropertyName: meta.bindingPropertyName});
-      }
-    });
+  iteratePropertyDecorators(instance, (key: string, meta) => {
+    if (meta.toString() === '@Output') {
+      outputs.push({ propertyKey: key, bindingPropertyName: meta.bindingPropertyName });
+    }
+  });
 
   return Array.from(outputs);
 };
@@ -77,12 +69,11 @@ export interface Query {
 export const componentQueryChildren = (type: string, metadata, instance): Array<Query> => {
   const queries = new Array<Query>();
 
-  iteratePropertyDecorators(instance,
-    (key: string, meta) => {
-      if (meta.toString() === type) {
-        queries.push({propertyKey: key, selector: functionName(meta.selector)});
-      }
-    });
+  iteratePropertyDecorators(instance, (key: string, meta) => {
+    if (meta.toString() === type) {
+      queries.push({ propertyKey: key, selector: functionName(meta.selector) });
+    }
+  });
 
   return queries;
 };

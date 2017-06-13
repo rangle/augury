@@ -51,12 +51,10 @@ import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
 
-require('!style!css!postcss!../styles/app.css');
-
 @Component({
   selector: 'bt-app',
   template: require('./app.html'),
-  styles: [require('to-string!./app.css')],
+  styles: [require('../styles/app.css'), require('./app.css')],
 })
 export class App {
   private Theme = Theme;

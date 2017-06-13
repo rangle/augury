@@ -1,120 +1,96 @@
-import * as test from 'tape';
 import ParseData from './parse-data';
 
-test('utils/parse-data: parse number', t => {
-  t.plan(2);
+test('utils/parse-data: parse number', () => {
   const value: any = '10.24';
   const parsedValue = ParseData.parseNumber(value);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'number', 'should be of type number');
-  t.deepEqual(parsedValue + '', value, 'values should be same');
-  t.end();
+  expect(type).toBe('number');
+  expect(parsedValue + '').toBe(value);
 });
 
-test('utils/parse-data: parse boolean true', t => {
-  t.plan(2);
+test('utils/parse-data: parse boolean true', () => {
   const value: any = 'true';
   const parsedValue = ParseData.parseBoolean(value);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'boolean', 'should be of type boolean');
-  t.deepEqual(parsedValue, true, 'values should be same');
-  t.end();
+  expect(type).toBe('boolean');
+  expect(parsedValue).toBe(true);
 });
 
-test('utils/parse-data: parse boolean false', t => {
-  t.plan(2);
+test('utils/parse-data: parse boolean false', () => {
   const value: any = 'false';
   const parsedValue = ParseData.parseBoolean(value);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'boolean', 'should be of type boolean');
-  t.deepEqual(parsedValue, false, 'values should be same');
-  t.end();
+  expect(type).toBe('boolean');
+  expect(parsedValue).toBe(false);
 });
 
-test('utils/parse-data: convertToNumber with correct values', t => {
-  t.plan(2);
+test('utils/parse-data: convertToNumber with correct values', () => {
   const value: any = '10.23';
   const parsedValue = ParseData.convertToNumber(value, 0);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'number', 'should be of type number');
-  t.deepEqual(parsedValue + '', value, 'values should be same');
-  t.end();
+  expect(type).toBe('number');
+  expect(parsedValue + '').toBe(value);
 });
 
-test('utils/parse-data: convertToNumber with wrong values', t => {
-  t.plan(2);
+test('utils/parse-data: convertToNumber with wrong values', () => {
   const oldValue: number = 0;
   const value: any = 'wrong';
   const parsedValue = ParseData.convertToNumber(value, 0);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'number', 'should be of type number');
-  t.deepEqual(parsedValue, oldValue, 'values should be same');
-  t.end();
+  expect(type).toBe('number');
+  expect(parsedValue).toBe(oldValue);
 });
 
-test('utils/parse-data: convertToBoolean with correct values', t => {
-  t.plan(2);
+test('utils/parse-data: convertToBoolean with correct values', () => {
   const value: any = 'true';
   const parsedValue = ParseData.convertToBoolean(value, false);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'boolean', 'should be of type boolean');
-  t.deepEqual(parsedValue, true, 'values should be same');
-  t.end();
+  expect(type).toBe('boolean');
+  expect(parsedValue).toBe(true);
 });
 
-test('utils/parse-data: convertToBoolean with wrong values', t => {
-  t.plan(2);
+test('utils/parse-data: convertToBoolean with wrong values', () => {
   const value: any = 'asdas';
   const parsedValue = ParseData.convertToBoolean(value, false);
   const type: string = typeof parsedValue;
 
-  t.deepEqual(type, 'boolean', 'should be of type boolean');
-  t.deepEqual(parsedValue, false, 'values should be same');
-  t.end();
+  expect(type).toBe('boolean');
+  expect(parsedValue).toBe(false);
 });
 
-test('utils/parse-data: getTypeByValue', t => {
-  t.plan(2);
+test('utils/parse-data: getTypeByValue', () => {
   const value1: string = 'hello';
   const type1: string = ParseData.getTypeByValue(value1);
 
-  t.deepEqual(type1, 'string', 'should be of type string');
+  expect(type1).toBe('string');
 
   const value2: boolean = true;
   const type2: string = ParseData.getTypeByValue(value2);
 
-  t.deepEqual(type2, 'boolean', 'should be of type boolean');
-
-  t.end();
+  expect(type2).toBe('boolean');
 });
 
-test('utils/parse-data: checkType', t => {
-  t.plan(1);
+test('utils/parse-data: checkType', () => {
   const value: string = 'hello';
   const state = {
-    name: 'hello'
+    name: 'hello',
   };
 
   const typeCheck = ParseData.checkType(state, 'name', value);
-  t.deepEqual(typeCheck, true, 'should be of type boolean');
-
-  t.end();
+  expect(typeCheck).toBe(true);
 });
 
-test('utils/parse-data: getType', t => {
-  t.plan(1);
+test('utils/parse-data: getType', () => {
   const state = {
-    name: 'hello'
+    name: 'hello',
   };
 
   const typeCheck = ParseData.getType(state, 'name');
-  t.deepEqual(typeCheck, 'string', 'should be of type boolean');
-
-  t.end();
+  expect(typeCheck).toBe('string');
 });

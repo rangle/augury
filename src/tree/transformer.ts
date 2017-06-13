@@ -8,14 +8,12 @@ import {
   isDebugElementComponent,
 } from '../backend/utils/description';
 
-import {
-  ComponentView,
-  SimpleOptions,
-} from '../options';
+import { ComponentView, SimpleOptions } from '../options';
 
-import {Node} from './node';
-import {Path, serializePath} from './path';
-import {functionName, serialize} from '../utils';
+import { Node } from './node';
+import { Path, serializePath } from './path';
+import { functionName } from '../utils/function-name';
+import { serialize } from '../utils/serialize';
 
 import {
   classDecorators,
@@ -27,7 +25,7 @@ import {
   injectedParameterDecorators,
 } from './decorators';
 
-import {AUGURY_TOKEN_ID_METADATA_KEY} from '../backend/utils/parse-modules';
+import { AUGURY_TOKEN_ID_METADATA_KEY } from '../backend/utils/parse-modules';
 
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
 /// object that is our local representation of the combined data of those two
@@ -35,11 +33,13 @@ import {AUGURY_TOKEN_ID_METADATA_KEY} from '../backend/utils/parse-modules';
 /// in order for our tree comparisons to work. If we just create a reference to
 /// the existing DebugElement data, that data will mutate over time and
 /// invalidate the results of our comparison operations.
-export const transform = (path: Path,
-                          element,
-                          options: SimpleOptions,
-                          cache: Map<string, Node>,
-                          count: (n: number) => void): Node => {
+export const transform = (
+  path: Path,
+  element,
+  options: SimpleOptions,
+  cache: Map<string, Node>,
+  count: (n: number) => void,
+): Node => {
   if (element == null) {
     return null;
   }
@@ -59,14 +59,13 @@ export const transform = (path: Path,
 
   const metadata = element.componentInstance ? componentMetadata(element.componentInstance.constructor) : null;
 
-  const changeDetection = isComponent
-    ? getChangeDetection(metadata)
-    : null;
+  const changeDetection = isComponent ? getChangeDetection(metadata) : null;
 
   const node: Node = {
     id: serializedPath,
-    augury_token_id: element.componentInstance ?
-      Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, element.componentInstance.constructor) : null,
+    augury_token_id: element.componentInstance
+      ? Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, element.componentInstance.constructor)
+      : null,
     name,
     listeners,
     isComponent,
@@ -94,9 +93,7 @@ export const transform = (path: Path,
   const transformChildren = (children: Array<any>) => {
     let subindex = 0;
 
-    children.forEach(c =>
-      node.children.push(
-        transform(path.concat([subindex++]), c, options, cache, count)));
+    children.forEach(c => node.children.push(transform(path.concat([subindex++]), c, options, cache, count)));
   };
 
   const getChildren = (test: (compareElement) => boolean): Array<any> => {
@@ -136,45 +133,39 @@ export const recursiveSearch = (children: any[], test: (element) => boolean): Ar
   for (const c of children) {
     if (test(c)) {
       result.push(c);
-    }
-    else {
-      Array.prototype.splice.apply(result,
-        (<Array<any>> [result.length, 0]).concat(recursiveSearch(c.children, test)));
+    } else {
+      Array.prototype.splice.apply(result, (<Array<any>>[result.length, 0]).concat(recursiveSearch(c.children, test)));
     }
   }
 
   return result;
 };
 
-export const matchingChildren =
-  (element, test: (element) => boolean): Array<any> => {
-    if (test(element)) {
-      return [element];
-    }
-    return recursiveSearch(element.children, test);
-  };
+export const matchingChildren = (element, test: (element) => boolean): Array<any> => {
+  if (test(element)) {
+    return [element];
+  }
+  return recursiveSearch(element.children, test);
+};
 
 const getComponentProviders = (element, name: string): Array<Property> => {
   let providers = new Array<Property>();
 
   if (element.providerTokens && element.providerTokens.length > 0) {
     providers = element.providerTokens.map(provider =>
-      Description.getProviderDescription(provider,
-        element.injector.get(provider)));
+      Description.getProviderDescription(provider, element.injector.get(provider)),
+    );
   }
 
   if (name) {
     return providers.filter(provider => provider.key !== name);
-  }
-  else {
+  } else {
     return providers;
   }
 };
 
 const getChangeDetection = (metadata): number => {
-  if (metadata &&
-    metadata.changeDetection !== undefined &&
-    metadata.changeDetection !== null) {
+  if (metadata && metadata.changeDetection !== undefined && metadata.changeDetection !== null) {
     return metadata.changeDetection;
   } else {
     return 1;
@@ -183,8 +174,10 @@ const getChangeDetection = (metadata): number => {
 
 const getDependencies = (instance): Array<Dependency> => {
   const parameterDecorators = injectedParameterDecorators(instance);
-  const normalizedParamTypes = parameterTypes(instance).map((type, i) =>
-    type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0].token);
+  const normalizedParamTypes = parameterTypes(instance).map(
+    (type, i) =>
+      type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0].token,
+  );
 
   return normalizedParamTypes.map((paramType, i) => ({
     id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),

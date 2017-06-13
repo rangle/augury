@@ -1,16 +1,11 @@
-import * as test from 'tape';
+import { highlight } from './highlighter';
 
-import {highlight} from './highlighter';
-
-test('utils/highlighter: passing undefined', t => {
-  t.plan(1);
+test('utils/highlighter: passing undefined', () => {
   const hls = highlight([]);
-  t.deepEqual(hls, undefined, 'get undefined highlight');
-  t.end();
+  expect(hls).toBeUndefined();
 });
 
-test('utils/highlighter: test highlight', t => {
-  t.plan(2);
+test('utils/highlighter: test highlight', () => {
   document.body.innerHTML = '';
 
   const div = document.createElement('div');
@@ -21,22 +16,16 @@ test('utils/highlighter: test highlight', t => {
 
   document.body.appendChild(div);
 
-  const hls = highlight(
-    <any> [{id: '0', nativeElement: () => div, name: 'highlight div'}]);
+  const hls = highlight(<any>[{ id: '0', nativeElement: () => div, name: 'highlight div' }]);
 
   const all = document.querySelectorAll('div');
   const h: any = all[all.length - 1];
 
-  t.deepEqual(h.style.padding, '5px', 'get highlighted padding');
-  t.deepEqual(h.style.position, 'absolute', 'get highlighted position');
-
-  t.end();
+  expect(h.style.padding).toBe('5px');
+  expect(h.style.position).toBe('absolute');
 });
 
-test('utils/highlighter: test highlight', t => {
-  t.plan(1);
-  document.clear();
-
+test('utils/highlighter: test highlight', () => {
   const div = document.createElement('div');
   div.setAttribute('value', 'value');
 
@@ -45,11 +34,8 @@ test('utils/highlighter: test highlight', t => {
 
   document.body.appendChild(div);
 
-  const hls = highlight(
-    <any> [{id: '1', nativeElement: () => div, name: 'foo'}]);
+  const hls = highlight(<any>[{ id: '1', nativeElement: () => div, name: 'foo' }]);
 
   highlight([]);
-  t.deepEqual(document.getElementsByTagName('div').length, 3,
-    'remove all highlight');
-  t.end();
+  expect(document.getElementsByTagName('div').length).toBe(3);
 });

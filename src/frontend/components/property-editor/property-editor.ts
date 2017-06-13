@@ -28,7 +28,7 @@ export enum State {
 @Component({
   selector: 'bt-property-editor',
   template: require('./property-editor.html'),
-  styles: [require('to-string!./property-editor.css')],
+  styles: [require('./property-editor.css')],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyEditor {

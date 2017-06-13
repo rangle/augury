@@ -17,7 +17,7 @@ import * as d3 from 'd3';
 @Component({
   selector: 'bt-router-tree',
   template: require('./router-tree.html'),
-  styles: [require('to-string!./router-tree.css')],
+  styles: [require('./router-tree.css')],
 })
 export class RouterTree {
   @ViewChild('routeTree') private routeTreeComponent;

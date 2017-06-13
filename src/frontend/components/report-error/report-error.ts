@@ -13,7 +13,7 @@ import {
 @Component({
   selector: 'report-error',
   template: require('./report-error.html'),
-  styles: [require('to-string!./report-error.css')],
+  styles: [require('./report-error.css')],
 })
 export class ReportError {
   @Input() private error: ApplicationError;

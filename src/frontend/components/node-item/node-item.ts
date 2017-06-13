@@ -20,7 +20,7 @@ export const defaultExpansionDepth = 3;
 @Component({
   selector: 'bt-node-item',
   template: require('./node-item.html'),
-  styles: [require('to-string!./node-item.css')],
+  styles: [require('./node-item.css')],
 })
 export class NodeItem {
   @Input() node;

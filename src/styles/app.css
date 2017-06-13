@@ -3,11 +3,11 @@
  */
 
 /* Basscss Modules */
-@import 'basscss';
-@import 'basscss-border-colors';
-@import 'basscss-layout';
-@import 'basscss-type-scale';
-@import 'basscss-typography';
+@import '../../node_modules/basscss/css/basscss.min.css';
+@import '../../node_modules/basscss-border-colors/css/border-colors.css';
+@import '../../node_modules/basscss-layout/css/layout.css';
+@import '../../node_modules/basscss-type-scale/css/type-scale.css';
+@import '../../node_modules/basscss-typography/css/typography.css';
 
 /* CSS Folder Imports */
 @import './base.css';
@@ -18,4 +18,29 @@
 .transparent {
   opacity: 0;
   pointer-events: none;
+}
+
+.p3 {
+  padding: 1rem !important;
+}
+.px3 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.py3 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+.px2 {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+.py2 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.mt1 {
+  margin-top: 0px !important;
 }

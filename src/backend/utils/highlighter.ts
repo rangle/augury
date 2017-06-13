@@ -10,7 +10,19 @@ export interface Offsets {
   h: number;
 }
 
-const styles = require('to-string!raw!./highlighter.raw');
+const styles = `
+padding: 5px;
+font-size: 11px;
+line-height: 11px;
+position: absolute;
+text-align: right;
+z-index: 9999999999999 !important;
+pointer-events: none;
+min-height: 5px;
+background: rgba(126, 183, 253, 0.3);
+border: 1px solid rgba(126, 183, 253, 0.7) !important;
+color: #6da9d7 !important;
+`;
 
 let highlights = new Map<string, HTMLElement>();
 

@@ -16,10 +16,10 @@ var path = require('path');
 var webpack = require('webpack');
 
 // Webpack Plugins
-var OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
+var OccurrenceOrderPlugin = webpack.optimize.OccurrenceOrderPlugin;
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-var DedupePlugin = webpack.optimize.DedupePlugin;
+// var DedupePlugin = webpack.optimize.DedupePlugin;
 var DefinePlugin = webpack.DefinePlugin;
 var BannerPlugin = webpack.BannerPlugin;
 
@@ -28,31 +28,28 @@ var BannerPlugin = webpack.BannerPlugin;
  */
 module.exports = {
   devtool: 'source-map',
-  debug: true,
   cache: true,
 
-  verbose: true,
-  displayErrorDetails: true,
   context: __dirname,
   stats: {
     colors: true,
-    reasons: true
+    reasons: true,
   },
 
   entry: {
-    'frontend': [
-      'webpack.vendor.ts',
-      './src/frontend/module'
+    frontend: [
+      './webpack.vendor',
+      './src/frontend/module',
     ],
-    'backend': ['./src/backend/backend'],
+    backend: ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
-    'devtools': ['./src/devtools/devtools'],
+    devtools: ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
-    'background': [
+    background: [
       './src/channel/channel',
       './src/sentry-connection/sentry-connection',
-      './src/gtm-connection/gtm-connection'
-    ]
+      './src/gtm-connection/gtm-connection',
+    ],
   },
 
   // Config for our build files
@@ -60,68 +57,34 @@ module.exports = {
     path: root('build'),
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: '[id].chunk.js',
   },
 
   resolve: {
-    root: __dirname,
-    extensions: ['', '.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json'],
   },
   module: {
-    preLoaders: [{
-      test: /\.ts$/,
-      loader: 'tslint',
-      exclude: /node_modules/,
-    }],
-    loaders: [{
-      // Support for .ts files.
-      test: /\.ts$/,
-      loader: 'ts',
-      query: {
-        'ignoreDiagnostics': []
+    loaders: [
+      { test: /\.tsx?$/, loader: 'ts-loader' },
+      {
+        test: /\.css$/,
+        use: ['to-string-loader', 'style-loader', 'css-loader', 'postcss-loader'],
       },
-      exclude: [
-        /\.min\.js$/,
-        /\.spec\.ts$/,
-        /\.e2e\.ts$/,
-        /web_modules/,
-        /test/,
-        /node_modules\/(?!(ng2-.+))/
-      ]
-    }, {
-      test: /\.css$/,
-      loader: 'css!postcss'
-    }, {
-      test: /\.png$/,
-      loader: "url-loader?mimetype=image/png"
-    }, {
-      test: /\.html$/,
-      loader: 'raw'
-    }],
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/,
-      /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/
-    ]
-  },
-
-  postcss: function () {
-    return [
-      require('postcss-import')({ addConfigTo: webpack }),
-      require('postcss-cssnext')
-    ];
+      { test: /\.png$/, loader: 'url-loader?mimetype=image/png' },
+      { test: /\.html$/, loader: 'raw-loader' },
+      { test: /\.raw$/, loader: 'raw-loader' },
+    ],
+    noParse: [/rtts_assert\/src\/rtts_assert/, /reflect-metadata/, /.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/],
   },
 
   plugins: [
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
-      'VERSION': JSON.stringify(pkg.version),
-      'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
+      PRODUCTION: JSON.stringify(process.env.NODE_ENV !== 'development'),
+      VERSION: JSON.stringify(pkg.version),
+      SENTRY_KEY: JSON.stringify(process.env.SENTRY_KEY),
     }),
-    new OccurenceOrderPlugin(),
-    new DedupePlugin()
+    new OccurrenceOrderPlugin(),
   ],
 
   /*
@@ -130,8 +93,8 @@ module.exports = {
    */
   node: {
     crypto: false,
-    __filename: true
-  }
+    __filename: true,
+  },
 };
 
 /**
@@ -142,13 +105,13 @@ function env(configEnv) {
     return configEnv;
   }
   switch (toString(configEnv[NODE_ENV])) {
-    case '[object Object]'    :
+    case '[object Object]':
       return Object.assign({}, configEnv.all || {}, configEnv[NODE_ENV]);
-    case '[object Array]'     :
+    case '[object Array]':
       return [].concat(configEnv.all || [], configEnv[NODE_ENV]);
-    case '[object Undefined]' :
+    case '[object Undefined]':
       return configEnv.all;
-    default                   :
+    default:
       return configEnv[NODE_ENV];
   }
 }
