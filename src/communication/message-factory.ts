@@ -108,6 +108,12 @@ export abstract class MessageFactory {
     });
   }
 
+  static selectElement(): Message<{path: Path, requestInstance: boolean}> {
+    return create({
+      messageType: MessageType.SelectElement
+    });
+  }
+
   static updateProperty(path: Path, newValue): Message<{path: Path, newValue}> {
     return create({
       messageType: MessageType.UpdateProperty,

@@ -277,6 +277,9 @@ const messageHandler = (message: Message<any>) => {
         }
         return;
 
+      case MessageType.SelectElement:
+        return this.getSelectedElement();
+
       case MessageType.UpdateProperty:
         return updateProperty(previousTree,
           message.content.path,
@@ -435,6 +438,18 @@ export const consoleReference = (node: Node) => {
     get: () => {
       if (node) {
         return ng.probe(node.nativeElement());
+      }
+      return null;
+    }
+  });
+};
+
+export const getSelectedElement = () => {
+  const selectedElement = (<any>window).$0;
+  Object.defineProperty(window, selectedComponentPropertyKey, {
+    get: () => {
+      if (selectedElement) {
+        return ng.probe(selectedElement);
       }
       return null;
     }

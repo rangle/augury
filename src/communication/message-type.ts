@@ -50,6 +50,9 @@ export enum MessageType {
   /// Select a component in the tree view
   SelectComponent,
 
+  /// Select an element in the elements panel
+  SelectElement,
+
   /// Update the value of a property inside the component tree
   UpdateProperty,
 

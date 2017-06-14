@@ -98,6 +98,10 @@ export class App {
         });
     }
 
+    chrome.devtools.panels.elements.onSelectionChanged.addListener(() => {
+      this.onSelectElement();
+    });
+
     this.componentState = new ComponentInstanceState(changeDetector);
 
     this.options.changes.subscribe(() => this.requestTree());
@@ -250,6 +254,10 @@ export class App {
                            sendResponse: (response: MessageResponse<any>) => void) {
 
     this.zone.run(() => this.processMessage(msg, sendResponse));
+  }
+
+  private onSelectElement() {
+    this.directConnection.handleImmediate(MessageFactory.selectElement());
   }
 
   private onSelectNode(node: Node, beforeLoad?: () => void) {
