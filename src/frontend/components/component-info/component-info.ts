@@ -61,10 +61,20 @@ export class ComponentInfo {
     return Object.keys(this.state).length > 0;
   }
 
+  private onTriggerTemplateEvent(listener) {
+    this.actions.triggerEvent(this.node, listener);
+  }
+
   private get hasDirectives() {
     return this.node &&
       this.node.directives &&
       this.node.directives.length > 0;
+  }
+
+  private get hasTemplateEventListeners() {
+    return this.node &&
+      this.node.listeners &&
+      this.node.listeners.length;
   }
 
   private get hasDependencies() {
