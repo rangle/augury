@@ -59,6 +59,9 @@ export enum MessageType {
   /// Emit a new value through an EventEmitter
   EmitValue,
 
+  /// Emit an event on a particular node (ex: click, change, etc..)
+  EmitEvent,
+
   /// Set the nodes that should be highlighted on the page
   Highlight,
 

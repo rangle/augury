@@ -37,6 +37,19 @@
       </div>
     </accordion>
 
+    <accordion sectionTitle="Template Event Listeners"
+      *ngIf="hasTemplateEventListeners" [defaultExpanded]="true">
+      <div class="dark" section-content>
+        <ul class="list-reset m0">
+          <li class="legible-color" *ngFor="let listener of node.listeners">
+            <span class="inline-block info-key">({{listener.name}})</span>
+            <button class="btn"
+              (click)="onTriggerTemplateEvent(listener)">Trigger Event</button>
+          </li>
+        </ul>
+      </div>
+    </accordion>
+
     <accordion sectionTitle="Directives" *ngIf="hasDirectives">
       <div section-content>
         <ul class="list-reset m0">

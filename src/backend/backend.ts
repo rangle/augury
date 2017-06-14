@@ -294,6 +294,11 @@ const messageHandler = (message: Message<any>) => {
           message.content.path,
           message.content.value);
 
+      case MessageType.EmitEvent:
+        return emitEvent(
+          message.content.nodeId,
+          message.content.listenerName);
+
       case MessageType.Highlight:
         if (previousTree == null) {
           return;
@@ -354,6 +359,13 @@ const updateProviderProperty = (tree: MutableTree, path: Path, token: string, pr
       provider[propertyPath[propertyPath.length - 1]] = newValue;
     }
   });
+};
+
+const emitEvent = (nodeId, listenerName) => {
+  const node = ng.probe(ApplicationOperations.nodeFromPath(nodeId));
+  if (node && node.nativeElement) {
+    node.nativeElement.dispatchEvent(new Event(listenerName));
+  }
 };
 
 const emitValue = (tree: MutableTree, path: Path, newValue) => {
