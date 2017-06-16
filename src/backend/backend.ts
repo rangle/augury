@@ -362,9 +362,12 @@ const updateProviderProperty = (tree: MutableTree, path: Path, token: string, pr
 };
 
 const emitEvent = (nodeId, listenerName) => {
-  const node = ng.probe(ApplicationOperations.nodeFromPath(nodeId));
+  const node = ng.probe(applicationOperations.nodeFromPath(nodeId));
   if (node && node.nativeElement) {
-    node.nativeElement.dispatchEvent(new Event(listenerName));
+    const ngZone = node.injector.get(ng.coreTokens.NgZone);
+    setTimeout(() => {
+      ngZone.run(() => node.nativeElement.dispatchEvent(new Event(listenerName)));
+    });
   }
 };
 
