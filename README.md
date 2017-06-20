@@ -8,12 +8,11 @@
 1. [Supported version](#supported-version)
 1. [Working on Augury](#working-on-augury)
 1. [Building and installing locally](#building-and-installing-locally)
-1. [Supported version](#supported-version)
-1. [Working on Augury](#working-on-augury)
 1. [Running tests](#running-tests)
 1. [Reporting issues](#reporting-issues)
 1. [Contributing](#contributing)
 1. [Known issues](#known-issues)
+1. [Support for NgUpgrade](#support-for-ngupgrade)
 
 ## Introduction
 
@@ -141,6 +140,12 @@ To learn more about AoT compilation, visit [this section of Angular documentatio
 ## Support for `enableDebugTools()`
 
 Prior to [Angular 2.2.0](https://github.com/angular/angular/blob/master/CHANGELOG.md#220-upgrade-firebooster-2016-11-14), `enableDebugTools()` would clobber `ng.probe`, which breaks Augury. Prior to that version, [this workaround](https://github.com/AngularClass/angular2-webpack-starter/blob/dbb7d10e6e84b8e88116d957f0047b422ab807c1/src/app/environment.ts#L28...L36) will circumvent the issue.
+
+## Support for NgUpgrade
+
+When upgrading AngularJS components for use within an Angular application, Augury works as expected. You will see the Angular component which wraps the AngularJS component, and you will be able to inspect the properties of the wrapping component.
+
+Currently there is no support for using Augury in the opposite scenario (downgrading Angular components for use in an AngularJS application). There have been requests for this functionality, but supporting it would require an almost complete reimplementation of Augury's introspection mechanics which is not feasible at the moment. It is something we continue to consider though, as we understand it's the more common case for NgUpgrade.
 
 ### License
 [MIT](LICENSE)
