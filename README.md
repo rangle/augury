@@ -26,7 +26,7 @@ Augury only works with Angular 2+ applications. A hard requirement is that the A
 
 ## Supported version
 
-Augury works with application built starting with Angular 2+.
+Augury supports all Angular versions back to v2.0.0.
 
 ---
 ## Working on Augury
