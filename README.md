@@ -137,6 +137,8 @@ _Note_: This debug flag and `development mode` in Angular runtime are two comple
 
 To learn more about AoT compilation, visit [this section of Angular documentation](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html).
 
+**Caveat:** The NgModules tab will not contain any data when using AoT. This is the expected behaviour for now.
+
 ## Support for `enableDebugTools()`
 
 Prior to [Angular 2.2.0](https://github.com/angular/angular/blob/master/CHANGELOG.md#220-upgrade-firebooster-2016-11-14), `enableDebugTools()` would clobber `ng.probe`, which breaks Augury. Prior to that version, [this workaround](https://github.com/AngularClass/angular2-webpack-starter/blob/dbb7d10e6e84b8e88116d957f0047b422ab807c1/src/app/environment.ts#L28...L36) will circumvent the issue.
