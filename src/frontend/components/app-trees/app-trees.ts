@@ -28,14 +28,7 @@ type Node = any;
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   },
-  styles: [`
-    .ngVersion {
-      line-height: 31px;
-      font-weight: bold;
-      color: #5128a5;
-      padding-right: 5px;
-    }
-  `]
+  styles: []
 })
 export class AppTrees {
   private ComponentView = ComponentView;
