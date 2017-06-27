@@ -12,3 +12,14 @@
   margin-right: 10px;
   padding: 3px;
 }
+
+.ngVersion {
+  line-height: 31px;
+  font-weight: bold;
+  color: #5128a5;
+  padding-right: 5px;
+}
+
+.dark .ngVersion {
+  color: #A28AD0;
+}
