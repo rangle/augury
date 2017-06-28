@@ -1,0 +1,28 @@
+.overall-exp a {
+  padding: 2px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.overall-exp a:active, .overall-exp a:focus {
+  outline: none;
+}
+
+.overall-exp .overall-exp-img {
+  height: 32px;
+  width: 32px;
+  fill: #333333;
+}
+
+:host.dark .overall-exp .overall-exp-img {
+  fill: #f1f1f1;
+}
+
+a.selected {
+  background: rgba(0,0,0,0.2);
+}
+
+:host.dark a.selected {
+  background: rgba(255,255,255,0.2);
+}
