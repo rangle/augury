@@ -1,0 +1,67 @@
+:host {
+  font-size: 16px;
+  color: #222;
+}
+:host.dark {
+  color: #f1f1f1;
+}
+
+section.feedback-form-container {
+  padding: 10px 0;
+}
+
+#fbf-feedback {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group .btn-group {
+  display: inline-block;
+}
+
+.fbf-button {
+  padding: 10px 20px;
+  background: #343434;
+  border-radius: 0;
+  color: white;
+  font-weight: bold;
+  border: none;
+}
+
+:host.dark .fbf-button {
+  background: #00cdff;
+}
+
+.fbf-button:active, .fbf-button:focus {
+  outline: none;
+}
+
+.fbf-button {
+  background: #008aff;
+  color: #f1f1f1;
+  transition: background .3s ease;
+}
+
+.fbf-button:active {
+  background: #0059bb;
+}
+
+.fbf-button:hover {
+  background: #00cdff;
+  cursor: pointer;
+}
+
+.feedback-close-form-button {
+  display: block;
+  text-decoration: none;
+  top: 0; right: 15px;
+  position: absolute;
+  font-size: 32px;
+  cursor: pointer;
+}

@@ -1,0 +1,42 @@
+<div class="container">
+
+  <header class="feedback-header">
+    <h1 class="mb0">Let us know how we're doing</h1>
+    <a class="feedback-close-form-button primary-color" (click)="onCloseForm.emit()">&times;</a>
+  </header>
+
+  <section class="feedback-form-container">
+
+    <form (submit)="onSubmit()">
+
+      <div class="form-group">
+        <label>
+          How has your overall experience been?
+          <bt-overall-exp-control
+            [isDarkTheme]="isDarkTheme"
+            #experienceControl>
+          </bt-overall-exp-control>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="fbf-feedback">
+          Share your thoughts with us:
+        </label>
+        <textarea
+          [formControl]="feedbackControl"
+          placeholder="Let us know how we can improve Augury!"
+          id="fbf-feedback"
+          name="fbf-feedback"></textarea>
+      </div>
+
+      <button class="fbf-button" type="submit">
+        <span *ngIf="!isSubmitting" class="fbf-button-text">Submit Feedback!</span>
+        <span *ngIf="isSubmitting" class="fbf-button-text">Submitting...</span>
+      </button>
+
+    </form>
+
+  </section>
+
+</div>
