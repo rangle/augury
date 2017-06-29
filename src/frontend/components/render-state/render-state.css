@@ -21,12 +21,21 @@
 .property-container {
   display: inline-flex;
   white-space: nowrap;
-  width: calc(100% - 15px);
+  position: relative;
 }
 
 .classification {
   width: 100%;
   display: flex;
+}
+
+.set-state-item-undefined {
+  position: absolute;
+  top: -5px; left: 0;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+  text-decoration: none;
 }
 
 .info-key {
