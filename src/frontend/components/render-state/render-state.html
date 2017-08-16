@@ -2,9 +2,11 @@
   <span *ngIf="none">
     No state to show
   </span>
+
+
   <span class="property-container" (click)="expandTree(k, $event)">
-    <span class="info-key" [ngClass]="{output: isEmittable(k)}">
-      <div [ngClass]="{
+    <span class="info-key pl4" [ngClass]="{output: isEmittable(k)}">
+      <div *ngIf="nest(k)" [ngClass]="{
         expander: true,
         rotate90: !expanded(k),
         transparent: !expandable(k)
@@ -30,6 +32,10 @@
         </span>
       </span>
       {{k}}:
+      <a
+        [attr.title]="'Set value to undefined'"
+        class="set-state-item-undefined"
+        (click)="setValueUndefined(k, path.concat(k))">&times;</a>
     </span>
     <span *ngIf="isEmittable(k)" class="emitter">
       <input class="editable" type="text" #prop />
