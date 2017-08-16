@@ -67,7 +67,7 @@ export class RouterTree {
   }
 
   render() {
-    if (!this.routerTree) {
+    if (!this.routerTree || this.routerTree.length === 0) {
       return;
     }
 

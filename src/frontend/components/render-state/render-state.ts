@@ -85,6 +85,15 @@ export class RenderState {
     return this.propertyState.expansionState(this.path.concat(key)) === ExpandState.Expanded;
   }
 
+  private setValueUndefined(key: string) {
+    if (typeof this.state[key] === 'undefined') {
+      return;
+    }
+    const path = this.path.slice();
+    const propertyKey = [key];
+    this.updateValue.emit({path, propertyKey, newValue: undefined});
+  }
+
   private displayType(key: string): string {
     const object = this.state[key];
 

@@ -28,20 +28,14 @@ type Node = any;
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   },
-  styles: [`
-    .ngVersion {
-      line-height: 31px;
-      font-weight: bold;
-      color: #5128a5;
-      padding-right: 5px;
-    }
-  `]
+  styles: []
 })
 export class AppTrees {
   private ComponentView = ComponentView;
   private Tab = Tab;
   private Theme = Theme;
   private AnalyticsConsent = AnalyticsConsent;
+  private showFeedbackPane: boolean = false;
 
   @Input() private ngVersion: String;
   @Input() private componentState: ComponentInstanceState;
@@ -117,6 +111,37 @@ export class AppTrees {
 
   private onOpenSettings = () => {
     this.settingOpened = !this.settingOpened;
+  }
+
+  private onFeedbackClick = () => {
+    this.showFeedbackPane = !this.showFeedbackPane;
+  }
+
+  private onReportIssuesClick = () => {
+    const date = (new Date()).toUTCString();
+    const body = `Augury: ${chrome.runtime.getManifest().version}
+    Date: ${date}
+    OS: ${navigator.platform}
+
+    Demo Test Application:
+    -- Git repository for demo app showing the issue (optional but very helpful for difficult issues.)
+    -- If a code snippet will completely show the issue, please include it.
+
+    Description of issue:
+    -- Include (clipped) screenshot images if possible.
+
+    Angular Version (required): ${this.ngVersion ? this.ngVersion : '???'}
+
+    Steps to reproduce:
+
+    1.
+    2.
+    3.
+
+    Additional Details:
+
+    `;
+    window.open(`https://github.com/rangle/augury/issues/new?body=${(<any>window).encodeURI(body)}`);
   }
 
   private onThemeChange = (theme: Theme) => {

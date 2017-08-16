@@ -1,7 +1,8 @@
 import {NgModule, ErrorHandler, enableProdMode} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import {Accordion} from './components/accordion/accordion';
@@ -9,6 +10,9 @@ import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
 import {ComponentTree} from './components/component-tree/component-tree';
 import {DependencyInfo} from './components/dependency-info/dependency-info';
+import {GoogleService} from './components/feedback-form/google-service/google-service';
+import {FeedbackForm} from './components/feedback-form/feedback-form';
+import {OverallExpControl} from './components/feedback-form/overall-exp/overall-exp';
 import {InjectorTree} from './components/injector-tree/injector-tree';
 import {NodeAttributes} from './components/node-item/node-attributes';
 import {NodeItem} from './components/node-item/node-item';
@@ -72,6 +76,8 @@ import {App} from './app';
     CommonModule,
     FormsModule,
     NgReduxModule,
+    HttpModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     Accordion,
@@ -80,11 +86,13 @@ import {App} from './app';
     ComponentInfo,
     ComponentTree,
     DependencyInfo,
+    FeedbackForm,
     InfoPanel,
     InjectorTree,
     NodeAttributes,
     NodeItem,
     NodeOpenTag,
+    OverallExpControl,
     PropertyEditor,
     PropertyValue,
     RenderError,
@@ -111,6 +119,7 @@ import {App} from './app';
     ComponentViewState,
     ComponentPropertyState,
     SendAnalytics,
+    GoogleService,
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
   ],
   bootstrap: [App]

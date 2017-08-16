@@ -166,6 +166,10 @@ export class App {
       case MessageType.Ping:
         respond();
         break;
+      case MessageType.Initialize:
+        this.error = null;
+        respond();
+        break;
       case MessageType.NotNgApp:
         this.error = new ApplicationError(ApplicationErrorType.NotNgApp);
         respond();

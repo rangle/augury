@@ -40,9 +40,7 @@ export class ComponentInfo {
   @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
   private changeDetectionStrategies = ChangeDetectionStrategy;
-
   private ComponentLoadState = ComponentLoadState;
-
   private path: Path;
 
   constructor(private actions: UserActions) {}
