@@ -56,7 +56,7 @@
       [id]="id"
       [metadata]="metadata"
       [path]="path.concat(k)"
-      [value]="state[k]"
+      [value]="stateValue(k)"
       (updateValue)="updateValue.emit($event)">
     </bt-state-values>
   </span>
@@ -68,7 +68,7 @@
        [path]="path.concat(k)"
        [componentMetadata]="componentMetadata"
        [metadata]="metadata"
-       [state]="state[k]"
+       [state]="stateValue(k)"
        (updateValue)="updateValue.emit($event)">
     </bt-render-state>
   </div>

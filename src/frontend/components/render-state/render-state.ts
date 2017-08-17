@@ -64,6 +64,10 @@ export class RenderState {
   ) {}
 
   keys(obj): string[] {
+    // Need to handle map iterators
+    if (obj instanceof Map) {
+      return Array.from(obj.keys());
+    }
     return (obj instanceof Object) ? Object.keys(obj) : [];
   }
 
@@ -74,11 +78,18 @@ export class RenderState {
   }
 
   private get none() {
-    return this.state == null || Object.keys(this.state).length === 0;
+    return this.state == null || this.keys(this.state).length === 0;
+  }
+
+  private stateValue(key: string) {
+    if (this.state instanceof Map) {
+      return this.state.get(key);
+    }
+    return this.state[key];
   }
 
   private nest(key: string): boolean {
-    return typeof this.state[key] === 'object' && this.state[key] != null;
+    return typeof this.stateValue(key) === 'object' && this.stateValue(key) != null;
   }
 
   private expanded(key: string): boolean {
@@ -86,7 +97,8 @@ export class RenderState {
   }
 
   private setValueUndefined(key: string) {
-    if (typeof this.state[key] === 'undefined') {
+    console.log('SET VALUE UNDEFINED: ', key);
+    if (typeof this.stateValue(key) === 'undefined') {
       return;
     }
     const path = this.path.slice();
@@ -95,16 +107,21 @@ export class RenderState {
   }
 
   private displayType(key: string): string {
-    const object = this.state[key];
+    const object = this.stateValue(key);
 
     if (Array.isArray(object)) {
       return `Array[${object.length}]`;
     }
+
+    if (object instanceof Map) {
+      return `Map(${object.size})`;
+    }
+
     else if (object != null) {
       const constructor = functionName(object.constructor) || typeof object;
 
       if (/object/i.test(constructor)) {
-        if (Object.keys(object).length === 0) {
+        if (this.keys(object).length === 0) {
           return '{}'; // special case to denote an empty object
         }
       }
@@ -123,7 +140,7 @@ export class RenderState {
     if (this.isEmittable(key) || !this.nest(key)) {
       return false;
     }
-    return Object.keys(this.state[key] || {}).length > 0;
+    return this.keys(this.stateValue(key) || {}).length > 0;
   }
 
   private evaluate(data: string) {
@@ -147,7 +164,7 @@ export class RenderState {
   }
 
   private isEmittable(key: string): boolean {
-    const metadata = this.metadata.get(this.state[key]);
+    const metadata = this.metadata.get(this.stateValue(key));
     if (metadata) {
       return (metadata[0] & ObjectType.EventEmitter) !== 0
           || (metadata[0] & ObjectType.Subject) !== 0;
@@ -174,6 +191,7 @@ export class RenderState {
 
   private getSelector(key: string): string {
     const metadata = this.getComponentMetadata(key);
+
     if (metadata) {
       const additionalProperties = metadata[1];
       if (additionalProperties) {

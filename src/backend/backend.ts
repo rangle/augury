@@ -347,6 +347,10 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
   updateNode(tree, path, probed => {
     const instanceParent = getNodeInstanceParent(probed, path);
     if (instanceParent) {
+      const key = path[path.length - 1];
+      if (instanceParent instanceof Map) { // properly handle Map instances
+        instanceParent.set(key, newValue);
+      }
       instanceParent[path[path.length - 1]] = newValue;
     }
   });
