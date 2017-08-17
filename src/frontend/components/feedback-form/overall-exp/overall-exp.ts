@@ -12,7 +12,7 @@ export enum Experience {
 @Component({
   selector: 'bt-overall-exp-control',
   template: require('./overall-exp.html'),
-  styles: [require('to-string!./overall-exp.css')],
+  styles: [require('to-string-loader!./overall-exp.css')],
   host: {
     '[class.dark]': 'isDarkTheme()'
   }

@@ -85,6 +85,12 @@ module.exports = {
       SENTRY_KEY: JSON.stringify(process.env.SENTRY_KEY),
     }),
     new OccurrenceOrderPlugin(),
+    new webpack.ContextReplacementPlugin(
+      // The (\\|\/) piece accounts for path separators in *nix and Windows
+      /angular(\\|\/)core/,
+      root('./src'), // location of your src
+      { }
+    ),
   ],
 
   /*
