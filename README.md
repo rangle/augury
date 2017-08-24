@@ -120,7 +120,27 @@ export default class KitchenSink {
 }
 ```
 
-[Example code](https://github.com/rangle/augury/blob/dev/example-apps/kitchen-sink-example/source/containers/kitchen-sink.ts#L75)
+## State with "delete" methods
+
+Currently any compononent or service that contains a method with the keyword "delete" will cause Augury's serialization / deserialization process to fail, resulting in no state being shown for that component. The following is an example of a service that will cause this issue:
+
+```js
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class TestService {
+
+  constructor() { }
+
+  projects = {
+    read: () => null, // this is fine
+    delete: () => null, // this will cause any component using TestService to fail in Augury
+  };
+
+}
+```
+
+As a workaround, we suggest naming custom `delete` methods with an underscore, eg. `_delete`.
 
 ## Support for AoT (Ahead-Of-Time) compilation
 
