@@ -37,10 +37,7 @@ module.exports = {
   },
 
   entry: {
-    frontend: [
-      './webpack.vendor',
-      './src/frontend/module',
-    ],
+    frontend: ['./webpack.vendor', './src/frontend/module'],
     backend: ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
     devtools: ['./src/devtools/devtools'],
@@ -84,7 +81,7 @@ module.exports = {
       VERSION: JSON.stringify(pkg.version),
       SENTRY_KEY: JSON.stringify(process.env.SENTRY_KEY),
     }),
-    new OccurrenceOrderPlugin(),
+    new OccurrenceOrderPlugin()
   ],
 
   /*

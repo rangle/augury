@@ -9,7 +9,7 @@ import {Options, Theme} from '../../state';
 @Component({
   selector: 'bt-feedback-form',
   template: require('./feedback-form.html'),
-  styles: [require('to-string!./feedback-form.css')],
+  styles: [require('to-string-loader!./feedback-form.css')],
   host: {
     '[class.dark]': 'isDarkTheme()'
   }
