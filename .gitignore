@@ -1,6 +1,9 @@
 # Logs
 *.log
 
+# we dont use yarn here.
+yarn.lock
+
 # Runtime data
 pids
 *.pid
