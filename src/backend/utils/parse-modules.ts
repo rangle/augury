@@ -16,8 +16,19 @@ export interface NgModulesRegistry {
 const resolveNgModuleDecoratorConfig = (m) => {
   if (m.decorators) {
     return m.decorators.reduce((prev, curr, idx, decorators) =>
-      prev ? prev : decorators[idx].type.prototype.toString() === '@NgModule' ?
-        (decorators[idx].args || [])[0] : null, null);
+      prev ?
+        prev :
+        (
+          (decorators[idx].type.prototype.ngMetadataName === 'NgModule') ||
+          (decorators[idx].type.prototype.toString() === '@NgModule')
+        ) ?
+          (decorators[idx].args || [])[0] : null
+    , null);
+  }
+
+  if (m.__annotations__) {
+    return m.__annotations__
+      .find(decorator => decorator.ngMetadataName === 'NgModule');
   }
 
   return (Reflect.getMetadata('annotations', m) || [])
