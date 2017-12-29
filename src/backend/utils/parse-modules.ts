@@ -16,8 +16,19 @@ export interface NgModulesRegistry {
 const resolveNgModuleDecoratorConfig = (m) => {
   if (m.decorators) {
     return m.decorators.reduce((prev, curr, idx, decorators) =>
-      prev ? prev : decorators[idx].type.prototype.toString() === '@NgModule' ?
-        (decorators[idx].args || [])[0] : null, null);
+      prev ?
+        prev :
+        (
+          (decorators[idx].type.prototype.ngMetadataName === 'NgModule') ||
+          (decorators[idx].type.prototype.toString() === '@NgModule')
+        ) ?
+          (decorators[idx].args || [])[0] : null
+    , null);
+  }
+
+  if (m.__annotations__) {
+    return m.__annotations__
+      .find(decorator => decorator.ngMetadataName === 'NgModule');
   }
 
   return (Reflect.getMetadata('annotations', m) || [])
@@ -103,8 +114,12 @@ const resolveTokenIdMetaData = (token, tokenIdMap: { [key: string]: any }) => {
   return { token: token, augury_token_id: tokenId || Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, token) };
 };
 
-const parseProviderName = p =>
-  typeof p === 'object' && p.provide ? p.provide.name || p.provide.toString().replace(' ', ':') : p.name;
+const parseProviderName = p => {
+  if (typeof p === 'object' && p.provide) {
+    return p.provide.name || p.provide.toString().replace(' ', ':');
+  }
+  return p.name;
+};
 
 const buildModuleDescription = (module, config) => {
   const flattenedDeclarations = flatten(config.declarations || []);

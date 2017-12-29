@@ -485,6 +485,13 @@ developer interacts with when debugging Angular applications.
 If you have worked with Angular applications, you should have no trouble
 understanding the Augury UI code in the `frontend` directory.
 
+# Ahead of Time compiled apps
+
+Augury should work as normal when used to inspect an AoT app in development
+mode, however not every feature will be available for use. Since at this time
+there is no easy way to attain the metadata associated with an applications
+modules, the `NgModules` tab in augury will not populate correctly.
+
 # References
 
 * [Extending DevTools](https://developer.chrome.com/extensions/devtools)

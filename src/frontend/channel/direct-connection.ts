@@ -58,7 +58,11 @@ export class DirectConnection {
         if (exceptionInfo &&
             (exceptionInfo.isError ||
              exceptionInfo.isException)) {
-          reject(new Error('Code evaluation failed'));
+          const e = new Error('Code evaluation failed');
+          if (exceptionInfo.isException) {
+            e.stack = exceptionInfo.value;
+          }
+          reject(e);
         }
         else {
           resolve(result);

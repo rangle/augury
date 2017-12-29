@@ -1,14 +1,14 @@
 machine:
   node:
-    version: 4.2.3
+    version: 8.9.3
   post:
-    - npm install -g npm@3.x.x
+    - npm install -g npm@5.x.x
 
 dependencies:
   pre:
     - rm -rf node_modules typings
   post:
-    - npm run prod-build; ./crxmake.sh
+    - if [ ! $SENTRY_KEY ]; then export SENTRY_KEY=DUMMY_SENTRY_KEY; fi; npm run prod-build; ./crxmake.sh
 
 test:
   pre:

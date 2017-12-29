@@ -28,4 +28,4 @@ export function mainReducer(state: IAuguryState = INITIAL_STATE,
   }
 
   return state;
-};
+}
