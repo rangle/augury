@@ -1,0 +1,29 @@
+.property-editor {
+  display: flex;
+  padding-bottom: 2px;
+}
+
+.info-key {
+  margin-right: 0.5em;
+  line-height: 2em;
+}
+
+.property-editor input {
+  width: 100%;
+  border-radius: 1px;
+  box-shadow: none;
+  transition: all 0.2s ease-in-out;
+  height: 2em;
+  padding: 0 5px;
+}
+
+.state-container {
+  display: flex;
+  flex-grow: 2;
+  line-height: 2em;
+  height: 2em;
+}
+
+.state-container > span {
+  width: 100%;
+}

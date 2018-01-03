@@ -1,0 +1,46 @@
+<!--dependencies view-->
+<div class="mxn4 myn2" *ngIf="!hasDependencies">
+  <ul class="list-reset m0">
+    <li class="border-bottom py2 px4"
+      *ngFor="let dep of dependencies">
+      <a href="#"
+        class="node-item-property"
+        (click)="onDependencySelected(dep.id)">
+        {{dep.name}}
+        </a>
+    </li>
+  </ul>
+</div>
+
+<!--dependent components view-->
+<div class="mxn4 myn2" *ngIf="selectedDependency">
+  <div class="border-bottom py2 px4">
+    <a href="#"
+      class="icon double-arrow bg-primary rotate180"
+      (click)="onBack()">
+      </a>
+    <span class="node-item-property inline-block">
+      {{selectedDependency}}
+      </span>
+  </div>
+
+  <ul class="list-reset primary-color m0" *ngIf="hasDependencies">
+    <li class="border-bottom py2 px4"
+      *ngFor="let comp of dependentComponents">
+      <a href="#"
+        class="node-item-property"
+        (click)="selectNode.emit(comp)">
+        {{comp.name}} (a-id = {{comp.id}})
+        </a>
+      <ul>
+        <li *ngFor="let dep of comp.dependencies">
+          <a href="#"
+            class="node-item-property"
+            (click)="onDependencySelected(dep.id)">
+            {{dep.name}}
+            </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

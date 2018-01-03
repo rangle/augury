@@ -1,6 +1,9 @@
 {
   "version": "1.6.2",
+  "compileOnSave": false,
+  "buildOnSave": false,
   "compilerOptions": {
+    "lib": ["es6", "dom"],
     "target": "es5",
     "module": "commonjs",
     "declaration": false,
@@ -16,7 +19,6 @@
        "node_modules",
        "example-apps",
        "build",
-       "typings/main.d.ts",
-       "typings/main"
+       "typings"
      ]
 }

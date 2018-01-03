@@ -1,81 +1,153 @@
-# Angular 2.0 Batarangle
+# Augury
 
-[![Circle CI](https://circleci.com/gh/rangle/batarangle.svg?style=svg&circle-token=7df1edad916fdc18b7bfddc60ff694871570359c)](https://circleci.com/gh/rangle/batarangle) [![Slack Status](https://batarangle-slack.herokuapp.com/badge.svg)](https://batarangle-slack.herokuapp.com)
-[![Stories in Ready](https://badge.waffle.io/rangle/batarangle.svg?label=ready&title=Ready)](http://waffle.io/rangle/batarangle)
+[![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://augury-slack.herokuapp.com/badge.svg)](https://augury-slack.herokuapp.com)
+[![Stories in Ready](https://badge.waffle.io/rangle/augury.svg?label=ready&title=Ready)](https://waffle.io/rangle/augury)
 
-Batarangle is a Google Chrome Dev Tools extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions below to build the tool locally and install it from source. It's actually quite easy.
+## Table of content
+1. [Introduction](#introduction)
+1. [Supported version](#supported-version)
+1. [Working on Augury](#working-on-augury)
+1. [Building and installing locally](#building-and-installing-locally)
+1. [Running tests](#running-tests)
+1. [Reporting issues](#reporting-issues)
+1. [Contributing](#contributing)
+1. [Known issues](#known-issues)
+1. [Support for NgUpgrade](#support-for-ngupgrade)
 
-![Screenshot of Batarangle](images/screenloop.gif)
+## Introduction
 
+[Augury](https://augury.angular.io/) is a Google Chrome Dev Tools extension for debugging Angular 2+ applications.
 
-## Supported Version
+You can install the extension from [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd).
 
-Currently works with applications built in [Angular 2.0.0-beta.14](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-beta14-2016-04-07) with _limited backwards compatibility_, which will change once Angular 2 stabilizes.
+## Inspecting Code
 
-## Join Our Slack Team
+Augury only works with Angular 2+ applications. A hard requirement is that the Angular application is running in development mode, this is due to a security restriction. If you plan to read the original source code, it is a good idea to generate source maps. Otherwise you will be forced to work with the compiled JavaScript code.
 
-If you want to contribute or need help getting started, [join us on Slack](https://batarangle-slack.herokuapp.com).
+## Supported version
 
-## Getting Extension
+Augury supports all Angular versions back to v2.0.0.
 
-You can get the extension in two ways:
+---
+## Working on Augury
 
-1. If you just want to use the extension you can get the latest master build, which is packaged and hosted on every successful build of master branch on CircleCI
- * To download the latest build go to [Batarangle.io](http://batarangle.io) and click install
- * After download is complete go to Chrome Extensions `chrome://extensions` in the Chrome
- * Drag and Drop the downloaded package to install the extension
+### Development environment
 
-2. If you want to download the source code and build it manually
- * Clone the repo and install all the dependencies required
- * Run command `npm run pack`
- * This will generate `batarangle.crx` in the source folder
- * Then go to Chrome Extensions `chrome://extensions` in the Chrome
- * Drag and Drop the bundled package to install the extension
+To develop the Augury extension, the following environment is used:
 
-## Development Environment
+* Node
+* Yarn
+* NPM
+* TypeScript
 
-To develop this extension, the following environment is used:
+### Building and installing locally
 
-* Node v4.2.1
-* NPM 3.3.10
-* TypeScript 1.7.5
-* typings 0.6.8
+```bash
+git clone git://github.com/rangle/augury
+cd augury
+yarn
+npm run dev-build
+```
 
-## Trying out the extension
+1. Navigate to chrome://extensions and enable Developer mode.
+1. Choose "Load unpacked extension".
+1. In the dialog, open the directory you just cloned.
 
-1. Clone this repository: `git clone git://github.com/rangle/batarangle`.
-2. Run `npm install`.
-3. Run `npm run build` (errors related to typing files conflicts can be ignore for now).
-4. Navigate to chrome://extensions and enable Developer Mode.
-5. Choose "Load unpacked extension".
-6. In the dialog, open the directory you just cloned.
+Try out the extension with one of the example app from the [Guide](https://augury.angular.io/pages/guides/).
 
-To try out with an example application, refer to instructions in [README](./example-apps/todo-mvc-example/README.md).
-
-## Running Tests
+### Running tests
 
 To execute all unit tests, run `npm test`. It bundles up all files that match `*.test.ts` into `build/test.js`, then runs it through tape-run in a headless Electron browser.
 
-## Available NPM Scripts
+### Available NPM scripts
 
-- `build` Build the extension
-- `webpack` Run webpack
-- `clean` Clean `node_modules` and `typings`,
-- `postinstall` install typings
-- `start` Clean build and run webpack in watch mode
-- `test` Bundle all *.test.ts and run it through a headless browser
-- `prepack` Run npm build before running npm pack
-- `pack` Packages the extension and create chrome build batarangle.crx
+To see all available script type `npm run` in the terminal. The following command are the ones you will mostly be working with.
 
-## Developer Information
+Command|Descrption
+-------|----------
+`build`|Build the extension
+`webpack`|Run webpack
+`clean`|Clean `node_modules` and `typings`,
+`postinstall`|install typings
+`start`|Clean build and run webpack in watch mode
+`test`|Bundle all *.test.ts and run it through a headless browser
+`prepack`|Run npm build before running npm pack
+`pack`|Packages the extension and create chrome build augury.crx
 
-- [Developer guide](https://github.com/rangle/batarangle/wiki)
-- [Contributing guidelines](CONTRIBUTING.md)
-- [Architecture of this extension](./docs/ARCHITECTURE.md)
+## Reporting issues
 
-## Future Plans
+Please search to make sure your issue is not already been reported.
 
-We are working hard towards [the official release](https://github.com/rangle/batarangle/releases). But at the mean time, you can take a look at our [milestones](https://github.com/rangle/batarangle/milestones) to see what new features are in place.
+You should report an issue directly from Augury, by clicking on the Augury icon next to the address bar in the browser. It will open up a popup menu with a link to Issue reporting.
 
-## License
+![Image Issue reporting](images/augury-popup-icon.png)
+
+## Contributing
+
+### General guidelines
+
+If you'd like to help out, please read our [Contributing Guidelines](https://augury.angular.io/pages/guides/contribute.html).
+
+### Augury Architecture
+
+You might want to first checkout the [Architecture of this extension](https://augury.angular.io/pages/guides/architecture.html).
+
+### Join on Slack
+
+If you want to contribute or need help getting started, [join us on Slack](https://augury-slack.herokuapp.com).
+
+---
+
+# Known issues
+
+## Router graph
+
+The router injection technique described below applies to version before those listed below:
+
+```
+Angular v2.3.0
+Angular Router v3.3.0
+Augury v1.2.8
+```
+
+
+To be able to view the router graph, you will need to inject the Router in the application _Root_ component as shown below (it must be named `router` exactly).
+
+```js
+export default class KitchenSink {
+  constructor(private router: Router) {
+  }
+}
+```
+
+[Example code](https://github.com/rangle/augury/blob/dev/example-apps/kitchen-sink-example/source/containers/kitchen-sink.ts#L75)
+
+## Support for AoT (Ahead-Of-Time) compilation
+
+In order for Angular to expose the debug information for AoT applications, you will have to explicitly set the debug flag to `true` in your project's `tsconfig.json` as such:
+
+```json
+"angularCompilerOptions": {
+  /* ... */
+  "debug": true
+}
+```
+
+_Note_: This debug flag and `development mode` in Angular runtime are two completely different settings.
+
+To learn more about AoT compilation, visit [this section of Angular documentation](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html).
+
+**Caveat:** The NgModules tab will not contain any data when using AoT. This is the expected behaviour for now.
+
+## Support for `enableDebugTools()`
+
+Prior to [Angular 2.2.0](https://github.com/angular/angular/blob/master/CHANGELOG.md#220-upgrade-firebooster-2016-11-14), `enableDebugTools()` would clobber `ng.probe`, which breaks Augury. Prior to that version, [this workaround](https://github.com/AngularClass/angular2-webpack-starter/blob/dbb7d10e6e84b8e88116d957f0047b422ab807c1/src/app/environment.ts#L28...L36) will circumvent the issue.
+
+## Support for NgUpgrade
+
+When upgrading AngularJS components for use within an Angular application, Augury works as expected. You will see the Angular component which wraps the AngularJS component, and you will be able to inspect the properties of the wrapping component.
+
+Currently there is no support for using Augury in the opposite scenario (downgrading Angular components for use in an AngularJS application). There have been requests for this functionality, but supporting it would require an almost complete reimplementation of Augury's introspection mechanics which is not feasible at the moment. It is something we continue to consider though, as we understand it's the more common case for NgUpgrade.
+
+### License
 [MIT](LICENSE)

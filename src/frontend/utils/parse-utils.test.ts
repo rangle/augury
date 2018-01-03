@@ -1,5 +1,7 @@
 import * as test from 'tape';
 import {ParseUtils} from './parse-utils';
+import {MutableTree} from '../../tree/mutable-tree';
+import {createTree} from '../../tree/mutable-tree-factory';
 
 test('utils/parse-utils: copyParent', t => {
   t.plan(1);
@@ -59,7 +61,7 @@ test('utils/parse-utils: flatten list data', t => {
   }];
 
   const parseUtils: ParseUtils = new ParseUtils();
-  const output = parseUtils.flatten(mockData);
+  const output = parseUtils.flatten(<any> mockData);
   t.deepEqual(result, output, 'result should be equal to output');
   t.end();
 });
@@ -70,91 +72,87 @@ test('utils/parse-utils: getParentHierarchy', t => {
     id: '0',
     name: 'mockData',
     children: [{
-      id: '0.1',
+      id: '0 0',
       name: 'one'
     }, {
-      id: '0.2',
+      id: '0 1',
       name: 'two',
       children: [{
-        id: '0.2.1',
+        id: '0 1 0',
         name: 'three'
       }, {
-        id: '0.2.2',
-        name: 'four'
+        id: '0 1 1',
+        name: 'four',
+        children: []
       }]
     }]
   }];
 
   const node = {
-    id: '0.2.2',
+    id: '0 1 1',
     name: 'four'
   };
 
-  const result = [{
-    children: undefined,
-    id: '0',
-    name: 'mockData'
-  }, {
-    children: undefined,
-    id: '0.2',
-    name: 'two'
-    }];
+  const tree = createTree(<any>mockData);
 
   const parseUtils: ParseUtils = new ParseUtils();
-  const flattened = parseUtils.flatten(mockData);
-  const output = parseUtils.getParentHierarchy(flattened, node);
-  t.deepEqual(result, output, 'result should be equal to output');
+  const output = parseUtils.getParentHierarchy(tree, <any> node).map(n => n.id);
+
+  const result = ['0', '0 1'];
+
+  t.deepEqual(output, result, 'result should be equal to output');
   t.end();
 });
 
 test('utils/parse-utils: getParentNodeIds', t => {
   t.plan(1);
-  const nodeId = '0.1.22.333.444';
+  const nodeId = '0 1 22 333 444';
   const parseUtils: ParseUtils = new ParseUtils();
   const output = parseUtils.getParentNodeIds(nodeId);
-  const result = ['0', '0.1', '0.1.22', '0.1.22.333'];
+  const result = ['0', '0 1', '0 1 22', '0 1 22 333'];
   t.deepEqual(result, output, 'result should be equal to output');
   t.end();
 });
 
-test('utils/parse-utils: getDependencyLink', t => {
+test('utils/parse-utils: getDependencyProvider', t => {
   t.plan(1);
+  const node = {
+    id: '0 1 1',
+    name: 'four',
+    providers: [],
+  };
   const mockData = [{
     id: '0',
     name: 'mockData',
-    injectors: ['service1'],
-    children: [{
-      id: '0.1',
-      name: 'one',
-      injectors: ['service2']
-    }, {
-      id: '0.2',
-      name: 'two',
-      injectors: ['service3'],
-      children: [{
-        id: '0.2.1',
-        name: 'three'
-      }, {
-        id: '0.2.2',
-        name: 'four',
-        injectors: ['service1']
-      }]
-    }]
+    providers: [{ id: 'service1_id', key: 'service1' }],
+    children: [
+      {
+        id: '0 0',
+        name: 'one',
+        providers: [],
+      },
+      {
+        id: '0 1',
+        name: 'two',
+        providers: [],
+        children: [
+          {
+            id: '0 1 0',
+            name: 'three'
+          },
+          node,
+        ],
+      },
+    ]
   }];
 
-  const nodeId = '0.2.2';
-  const dependency = 'service1';
+  const dependency = { id: 'service1_id', name: 'service1', decorators: [] };
 
   const parseUtils: ParseUtils = new ParseUtils();
-  const flattened = parseUtils.flatten(mockData);
-  const output = parseUtils.getDependencyLink(flattened, nodeId, dependency);
-  const result = {
-    children: undefined,
-    id: '0',
-    injectors: [ 'service1' ],
-    name: 'mockData'
-  };
 
-  t.deepEqual(result, output, 'result should be equal to output');
+  const tree = createTree(<any> mockData);
+
+  const output = parseUtils.getDependencyProvider(tree, node.id, dependency);
+  t.deepEqual(mockData[0], output, 'result should be equal to output');
   t.end();
 });

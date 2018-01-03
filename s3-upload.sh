@@ -9,7 +9,7 @@ bucket=batarangle.io
 dateValue=$(date -u +'%Y%m%dT%H%M%SZ')
 
 # filename generated using circleci
-file="batarangle-$CIRCLE_BUILD_NUM.crx"
+file="augury-$CIRCLE_BUILD_NUM.crx"
 resource="/${bucket}/${file}"
 contentType="application/x-compressed-tar"
 

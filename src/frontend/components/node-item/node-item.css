@@ -1,0 +1,21 @@
+:host .node-item-name {
+  margin-left: 0;
+  white-space: nowrap;
+}
+
+:host .node-item.self {
+  white-space: nowrap;
+}
+
+:host .node-item-value {
+  margin-left: 2px;
+}
+
+:host .node-item-close-tag {
+  margin-left: 15px;
+}
+
+:host .parenthesis,
+:host .punctuation {
+  color: darkcyan;
+}

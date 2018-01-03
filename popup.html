@@ -1,191 +1,185 @@
 <html>
-  <head>
-    <style>
-      /*------- Modal Structure -------*/
-      html, body {
-        padding: 0px;
-        margin: 0px;
-        min-height: 150px;
-        width: 400px;
-      }
+<head>
+  <style>
+    /* Modal Structure */
 
-      .modal_header {
-        align-items: center;
-        border-bottom: 0.5px solid #dadada;
-        display: flex;
-        height: 55px;
-        width: 100%;
-      }
+    html,
+    body {
+      margin: 0;
+      min-height: 180px;
+      padding: 0;
+      width: 384px;
+    }
 
-      .modal_content {
-        padding: 20px 22px;
-      }
+    .modal_header {
+      align-items: center;
+      border-bottom: 0.5px solid #dadada;
+    }
 
-      .modal_cta {
-        border-top: 0.5px solid #dadada;
-        height: 50px;
-        width: 100%;
-      }
+    .modal_content {
+      padding: 0 22px;
+    }
 
-      /*------- Header Section -------*/
-      .logo {
-        align-items: center;
-        display: flex;
-        padding-left: 22px;
-        width: 60%;
-      }
+    .modal_cta {
+      border-top: 0.5px solid #dadada;
+      height: 50px;
+      width: 100%;
+    }
+    /* Header Section */
 
-      .logo_icon {
-        display: inline-block;
-        float: left;
-        margin-right: 10px;
-      }
+    .logo {
+      padding: 16px;
+    }
 
-      .logo_text {
-        float: left;
-      }
+    .logo_icon {
+      vertical-align: text-bottom;
+      margin-right: 12px;
+    }
 
-      .close_btn {
-        background: url(images/close.svg) no-repeat center center;
-        border: none;
-        cursor: pointer;
-        height: 25px;
-        margin-left: auto;
-        margin-right: 12px;
-        outline: none;
-        opacity: 0.65;
-        transition: opacity 0.2s ease-in-out;
-        width: 25px;
-      }
+    .version_number {
+      color: #444;
+      font-size: 18px;
+    }
 
-      .close_btn:hover {
-        opacity: 0.4;
-      }
+    /* CTA Section */
 
-      /*------- CTA Section -------*/
-      .flex_container {
-        display: flex;
-        justify-content:space-between;
-        padding: 12px 22px;
-      }
+    .flex_container {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 22px;
+    }
 
-      .flex {
-        width: 120px;
-        opacity: 1;
-        transition: opacity 0.2s ease-in-out;
-      }
+    .flex {
+      opacity: 1;
+      transition: opacity 0.2s ease-in-out;
+      width: 120px;
+    }
 
-      .flex:hover {
-        opacity: 0.4;
-      }
+    .flex:hover {
+      opacity: 0.4;
+    }
 
-      .icon {
-        display: inline-block;
-        position: relative;
-      }
+    .icon {
+      display: inline-block;
+      position: relative;
+    }
 
-      .icon:before {
-        content: "";
-        display: inline-block;
-        height: 25px;
-        margin-right: 8px;
-        width: 25px;
-        vertical-align: middle;
-      }
+    .icon:before {
+      content: "";
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+      background-repeat: no-repeat;
+      background-size: 33px 33px;
+      width: 33px;
+      height: 33px;
+    }
 
-      .icon span {
-        display: inline-block;
-        margin-top: 3px;
-      }
+    .github .icon:before {
+      background-image: url(images/github.svg);
+    }
 
-      .github {
-        background-image: url(images/github.svg);
-        background-repeat: no-repeat;
-      }
+    .gitissue .icon:before {
+      background-image: url(images/report-issue.svg);
+      background-size: 25px 25px;
+      width: 25px;
+      height: 25px;
+      margin-top: 4px;
+      padding-bottom: 4px;
+    }
 
-      .website {
-        background-image: url(images/batarangle_bw.svg);
-        background-repeat: no-repeat;
-      }
+    .feedback .icon:before {
+      background-image: url(images/feedback.svg);
+      background-size: 30px 33px;
+      width: 33px;
+      height: 33px;
+    }
 
-      .contribute {
-        background-image: url(images/contribute.svg);
-        background-repeat: no-repeat;
-      }
+    .website {
+      position: relative;
+      top: 4px;
+    }
 
-      /*------- Content -------*/
+    .website .icon:before {
+      background-image: url(images/augury-bw.svg);
+      background-size: 25px 25px;
+      width: 25px;
+      height: 25px;
+      padding-bottom: 4px;
+    }
 
-      a:link {
-        color: #000000;
-      }
+    .guide .icon:before {
+      background-image: url(images/guide.svg);
+    }
 
-      a:visited {
-        color: #000000;
-      }
+    /* Content */
 
-      img {
-        width: 30px;
-      }
+    a:link,
+    a:visited {
+      color: #000000;
+      outline: 0;
+      text-decoration: none;
+    }
 
-      h1 {
-        font-family: 'Menlo', monospace;
-        font-size: 16px;
-        font-weight: 100;
-        margin: 0;
-      }
+    img {
+      width: 30px;
+    }
 
-      p {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 12px;
-        line-height: 24px;
-        margin: 0;
-      }
+    h1 {
+      font-family: 'Menlo', monospace;
+      font-size: 22px;
+      font-weight: 400;
+      margin: 0;
+    }
 
-      span {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 14px;
-      }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+    }
+  </style>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+</head>
 
-    </style>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-    <!--<div class="modal_container">-->
-      <div class="modal_header">
-        <div class="logo">
-          <div class="logo_icon">
-            <img src="images/batarangle.svg">
-          </div>
-          <div class="logo_text">
-            <h1>
-              Batarangle.io
-            </h1>
-          </div>
-        </div>
-        <!--<button class="close_btn">
-        </button>-->
+<body>
+  <div class="modal_header">
+    <h1 class="logo"><img class="logo_icon" src="images/augury-logo.svg">Augury&nbsp;<span class="version_number"></span></h1>
+  </div>
+
+  <div class="modal_content">
+    <p>Augury is a Chrome Dev Tools extension for debugging Angular applications.</p>
+  </div>
+
+  <div class="modal_cta">
+    <div class="flex_container">
+      <div class="flex guide">
+        <a href="https://augury.angular.io/pages/guides/" target="__augury_website" class="icon">
+          Guides
+        </a>
       </div>
-
-      <div class="modal_content">
-        <p>
-          Batarangle is a Google Chrome Dev Tool extension for debugging Angular 2 applications. Treat this as a "developer preview". Until the official release, please follow instructions on github to build the tool locally and install it from the source. It's actually quite easy!
-        </p>
+      <div class="flex website">
+        <a href="https://augury.angular.io/" target="__augury_website" class="icon">
+          Website
+        </a>
       </div>
-
-      <div class="modal_cta">
-        <div class="flex_container">
-          <div class="flex github">
-            <a target="_blank" href="https://github.com/rangle/batarangle" class="icon github"><span>Github</span></a>
-          </div>
-          <div class="flex website">
-            <a target="_blank" href="http://rangle.github.io/batarangle-io/" class="icon"><span>Website</span></a>
-          </div>
-          <div class="flex contribute">
-            <a target="_blank" href="https://github.com/rangle/batarangle" class="icon"><span>Contribute</span></a>
-          </div>
-        </div>
+      <div class="flex gitissue">
+        <a id="create_issue" target="__augury_github" class="icon">
+          Issues
+        </a>
       </div>
-    <!--</div>-->
+      <div class="flex github">
+        <a href="https://github.com/rangle/augury" target="__augury_github" class="icon">
+          Github
+        </a>
+      </div>
+      <div class="flex feedback">
+        <a href="https://rangleio.typeform.com/to/GrdAGu" target="__augury_feedback" class="icon">
+          Feedback
+        </a>
+      </div>
+    </div>
+  </div>
 
-  </body>
+  <script src="popup.js"></script>
+
+</body>
 </html>

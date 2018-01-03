@@ -1,0 +1,32 @@
+<div class="flex flex-center border rounded mr3"
+    [ngClass]="{ 'bg-base': state !== SearchState.Failure, 'bg-error': state === SearchState.Failure}">
+  <div class="icon" [ngClass]="{searching: state === SearchState.Searching}"></div>
+  <input
+    class="border-none outline-none primary-color"
+    [placeholder]="placeholder"
+    [ngModel]="query"
+    (ngModelChange)="onSearchChanged($event)"
+    (keypress)="onKeypress($event)"
+    [ngClass]="{searching: state === SearchState.Searching}" />
+  <div class="right-align pr2">
+    <span class="h4 regular primary-color" [ngClass]="{ transparent: !total }">
+      {{ current + 1 }} of {{ total }}
+    </span>
+  </div>
+  <div class="right-align border-left" [ngClass]="{ transparent: !total }">
+    <div class="inline-block">
+      <button class="outline border-none btn-primary primary-color bg-panel pointer py1"
+          (click)="previous()"
+          [disabled]="enablePrevious === false">
+        <div class="expander rotate180"></div>
+      </button>
+    </div>
+    <div class="border-left inline-block" style="margin-left: -4px">
+      <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py1"
+          (click)="next()"
+          [disabled]="enableNext === false">
+        <div class="expander"></div>
+      </button>
+    </div>
+  </div>
+</div>

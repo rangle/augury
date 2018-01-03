@@ -4,13 +4,19 @@ machine:
   post:
     - npm install -g npm@3.x.x
 
+dependencies:
+  pre:
+    - rm -rf node_modules typings
+  post:
+    - if [ ! $SENTRY_KEY ]; then export SENTRY_KEY=DUMMY_SENTRY_KEY; fi; npm run prod-build; ./crxmake.sh
+
 test:
   pre:
     - git grep --color TODO | cat
 
-deployment:
-  release:
-    branch: master
-    commands:
-      - npm run pack
-      - ./s3-upload.sh
+#deployment:
+#  release:
+#    branch: master
+#    commands:
+#      - npm run pack
+#      - ./s3-upload.sh

@@ -1,0 +1,85 @@
+
+/* Base */
+
+html,
+body {
+  /* Override basscss default white background to prevent a white flash during load. */
+  background-color: inherit !important;
+
+  font-size: 11px;
+  font-family: '.SFNSDisplay-Regular', 'Helvetica Neue', 'Lucida Grande', sans-serif;
+}
+
+bt-tab-menu > header {
+  padding-left: 5px;
+}
+
+split-pane-secondary-content {
+  border-left: 1px solid rgb(92, 92, 92);
+}
+
+.monospace {
+  font-family: 'Menlo', monospace;
+}
+
+.vh-100 {
+  height: 100vh;
+}
+
+.maxheight-100pct {
+  max-height: 100%;
+}
+
+.minheight-100pct {
+  min-height: 100%;
+}
+
+.minwidth-100pct {
+  min-width: 100%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.border-transparent {
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.outline {
+  outline: 0;
+}
+
+.border-none {
+  border: 0;
+}
+
+.disabled-color {
+  opacity: 0.6;
+}
+
+.expander {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.7rem;
+  background-color: transparent;
+  background: transparent url(/images/Triangle.svg) center center;
+  -webkit-transition: transform 250ms ease-in-out;
+  -moz-transition: transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out;
+}
+
+.expander.transparent {
+  margin-right: 1px;
+}
+
+.decorator {
+  display: inline-block;
+  margin-right: -2px;
+}
+
+.message-gray {
+  color: #b0b0b0;
+}

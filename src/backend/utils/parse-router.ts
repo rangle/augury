@@ -1,5 +1,3 @@
-import {RouteRule} from 'angular2/src/router/rules/rules';
-
 export interface Route {
   name: string;
   hash: string;
@@ -11,76 +9,73 @@ export interface Route {
   isAux: boolean;
 }
 
-export interface MainRoute {
-  name: string;
-  children: Array<Route>;
+// *** Component Router ***
+export function parseRoutes(router: any): Route {
+  const rootName = router.rootComponentType ? router.rootComponentType.name : 'no-name';
+  const rootChildren: [any] = router.config;
+
+  const root: Route = {
+    handler: rootName,
+    name: rootName,
+    path: '/',
+    children: rootChildren ? assignChildrenToParent(null, rootChildren) : [],
+    isAux: false,
+    specificity: null,
+    data: null,
+    hash: null,
+  };
+
+  return root;
 }
 
-export class ParseRouter {
+function assignChildrenToParent(parentPath, children): [any] {
+  return children.map((child) => {
+    const childName = childRouteName(child);
+    const childDescendents: [any] = child._loadedConfig ? child._loadedConfig.routes : child.children;
 
-  private static NAME_REGEX = /function ([^\(]*)/;
+    // only found in aux routes, otherwise property will be undefined
+    const isAuxRoute = !!child.outlet;
 
-  public static parseRoutes(registry: any): MainRoute {
-    const routes: Array<MainRoute> = new Array<MainRoute>();
-    const rules = registry._rules;
+    const pathFragment = child.outlet ? `(${child.outlet}:${child.path})` : child.path;
 
-    rules.forEach((key, value) => {
-      routes.push(this.getMainRoute(key, value));
-    });
-    return this.flattenRoutes(routes);
-  }
+    const routeConfig: Route = {
+      handler: childName,
+      data: [],
+      hash: null,
+      specificity: null,
+      name: childName,
+      path: `${parentPath ? parentPath : ''}/${pathFragment}`.split('//').join('/'),
+      isAux: isAuxRoute,
+      children: [],
+    };
 
-  private static mapRoutes(routes: any, subRoutes: any): void {
-    routes.map((r) => {
-      const e = subRoutes.filter(sr => sr.name === r.name);
-      if (e.length > 0) {
-        r.children = e[0].children;
-        this.mapRoutes(r.children, subRoutes);
+    if (childDescendents) {
+      routeConfig.children = assignChildrenToParent(routeConfig.path, childDescendents);
+    }
+
+    if (child.data) {
+      for (const el in child.data) {
+        if (child.data.hasOwnProperty(el)) {
+          routeConfig.data.push({
+            key: el,
+            value: child.data[el],
+          });
+        }
       }
-      return r;
-    });
+    }
+
+    return routeConfig;
+  });
+}
+
+function childRouteName(child): string {
+  if (child.component) {
+    return child.component.name;
   }
-
-  private static flattenRoutes(routes: Array<MainRoute>): MainRoute {
-    const appRoute: MainRoute = routes[0];
-    const subRoutes: any = routes.slice(1);
-
-    this.mapRoutes(appRoute.children, subRoutes);
-    return appRoute;
+  else if (child.loadChildren) {
+    return `${child.path} [Lazy]`;
   }
-
-  private static getMainRoute(key: any, value: any): MainRoute {
-
-    const name: string = this.NAME_REGEX.exec(value)[1];
-    const children: Array<Route> = new Array<Route>();
-
-    key.auxRulesByName.forEach((obj, route_name) => {
-      children.push(this.getRoute(obj, route_name, true));
-    });
-
-    key.rulesByName.forEach((obj, route_name) => {
-      children.push(this.getRoute(obj, route_name));
-    });
-
-    return {
-      name,
-      children
-    };
-  }
-
-  private static getRoute
-    (value: RouteRule, name: string, isAux: boolean = false): Route {
-    const handler: string =
-      this.NAME_REGEX.exec(value.handler.componentType + '')[1];
-
-    return {
-      name,
-      handler,
-      hash: value.hash,
-      path: value.path,
-      specificity: value.specificity,
-      data: value.handler.data,
-      isAux
-    };
+  else {
+    return 'no-name-route';
   }
 }

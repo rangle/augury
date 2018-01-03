@@ -1,0 +1,43 @@
+/**
+ * Custom Properties
+ */
+
+:root {
+  --bt-link-color: #2828AB;
+
+
+  /**
+   *  Light Mode (lmode) and Dark Mode (dmode) of Injector Graph (igraph) Colours
+   */
+  --lmode-igraph-component-primary: #2828AB;
+  --lmode-igraph-component-secondary: #EBF2FC;
+  --lmode-igraph-dependency-primary: #F05057;
+  --lmode-igraph-dependency-secondary: #FFF0F0;
+  --lmode-igraph-dependency-legend-origin: #C6E3FF;
+  --lmode-igraph-dependency-legend-provided: #ffa4a4;
+
+  --dmode-igraph-component-primary: #23a9ab;
+  --dmode-igraph-component-secondary: #EBF2FC;
+  --dmode-igraph-dependency-primary: #F05057;
+  --dmode-igraph-dependency-secondary: #FFF0F0;
+
+
+  /**
+   *  Light Mode (lmode) and Dark Mode (dmode) of Router Tree (rtree) Colours
+   */
+  --lmode-rtree-node-primary: #F05057;
+  --lmode-rtree-node-secondary: #FFF0F0;
+  --lmode-rtree-aux-node-primary: #2828AB;
+  --lmode-rtree-aux-node-secondary: #EBF2FC;
+
+  --dmode-rtree-node-primary: #F05057;
+  --dmode-rtree-node-secondary: #FFF0F0;
+  --dmode-rtree-aux-node-primary: #23a9ab;
+  --dmode-rtree-aux-node-secondary: #EBF2FC;
+
+
+  --space-1: 0.1818rem;
+  --space-2: 0.3636rem;
+  --space-3: 0.7273rem;
+  --space-4: 1.455rem;
+}

@@ -1,71 +1,21 @@
+/*
+ * Index
+ */
+
+/* Basscss Modules */
 @import 'basscss';
 @import 'basscss-border-colors';
-@import './variables.css';
-@import './white-space.css';
-@import './utility-colors.css';
-@import './node-items.css';
-@import './info-panel.css';
-@import './router-tree.css';
+@import 'basscss-layout';
+@import 'basscss-type-scale';
+@import 'basscss-typography';
 
-html,body {
-  font-size: 11px;
-  font-family: 'Lucida Grande', sans-serif;
-}
+/* CSS Folder Imports */
+@import './base.css';
+@import './components/components.css';
+@import './properties.css';
+@import './utils/utils.css';
 
-.monospace {
-  font-family: 'Menlo', monospace;
-}
-
-.vh-100 {
-  height: 100vh;
-}
-
-.rotate90 {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-}
-
-.rotate180 {
-  -webkit-transform: rotate(-180deg);
-  -moz-transform: rotate(-180deg);
-  -o-transform: rotate(-180deg);
-  -ms-transform: rotate(-180deg);
-  transform: rotate(-180deg);
-}
-
-.pannel-tab-header {
-  font-size: var(--pannel-tab-header);
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.expand-arrow {
-  -webkit-mask-position: -18px -96px;
-  background-color: var(--primary-color);
+.transparent {
+  opacity: 0;
   pointer-events: none;
-  margin: auto 5px;
-}
-
-.icon {
-  -webkit-mask-image: url(../../images/toolbarButtonGlyphs_2x.png);
-  -webkit-mask-size: 352px 168px;
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-}
-
-.double-arrow {
-  -webkit-mask-position: -74px 16px;
-  background-color: var(--bt-link-color);
-}
-
-.no-highlight {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }

@@ -1,70 +1,33 @@
-export enum ARROW_TYPES {
-  COMPONENT,
-  INJECTOR,
-  DEPENDENCY
-};
-
-export enum NODE_TYPES {
-  ROOT,
-  COMPONENT,
-  SERVICE
-};
-
-export const NODE_STROKE_COLORS = {
-  0: '#9B9B9B',  // NODE_TYPES.ROOT
-  1: '#2828AB', // NODE_TYPES.COMPONENT
-  2: '#FF0202'  // NODE_TYPES.SERVICE,
-};
-
-export const NODE_COLORS = {
-  0: '#9B9B9B',  // NODE_TYPES.ROOT
-  1: '#EBF2FC', // NODE_TYPES.COMPONENT
-  2: '#FFF0F0'  // NODE_TYPES.SERVICE,
-};
-
-export const ANGULAR_COMPONENTS = [
-  'NgClass',
-  'RouterLink',
-  'RouterOutlet',
-  'LoadIntoComponent',
-  'LoadNextToComponent',
-  'LoadAsRootComponent',
-  'NgForm',
-  'NgModel',
-  'NgControlName'
-];
-
 export class GraphUtils {
-
-  addText(svg: any, x: number, y: number, text: string) {
+  addText(svg: any, x: number, y: number, text: string, maxChars: number = 0) {
+    const fittedText = maxChars > 0 && text && text.length > maxChars ? `${text.slice(0, maxChars - 3)}...` : text;
     svg
       .append('text')
       .attr('x', x)
       .attr('y', y)
-      .text(text);
+      .text(fittedText);
   }
 
-  addCircle(svg: any, x: number, y: number, r: number,
-    fill: string, stroke: string) {
+  addCircle(svg: any, x: number, y: number, r: number, clazz: string,
+    mouseOverFn?: () => void, mouseOutFn?: () => void) {
     svg
       .append('circle')
       .attr('cx', x)
       .attr('cy', y)
-      .style('fill', fill)
       .attr('r', r)
       .attr('stroke-width', 1)
-      .attr('stroke', stroke);
+      .attr('class', clazz)
+      .on('mouseover', mouseOverFn ? mouseOverFn : () => null)
+      .on('mouseout', mouseOutFn ? mouseOutFn : () => null);
   }
 
-  addLine(svg: any, x1: number, y1: number,
-    x2: number, y2: number, style: string) {
+  addLine(svg: any, x1: number, y1: number, x2: number, y2: number, clazz: string) {
     svg
       .append('line')
       .attr('x1', x1)
       .attr('y1', y1)
       .attr('x2', x2)
       .attr('y2', y2)
-      .attr('class', 'link')
-      .attr('style', style);
+      .attr('class', 'link ' + (clazz || ''));
   }
 }

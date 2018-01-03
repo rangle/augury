@@ -1,0 +1,18 @@
+
+/* Node Items */
+
+.node-item {
+  cursor: pointer;
+}
+
+.node-item-name {
+  display: inline;
+}
+
+.node-item-property {
+  display: inline;
+}
+
+.node-item-value {
+  display: inline;
+}

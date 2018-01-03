@@ -1,9 +1,9 @@
 /**
- * Create an Angular panel from the Component Tree View
+ * Create an Augury panel from the Component Tree View
  * on Chrome Development Tools window.
 */
 chrome.devtools.panels.create(
-  'Angular2',
-  '../images/angular.png',
+  'Augury',
+  '../images/augury.png',
   '../frontend.html'
 );

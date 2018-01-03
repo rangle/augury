@@ -1,22 +1,29 @@
-<div class="flex flex-column flex-stretch vh-100">
-  <bt-tab-menu
-    [tabs]="tabs"
-    (tabChange)="tabChange($event)"
-    [selectedTabIndex]="selectedTabIndex">
-  </bt-tab-menu>
+<bt-components-tab-menu
+  [selectedStateTab]="selectedStateTab"
+  (tabChange)="componentsSubTabMenuChange.emit($event)">
+</bt-components-tab-menu>
 
-  <bt-component-info
-    [node]="node"
-    [hidden]="selectedTabIndex != 0"
-    [ngClass]="{flex: selectedTabIndex == 0}">
-  </bt-component-info>
+<bt-component-info
+  [node]="node"
+  [tree]="tree"
+  [loadingState]="loadingState"
+  [state]="state"
+  [providers]="providers"
+  [componentMetadata]="componentMetadata"
+  [metadata]="metadata"
+  [hidden]="selectedStateTab !== StateTab.Properties"
+  [ngClass]="{flex: selectedStateTab === StateTab.Properties}"
+  (selectNode)="selectNode.emit($event)"
+  (updateProperty)="updateProperty.emit($event)"
+  (emitValue)="emitValue.emit($event)">
+</bt-component-info>
 
-  <bt-injector-tree
-    (selectNode)="selectNode($event)"
-    [hidden]="selectedTabIndex != 1"
-    [tree]="tree"
-    [selectedNode]="node"
-    [ngClass]="{'flex flex-auto': selectedTabIndex == 1}">
-  </bt-injector-tree>
-
-</div>
+<bt-injector-tree
+  (selectNode)="selectNode.emit($event)"
+  [hidden]="selectedStateTab !== StateTab.InjectorGraph"
+  [tree]="tree"
+  [ngModules]="ngModules"
+  [selectedNode]="node"
+  [selectNode]="selectNode"
+  [ngClass]="{'flex flex-auto': selectedStateTab === StateTab.InjectorGraph}">
+</bt-injector-tree>

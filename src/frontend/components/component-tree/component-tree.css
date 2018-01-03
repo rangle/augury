@@ -1,0 +1,14 @@
+:host > main {
+  min-height: min-content;
+  display: block;
+}
+
+:host > main > bt-node-item {
+  min-width: 100%;
+  display: table;
+  white-space: nowrap;
+}
+
+:host {
+  width: 100%;
+}

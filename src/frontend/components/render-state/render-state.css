@@ -1,0 +1,64 @@
+.emitter {
+  position: relative;
+  display: flex;
+  width: 100%;
+  border-radius: 2px;
+  box-shadow: none;
+  -webkit-transition: all 0.4s linear;
+  transition: all 0.4s linear;
+}
+
+.emitter input {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+}
+
+.emitter button {
+  margin-left: 5px;
+}
+
+.property-container {
+  display: inline-flex;
+  white-space: nowrap;
+  position: relative;
+}
+
+.classification {
+  width: 100%;
+  display: flex;
+}
+
+.set-state-item-undefined {
+  position: absolute;
+  top: -5px; left: 0;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.info-key {
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.info-key.output {
+  margin-top: 0.5em;
+}
+
+.emit-state {
+  position: absolute;
+  display: inline-block;
+  margin-top: 2px;
+  right: 5em;
+  font-size: 1.2em;
+}
+
+.emitted {
+  color: darkgreen;
+}
+
+.failed {
+  color: red;
+}

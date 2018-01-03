@@ -1,26 +1,32 @@
-import {Component, Input} from 'angular2/core';
-import {NgFor, NgIf} from 'angular2/common';
+import {Component, Input} from '@angular/core';
+
+import {Route} from '../../../backend/utils';
 
 @Component({
   selector: 'bt-router-info',
-  templateUrl: '/src/frontend/components/router-info/router-info.html',
-  directives: [NgFor, NgIf]
+  template: require('./router-info.html'),
 })
 
-export default class RouterInfo {
+export class RouterInfo {
+  @Input() private selectedRoute: Route | any;
 
-  @Input() selectedNode: any;
+  private hasSelection() {
+    return this.selectedRoute.data &&
+           this.selectedRoute.data.length > 0;
+  }
 
-  ngOnChanges() {
-    if (!this.selectedNode || !this.selectedNode.data) {
+  private ngOnChanges() {
+    if (!this.selectedRoute || !this.selectedRoute.data) {
       return;
     }
-    this.selectedNode._data = [];
-    for (let key in this.selectedNode.data.data) {
-      if (this.selectedNode.data.data.hasOwnProperty(key)) {
-        this.selectedNode._data.push({
+
+    this.selectedRoute._data = [];
+
+    for (let key in this.selectedRoute.data.data) {
+      if (this.selectedRoute.data.data.hasOwnProperty(key)) {
+        this.selectedRoute._data.push({
           key: key,
-          value: this.selectedNode.data.data[key]
+          value: this.selectedRoute.data.data[key]
         });
       }
     }

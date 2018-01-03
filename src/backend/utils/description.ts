@@ -1,172 +1,166 @@
-export interface Property {
-  key: string;
-  value: string;
+import {AUGURY_TOKEN_ID_METADATA_KEY} from './parse-modules';
+import {pathExists, getAtPath} from '../../utils/property-path';
+import {functionName} from '../../utils';
+
+export interface Dependency {
+  id: string;
+  name: string;
+  decorators: Array<string>;
 }
 
-export abstract class Description {
+export interface Property {
+  id?: string;
+  key: string;
+  value;
+}
 
-  public static getComponentDescription(compEl: any): Object[] {
-    let description: Array<Property> = new Array<Property>();
-    if (!compEl) {
-      return description;
-    }
+export const isDebugElementComponent = (element) => !!element.componentInstance &&
+  !componentInstanceExistsInParentChain(element);
 
-    const componentInstance: any = compEl.componentInstance || {};
-    const constructor: any =  componentInstance.constructor;
-    const constructorName: string = constructor.name;
-    const componentName: string = constructorName !== 'Object' ?
-      constructorName : compEl.nativeElement.tagName;
-    const element: HTMLElement = <HTMLElement>compEl.nativeElement;
-
-    switch (componentName) {
-      case 'RouterLink':
-        description =  Description._getRouterLinkDesc(element);
-        break;
-      case 'RouterOutlet':
-        description =  Description._getRouterOutletDesc(componentInstance);
-        break;
-      case 'NgSelectOption':
-        description = Description._getSelectOptionDesc(element);
-        break;
-      case 'NgIf':
-        description = Description._getNgIfDesc(componentInstance);
-        break;
-      case 'NgClass':
-        description = Description._getClassDesc(componentInstance);
-        break;
-      case 'NgControlName':
-        description = Description._getControlNameDesc(componentInstance);
-        break;
-      case 'NgFormControl':
-        description = Description._getFormControlDesc(componentInstance);
-        break;
-      case 'ControlForm':
-        description = Description._getFormControlDesc(componentInstance);
-        break;
-      case 'NgModel':
-        description = Description._getNgModelDesc(componentInstance);
-        break;
-      case 'NgForm':
-        description = Description._getNgFormDesc(componentInstance);
-        break;
-      case 'NgFormModel':
-        description = Description._getNgFormModelDesc(componentInstance);
-        break;
-      case 'NgSwitch':
-        description = Description._getNgSwitchDesc(componentInstance);
-        break;
-      case 'NgSwitchWhen':
-        description = Description._getNgSwitchWhenDesc(componentInstance);
-        break;
-      case 'NgSwitchDefault':
-        description = Description._getNgSwitchWhenDesc(componentInstance);
-        break;
-      default:
-        description = [
-          { key: 'name', value: componentName },
-        ];
-        break;
-    }
-    return description;
+export const getComponentName = (element): string => {
+  if (element.componentInstance &&
+    element.componentInstance.constructor &&
+    !componentInstanceExistsInParentChain(element)) {
+    return functionName(element.componentInstance.constructor);
+  }
+  else if (element.name) {
+    return element.name;
   }
 
-  private static _getRouterLinkDesc(element: HTMLElement): Array<Property> {
-    return [
-      { key: 'href', value: element.getAttribute('href') },
-      { key: 'htmlText', value: element.innerText }
-    ];
+  return element.nativeElement.tagName.toLowerCase();
+};
+
+const componentInstanceExistsInParentChain = (debugElement) => {
+  const componentInstanceRef = debugElement.componentInstance;
+  while (componentInstanceRef && debugElement.parent) {
+    if (componentInstanceRef === debugElement.parent.componentInstance) {
+      return true;
+    }
+    debugElement = debugElement.parent;
+  }
+  return false;
+};
+
+/*
+*  addPropsIfTheyExist([
+*    ['text'], // result: { key: 'text', value: '<value>'}
+*    ['text, 'text'], // result: { key: 'text', value: '<value>'}
+*    ['some_label', 'text'], // result: { key: 'some_label', value: '<value>'}
+*    ...
+*  ]);
+*/
+const getPropsIfTheyExist = (object: any, props: Array<any[]>): Array<any> => {
+  const properties: Array<any> = [];
+  props.forEach((prop: any[]) => {
+    const label = prop[0];
+    const path = prop.length > 1 ? prop.slice(1, prop.length) : prop[0];
+
+    if (pathExists(object, ...path)) {
+      properties.push({key: label, value: getAtPath(object, ...path).value });
+    }
+  });
+  return properties;
+};
+export abstract class Description {
+  public static getProviderDescription(provider, instance): Property {
+    return {
+      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, provider),
+      key: provider.name,
+      value: null,
+    };
+  }
+
+  public static getComponentDescription(debugElement: any): Array<Property> {
+    if (debugElement == null) {
+      return [];
+    }
+
+    let componentName: any;
+    const element: any = pathExists(debugElement, 'nativeElement') ? debugElement.nativeElement : null;
+
+    if (debugElement.componentInstance && !componentInstanceExistsInParentChain(debugElement)) {
+      componentName = pathExists(debugElement, 'componentInstance', 'constructor', 'name') ?
+        debugElement.componentInstance.constructor.name : null;
+    } else {
+      componentName = pathExists(element, 'tagName') ?
+        element.tagName.toLowerCase() : null;
+    }
+
+    const properties = [];
+
+    switch (componentName) {
+      case 'a':
+        return getPropsIfTheyExist(element, [
+          ['text'],
+          ['hash'],
+        ]);
+      case 'form':
+          return getPropsIfTheyExist(element, [
+            ['method']
+          ]);
+      case 'input':
+        return getPropsIfTheyExist(element, [
+          ['id'],
+          ['name'],
+          ['type'],
+          ['required']
+        ]);
+      case 'router-outlet':
+        const routerOutletProvider = debugElement.providerTokens.reduce((prev, curr) =>
+          prev ? prev : curr.name === 'RouterOutlet' ? curr : null, null);
+        return getPropsIfTheyExist(debugElement.injector.get(routerOutletProvider), [['name']]);
+      case 'NgSelectOption':
+        return (element) ? Description._getSelectOptionDesc(element) : [];
+      case 'NgIf':
+        return Description._getNgIfDesc(debugElement.componentInstance);
+      case 'NgControlName':
+        return Description._getControlNameDesc(debugElement.componentInstance);
+      case 'NgSwitch':
+        return Description._getNgSwitchDesc(debugElement.componentInstance);
+      case 'NgSwitchWhen':
+      case 'NgSwitchDefault':
+        return Description._getNgSwitchWhenDesc(debugElement.componentInstance);
+    }
+    return properties;
   }
 
   private static _getSelectOptionDesc(element: HTMLElement): Array<Property> {
-    return [
-      { key: 'label', value: element.innerText },
-      { key: 'value', value: element.getAttribute('value') }
-    ];
+    return getPropsIfTheyExist(element, [
+      ['label', 'innerText'],
+    ]).concat([{key: 'value', value: element.getAttribute('value')}]);
   }
 
   private static _getControlNameDesc(instance: any): Array<Property> {
-    return [
-      { key: 'name', value: instance.name },
-      { key: 'value', value: instance.value },
-      { key: 'valid', value: instance.valid }
-    ];
-  }
-
-  private static _getNgFormDesc(instance: any): Array<Property> {
-    return [
-      { key: 'status', value: instance.form.status },
-      { key: 'dirty', value: instance.form.dirty }
-    ];
-  }
-
-  private static _getRouterOutletDesc(instance: any): Array<Property> {
-    return [
-      { key: 'name', value: instance.name || ''},
-      { key: 'hostComponent',
-        value: instance._componentRef
-           && instance._componentRef.componentType
-           && instance._componentRef.componentType.name }
-    ];
+    return getPropsIfTheyExist(instance, [
+      ['name'],
+      ['value'],
+      ['valid'],
+    ]);
   }
 
   private static _getNgSwitchDesc(instance: any): Array<Property> {
-    return [
-      { key: 'useDefault', value: instance._useDefault },
-      { key: 'switchValue', value: instance._switchValue },
-      { key: 'valuesCount', value: instance._valueViews.size }
-    ];
+    const properties = getPropsIfTheyExist(instance, [
+      ['useDefault', '_useDefault'],
+      ['switchDefault', '_switchValue'],
+      ['valuesCount', '_valueViews'],
+    ]);
+
+    properties
+      .filter(element => element.key === 'valuesCount')
+      .forEach(element => element.value = element.value ? element.value.size : 0);
+
+    return properties;
   }
 
   private static _getNgSwitchWhenDesc(instance: any): Array<Property> {
-    return [
-      { key: 'value', value: instance._value }
-    ];
-  }
-
-  private static _getClassDesc(instance: any): Array<Property> {
-    const rawClasses = instance._rawClass;
-    const appliedClasses = [];
-    for (let key in rawClasses) {
-      if (rawClasses[key]) {
-        appliedClasses.push(key);
-      }
-    }
-    return [{
-      key: 'applied',
-      value: appliedClasses.map(String).join(',')
-    }];
-  }
-
-  private static _getFormControlDesc(instance: any): Array<Property> {
-    return [
-      { key: 'model', value: instance.name },
-      { key: 'value', value: instance.value },
-      { key: 'viewModel', value: instance.viewModel },
-      { key: 'dirty', value: instance.dirty }
-    ];
-  }
-
-  private static _getNgModelDesc(instance: any): Array<Property> {
-    return [
-      { key: 'model', value: instance.name },
-      { key: 'value', value: instance.value },
-      { key: 'viewModel', value: instance.viewModel },
-      { key: 'controlStatus', value: instance.control.status },
-      { key: 'dirty', value: instance.dirty }
-    ];
-  }
-
-  private static _getNgFormModelDesc(instance: any): Array<Property> {
-    return [
-      { key: 'status', value: instance.form.status },
-      { key: 'dirty', value: instance.form.dirty },
-      { key: 'value', value: JSON.stringify(instance.value) }
-    ];
+    return getPropsIfTheyExist(instance, [
+      ['value', '_value'],
+    ]);
   }
 
   private static _getNgIfDesc(instance: any): Array<Property> {
-    return [
-      { key: 'condition', value: instance._prevCondition }
-    ];
+    return getPropsIfTheyExist(instance, [
+      ['condition', '_prevCondition'],
+    ]);
   }
 }

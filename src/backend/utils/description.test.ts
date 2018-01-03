@@ -1,35 +1,33 @@
 import * as test from 'tape';
 import {Description} from './description';
 
-test('utils/description: Passing undefined', t => {
+test('utils/description: Passing component undefined', t => {
   t.plan(1);
   const description = Description.getComponentDescription(undefined);
 
   t.deepEqual(description, [], 'get undefined description');
   t.end();
-})
+});
 
 test('utils/description: Passing undefined', t => {
   t.plan(1);
 
   const compEl = {
-    nativeElement: {}
+    nativeElement: {
+      tagName: 'tagName'
+    }
   };
 
   const description = Description.getComponentDescription(compEl);
 
-  t.deepEqual(description, [
-    {
-      key: 'name',
-      value: undefined
-    }], 'get empty description');
+  t.deepEqual(description, [], 'get empty description');
   t.end();
-})
+});
 
-test('utils/description: RouterLink', t => {
+test.skip('utils/description: RouterLink', t => {
   t.plan(1);
 
-  class RouterLink { };
+  class RouterLink { }
 
   const link = document.createElement('a');
   link.href = 'href';
@@ -55,25 +53,29 @@ test('utils/description: RouterLink', t => {
     }
   ], 'get RouterLink description');
   t.end();
-})
+});
 
 
-test('utils/description: RouterOutlet', t => {
+test.skip('utils/description: RouterOutlet', t => {
   t.plan(1);
 
-  class RouterOutlet {
-    name: string = 'RouterOutlet';
-    _componentRef: any = {
-      componentType: {
-        name: 'RouterOutlet'
+  const compEl = {
+    providerTokens: [function RouterOutlet() {
+      console.log('RouterOutlet');
+    }],
+    injector: {
+      get: (name: string) => {
+        return {
+          name: 'RouterOutlet',
+          '_currentInstruction': {
+            routeName: 'routeName',
+            componentType: function componentType() {
+              return 'componentType';
+            }
+          }
+        };
       }
     }
-  };
-
-  const routerOutet: RouterOutlet = new RouterOutlet();
-
-  const compEl = {
-    componentInstance: routerOutet
   };
 
   const description = Description.getComponentDescription(compEl);
@@ -84,17 +86,21 @@ test('utils/description: RouterOutlet', t => {
       value: 'RouterOutlet'
     },
     {
+      key: 'routeName',
+      value: 'routeName'
+    },
+    {
       key: 'hostComponent',
-      value: 'RouterOutlet'
+      value: 'componentType'
     }
   ], 'get RouterOutlet description');
   t.end();
-})
+});
 
 test('utils/description: NgSelectOption', t => {
   t.plan(1);
 
-  class NgSelectOption { };
+  class NgSelectOption { }
 
   const div = document.createElement('div');
   div.setAttribute('value', 'value');
@@ -105,7 +111,7 @@ test('utils/description: NgSelectOption', t => {
   const ngSelectOption: NgSelectOption = new NgSelectOption();
 
   const compEl = {
-    'nativeElement': div,
+    nativeElement: div,
     componentInstance: ngSelectOption
   };
 
@@ -121,15 +127,15 @@ test('utils/description: NgSelectOption', t => {
       value: 'value'
     }
   ], 'get NgSelectOption description');
-  t.end();
-})
+
+});
 
 test('utils/description: NgIf', t => {
   t.plan(1);
 
   class NgIf {
-    _prevCondition: boolean = true
-  };
+    '_prevCondition': boolean = true;
+  }
 
   const ngIf: NgIf = new NgIf();
   const compEl = {
@@ -143,16 +149,16 @@ test('utils/description: NgIf', t => {
       value: true
     }], 'get NgIf description');
   t.end();
-})
+});
 
 
 test('utils/description: NgSwitch', t => {
   t.plan(1);
 
   class NgSwitch {
-    _useDefault: boolean = true;
-    _switchValue: boolean = true;
-    _valueViews: any = {
+    '_useDefault': boolean = true;
+    '_switchValue': boolean = true;
+    '_valueViews': any = {
       size: 10
     };
   }
@@ -160,26 +166,26 @@ test('utils/description: NgSwitch', t => {
 
   const compEl = {
     componentInstance: ngSwitch
-  }
+  };
 
   const description = Description.getComponentDescription(compEl);
 
   t.deepEqual(description, [
     {
-      key: 'useDefault',
-      value: true
-    }, {
-      key: 'switchValue',
-      value: true
-    }, {
-      key: 'valuesCount',
-      value: 10
-    }], 'get NgSwitch description');
+      key: 'useDefault', value: true
+    },
+    {
+      key: 'switchDefault', value: true
+    },
+    {
+      key: 'valuesCount', value: 10
+    }
+  ], 'get NgSwitch description');
   t.end();
-})
+});
 
 
-test('utils/description: NgForm', t => {
+test.skip('utils/description: NgForm', t => {
   t.plan(1);
 
   class NgForm {
@@ -192,7 +198,7 @@ test('utils/description: NgForm', t => {
 
   const compEl = {
     componentInstance: ngForm
-  }
+  };
 
   const description = Description.getComponentDescription(compEl);
 
@@ -205,7 +211,7 @@ test('utils/description: NgForm', t => {
       value: false
     }], 'get NgForm description');
   t.end();
-})
+});
 
 test('utils/description: NgControlName', t => {
   t.plan(1);
@@ -219,7 +225,7 @@ test('utils/description: NgControlName', t => {
 
   const compEl = {
     componentInstance: ngControlName
-  }
+  };
 
   const description = Description.getComponentDescription(compEl);
 
@@ -235,13 +241,13 @@ test('utils/description: NgControlName', t => {
       value: true
     }], 'get NgControlName description');
   t.end();
-})
+});
 
 test('utils/description: NgSwitchWhen', t => {
   t.plan(1);
 
   class NgSwitchWhen {
-    _value: string = 'switchValue';
+    '_value': string = 'switchValue';
   }
   const comp: NgSwitchWhen = new NgSwitchWhen();
 
@@ -250,16 +256,15 @@ test('utils/description: NgSwitchWhen', t => {
   };
 
   const description = Description.getComponentDescription(compEl);
-
   t.deepEqual(description, [
     {
-      key: 'value',
-      value: 'switchValue'
-    }], 'get NgSwitchWhen description');
+      key: 'value', value: 'switchValue'
+    }
+  ], 'get NgSwitchWhen description');
   t.end();
-})
+});
 
-test('utils/description: NgModel', t => {
+test.skip('utils/description: NgModel', t => {
   t.plan(1);
 
   class NgModel {
@@ -269,8 +274,8 @@ test('utils/description: NgModel', t => {
     dirty: boolean = true;
     control: any = {
       status: true
-    }
-  };
+    };
+  }
   const comp: NgModel = new NgModel();
 
   const compEl = {
@@ -297,9 +302,9 @@ test('utils/description: NgModel', t => {
       value: true
     }], 'get NgModel description');
   t.end();
-})
+});
 
-test('utils/description: NgFormControl', t => {
+test.skip('utils/description: NgFormControl', t => {
   t.plan(1);
 
   class NgFormControl {
@@ -307,7 +312,7 @@ test('utils/description: NgFormControl', t => {
     value: string = 'modelValue';
     viewModel: string = 'viewModel';
     dirty: boolean = true;
-  };
+  }
   const comp: NgFormControl = new NgFormControl();
 
   const compEl = {
@@ -331,9 +336,9 @@ test('utils/description: NgFormControl', t => {
       value: true
     }], 'get NgFormControl description');
   t.end();
-})
+});
 
-test('utils/description: NgFormModel', t => {
+test.skip('utils/description: NgFormModel', t => {
   t.plan(1);
 
   class NgFormModel {
@@ -344,7 +349,7 @@ test('utils/description: NgFormModel', t => {
     value: any = {
       name: 'CompName'
     };
-  };
+  }
   const comp: NgFormModel = new NgFormModel();
 
   const compEl = {
@@ -365,22 +370,26 @@ test('utils/description: NgFormModel', t => {
       value: '{"name":"CompName"}'
     }], 'get NgFormModel description');
   t.end();
-})
+});
 
-test('utils/description: NgClass', t => {
+test.skip('utils/description: NgClass', t => {
   t.plan(1);
 
-  class NgClass {
-    _rawClass: any = {
-      'class1': 'class1',
-      'class2': 'class2',
-      'class3': 'class3'
-    };
-  };
-  const comp: NgClass = new NgClass();
-
   const compEl = {
-    componentInstance: comp
+    providerTokens: [function NgClass() {
+      console.log('NgClass');
+    }],
+    injector: {
+      get: (name: string) => {
+        return {
+          '_rawClass': {
+            'class1': 'class1',
+            'class2': 'class2',
+            'class3': 'class3'
+          }
+        };
+      }
+    }
   };
 
   const description = Description.getComponentDescription(compEl);
@@ -391,4 +400,4 @@ test('utils/description: NgClass', t => {
       value: 'class1,class2,class3'
     }], 'get NgClass description');
   t.end();
-})
+});

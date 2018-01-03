@@ -1,0 +1,362 @@
+.red-1 {
+  color: red;
+}
+
+.bg-error {
+  background-color: rgba(255, 11, 0, 0.15);
+}
+
+.changed {
+  background-color: #E7B4E4;
+}
+
+bt-router-tree .link {
+  stroke: #9B9B9B;
+}
+
+bt-injector-tree {
+  & .stroke- {
+    &root {
+      stroke: var(--lmode-igraph-component-primary);
+    }
+
+    &component {
+      stroke: var(--lmode-igraph-component-primary);
+    }
+
+    &dependency {
+      stroke: var(--lmode-igraph-dependency-primary);
+    }
+  }
+  & .stroke-dependency.origin {
+    stroke: var(--lmode-igraph-dependency-legend-origin);
+  }
+  & .fill- {
+    &root {
+      fill: var(--lmode-igraph-component-primary);
+    }
+
+    &component {
+      fill: #EBF2FC;
+    }
+
+    &dependency {
+      fill: #FFF0F0;
+    }
+  }
+  & .fill-dependency.provided-here {
+    fill: var(--lmode-igraph-dependency-legend-provided);
+  }
+}
+
+.light {
+  background-color: white;
+
+  & .bg-base {
+    background-color: white;
+  }
+
+  & .bg-panel {
+    background-color: #F3F3F3;
+  }
+
+  & .primary-color,
+  & .toggler {
+    color: #5A5A5A;
+  }
+
+  & .legible-color {
+    color: #333;
+  }
+
+  & .bg-primary {
+    background-color: #5A5A5A;
+  }
+
+  & .editable {
+    background-color: #EBF2FC;
+    border-bottom-color: blue;
+    color: #2828AB;
+  }
+
+  & [split-pane-secondary-content] {
+    border-left-color: #A3A3A3;
+  }
+
+  & .tab-menu-title.selected {
+    color: #333;
+  }
+
+  & .tab-menu-title:hover {
+    color: #333;
+    background-color: #E5E5E5;
+  }
+
+  & .select-element-active > svg * > polygon {
+     fill: #5A5A5A;
+  }
+
+  & .select-element-active > svg * > path {
+    stroke: #5A5A5A;
+  }
+
+  & .select-element-active > svg * > polygon {
+    fill: #4280EC;
+  }
+
+  & .select-element-active > svg * > path {
+    stroke: #4280EC;
+  }
+
+  & .node-item:hover {
+    background-color: #EBF2FC;
+  }
+
+  & .node-item-selected,
+  & .node-item-selected:hover {
+    background-color: #A28AD0;
+  }
+
+  & .node-item-name {
+    color: #881280;
+  }
+
+  & .node-item-property {
+    color: #994500;
+  }
+
+  & .node-item-value {
+    color: #1A1AA6;
+  }
+
+  & .node-item-selected * > .node-item-value {
+    color: white;
+  }
+
+  & .info-key {
+    color: #8F1F87;
+  }
+
+  & .info-value {
+    color: black;
+  }
+
+  & .border {
+    border-color: #CCC;
+  }
+
+  & .border-bottom {
+    border-bottom-color: #CCC;
+  }
+
+  & .border-right {
+    border-right-color: #CCC;
+  }
+
+  & .border-top {
+    border-top-color: #CCC;
+  }
+
+  & .border-left {
+    border-left-color: #CCC;
+  }
+
+  & .descriptive-text {
+    color: #777;
+  }
+
+  & bt-router-tree {
+    & .node-route {
+      stroke: var(--lmode-rtree-node-primary);
+      fill: var(--lmode-rtree-node-secondary);
+    }
+
+    & .node-route:hover,
+    & .node-route.selected {
+      fill: var(--lmode-rtree-node-primary);
+    }
+
+    & .node-aux-route {
+      stroke: var(--lmode-rtree-aux-node-primary);
+      fill: var(--lmode-rtree-aux-node-secondary);
+    }
+
+    & .node-aux-route:hover,
+    & .node-aux-route.selected {
+      fill: var(--lmode-rtree-aux-node-primary);
+    }
+
+    & text {
+      fill: black;
+    }
+  }
+
+  & bt-injector-tree text {
+    fill: black;
+  }
+
+  & bt-injector-tree #suit > path {
+    stroke: var(--lmode-igraph-component-primary) !important;
+  }
+}
+
+.dark {
+  & .bg-base {
+    background-color: #242424;
+  }
+
+  & .bg-panel {
+    background-color: #2A2A2A;
+  }
+
+  & .primary-color,
+  & .toggler {
+    color: #A5A5A5;
+  }
+
+  & .legible-color {
+    color: #CCCCCC;
+  }
+
+  & .bg-primary {
+    background-color: #A5A5A5;
+  }
+
+  & .editable {
+    background-color: #242424;
+    border-bottom-color: #BDC6CF;
+    color: #BDC6CF;
+  }
+
+  & [split-pane-secondary-content] {
+    border-left-color: #5C5C5C;
+  }
+
+  & .tab-menu-title.selected {
+    color: #CCCCCC;
+  }
+
+  & .tab-menu-title:hover {
+    color: #CCCCCC;
+    background-color: #313131;
+  }
+
+  & .select-element > svg * > polygon {
+    fill: #FFCC33;
+  }
+
+  & .select-element > svg * > path {
+    stroke: #FFCC33;
+  }
+
+  & .select-element-active > svg * > polygon {
+    fill: #A28AD0;
+  }
+
+  & .select-element-active > svg * > path {
+    stroke: #A28AD0;
+  }
+
+
+  & .node-item:hover {
+    background-color: #3D3D3D;
+  }
+
+  & .node-item-selected {
+    & .node-item-name,
+    & .node-item-property,
+    & .node-item-value {
+      color: #242424;
+    }
+  }
+  & .node-item-property {
+    color: #BDC6CF;
+  }
+
+  & .info-value,
+  & .node-item-value {
+    color: #FFCC33;
+  }
+
+  & .node-item-selected,
+  & .node-item-selected:hover {
+    background-color: #A28AD0;
+  }
+
+  & .node-item-name,
+  & .info-key {
+    color: #A28AD0;
+  }
+
+  & .border {
+    border-color: #3D3D3D;
+  }
+
+  & .border-bottom {
+    border-bottom-color: #3D3D3D;
+  }
+
+  & .border-right {
+    border-right-color: #3D3D3D;
+  }
+
+  & .border-top {
+    border-top-color: #3D3D3D;
+  }
+
+  & .border-left {
+    border-left-color: #3D3D3D;
+  }
+
+  & .descriptive-text {
+    color: #aaa;
+  }
+
+  & bt-router-tree {
+    & .node-route {
+      stroke: var(--dmode-rtree-node-primary);
+      fill: var(--dmode-rtree-node-secondary);
+    }
+
+    & .node-route:hover,
+    & .node-route.selected {
+      fill: var(--dmode-rtree-node-primary);
+    }
+
+    & .node-aux-route {
+      stroke: var(--dmode-rtree-aux-node-primary);
+      fill: var(--dmode-rtree-aux-node-secondary);
+    }
+
+    & .node-aux-route:hover,
+    & .node-aux-route.selected {
+      fill: var(--dmode-rtree-aux-node-primary);
+    }
+
+    & text {
+      fill: #A5A5A5;
+    }
+  }
+
+
+  & bt-injector-tree text {
+    fill: #A5A5A5;
+  }
+
+  & bt-injector-tree {
+    & .stroke- {
+      &root, &component {
+        stroke: var(--dmode-igraph-component-primary);
+      }
+    }
+
+    & .fill-root {
+        fill: var(--dmode-igraph-component-primary);
+    }
+  }
+
+  & bt-injector-tree #suit > path {
+    stroke: var(--dmode-igraph-component-primary) !important;
+  }
+
+}

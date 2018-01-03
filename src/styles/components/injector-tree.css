@@ -1,0 +1,30 @@
+bt-injector-tree {
+  & .link {
+    stroke-width: 1.5px;
+  }
+
+  & .node-circle {
+    stroke: none;
+    cursor: pointer;
+  }
+
+  & .arrow {
+    marker-end: url(#suit);
+  }
+
+  & .dashed5 {
+    stroke-dasharray: 5px 5px;
+  }
+
+  & #suit {
+    stroke-width: 1.414px;
+  }
+
+  & .graph-panel {
+    overflow-y: auto;
+  }
+
+  & .focused-node-info-panel {
+    overflow-y: auto;
+  }
+}

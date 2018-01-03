@@ -1,44 +1,89 @@
-let connections = new Map<number, chrome.runtime.Port>();
+import {
+  Message,
+  MessageType,
+} from '../communication';
+
+const connections = new Map<number, chrome.runtime.Port>();
+
+/// A queue of messages that were not able to be delivered and will be
+/// retried when the connection to the content script or extension is
+/// re-established
+const messageBuffer = new Map<number, Array<any>>();
+
+const drainQueue = (port: chrome.runtime.Port, buffer: Array<any>) => {
+  if (buffer == null || buffer.length === 0) {
+    return;
+  }
+
+  let removed = 0;
+
+  const send = (m: Message<any>, index: number) => {
+    port.postMessage(m);
+    ++removed;
+  };
+
+  try {
+    buffer.forEach(send);
+  } catch (error) {
+    // port disconnected, re-try on connect.
+  }
+
+  buffer.splice(0, removed);
+};
+
+chrome.runtime.onMessage.addListener(
+  (message, sender, sendResponse) => {
+    if (message.messageType === MessageType.Initialize) {
+        sendResponse({ // note that this is separate from our message response system
+          extensionId: chrome.runtime.id
+        });
+    }
+
+    if (sender.tab) {
+      let sent = false;
+
+      const connection = connections.get(sender.tab.id);
+      if (connection) {
+        try {
+          connection.postMessage(message);
+          sent = true;
+        }
+        catch (err) {}
+      }
+
+      if (sent === false) {
+        let queue = messageBuffer.get(sender.tab.id);
+        if (queue == null) {
+          queue = new Array<any>();
+          messageBuffer.set(sender.tab.id, queue);
+        }
+
+        queue.push(message);
+      }
+    }
+    return true;
+  });
 
 chrome.runtime.onConnect.addListener(port => {
-
-  let frontendListener = (message, sender) => {
-    // The original connection event doesn't include the tab ID of the
-    // DevTools page, so we need to send it explicitly.
-    if (message.name === 'init') {
+  const listener = (message, sender) => {
+    if (connections.has(message.tabId) === false) {
       connections.set(message.tabId, port);
     }
 
+    drainQueue(message.tabId, messageBuffer.get(message.tabId));
+
     chrome.tabs.sendMessage(message.tabId, message);
-    // other message handling
   };
 
-  // Listen to messages sent from the DevTools page
-  port.onMessage.addListener(frontendListener);
+  port.onMessage.addListener(listener);
 
-  port.onDisconnect.addListener(_port => {
+  port.onDisconnect.addListener(() => {
+    port.onMessage.removeListener(<any> listener);
 
-    _port.onMessage.removeListener(frontendListener);
     connections.forEach((value, key, map) => {
       if (value === port) {
         map.delete(key);
       }
     });
   });
-
 });
-
-// Receive message from content script and
-// relay to the devTools page for the current tab
-chrome.runtime.onMessage.addListener(
-  (message, sender, sendResponse) => {
-    // Messages from content scripts should have sender.tab set
-    if (sender.tab && connections.has(sender.tab.id)) {
-      if (message.from === 'content-script') {
-        sendResponse({connection: true});
-      }
-      connections.get(sender.tab.id).postMessage(message);
-    }
-
-    return true;
-  });

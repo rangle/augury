@@ -1,75 +1,55 @@
-import {Component, Inject, NgZone, ElementRef} from 'angular2/core';
-import {NgFor} from 'angular2/common';
-import {NodeItem} from '../node-item/node-item';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+
+import {
+  MutableTree,
+  Node,
+} from '../../../tree';
+
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
-import {UserActionType}
-  from '../../actions/action-constants';
-import {ComponentTree} from '../component-tree/component-tree';
+import {Search} from '../search/search';
 
 @Component({
   selector: 'bt-tree-view',
-  inputs: ['tree', 'changedNodes'],
-  templateUrl: 'src/frontend/components/tree-view/tree-view.html',
-  directives: [NgFor, NodeItem, ComponentTree]
+  template: require('./tree-view.html'),
 })
-/**
- * The Tree View
- * Displays the components' hierarchy
- */
 export class TreeView {
+  @Input() private selectedNode: Node;
+  @Input() private tree: MutableTree;
 
-  private tree: any;
-  private searchIndex: number = 0;
-  private totalSearchCount: number = 0;
+  @Output() private collapseChildren = new EventEmitter<Node>();
+  @Output() private expandChildren = new EventEmitter<Node>();
+  @Output() private inspectElement = new EventEmitter<Node>();
+  @Output() private selectNode = new EventEmitter<Node>();
 
-  constructor(
-    private userActions: UserActions,
-    private componentDataStore: ComponentDataStore,
-    private element: ElementRef,
-    private _ngZone: NgZone
-  ) {
+  @ViewChild(Search) private search: Search;
 
-    this.componentDataStore.dataStream
-      .subscribe((data: any) => {
-        this.totalSearchCount = data.totalSearchCount;
-      });
+  private searchNode: Node;
 
-  }
+  constructor(private userActions: UserActions) {}
 
-
-  /**
-   * Query for a node
-   * @param  {String} query
-   */
-  onChange(event, query, isNext) {
-
-    if (query.length === 0) {
+  ngOnChanges(changes) {
+    if (this.search === null) {
       return;
     }
 
-    if (isNext === undefined && event.keyCode === 13) {
-      this.searchIndex++;
-    } else if (isNext === undefined) {
-      this.searchIndex = 0;
-    } else if (isNext) {
-      this.searchIndex++;
-    } else if (!isNext) {
-      this.searchIndex--;
+    if (changes.hasOwnProperty('selectedNode') && this.selectedNode !== this.searchNode) {
+      this.searchNode = null;
+      this.search.reset();
     }
-
-    // cycle over the search results if reached at the end
-    if (this.searchIndex === this.totalSearchCount) {
-      this.searchIndex = 0;
-    } else if (this.searchIndex < 0) {
-      this.searchIndex = this.totalSearchCount - 1;
-    }
-
-    query = query.toLocaleLowerCase();
-
-    this.userActions.searchNode({ query, index: this.searchIndex });
-    this._ngZone.run(() => undefined);
   }
 
+  private onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
+    return this.userActions.searchComponents(this.tree, query);
+  }
+
+  private onSelectedSearchResultChanged(node: Node) {
+    this.searchNode = node;
+    this.selectNode.emit(node);
+  }
 }

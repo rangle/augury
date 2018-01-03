@@ -1,30 +1,31 @@
-<div
-  (mouseout)=onMouseOut($event)
-  (mouseover)=onMouseOver($event)
-  (dblclick)=onDblClick($event)
-  (click)="onClick($event)">
-
-  <div class="node-item pl4 rounded border-box"
-       [ngClass]="{'node-item-selected':node.isSelected, 
-       'changed': isUpdated}">
-
-    <img src="../images/Triangle.svg"
-         style="width: 0.8em; height: 0.8em;"
-         [hidden]="node.children ? false : true"
-         [ngClass]="{rotate90: showChildren()}"
-         (click)="expandTree($event)">
-
-    <div class="node-item-container"
-      [innerHTML]="getNodeDetails(node)">
+<div>
+  <div class="node-item pl3 rounded border-box"
+      [ngClass]="{'node-item-selected': selected, changed: viewState.nodeIsChanged(node)}"
+      (mouseout)="onMouseOut($event)"
+      (mouseover)="onMouseOver($event)"
+      (dblclick)="onDblClick($event)"
+      (click)="onClick($event)">
+    <div
+      [ngClass]="{
+        expander: true,
+        rotate90: !expanded,
+        transparent: node.children == null || node.children.length === 0
+      }"
+      (click)="onToggleExpand($event)">
+    </div>
+    <div class="inline">
+      <node-open-tag [node]="node" [hasChildren]="hasChildren"></node-open-tag>
     </div>
   </div>
 
-  <div class="pl4 border-box">
-    <bt-node-item
-      [changedNodes]="changedNodes"
-      [hidden]="showChildren()"
-      *ngFor="#node of node.children"
-      [node]="node">
+  <div class="border-box pl4" *ngIf="expanded && hasChildren">
+    <bt-node-item *ngFor="let node of node.children; trackBy: trackById"
+      [node]="node"
+      [level]="level + 1"
+      (selectNode)="selectNode.emit($event)"
+      (inspectElement)="inspectElement.emit($event)"
+      (collapseChildren)="collapseChildren.emit($event)"
+      (expandChildren)="expandChildren.emit($event)">
     </bt-node-item>
   </div>
 </div>

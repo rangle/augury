@@ -1,10 +1,12 @@
-<div class="flex section-title py2 px2 bg-darken-1 border-bottom pointer" (click)="expanded=!expanded">
-  <div class="icon expand-arrow"
-    [ngClass]="{rotate90: expanded == false}">
+<div class="flex bg-panel primary-color pointer border-bottom py2 px2"
+  (click)="expansionState = !expanded">
+  <div class="icon expand-arrow bg-primary"
+    [ngClass]="{rotate90: !expanded}">
   </div>
-  <div class="title no-highlight">{{sectionTitle}}</div>
+  <div class="title no-highlight">
+    {{sectionTitle}}</div>
 </div>
-
-<div class="section-content py2 px4 border-bottom monospace" [hidden]="!expanded">
-  <ng-content select="section-content"></ng-content>
+<div class="monospace border-bottom py2 px3 overflow-hidden"
+  [hidden]="!expanded">
+  <ng-content select="[section-content]"></ng-content>
 </div>

@@ -1,0 +1,23 @@
+{
+  "maxReviewers": 2,
+  "numFilesToCheck": 10,
+  "message": "@pullRequester, thanks! @reviewers, please review this.",
+  "alwaysNotifyForPaths": [
+    {
+      "name": "ghuser",
+      "files": ["src/js/**/*.js"]
+    }
+  ],
+  "fallbackNotifyForPaths": [
+    {
+      "name": "ghuser",
+      "files": ["src/js/**/*.js"]
+    }
+  ],
+  "findPotentialReviewers": true,
+  "fileBlacklist": ["*.md"],
+  "userBlacklist": ["winkerVSbecks"],
+  "userBlacklistForPR": ["winkerVSbecks"],
+  "requiredOrgs": [],
+  "actions": ["opened"]
+}

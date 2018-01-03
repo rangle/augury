@@ -1,180 +1,105 @@
-import {Component, Inject, NgZone, Input} from 'angular2/core';
-import {NgIf, NgFor, NgStyle} from 'angular2/common';
-import * as Rx from 'rxjs';
-import {ComponentDataStore}
-  from '../../stores/component-data/component-data-store';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+
+import {Node} from '../../../tree/node';
 import {UserActions} from '../../actions/user-actions/user-actions';
-import {UserActionType}
-  from '../../actions/action-constants';
+
+import {
+  ExpandState,
+  ComponentViewState,
+} from '../../state';
+
+/// The number of levels of tree nodes that we expand by default
+export const defaultExpansionDepth = 3;
 
 @Component({
   selector: 'bt-node-item',
-  templateUrl: 'src/frontend/components/node-item/node-item.html',
-  directives: [NgIf, NgFor, NodeItem, NgStyle]
+  template: require('./node-item.html'),
+  styles: [require('to-string!./node-item.css')],
 })
-/**
- * Node Item
- * Renders a node in the Component Tree View
- * (see ../tree-view.ts)
- */
 export class NodeItem {
+  @Input() node;
 
-  @Input() node: any;
-  @Input() changedNodes: any;
+  // The depth of this node in the tree
+  @Input() level: number;
 
-  private collapsed: any;
-  private color: any;
-  private borderColor: any;
-  private isUpdated: boolean = false;
+  // Emitted when this node is selected
+  @Output() private selectNode = new EventEmitter<Node>();
+
+  // Emitted when this node is selected for element inspection
+  @Output() private inspectElement = new EventEmitter<Node>();
+
+  // Expand this node and all its children
+  @Output() private expandChildren = new EventEmitter<Node>();
+
+  // Collapse this node and all its children
+  @Output() private collapseChildren = new EventEmitter<Node>();
 
   constructor(
-    private userActions: UserActions,
-    private componentDataStore: ComponentDataStore,
-    private _ngZone: NgZone
-  ) {
+    private changeDetector: ChangeDetectorRef,
+    private viewState: ComponentViewState,
+    private userActions: UserActions
+  ) {}
 
-    this.borderColor = 'rgba(0, 0, 0, 0.125)';
-    this.color = '#666';
-
-    // Listen for changes in selected node
-    this.componentDataStore.dataStream
-      .filter((data) => {
-        return  data.action && data.action === UserActionType.SELECT_NODE &&
-          data.selectedNode && data.selectedNode.id;
-        })
-        .map(({ selectedNode }: any) => selectedNode)
-        .subscribe((selectedNode: any) => {
-            const isSelected = this.node && selectedNode &&
-              selectedNode.id === this.node.id;
-            this.update(isSelected);
-        });
-
-    this.componentDataStore.dataStream
-      .filter((data: any) => {
-        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
-          data.openedNodes.indexOf(this.node.id) > -1;
-      })
-      .subscribe((data) => {
-        this.node.isOpen = false;
-        this._ngZone.run(() => undefined);
-      });
-
-    this.componentDataStore.dataStream
-      .filter((data: any) => {
-        return data.action && data.action === UserActionType.OPEN_CLOSE_TREE &&
-          data.selectedNode.id === this.node.id;
-      })
-      .subscribe((data) => {
-        this.userActions.selectNode({ node: this.node });
-      });
+  private get selected(): boolean {
+    return this.viewState.selectionState(this.node);
   }
 
-  /**
-   * Update the state of the node based on selection
-   * @param  {Boolean} isSelected
-   */
-  update(isSelected) {
-    this.node.isSelected = isSelected;
-    this.borderColor = this.node.isSelected ? '#0074D9' :
-      'rgba(0, 0, 0, 0.125)';
-    this.color = this.node.isSelected ? '#222' : '#888';
-    this._ngZone.run(() => undefined);
+  private get expanded(): boolean {
+    const state = this.viewState.expandState(this.node);
+    if (state == null) { // user has not expanded or collapsed explicitly
+      return this.defaultExpanded;
+    }
+    return state === ExpandState.Expanded;
   }
 
-  getNodeDetails(node) {
+  private get defaultExpanded(): boolean {
+    return this.level < defaultExpansionDepth;
+  }
 
-    let html = '';
-    html += '<p class="node-item-name">' + node.name + '</p>';
-    if (node.description && node.description.length) {
-      html += '<span class="node-item-description">( ';
-      for (let i = 0; i < node.description.length; i++) {
-        const desc = node.description[i];
-        html += '<p class="node-item-property">' + desc.key + '=</p>';
-        html += '<p class="node-item-value">"' + desc.value + '"</p>';
-        if (i < node.description.length - 1) {
-          html += '<span>, </span>';
-        }
-      }
-      html += ')</span>';
+  private get hasChildren(): boolean {
+    return this.node.children.length > 0;
+  }
+
+  /// Select the element in inspect window on double click
+  onDblClick(event: MouseEvent) {
+    this.inspectElement.emit(this.node);
+  }
+
+  onClick(event: MouseEvent) {
+    if (event.ctrlKey || event.metaKey) {
+      this.expandChildren.emit(this.node);
+    }
+    else if (event.altKey) {
+      this.collapseChildren.emit(this.node);
     }
 
-    return html;
+    this.selectNode.emit(this.node);
   }
 
-  /**
-   * Select the element in inspect window on double click
-   * @param  {Object} $event
-   */
-  onDblClick($event) {
-    let evalStr = 'inspect($$(\'body [batarangle-id=\"' +
-      this.node.id + '\"]\')[0])';
-
-    chrome.devtools.inspectedWindow.eval(
-      evalStr,
-      function(result, isException) {
-        if (isException) {
-          console.log(isException);
-        }
-      }
-    );
-
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
-
-  /**
-   * Select this node on click
-   * @param  {Object} $event
-   */
-  onClick($event) {
-    this.userActions.selectNode({ node: this.node });
-    this._ngZone.run(() => undefined);
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
-
-  /**
-   * Dispatch clear highlight action on node mouse out
-   * @param  {Object} $event
-   */
-  onMouseOut($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
+  onMouseOut(event: MouseEvent) {
     this.userActions.clearHighlight();
   }
 
-  /**
-   * Dispatch element highlight action on node mouse over
-   * @param  {Object} $event
-   */
   onMouseOver($event) {
-    this.userActions.highlight({ node: this.node });
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.userActions.highlight(this.node);
   }
 
-  showChildren() {
-    return !this.node.isOpen;
+  onToggleExpand($event) {
+    const defaultState =
+      this.defaultExpanded
+        ? ExpandState.Expanded
+        : ExpandState.Collapsed;
+
+    this.userActions.toggle(this.node, defaultState);
+
+    this.changeDetector.detectChanges();
   }
 
-  /**
-   * Expand or Collapse tree based on current state on click
-   * @param  {Object} $event
-   */
-  expandTree($event) {
-    this.node.isOpen = !this.node.isOpen;
-    this.userActions.openCloseNode({ node: this.node });
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
-
-  ngOnChanges() {
-    if (this.changedNodes && this.node) {
-      this.isUpdated = this.changedNodes.indexOf(this.node.id) > 0;
-      setTimeout(() => {
-        this.isUpdated = false;
-      }, 2000);
-    }
-  }
-
+  trackById = (index: number, node: Node) => node.id;
 }

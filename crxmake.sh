@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# Package batarangle into crx format Chrome extension
+# Package Augury into crx format Chrome extension
 # (This will not be needed for official distribution)
 # Based on https://developer.chrome.com/extensions/crx#scripts
 
@@ -9,19 +9,30 @@ npm -v
 
 dir="temp"
 key="key.pem"
-name="batarangle"
-files="manifest.json build src images index.html frontend.html popup.html"
+name="augury"
+files="manifest.json build images index.html frontend.html popup.html popup.js"
 
-crx="$name-$CIRCLE_BUILD_NUM.crx"
+crx="$name.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
-trap 'rm -f "$pub" "$sig" "$zip"' EXIT
+
+# Ensure environment variables exist
+sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
+
+# assign build name to zip and crx file in circleci env
+if [ $CIRCLE_BUILD_NUM ] || [ $CIRCLE_ARTIFACTS ]; then
+  crx="$name-$CIRCLE_BUILD_NUM.crx"
+  zip="$name-$CIRCLE_BUILD_NUM.zip"
+fi
+
+trap 'rm -f "$pub" "$sig"' EXIT
 
 # copy all the files we need
 rm -rf $dir
 mkdir $dir
 cp -R $files $dir/
+rm $dir/build/*.map
 
 # generate private key key.pem if it doesn't exist already
 if [ ! -f $key ]; then
@@ -54,6 +65,13 @@ sig_len_hex=$(byte_swap $(printf '%08x\n' $(ls -l "$sig" | awk '{print $5}')))
 ) > "$crx"
 
 echo "Wrote $crx"
+
+# move crx to artifacts folder in circleci
+if [ $CIRCLE_ARTIFACTS ]; then
+  mv $crx $CIRCLE_ARTIFACTS
+  mv $zip $CIRCLE_ARTIFACTS
+fi
+
 
 echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
 echo "Wrote file"

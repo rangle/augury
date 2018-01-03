@@ -1,39 +1,37 @@
 {
-  "name": "Angular 2.0 Batarangle",
-  "version": "0.0.2",
-  "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular 2.0 applications.",
+  "name": "Augury",
+  "short_name": "Augury",
+  "version": "1.14.0",
+  "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular applications.",
   "permissions": [
-    "tabs",
-    "<all_urls>"
+    "storage"
   ],
   "browser_action": {
-     "default_icon": "images/icon48.png",
+    "default_icon": "images/augury.png",
     "default_popup": "popup.html"
-   },
+  },
   "devtools_page": "index.html",
   "background": {
     "scripts": [
-      "build/channel.js"
+      "build/background.js"
     ],
     "persistent": false
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "build/content-script.js"
-      ],
-      "run_at": "document_end"
-    }
-  ],
+  "content_scripts": [{
+    "matches": [
+      "<all_urls>"
+    ],
+    "js": [
+      "build/content-script.js"
+    ],
+    "run_at": "document_end"
+  }],
   "web_accessible_resources": [
     "node_modules/*",
     "build/*"
   ],
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com 'unsafe-eval'; object-src 'self'",
   "icons": {
     "16": "images/icon16.png",
     "48": "images/icon48.png",

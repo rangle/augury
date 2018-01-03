@@ -15,6 +15,8 @@ pids
 # Users Environment Variables
 .lock-wscript
 .idea/
+*.iml
+npm-debug*
 *~
 \#*#
 .#*
@@ -32,6 +34,7 @@ Thumbs.db
 build
 dist
 temp
+tmp
 node_modules
 bower_components
 
@@ -45,5 +48,9 @@ NOTES.md
 typings
 
 key.pem
-*.crx
 .vscode/
+
+# build output
+*.crx
+augury.zip
+download.html

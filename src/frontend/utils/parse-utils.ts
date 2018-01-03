@@ -1,88 +1,91 @@
+import {
+  MutableTree,
+  Node,
+  Path,
+  deserializePath,
+  serializePath,
+} from '../../tree';
+
+import {Dependency} from '../../backend/utils/description';
+
 export class ParseUtils {
-
-  getNodesMap(tree: any) {
-    return this
-      .flatten(tree)
-      .reduce((previousValue, node) => {
-        previousValue[node.id] = JSON.stringify(node);
-        return previousValue;
-      }, {});
-  }
-
-  getChangedNodes(previousTree: any, newTree: any) {
-    const flattenedOldData = this.getNodesMap(previousTree);
-
-    return this
-      .flatten(newTree)
-      .reduce((x, n) => {
-        if (!flattenedOldData[n.id]) {
-          x.push(n.id);
-        } else if (flattenedOldData[n.id] !== JSON.stringify(n)) {
-          x.push(n.id);
-        }
-        return x;
-      }, []);
-  }
-
   getParentNodeIds(nodeId: string) {
-    const nodeIds = nodeId.split('.');
-    let initalValue = {
-      concatedIds : '',
-      allIds : []
-    };
+    const path = deserializePath(nodeId);
 
-    const reduced = nodeIds.reduce((previousVal, currentVal) => {
-      const concatenated =
-      previousVal.concatedIds.length === 0 ?
-        previousVal.concatedIds + currentVal :
-        previousVal.concatedIds + '.' + currentVal;
+    const result = new Array<string>();
 
-      previousVal.concatedIds = concatenated;
-      previousVal.allIds.push(concatenated);
+    for (let i = 1; i < path.length; ++i) {
+      result.push(serializePath(path.slice(0, i)));
+    }
 
-      return previousVal;
-    }, initalValue);
-    reduced.allIds.pop();
-    return reduced.allIds;
+    return result;
   }
 
-  getDependencyLink (flattenedTree: any, nodeId: string, dependency: string) {
-    let node;
+  getNodeDependency(node: Node, dependencyId: string) {
+    return node.dependencies.reduce((prev, curr, idx, p) =>
+      prev ? prev : p[idx].id === dependencyId ? p[idx] : null, null);
+  }
+
+  checkNodeProvidesDependency(node: Node, dependency: Dependency) {
+    return node.providers.reduce((prev, curr, idx, p) =>
+      prev ? prev : p[idx].id === dependency.id, false);
+  }
+
+  getDependencyProvider(tree: MutableTree, nodeId: string, dependency: Dependency) {
+    if (tree == null) {
+      return null;
+    }
+
+    const node = tree.lookup(nodeId);
+    if (this.checkNodeProvidesDependency(node, dependency)
+      && dependency.decorators.indexOf('@SkipSelf') < 0) {
+      return node;
+    }
+
     const nodeIds = this.getParentNodeIds(nodeId);
 
-    nodeIds.forEach((id) => {
-      const searchNodes = flattenedTree.filter((n) => n.id === id);
-      if (!node && searchNodes.length > 0 &&
-          searchNodes[0].injectors.indexOf(dependency) > -1) {
-        node = searchNodes[0];
+    for (const id of nodeIds) {
+      const matchingNode = tree.lookup(id);
+      if (this.checkNodeProvidesDependency(matchingNode, dependency)) {
+        return matchingNode;
       }
-    });
-    return node;
+    }
+
+    return null;
   }
 
-  getParentHierarchy(flattenedTree: any, node: any) {
+  getParentHierarchy(tree: MutableTree, node: Node, filter?: (n: Node) => boolean): Array<Node> {
+    if (tree == null) {
+      return [];
+    }
+
     const nodeIds = this.getParentNodeIds(node.id);
 
-    const hierarchy = nodeIds.reduce((data, id) => {
-      const searchNodes = flattenedTree.filter((n) => n.id === id);
-      if (searchNodes.length > 0) {
-        data.push(searchNodes[0]);
-      }
-      return data;
-    }, []);
+    const hierarchy = nodeIds.reduce(
+      (array, id) => {
+        const matchingNode = tree.lookup(id);
+        if (matchingNode) {
+          array.push(matchingNode);
+        }
+        return array;
+      },
+      []);
+
+    if (typeof filter === 'function') {
+      return hierarchy.filter(n => filter(n));
+    }
 
     return hierarchy;
   }
 
-  flatten(list: Array<any>) {
-    return list.reduce((a, b) => {
-      return a.concat(Array.isArray(b.children) ?
-        [this.copyParent(b), ...this.flatten(b.children)] : b);
-    }, []);
+  flatten(list: Array<Node>): Array<Node> {
+    return list.reduce((a, b) =>
+      a.concat(Array.isArray(b.children) ?
+        [this.copyParent(b), ...this.flatten(b.children)] : b),
+      []);
   }
 
   copyParent(p: Object) {
     return Object.assign({}, p, { children: undefined });
   }
-
 }
