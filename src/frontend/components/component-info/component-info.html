@@ -39,12 +39,12 @@
 
     <accordion sectionTitle="Template Event Listeners"
       *ngIf="hasTemplateEventListeners" [defaultExpanded]="true">
-      <div class="dark" section-content>
+      <div section-content>
         <ul class="list-reset m0">
           <li class="legible-color" *ngFor="let listener of node.listeners">
             <span class="inline-block info-key">({{listener.name}})</span>
-            <button class="btn"
-              (click)="onTriggerTemplateEvent(listener)">Trigger Event</button>
+            <button class="btn btn-primary bg-olive mb1"
+                    (click)="onTriggerTemplateEvent(listener)">Trigger Event</button>
           </li>
         </ul>
       </div>
