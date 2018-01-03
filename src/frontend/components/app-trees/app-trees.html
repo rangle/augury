@@ -146,7 +146,6 @@
        [selectedStateTab]="selectedComponentsSubTab"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
-       (selectNode)="selectNode.emit($event)"
        (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)">
     </bt-info-panel>
   </div>

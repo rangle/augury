@@ -97,15 +97,9 @@ export class ComponentInfo {
 
   private onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
     this.actions.updateProperty(event.path.concat(event.propertyKey), event.newValue);
-    if (this.node) {
-      this.selectNode.emit(this.node);
-    }
   }
 
   private onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
     this.actions.updateProvider(event.path, event.propertyKey, event.newValue);
-    if (this.node) {
-      this.selectNode.emit(this.node);
-    }
   }
 }
