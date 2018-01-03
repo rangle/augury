@@ -42,7 +42,7 @@
       <div section-content>
         <ul class="list-reset m0">
           <li class="legible-color" *ngFor="let listener of node.listeners">
-            <span class="inline-block info-key">({{listener.name}})</span>
+            <span class="inline-block info-key template-event-name">({{listener.name}})</span>
             <button class="btn btn-primary bg-olive mb1"
                     (click)="onTriggerTemplateEvent(listener)">Trigger Event</button>
           </li>

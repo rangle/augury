@@ -31,10 +31,10 @@
         </span>
       </span>
       {{k}}:
-      <!-- <a
+      <a
         [attr.title]="'Set value to undefined'"
         class="set-state-item-undefined"
-        (click)="setValueUndefined(k, path.concat(k))">&times;</a> -->
+        (click)="setValueUndefined(k, path.concat(k))">&times;</a>
     </span>
     <span *ngIf="isEmittable(k)" class="emitter">
       <input class="editable" type="text" #prop />

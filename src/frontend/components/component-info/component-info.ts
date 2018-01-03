@@ -25,6 +25,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 @Component({
   selector: 'bt-component-info',
   template: require('./component-info.html'),
+  styles: [require('to-string!./component-info.css')],
 })
 export class ComponentInfo {
   @Input() private node: Node;
