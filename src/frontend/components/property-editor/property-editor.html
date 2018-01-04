@@ -4,8 +4,7 @@
       <span class="editable">
         <span *ngIf="isUndefined()">undefined</span>
         <span *ngIf="isNull()">null</span>
-        <span *ngIf="isNonEmptyString()">"{{value}}"</span>
-        <span *ngIf="isEmptyString()">&quot;&quot;</span>
+        <span *ngIf="isString()">"{{value}}"</span>
         <span *ngIf="isRenderable()">{{value}}</span>
       </span>
     </span>

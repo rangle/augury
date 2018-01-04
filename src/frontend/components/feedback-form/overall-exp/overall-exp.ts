@@ -26,16 +26,22 @@ export class OverallExpControl {
   constructor(private options: Options) {
   }
 
-  setExperience(wasGoodExperience: boolean, chosen, other) {
+  setExperience(wasGoodExperience: boolean) {
     this._overallExperience = wasGoodExperience ?
       Experience.Good :
       Experience.Bad;
-    chosen.setAttribute('class', 'selected');
-    other.setAttribute('class', '');
   }
 
   get rating() {
     return this._overallExperience;
+  }
+
+  get isGood() {
+    return this._overallExperience === Experience.Good;
+  }
+
+  get isBad() {
+    return this._overallExperience === Experience.Bad;
   }
 
   public resetRating() {

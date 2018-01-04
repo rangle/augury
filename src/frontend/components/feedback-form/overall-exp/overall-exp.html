@@ -1,9 +1,8 @@
 <div class="overall-exp">
   <!-- TODO(raven): Toggled selected class on each button if selected -->
   <a
-    #goodExp
-    [ngClass]="{'selected': false}"
-    (click)="setExperience(true, goodExp, badExp)">
+    [ngClass]="{'selected': isGood}"
+    (click)="setExperience(true)">
     <svg class="overall-exp-img" xmlns="http://www.w3.org/2000/svg" xmlns:odm="http://product.corel.com/CGS/11/cddns/" xml:space="preserve" width="8.5in" height="11in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd"
       viewBox="0 0 8500 11000">
       <g id="Layer_1">
@@ -13,9 +12,8 @@
   </a>
 
   <a
-    #badExp
-    [ngClass]="{'selected': false}"
-    (click)="setExperience(false, badExp, goodExp)">
+    [ngClass]="{'selected': isBad}"
+    (click)="setExperience(false)">
     <svg class="overall-exp-img" xmlns="http://www.w3.org/2000/svg" xmlns:odm="http://product.corel.com/CGS/11/cddns/" xml:space="preserve" width="8.5in" height="11in" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd"
       viewBox="0 0 8500 11000">
       <g id="Layer 1">

@@ -33,6 +33,7 @@
   border: 1px solid rgba(0,0,0,0.4);
   padding: 20px;
   width: 50%;
+  z-index: 200;
 }
 
 .feedback-form::before {

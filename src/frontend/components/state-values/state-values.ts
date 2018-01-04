@@ -61,7 +61,7 @@ export class StateValues extends Highlightable {
     return this.path[this.path.length - 1];
   }
 
-  private onDeleteMe(){
+  private onDeleteMe() {
     const index = propertyIndex(this.path);
     const path = this.path.slice(0, index);
     const propertyKey = this.path.slice(index);

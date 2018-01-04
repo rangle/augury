@@ -99,19 +99,14 @@ export class PropertyEditor {
     return this.value === null;
   }
 
-  private isNonEmptyString(): boolean {
-    return !!(typeof this.value === 'string' && this.value.length);
-  }
-
-  private isEmptyString(): boolean {
-    return typeof this.value === 'string' && this.value.length === 0;
+  private isString() {
+    return typeof this.value === 'string';
   }
 
   private isRenderable(): boolean {
     return !this.isUndefined()
         && !this.isNull()
-        && !this.isEmptyString()
-        && !this.isNonEmptyString();
+        && !this.isString();
   }
 
   private onKeypress(event: KeyboardEvent) {

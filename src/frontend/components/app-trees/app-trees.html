@@ -25,7 +25,10 @@
     <div class="feedback-form bg-base" *ngIf="showFeedbackPane">
       <bt-feedback-form (onCloseForm)="onFeedbackClick()"></bt-feedback-form>
     </div>
-    <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
+    <div #menuButtonElement
+         class="icon setting bg-primary"
+         (click)="!showFeedbackPane ? onOpenSettings() : null">
+    </div>
   </div>
 </bt-tab-menu>
 
