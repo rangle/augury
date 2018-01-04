@@ -32,10 +32,6 @@
         </span>
       </span>
       {{k}}:
-      <a
-        [attr.title]="'Set value to undefined'"
-        class="set-state-item-undefined"
-        (click)="setValueUndefined(k, path.concat(k))">&times;</a>
     </span>
     <span *ngIf="isEmittable(k)" class="emitter">
       <input class="editable" type="text" #prop />
@@ -57,6 +53,7 @@
       [metadata]="metadata"
       [path]="path.concat(k)"
       [value]="state[k]"
+      [showDeleteMe]="showDeleteMe"
       (updateValue)="updateValue.emit($event)">
     </bt-state-values>
   </span>

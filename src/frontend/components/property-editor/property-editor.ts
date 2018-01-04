@@ -35,9 +35,11 @@ export class PropertyEditor {
   @Input() private key: string;
   @Input() private level: number;
   @Input() private initialValue;
+  @Input() private showDeleteMe: boolean;
 
   @Output() private cancel = new EventEmitter<void>();
   @Output() private submit = new EventEmitter<EditorResult>();
+  @Output() private deleteMe = new EventEmitter<void>();
 
   @Output() private stateTransition = new EventEmitter<State>();
 

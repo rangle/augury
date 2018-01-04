@@ -40,6 +40,10 @@ export enum EmitState {
   selector: 'bt-render-state',
   template: require('./render-state.html'),
   styles: [require('to-string!./render-state.css')],
+  host: {
+    '(mouseenter)': 'onMouseEnter()',
+    '(mouseleave)': 'onMouseLeave()'
+  }
 })
 export class RenderState {
   @Input() id: string;
@@ -57,6 +61,8 @@ export class RenderState {
   private ObjectType = ObjectType;
 
   private emitState = new Map<string, EmitState>();
+
+  private showDeleteMe:boolean = false;
 
   constructor(
     private userActions: UserActions,
@@ -85,13 +91,12 @@ export class RenderState {
     return this.propertyState.expansionState(this.path.concat(key)) === ExpandState.Expanded;
   }
 
-  private setValueUndefined(key: string) {
-    if (typeof this.state[key] === 'undefined') {
-      return;
-    }
-    const path = this.path.slice();
-    const propertyKey = [key];
-    this.updateValue.emit({path, propertyKey, newValue: undefined});
+  private onMouseEnter(){
+    this.showDeleteMe = true;
+  }
+
+  private onMouseLeave(){
+    this.showDeleteMe = false;
   }
 
   private displayType(key: string): string {

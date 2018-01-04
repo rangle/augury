@@ -1,3 +1,10 @@
+.delete-me {
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
 .property-editor {
   display: flex;
   padding-bottom: 2px;

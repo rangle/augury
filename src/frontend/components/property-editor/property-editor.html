@@ -19,5 +19,12 @@
         (keypress)="onKeypress($event)"
         (blur)="onBlur($event)" />
     </span>
+    <a
+      *ngIf="showDeleteMe"
+      [attr.title]="'Set value to undefined'"
+      class="delete-me"
+      (click)="$event.stopPropagation();deleteMe.emit()">
+      &times;
+    </a>
   </span>
 </div>

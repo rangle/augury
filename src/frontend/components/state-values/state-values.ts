@@ -25,6 +25,7 @@ export class StateValues extends Highlightable {
   @Input() path: Path;
   @Input() metadata: ObjectType;
   @Input() value;
+  @Input() showDeleteMe: boolean;
 
   @Output() updateValue = new EventEmitter<{path: Path, propertyKey: Path, newValue}>();
 
@@ -58,6 +59,13 @@ export class StateValues extends Highlightable {
 
   private get key(): string | number {
     return this.path[this.path.length - 1];
+  }
+
+  private onDeleteMe(){
+    const index = propertyIndex(this.path);
+    const path = this.path.slice(0, index);
+    const propertyKey = this.path.slice(index);
+    this.updateValue.emit({path, propertyKey, newValue: undefined});
   }
 
   private onValueChanged(newValue) {

@@ -2,6 +2,8 @@
   <bt-property-editor
      [key]="key"
      [initialValue]="value"
-     (submit)="onValueChanged($event)">
+     [showDeleteMe]="showDeleteMe"
+     (submit)="onValueChanged($event)"
+     (deleteMe)="onDeleteMe()">
   </bt-property-editor>
 </div>
