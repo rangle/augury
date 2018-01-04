@@ -137,10 +137,10 @@ const updateComponentTree = (roots: Array<any>) => {
   else {
     const changes = previousTree.diff(tree);
     if (changes.length > 0) {
-      messageBuffer.enqueue(MessageFactory.treeDiff(previousTree.diff(tree)));
+      messageBuffer.enqueue(MessageFactory.treeDiff(changes));
     }
     else {
-      return; // no changes
+      messageBuffer.enqueue(MessageFactory.treeUnchanged());
     }
   }
 
