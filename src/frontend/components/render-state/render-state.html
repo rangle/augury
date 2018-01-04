@@ -4,7 +4,11 @@
   </span>
 
 
-  <span class="property-container" (click)="expandTree(k, $event)">
+  <span
+    class="property-container"
+    (mouseenter)="onMouseEnter(k)"
+    (mouseleave)="onMouseLeave(k)"
+    (click)="expandTree(k, $event)" >
     <span class="info-key" [ngClass]="{output: isEmittable(k)}">
       <div *ngIf="nest(k) && expandable(k)" [ngClass]="{
         expander: !( !expandable(k) && (level === 0) ),
@@ -52,7 +56,7 @@
       [metadata]="metadata"
       [path]="path.concat(k)"
       [value]="state[k]"
-      [showDeleteMe]="showDeleteMe"
+      [showDeleteMe]="showDeleteMe[k]"
       (updateValue)="updateValue.emit($event)">
     </bt-state-values>
   </span>
