@@ -62,7 +62,7 @@ export class RenderState {
 
   private emitState = new Map<string, EmitState>();
 
-  private showDeleteMe:boolean[] = [];
+  private showDeleteMe: boolean[] = [];
 
   constructor(
     private userActions: UserActions,
@@ -91,12 +91,12 @@ export class RenderState {
     return this.propertyState.expansionState(this.path.concat(key)) === ExpandState.Expanded;
   }
 
-  private onMouseEnter(k){
+  private onMouseEnter(k) {
     this.showDeleteMe.map(() => false);
     this.showDeleteMe[k] = true;
   }
 
-  private onMouseLeave(k){
+  private onMouseLeave(k) {
     this.showDeleteMe[k] = false;
   }
 
