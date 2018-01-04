@@ -50,6 +50,7 @@ export class RenderState {
   @Input() state;
 
   @Output() updateValue = new EventEmitter<{path: Path, propertyKey: Path, newValue}>();
+  @Output() emitValueChange = new EventEmitter<{path: Path, data: any}>();
 
   private EmitState = EmitState;
 
@@ -180,6 +181,8 @@ export class RenderState {
     const timedReset = () => setTimeout(() => update(EmitState.None), 3000);
 
     const path = this.path.concat(outputProperty);
+
+    this.emitValueChange.emit({path, data});
 
     return this.userActions.emitValue(path, data)
       .then(() => {

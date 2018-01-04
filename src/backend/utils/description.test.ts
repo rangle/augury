@@ -27,7 +27,7 @@ test('utils/description: Passing undefined', t => {
 test.skip('utils/description: RouterLink', t => {
   t.plan(1);
 
-  class RouterLink { };
+  class RouterLink { }
 
   const link = document.createElement('a');
   link.href = 'href';
@@ -100,7 +100,7 @@ test.skip('utils/description: RouterOutlet', t => {
 test('utils/description: NgSelectOption', t => {
   t.plan(1);
 
-  class NgSelectOption { };
+  class NgSelectOption { }
 
   const div = document.createElement('div');
   div.setAttribute('value', 'value');
@@ -134,8 +134,8 @@ test('utils/description: NgIf', t => {
   t.plan(1);
 
   class NgIf {
-    _prevCondition: boolean = true;
-  };
+    '_prevCondition': boolean = true;
+  }
 
   const ngIf: NgIf = new NgIf();
   const compEl = {
@@ -156,9 +156,9 @@ test('utils/description: NgSwitch', t => {
   t.plan(1);
 
   class NgSwitch {
-    _useDefault: boolean = true;
-    _switchValue: boolean = true;
-    _valueViews: any = {
+    '_useDefault': boolean = true;
+    '_switchValue': boolean = true;
+    '_valueViews': any = {
       size: 10
     };
   }
@@ -247,7 +247,7 @@ test('utils/description: NgSwitchWhen', t => {
   t.plan(1);
 
   class NgSwitchWhen {
-    _value: string = 'switchValue';
+    '_value': string = 'switchValue';
   }
   const comp: NgSwitchWhen = new NgSwitchWhen();
 
@@ -275,7 +275,7 @@ test.skip('utils/description: NgModel', t => {
     control: any = {
       status: true
     };
-  };
+  }
   const comp: NgModel = new NgModel();
 
   const compEl = {
@@ -312,7 +312,7 @@ test.skip('utils/description: NgFormControl', t => {
     value: string = 'modelValue';
     viewModel: string = 'viewModel';
     dirty: boolean = true;
-  };
+  }
   const comp: NgFormControl = new NgFormControl();
 
   const compEl = {
@@ -349,7 +349,7 @@ test.skip('utils/description: NgFormModel', t => {
     value: any = {
       name: 'CompName'
     };
-  };
+  }
   const comp: NgFormModel = new NgFormModel();
 
   const compEl = {
