@@ -52,7 +52,7 @@
     <accordion sectionTitle="State" *ngIf="hasState" [defaultExpanded]="hasState">
       <div section-content>
         <div [ngSwitch]="loadingState">
-          <template [ngSwitchCase]="ComponentLoadState.Received">
+          <ng-template [ngSwitchCase]="ComponentLoadState.Received">
             <bt-render-state
               [componentMetadata]="componentMetadata"
               [metadata]="metadata"
@@ -62,10 +62,10 @@
               (updateValue)="onUpdateProperty($event)"
               (emitValueChange)="emitValue.emit($event)">
             </bt-render-state>
-          </template>
-          <template [ngSwitchCase]="ComponentLoadState.Failed">
+          </ng-template>
+          <ng-template [ngSwitchCase]="ComponentLoadState.Failed">
             Failed to load component state
-          </template>
+          </ng-template>
         </div>
       </div>
     </accordion>
