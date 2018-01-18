@@ -1,4 +1,9 @@
 # Change Log
+
+## [1.15.0](https://github.com/rangle/tree/1.15.0)
+* Angular 5 does not work ([1255](https://github.com/rangle/augury/issues/1255)).
+* Angular 5 breaks augury ([1253](https://github.com/rangle/augury/issues/1253)).
+
 ## [1.14.0](https://github.com/rangle/tree/1.14.0)
 * Add some more analytics events ([1164](https://github.com/rangle/augury/issues/1164)).
 * Update typescript and loaders.
