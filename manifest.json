@@ -3,7 +3,7 @@
   "short_name": "Augury",
   "version": "1.14.0",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular applications.",
-  "update_url": "http://0.0.0.0",
+  "update_url": "https://augury.angular.io/",
   "permissions": [
     "storage"
   ],
