@@ -56,4 +56,5 @@ key.pem
 # build output
 *.crx
 augury.zip
+augury.xpi
 download.html

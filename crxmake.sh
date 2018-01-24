@@ -16,14 +16,16 @@ crx="$name.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
+xpi="$name.xpi"
 
-# Ensure environment variables exist
-sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
+# Ensure environment variables exist (we don't seem to use this anywhere?)
+# sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
 
 # assign build name to zip and crx file in circleci env
 if [ $CIRCLE_BUILD_NUM ] || [ $CIRCLE_ARTIFACTS ]; then
   crx="$name-$CIRCLE_BUILD_NUM.crx"
   zip="$name-$CIRCLE_BUILD_NUM.zip"
+  xpi="$name-$CIRCLE_BUILD_NUM.xpi"
 fi
 
 trap 'rm -f "$pub" "$sig"' EXIT
@@ -65,16 +67,19 @@ sig_len_hex=$(byte_swap $(printf '%08x\n' $(ls -l "$sig" | awk '{print $5}')))
 ) > "$crx"
 
 echo "Wrote $crx"
+echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
+echo "Wrote file"
 
-# move crx to artifacts folder in circleci
+# now make webextension file (.xpi) for FireFox
+# TODO: add digital signatures. (firefox requires add-on verification)
+cp $zip $xpi
+
+# move files to artifacts folder in circleci
 if [ $CIRCLE_ARTIFACTS ]; then
   mv $crx $CIRCLE_ARTIFACTS
   mv $zip $CIRCLE_ARTIFACTS
+  mv $xpi $CIRCLE_ARTIFACTS
 fi
-
-
-echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
-echo "Wrote file"
 
 # clean up
 rm -rf $dir
