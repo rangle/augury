@@ -22,6 +22,17 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var DedupePlugin = webpack.optimize.DedupePlugin;
 var DefinePlugin = webpack.DefinePlugin;
 var BannerPlugin = webpack.BannerPlugin;
+var CopyFilesPlugin = require('copy-webpack-plugin');
+
+/**
+ * We use different build configurations depending on browser.
+ * For example, browsers have different support for properties on manifest.json
+ */
+var BROWSER = { // browsers we support
+  FIREFOX: 'FIREFOX',
+  CHROME: 'CHROME'
+};
+var targetBrowser = getTargetBrowser(process.env.BROWSER);
 
 /*
  * Config
@@ -121,7 +132,13 @@ module.exports = {
       'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
     }),
     new OccurenceOrderPlugin(),
-    new DedupePlugin()
+    new DedupePlugin(),
+    new CopyFilesPlugin([
+      {
+        from: './manifest/' + targetBrowser.toLowerCase() + '.manifest.json',
+        to: root('manifest.json')
+      }
+    ])
   ],
 
   /*
@@ -156,4 +173,10 @@ function env(configEnv) {
 function root(args) {
   args = sliceArgs(arguments, 0);
   return path.join.apply(path, [__dirname].concat(args));
+}
+
+function getTargetBrowser(requested = ''){
+  return Object.keys(BROWSER)
+    .find(browser => browser == requested.toUpperCase())
+    || BROWSER.CHROME;
 }

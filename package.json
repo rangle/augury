@@ -21,17 +21,31 @@
   },
   "homepage": "https://github.com/rangle/augury",
   "scripts": {
-    "prod-build": "webpack --optimize-dedupe",
+
+    "pack": "./crxmake.sh",
+
     "build": "webpack --colors --display-error-details --display-cached",
+    "build-chrome": "cross-env BROWSER=chrome npm run build",
+    "build-firefox": "cross-env BROWSER=firefox npm run build",
+
+    "prod-build": "webpack --optimize-dedupe",
+    "prod-build-chrome": "cross-env BROWSER=chrome npm run prod-build",
+    "prod-build-firefox": "cross-env BROWSER=firefox npm run prod-build",
+
     "dev": "webpack --colors --display-error-details --display-cached --watch",
+    "dev-chrome": "cross-env BROWSER=chrome npm run dev",
+    "dev-firefox": "cross-env BROWSER=firefox npm run dev",
+
     "dev-build": "cross-env NODE_ENV=development npm run build",
+    "dev-build-chrome": "cross-env BROWSER=chrome npm run dev-build",
+    "dev-build-firefox": "cross-env BROWSER=firefox npm run dev-build",
+
     "webpack": "webpack",
     "clean": "rimraf build",
     "start": "rimraf build && cross-env NODE_ENV=development webpack --watch",
     "test": "npm run lint && webpack --config webpack.test.config.js && cat build/test.js | tape-run | tap-spec",
-    "prepack": "npm run clean && npm run build",
-    "pack": "./crxmake.sh",
     "lint": "tslint 'src/**/*.ts'"
+
   },
   "dependencies": {
     "@angular-redux/store": "7.0.2",
@@ -73,6 +87,7 @@
     "autoprefixer": "6.3.6",
     "basscss-layout": "3.1.0",
     "clone": "2.1.0",
+    "copy-webpack-plugin": "^4.3.1",
     "css-loader": "0.26.1",
     "d3-hierarchy": "1.1.1",
     "d3-selection": "1.0.3",
