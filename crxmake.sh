@@ -31,7 +31,7 @@ fi
 trap 'rm -f "$pub" "$sig"' EXIT
 
 function build_for_browser {
-  npm run prod-build-${BROWSER_LOWERCASE}
+  npm run build:prod:${BROWSER_LOWERCASE}
 }
 
 function grab_files_and_zip {

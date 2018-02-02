@@ -1,44 +1,7 @@
 {
-  "name": "Augury",
-  "short_name": "Augury",
-  "version": "1.15.0",
-  "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular applications.",
   "applications": {
     "gecko": {
       "id": "augury@rangle.io"
     }
-  },
-  "permissions": [
-    "storage"
-  ],
-  "browser_action": {
-    "default_icon": "images/augury.png",
-    "default_popup": "popup.html"
-  },
-  "devtools_page": "index.html",
-  "background": {
-    "scripts": [
-      "build/background.js"
-    ]
-  },
-  "content_scripts": [{
-    "matches": [
-      "<all_urls>"
-    ],
-    "js": [
-      "build/content-script.js"
-    ],
-    "run_at": "document_end"
-  }],
-  "web_accessible_resources": [
-    "node_modules/*",
-    "build/*"
-  ],
-  "manifest_version": 2,
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com 'unsafe-eval'; object-src 'self'",
-  "icons": {
-    "16": "images/icon16.png",
-    "48": "images/icon48.png",
-    "128": "images/icon128.png"
   }
 }

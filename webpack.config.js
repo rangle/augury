@@ -22,17 +22,43 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var DedupePlugin = webpack.optimize.DedupePlugin;
 var DefinePlugin = webpack.DefinePlugin;
 var BannerPlugin = webpack.BannerPlugin;
-var CopyFilesPlugin = require('copy-webpack-plugin');
+var MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 
 /**
+ * CROSS-BROWSER COMPATIBILITY
  * We use different build configurations depending on browser.
  * For example, browsers have different support for properties on manifest.json
  */
-var BROWSER = { // browsers we support
+
+// browsers we support
+const BROWSER = {
   FIREFOX: 'FIREFOX',
   CHROME: 'CHROME'
-};
-var targetBrowser = getTargetBrowser(process.env.BROWSER);
+}
+
+// browser-specific manifest file created during build.
+// `merge-jsons-webpack-plugin` needs relative paths from the build folder.
+const MANIFEST_OUTPUT = `../manifest.json`
+
+// manifest.json properties shared by all browsers
+const BASE_MANIFEST = `manifest/base.manifest.json`
+
+// target browser parameter is case insensitive (default chrome)
+const interpretTargetBrowser = (requested = '') => {
+  return Object.keys(BROWSER)
+    .find(browser => browser == requested.toUpperCase())
+    || BROWSER.CHROME
+}
+
+// each browser can extend the base manifest with a file of this form
+const getManifestExtension = (targetBrowser) =>
+  `manifest/${targetBrowser.toLowerCase()}.manifest.json`
+
+// grab target browser parameter (passed as command arg)
+const targetBrowser = interpretTargetBrowser(process.env.BROWSER)
+
+// grab manifest extension
+const manifestExtension = getManifestExtension(targetBrowser)
 
 /*
  * Config
@@ -133,12 +159,15 @@ module.exports = {
     }),
     new OccurenceOrderPlugin(),
     new DedupePlugin(),
-    new CopyFilesPlugin([
-      {
-        from: './manifest/' + targetBrowser.toLowerCase() + '.manifest.json',
-        to: root('manifest.json')
-      }
-    ])
+    new MergeJsonWebpackPlugin({
+        "files": [
+            BASE_MANIFEST,
+            manifestExtension,
+        ],
+        "output": {
+            "fileName": MANIFEST_OUTPUT
+        }
+    })
   ],
 
   /*
@@ -173,10 +202,4 @@ function env(configEnv) {
 function root(args) {
   args = sliceArgs(arguments, 0);
   return path.join.apply(path, [__dirname].concat(args));
-}
-
-function getTargetBrowser(requested = ''){
-  return Object.keys(BROWSER)
-    .find(browser => browser == requested.toUpperCase())
-    || BROWSER.CHROME;
 }
