@@ -84,6 +84,9 @@ export class AppTrees {
   }, {
     title: 'NgModules',
     tab: Tab.NgModules,
+  }, {
+    title: 'Diagnostic Tools',
+    tab: Tab.DiagnosticTools,
   }];
 
   private ngOnInit() {

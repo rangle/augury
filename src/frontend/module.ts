@@ -31,6 +31,7 @@ import {UserActions} from './actions/user-actions/user-actions';
 import {MainActions} from './actions/main-actions';
 import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
+import {DiagnosticTools} from './components/diagnostic-tools/diagnostic-tools';
 
 import reduxLogger from 'redux-logger';
 import {createEpicMiddleware} from 'redux-observable';
@@ -101,6 +102,7 @@ import {App} from './app';
     NgModuleInfo,
     NgModuleConfigView,
     AnalyticsPopup,
+    DiagnosticTools,
   ],
   providers: [
     Connection,

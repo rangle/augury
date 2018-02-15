@@ -23,7 +23,7 @@
   "scripts": {
     "prod-build": "webpack --optimize-dedupe",
     "build": "webpack --colors --display-error-details --display-cached",
-    "dev": "webpack --colors --display-error-details --display-cached --watch",
+    "dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --display-cached --watch",
     "dev-build": "cross-env NODE_ENV=development npm run build",
     "webpack": "webpack",
     "clean": "rimraf build",
