@@ -107,8 +107,6 @@ export class App {
 
     this.options.changes.subscribe(() => this.requestTree());
 
-    this.options.load().then(() => this.changeDetector.detectChanges());
-
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
 
     this.mainActions.initializeAugury();
@@ -171,6 +169,7 @@ export class App {
 
     switch (msg.messageType) {
       case MessageType.Ping:
+        debugger;
         respond();
         break;
       case MessageType.NotNgApp:
