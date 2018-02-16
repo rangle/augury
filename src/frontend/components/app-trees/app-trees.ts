@@ -137,6 +137,11 @@ export class AppTrees {
     this.reset();
   }
 
+  private onDiagnosticToolsToggle = (value: boolean) => {
+    this.options.diagnosticToolsEnabled = value;
+    this.reset();
+  }
+
   private onHideAnalyticsPopup = () => {
     this.showAnalyticsConsent = false;
   }
