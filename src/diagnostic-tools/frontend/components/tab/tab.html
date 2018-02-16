@@ -1,4 +1,5 @@
 <div class="flex-grow flex flex-column bg-base">
+  <button (click)="diagActions.log({ txt: 'testttt' })" style="width:50px"> test log </button>
   <div *ngFor="let entry of log | async"> <!-- @todo: add "trackLogEntry: trackById" -->
     <strong>{{entry.txt}}</strong>
   </div>

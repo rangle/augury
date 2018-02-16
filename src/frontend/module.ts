@@ -6,6 +6,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 // diagnostic-tools
 import { DIAG_COMPONENTS } from '../diagnostic-tools/frontend/components';
+import { DiagActions } from '../diagnostic-tools/frontend/actions';
 // import { DiagService } from '../diagnostic-tools/frontend/service'; @todo: get rid
 
 import {Accordion} from './components/accordion/accordion';
@@ -114,6 +115,7 @@ import {App} from './app';
     Options,
     UserActions,
     MainActions,
+    DiagActions,
     ComponentViewState,
     ComponentPropertyState,
     SendAnalytics,

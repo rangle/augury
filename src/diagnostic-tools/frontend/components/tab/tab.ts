@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { select } from '@angular-redux/store';
+
 import { selectors } from '../../state.model'; // @todo: fix path, get rid of ../..
+import { DiagActions } from '../../actions'; // @todo: fix path, get rid of ../..
 
 interface LogEntry {
   txt: string;
@@ -14,6 +16,10 @@ interface LogEntry {
 export class DiagTabComponent {
 
   @select(selectors.log) log;
+
+  constructor(
+    private diagActions: DiagActions
+  ){ }
 
   /* // @todo: currently not tracking
   private trackLogEntry(index: number, entry: LogEntry): string {
