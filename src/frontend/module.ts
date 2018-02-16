@@ -145,10 +145,11 @@ storedOptionsService.load()
       ngRedux.provideStore(store as Store<IAppState>);
     }
   }
-  
+
   if (PRODUCTION) {
     enableProdMode();
   }
 
   platformBrowserDynamic().bootstrapModule(FrontendModule);
-})
+
+});

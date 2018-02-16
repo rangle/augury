@@ -169,7 +169,6 @@ export class App {
 
     switch (msg.messageType) {
       case MessageType.Ping:
-        debugger;
         respond();
         break;
       case MessageType.NotNgApp:

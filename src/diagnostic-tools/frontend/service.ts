@@ -18,7 +18,7 @@ export class DiagService {
     this.selectors = selectors;
     this.actions = diagActions;
 
-    this.actions.log({ txt: "did it work? -> " + options.diagnoticToolsEnabled })
+    this.actions.log({ txt: 'did it work? -> ' + options.diagnoticToolsEnabled });
     options.diagnosticToolsEnabled = true; // setter function
 
   }
