@@ -18,8 +18,8 @@ sig="$name.sig"
 zip="$name.zip"
 xpi="$name.xpi"
 
-# Ensure environment variables exist (we don't seem to use this anywhere?)
-# sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
+# Ensure environment variables exist ($sentry_key isnt used anywhere)
+sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
 
 # assign build name to zip and crx file in circleci env
 if [ $CIRCLE_BUILD_NUM ] || [ $CIRCLE_ARTIFACTS ]; then
