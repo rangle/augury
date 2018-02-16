@@ -5,9 +5,11 @@ import {FormsModule} from '@angular/forms';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 // diagnostic-tools
-import { DIAG_COMPONENTS } from '../diagnostic-tools/frontend/components';
-import { DiagActions } from '../diagnostic-tools/frontend/actions';
-// import { DiagService } from '../diagnostic-tools/frontend/service'; @todo: get rid
+import {
+  DiagActions,
+  DiagService,
+  DIAG_COMPONENTS,
+} from '../diagnostic-tools/frontend';
 
 import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';
@@ -79,7 +81,6 @@ import {App} from './app';
     NgReduxModule,
   ],
   declarations: [
-    ...DIAG_COMPONENTS,
     Accordion,
     App,
     AppTrees,
@@ -107,19 +108,20 @@ import {App} from './app';
     NgModuleInfo,
     NgModuleConfigView,
     AnalyticsPopup,
+    ...DIAG_COMPONENTS,
   ],
   providers: [
-    // DiagService, @todo: get rid
     Connection,
     DirectConnection,
     Options,
     UserActions,
     MainActions,
-    DiagActions,
     ComponentViewState,
     ComponentPropertyState,
     SendAnalytics,
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
+    DiagActions,
+    DiagService,
   ],
   bootstrap: [App]
 })

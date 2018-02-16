@@ -18,8 +18,8 @@ export class DiagTabComponent {
   @select(selectors.log) log;
 
   constructor(
-    private diagActions: DiagActions
-  ){ }
+    private diagActions: DiagActions,
+  ) { }
 
   /* // @todo: currently not tracking
   private trackLogEntry(index: number, entry: LogEntry): string {

@@ -50,6 +50,7 @@ import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
+import {DiagService} from '../diagnostic-tools/frontend';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -84,7 +85,11 @@ export class App {
               private userActions: UserActions,
               private viewState: ComponentViewState,
               private zone: NgZone,
-              private errorHandler: ErrorHandler) {
+              private errorHandler: ErrorHandler,
+              private diagService: DiagService,
+  ) {
+
+    this.diagService.actions.log({ txt: 'constructing top component...' });
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {

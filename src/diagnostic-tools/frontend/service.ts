@@ -6,7 +6,14 @@ import { DiagActions } from './actions';
 @Injectable()
 export class DiagService {
 
-  public selectors = selectors;
-  public actions = DiagActions;
+  public selectors;
+  public actions;
+
+  constructor(
+    public diagActions: DiagActions,
+  ) {
+    this.selectors = selectors;
+    this.actions = diagActions;
+  }
 
 }
