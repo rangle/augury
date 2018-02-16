@@ -1,5 +1,5 @@
 <div class="flex-grow flex flex-column bg-base">
-  <div *ngFor="let entry of log"> <!-- add "trackLogEntry: trackById" -->
+  <div *ngFor="let entry of log | async"> <!-- @todo: add "trackLogEntry: trackById" -->
     <strong>{{entry.txt}}</strong>
   </div>
 </div>

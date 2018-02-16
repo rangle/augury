@@ -4,6 +4,10 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
+// diagnostic-tools
+import { DIAG_COMPONENTS } from '../diagnostic-tools/frontend/components';
+// import { DiagService } from '../diagnostic-tools/frontend/service'; @todo: get rid
+
 import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';
 import {ComponentInfo} from './components/component-info/component-info';
@@ -31,7 +35,6 @@ import {UserActions} from './actions/user-actions/user-actions';
 import {MainActions} from './actions/main-actions';
 import {NgModuleInfo} from './components/ng-module-info/ng-module-info';
 import {NgModuleConfigView} from './components/ng-module-config-view/ng-module-config-view';
-import {DiagnosticTools} from './components/diagnostic-tools/diagnostic-tools';
 
 import reduxLogger from 'redux-logger';
 import {createEpicMiddleware} from 'redux-observable';
@@ -75,6 +78,7 @@ import {App} from './app';
     NgReduxModule,
   ],
   declarations: [
+    ...DIAG_COMPONENTS,
     Accordion,
     App,
     AppTrees,
@@ -102,9 +106,9 @@ import {App} from './app';
     NgModuleInfo,
     NgModuleConfigView,
     AnalyticsPopup,
-    DiagnosticTools,
   ],
   providers: [
+    // DiagService, @todo: get rid
     Connection,
     DirectConnection,
     Options,
