@@ -1,10 +1,13 @@
-let service;
+let diagService;
 
 export function useService(s) {
-  service = s;
+  diagService = s;
 }
 
-export function diagnosable() {
+export function diagnosable(
+    { pre = undefined, post = undefined }
+  = { pre: undefined,  post: undefined  }
+) {
     return function (
       target: any,
       propertyKey: string,
@@ -12,10 +15,12 @@ export function diagnosable() {
     ) {
       const func = descriptor.value;
       descriptor.value = function (...args) {
-        if (service) {
-          service.actions.log({ txt: 'running func: ' + ( func.name || propertyKey ) });
-        }
-        return func.apply(this, ...args);
+        diagService.actions.log({ txt: 'executing method: ' + propertyKey })
+        if (pre) pre(diagService).apply(this, args);
+        const result = func.apply(this, args);
+        if (post) post(diagService).apply(this, [ result, ...args ]);
+        return result;
       }
-    };
+      return descriptor;
+    }
 }

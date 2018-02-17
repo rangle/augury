@@ -21,10 +21,12 @@ export class DiagService {
     this.actions.log({ txt: 'diagnoticToolsEnabled? -> ' + options.diagnoticToolsEnabled });
   }
 
-  // event hooks ----
+  log(txt){
+    this.actions.log({ txt });
+  }
 
-  receivedTree(content) {
-
+  assert(label, isTrue){
+    this.log(`${label}: ` + isTrue);
   }
 
 }

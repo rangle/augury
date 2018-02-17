@@ -161,7 +161,6 @@ export class App {
     this.onSelectNode(this.selectedNode, () => this.componentState.reset());
   }
 
-  @diagnosable()
   private processMessage(msg: Message<any>,
                          sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
@@ -181,7 +180,6 @@ export class App {
           (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
         break;
       case MessageType.CompleteTree:
-        this.diagService.receivedTree(msg.content);
         this.createTree(msg.content);
         respond();
         break;
@@ -226,7 +224,16 @@ export class App {
     }
   }
 
-  @diagnosable()
+  @diagnosable({
+    pre: s => (roots) => {
+      s.assert('has root', roots.length > 0);
+      s.assert('root is component', roots[0].isComponent);
+    },
+    post: s => function (result) {
+      s.assert('tree exists', !!this.tree);
+      s.assert('tree has roots', this.tree.roots.length > 0);
+    },
+  })
   private createTree(roots: Array<Node>) {
     this.componentState.reset();
 
@@ -254,7 +261,6 @@ export class App {
     this.zone.run(() => this.processMessage(msg, sendResponse));
   }
 
-  @diagnosable()
   private onSelectNode(node: Node, beforeLoad?: () => void) {
     this.selectedNode = node;
 
