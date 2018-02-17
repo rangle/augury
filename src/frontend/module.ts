@@ -8,6 +8,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {
   DiagActions,
   DiagService,
+  useService,
   DIAG_COMPONENTS,
 } from '../diagnostic-tools/frontend';
 
@@ -78,7 +79,11 @@ declare const PRODUCTION: boolean;
 const storedOptionsService = new Options();
 
 storedOptionsService.load()
-.then(() => {
+.then((options) => {
+
+  const diagActions = new DiagActions();
+  const diagService = new DiagService(diagActions, storedOptionsService);
+  useService(diagService);
 
   @NgModule({
     imports: [
@@ -127,8 +132,8 @@ storedOptionsService.load()
       ComponentPropertyState,
       SendAnalytics,
       { provide: ErrorHandler, useClass: UncaughtErrorHandler },
-      DiagActions,
-      DiagService,
+      { provide: DiagActions, useValue: diagActions },
+      { provide: DiagService, useValue: diagService },
     ],
     bootstrap: [App]
   })

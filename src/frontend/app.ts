@@ -50,7 +50,7 @@ import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
-import {DiagService} from '../diagnostic-tools/frontend';
+import {DiagService, diagnosable} from '../diagnostic-tools/frontend';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -161,6 +161,7 @@ export class App {
     this.onSelectNode(this.selectedNode, () => this.componentState.reset());
   }
 
+  @diagnosable()
   private processMessage(msg: Message<any>,
                          sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
@@ -180,6 +181,7 @@ export class App {
           (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
         break;
       case MessageType.CompleteTree:
+        this.diagService.receivedTree(msg.content);
         this.createTree(msg.content);
         respond();
         break;
@@ -224,6 +226,7 @@ export class App {
     }
   }
 
+  @diagnosable()
   private createTree(roots: Array<Node>) {
     this.componentState.reset();
 
@@ -251,6 +254,7 @@ export class App {
     this.zone.run(() => this.processMessage(msg, sendResponse));
   }
 
+  @diagnosable()
   private onSelectNode(node: Node, beforeLoad?: () => void) {
     this.selectedNode = node;
 
