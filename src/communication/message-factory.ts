@@ -200,6 +200,13 @@ export abstract class MessageFactory {
     });
   }
 
+  static errorCleared(errorTypes: [ApplicationErrorType]): Message<{ errorTypes: [ApplicationErrorType] }> {
+    return create({
+      messageType: MessageType.ErrorCleared,
+      content: { errorTypes },
+    });
+  }
+
   static uncaughtApplicationError(error: SerializeableError): Message<ApplicationError> {
     return create({
       messageType: MessageType.ApplicationError,
