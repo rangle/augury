@@ -29,6 +29,10 @@ const handler = () => {
         unsubscribe();
       }
       errorToSend = null;
+      send(MessageFactory.errorCleared([
+        ApplicationErrorType.NotNgApp,
+        ApplicationErrorType.ProductionMode
+      ]));
       return true;
     }
     errorToSend = MessageFactory.applicationError(
@@ -62,4 +66,3 @@ if (!handler()) {
 
   unsubscribe = subscribe();
 }
-
