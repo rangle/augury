@@ -219,8 +219,9 @@ export class App {
         respond();
         break;
       case MessageType.ErrorCleared:
-        if (msg.content.errorTypes.includes(this.error.errorType))
+        if (msg.content.errorTypes.includes(this.error.errorType)) {
           this.error = null;
+        }
         respond();
         break;
     }
