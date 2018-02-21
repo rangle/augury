@@ -15,7 +15,7 @@ export function diagnosable(
     ) {
       const func = descriptor.value;
       descriptor.value = function (...args) {
-        diagService.actions.log({ txt: 'executing method: ' + propertyKey })
+        diagService.actions.log({ txt: `-------\n[frontend] [${Date.now()}] executing method: ${propertyKey}` })
         if (pre) pre(diagService).apply(this, args);
         const result = func.apply(this, args);
         if (post) post(diagService).apply(this, [ result, ...args ]);

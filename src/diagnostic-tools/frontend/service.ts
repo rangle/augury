@@ -26,7 +26,7 @@ export class DiagService {
   }
 
   assert(label, isTrue){
-    this.log(`${label}: ` + isTrue);
+    this.log(`[frontend] [${Date.now()}] ${label}: ` + isTrue);
   }
 
 }
