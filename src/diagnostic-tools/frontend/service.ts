@@ -21,11 +21,11 @@ export class DiagService {
     this.actions.log({ txt: 'diagnoticToolsEnabled? -> ' + options.diagnoticToolsEnabled });
   }
 
-  log(txt){
+  log(txt) {
     this.actions.log({ txt });
   }
 
-  assert(label, isTrue){
+  assert(label, isTrue) {
     this.log(`[frontend] [${Date.now()}] ${label}: ` + isTrue);
   }
 

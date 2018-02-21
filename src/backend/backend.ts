@@ -3,6 +3,7 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {compare} from '../utils/patch';
 import {isAngular, isDebugMode} from './utils/app-check';
+import {diagnosable} from '../diagnostic-tools/backend/decorator';
 
 import {SerializeableError} from '../utils/error-handling';
 
@@ -128,30 +129,43 @@ const parseInitialModules = () => {
   });
 };
 
-const updateComponentTree = (roots: Array<any>) => {
-  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
-
-  if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
-    messageBuffer.enqueue(MessageFactory.completeTree(tree));
+const updateComponentTree = diagnosable({
+  pre: (s, remember) => (roots) => {
+    s.assert('roots is an array', Array.isArray(roots));
+    let t: any = {};
+    try {
+      t = createTreeFromElements(roots, treeRenderOptions);
+    } catch (e) { }
+    s.assert('createTreeFromElements got a tree', !!t.tree);
+    s.assert('createTreeFromElements got this count', t.count);
   }
-  else {
-    const changes = previousTree.diff(tree);
-    if (changes.length > 0) {
-      messageBuffer.enqueue(MessageFactory.treeDiff(previousTree.diff(tree)));
+})
+(
+  function updateComponentTree (roots: Array<any>) {
+    const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+
+    if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
+      messageBuffer.enqueue(MessageFactory.completeTree(tree));
     }
     else {
-      return; // no changes
+      const changes = previousTree.diff(tree);
+      if (changes.length > 0) {
+        messageBuffer.enqueue(MessageFactory.treeDiff(previousTree.diff(tree)));
+      }
+      else {
+        return; // no changes
+      }
     }
+
+    /// Send a message through the normal channels to indicate to the frontend
+    /// that messages are waiting for it in {@link messageBuffer}
+    send(MessageFactory.push());
+
+    previousTree = tree;
+
+    previousCount = count;
   }
-
-  /// Send a message through the normal channels to indicate to the frontend
-  /// that messages are waiting for it in {@link messageBuffer}
-  send(MessageFactory.push());
-
-  previousTree = tree;
-
-  previousCount = count;
-};
+);
 
 const updateLazyLoadedNgModules = (routers) => {
 
@@ -187,22 +201,34 @@ const subject = new Subject<void>();
 
 const subscriptions = new Array<Subscription>();
 
-const bind = (root) => {
-  const ngZone = root.injector.get(ng.coreTokens.NgZone);
-  if (ngZone) {
-    subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
+const bind = diagnosable({
+  pre: (s, remember) => (root) => {
+    s.assert('root passed as arg, and has injector', !!root.injector);
+    s.assert('global func getAllAngularRootElements exists', getAllAngularRootElements);
+    if (root.injector) {
+      s.assert('root injector has ngZone', !!root.injector.get(ng.coreTokens.NgZone));
+    }
   }
+})
+(
+  function bind(root) {
+    const ngZone = root.injector.get(ng.coreTokens.NgZone);
+    if (ngZone) {
+      subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
+    }
 
-  // parse components and routes each time
-  subscriptions.push(
-    subject.debounceTime(0).subscribe(() => {
-      updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
-      updateRouterTree();
-    }));
+    // parse components and routes each time
+    subscriptions.push(
+      subject.debounceTime(0).subscribe(() => {
+        updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
+        updateRouterTree();
+      }));
 
-  // initial load
-  subject.next(void 0);
-};
+    // initial load
+    subject.next(void 0);
+  }
+);
+
 
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
