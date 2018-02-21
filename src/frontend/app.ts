@@ -216,9 +216,12 @@ export class App {
           break;
         }
         break;
-
       case MessageType.ApplicationError:
         this.error = msg.content;
+        respond();
+        break;
+      case MessageType.DiagnosticPacket:
+        this.diagService.log(msg.content.txt);
         respond();
         break;
     }
@@ -241,6 +244,7 @@ export class App {
 
     this.restoreSelection();
   }
+
 
   private updateTree(changes) {
     /// Patch the treee

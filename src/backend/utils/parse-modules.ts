@@ -2,6 +2,8 @@ import {classDecorators, componentMetadata} from '../../tree/decorators';
 import {functionName} from '../../utils/function-name';
 import {Route} from '../utils/parse-router';
 
+import {diagnosable} from '../../diagnostic-tools/backend/decorator';
+
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
 declare const ng;
@@ -168,60 +170,76 @@ const flatten = (l: Array<any>) => {
   return flatArray;
 };
 
-const _parseModule = (
-  module: any,
-  modules: {} = {},
-  moduleNames: Array<string> = [],
-  tokenIdMap: {} = {}) => {
+const _parseModule = diagnosable({
+  pre: (s, remember) => (module, modules, moduleNames, tokenIdMap) => {
+    s.assert('module passed as argument', !!module);
+    remember({ module, modules });
+  },
+  post: (s, old) => ([ modules, moduleNames, tokenIdMap ]) => {
+    // this is a recursive function because modules may contain other modules.
+    s.assert(
+      'moduleNames includes root module passed in as "module" param',
+      moduleNames.includes( old('module').name )
+    );
+  },
+})
+(
+  function _parseModule (
+    module: any,
+    modules: {} = {},
+    moduleNames: Array<string> = [],
+    tokenIdMap: {} = {}
+  ) {
 
-  const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
+    const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
 
-  if (!modules[auguryModuleId]) {
-    const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module) || {};
-    moduleNames.push(parseModuleName(module));
-    modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
+    if (!modules[auguryModuleId]) {
+      const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module) || {};
+      moduleNames.push(parseModuleName(module));
+      modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
 
-    // collect all providers from this module
-    const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
-      .filter(declaration => componentMetadata(declaration));
+      // collect all providers from this module
+      const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
+        .filter(declaration => componentMetadata(declaration));
 
-    const moduleComponentProviders = moduleComponents.reduce((prev, curr, i, components) =>
-      prev.concat(flattenProviders(componentMetadata(components[i]).providers || [])), []);
+      const moduleComponentProviders = moduleComponents.reduce((prev, curr, i, components) =>
+        prev.concat(flattenProviders(componentMetadata(components[i]).providers || [])), []);
 
-    const providersFromModuleImports = [];
+      const providersFromModuleImports = [];
 
-    // parse modules imported by this module
-    const flatImports = flatten(ngModuleDecoratorConfig.imports || []);
-    flatImports.forEach((im: any): any => {
-      const importedModule = im.ngModule || im;
+      // parse modules imported by this module
+      const flatImports = flatten(ngModuleDecoratorConfig.imports || []);
+      flatImports.forEach((im: any): any => {
+        const importedModule = im.ngModule || im;
 
-      if (im.ngModule) {
-        Array.prototype.push.apply(providersFromModuleImports, flattenProviders(im.providers));
-      }
+        if (im.ngModule) {
+          Array.prototype.push.apply(providersFromModuleImports, flattenProviders(im.providers));
+        }
 
-      const importModuleDecorator = resolveNgModuleDecoratorConfig(importedModule);
-      if (importModuleDecorator) {
-        _parseModule(importedModule, modules, moduleNames, tokenIdMap);
-      }
-    });
-
-    providersFromModuleImports.forEach(p => modules[auguryModuleId].providers.push(parseProviderName(p)));
-
-    // add augury ids
-    flattenProviders(ngModuleDecoratorConfig.providers || [])
-      .concat(providersFromModuleImports)
-      .concat(moduleComponentProviders)
-      .concat(moduleComponents)
-      .map(t => resolveTokenIdMetaData(t, tokenIdMap))
-      .map(tokenAndId => {
-        const isString = (typeof tokenAndId.token) === 'string';
-        tokenIdMap[tokenAndId.augury_token_id] = {
-          name: !isString ? tokenAndId.token.name : tokenAndId.token,
-          type: !isString && componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
-          module: module.name,
-        };
+        const importModuleDecorator = resolveNgModuleDecoratorConfig(importedModule);
+        if (importModuleDecorator) {
+          _parseModule(importedModule, modules, moduleNames, tokenIdMap);
+        }
       });
-  }
 
-  return [modules, moduleNames, tokenIdMap];
-};
+      providersFromModuleImports.forEach(p => modules[auguryModuleId].providers.push(parseProviderName(p)));
+
+      // add augury ids
+      flattenProviders(ngModuleDecoratorConfig.providers || [])
+        .concat(providersFromModuleImports)
+        .concat(moduleComponentProviders)
+        .concat(moduleComponents)
+        .map(t => resolveTokenIdMetaData(t, tokenIdMap))
+        .map(tokenAndId => {
+          const isString = (typeof tokenAndId.token) === 'string';
+          tokenIdMap[tokenAndId.augury_token_id] = {
+            name: !isString ? tokenAndId.token.name : tokenAndId.token,
+            type: !isString && componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
+            module: module.name,
+          };
+        });
+    }
+
+    return [modules, moduleNames, tokenIdMap];
+  }
+);

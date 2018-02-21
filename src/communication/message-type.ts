@@ -66,4 +66,8 @@ export enum MessageType {
   FindElement,
 
   GoogleTagManagerSend,
+
+  /// Diagnostic info collected on the backend gets sent to the front end for display as a DP
+  DiagnosticPacket,
+
 }
