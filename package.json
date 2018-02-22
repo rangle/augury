@@ -53,6 +53,7 @@
     "crypto": "0.0.3",
     "d3": "4.5.0",
     "expose-loader": "0.7.1",
+    "fast-safe-stringify": "^2.0.3",
     "immutable": "3.7.6",
     "ramda": "0.24.1",
     "redux": "3.7.2",

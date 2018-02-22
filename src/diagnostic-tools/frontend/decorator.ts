@@ -1,3 +1,5 @@
+import { wrapFunction } from '../diagnoseFunction.function';
+
 let diagService;
 
 export function useService(s) {
@@ -13,14 +15,14 @@ export function diagnosable(
       propertyKey: string,
       descriptor: PropertyDescriptor,
     ) {
+
       const func = descriptor.value;
       descriptor.value = function (...args) {
-        diagService.actions.log({ txt: `-------\n[frontend] [${Date.now()}] executing method: ${propertyKey}` });
-        if (pre) { pre(diagService).apply(this, args); }
-        const result = func.apply(this, args);
-        if (post) { post(diagService).apply(this, [ result, ...args ]); }
+        const {result, diagPacket} = wrapFunction('frontend', propertyKey, func, { pre, post }).apply(this, [...args]);
+        diagService.logPacket(diagPacket);
         return result;
       };
       return descriptor;
+
     };
 }

@@ -89,7 +89,7 @@ export class App {
               private diagService: DiagService,
   ) {
 
-    this.diagService.actions.log({ txt: 'constructing top component...' });
+    this.diagService.log('constructing top component...');
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {
@@ -168,6 +168,9 @@ export class App {
     };
 
     switch (msg.messageType) {
+      case MessageType.Initialize:
+        this.diagService.clear();
+        break;
       case MessageType.Ping:
         respond();
         break;
@@ -221,7 +224,7 @@ export class App {
         respond();
         break;
       case MessageType.DiagnosticPacket:
-        this.diagService.log(msg.content.txt);
+        this.diagService.logPacket(msg.content);
         respond();
         break;
     }

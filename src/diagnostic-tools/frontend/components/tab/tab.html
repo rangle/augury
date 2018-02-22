@@ -1,6 +1,21 @@
 <div class="flex-grow flex flex-column bg-base">
-  <button (click)="diagActions.log({ txt: 'testttt' })" style="width:50px"> test log </button>
   <div *ngFor="let entry of log | async"> <!-- @todo: add "trackLogEntry: trackById" -->
-    <strong>{{entry.txt}}</strong>
+    <div *ngIf="entry.type == 'MSG'">
+      <div><span>MSG: </span><strong>{{entry.value.txt}}</strong></div>
+    </div>
+    <div *ngIf="entry.type == 'PKT'">
+      <div><strong>{{entry.value.header}}</strong></div>
+      <div>PRE</div>
+      <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
+        <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
+      </div>
+      <div *ngFor="let msg of entry.value.pre?.msgs">
+        <div style="color:{{msg.color}}">{{msg.txt}}</div>
+      </div>
+      <div>POST</div>
+      <div *ngFor="let msg of entry.value.pre?.msgs">
+        <div style="color:{{msg.color}}">{{msg.txt}}</div>
+      </div>
+    </div>
   </div>
 </div>

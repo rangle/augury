@@ -17,6 +17,8 @@ export class DiagTabComponent {
 
   @select(selectors.log) log;
 
+  objectKeys = Object.keys; // use in template
+
   constructor(
     private diagActions: DiagActions,
   ) { }

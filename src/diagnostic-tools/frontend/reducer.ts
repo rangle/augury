@@ -9,8 +9,12 @@ export const basename = NAMESPACE;
 export function diagReducer(state = INITIAL_STATE, action) {
 
   switch (action.type) {
-    case DiagActions.LOG:
-      return { log: updaters.log.add(action.payload, state) };
+    case DiagActions.LOGMSG:
+      return { log: updaters.log.addMsg(action.payload, state) };
+    case DiagActions.LOGPKT:
+      return { log: updaters.log.addPkt(action.payload, state) };
+    case DiagActions.CLEAR:
+      return updaters.clear();
   }
 
   return state;

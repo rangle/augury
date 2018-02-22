@@ -3,12 +3,24 @@ import {dispatch} from '@angular-redux/store';
 
 @Injectable()
 export class DiagActions {
-  static readonly LOG = 'LOG';
+  static readonly LOGMSG = 'LOGMSG';
+  static readonly LOGPKT = 'LOGPKT';
+  static readonly CLEAR = 'CLEAR';
 
   @dispatch()
-  log = (entry) => ({
-    type: DiagActions.LOG,
+  logMsg = (entry) => ({
+    type: DiagActions.LOGMSG,
     payload: entry,
   })
 
+  @dispatch()
+  logPacket = (entry) => ({
+    type: DiagActions.LOGPKT,
+    payload: entry,
+  })
+
+  @dispatch()
+  clear = () => ({
+    type: DiagActions.CLEAR
+  })
 }

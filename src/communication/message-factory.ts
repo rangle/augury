@@ -35,6 +35,8 @@ import {
 
 import {SimpleOptions} from '../options';
 
+import { DiagPacket } from '../diagnostic-tools/DiagPacket.class';
+
 const create = <T>(properties: T) =>
   Object.assign({
     messageSource,
@@ -193,10 +195,10 @@ export abstract class MessageFactory {
     });
   }
 
-  static diagnosticPacket({ txt }): Message<{ txt: string }> {
+  static diagnosticPacket(packet: DiagPacket): Message<DiagPacket> {
     return create({
       messageType: MessageType.DiagnosticPacket,
-      content: { txt }
+      content: packet
     });
   }
 

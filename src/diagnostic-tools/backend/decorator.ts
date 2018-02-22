@@ -1,6 +1,8 @@
 import { send } from '../../backend/indirect-connection'; // @todo: pathing
 import { MessageFactory } from '../../communication/message-factory';
-import * as clone from 'clone';
+
+import { DiagPacketConstructor } from '../DiagPacket.class';
+import { wrapFunction } from '../diagnoseFunction.function';
 
 export function diagnosable(
     { pre = undefined, post = undefined }
@@ -9,21 +11,16 @@ export function diagnosable(
     return function (target: any) {
       const func = target;
       return function (...args) {
-        send(MessageFactory.diagnosticPacket({
-          txt: `-------\n[backend] [${Date.now()}] executing method: ${target.name}`
-        }));
-        const pseudoService = {
-          assert: (label, expression) =>
-            send(MessageFactory.diagnosticPacket({ txt: `[backend] [${Date.now()}] ${label}: ${expression}` }))
-        };
-        const mem = {};
-        const remember = (vals) => Object.keys(vals).forEach(k => mem[k] = clone(vals[k]));
-        const old = (key) => mem[key];
-
-        if (pre) { pre(pseudoService, remember).apply(this, args); }
-        const result = func.apply(this, args);
-        if (post) { post(pseudoService, old).apply(this, [ result, ...args ]); }
+        const {result, diagPacket} = wrapFunction('backend', func.name, func, { pre, post }).apply(this, [...args]);
+        send(MessageFactory.diagnosticPacket(diagPacket));
         return result;
       };
     };
+}
+
+
+export function diagnosableEvent(name) {
+  const diagPacketC = new DiagPacketConstructor();
+  diagPacketC.setHeader(`-------\n[backend] [${Date.now()}] event occurred: ${name}`);
+  send(MessageFactory.diagnosticPacket(diagPacketC.finish()));
 }

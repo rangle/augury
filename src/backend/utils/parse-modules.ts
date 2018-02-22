@@ -170,15 +170,15 @@ const flatten = (l: Array<any>) => {
 };
 
 const _parseModule = diagnosable({
-  pre: (s, remember) => (module, modules, moduleNames, tokenIdMap) => {
+  pre: s => (module, modules, moduleNames, tokenIdMap) => {
     s.assert('module passed as argument', !!module);
-    remember({ module, modules });
+    s.remember({ module, modules });
   },
-  post: (s, old) => ([ modules, moduleNames, tokenIdMap ]) => {
+  post: s => ([ modules, moduleNames, tokenIdMap ]) => {
     // this is a recursive function because modules may contain other modules.
     s.assert(
       'moduleNames includes root module passed in as "module" param',
-      moduleNames.includes( old('module').name )
+      moduleNames.includes( s.old('module').name )
     );
   },
 })
