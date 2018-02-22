@@ -69,5 +69,6 @@ export enum MessageType {
 
   /// Diagnostic info collected on the backend gets sent to the front end for display as a DP
   DiagnosticPacket,
+  DiagnosticMsg,
 
 }

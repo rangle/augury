@@ -183,10 +183,12 @@ export class App {
           (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
         break;
       case MessageType.CompleteTree:
+        this.diagService.logMsg({ txt: `-------- [frontend] [${Date.now()}]received MessageType.CompleteTree` });
         this.createTree(msg.content);
         respond();
         break;
       case MessageType.TreeDiff:
+        this.diagService.logMsg({ txt: `-------- [frontend] [${Date.now()}]received MessageType.TreeDiff` });
         if (this.tree == null) {
           this.connection.send(MessageFactory.initialize(this.options.simpleOptions())); // request tree
         }
@@ -225,6 +227,10 @@ export class App {
         break;
       case MessageType.DiagnosticPacket:
         this.diagService.logPacket(msg.content);
+        respond();
+        break;
+      case MessageType.DiagnosticMsg:
+        this.diagService.logMsg(msg.content);
         respond();
         break;
     }

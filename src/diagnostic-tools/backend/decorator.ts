@@ -20,7 +20,7 @@ export function diagnosable(
 
 
 export function diagnosableEvent(name) {
-  const diagPacketC = new DiagPacketConstructor();
-  diagPacketC.setHeader(`-------\n[backend] [${Date.now()}] event occurred: ${name}`);
-  send(MessageFactory.diagnosticPacket(diagPacketC.finish()));
+  send(MessageFactory.diagnosticMsg({
+    txt: `-------\n[backend] [${Date.now()}] event occurred: ${name}`
+  }));
 }

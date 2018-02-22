@@ -35,25 +35,11 @@ export class DiagService {
   }
 
   logPacket(packet: DiagPacket) {
-      this.actions.logPacket(packet);
+    this.actions.logPacket(packet);
   }
 
-  _logPacket(packet: DiagPacket) {
-    this.log(packet.header);
-    if (packet.pre.msgs.length || Object.keys(packet.pre.snapshots).length) {
-      this.log('PRE');
-      packet.pre.msgs.forEach(m => this.log(m.txt));
-      this.log('snapshots:');
-      Object.keys(packet.pre.snapshots)
-        .forEach(k => this.log(`${k}: ${packet.pre.snapshots[k]}`));
-    }
-    if (packet.post.msgs.length || Object.keys(packet.post.snapshots).length) {
-      this.log('POST');
-      packet.post.msgs.forEach(m => this.log(m.txt));
-      this.log('snapshots:');
-      Object.keys(packet.post.snapshots)
-        .forEach(k => this.log(`${k}: ${packet.post.snapshots[k]}`));
-    }
+  logMsg(msg: { txt: string }) {
+    this.actions.logMsg(msg);
   }
 
 }

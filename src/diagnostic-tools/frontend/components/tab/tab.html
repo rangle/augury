@@ -1,7 +1,7 @@
 <div class="flex-grow flex flex-column bg-base">
   <div *ngFor="let entry of log | async"> <!-- @todo: add "trackLogEntry: trackById" -->
     <div *ngIf="entry.type == 'MSG'">
-      <div><span>MSG: </span><strong>{{entry.value.txt}}</strong></div>
+      <div><strong><span>MSG: </span>{{entry.value.txt}}</strong></div>
     </div>
     <div *ngIf="entry.type == 'PKT'">
       <div><strong>{{entry.value.header}}</strong></div>
@@ -13,7 +13,10 @@
         <div style="color:{{msg.color}}">{{msg.txt}}</div>
       </div>
       <div>POST</div>
-      <div *ngFor="let msg of entry.value.pre?.msgs">
+      <div *ngFor="let snapshotKey of objectKeys(entry.value.post?.snapshots)">
+        <div><strong>{{snapshotKey}}:</strong>{{entry.value.post?.snapshots[snapshotKey]}}</div>
+      </div>
+      <div *ngFor="let msg of entry.value.post?.msgs">
         <div style="color:{{msg.color}}">{{msg.txt}}</div>
       </div>
     </div>

@@ -202,6 +202,13 @@ export abstract class MessageFactory {
     });
   }
 
+  static diagnosticMsg(msg: { txt }): Message<{ txt: string }> {
+    return create({
+      messageType: MessageType.DiagnosticMsg,
+      content: msg
+    });
+  }
+
   static applicationError(error: ApplicationError): Message<ApplicationError> {
     return create({
       messageType: MessageType.ApplicationError,
