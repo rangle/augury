@@ -11,8 +11,10 @@ export function diagnosable(
     return function (target: any) {
       const func = target;
       return function (...args) {
-        const {result, diagPacket} = wrapFunction('backend', func.name, func, { pre, post }).apply(this, [...args]);
+        const { result, error, diagPacket }
+          = wrapFunction('backend', func.name, func, { pre, post }).apply(this, [...args]);
         send(MessageFactory.diagnosticPacket(diagPacket));
+        // if (error) { throw error; }
         return result;
       };
     };

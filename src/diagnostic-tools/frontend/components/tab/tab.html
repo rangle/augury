@@ -5,19 +5,31 @@
     </div>
     <div *ngIf="entry.type == 'PKT'">
       <div><strong>{{entry.value.header}}</strong></div>
-      <div>PRE</div>
-      <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
-        <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
+      <div *ngIf="entry.value.diagError">
+        <div> ERROR (in diagnostic code) [section {{entry.value.diagError.section}}]:
+          <strong> {{entry.value.diagError.error}} </strong>
+        </div>
       </div>
-      <div *ngFor="let msg of entry.value.pre?.msgs">
-        <div style="color:{{msg.color}}">{{msg.txt}}</div>
+      <div *ngIf="!entry.value.diagError">
+        <div>PRE</div>
+        <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
+          <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
+        </div>
+        <div *ngFor="let msg of entry.value.pre?.msgs">
+          <div style="color:{{msg.color}}">{{msg.txt}}</div>
+        </div>
+        <div *ngIf="entry.value.exception">
+          <div> EXCEPTION: <strong> {{entry.value.exception}} </strong></div>
+        </div>
+        <div *ngIf="!entry.value.exception">
+          <div>POST</div>
+          <div *ngFor="let snapshotKey of objectKeys(entry.value.post?.snapshots)">
+            <div><strong>{{snapshotKey}}:</strong>{{entry.value.post?.snapshots[snapshotKey]}}</div>
+          </div>
+          <div *ngFor="let msg of entry.value.post?.msgs">
+            <div style="color:{{msg.color}}">{{msg.txt}}</div>
+          </div>
       </div>
-      <div>POST</div>
-      <div *ngFor="let snapshotKey of objectKeys(entry.value.post?.snapshots)">
-        <div><strong>{{snapshotKey}}:</strong>{{entry.value.post?.snapshots[snapshotKey]}}</div>
-      </div>
-      <div *ngFor="let msg of entry.value.post?.msgs">
-        <div style="color:{{msg.color}}">{{msg.txt}}</div>
       </div>
     </div>
   </div>

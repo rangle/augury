@@ -5,8 +5,7 @@ import { DiagPacketConstructor } from './DiagPacket.class';
 export function wrapFunction(
   end: 'backend'|'frontend',
   name: string, func: Function,
-    { pre = undefined, post = undefined }
-  = { pre: undefined,  post: undefined  }
+  diagFuncs: {pre?: Function,  post?: Function} = {pre: undefined, post: undefined}
 ) {
 
   return function (...args) {
@@ -35,11 +34,26 @@ export function wrapFunction(
       };
     };
 
-    if (pre) { pre(serviceForSection('pre')).apply(this, args); }
-    const result = func.apply(this, args);
-    if (post) { post(serviceForSection('post')).apply(this, [ result, ...args ]); }
+    if (diagFuncs.pre) {
+      try { diagFuncs.pre(serviceForSection('pre')).apply(this, args); }
+      catch (error) { diagPacketC.setDiagError({ section: 'pre', error }); }
+    }
 
-    return { result, diagPacket: diagPacketC.finish() };
+    const { result, error } = (() => {
+      try { return { result: func.apply(this, args), error: undefined }; }
+      catch (error) { return { error, result: undefined }; }
+    })();
+
+    if (!error) {
+      if (diagFuncs.post) {
+        try { diagFuncs.post(serviceForSection('post')).apply(this, [ result ]); }
+        catch (error) { diagPacketC.setDiagError({ section: 'post', error }); }
+      }
+    } else {
+      diagPacketC.setException(error);
+    }
+
+    return { result, error, diagPacket: diagPacketC.finish() };
 
   };
 
