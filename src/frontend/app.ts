@@ -240,10 +240,19 @@ export class App {
     pre: s => (roots) => {
       s.assert('has root', roots.length > 0);
       s.assert('root is component', roots[0].isComponent);
+      s.inspect({
+        numRoots: roots.length,
+        rootNames: roots.map(r => r.name),
+        rootNumChildren: roots.map(r => r.children.length),
+      });
     },
     post: s => function (result) {
       s.assert('tree exists', !!this.tree);
       s.assert('tree has roots', this.tree.roots.length > 0);
+      s.inspect({
+        treeRoots: this.tree.roots.length,
+        treeChildren: this.tree.roots.map(r => r.children.length)
+      });
     },
   })
   private createTree(roots: Array<Node>) {
