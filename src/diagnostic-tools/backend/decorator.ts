@@ -14,7 +14,7 @@ export function diagnosable(
         const { result, error, diagPacket }
           = wrapFunction('backend', func.name, func, { pre, post }).apply(this, [...args]);
         send(MessageFactory.diagnosticPacket(diagPacket));
-        // if (error) { throw error; }
+        if (error) { throw error; }
         return result;
       };
     };
