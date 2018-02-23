@@ -1,3 +1,5 @@
+// @todo: change name of file to wrapFunction
+
 import * as clone from 'clone';
 
 import { DiagPacketConstructor } from './DiagPacket.class';
@@ -17,11 +19,12 @@ export function wrapFunction(
     const serviceForSection = (section: 'pre'|'post') => {
       const packetMethods = diagPacketC.getSectionMethods(section);
       return {
-        assert: (label, expression) => {
+        assert: (label, expression, { fail } = { fail: undefined }) => {
           packetMethods.msg({
             txt: `[${Date.now()}] ${label}: [${!!expression}]`,
             color: expression ? 'default' : 'error',
           });
+          if (!expression && fail) { fail(); }
           return expression;
         },
         remember: section === 'pre' ?

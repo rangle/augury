@@ -11,23 +11,27 @@
         </div>
       </div>
       <div *ngIf="!entry.value.diagError">
-        <div>PRE</div>
-        <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
-          <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
-        </div>
-        <div *ngFor="let msg of entry.value.pre?.msgs">
-          <div style="color:{{msg.color}}">{{msg.txt}}</div>
+        <div *ngIf="objectKeys(entry.value.pre.snapshots).length || entry.value.pre.msgs.length">
+          <div>PRE</div>
+          <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
+            <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
+          </div>
+          <div *ngFor="let msg of entry.value.pre?.msgs">
+            <div style="color:{{msg.color}}">{{msg.txt}}</div>
+          </div>
         </div>
         <div *ngIf="entry.value.exception">
           <div> EXCEPTION: <strong> {{entry.value.exception}} </strong></div>
         </div>
         <div *ngIf="!entry.value.exception">
-          <div>POST</div>
-          <div *ngFor="let snapshotKey of objectKeys(entry.value.post?.snapshots)">
-            <div><strong>{{snapshotKey}}:</strong>{{entry.value.post?.snapshots[snapshotKey]}}</div>
-          </div>
-          <div *ngFor="let msg of entry.value.post?.msgs">
-            <div style="color:{{msg.color}}">{{msg.txt}}</div>
+          <div *ngIf="objectKeys(entry.value.post.snapshots).length || entry.value.post.msgs.length">
+            <div>POST</div>
+            <div *ngFor="let snapshotKey of objectKeys(entry.value.post.snapshots)">
+              <div><strong>{{snapshotKey}}:</strong>{{entry.value.post.snapshots[snapshotKey]}}</div>
+            </div>
+            <div *ngFor="let msg of entry.value.post?.msgs">
+              <div style="color:{{msg.color}}">{{msg.txt}}</div>
+            </div>
           </div>
       </div>
       </div>

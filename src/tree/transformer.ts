@@ -1,5 +1,7 @@
 import * as clone from 'clone';
 
+import { diagnosable } from '../diagnostic-tools/backend/decorator';
+
 import {
   Description,
   Property,
@@ -181,14 +183,25 @@ const getChangeDetection = (metadata): number => {
   }
 };
 
-const getDependencies = (instance): Array<Dependency> => {
-  const parameterDecorators = injectedParameterDecorators(instance);
-  const normalizedParamTypes = parameterTypes(instance).map((type, i) =>
-    type ? type : parameterDecorators[i].filter(decorator => decorator.toString() === '@Inject')[0].token);
+const getDependencies: (instance: any) => Array<Dependency>
+  = diagnosable({
+    name: 'getDependencies',
+    pre: s => (instance) => {
+      s.inspect({
+        parameterDecorators: injectedParameterDecorators(instance) || "undefined",
+        parameterTypes: parameterTypes(instance) || "undefined" // @todo improve stringify
+      });
+    }
+  })((instance) => {
+    const parameterDecorators = injectedParameterDecorators(instance);
+    const normalizedParamTypes = parameterDecorators ?
+      parameterTypes(instance).map((type, i) =>
+        type ? type : parameterDecorators[i].find(item => item.token !== undefined).token)
+      : [];
 
-  return normalizedParamTypes.map((paramType, i) => ({
-    id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
-    name: functionName(paramType) || paramType.toString(),
-    decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
-  }));
-};
+    return normalizedParamTypes.map((paramType, i) => ({
+      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
+      name: functionName(paramType) || paramType.toString(),
+      decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
+    }));
+  });
