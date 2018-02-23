@@ -20,7 +20,7 @@ export const parameterTypes = (instance): Array<any> =>
 export const injectedParameterDecorators: (instance: any) => Array<any>
   = diagnosable({
     name: 'injectedParameterDecorators',
-    deps: [ 'parameterTypes (decorators.ts)' ],
+    deps: [ 'parameterTypes (tree/decorators.ts)' ],
     pre: s => (instance) => {
       s.remember({ instance });
     },
