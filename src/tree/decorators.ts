@@ -13,9 +13,11 @@ export const classDecorators = (token): Array<any> =>
 export const propertyDecorators = (instance): Array<any> =>
   Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
 
-export const parameterTypes = (instance): Array<any> =>
-  Reflect.getOwnMetadata('design:paramtypes', instance.constructor)
-  .map(param => param.name == 'Object' ? null : param);
+export const parameterTypes = (instance): (Array<any> | null) => {
+  const pt = Reflect.getOwnMetadata('design:paramtypes', instance.constructor);
+  if (Array.isArray(pt)) { return pt.map(param => param.name === 'Object' ? null : param); }
+  else { return null; }
+};
 
 export const injectedParameterDecorators: (instance: any) => Array<any>
   = diagnosable({
@@ -26,7 +28,7 @@ export const injectedParameterDecorators: (instance: any) => Array<any>
     },
     post: s => (result: Array<any>) => {
       const pt = parameterTypes(s.old('instance'));
-      const matchPt = s.assert(
+      s.assert(
         `resulting array exists if and only if
           \`parameterTypes(instance)\` also exists
           and contains no null entries (which correspond to decorated parameters)`,
@@ -53,8 +55,8 @@ export const injectedParameterDecorators: (instance: any) => Array<any>
       }
       s.inspect({
         className: s.old('instance').constructor.name,
-        result: result || 'undefined',
-        parameterTypes: pt || 'undefined'
+        result: result,
+        parameterTypes: pt
       }); // @todo: improve stringify to print undefined. currently it omits
       // if(s.old('instance').constructor.name == 'Component4') debugger;
     }

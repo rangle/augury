@@ -1,4 +1,5 @@
-import stringify from 'fast-safe-stringify';
+const stringifier = require('stringifier/build/stringifier'); // @todo: weird issues with this module. importing build file against webpack's recommendations
+const stringify = stringifier({ indent: ' ' });
 
 export class DiagPacket {
   header: string;

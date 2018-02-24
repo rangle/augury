@@ -188,8 +188,8 @@ const getDependencies: (instance: any) => Array<Dependency>
     name: 'getDependencies',
     pre: s => (instance) => {
       s.inspect({
-        parameterDecorators: injectedParameterDecorators(instance) || "undefined",
-        parameterTypes: parameterTypes(instance) || "undefined" // @todo improve stringify
+        parameterDecorators: injectedParameterDecorators(instance),
+        parameterTypes: parameterTypes(instance)
       });
     }
   })((instance) => {
