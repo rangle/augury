@@ -3,6 +3,7 @@ const stringifier = require('stringifier/build/stringifier');
 const stringify = stringifier({ indent: ' ' });
 
 export class DiagPacket {
+  logicalThread: { stackLevel: number; id: number };
   header: string;
   pre: {
     msgs: Array<{ color: string; txt: string }>,
@@ -23,6 +24,7 @@ export class DiagPacketConstructor extends DiagPacket {
     this.header = '';
     this.pre =  { msgs: [], snapshots: {} };
     this.post = { msgs: [], snapshots: {} };
+    this.logicalThread = undefined;
     this.diagError = undefined;
     this.exception = undefined;
   }
@@ -33,6 +35,10 @@ export class DiagPacketConstructor extends DiagPacket {
 
   setException = e => {
     this.exception = e.toString();
+  }
+
+  setLogicalThread = (lt :{ stackLevel: number; id: number }) => {
+    this.logicalThread = lt;
   }
 
   setDiagError = ({ section, error }) => {
@@ -49,6 +55,7 @@ export class DiagPacketConstructor extends DiagPacket {
   })
 
   finish = (): DiagPacket => ({
+    logicalThread: this.logicalThread,
     header: this.header,
     pre: this.pre,
     post: this.post,

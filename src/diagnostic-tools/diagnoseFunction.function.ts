@@ -4,7 +4,7 @@ import * as clone from 'clone';
 
 import { DiagPacketConstructor } from './DiagPacket.class';
 
-declare const Zone: any;
+declare const Zone: any; // @todo: assuming that Zone is present (loaded in by angular). this is not necessarily true.
 
 export function wrapFunction(
   end: 'backend'|'frontend',
@@ -15,7 +15,7 @@ export function wrapFunction(
   return function (...args) {
 
     const diagPacketC = new DiagPacketConstructor();
-    diagPacketC.setHeader(`-------\n[${end}] [${Date.now()}] executing method: ${name}`);
+    diagPacketC.setHeader(`-------\n[${end}] [${Date.now()}] executing method: ${name}`); // @todo: formatting should not happen here.
 
     const mem = {};
     const serviceForSection = (section: 'pre'|'post') => {
@@ -23,7 +23,7 @@ export function wrapFunction(
       return {
         assert: (label, expression, { fail } = { fail: undefined }) => {
           packetMethods.msg({
-            txt: `[${Date.now()}] ${label}: [${!!expression}]`,
+            txt: `[${Date.now()}] ${label}: [${!!expression}]`, // @todo: formatting should not happen here.
             color: expression ? 'default' : 'error',
           });
           if (!expression && fail) { fail(); }
@@ -45,12 +45,16 @@ export function wrapFunction(
     }
 
     const { result, error } = (() => {
-      let retVal;
+      // @todo: all the zone operations should be part of a modular service.
       if (!Zone.current.auguryDiagnostic) {
-          Zone.current.auguryDiagnostic = { stackLevel: 0 };
+          Zone.current.auguryDiagnostic = { // @todo: this is LogicalThread type
+            id: Date.now(),
+            stackLevel: 0
+          };
       }
-      console.log('executing: ', name ? name : func.name);
-      console.log('current stack level: ', Zone.current.auguryDiagnostic.stackLevel);
+      diagPacketC.setLogicalThread(Zone.current.auguryDiagnostic);
+
+      let retVal;
       Zone.current.auguryDiagnostic.stackLevel++;
       try { retVal = { result: func.apply(this, args), error: undefined }; }
       catch (error) { retVal = { error, result: undefined }; }

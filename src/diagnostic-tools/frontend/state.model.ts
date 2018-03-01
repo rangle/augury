@@ -15,10 +15,15 @@ export const selectors = {
 export const updaters = {
   log: {
     addMsg (entry, state) { // @todo: type
-      return state.log.concat({type: 'MSG', value: entry });
+      return state.log; // @todo: removing msgs to simplify structure. add these back
+      // return state.log.concat({type: 'MSG', value: entry });
     },
     addPkt (entry, state) { // @todo: type
-      return state.log.concat({type: 'PKT', value: entry });
+      return state.log.concat({type: 'PKT', value: entry })
+        .sort((a, b) => { // @todo: shouldnt be sorting everything everytime
+          if (a.type != 'PKT' || b.type != 'PKT') { return 0; }
+          return (a.value.logicalThread.id < b.value.logicalThread.id) ? -1 : 1
+        });
     }
   },
   clear () {
