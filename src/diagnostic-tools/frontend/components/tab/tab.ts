@@ -25,7 +25,7 @@ export class DiagTabComponent {
     private diagActions: DiagActions,
   ) { }
 
-  /* // @todo: currently not tracking
+  /* // @todo: currently not tracking (for *ngFor optimization)
   private trackLogEntry(index: number, entry: LogEntry): string {
     return item.id;
   }
