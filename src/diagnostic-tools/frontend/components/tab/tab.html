@@ -4,36 +4,50 @@
       <div><strong><span>MSG: </span>{{entry.value.txt}}</strong></div>
     </div>
     <div *ngIf="entry.type == 'PKT'">
-      <div><strong>{{entry.value.header}}</strong></div>
+      <div><strong>=================={{entry.value.header}}</strong></div>
+      <div>---start time: {{entry.value.startTime}}</div>
+      <div>---running time (msec): {{entry.value.endTime - entry.value.startTime}}</div>
       <div *ngIf="entry.value.diagError">
-        <div> ERROR (in diagnostic code) [section {{entry.value.diagError.section}}]:
+        <div> ERROR (in diagnostic code) [section: {{entry.value.diagError.section}}]:
           <strong> {{entry.value.diagError.error}} </strong>
         </div>
       </div>
       <div *ngIf="!entry.value.diagError">
-        <div *ngIf="objectKeys(entry.value.pre.snapshots).length || entry.value.pre.msgs.length">
-          <div>PRE</div>
+        <div *ngIf="objectKeys(entry.value.pre.snapshots).length || entry.value.pre.statements.length">
+          <div>---pre</div>
+          <div *ngFor="let statement of entry.value.pre?.statements">
+            <div *ngIf="statement.type === STATEMENT_TYPE.ASSERTION">
+              <span class="assertion-{{statement.pass ? 'pass' : 'fail'}}">
+                <strong>{{statement.pass ? 'PASS' : 'FAIL'}}:</strong>
+              </span>
+              {{statement.label}}
+            </div>
+            <div *ngIf="statement.type === STATEMENT_TYPE.PLAIN_TEXT">{{statement.text}}</div>
+          </div>
           <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
             <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
-          </div>
-          <div *ngFor="let msg of entry.value.pre?.msgs">
-            <div style="color:{{msg.color}}">{{msg.txt}}</div>
           </div>
         </div>
         <div *ngIf="entry.value.exception">
           <div> EXCEPTION: <strong> {{entry.value.exception}} </strong></div>
         </div>
         <div *ngIf="!entry.value.exception">
-          <div *ngIf="objectKeys(entry.value.post.snapshots).length || entry.value.post.msgs.length">
-            <div>POST</div>
+          <div *ngIf="objectKeys(entry.value.post.snapshots).length || entry.value.post.statements.length">
+            <div>---post</div>
+            <div *ngFor="let statement of entry.value.post?.statements">
+              <div *ngIf="statement.type === STATEMENT_TYPE.ASSERTION">
+                <span class="assertion-{{statement.pass ? 'pass' : 'fail'}}">
+                  <strong>{{statement.pass ? 'PASS' : 'FAIL'}}:</strong>
+                </span>
+                {{statement.label}}
+              </div>
+              <div *ngIf="statement.type === STATEMENT_TYPE.PLAIN_TEXT">{{statement.text}}</div>
+            </div>
             <div *ngFor="let snapshotKey of objectKeys(entry.value.post.snapshots)">
               <div><strong>{{snapshotKey}}:</strong>{{entry.value.post.snapshots[snapshotKey]}}</div>
             </div>
-            <div *ngFor="let msg of entry.value.post?.msgs">
-              <div style="color:{{msg.color}}">{{msg.txt}}</div>
-            </div>
           </div>
-      </div>
+        </div>
       </div>
     </div>
   </div>

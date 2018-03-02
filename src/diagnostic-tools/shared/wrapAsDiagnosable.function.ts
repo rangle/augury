@@ -13,27 +13,26 @@ export function wrapAsDiagnosable(
   return function (...args) {
 
     const diagPacketC = new DiagPacketConstructor();
-    diagPacketC.setHeader(`-------\n[${end}] [${Date.now()}] executing method: ${name}`);
+    diagPacketC.setEnd(end);
+    diagPacketC.setHeader(name);
 
     const mem = {};
     const serviceForSection = (section: 'pre'|'post') => {
       const packetMethods = diagPacketC.getSectionMethods(section);
       return {
         assert: (label, expression, { fail } = { fail: undefined }) => {
-          packetMethods.msg({
-            txt: `[${Date.now()}] ${label}: [${!!expression}]`,
-            color: expression ? 'default' : 'error',
-          });
+          packetMethods.addAssertion(label, !!expression);
           if (!expression && fail) { fail(); }
           return expression;
         },
+        text: (txt:string) => packetMethods.addPlaintext(txt),
         remember: section === 'pre' ?
           vals => Object.keys(vals).forEach(k => mem[k] = clone(vals[k]))
           : undefined,
         old: section === 'post' ?
           key => mem[key]
           : undefined,
-        inspect: packetMethods.inspect,
+        inspect: (serializable: {} = {}) => packetMethods.inspect(serializable),
       };
     };
 
@@ -44,8 +43,10 @@ export function wrapAsDiagnosable(
 
     const { result, error } = (() => {
       let retVal;
+      diagPacketC.setStartTime(Date.now());
       try { retVal = { result: func.apply(this, args), error: undefined }; }
       catch (error) { retVal = { error, result: undefined }; }
+      diagPacketC.setEndTime(Date.now());
       return retVal;
     })();
 
