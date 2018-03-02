@@ -67,7 +67,7 @@ export enum MessageType {
 
   GoogleTagManagerSend,
 
-  /// @todo: these have to be declared here because there's no way to merge enums..
+  /// @todo: these have to be put here because there's no way to merge enums..
   ///        (should be declared in 'diagnostic-tools' module directory)
   /// Diagnostic info collected on the backend gets sent to the front end for display as a DP
   DiagnosticPacket,
