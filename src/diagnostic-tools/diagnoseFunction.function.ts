@@ -44,23 +44,34 @@ export function wrapFunction(
       catch (error) { diagPacketC.setDiagError({ section: 'pre', error }); }
     }
 
-    const { result, error } = (() => {
+    const e = () => {
+      //debugger;
       // @todo: all the zone operations should be part of a modular service.
-      if (!Zone.current.auguryDiagnostic) {
-          Zone.current.auguryDiagnostic = { // @todo: this is LogicalThread type
+      if (!Zone.current.auguryLogicalThread) {
+          Zone.current.auguryLogicalThread = { // @todo: this is LogicalThread type
             id: Date.now(),
-            stackLevel: 0
+            stackTreePosition: [ 0 ]
           };
       }
-      diagPacketC.setLogicalThread(Zone.current.auguryDiagnostic);
+      const logicalThread = Zone.current.auguryLogicalThread;
+
+      diagPacketC.setLogicalThread(clone(logicalThread)); // @todo: logicalThread class should spit out clone thing
 
       let retVal;
-      Zone.current.auguryDiagnostic.stackLevel++;
+      // @todo: all the zone operations should be part of a modular service.
+      logicalThread.stackTreePosition.push( 0 );
       try { retVal = { result: func.apply(this, args), error: undefined }; }
       catch (error) { retVal = { error, result: undefined }; }
-      Zone.current.auguryDiagnostic.stackLevel--;
+      logicalThread.stackTreePosition.pop();
+
+      // @todo: logicalThread class should handle cursor movement
+      const nextSibling = logicalThread.stackTreePosition.pop() + 1;
+      logicalThread.stackTreePosition.push( nextSibling );
+
       return retVal;
-    })();
+    };
+
+    const { result, error } = e();
 
     if (!error) {
       if (diagFuncs.post) {

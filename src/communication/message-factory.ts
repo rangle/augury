@@ -195,6 +195,7 @@ export abstract class MessageFactory {
     });
   }
 
+  // @todo: import this from diagnostic-tools module (keep all related stuff together)
   static diagnosticPacket(packet: DiagPacket): Message<DiagPacket> {
     return create({
       messageType: MessageType.DiagnosticPacket,

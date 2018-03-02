@@ -1,11 +1,11 @@
 <div class="flex-grow flex flex-column bg-base">
-  <div *ngFor="let entry of log | async"> <!-- @todo: add "trackLogEntry: trackById" -->
+<!--   <div *ngFor="let entry of log | async"> <!- @todo: add "trackLogEntry: trackById" ->
     <div *ngIf="entry.type == 'MSG'">
       <div><strong><span>MSG: </span>{{entry.value.txt}}</strong></div>
     </div>
     <div *ngIf="entry.type == 'PKT'">
-      <div>
-        <span><strong>{{entry.value.header}}</strong> <<{{entry.value.logicalThread.id}} || {{entry.value.logicalThread.stackLevel}}>> </span>
+     <div>
+        <span><strong>{{entry.value.header}}</strong> <<{{entry.value.logicalThread.id}} || {{entry.value.logicalThread.stackTreePosition.join(',')}}>> </span>
       </div>
       <div *ngIf="entry.value.diagError">
         <div> ERROR (in diagnostic code) [section {{entry.value.diagError.section}}]:
@@ -38,5 +38,5 @@
       </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
