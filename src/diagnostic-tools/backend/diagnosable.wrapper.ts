@@ -1,8 +1,11 @@
-import { send } from '../../backend/indirect-connection'; // @todo: pathing
-import { MessageFactory } from '../../communication/message-factory';
+// project deps
+import { send } from 'diagnostic-tools/module-dependencies.barrel';
 
-import { DiagPacketConstructor } from '../DiagPacket.class';
-import { wrapFunction } from '../diagnoseFunction.function';
+import { DiagnosticMessageFactory } from 'diagnostic-tools/shared/communication/message-factory';
+
+// same-module deps
+import { DiagPacketConstructor } from 'diagnostic-tools/shared/DiagPacket.class';
+import { wrapAsDiagnosable } from 'diagnostic-tools/shared/wrapAsDiagnosable.function';
 
 interface DiagnosableParams { // @todo flush out types
     name?: string;
@@ -19,8 +22,8 @@ export function diagnosable({
       const func = target;
       return function (...args) {
         const { result, error, diagPacket }
-          = wrapFunction('backend', name ? name : func.name, func, { pre, post }).apply(this, [...args]);
-        send(MessageFactory.diagnosticPacket(diagPacket));
+          = wrapAsDiagnosable('backend', name ? name : func.name, func, { pre, post }).apply(this, [...args]);
+        send(DiagnosticMessageFactory.diagnosticPacket(diagPacket));
         if (error) { throw error; }
         return result;
       };
@@ -29,7 +32,7 @@ export function diagnosable({
 
 
 export function diagnosableEvent(name) {
-  send(MessageFactory.diagnosticMsg({
+  send(DiagnosticMessageFactory.diagnosticMsg({
     txt: `-------\n[backend] [${Date.now()}] event occurred: ${name}`
   }));
 }

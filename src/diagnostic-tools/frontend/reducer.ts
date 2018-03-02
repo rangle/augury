@@ -1,6 +1,5 @@
-import * as R from 'ramda';
-
-import {DiagActions} from './actions';
+// same-module deps
+import { DiagActions } from './actions';
 import { updaters, NAMESPACE, INITIAL_STATE} from './state.model';
 
 // this is the key name for the diag state subtree

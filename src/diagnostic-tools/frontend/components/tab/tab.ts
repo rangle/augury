@@ -1,8 +1,10 @@
+// third party deps
 import { Component } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { selectors } from '../../state.model'; // @todo: fix path, get rid of ../..
-import { DiagActions } from '../../actions'; // @todo: fix path, get rid of ../..
+// same-module deps
+import { selectors } from 'diagnostic-tools/frontend/state.model';
+import { DiagActions } from 'diagnostic-tools/frontend/actions';
 
 interface LogEntry {
   txt: string;

@@ -6,7 +6,7 @@ import { DiagPacketConstructor } from './DiagPacket.class';
 
 declare const Zone: any;
 
-export function wrapFunction(
+export function wrapAsDiagnosable(
   end: 'backend'|'frontend',
   name: string, func: Function,
   diagFuncs: {pre?: Function,  post?: Function} = {pre: undefined, post: undefined}

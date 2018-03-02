@@ -65,7 +65,13 @@ module.exports = {
 
   resolve: {
     root: __dirname,
-    extensions: ['', '.ts', '.js', '.json']
+    extensions: ['', '.ts', '.js', '.json'],
+    alias: {
+      'diagnostic-tools': path.resolve('./src/diagnostic-tools'),
+      'backend': path.resolve('./src/backend'),
+      'frontend': path.resolve('./src/frontend'),
+      'communication': path.resolve('./src/communication'),
+    },
   },
   module: {
     preLoaders: [{

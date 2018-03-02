@@ -3,7 +3,7 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {compare} from '../utils/patch';
 import {isAngular, isDebugMode} from './utils/app-check';
-import {diagnosable, diagnosableEvent} from '../diagnostic-tools/backend/decorator';
+import { diagnosable } from 'diagnostic-tools/backend/diagnosable.wrapper';
 
 import {SerializeableError} from '../utils/error-handling';
 
@@ -219,7 +219,6 @@ const bind = diagnosable({
     const ngZone = root.injector.get(ng.coreTokens.NgZone);
     if (ngZone) {
       subscriptions.push(ngZone.onStable.subscribe(() => {
-        diagnosableEvent('ngZone onStable');
         subject.next(void 0);
       }));
     }
@@ -227,7 +226,6 @@ const bind = diagnosable({
     // parse components and routes each time
     subscriptions.push(
       subject.debounceTime(0).subscribe(() => {
-        diagnosableEvent('subject fired');
         updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
         updateRouterTree();
       }));

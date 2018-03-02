@@ -1,6 +1,6 @@
 import * as clone from 'clone';
 
-import { diagnosable } from '../diagnostic-tools/backend/decorator';
+import { diagnosable } from 'diagnostic-tools/backend/diagnosable.wrapper';
 
 import {
   Description,

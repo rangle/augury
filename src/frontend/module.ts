@@ -8,7 +8,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {
   DiagActions,
   DiagService,
-  useService,
+  useServiceInstance,
   DIAG_COMPONENTS,
 } from '../diagnostic-tools/frontend';
 
@@ -83,7 +83,7 @@ storedOptionsService.load()
 
   const diagActions = new DiagActions();
   const diagService = new DiagService(diagActions, storedOptionsService);
-  useService(diagService);
+  useServiceInstance(diagService);
 
   @NgModule({
     imports: [

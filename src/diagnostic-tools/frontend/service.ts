@@ -1,10 +1,14 @@
+// third party deps
 import { Injectable } from '@angular/core';
 
-import { Options } from '../../frontend/state'; // @todo: pathing (should we merge with src/frontend?)
+// project deps
+import { Options } from 'diagnostic-tools/module-dependencies.barrel';
 
-import { selectors } from './state.model';
-import { DiagActions } from './actions';
-import { DiagPacket } from '../DiagPacket.class';
+// same-module deps
+import { DiagPacket } from 'diagnostic-tools/shared/DiagPacket.class';
+import { selectors } from 'diagnostic-tools/frontend/state.model';
+import { DiagActions } from 'diagnostic-tools/frontend/actions';
+
 
 @Injectable()
 export class DiagService {

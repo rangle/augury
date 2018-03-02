@@ -5,7 +5,7 @@ import {
 
 import {functionName} from '../utils';
 
-import { diagnosable } from '../diagnostic-tools/backend/decorator';
+import { diagnosable } from 'diagnostic-tools/backend/diagnosable.wrapper';
 
 export const classDecorators = (token): Array<any> =>
   Reflect.getOwnMetadata('annotations', token) || [];

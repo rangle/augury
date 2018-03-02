@@ -2,7 +2,6 @@ import {
   Message,
   MessageResponse,
   Serialize,
-  messageSource,
 } from './message';
 
 import {SerializeableError} from '../utils/error-handling';
@@ -33,19 +32,12 @@ import {
   serializeBinary,
 } from '../utils';
 
+import { create } from './message-create';
+
 import {SimpleOptions} from '../options';
 
-import { DiagPacket } from '../diagnostic-tools/DiagPacket.class';
-
-const create = <T>(properties: T) =>
-  Object.assign({
-    messageSource,
-    messageId: getRandomHash(),
-    serialize: Serialize.None,
-  },
-  properties);
-
 export abstract class MessageFactory {
+
   static initialize(options?: SimpleOptions): Message<SimpleOptions> {
     return create({
       messageType: MessageType.Initialize,
@@ -192,20 +184,6 @@ export abstract class MessageFactory {
         event,
         desc
       }
-    });
-  }
-
-  static diagnosticPacket(packet: DiagPacket): Message<DiagPacket> {
-    return create({
-      messageType: MessageType.DiagnosticPacket,
-      content: packet
-    });
-  }
-
-  static diagnosticMsg(msg: { txt }): Message<{ txt: string }> {
-    return create({
-      messageType: MessageType.DiagnosticMsg,
-      content: msg
     });
   }
 
