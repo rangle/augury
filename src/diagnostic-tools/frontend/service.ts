@@ -5,9 +5,9 @@ import { Injectable } from '@angular/core';
 import { Options } from 'diagnostic-tools/module-dependencies.barrel';
 
 // same-module deps
-import { DiagPacket } from 'diagnostic-tools/shared/DiagPacket.class';
-import { selectors } from 'diagnostic-tools/frontend/state.model';
-import { DiagActions } from 'diagnostic-tools/frontend/actions';
+import { DiagPacket } from 'diagnostic-tools/shared';
+import { selectors } from './state.model';
+import { DiagActions } from './actions';
 
 
 @Injectable()

@@ -50,7 +50,7 @@ import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
-import {DiagService, diagnosable} from '../diagnostic-tools/frontend';
+import {DiagService, diagnosable} from 'diagnostic-tools/frontend';
 
 require('!style!css!postcss!../styles/app.css');
 

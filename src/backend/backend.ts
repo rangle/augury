@@ -3,7 +3,7 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {compare} from '../utils/patch';
 import {isAngular, isDebugMode} from './utils/app-check';
-import { diagnosable } from 'diagnostic-tools/backend/diagnosable.wrapper';
+import { diagnosable } from 'diagnostic-tools/backend';
 
 import {SerializeableError} from '../utils/error-handling';
 

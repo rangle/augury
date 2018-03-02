@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 
 import { mainReducer } from '../reducers/main-reducer';
-import { diagReducer, basename } from 'diagnostic-tools/frontend/reducer';
+import { diagReducer, diagStoreRoot} from 'diagnostic-tools/frontend';
 
 export const rootReducer = combineReducers({
   main: mainReducer,
-  [basename]: diagReducer
+  [diagStoreRoot]: diagReducer
 });

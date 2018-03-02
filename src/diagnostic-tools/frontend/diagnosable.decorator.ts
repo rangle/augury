@@ -1,5 +1,5 @@
 // same-module deps
-import { wrapAsDiagnosable } from 'diagnostic-tools/shared/wrapAsDiagnosable.function';
+import { wrapAsDiagnosable } from 'diagnostic-tools/shared';
 
 let diagService;
 

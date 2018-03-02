@@ -10,7 +10,7 @@ import {
   DiagService,
   useServiceInstance,
   DIAG_COMPONENTS,
-} from '../diagnostic-tools/frontend';
+} from 'diagnostic-tools/frontend';
 
 import {Accordion} from './components/accordion/accordion';
 import {AppTrees} from './components/app-trees/app-trees';

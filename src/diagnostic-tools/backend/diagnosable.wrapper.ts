@@ -1,11 +1,8 @@
 // project deps
 import { send } from 'diagnostic-tools/module-dependencies.barrel';
 
-import { DiagnosticMessageFactory } from 'diagnostic-tools/shared/communication/message-factory';
-
 // same-module deps
-import { DiagPacketConstructor } from 'diagnostic-tools/shared/DiagPacket.class';
-import { wrapAsDiagnosable } from 'diagnostic-tools/shared/wrapAsDiagnosable.function';
+import { DiagnosticMessageFactory, wrapAsDiagnosable } from 'diagnostic-tools/shared';
 
 interface DiagnosableParams { // @todo flush out types
     name?: string;
@@ -28,11 +25,4 @@ export function diagnosable({
         return result;
       };
     };
-}
-
-
-export function diagnosableEvent(name) {
-  send(DiagnosticMessageFactory.diagnosticMsg({
-    txt: `-------\n[backend] [${Date.now()}] event occurred: ${name}`
-  }));
 }
