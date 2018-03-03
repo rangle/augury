@@ -12,15 +12,15 @@ export class DiagPacket {
   header: string;
   startTime: number;
   endTime: number;
-  pre: DiagnosticSectionResult;
-  post: DiagnosticSectionResult;
+  pre?: DiagnosticSectionResult;
+  post?: DiagnosticSectionResult;
   diagError?: { section, error };
-  exception: any;
+  exception?: any;
 }
 
 /**
- *  DiagnosticSectionResults contain arrays of statements of the following types
- *    full type definitions below.
+ *  DiagnosticSectionResults contain arrays of statements of the following types.
+ *    full type definitions below (Statement, Assertion, Plaintext, ..).
  */
 export enum STATEMENT_TYPE {
     ASSERTION,
@@ -33,13 +33,17 @@ export enum STATEMENT_TYPE {
  */
 class DiagnosticSectionResult {
   statements: Array<Statement>;
-  snapshots: {}; // Map < K: string: name of inspected object, string: stringified object >
+  snapshots: { [name: string]: string }; // each snapshot is stringified
 }
 
+/**
+ */
 abstract class Statement {
   type: STATEMENT_TYPE;
 }
 
+/**
+ */
 class Assertion extends Statement {
   type = STATEMENT_TYPE.ASSERTION;
   constructor(
@@ -48,6 +52,8 @@ class Assertion extends Statement {
   ) { super(); }
 }
 
+/**
+ */
 class Plaintext extends Statement {
   type = STATEMENT_TYPE.PLAIN_TEXT;
   constructor(
@@ -63,49 +69,6 @@ class Plaintext extends Statement {
  */
 export class DiagPacketConstructor extends DiagPacket {
 
-  constructor() {
-    super();
-    this.header = '';
-    this.pre =  { statements: [], snapshots: {}, };
-    this.post = { statements: [], snapshots: {}, };
-    this.diagError = undefined;
-    this.exception = undefined;
-  }
-
-  setHeader = (txt: string) => {
-    this.header = txt;
-  }
-
-  setEnd = (end: 'frontend' | 'backend') => {
-    this.end = end;
-  }
-
-  setStartTime = (timestamp:number) => {
-    this.startTime = timestamp;
-  }
-
-  setEndTime = (timestamp:number) => {
-    this.endTime = timestamp;
-  }
-
-  setException = e => {
-    this.exception = e.toString();
-  }
-
-  setDiagError = ({ section, error }) => {
-    error = error.toString();
-    this.diagError = { section, error };
-  }
-
-  getSectionMethods = (section: 'pre'|'post') => ({
-    addPlaintext: (txt: string) =>
-      this[section].statements.push(new Plaintext(txt)),
-    addAssertion: (label: string, pass: boolean) =>
-      this[section].statements.push(new Assertion(label, pass)),
-    inspect: (vals) => Object.keys(vals)
-      .forEach(k => this[section].snapshots[k] = stringify(vals[k]))
-  })
-
   finish = (): DiagPacket => ({
     end: this.end,
     header: this.header,
@@ -115,6 +78,37 @@ export class DiagPacketConstructor extends DiagPacket {
     post: this.post,
     exception: this.exception,
     diagError: this.diagError,
+  })
+
+  constructor() {
+    super();
+    this.header = '';
+    this.pre =  { statements: [], snapshots: {}, };
+    this.post = { statements: [], snapshots: {}, };
+    this.diagError = undefined;
+    this.exception = undefined;
+  }
+
+  setHeader = (txt: string) =>
+    this.header = txt
+  setEnd = (end: 'frontend' | 'backend') =>
+    this.end = end
+  setStartTime = (timestamp: number) =>
+    this.startTime = timestamp
+  setEndTime = (timestamp: number) =>
+    this.endTime = timestamp
+  setException = e =>
+    this.exception = e.toString()
+  setDiagError = ({ section, error }) =>
+    this.diagError = { section, error: error.toString() }
+
+  getSectionMethods = (section: 'pre'|'post') => ({
+    addPlaintext: (txt: string) =>
+      this[section].statements.push(new Plaintext(txt)),
+    addAssertion: (label: string, pass: boolean) =>
+      this[section].statements.push(new Assertion(label, pass)),
+    inspect: (vals) => Object.keys(vals)
+      .forEach(k => this[section].snapshots[k] = stringify(vals[k]))
   })
 
 }

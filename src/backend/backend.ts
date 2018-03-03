@@ -134,7 +134,7 @@ const updateComponentTree = diagnosable({
     s.assert('roots is an array', Array.isArray(roots));
     let t: any = {};
     try {
-      t = createTreeFromElements(roots, treeRenderOptions);
+    //  t = createTreeFromElements(roots, treeRenderOptions);
     } catch (e) { }
     s.assert('createTreeFromElements got a tree', !!t.tree);
     s.assert('createTreeFromElements got has count > 0', t.count > 0);
@@ -142,7 +142,7 @@ const updateComponentTree = diagnosable({
   }
 })
 (
-  function updateComponentTree (roots: Array<any>) {
+  function updateComponentTree (roots) {
     const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
     if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
@@ -205,7 +205,7 @@ const subscriptions = new Array<Subscription>();
 const bind = diagnosable({
   pre: s => (root) => {
     s.assert('root passed as arg, and has injector', !!root.injector);
-    s.assert('global func getAllAngularRootElements exists', getAllAngularRootElements);
+    s.assert('global func getAllAngularRootElements exists', !!getAllAngularRootElements);
     if (root.injector) {
       s.assert('root injector has ngZone', !!root.injector.get(ng.coreTokens.NgZone));
     }

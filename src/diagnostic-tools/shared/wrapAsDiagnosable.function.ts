@@ -2,13 +2,35 @@
 import * as clone from 'clone';
 
 // same-module deps
-import { DiagPacketConstructor } from './DiagPacket.class';
+import { DiagPacketConstructor, DiagPacket } from './DiagPacket.class';
+
+interface DiagHelpersGeneral {
+  say: (txt: string) => void;
+  assert: (label: string, expression: boolean, ops?: { fail: () => void }) => boolean; // returns expression
+  inspect: (serializable: any) => void;
+}
+
+export interface DiagHelpersPre extends DiagHelpersGeneral {
+  remember: (things: { [name: string]: any }) => void;
+}
+
+export interface DiagHelpersPost extends DiagHelpersGeneral {
+  old: (name: string) => any;
+}
 
 export function wrapAsDiagnosable(
-  end: 'backend'|'frontend',
-  name: string, func: Function,
-  diagFuncs: {pre?: Function,  post?: Function} = {pre: undefined, post: undefined}
-) {
+  end: 'backend' | 'frontend',
+  name: string,
+  func: (...T) => any,
+  diagFuncs: {
+    pre?: (d: DiagHelpersPre) => (...T) => void,
+    post?: (d: DiagHelpersPost) => (...T) => void
+  } = {}
+): (...T) => {
+  diagPacket: DiagPacket,
+  result: any,
+  error: any,
+} {
 
   return function (...args) {
 
@@ -20,12 +42,12 @@ export function wrapAsDiagnosable(
     const serviceForSection = (section: 'pre'|'post') => {
       const packetMethods = diagPacketC.getSectionMethods(section);
       return {
-        assert: (label, expression, { fail } = { fail: undefined }) => {
+        assert: (label, expression, { fail } = { fail }) => {
           packetMethods.addAssertion(label, !!expression);
           if (!expression && fail) { fail(); }
           return expression;
         },
-        text: (txt:string) => packetMethods.addPlaintext(txt),
+        say: (txt: string) => packetMethods.addPlaintext(txt),
         remember: section === 'pre' ?
           vals => Object.keys(vals).forEach(k => mem[k] = clone(vals[k]))
           : undefined,
