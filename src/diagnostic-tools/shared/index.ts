@@ -1,5 +1,5 @@
 export { DiagPacket } from './DiagPacket.class';
-export { DiagnosticMessageFactory } from './message-factory.extension';
+export { DiagnosticMessageFactory } from './MessageFactory.extension';
 export {
   wrapAsDiagnosable,
   DiagHelpersPre,
