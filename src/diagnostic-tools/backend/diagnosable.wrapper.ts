@@ -2,7 +2,12 @@
 import { send } from 'diagnostic-tools/module-dependencies.barrel';
 
 // same-module deps
-import { DiagnosticMessageFactory, wrapAsDiagnosable, DiagHelpersPre, DiagHelpersPost} from 'diagnostic-tools/shared';
+import {
+  DiagnosticMessageFactory,
+  wrapAsDiagnosable,
+  DiagHelpersPre,
+  DiagHelpersPost
+} from 'diagnostic-tools/shared';
 
 export function diagnosable({ name, deps = [], pre, post, }: {
   name?: string;

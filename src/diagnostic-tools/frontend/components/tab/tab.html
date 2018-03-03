@@ -1,21 +1,21 @@
 <div class="flex-grow flex flex-column bg-base">
-  <div *ngFor="let entry of log | async"> <!-- @todo: add "trackLogEntry: trackById" -->
-    <div *ngIf="entry.type == 'MSG'">
-      <div><strong><span>MSG: </span>{{entry.value.txt}}</strong></div>
+  <div *ngFor="let entry of packets | async"> <!-- @todo: add "trackLogEntry: trackById" -->
+  <!--  <div *ngIf="entry.type == 'MSG'">
+      <div><strong><span>MSG: </span>{{entry.txt}}</strong></div>
     </div>
-    <div *ngIf="entry.type == 'PKT'">
-      <div><strong>=================={{entry.value.header}}</strong></div>
-      <div>---start time: {{entry.value.startTime}}</div>
-      <div>---running time (msec): {{entry.value.endTime - entry.value.startTime}}</div>
-      <div *ngIf="entry.value.diagError">
-        <div> ERROR (in diagnostic code) [section: {{entry.value.diagError.section}}]:
-          <strong> {{entry.value.diagError.error}} </strong>
+    <div *ngIf="entry.type == 'PKT'"> -->
+      <div><strong>=================={{entry.header}}</strong></div>
+      <div>---start time: {{entry.startTime}}</div>
+      <div>---running time (msec): {{entry.endTime - entry.startTime}}</div>
+      <div *ngIf="entry.diagError">
+        <div> ERROR (in diagnostic code) [section: {{entry.diagError.section}}]:
+          <strong> {{entry.diagError.error}} </strong>
         </div>
       </div>
-      <div *ngIf="!entry.value.diagError">
-        <div *ngIf="objectKeys(entry.value.pre.snapshots).length || entry.value.pre.statements.length">
+      <div *ngIf="!entry.diagError">
+        <div *ngIf="objectKeys(entry.pre.snapshots).length || entry.pre.statements.length">
           <div>---pre</div>
-          <div *ngFor="let statement of entry.value.pre?.statements">
+          <div *ngFor="let statement of entry.pre?.statements">
             <div *ngIf="statement.type === STATEMENT_TYPE.ASSERTION">
               <span class="assertion-{{statement.pass ? 'pass' : 'fail'}}">
                 <strong>{{statement.pass ? 'PASS' : 'FAIL'}}:</strong>
@@ -24,17 +24,17 @@
             </div>
             <div *ngIf="statement.type === STATEMENT_TYPE.PLAIN_TEXT">{{statement.text}}</div>
           </div>
-          <div *ngFor="let snapshotKey of objectKeys(entry.value.pre?.snapshots)">
-            <div><strong>{{snapshotKey}}:</strong>{{entry.value.pre?.snapshots[snapshotKey]}}</div>
+          <div *ngFor="let snapshotKey of objectKeys(entry.pre?.snapshots)">
+            <div><strong>{{snapshotKey}}:</strong>{{entry.pre?.snapshots[snapshotKey]}}</div>
           </div>
         </div>
-        <div *ngIf="entry.value.exception">
-          <div> EXCEPTION: <strong> {{entry.value.exception}} </strong></div>
+        <div *ngIf="entry.exception">
+          <div> EXCEPTION: <strong> {{entry.exception}} </strong></div>
         </div>
-        <div *ngIf="!entry.value.exception">
-          <div *ngIf="objectKeys(entry.value.post.snapshots).length || entry.value.post.statements.length">
+        <div *ngIf="!entry.exception">
+          <div *ngIf="objectKeys(entry.post.snapshots).length || entry.post.statements.length">
             <div>---post</div>
-            <div *ngFor="let statement of entry.value.post?.statements">
+            <div *ngFor="let statement of entry.post?.statements">
               <div *ngIf="statement.type === STATEMENT_TYPE.ASSERTION">
                 <span class="assertion-{{statement.pass ? 'pass' : 'fail'}}">
                   <strong>{{statement.pass ? 'PASS' : 'FAIL'}}:</strong>
@@ -43,12 +43,12 @@
               </div>
               <div *ngIf="statement.type === STATEMENT_TYPE.PLAIN_TEXT">{{statement.text}}</div>
             </div>
-            <div *ngFor="let snapshotKey of objectKeys(entry.value.post.snapshots)">
-              <div><strong>{{snapshotKey}}:</strong>{{entry.value.post.snapshots[snapshotKey]}}</div>
+            <div *ngFor="let snapshotKey of objectKeys(entry.post.snapshots)">
+              <div><strong>{{snapshotKey}}:</strong>{{entry.post.snapshots[snapshotKey]}}</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 </div>

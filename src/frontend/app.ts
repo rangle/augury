@@ -89,7 +89,8 @@ export class App {
               private diagService: DiagService,
   ) {
 
-    this.diagService.log('constructing top component...');
+    // @todo: this is a DiagEvent
+    // this.diagService.log('constructing top component...');
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {
@@ -183,12 +184,14 @@ export class App {
           (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
         break;
       case MessageType.CompleteTree:
-        this.diagService.logMsg({ txt: `-------- [frontend] [${Date.now()}]received MessageType.CompleteTree` });
+        // @todo: this is a diag event
+        // this.diagService.logMsg({ txt: `-------- [frontend] [${Date.now()}]received MessageType.CompleteTree` });
         this.createTree(msg.content);
         respond();
         break;
       case MessageType.TreeDiff:
-        this.diagService.logMsg({ txt: `-------- [frontend] [${Date.now()}]received MessageType.TreeDiff` });
+        // @todo: this is a diag event
+        // this.diagService.logMsg({ txt: `-------- [frontend] [${Date.now()}]received MessageType.TreeDiff` });
         if (this.tree == null) {
           this.connection.send(MessageFactory.initialize(this.options.simpleOptions())); // request tree
         }
@@ -226,11 +229,7 @@ export class App {
         respond();
         break;
       case MessageType.DiagnosticPacket:
-        this.diagService.logPacket(msg.content);
-        respond();
-        break;
-      case MessageType.DiagnosticMsg:
-        this.diagService.logMsg(msg.content);
+        this.diagService.takePacket(msg.content);
         respond();
         break;
     }

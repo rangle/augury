@@ -1,19 +1,21 @@
 // same-module deps
-import { DiagActions } from './actions';
-import { updaters, NAMESPACE, INITIAL_STATE} from './state.model';
+import { DiagPacket } from '../shared';
+import { DiagActions, DiagActionType } from './actions';
+import { DiagState, Updaters, NAMESPACE, INITIAL_STATE} from './state.model';
 
 // this is the key name for the diag state subtree
 export const diagStoreRoot = NAMESPACE;
 
-export function diagReducer(state = INITIAL_STATE, action) {
+export function diagReducer(
+  state: DiagState = INITIAL_STATE,
+  action: { type: DiagActionType, payload: any }
+): DiagState {
 
   switch (action.type) {
-    case DiagActions.LOGMSG:
-      return { log: updaters.log.addMsg(action.payload, state) };
-    case DiagActions.LOGPKT:
-      return { log: updaters.log.addPkt(action.payload, state) };
-    case DiagActions.CLEAR:
-      return updaters.clear();
+    case DiagActionType.TAKE_PKT:
+      return { packets: Updaters.addPacket(<DiagPacket> action.payload, state) };
+    case DiagActionType.CLEAR:
+      return Updaters.clear();
   }
 
   return state;

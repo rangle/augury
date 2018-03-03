@@ -1,16 +1,19 @@
 // same-module deps
-import { wrapAsDiagnosable } from 'diagnostic-tools/shared';
+import {
+  wrapAsDiagnosable,
+  DiagHelpersPre,
+  DiagHelpersPost
+} from 'diagnostic-tools/shared';
+import { DiagService } from './service';
 
-let diagService;
+// @todo: more functional way to do this?
+let diagService: DiagService;
+export const useServiceInstance = (s: DiagService) => diagService = s;
 
-export function useServiceInstance(s) {
-  diagService = s;
-}
-
-export function diagnosable(
-    { pre = undefined, post = undefined }
-  = { pre: undefined,  post: undefined  }
-) {
+export function diagnosable({ pre, post }: {
+  pre?: (d: DiagHelpersPre) => (...T) => void;
+  post?: (d: DiagHelpersPost) => (...T) => void;
+}) {
     return function (
       target: any,
       propertyKey: string,
@@ -21,7 +24,7 @@ export function diagnosable(
       descriptor.value = function (...args) {
         const { result, error, diagPacket }
           = wrapAsDiagnosable('frontend', propertyKey, func, { pre, post }).apply(this, [...args]);
-        diagService.logPacket(diagPacket);
+        diagService.takePacket(diagPacket);
         if (error) { throw error; }
         return result;
       };

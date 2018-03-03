@@ -71,6 +71,5 @@ export enum MessageType {
   ///        (should be declared in 'diagnostic-tools' module directory)
   /// Diagnostic info collected on the backend gets sent to the front end for display as a DP
   DiagnosticPacket,
-  DiagnosticMsg,
 
 }

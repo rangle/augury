@@ -1,27 +1,24 @@
+// same-module deps
+import { DiagPacket } from 'diagnostic-tools/shared';
+
 export const NAMESPACE = 'diag';
-const _getState = (store) => store[NAMESPACE];
+const _getState = (store: any): DiagState => store[NAMESPACE];
 
-// @todo: needs type
-export const INITIAL_STATE = {
-  log: [] // @todo: needs type (msg/packet)
+export interface DiagState {
+  packets: Array<DiagPacket>;
+}
+
+export const INITIAL_STATE: DiagState = {
+  packets: []
 };
 
-export const selectors = {
-  log (store) {
-    return _getState(store).log;
-  }
-};
+export class Selectors {
+  static packets = (store) => _getState(store).packets;
+}
 
-export const updaters = {
-  log: {
-    addMsg (entry, state) { // @todo: type
-      return state.log.concat({type: 'MSG', value: entry });
-    },
-    addPkt (entry, state) { // @todo: type
-      return state.log.concat({type: 'PKT', value: entry });
-    }
-  },
-  clear () {
-    return INITIAL_STATE;
-  }
-};
+export class Updaters {
+  static addPacket
+    = (packet: DiagPacket, state: DiagState): Array<DiagPacket> =>
+      state.packets.concat(packet)
+  static clear = () => INITIAL_STATE;
+}

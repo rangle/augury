@@ -15,11 +15,4 @@ export class DiagnosticMessageFactory extends MessageFactory {
     });
   }
 
-  static diagnosticMsg(msg: { txt }): Message<{ txt: string }> {
-    return create({
-      messageType: MessageType.DiagnosticMsg,
-      content: msg
-    });
-  }
-
 }
