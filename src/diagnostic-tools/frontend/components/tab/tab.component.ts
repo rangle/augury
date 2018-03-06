@@ -23,7 +23,7 @@ export class DiagTabComponent {
 
   constructor(
     private diagActions: DiagActions,
-  ) { debugger; }
+  ) { }
 
   /* // @todo: currently not tracking (for *ngFor optimization)
   private trackLogEntry(index: number, entry: LogEntry): string {
