@@ -3,7 +3,7 @@
  *  Diagnostics are serializable. (not enforced)
  */
 export class Diagnostic {
-  end: 'frontend' | 'backend';
+  end: End
   startTime: number;
   pass: boolean;
 }
