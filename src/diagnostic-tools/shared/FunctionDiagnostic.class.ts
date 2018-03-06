@@ -4,14 +4,13 @@ const stringifier = require('stringifier/build/stringifier');
 const stringify = stringifier({ indent: ' ' });
 
 // same-module deps
-import { Diagnostic } from './Diagnostic.class';
+import { Diagnostic, End } from './Diagnostic.class';
 
 /**
  *  a FunctionDiagnostic represents the diagnosis results
  *    for a single execution event of a diagnosable function.
  */
 export class FunctionDiagnostic extends Diagnostic {
-  end: 'frontend' | 'backend';
   header: string;
   startTime: number;
   endTime: number;
@@ -98,7 +97,7 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     this.pass = false
   setHeader = (txt: string) =>
     this.header = txt
-  setEnd = (end: 'frontend' | 'backend') =>
+  setEnd = (end: End) =>
     this.end = end
   setStartTime = (timestamp: number) =>
     this.startTime = timestamp
