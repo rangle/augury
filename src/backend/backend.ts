@@ -134,7 +134,7 @@ const updateComponentTree = diagnosable({
     s.assert('roots is an array', Array.isArray(roots));
     let t: any = {};
     try {
-    //  t = createTreeFromElements(roots, treeRenderOptions);
+      t = createTreeFromElements(roots, treeRenderOptions);
     } catch (e) { }
     s.assert('createTreeFromElements got a tree', !!t.tree);
     s.assert('createTreeFromElements got has count > 0', t.count > 0);
