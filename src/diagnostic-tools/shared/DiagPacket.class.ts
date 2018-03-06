@@ -13,9 +13,7 @@ export class DiagPacket {
 
 export class FunctionDiagPacket extends DiagPacket {
   public type = DiagType.FUNCTION;
-
   constructor(
     public diagnostic: FunctionDiagnostic
   ) { super(); }
-
 }
