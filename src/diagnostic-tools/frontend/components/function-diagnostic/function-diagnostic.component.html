@@ -1,0 +1,47 @@
+<div>
+  <div><strong>=================={{fd.header}}</strong></div>
+  <div>---start time: {{fd.startTime}}</div>
+  <div>---running time (msec): {{fd.endTime - fd.startTime}}</div>
+  <div *ngIf="fd.diagError">
+    <div> ERROR (in diagnostic code) [section: {{fd.diagError.section}}]:
+      <strong> {{fd.diagError.error}} </strong>
+    </div>
+  </div>
+  <div *ngIf="!fd.diagError">
+    <div *ngIf="objectKeys(fd.pre.snapshots).length || fd.pre.statements.length">
+      <div>---pre</div>
+      <div *ngFor="let statement of fd.pre?.statements">
+        <div *ngIf="statement.type === STATEMENT_TYPE.ASSERTION">
+          <span class="assertion-{{statement.pass ? 'pass' : 'fail'}}">
+            <strong>{{statement.pass ? 'PASS' : 'FAIL'}}:</strong>
+          </span>
+          {{statement.label}}
+        </div>
+        <div *ngIf="statement.type === STATEMENT_TYPE.PLAIN_TEXT">{{statement.text}}</div>
+      </div>
+      <div *ngFor="let snapshotKey of objectKeys(fd.pre?.snapshots)">
+        <div><strong>{{snapshotKey}}:</strong>{{fd.pre?.snapshots[snapshotKey]}}</div>
+      </div>
+    </div>
+    <div *ngIf="fd.exception">
+      <div> EXCEPTION: <strong> {{fd.exception}} </strong></div>
+    </div>
+    <div *ngIf="!fd.exception">
+      <div *ngIf="objectKeys(fd.post.snapshots).length || fd.post.statements.length">
+        <div>---post</div>
+        <div *ngFor="let statement of fd.post?.statements">
+          <div *ngIf="statement.type === STATEMENT_TYPE.ASSERTION">
+            <span class="assertion-{{statement.pass ? 'pass' : 'fail'}}">
+              <strong>{{statement.pass ? 'PASS' : 'FAIL'}}:</strong>
+            </span>
+            {{statement.label}}
+          </div>
+          <div *ngIf="statement.type === STATEMENT_TYPE.PLAIN_TEXT">{{statement.text}}</div>
+        </div>
+        <div *ngFor="let snapshotKey of objectKeys(fd.post.snapshots)">
+          <div><strong>{{snapshotKey}}:</strong>{{fd.post.snapshots[snapshotKey]}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

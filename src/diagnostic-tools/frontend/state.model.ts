@@ -1,3 +1,6 @@
+// third party deps
+import { merge } from 'ramda';
+
 // same-module deps
 import { DiagPacket } from 'diagnostic-tools/shared';
 
@@ -13,12 +16,17 @@ export const INITIAL_STATE: DiagState = {
 };
 
 export class Selectors {
-  static packets = (store) => _getState(store).packets;
+  static packets
+    = (store) => _getState(store).packets
 }
 
 export class Updaters {
   static addPacket
-    = (packet: DiagPacket, state: DiagState): Array<DiagPacket> =>
-      state.packets.concat(packet)
-  static clear = () => INITIAL_STATE;
+    = (packet: DiagPacket, state: DiagState): DiagState =>
+      merge(state, {
+        packets: state.packets
+          .concat(packet)
+          .sort((a, b) => a.diagnostic.startTime - b.diagnostic.startTime) })
+  static clear
+    = (): DiagState => INITIAL_STATE
 }

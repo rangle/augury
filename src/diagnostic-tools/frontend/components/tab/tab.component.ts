@@ -5,27 +5,20 @@ import { select } from '@angular-redux/store';
 // same-module deps
 import { Selectors } from 'diagnostic-tools/frontend/state.model';
 import { DiagActions } from 'diagnostic-tools/frontend/actions';
-import { STATEMENT_TYPE } from 'diagnostic-tools/shared/DiagPacket.class';
-
-interface LogEntry {
-  txt: string;
-}
+import { DiagType } from 'diagnostic-tools/shared/DiagPacket.class';
 
 @Component({
   selector: 'bt-diag-tab',
-  template: require('./tab.html'),
+  template: require('./tab.component.html'),
   styles: [
-    require('to-string!./tab.css'),
-    '.assertion-pass { color: green }',
-    '.assertion-fail { color: red }',
+    require('to-string!./tab.component.css')
   ],
 })
 export class DiagTabComponent {
 
   @select(Selectors.packets) packets;
 
-  objectKeys = Object.keys; // use in template
-  STATEMENT_TYPE = STATEMENT_TYPE; // use in template
+  DiagType = DiagType; // used in template
 
   constructor(
     private diagActions: DiagActions,

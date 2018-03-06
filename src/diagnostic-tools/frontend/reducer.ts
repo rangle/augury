@@ -13,7 +13,7 @@ export function diagReducer(
 
   switch (action.type) {
     case DiagActionType.TAKE_PKT:
-      return { packets: Updaters.addPacket(<DiagPacket> action.payload, state) };
+      return Updaters.addPacket(<DiagPacket> action.payload, state);
     case DiagActionType.CLEAR:
       return Updaters.clear();
   }

@@ -2,7 +2,8 @@
 import * as clone from 'clone';
 
 // same-module deps
-import { DiagPacketConstructor, DiagPacket } from './DiagPacket.class';
+import { FunctionDiagnostic, FunctionDiagnosticConstructor } from './FunctionDiagnostic.class';
+import { FunctionDiagPacket } from './DiagPacket.class';
 
 interface DiagHelpersGeneral {
   say: (txt: string) => void;
@@ -27,20 +28,20 @@ export function wrapAsDiagnosable(
     post?: (d: DiagHelpersPost) => (...T) => void
   } = {}
 ): (...T) => {
-  diagPacket: DiagPacket,
+  diagPacket: FunctionDiagPacket,
   result: any,
   error: any,
 } {
 
   return function (...args) {
 
-    const diagPacketC = new DiagPacketConstructor();
-    diagPacketC.setEnd(end);
-    diagPacketC.setHeader(name);
+    const funcDiagC = new FunctionDiagnosticConstructor();
+    funcDiagC.setEnd(end);
+    funcDiagC.setHeader(name);
 
     const mem = {};
     const serviceForSection = (section: 'pre'|'post') => {
-      const packetMethods = diagPacketC.getSectionMethods(section);
+      const packetMethods = funcDiagC.getSectionMethods(section);
       return {
         assert: (label, expression, { fail } = { fail }) => {
           packetMethods.addAssertion(label, !!expression);
@@ -60,28 +61,28 @@ export function wrapAsDiagnosable(
 
     if (diagFuncs.pre) {
       try { diagFuncs.pre(serviceForSection('pre')).apply(this, args); }
-      catch (error) { diagPacketC.setDiagError({ section: 'pre', error }); }
+      catch (error) { funcDiagC.setDiagError({ section: 'pre', error }); }
     }
 
     const { result, error } = (() => {
       let retVal;
-      diagPacketC.setStartTime(Date.now());
+      funcDiagC.setStartTime(Date.now());
       try { retVal = { result: func.apply(this, args), error: undefined }; }
       catch (error) { retVal = { error, result: undefined }; }
-      diagPacketC.setEndTime(Date.now());
+      funcDiagC.setEndTime(Date.now());
       return retVal;
     })();
 
     if (!error) {
       if (diagFuncs.post) {
         try { diagFuncs.post(serviceForSection('post')).apply(this, [ result ]); }
-        catch (error) { diagPacketC.setDiagError({ section: 'post', error }); }
+        catch (error) { funcDiagC.setDiagError({ section: 'post', error }); }
       }
     } else {
-      diagPacketC.setException(error);
+      funcDiagC.setException(error);
     }
 
-    return { result, error, diagPacket: diagPacketC.finish() };
+    return { result, error, diagPacket: new FunctionDiagPacket(funcDiagC.finish()) };
 
   };
 

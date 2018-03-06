@@ -1,0 +1,8 @@
+<div class="flex-grow flex flex-column bg-base">
+  <div *ngFor="let packet of packets | async"> <!-- @todo: add "trackLogEntry: trackById" -->
+    <bt-function-diagnostic
+      *ngIf="packet.type == DiagType.FUNCTION"
+      [fd]="packet.diagnostic"
+    ></bt-function-diagnostic>
+  </div>
+</div>

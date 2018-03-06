@@ -1,7 +1,9 @@
-import { DiagTabComponent } from './tab/tab';
+import { DiagTabComponent } from './tab/tab.component';
+import { FunctionDiagnosticComponent } from './function-diagnostic/function-diagnostic.component';
 
 const DIAG_COMPONENTS = [
-  DiagTabComponent
+  DiagTabComponent,
+  FunctionDiagnosticComponent,
 ];
 
 export {
