@@ -1,2 +1,2 @@
 .assertion-pass { color: green }
-.assertion-fail { color: red }
+.assertion-fail .error-label { color: red }

@@ -3,8 +3,9 @@
   <div>---start time: {{fd.startTime}}</div>
   <div>---running time (msec): {{fd.endTime - fd.startTime}}</div>
   <div *ngIf="fd.diagError">
-    <div> ERROR (in diagnostic code) [section: {{fd.diagError.section}}]:
-      <strong> {{fd.diagError.error}} </strong>
+    <div>
+      <strong class="error-label">ERROR:</strong> 
+      (in diagnostic code) [section: {{fd.diagError.section}}]: {{fd.diagError.error}}
     </div>
   </div>
   <div *ngIf="!fd.diagError">
