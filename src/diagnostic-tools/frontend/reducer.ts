@@ -16,6 +16,8 @@ export function diagReducer(
       return Updaters.addPacket(<DiagPacket> action.payload, state);
     case DiagActionType.CLEAR:
       return Updaters.clear();
+    case DiagActionType.SHOW_PASSED:
+      return Updaters.setShowPassed(action.payload, state);
   }
 
   return state;

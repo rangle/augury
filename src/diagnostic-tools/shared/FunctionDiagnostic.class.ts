@@ -81,6 +81,7 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     post: this.post,
     exception: this.exception,
     diagError: this.diagError,
+    pass: this.pass
   })
 
   constructor() {
@@ -90,8 +91,11 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     this.post = { statements: [], snapshots: {}, };
     this.diagError = undefined;
     this.exception = undefined;
+    this.pass = true;
   }
 
+  setFail = () =>
+    this.pass = false
   setHeader = (txt: string) =>
     this.header = txt
   setEnd = (end: 'frontend' | 'backend') =>
@@ -100,18 +104,21 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     this.startTime = timestamp
   setEndTime = (timestamp: number) =>
     this.endTime = timestamp
-  setException = e =>
-    this.exception = e.toString()
-  setDiagError = ({ section, error }) =>
-    this.diagError = { section, error: error.toString() }
+  setException = e => {
+    this.exception = e.toString();
+    this.setFail(); }
+  setDiagError = ({ section, error }) => {
+    this.diagError = { section, error: error.toString() };
+    this.setFail(); }
 
   getSectionMethods = (section: 'pre'|'post') => ({
+    inspect: (vals) => Object.keys(vals)
+      .forEach(k => this[section].snapshots[k] = stringify(vals[k])),
     addPlaintext: (txt: string) =>
       this[section].statements.push(new Plaintext(txt)),
-    addAssertion: (label: string, pass: boolean) =>
-      this[section].statements.push(new Assertion(label, pass)),
-    inspect: (vals) => Object.keys(vals)
-      .forEach(k => this[section].snapshots[k] = stringify(vals[k]))
+    addAssertion: (label: string, pass: boolean) => {
+      this[section].statements.push(new Assertion(label, pass));
+      if (!pass) { this.setFail(); } },
   })
 
 }

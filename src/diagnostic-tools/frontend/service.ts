@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Options } from 'diagnostic-tools/module-dependencies.barrel';
 
 // same-module deps
-import { DiagPacket } from 'diagnostic-tools/shared';
+import { DiagPacket, Diagnostic } from 'diagnostic-tools/shared';
 import { Selectors } from './state.model';
 import { DiagActions } from './actions';
 
@@ -17,10 +17,16 @@ export class DiagService {
     public options: Options,
   ) { }
 
+  /* actions */
+
   clear = () =>
     this.diagActions.clear()
 
   takePacket = (packet: DiagPacket) =>
     this.diagActions.takePacket(packet)
+
+  setShowPassed = (bool: boolean) =>
+    this.diagActions.setShowPassed(bool)
+
 
 }

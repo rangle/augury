@@ -7,7 +7,8 @@ import { DiagPacket } from 'diagnostic-tools/shared';
 
 export enum DiagActionType {
   TAKE_PKT,
-  CLEAR
+  CLEAR,
+  SHOW_PASSED,
 }
 
 @Injectable()
@@ -22,6 +23,12 @@ export class DiagActions {
   @dispatch()
   clear = () => ({
     type: DiagActionType.CLEAR
+  })
+
+  @dispatch()
+  setShowPassed = (bool: boolean) => ({
+    type: DiagActionType.SHOW_PASSED,
+    payload: bool
   })
 
 }
