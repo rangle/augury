@@ -1,6 +1,8 @@
 // third party deps
 import * as clone from 'clone';
-import Zone from 'zone.js/dist/zone';
+//import Zone from 'zone.js/dist/zone';
+
+declare const Zone:any; //@todo: check if not there, and import. angular may actually run without this
 
 // same-module deps
 import { FunctionDiagnostic, FunctionDiagnosticConstructor } from './FunctionDiagnostic.class';
@@ -67,7 +69,7 @@ export function wrapAsDiagnosable <TargetReturnType> (
 
     const { result, error } = (() => {
 
-      //debugger;
+      // debugger;
       // @todo: all the zone operations should be part of a modular service.
       if (!Zone.current.auguryLogicalThread) {
           Zone.current.auguryLogicalThread = { // @todo: this is LogicalThread type

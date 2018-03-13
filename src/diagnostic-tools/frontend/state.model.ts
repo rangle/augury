@@ -8,18 +8,17 @@ import { DiagPacket } from 'diagnostic-tools/shared';
 export const NAMESPACE = 'diag';
 const _getState = (store: any): DiagState => store[NAMESPACE];
 
-interface PacketTreeNode { // @todo: or PacketFrame?
-  packet: DiagPacket,
-  children: Array<DiagPacket>
+interface PacketTreeNode extends PacketTree { // @todo: or PacketFrame?
+  packet: DiagPacket;
 }
 
 interface PacketTree {
-  roots: Array<PacketTreeNode>
+  children: Array<PacketTreeNode>;
 }
 
 export interface DiagState {
   packets: Array<DiagPacket>; // @todo: get rid of this one?
-  packetTree: PacketTree;
+  packetTree: PacketTreeNode;
   presentationOptions: {
     showPassed: boolean
   };
@@ -27,9 +26,7 @@ export interface DiagState {
 
 export const INITIAL_STATE: DiagState = {
   packets: [],
-  packetTree: {
-    roots: []
-  },
+  packetTree: undefined,
   presentationOptions: {
     showPassed: false
   }
@@ -61,19 +58,19 @@ export class Updaters {
 const newFrame = (packet = null): PacketTreeNode => ({ //@todo: types types types
   children: [],
   packet,
-})
+});
 
 // @todo: rewrite, make this not so mutaty (dont use foreach) code looks like hell
-const insertPacketIntoTree = (packet, tree) => {
+const insertPacketIntoTree = (packet: DiagPacket, tree = newFrame()) => {
   const threadClone = clone(tree);
   let frameCursor = threadClone;
-  packet.logicalThread.stackTreePosition.forEach(i => {
+  packet.diagnostic.logicalThread.stackTreePosition.forEach(i => {
     const arrOfNewLength = (new Array(Math.max(i + 1, frameCursor.children.length))).fill(true).map(_ => newFrame());
-    frameCursor.children.forEach((_,j) => arrOfNewLength[j] = frameCursor.children[j]);
+    frameCursor.children.forEach((_, j) => arrOfNewLength[j] = frameCursor.children[j]);
     frameCursor.children = arrOfNewLength;
     frameCursor = frameCursor.children[i];
   });
   // @todo: rewrite into nicer way of inserting new frame when we reach the correct spot
   frameCursor.packet = packet;
   return threadClone;
-}
+};
