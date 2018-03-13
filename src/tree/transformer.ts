@@ -188,6 +188,8 @@ const getDependencies: (instance: any) => Array<Dependency>
     name: 'getDependencies',
     pre: s => (instance) => {
       s.inspect({
+        // @todo: injectedParameterDecorators call shows in diagnostics,
+        // it should be silenced when called in diagnostic code
         parameterDecorators: injectedParameterDecorators(instance),
         parameterTypes: parameterTypes(instance)
       });

@@ -66,12 +66,35 @@ export function wrapAsDiagnosable <TargetReturnType> (
     }
 
     const { result, error } = (() => {
+
+      //debugger;
+      // @todo: all the zone operations should be part of a modular service.
+      if (!Zone.current.auguryLogicalThread) {
+          Zone.current.auguryLogicalThread = { // @todo: this is LogicalThread type
+            id: Date.now(),
+            stackTreePosition: [ 0 ]
+          };
+      }
+      const logicalThread = Zone.current.auguryLogicalThread;
+
+      funcDiagC.setLogicalThread(clone(logicalThread)); // @todo: logicalThread class should spit out clone thing
+
       let retVal;
+      logicalThread.stackTreePosition.push( 0 ); // @todo: all the zone operations should be part of a modular service.
+
       funcDiagC.setStartTime(Date.now());
-      if(Zone.current.thread)
+
       try { retVal = { result: func.apply(this, args), error: undefined }; }
       catch (error) { retVal = { error, result: undefined }; }
+
       funcDiagC.setEndTime(Date.now());
+
+      logicalThread.stackTreePosition.pop();
+
+      // @todo: logicalThread class should handle cursor movement
+      const nextSibling = logicalThread.stackTreePosition.pop() + 1;
+      logicalThread.stackTreePosition.push( nextSibling );
+
       return retVal;
     })();
 

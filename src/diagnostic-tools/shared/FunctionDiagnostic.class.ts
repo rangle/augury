@@ -80,7 +80,8 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     post: this.post,
     exception: this.exception,
     diagError: this.diagError,
-    pass: this.pass
+    pass: this.pass,
+    logicalThread: this.logicalThread,
   })
 
   constructor() {
@@ -93,6 +94,8 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     this.pass = true;
   }
 
+  setLogicalThread = (lt) =>  // @todo: types and cleanup
+    this.logicalThread = lt
   setFail = () =>
     this.pass = false
   setHeader = (txt: string) =>
