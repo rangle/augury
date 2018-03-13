@@ -1,5 +1,6 @@
 // third party deps
 import * as clone from 'clone';
+import Zone from 'zone.js/dist/zone';
 
 // same-module deps
 import { FunctionDiagnostic, FunctionDiagnosticConstructor } from './FunctionDiagnostic.class';
@@ -19,17 +20,17 @@ export interface DiagHelpersPost extends DiagHelpersGeneral {
   old: (name: string) => any;
 }
 
-export function wrapAsDiagnosable(
+export function wrapAsDiagnosable <TargetReturnType> (
   end: 'backend' | 'frontend',
   name: string,
-  func: (...T) => any,
+  func: (...targetFuncParams) => TargetReturnType,
   diagFuncs: {
-    pre?: (d: DiagHelpersPre) => (...T) => void,
-    post?: (d: DiagHelpersPost) => (...T) => void
+    pre?: (d: DiagHelpersPre) => (...targetFuncParams) => void,
+    post?: (d: DiagHelpersPost) => (...targetFuncParams) => void
   } = {}
-): (...T) => {
+): (...targetFuncParams) => {
   diagPacket: FunctionDiagPacket,
-  result: any,
+  result: TargetReturnType,
   error: any,
 } {
 
@@ -41,21 +42,21 @@ export function wrapAsDiagnosable(
 
     const mem = {};
     const serviceForSection = (section: 'pre'|'post') => {
-      const packetMethods = funcDiagC.getSectionMethods(section);
+      const sectionUtils = funcDiagC.getSectionMethods(section);
       return {
         assert: (label, expression, { fail } = { fail }) => {
-          packetMethods.addAssertion(label, !!expression);
+          sectionUtils.addAssertion(label, !!expression);
           if (!expression && fail) { fail(); }
           return expression;
         },
-        say: (txt: string) => packetMethods.addPlaintext(txt),
+        say: (txt: string) => sectionUtils.addPlaintext(txt),
         remember: section === 'pre' ?
           vals => Object.keys(vals).forEach(k => mem[k] = clone(vals[k]))
           : undefined,
         old: section === 'post' ?
           key => mem[key]
           : undefined,
-        inspect: (serializable: {} = {}) => packetMethods.inspect(serializable),
+        inspect: (serializable: {} = {}) => sectionUtils.inspect(serializable),
       };
     };
 
@@ -67,6 +68,7 @@ export function wrapAsDiagnosable(
     const { result, error } = (() => {
       let retVal;
       funcDiagC.setStartTime(Date.now());
+      if(Zone.current.thread)
       try { retVal = { result: func.apply(this, args), error: undefined }; }
       catch (error) { retVal = { error, result: undefined }; }
       funcDiagC.setEndTime(Date.now());

@@ -12,10 +12,10 @@ import {
 export function diagnosable({ name, deps = [], pre, post, }: {
   name?: string;
   deps?: Array<string>;
-  pre?: (d: DiagHelpersPre) => (...T) => void;
-  post?: (d: DiagHelpersPost) => (...T) => void;
+  pre?: (d: DiagHelpersPre) => (...targetFuncParams) => void;
+  post?: (d: DiagHelpersPost) => (targetReturnVal) => void;
 }) {
-  return function (target: (...T) => any) {
+  return function (target: (...targetFuncParams) => any) {
     const func = target;
     return function (...args) {
       const { result, error, diagPacket }
