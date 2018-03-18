@@ -9,6 +9,18 @@ import { DiagPacket, Diagnostic } from 'diagnostic-tools/shared';
 import { Selectors } from './state.model';
 import { DiagActions } from './actions';
 
+const ifEnabled = function (
+  target: any,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+): PropertyDescriptor {
+  const func = descriptor.value;
+  descriptor.value = (...args) => {
+    if (target.options.diagnosticToolsEnabled)
+      return func(...args); }
+  return descriptor;
+}
+
 @Injectable()
 export class DiagService {
 
@@ -19,14 +31,19 @@ export class DiagService {
 
   /* actions */
 
-  clear = () =>
+  @ifEnabled
+  clear() {
     this.diagActions.clear()
+  }
 
-  takePacket = (packet: DiagPacket) =>
+  @ifEnabled
+  takePacket(packet: DiagPacket) {
     this.diagActions.takePacket(packet)
+  }
 
-  setShowPassed = (bool: boolean) =>
+  @ifEnabled
+  setShowPassed(bool: boolean) {
     this.diagActions.setShowPassed(bool)
-
+  }
 
 }
