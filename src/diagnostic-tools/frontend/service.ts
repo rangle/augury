@@ -9,6 +9,7 @@ import { DiagPacket, Diagnostic } from 'diagnostic-tools/shared';
 import { Selectors } from './state.model';
 import { DiagActions } from './actions';
 
+// @todo: using this?
 const ifEnabled = function (
   target: any,
   propertyKey: string,
@@ -31,19 +32,23 @@ export class DiagService {
 
   /* actions */
 
-  @ifEnabled
+  // @ifEnabled
+  // @todo: are we using these decorators? having trouble accessing options from it.
   clear() {
-    this.diagActions.clear()
+    if (this.options.diagnosticToolsEnabled)
+      this.diagActions.clear()
   }
 
-  @ifEnabled
+  // @ifEnabled
   takePacket(packet: DiagPacket) {
-    this.diagActions.takePacket(packet)
+    if (this.options.diagnosticToolsEnabled)
+      this.diagActions.takePacket(packet)
   }
 
-  @ifEnabled
+  // @ifEnabled
   setShowPassed(bool: boolean) {
-    this.diagActions.setShowPassed(bool)
+    if (this.options.diagnosticToolsEnabled)
+      this.diagActions.setShowPassed(bool)
   }
 
 }

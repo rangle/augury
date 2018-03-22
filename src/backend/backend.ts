@@ -1,9 +1,16 @@
+import { diagnosable, enableDiagnosticBackend } from 'diagnostic-tools/backend';
+declare const treeRenderOptions: SimpleOptions;
+
+// @todo: rename 'treeRenderOptions', it has become more than that.
+// maybe 'auguryOptions'
+if (treeRenderOptions.diagnosticToolsEnabled)
+  enableDiagnosticBackend();
+
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {compare} from '../utils/patch';
 import {isAngular, isDebugMode} from './utils/app-check';
-import { diagnosable } from 'diagnostic-tools/backend';
 
 import {SerializeableError} from '../utils/error-handling';
 
@@ -61,7 +68,7 @@ import {SimpleOptions} from '../options';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
-declare const treeRenderOptions: SimpleOptions;
+
 
 /// For tree deltas that contain more changes than {@link deltaThreshold},
 /// we simply send the entire tree again instead of trying to patch it
@@ -257,18 +264,9 @@ const resubscribe = () => {
   });
 };
 
-// Check to see if the Augury tab is open and active before we start
-// subscribing to Angular state changes. Our internal state management
-// can cause a slight drag on performance which is unnecessary if
-// the Augury UI / frontend is not even open.
-send(MessageFactory.ping()).then(resubscribe);
-
 const selectedComponentPropertyKey = '$$el';
 
 const noSelectedComponentWarningText = 'There is no component selected.';
-
-Object.defineProperty(window, selectedComponentPropertyKey,
-  {value: noSelectedComponentWarningText});
 
 const messageHandler = (message: Message<any>) => {
   return runAndHandleUncaughtExceptions(() => {
@@ -342,9 +340,6 @@ const messageHandler = (message: Message<any>) => {
     return undefined;
   });
 };
-
-
-browserSubscribe(messageHandler);
 
 // We do not store component instance properties on the node itself because
 // we do not want to have to serialize them across backend-frontend boundaries.
@@ -550,6 +545,16 @@ const findElement = (message) => {
   }
 };
 
+Object.defineProperty(window, selectedComponentPropertyKey,
+  {value: noSelectedComponentWarningText});
+
+// Check to see if the Augury tab is open and active before we start
+// subscribing to Angular state changes. Our internal state management
+// can cause a slight drag on performance which is unnecessary if
+// the Augury UI / frontend is not even open.
+send(MessageFactory.ping()).then(resubscribe);
+
+browserSubscribe(messageHandler);
 
 // add custom operations
 extendWindowOperations(window || global || this, {inspectedApplication: applicationOperations});

@@ -65,7 +65,7 @@ export class Options {
     this.publish();
   }
 
-  get diagnoticToolsEnabled(): boolean {
+  get diagnosticToolsEnabled(): boolean {
     return this.cachedOptions.diagnosticToolsEnabled;
   }
 

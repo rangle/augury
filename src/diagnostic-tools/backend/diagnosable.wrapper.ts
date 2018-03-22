@@ -1,5 +1,6 @@
 // project deps
 import { send } from 'diagnostic-tools/module-dependencies.barrel';
+import { isEnabled } from 'diagnostic-tools/backend/settings.global';
 
 // same-module deps
 import {
@@ -17,12 +18,13 @@ export function diagnosable({ name, deps = [], pre, post, }: {
 }) {
   return function (target: (...targetFuncParams) => any) {
     const func = target;
-    return function (...args) {
-      const { result, error, diagPacket }
-        = wrapAsDiagnosable('backend', name ? name : func.name, func, { pre, post }).apply(this, [...args]);
-      send(DiagnosticMessageFactory.diagnosticPacket(diagPacket));
-      if (error) { throw error; }
-      return result;
-    };
+    return isEnabled() ?
+      function (...args) {
+        const { result, error, diagPacket }
+          = wrapAsDiagnosable('backend', name ? name : func.name, func, { pre, post }).apply(this, [...args]);
+        send(DiagnosticMessageFactory.diagnosticPacket(diagPacket));
+        if (error) { throw error; }
+        return result;
+      } : func
   };
 }
