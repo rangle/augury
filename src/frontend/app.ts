@@ -218,6 +218,12 @@ export class App {
         this.error = msg.content;
         respond();
         break;
+      case MessageType.ErrorCleared:
+        if (msg.content.errorTypes.includes(this.error.errorType)) {
+          this.error = null;
+        }
+        respond();
+        break;
     }
   }
 

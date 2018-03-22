@@ -16,6 +16,10 @@ export enum MessageType {
   /// An error has occurred in the backend and is being transmitted to the frontend
   ApplicationError,
 
+  /// An error has been cleared, and frontend should resume normal functioning
+  /// this is used in the case of pages without angular suddenly bootstrapping, for example
+  ErrorCleared,
+
   /// User signals "report this error".
   SendUncaughtError,
 
