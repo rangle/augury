@@ -167,8 +167,12 @@ module.exports = {
         "output": {
             "fileName": MANIFEST_OUTPUT
         }
-    })
-  ],
+    }),
+  ].concat((NODE_ENV == 'production') ?  [
+    new UglifyJsPlugin()
+  ] : [
+    // ... dev-only plugins
+  ]),
 
   /*
    * When using `templateUrl` and `styleUrls` please use `__filename`
