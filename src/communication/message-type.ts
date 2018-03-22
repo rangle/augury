@@ -32,7 +32,7 @@ export enum MessageType {
   /// of backend -> content script -> channel -> frontend.
   Push,
 
-  // Send the inspected application ng version
+  /// Send the inspected application ng version
   NgVersion,
 
   /// Transmit a complete component tree
@@ -40,6 +40,16 @@ export enum MessageType {
 
   /// Transmit the delta of two trees
   TreeDiff,
+
+  /// This message type complements the TreeDiff type.
+  /// In the case where a component instance property has been changed,
+  ///   the treediff operation will not find a delta, since component instance properties
+  ///   are not kept in the tree.
+  /// This message is sent out after all tree comparisons that produce an empty delta.
+  /// If there is a component selected for inspection in the front end,
+  ///   this message serves to notify that its properties might have updated,
+  ///   and a reselect should be requested to get up-to-date values.
+  TreeUnchanged,
 
   /// Send the list of NgModules
   NgModules,

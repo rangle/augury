@@ -189,6 +189,9 @@ export class App {
         }
         respond();
         break;
+      case MessageType.TreeUnchanged:
+        this.restoreSelection();
+        break;
       case MessageType.RouterTree: // TODO(cbond): support router tree diff
         this.routerTree = msg.content;
         respond();
