@@ -36,6 +36,8 @@ export class ComponentInfo {
   @Input() private loadingState: ComponentLoadState;
 
   @Output() private selectNode = new EventEmitter<Node>();
+  @Output() private emitValue = new EventEmitter<{path: Path, data: any}>();
+  @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
   private changeDetectionStrategies = ChangeDetectionStrategy;
 

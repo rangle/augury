@@ -61,7 +61,7 @@ browserSubscribeOnce(MessageType.FrameworkLoaded,
     return true;
   });
 
-browserSubscribeDispatch(message => {
+browserSubscribeDispatch((message: any) => {
   if (message.messageType === MessageType.DispatchWrapper) {
     send(message.content)
       .then(response => {

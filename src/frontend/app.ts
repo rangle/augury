@@ -73,7 +73,7 @@ export class App {
   private unsubscribeUncaughtErrorListener;
   @select(store => store.main.selectedTab) selectedTab;
   @select(store => store.main.selectedComponentsSubTab) selectedComponentsSubTab;
-  @select(store => store.main.DOMSelectionActive) DOMSelectionActive;
+  @select(store => store.main.DOMSelectionActive) domSelectionActive;
 
   constructor(private ngRedux: NgRedux<IAppState>,
               private mainActions: MainActions,
@@ -105,6 +105,9 @@ export class App {
     this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
+
+    this.mainActions.initializeAugury();
+
   }
 
   private hasContent() {
@@ -262,6 +265,10 @@ export class App {
 
     const promise = this.directConnection.handleImmediate(m)
       .then(response => {
+        if (!response) {
+          return;
+        }
+
         if (typeof beforeLoad === 'function') {
           beforeLoad();
         }
@@ -314,6 +321,14 @@ export class App {
 
   private onDOMSelectionActiveChange(state: boolean) {
     this.mainActions.setDOMSelectionActive(state);
+  }
+
+  private onEmitValue(data) {
+    this.mainActions.emitValue(data.path, data.data);
+  }
+
+  private onUpdateProperty(data) {
+    this.mainActions.updateProperty(data.path, data.data);
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {

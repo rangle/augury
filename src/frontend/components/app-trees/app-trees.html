@@ -1,11 +1,14 @@
 <bt-tab-menu
    showMainItems="true"
    [tabs]="tabs"
-   [DOMSelectionActive]="DOMSelectionActive"
+   [domSelectionActive]="domSelectionActive"
    [selectedTab]="selectedTab"
    (tabChange)="onTabSelectionChanged($event)"
    (DOMSelectionActiveChange)="onDOMSelectionActiveChange($event)">
   <div postlude class="flex px3">
+    <span *ngIf="ngVersion" class="ngVersion">
+      Angular Version: {{ngVersion}}
+    </span>
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
 </bt-tab-menu>
@@ -146,7 +149,10 @@
        [selectedStateTab]="selectedComponentsSubTab"
        [loadingState]="componentState.loadingState(selectedNode)"
        [instanceValue]="componentState.componentInstance(selectedNode)"
-       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)">
+       (selectNode)="selectNode.emit($event)"
+       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)"
+       (emitValue)="emitValue.emit($event)"
+       (updateProperty)="updateProperty.emit($event)">
     </bt-info-panel>
   </div>
 </split-pane>

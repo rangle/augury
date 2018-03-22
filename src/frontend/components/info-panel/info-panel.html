@@ -12,7 +12,10 @@
   [componentMetadata]="componentMetadata"
   [metadata]="metadata"
   [hidden]="selectedStateTab !== StateTab.Properties"
-  [ngClass]="{flex: selectedStateTab === StateTab.Properties}">
+  [ngClass]="{flex: selectedStateTab === StateTab.Properties}"
+  (selectNode)="selectNode.emit($event)"
+  (updateProperty)="updateProperty.emit($event)"
+  (emitValue)="emitValue.emit($event)">
 </bt-component-info>
 
 <bt-injector-tree

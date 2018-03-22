@@ -100,7 +100,7 @@ const runAndHandleUncaughtExceptions = (fn: () => any) => {
       stack: e.stack,
       message: e.message,
     }));
-  };
+  }
 };
 
 const sendNgVersionMessage = () => {
@@ -264,16 +264,18 @@ const messageHandler = (message: Message<any>) => {
       case MessageType.SelectComponent:
         const path: Path = message.content.path;
 
-        const node = previousTree.traverse(path);
+        if (previousTree) {
+          const node = previousTree.traverse(path);
+          this.consoleReference(node);
 
-        this.consoleReference(node);
-
-        // For component selection events, we respond with component instance
-        // properties for the selected node. If we had to serialize the
-        // properties of each node on the tree that would be a performance
-        // killer, so we only send the componentInstance values for the
-        // node that has been selected.
-        return getComponentInstance(previousTree, node);
+          // For component selection events, we respond with component instance
+          // properties for the selected node. If we had to serialize the
+          // properties of each node on the tree that would be a performance
+          // killer, so we only send the componentInstance values for the
+          // node that has been selected.
+          return getComponentInstance(previousTree, node);
+        }
+        return;
 
       case MessageType.UpdateProperty:
         return updateProperty(previousTree,
@@ -439,7 +441,7 @@ export const extendWindowOperations = <T>(target, classImpl: T) => {
   Object.assign(target, classImpl);
 };
 
-export const ApplicationOperations = {
+export const applicationOperations = {
   /// Note that the ID is a serialized path, and the first element in that path is the
   /// index of the application that the node belongs to. So even though we have this
   /// global lookup operation for things like 'inspect' and 'view source', it will find
@@ -518,4 +520,4 @@ const findElement = (message) => {
 
 
 // add custom operations
-extendWindowOperations(window || global || this, {inspectedApplication: ApplicationOperations});
+extendWindowOperations(window || global || this, {inspectedApplication: applicationOperations});
