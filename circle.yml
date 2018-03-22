@@ -8,7 +8,7 @@ dependencies:
   pre:
     - rm -rf node_modules typings
   post:
-    - if [ ! $SENTRY_KEY ]; then export SENTRY_KEY=DUMMY_SENTRY_KEY; fi; npm run prod-build; ./crxmake.sh
+    - if [ ! $SENTRY_KEY ]; then export SENTRY_KEY=DUMMY_SENTRY_KEY; fi; npm run pack;
 
 test:
   pre:

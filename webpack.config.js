@@ -22,6 +22,43 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var DedupePlugin = webpack.optimize.DedupePlugin;
 var DefinePlugin = webpack.DefinePlugin;
 var BannerPlugin = webpack.BannerPlugin;
+var MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+
+/**
+ * CROSS-BROWSER COMPATIBILITY
+ * We use different build configurations depending on browser.
+ * For example, browsers have different support for properties on manifest.json
+ */
+
+// browsers we support
+const BROWSER = {
+  FIREFOX: 'FIREFOX',
+  CHROME: 'CHROME'
+}
+
+// browser-specific manifest file created during build.
+// `merge-jsons-webpack-plugin` needs relative paths from the build folder.
+const MANIFEST_OUTPUT = `../manifest.json`
+
+// manifest.json properties shared by all browsers
+const BASE_MANIFEST = `manifest/base.manifest.json`
+
+// target browser parameter is case insensitive (default chrome)
+const interpretTargetBrowser = (requested = '') => {
+  return Object.keys(BROWSER)
+    .find(browser => browser == requested.toUpperCase())
+    || BROWSER.CHROME
+}
+
+// each browser can extend the base manifest with a file of this form
+const getManifestExtension = (targetBrowser) =>
+  `manifest/${targetBrowser.toLowerCase()}.manifest.json`
+
+// grab target browser parameter (passed as command arg)
+const targetBrowser = interpretTargetBrowser(process.env.BROWSER)
+
+// grab manifest extension
+const manifestExtension = getManifestExtension(targetBrowser)
 
 /*
  * Config
@@ -121,8 +158,21 @@ module.exports = {
       'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
     }),
     new OccurenceOrderPlugin(),
-    new DedupePlugin()
-  ],
+    new DedupePlugin(),
+    new MergeJsonWebpackPlugin({
+        "files": [
+            BASE_MANIFEST,
+            manifestExtension,
+        ],
+        "output": {
+            "fileName": MANIFEST_OUTPUT
+        }
+    }),
+  ].concat((NODE_ENV == 'production') ?  [
+    new UglifyJsPlugin()
+  ] : [
+    // ... dev-only plugins
+  ]),
 
   /*
    * When using `templateUrl` and `styleUrls` please use `__filename`
