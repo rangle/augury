@@ -33,7 +33,7 @@
     "build:dev": "cross-env NODE_ENV=development npm run build",
     "build:dev:chrome": "cross-env BUILD=chrome npm run build:dev",
     "build:dev:firefox": "cross-env BUILD=firefox npm run build:dev",
-    "build:dev:canary": "cross-env BUILD=firefox npm run build:dev",
+    "build:dev:canary": "cross-env BUILD=canary npm run build:dev",
     "watch": "webpack --colors --display-error-details --display-cached --watch",
     "watch:chrome": "cross-env BUILD=chrome npm run watch",
     "watch:firefox": "cross-env BUILD=firefox npm run watch",
