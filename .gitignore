@@ -55,7 +55,9 @@ key.pem
 
 # build output
 *.crx
-augury.zip
-augury.xpi
+*.xpi
+*.zip
+*.pub
+*.sig
 download.html
 manifest.json

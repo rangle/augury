@@ -25,40 +25,41 @@ var BannerPlugin = webpack.BannerPlugin;
 var MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 
 /**
- * CROSS-BROWSER COMPATIBILITY
- * We use different build configurations depending on browser.
+ * CROSS-BROWSER COMPATIBILITY (and other builds)
+ * We use different build configurations depending on browser (or other builds, like canary).
  * For example, browsers have different support for properties on manifest.json
  */
 
-// browsers we support
-const BROWSER = {
+// versions we produce
+const BUILD = {
   FIREFOX: 'FIREFOX',
-  CHROME: 'CHROME'
+  CHROME: 'CHROME',
+  CANARY: 'CANARY',
 }
 
-// browser-specific manifest file created during build.
+// browser/build-specific manifest file created during build.
 // `merge-jsons-webpack-plugin` needs relative paths from the build folder.
 const MANIFEST_OUTPUT = `../manifest.json`
 
-// manifest.json properties shared by all browsers
+// manifest.json properties shared by all builds
 const BASE_MANIFEST = `manifest/base.manifest.json`
 
-// target browser parameter is case insensitive (default chrome)
-const interpretTargetBrowser = (requested = '') => {
-  return Object.keys(BROWSER)
-    .find(browser => browser == requested.toUpperCase())
-    || BROWSER.CHROME
+// target BUILD parameter is case insensitive (default chrome)
+const interpretTargetBuild = (requested = '') => {
+  return Object.keys(BUILD)
+    .find(build => build == requested.toUpperCase())
+    || BUILD.CHROME
 }
 
-// each browser can extend the base manifest with a file of this form
-const getManifestExtension = (targetBrowser) =>
-  `manifest/${targetBrowser.toLowerCase()}.manifest.json`
+// each build can extend the base manifest with a file of this form
+const getManifestExtension = (targetBuild) =>
+  `manifest/${targetBuild.toLowerCase()}.manifest.json`
 
-// grab target browser parameter (passed as command arg)
-const targetBrowser = interpretTargetBrowser(process.env.BROWSER)
+// grab target build parameter (passed as command arg)
+const targetBuild = interpretTargetBuild(process.env.BUILD)
 
 // grab manifest extension
-const manifestExtension = getManifestExtension(targetBrowser)
+const manifestExtension = getManifestExtension(targetBuild)
 
 /*
  * Config

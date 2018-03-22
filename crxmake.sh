@@ -12,14 +12,15 @@ key="key.pem"
 name="augury"
 files="manifest.json build images index.html frontend.html popup.html popup.js"
 
-crx="$name.crx"
 pub="$name.pub"
 sig="$name.sig"
 zip="$name.zip"
-xpi="$name.xpi"
+crx="$name.google.crx"
+xpi="$name.firefox.xpi"
+canary="$name.canary.zip"
 
 # Ensure environment variables exist ($sentry_key isnt used anywhere)
-sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
+#sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
 
 # assign build name to zip and crx file in circleci env
 if [ $CIRCLE_BUILD_NUM ] || [ $CIRCLE_ARTIFACTS ]; then
@@ -30,8 +31,8 @@ fi
 
 trap 'rm -f "$pub" "$sig"' EXIT
 
-function build_for_browser {
-  npm run build:prod:${BROWSER_LOWERCASE}
+function do_build {
+  npm run build:prod:${BUILD_LOWERCASE}
 }
 
 function grab_files_and_zip {
@@ -55,8 +56,8 @@ fi
 # ---------------------------------------------------------
 # build for chrome (.crx) ---------------------------------
 
-BROWSER_LOWERCASE=chrome
-build_for_browser
+BUILD_LOWERCASE=chrome
+do_build
 grab_files_and_zip
 
 # signature
@@ -87,19 +88,29 @@ echo "Wrote file"
 # build for firefox (.xpi) --------------------------------
 # TODO: add digital signatures. (firefox requires add-on verification)
 
-BROWSER_LOWERCASE=firefox
-build_for_browser
+BUILD_LOWERCASE=firefox
+do_build
 grab_files_and_zip
 
 cp $zip $xpi
+
+# ---------------------------------------------------------
+# build canary (.xpi) --------------------------------
+
+BUILD_LOWERCASE=canary
+do_build
+grab_files_and_zip
+
+cp $zip $canary
 
 # ---------------------------------------------------------
 # done. output artifacts and clean up ---------------------
 
 # move files to artifacts folder in circleci
 if [ $CIRCLE_ARTIFACTS ]; then
-  mv $crx $CIRCLE_ARTIFACTS
-  mv $xpi $CIRCLE_ARTIFACTS
+  mv $canary $CIRCLE_ARTIFACTS
+  mv $crx    $CIRCLE_ARTIFACTS
+  mv $xpi    $CIRCLE_ARTIFACTS
 fi
 
 # clean up

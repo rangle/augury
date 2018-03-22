@@ -1,0 +1,8 @@
+{
+  "name": "Augury (Canary Build)",
+  "short_name": "Augury-Canary",
+  "description": "Alpha release version for Augury. Updated frequently with experimental features ",
+  "browser_action": {
+    "default_icon": "images/augury-canary.png",
+  },
+}
