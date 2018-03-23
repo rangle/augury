@@ -194,4 +194,4 @@ const getDependencies = (instance): Array<Dependency> => {
     name: functionName(paramType) || paramType.toString(),
     decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
   }));
-}
+};
