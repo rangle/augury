@@ -1,5 +1,5 @@
-declare const getAllAngularRootElements: () => Element[];
 
+declare const getAllAngularRootElements: () => Element[];
 
 export const readNgVersion = () => {
   const rootElements = getAllAngularRootElements();

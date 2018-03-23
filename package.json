@@ -66,6 +66,7 @@
     "basscss-border-colors": "2.1.0",
     "basscss-type-scale": "1.0.5",
     "basscss-typography": "3.0.3",
+    "compare-versions": "^3.1.0",
     "core-js": "2.2.2",
     "cross-env": "3.1.4",
     "crypto": "0.0.3",
@@ -77,6 +78,7 @@
     "redux-logger": "3.0.6",
     "redux-observable": "0.17.0",
     "rxjs": "5.5.5",
+    "semver": "^5.5.0",
     "zone.js": "0.8.18"
   },
   "devDependencies": {

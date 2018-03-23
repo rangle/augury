@@ -5,20 +5,28 @@ import {
 
 import {functionName} from '../utils';
 
-export const classDecorators = (token): Array<any> =>
-  Reflect.getOwnMetadata('annotations', token) || [];
+export const classDecorators = (token): Array<any> => {
+  debugger;
+  return Reflect.getOwnMetadata('annotations', token) || [];
+}
 
-export const propertyDecorators = (instance): Array<any> =>
-  Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
+export const propertyDecorators = (instance): Array<any> => {
+  debugger;
+  return Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
+}
 
-export const parameterTypes = (instance): Array<any> =>
-  Reflect.getOwnMetadata('design:paramtypes', instance.constructor)
+export const parameterTypes = (instance): Array<any> => {
+  debugger;
+  return Reflect.getOwnMetadata('design:paramtypes', instance.constructor)
     .map(param => param.name === 'Object' ? null : param);
+}
 
-export const injectedParameterDecorators = (instance): Array<any> =>
-  Reflect.getOwnMetadata('parameters', instance.constructor)
+export const injectedParameterDecorators = (instance): Array<any> => {
+  debugger;
+  return Reflect.getOwnMetadata('parameters', instance.constructor)
       || instance.constructor.__parameters__
       || instance.constructor.__paramaters__; // angular 5.1 has a typo
+}
 
 export const iteratePropertyDecorators = (instance, fn: (key: string, decorator) => void) => {
   if (instance == null) {
