@@ -127,7 +127,7 @@ export default class KitchenSink {
 
 In order for Angular to expose the debug information for AoT applications, you will have to explicitly set the debug flag to `true` in your project's `tsconfig.json` as such:
 
-```json
+```json5
 "angularCompilerOptions": {
   /* ... */
   "debug": true
