@@ -1,9 +1,9 @@
 # Augury
 
 [![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://augury-slack.herokuapp.com/badge.svg)](https://augury-slack.herokuapp.com)
-[![Stories in Ready](https://badge.waffle.io/rangle/augury.svg?label=ready&title=Ready)](https://waffle.io/rangle/augury)
 
 ## Table of content
+
 1. [Introduction](#introduction)
 1. [Supported version](#supported-version)
 1. [Working on Augury](#working-on-augury)
@@ -17,9 +17,12 @@
 
 ## Introduction
 
-[Augury](https://augury.angular.io/) is a Google Chrome Dev Tools extension for debugging Angular 2+ applications.
+[Augury](https://augury.angular.io/) is a Chrome & Firefox Developer Tools extension for debugging Angular 2+ applications.
 
-You can install the extension from [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd).
+You can install the extension from:
+
+- [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd)
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/angular-augury)
 
 ## Inspecting Code
 
@@ -30,6 +33,7 @@ Augury only works with Angular 2+ applications. A hard requirement is that the A
 Augury works with application built starting with Angular 2+.
 
 ---
+
 ## Working on Augury
 
 ### Development environment
@@ -37,7 +41,6 @@ Augury works with application built starting with Angular 2+.
 To develop the Augury extension, the following environment is used:
 
 * Node
-* Yarn
 * NPM
 * TypeScript
 
@@ -46,15 +49,23 @@ To develop the Augury extension, the following environment is used:
 ```bash
 git clone git://github.com/rangle/augury
 cd augury
-yarn
+npm install
 npm run dev-build
 ```
 
-1. Navigate to chrome://extensions and enable Developer mode.
+Try out the extension with one of the example app from the [Guide](https://augury.angular.io/pages/guides/).
+
+#### Chrome
+
+1. Navigate to `chrome://extensions` and enable Developer mode.
 1. Choose "Load unpacked extension".
 1. In the dialog, open the directory you just cloned.
 
-Try out the extension with one of the example app from the [Guide](https://augury.angular.io/pages/guides/).
+#### Firefox
+
+1. Navigate to `about:debugging#addons` to load add-on.
+1. Click Load Temporary Add-on
+1. In the dialog, open the directory you just cloned.
 
 ### Running tests
 
@@ -64,16 +75,15 @@ To execute all unit tests, run `npm test`. It bundles up all files that match `*
 
 To see all available script type `npm run` in the terminal. The following command are the ones you will mostly be working with.
 
-Command|Descrption
--------|----------
-`build`|Build the extension
-`webpack`|Run webpack
-`clean`|Clean `node_modules` and `typings`,
-`postinstall`|install typings
-`start`|Clean build and run webpack in watch mode
-`test`|Bundle all *.test.ts and run it through a headless browser
-`prepack`|Run npm build before running npm pack
-`pack`|Packages the extension and create chrome build augury.crx
+Command   | Description
+----------|----------------------------------------------------------
+`start`   | Clean build and run webpack in watch mode
+`webpack` | Runs webpack in watch mode
+`build`   | Builds the extension
+`clean`   | Clean the `build` directory,
+`test`    | Bundle all *.test.ts and run it through a headless browser
+`lint`    | Run `tslint` on all source code
+`pack`    | Packages the extension for browser specific builds
 
 ## Reporting issues
 
