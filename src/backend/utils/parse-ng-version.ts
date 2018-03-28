@@ -1,7 +1,7 @@
 declare const getAllAngularRootElements: () => Element[];
 
 
-export const readNgVersion = () => {
+export const parseNgVersion = () => {
   const rootElements = getAllAngularRootElements();
   if (rootElements && rootElements[0]) {
     return rootElements[0].getAttribute('ng-version');

@@ -26,7 +26,7 @@ import {
   parseNgVersion,
 } from './utils/parse-ng-version';
 
-import {createTreeFromElements} from '../tree/mutable-tree-factory';
+import {createTreeFromElements} from '../tree/mutable-tree-factory.backend';
 
 import {
   ApplicationError,
@@ -57,6 +57,12 @@ import {
 import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
+
+import AR from './angular-reader/AngularReader.singleton'
+
+(<any> window).ar = AR
+
+//debugger;
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];

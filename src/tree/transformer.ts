@@ -1,5 +1,8 @@
 import * as clone from 'clone';
 
+// @todo: pathing
+import AR from '../backend/angular-reader/AngularReader.singleton'
+
 import {
   Description,
   Property,
@@ -28,6 +31,11 @@ import {
 } from './decorators';
 
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../backend/utils/parse-modules';
+
+
+if (!AR.hasDependencySupport) {
+  throw Error(`no dependency support! (using reader version ${AR.version})`);
+}
 
 /// Transform a {@link DebugElement} or {@link DebugNode} element into a Node
 /// object that is our local representation of the combined data of those two
@@ -83,7 +91,7 @@ export const transform = (path: Path,
     input: componentInputs(metadata, element.componentInstance),
     output: componentOutputs(metadata, element.componentInstance),
     properties: clone(element.properties),
-    dependencies: isDebugElementComponent(element) ? getDependencies(element.componentInstance) : [],
+    dependencies: isDebugElementComponent(element) ? AR.dependencySupport().extractDependencies(element.componentInstance) : [],
   };
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child
@@ -179,19 +187,4 @@ const getChangeDetection = (metadata): number => {
   } else {
     return 1;
   }
-};
-
-const getDependencies = (instance): Array<Dependency> => {
-  const parameterDecorators = injectedParameterDecorators(instance);
-  const normalizedParamTypes = parameterDecorators
-    ? parameterTypes(instance).map((type, i) => type
-      ? type
-      : parameterDecorators[i].find(item => item.token !== undefined).token)
-    : [];
-
-  return normalizedParamTypes.map((paramType, i) => ({
-    id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
-    name: functionName(paramType) || paramType.toString(),
-    decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
-  }));
 };
