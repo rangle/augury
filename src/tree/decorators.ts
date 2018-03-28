@@ -13,8 +13,8 @@ export const propertyDecorators = (instance): Array<any> =>
 
 export const parameterTypes = (instance): Array<any> => {
   return Reflect.getOwnMetadata('design:paramtypes', instance.constructor)
-    .map(param => typeof param != 'object' || param.name === 'Object' ? null : param);
-}
+    .map(param => typeof param !== 'object' || param.name === 'Object' ? null : param);
+};
 
 export const injectedParameterDecorators = (instance): Array<any> =>
   Reflect.getOwnMetadata('parameters', instance.constructor)
