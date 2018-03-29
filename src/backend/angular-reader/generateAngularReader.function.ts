@@ -5,7 +5,7 @@ import * as semver from 'semver';
 import { readVersion } from './readVersion.function';
 import { Registry } from './version-support/registry';
 
-import { AngularReaderService } from './readers/AngularReader.interface'
+import { AngularReaderService } from './AngularReader.interface'
 
 export const generateAngularReader = (): AngularReaderService => {
   const v = readVersion();

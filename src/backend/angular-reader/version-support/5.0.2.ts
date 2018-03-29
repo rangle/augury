@@ -1,5 +1,5 @@
-import { Dependency, DependencySupport, extractDependenciesUsingUnstableMethod } from '../readers/dependencies'
-import { AngularReaderService } from '../readers/AngularReader.interface'
+import { DependencySupport, extractDependenciesUsingUnstableMethod } from '../feature-support/dependencies'
+import { AngularReaderService } from '../AngularReader.interface'
 
 class V502
   extends AngularReaderService

@@ -1,4 +1,4 @@
-import { DependencySupport } from './dependencies'
+import { DependencySupport } from './feature-support/dependencies'
 
 export class AngularReaderService {
 
