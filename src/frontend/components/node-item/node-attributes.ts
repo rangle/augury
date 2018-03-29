@@ -1,6 +1,15 @@
 import {Component, Input} from '@angular/core';
 
-import {Property} from '../../../backend/utils';
+// @todo: define augury datatypes isomorphically. move angular-reader to isomorphic module directory.
+//        then get rid of this copypaste of the interface
+// import {Property} from '../../../backend/utils';
+// @todo: this one is not yet defined in angular-reader. still a copy-paste from description.ts
+export interface Property {
+  id?: string;
+  key: string;
+  value;
+}
+
 
 @Component({
   selector: 'node-attributes',

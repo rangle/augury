@@ -9,7 +9,7 @@ import {SerializeableError} from '../utils/error-handling';
 
 import {
   Route,
-} from '../backend/utils';
+} from '../backend/utils/parse-router';
 
 import {MessageType} from './message-type';
 

@@ -45,7 +45,7 @@ import {
 
 import {createTree} from '../tree/mutable-tree-factory';
 import {UserActions} from './actions/user-actions/user-actions';
-import {Route} from '../backend/utils';
+import {Route} from '../backend/utils/parse-router';
 import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';

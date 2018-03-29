@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import {Route} from '../../../backend/utils';
+import {Route} from '../../../backend/utils/parse-router';
 import {TabDescription} from '../tab-menu/tab-menu';
 import {
   ComponentInstanceState,

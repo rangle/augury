@@ -6,7 +6,14 @@ import {
   serializePath,
 } from '../../tree';
 
-import {Dependency} from '../../backend/utils/description';
+// @todo: define augury datatypes isomorphically. move angular-reader to isomorphic module directory.
+//        then get rid of this copypaste of the interface
+// import {Dependency} from '../../backend/utils/description';
+export interface Dependency {
+  id: string;
+  name: string;
+  decorators: Array<string>;
+}
 
 export class ParseUtils {
   getParentNodeIds(nodeId: string) {

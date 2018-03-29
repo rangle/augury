@@ -2,6 +2,8 @@ import {classDecorators, componentMetadata} from '../../tree/decorators';
 import {functionName} from '../../utils/function-name';
 import {Route} from '../utils/parse-router';
 
+import AR from '../angular-reader/AngularReader.singleton'
+
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
 declare const ng;
@@ -13,27 +15,30 @@ export interface NgModulesRegistry {
   tokenIdMap: { [key: string]: any };
 }
 
-const resolveNgModuleDecoratorConfig = (m) => {
-  if (m.decorators) {
-    return m.decorators.reduce((prev, curr, idx, decorators) =>
-      prev ?
-        prev :
-        (
-          (decorators[idx].type.prototype.ngMetadataName === 'NgModule') ||
-          (decorators[idx].type.prototype.toString() === '@NgModule')
-        ) ?
-          (decorators[idx].args || [])[0] : null
-    , null);
-  }
+//@todo: check if .hasModuleSupport()
 
-  if (m.__annotations__) {
-    return m.__annotations__
-      .find(decorator => decorator.ngMetadataName === 'NgModule');
-  }
-
-  return (Reflect.getMetadata('annotations', m) || [])
-    .find(decorator => decorator.toString() === '@NgModule');
-};
+// @todo: get rid?
+// const resolveNgModuleDecoratorConfig = (m) => {
+//   if (m.decorators) {
+//     return m.decorators.reduce((prev, curr, idx, decorators) =>
+//       prev ?
+//         prev :
+//         (
+//           (decorators[idx].type.prototype.ngMetadataName === 'NgModule') ||
+//           (decorators[idx].type.prototype.toString() === '@NgModule')
+//         ) ?
+//           (decorators[idx].args || [])[0] : null
+//     , null);
+//   }
+//
+//   if (m.__annotations__) {
+//     return m.__annotations__
+//       .find(decorator => decorator.ngMetadataName === 'NgModule');
+//   }
+//
+//   return (Reflect.getMetadata('annotations', m) || [])
+//     .find(decorator => decorator.toString() === '@NgModule');
+// };
 
 export const parseModulesFromRouter = (router, existingModules: NgModulesRegistry) => {
   const foundModules = [];
@@ -177,7 +182,7 @@ const _parseModule = (
   const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
 
   if (!modules[auguryModuleId]) {
-    const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module) || {};
+    const ngModuleDecoratorConfig = AR.moduleSupport().extractNgModuleDecoratorConfig(module) || {};
     moduleNames.push(parseModuleName(module));
     modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
 
@@ -199,7 +204,7 @@ const _parseModule = (
         Array.prototype.push.apply(providersFromModuleImports, flattenProviders(im.providers));
       }
 
-      const importModuleDecorator = resolveNgModuleDecoratorConfig(importedModule);
+      const importModuleDecorator = AR.moduleSupport().extractNgModuleDecoratorConfig(importedModule);
       if (importModuleDecorator) {
         _parseModule(importedModule, modules, moduleNames, tokenIdMap);
       }

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 
-import {Route} from '../../../backend/utils';
+import {Route} from '../../../backend/utils/parse-router';
 
 @Component({
   selector: 'bt-router-info',

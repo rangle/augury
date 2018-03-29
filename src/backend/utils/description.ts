@@ -2,6 +2,11 @@ import {AUGURY_TOKEN_ID_METADATA_KEY} from './parse-modules';
 import {pathExists, getAtPath} from '../../utils/property-path';
 import {functionName} from '../../utils';
 
+//@todo: code-sharing. "x-frontend" stuff is actually isomorphic, works in backend
+import { componentInstanceExistsInParentChain, isDebugElementComponent } from './description-frontend'
+
+export { isDebugElementComponent }
+
 export interface Dependency {
   id: string;
   name: string;
@@ -13,9 +18,6 @@ export interface Property {
   key: string;
   value;
 }
-
-export const isDebugElementComponent = (element) => !!element.componentInstance &&
-  !componentInstanceExistsInParentChain(element);
 
 export const getComponentName = (element): string => {
   if (element.componentInstance &&
@@ -30,16 +32,6 @@ export const getComponentName = (element): string => {
   return element.nativeElement.tagName.toLowerCase();
 };
 
-const componentInstanceExistsInParentChain = (debugElement) => {
-  const componentInstanceRef = debugElement.componentInstance;
-  while (componentInstanceRef && debugElement.parent) {
-    if (componentInstanceRef === debugElement.parent.componentInstance) {
-      return true;
-    }
-    debugElement = debugElement.parent;
-  }
-  return false;
-};
 
 /*
 *  addPropsIfTheyExist([

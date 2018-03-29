@@ -9,7 +9,7 @@ import {
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
-import {Route} from '../../../backend/utils';
+import {Route} from '../../../backend/utils/parse-router';
 import {UserActions} from '../../actions/user-actions/user-actions';
 
 import * as d3 from 'd3';

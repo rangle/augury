@@ -1,12 +1,20 @@
 import { DependencySupport, extractDependenciesUsingUnstableMethod } from '../feature-support/dependencies'
-import { AngularReaderService } from '../AngularReader.interface'
+import { ModuleSupport, extractNGModuleDecoratorConfigFromDecoratorsProperty } from '../feature-support/modules'
+import { AngularReaderService } from '../AngularReader.class'
 
 class V502
   extends AngularReaderService
-  implements DependencySupport {
+  implements DependencySupport,
+             ModuleSupport {
+
   version = '5.0.2'
+
   hasDependencySupport: true = true
   extractDependencies = extractDependenciesUsingUnstableMethod
+
+  hasModuleSupport: true = true
+  extractNgModuleDecoratorConfig = extractNGModuleDecoratorConfigFromDecoratorsProperty
+
 }
 
 export default ( new V502() )

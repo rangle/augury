@@ -21,7 +21,8 @@ import {
   recurse,
 } from '../utils';
 
-import {isDebugElementComponent} from '../backend/utils/description';
+// @todo: shouldbe "isomorphic", not "frontend"
+import {isDebugElementComponent} from '../backend/utils/description-frontend';
 
 export enum ObjectType {
   Input = 0x1,

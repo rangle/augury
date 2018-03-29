@@ -9,7 +9,7 @@ import {
 import {UserActions} from '../../actions/user-actions/user-actions';
 import {Highlightable} from '../../utils/highlightable';
 import {functionName} from '../../../utils';
-import {propertyIndex} from '../../../backend/utils';
+import {propertyIndex} from '../../../backend/utils/node-traversal';
 import {
   Path,
   ObjectType,

@@ -1,4 +1,18 @@
-import {Property, Dependency} from '../backend/utils/description';
+// @todo: define augury datatypes isomorphically. move angular-reader to isomorphic module directory.
+//        then get rid of this copypaste of the interface
+// import {Property, Dependency} from '../backend/utils/description';
+export interface Dependency {
+  id: string;
+  name: string;
+  decorators: Array<string>;
+}
+// @todo: this one is not yet defined in angular-reader. still a copy-paste from description.ts
+export interface Property {
+  id?: string;
+  key: string;
+  value;
+}
+
 
 export interface EventListener {
   name: string;

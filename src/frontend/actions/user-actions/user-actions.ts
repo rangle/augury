@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {Connection} from '../../channel/connection';
 import {MessageFactory} from '../../../communication';
-import {Route} from '../../../backend/utils';
+import {Route} from '../../../backend/utils/parse-router';
 import {
   matchNode,
   matchRoute,
@@ -119,4 +119,3 @@ export class UserActions {
     return this.connection.send(MessageFactory.foundDOMElement(null));
   }
 }
-
