@@ -182,12 +182,17 @@ const getChangeDetection = (metadata): number => {
 };
 
 const getDependencies = (instance): Array<Dependency> => {
-  const parameterDecorators = injectedParameterDecorators(instance);
-  const normalizedParamTypes = parameterDecorators
-    ? parameterTypes(instance).map((type, i) => type
-      ? type
-      : parameterDecorators[i].find(item => item.token !== undefined).token)
-    : [];
+  const parameterDecorators = injectedParameterDecorators(instance) || [];
+  const normalizedParamTypes = parameterTypes(instance)
+    .map((type, i) => type ?
+        type
+      : Array.isArray(parameterDecorators[i]) ?
+          (() => {
+            const decoratorToken = parameterDecorators[i].find(item => item.token !== undefined);
+            return decoratorToken ? decoratorToken.token : 'unknown';
+          })()
+        : 'unknown'
+    );
 
   return normalizedParamTypes.map((paramType, i) => ({
     id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
