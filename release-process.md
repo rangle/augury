@@ -55,8 +55,8 @@ Create the release build using build script
 
 Upload the latest build file `batarangle.crx` to Chrome Store and update version numbers on the extension.
 
-
 ## Post Release
+
 
 * Download and install latest build from chrome store.
 * Perform sanity checks on the build by checking it against any Angular application
