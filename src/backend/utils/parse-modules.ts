@@ -2,7 +2,7 @@ import {classDecorators, componentMetadata} from '../../tree/decorators';
 import {functionName} from '../../utils/function-name';
 import {Route} from '../utils/parse-router';
 
-import AR from '../angular-reader/AngularReader.singleton'
+import AR from '../angular-reader/AngularReader.singleton';
 
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
@@ -15,7 +15,7 @@ export interface NgModulesRegistry {
   tokenIdMap: { [key: string]: any };
 }
 
-//@todo: check if .hasModuleSupport()
+// @todo: check if .hasModuleSupport()
 
 // @todo: get rid?
 // const resolveNgModuleDecoratorConfig = (m) => {
@@ -182,7 +182,7 @@ const _parseModule = (
   const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
 
   if (!modules[auguryModuleId]) {
-    const ngModuleDecoratorConfig = AR.moduleSupport().extractNgModuleDecoratorConfig(module) || {};
+    const ngModuleDecoratorConfig = AR.moduleSupport().extractNgModuleDecoratorConfig(module);
     moduleNames.push(parseModuleName(module));
     modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
 

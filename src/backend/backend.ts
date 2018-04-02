@@ -38,10 +38,6 @@ import {
   browserSubscribe,
 } from '../communication';
 
-import {
-  parameterTypes,
-} from '../tree/decorators';
-
 import {send} from './indirect-connection';
 
 import {
@@ -58,11 +54,8 @@ import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
 
-import AR from './angular-reader/AngularReader.singleton'
-
-(<any> window).ar = AR
-
-//debugger;
+import AR from './angular-reader/AngularReader.singleton';
+(<any> window).ar = AR;
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -393,13 +386,19 @@ export const routersFromRoots = () => {
   const routers = [];
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
-    const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
-      prev ? prev : p[idx].name === 'Router' ? p[idx] : null, null);
+
+    // @todo: check for "dependencies" support
+    const routerFn = AR.dependencySupport()
+      .extractParameterTypes(element.componentInstance)
+      .reduce((prev, curr, idx, p) =>
+        prev ? prev : p[idx].name === 'Router' ? p[idx] : null, null);
+
     if (routerFn &&
         element.componentInstance.router &&
         element.componentInstance.router instanceof routerFn) {
       routers.push(element.componentInstance.router);
     }
+
   }
 
   return routers;

@@ -1,13 +1,22 @@
-import { ExtractNGModuleDecoratorConfigFunction } from './modules.definitions';
+import { ExtractNGModuleDecoratorConfigFunction, NgModuleDecoratorConfig  } from './modules.definitions';
 
 // @todo: precondition: all ngModulesConstructors have a decorators property. (this is for angular 5)
 
 export const extractNGModuleDecoratorConfigFromDecoratorsProperty: ExtractNGModuleDecoratorConfigFunction
-  = (ngModuleConstructor: any) => {
+  = (ngModuleConstructor: any): NgModuleDecoratorConfig => {
 
-    //@todo: whats the difference between decorators and __annotations__ ? why is it one or the other?
+    const baseType: NgModuleDecoratorConfig = {
+      declarations: [],
+      exports: [],
+      providers: [],
+      imports: []
+    };
+
+    let extracts = {};
+
+    // @todo: whats the difference between decorators and __annotations__ ? why is it one or the other?
     if (ngModuleConstructor.decorators) {
-      return ngModuleConstructor.decorators.reduce((prev, curr, idx, decorators) =>
+      extracts = ngModuleConstructor.decorators.reduce((prev, curr, idx, decorators) =>
         prev ?
           prev
         :
@@ -21,12 +30,11 @@ export const extractNGModuleDecoratorConfigFromDecoratorsProperty: ExtractNGModu
       , null) || {};
     }
 
-    //@todo: whats the difference between decorators and __annotations__ ? why is it one or the other?
+    // @todo: whats the difference between decorators and __annotations__ ? why is it one or the other?
     if (ngModuleConstructor.__annotations__) {
-      return ngModuleConstructor.__annotations__.find(decorator => decorator.ngMetadataName === 'NgModule');
+      extracts = ngModuleConstructor.__annotations__.find(decorator => decorator.ngMetadataName === 'NgModule');
     }
 
-    // @todo: enforce that return has all the properties of type (even if they have to be empty arrays or whatever
-    return {}
+    return Object.assign({}, baseType, extracts);
 
-  }
+  };

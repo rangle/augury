@@ -13,14 +13,25 @@ export interface Dependency {
   decorators: Array<string>;
 }
 
+
+// @todo: what is this? type it.
+export type ParameterType = any;
+
+// @todo: what is this? type it.
+export type ParameterDecorator = any;
+
 // ----- FEATURE SUPPORT
 
 export interface DependencySupport {
   // support flag
-  hasDependencySupport: true
-  extractDependencies:ExtractDependenciesFunction //@todo: instance type
+  hasDependencySupport: true;
+  extractDependencies: ExtractDependenciesFunction; //@todo: instance type
+  extractParameterTypes: ExtractParameterTypesFunction;
+  extractParameterDecorators: ExtractParameterDecoratorsFunction;
 }
 
 // ----  FEATURE FUNCTIONS
 
-export type ExtractDependenciesFunction = (instance:any) => Array<Dependency>;
+export type ExtractDependenciesFunction = (instance: any) => Array<Dependency>;
+export type ExtractParameterTypesFunction = (instance: any) => Array<ParameterType>;
+export type ExtractParameterDecoratorsFunction = (instance: any) => Array<ParameterDecorator>;

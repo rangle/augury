@@ -2,10 +2,10 @@ import {AUGURY_TOKEN_ID_METADATA_KEY} from './parse-modules';
 import {pathExists, getAtPath} from '../../utils/property-path';
 import {functionName} from '../../utils';
 
-//@todo: code-sharing. "x-frontend" stuff is actually isomorphic, works in backend
-import { componentInstanceExistsInParentChain, isDebugElementComponent } from './description-frontend'
+// @todo: code-sharing. "x-frontend" stuff is actually isomorphic, works in backend
+import { componentInstanceExistsInParentChain, isDebugElementComponent } from './description-frontend';
 
-export { isDebugElementComponent }
+export { isDebugElementComponent };
 
 export interface Dependency {
   id: string;

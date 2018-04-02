@@ -1,5 +1,7 @@
 // @todo: put this file somewhere that makes more sense. also rename, etc.
-// i only did this for now because i had to separate out the stuff in the transformer.ts file that is used in the back end
+// i only did this for now because i had to separate out
+//      the stuff in the transformer.ts file that is used in the back end
+
 import {MutableTree} from './mutable-tree';
 import {transform} from './transformer';
 import {Node} from './node';

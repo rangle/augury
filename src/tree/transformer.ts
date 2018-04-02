@@ -1,7 +1,7 @@
 import * as clone from 'clone';
 
 // @todo: pathing
-import AR from '../backend/angular-reader/AngularReader.singleton'
+import AR from '../backend/angular-reader/AngularReader.singleton';
 
 import {
   Description,
@@ -25,9 +25,7 @@ import {
   componentMetadata,
   componentInputs,
   componentOutputs,
-  parameterTypes,
   propertyDecorators,
-  injectedParameterDecorators,
 } from './decorators';
 
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../backend/utils/parse-modules';
@@ -91,7 +89,8 @@ export const transform = (path: Path,
     input: componentInputs(metadata, element.componentInstance),
     output: componentOutputs(metadata, element.componentInstance),
     properties: clone(element.properties),
-    dependencies: isDebugElementComponent(element) ? AR.dependencySupport().extractDependencies(element.componentInstance) : [],
+    dependencies: isDebugElementComponent(element) ?
+      AR.dependencySupport().extractDependencies(element.componentInstance) : [],
   };
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child

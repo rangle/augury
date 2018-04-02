@@ -11,15 +11,14 @@ export interface NgModulesRegistry {
 }
 
 // @todo: describe the types in each array (they shouldnt be angular things, but augury things)
-// @todo: enforce consistency. there shouldnt be question marks, fill with empty arrays
 /**
  *  describes the configurations passed to an @NgModule decorator
  */
 export interface NgModuleDecoratorConfig {
-  declarations?: Array<any>, // these are constructor functions
-  exports?: Array<any>, // could be anything...
-  providers?: Array<any>, // seems like also constructor functions
-  imports?: Array<any>
+  declarations: Array<any>; // these are constructor functions
+  exports: Array<any>; // could be anything...
+  providers: Array<any>; // seems like also constructor functions
+  imports: Array<any>;
 }
 
 // ----- FEATURE SUPPORT
