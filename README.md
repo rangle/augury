@@ -24,6 +24,8 @@ You can install the extension from:
 - [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd)
 - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/angular-augury)
 
+You may also install our [Canary Build](https://addons.mozilla.org/en-US/firefox/addon/angular-augury) for Chrome, to try out new features and bug fixes, and help us with user acceptance testing.
+
 ## Inspecting Code
 
 Augury only works with Angular 2+ applications. A hard requirement is that the Angular application is running in development mode, this is due to a security restriction. If you plan to read the original source code, it is a good idea to generate source maps. Otherwise you will be forced to work with the compiled JavaScript code.
