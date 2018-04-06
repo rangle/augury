@@ -5,14 +5,18 @@ import {
 
 import {functionName} from '../utils';
 
+var e = 0;
+
 export const classDecorators = (token): Array<any> => {
-//  debugger;
-  return Reflect.getOwnMetadata('annotations', token) || [];
+  const s = Reflect.getOwnMetadata('annotations', token);
+  if (s) debugger; else console.log(e++)
+  return s || []
 };
 
 export const propertyDecorators = (instance): Array<any> => {
-//  debugger;
-  return Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
+  const s = Reflect.getOwnMetadata('propMetadata', instance.constructor);
+  if (s) debugger; else console.log(e++)
+  return s || []
 };
 
 export const iteratePropertyDecorators = (instance, fn: (key: string, decorator) => void) => {
