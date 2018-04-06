@@ -1,6 +1,10 @@
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../../../utils/parse-modules';
 import {functionName} from '../../../../utils';
 
+// ---- FEATURE SUPPORT DEPENDENCIES
+
+import { BasicDecoratorsSupport } from '../basic-decorators'
+
 // ----  FEATURE DATA TYPES
 
 /**
@@ -13,7 +17,6 @@ export interface Dependency {
   decorators: Array<string>;
 }
 
-
 // @todo: what is this? type it.
 export type ParameterType = any;
 
@@ -22,12 +25,15 @@ export type ParameterDecorator = any;
 
 // ----- FEATURE SUPPORT
 
-export interface DependencySupport {
+export interface DependencySupport extends BasicDecoratorsSupport {
+
   // support flag
   hasDependencySupport: true;
+
   extractDependencies: ExtractDependenciesFunction; //@todo: instance type
   extractParameterTypes: ExtractParameterTypesFunction;
   extractParameterDecorators: ExtractParameterDecoratorsFunction;
+
 }
 
 // ----  FEATURE FUNCTIONS

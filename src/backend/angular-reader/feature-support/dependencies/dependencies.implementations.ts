@@ -1,6 +1,8 @@
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../../../utils/parse-modules'; // @todo: what's this?
 import {functionName} from '../../../../utils'; // @todo: this is fine, but fix pathing
 
+import { } from '../basic-decorators'
+
 import {
   Dependency,
   ParameterType,
@@ -13,6 +15,12 @@ import {
 // @todo: change name
 export const extractDependenciesUsingUnstableMethod: ExtractDependenciesFunction
   = (instance): Array<Dependency> => {
+
+    console.log(
+      instance,
+      extractParameterDecoratorsFromUnderscoredProperty(instance),
+      extractParameterTypesFromReflectMetadata(instance)
+    );
 
     const parameterDecorators = extractParameterDecoratorsFromUnderscoredProperty(instance) || [];
     const normalizedParamTypes = extractParameterTypesFromReflectMetadata(instance)

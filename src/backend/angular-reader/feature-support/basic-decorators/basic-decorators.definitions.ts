@@ -1,6 +1,8 @@
 
 // ----  FEATURE DATA TYPES
 
+// -- class decorators
+
 export enum ClassDecoratorType {
   Component
 }
@@ -28,6 +30,12 @@ export interface ComponentDecorator extends ClassDecorator {
 
 }
 
+// -- parameter decorators
+
+export interface ParameterDecorator {
+  
+}
+
 // ----- FEATURE SUPPORT
 
 export interface BasicDecoratorsSupport {
@@ -35,12 +43,14 @@ export interface BasicDecoratorsSupport {
   // support flag
   hasBasicDecoratorSupport: true;
 
-  extractClassDecorators: ExtractClassDecoratorsFunction;
+  extractDecoratorsForClass: ExtractDecoratorsForClassFunction;
   extractComponentDecorator: ExtractComponentDecoratorFunction;
+  extractDecoratorsForParameter: ExtractDecoratorsForParameterFunction
 
 }
 
 // ----  FEATURE FUNCTIONS
 
-export type ExtractClassDecoratorsFunction = (constructor: any) => Array<ClassDecorator>;
+export type ExtractDecoratorsForClassFunction = (constructor: any) => Array<ClassDecorator>;
 export type ExtractComponentDecoratorFunction = (componentConstructor: any) => ComponentDecorator;
+export type ExtractDecoratorsForParameterFunction = (constructor: any) => Array<ParameterDecorator>;

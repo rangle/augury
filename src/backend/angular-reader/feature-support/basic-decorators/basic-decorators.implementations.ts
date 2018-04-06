@@ -1,18 +1,20 @@
 import { merge } from 'ramda'
 
 import {
-  ExtractClassDecoratorsFunction,
+  ExtractDecoratorsForClassFunction,
+  ExtractDecoratorsForParameterFunction,
   ExtractComponentDecoratorFunction,
   ClassDecorator,
   ClassDecoratorType,
   ComponentDecorator,
+  ParameterDecorator
 } from './basic-decorators.definitions'
 
 const ngMetadataNames = {
   Component: 'Component'
 }
 
-export const extractClassDecoratorsUsingNgMetadataName: ExtractClassDecoratorsFunction
+export const extractDecoratorsForClassUsingNgMetadataName: ExtractDecoratorsForClassFunction
   = (constructor: any): Array<ClassDecorator> => {
     const raw: Array<any> = constructor.__annotations__ || [];
     return raw.map(rawClassDecorator =>
@@ -23,11 +25,17 @@ export const extractClassDecoratorsUsingNgMetadataName: ExtractClassDecoratorsFu
 
 export const extractComponentDecoratorUsingNgMetadataName: ExtractComponentDecoratorFunction
   = (componentConstructor: any): ComponentDecorator | undefined => {
-    return <ComponentDecorator> extractClassDecoratorsUsingNgMetadataName(componentConstructor)
+    return <ComponentDecorator> extractDecoratorsForClassUsingNgMetadataName(componentConstructor)
       .find((classDecorator: ClassDecorator) =>
         classDecorator.classDecoratorType === ClassDecoratorType.Component )
   }
-  
+
+export const extractDecoratorsForParameter: ExtractDecoratorsForParameterFunction
+  = (parameter: any): Array<ParameterDecorator> => {
+  //  debugger  
+    return null
+  };
+
 /*
 export const propertyDecorators = (instance): Array<any> => {
 //  debugger;
