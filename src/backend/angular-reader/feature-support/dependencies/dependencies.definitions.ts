@@ -32,7 +32,6 @@ export interface DependencySupport extends BasicDecoratorsSupport {
 
   extractDependencies: ExtractDependenciesFunction; //@todo: instance type
   extractParameterTypes: ExtractParameterTypesFunction;
-  extractParameterDecorators: ExtractParameterDecoratorsFunction;
 
 }
 
@@ -40,4 +39,3 @@ export interface DependencySupport extends BasicDecoratorsSupport {
 
 export type ExtractDependenciesFunction = (instance: any) => Array<Dependency>;
 export type ExtractParameterTypesFunction = (instance: any) => Array<ParameterType>;
-export type ExtractParameterDecoratorsFunction = (instance: any) => Array<ParameterDecorator>;

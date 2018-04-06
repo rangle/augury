@@ -9,13 +9,13 @@ var e = 0;
 
 export const classDecorators = (token): Array<any> => {
   const s = Reflect.getOwnMetadata('annotations', token);
-  if (s) debugger; else console.log(e++)
+  // if (s) debugger; else console.log(e++)
   return s || []
 };
 
 export const propertyDecorators = (instance): Array<any> => {
   const s = Reflect.getOwnMetadata('propMetadata', instance.constructor);
-  if (s) debugger; else console.log(e++)
+  // if (s) debugger; else console.log(e++)
   return s || []
 };
 

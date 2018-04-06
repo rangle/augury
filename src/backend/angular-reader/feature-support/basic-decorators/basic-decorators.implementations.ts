@@ -2,16 +2,20 @@ import { merge } from 'ramda'
 
 import {
   ExtractDecoratorsForClassFunction,
-  ExtractDecoratorsForParameterFunction,
+  ExtractDecoratorsForParametersFunction,
   ExtractComponentDecoratorFunction,
   ClassDecorator,
   ClassDecoratorType,
   ComponentDecorator,
-  ParameterDecorator
+  ParameterDecoratorType,
+  ParameterDecorator,
+  ParameterDecorators,
+  DecoratorsForParameters,
 } from './basic-decorators.definitions'
 
 const ngMetadataNames = {
-  Component: 'Component'
+  Component: 'Component',
+  Inject: 'Inject',
 }
 
 export const extractDecoratorsForClassUsingNgMetadataName: ExtractDecoratorsForClassFunction
@@ -19,8 +23,7 @@ export const extractDecoratorsForClassUsingNgMetadataName: ExtractDecoratorsForC
     const raw: Array<any> = constructor.__annotations__ || [];
     return raw.map(rawClassDecorator =>
       merge(rawClassDecorator, {
-        classDecoratorType: determineClassDecoratorTypeFromNgMetadataName(rawClassDecorator)
-      }))
+        classDecoratorType: determineClassDecoratorTypeFromNgMetadataName(rawClassDecorator) }))
   };
 
 export const extractComponentDecoratorUsingNgMetadataName: ExtractComponentDecoratorFunction
@@ -30,10 +33,20 @@ export const extractComponentDecoratorUsingNgMetadataName: ExtractComponentDecor
         classDecorator.classDecoratorType === ClassDecoratorType.Component )
   }
 
-export const extractDecoratorsForParameter: ExtractDecoratorsForParameterFunction
-  = (parameter: any): Array<ParameterDecorator> => {
-  //  debugger  
-    return null
+
+export const extractDecoratorsForParametersFromUnderscoredProperty: ExtractDecoratorsForParametersFunction
+  = (instance): DecoratorsForParameters | null => {
+    const rawDecoratorsForParameters:any =
+         instance.constructor.__parameters__
+      || instance.constructor.__paramaters__; // angular 5.1 has a typo
+    if (!Array.isArray(rawDecoratorsForParameters)) return null;
+    return rawDecoratorsForParameters
+      .map(rawParameterDecorators => rawParameterDecorators ?
+          rawParameterDecorators.map(rawParameterDecorator =>
+            merge(rawParameterDecorator, {
+              parameterDecoratorType: determineParameterDecoratorTypeFromNgMetadataName(rawParameterDecorator) }))
+        : null )
+
   };
 
 /*
@@ -48,5 +61,12 @@ const determineClassDecoratorTypeFromNgMetadataName =
   (rawClassDecorator: any): ClassDecoratorType => {
     switch (rawClassDecorator) {
       case ngMetadataNames.Component: return ClassDecoratorType.Component
+    }
+  }
+
+const determineParameterDecoratorTypeFromNgMetadataName =
+  (rawParameterDecorator: any): ParameterDecoratorType => {
+    switch (rawParameterDecorator) {
+      case ngMetadataNames.Inject: return ParameterDecoratorType.Inject
     }
   }

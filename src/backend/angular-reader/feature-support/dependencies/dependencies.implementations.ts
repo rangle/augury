@@ -1,28 +1,21 @@
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../../../utils/parse-modules'; // @todo: what's this?
 import {functionName} from '../../../../utils'; // @todo: this is fine, but fix pathing
 
-import { } from '../basic-decorators'
+import * as BasicDecorators from '../basic-decorators'
 
 import {
   Dependency,
   ParameterType,
   ParameterDecorator,
   ExtractDependenciesFunction,
-  ExtractParameterTypesFunction,
-  ExtractParameterDecoratorsFunction
+  ExtractParameterTypesFunction
 } from './dependencies.definitions';
 
 // @todo: change name
 export const extractDependenciesUsingUnstableMethod: ExtractDependenciesFunction
   = (instance): Array<Dependency> => {
 
-    console.log(
-      instance,
-      extractParameterDecoratorsFromUnderscoredProperty(instance),
-      extractParameterTypesFromReflectMetadata(instance)
-    );
-
-    const parameterDecorators = extractParameterDecoratorsFromUnderscoredProperty(instance) || [];
+    const parameterDecorators = BasicDecorators.extractDecoratorsForParametersFromUnderscoredProperty(instance) || [];
     const normalizedParamTypes = extractParameterTypesFromReflectMetadata(instance)
       .map((type, i) => type ?
           type
@@ -54,16 +47,4 @@ export const extractParameterTypesFromReflectMetadata: ExtractParameterTypesFunc
   = (instance): Array<ParameterType> => {
     return (Reflect.getOwnMetadata('design:paramtypes', instance.constructor) || [])
       .map(param => typeof param !== 'function' || param.name === 'Object' ? null : param);
-  };
-
-// ---- HELPERS
-
-/**
- *
- */
-export const extractParameterDecoratorsFromUnderscoredProperty: ExtractParameterDecoratorsFunction
-  = (instance): Array<ParameterDecorator> => {
-    return Reflect.getOwnMetadata('parameters', instance.constructor)
-        || instance.constructor.__parameters__
-        || instance.constructor.__paramaters__; // angular 5.1 has a typo
   };
