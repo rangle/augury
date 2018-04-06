@@ -24,7 +24,7 @@ You can install the extension from:
 - [Chrome Store](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd)
 - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/angular-augury)
 
-You may also install our [Canary Build](https://addons.mozilla.org/en-US/firefox/addon/angular-augury) for Chrome, to try out new features and bug fixes, and help us with user acceptance testing.
+You may also install our [Canary Build](https://addons.mozilla.org/en-US/firefox/addon/angular-augury) for Chrome to try out new features and bug fixes, and help us with user acceptance testing.
 
 ## Inspecting Code
 
