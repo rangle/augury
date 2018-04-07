@@ -10,15 +10,23 @@ import { BasicDecoratorsSupport } from '../basic-decorators'
 /**
  *  represents a Dependency Injection "Dependency".
  *  so, the things enumerated in the (component, service, etc)'s constructor
+ *  (this is a legacy augury type that is used throughout)
  */
 export interface Dependency {
-  id: string;
+  // id: string; // what is this for???
   name: string;
   decorators: Array<string>;
 }
 
-// @todo: what is this? type it.
-export type ParameterType = any;
+/**
+ *  represents a Dependency Injection "type",
+ *    aka a constructor function (class)
+ */
+export interface ParameterType {
+  name: string
+}
+
+export const UNKNOWN_PARAM_TYPE: ParameterType = { name: '[unknown]' }
 
 // @todo: what is this? type it.
 export type ParameterDecorator = any;
@@ -38,4 +46,4 @@ export interface DependencySupport extends BasicDecoratorsSupport {
 // ----  FEATURE FUNCTIONS
 
 export type ExtractDependenciesFunction = (instance: any) => Array<Dependency>;
-export type ExtractParameterTypesFunction = (instance: any) => Array<ParameterType>;
+export type ExtractParameterTypesFunction = (instance: any) => Array<ParameterType | undefined>;

@@ -9,6 +9,9 @@ import {
   ComponentDecorator,
   ParameterDecoratorType,
   ParameterDecorator,
+  InjectDecorator,
+  InjectDecoratorTokenWithForwardRef,
+  InjectDecoratorTokenWithoutForwardRef,
   ParameterDecorators,
   DecoratorsForParameters,
 } from './basic-decorators.definitions'
@@ -35,18 +38,18 @@ export const extractComponentDecoratorUsingNgMetadataName: ExtractComponentDecor
 
 
 export const extractDecoratorsForParametersFromUnderscoredProperty: ExtractDecoratorsForParametersFunction
-  = (instance): DecoratorsForParameters | null => {
+  = (instance): DecoratorsForParameters | undefined => {
     const rawDecoratorsForParameters:any =
          instance.constructor.__parameters__
       || instance.constructor.__paramaters__; // angular 5.1 has a typo
-    if (!Array.isArray(rawDecoratorsForParameters)) return null;
+    if (!Array.isArray(rawDecoratorsForParameters)) return undefined;
     return rawDecoratorsForParameters
       .map(rawParameterDecorators => rawParameterDecorators ?
-          rawParameterDecorators.map(rawParameterDecorator =>
-            merge(rawParameterDecorator, {
-              parameterDecoratorType: determineParameterDecoratorTypeFromNgMetadataName(rawParameterDecorator) }))
-        : null )
-
+          rawParameterDecorators
+            .map(rawParameterDecorator =>
+              merge(rawParameterDecorator, {
+                parameterDecoratorType: determineParameterDecoratorTypeFromNgMetadataName(rawParameterDecorator) }))
+        : undefined )
   };
 
 /*
@@ -61,12 +64,14 @@ const determineClassDecoratorTypeFromNgMetadataName =
   (rawClassDecorator: any): ClassDecoratorType => {
     switch (rawClassDecorator) {
       case ngMetadataNames.Component: return ClassDecoratorType.Component
+      default: return ClassDecoratorType.Other
     }
   }
 
 const determineParameterDecoratorTypeFromNgMetadataName =
   (rawParameterDecorator: any): ParameterDecoratorType => {
-    switch (rawParameterDecorator) {
+    switch (rawParameterDecorator.ngMetadataName) {
       case ngMetadataNames.Inject: return ParameterDecoratorType.Inject
+      default: return ParameterDecoratorType.Other
     }
   }

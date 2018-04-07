@@ -22,4 +22,8 @@ export class AngularReaderService {
   moduleSupport = (): ModuleSupport =>
     this.check('Module') && this.as<ModuleSupport>()
 
+  hasBasicDecoratorSupport: boolean;
+  basicDecoratorSupport = (): ModuleSupport =>
+    this.check('Module') && this.as<ModuleSupport>()
+
 }

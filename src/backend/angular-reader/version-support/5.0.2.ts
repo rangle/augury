@@ -14,12 +14,11 @@ class V502
   hasBasicDecoratorSupport: true = true;
   extractDecoratorsForClass = BasicDecorators.extractDecoratorsForClassUsingNgMetadataName;
   extractComponentDecorator = BasicDecorators.extractComponentDecoratorUsingNgMetadataName;
-  extractDecoratorsForParameter = BasicDecorators.extractDecoratorsForParameter;
+  extractDecoratorsForParameters = BasicDecorators.extractDecoratorsForParametersFromUnderscoredProperty;
 
   hasDependencySupport: true = true;
-  extractDependencies = Dependencies.extractDependenciesUsingUnstableMethod;
+  extractDependencies = Dependencies.extractDependenciesByMergingParamTypesAndDependencies;
   extractParameterTypes = Dependencies.extractParameterTypesFromReflectMetadata;
-  extractParameterDecorators = Dependencies.extractParameterDecoratorsFromUnderscoredProperty;
 
   hasModuleSupport: true = true;
   extractNgModuleDecoratorConfig = Modules.extractNGModuleDecoratorConfigFromDecoratorsProperty;

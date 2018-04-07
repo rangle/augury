@@ -2,7 +2,7 @@
 //        then get rid of this copypaste of the interface
 // import {Property, Dependency} from '../backend/utils/description';
 export interface Dependency {
-  id: string;
+  // id: string; // @todo: do we need this id??? how does this work and what is it for? uses Reflect.Metadata
   name: string;
   decorators: Array<string>;
 }

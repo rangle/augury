@@ -10,7 +10,7 @@ import {
 //        then get rid of this copypaste of the interface
 // import {Dependency} from '../../backend/utils/description';
 export interface Dependency {
-  id: string;
+  // id: string;
   name: string;
   decorators: Array<string>;
 }

@@ -1,42 +1,33 @@
 import {AUGURY_TOKEN_ID_METADATA_KEY} from '../../../utils/parse-modules'; // @todo: what's this?
 import {functionName} from '../../../../utils'; // @todo: this is fine, but fix pathing
 
-import * as BasicDecorators from '../basic-decorators'
+import {
+  extractDecoratorsForParametersFromUnderscoredProperty,
+  DecoratorsForParameters,
+  ParameterDecorators,
+  ParameterDecorator,
+  isInject,
+  isForwardRef,
+  InjectDecorator,
+} from '../basic-decorators'
 
 import {
   Dependency,
   ParameterType,
-  ParameterDecorator,
   ExtractDependenciesFunction,
-  ExtractParameterTypesFunction
+  ExtractParameterTypesFunction,
+  UNKNOWN_PARAM_TYPE,
 } from './dependencies.definitions';
 
-// @todo: change name
-export const extractDependenciesUsingUnstableMethod: ExtractDependenciesFunction
+/**
+ *
+ */
+export const extractDependenciesByMergingParamTypesAndDependencies: ExtractDependenciesFunction
   = (instance): Array<Dependency> => {
-
-    const parameterDecorators = BasicDecorators.extractDecoratorsForParametersFromUnderscoredProperty(instance) || [];
-    const normalizedParamTypes = extractParameterTypesFromReflectMetadata(instance)
-      .map((type, i) => type ?
-          type
-        : Array.isArray(parameterDecorators[i]) ?
-            (() => {
-              const decoratorToken = parameterDecorators[i].find(item => item.token !== undefined);
-              return decoratorToken ? decoratorToken.token : 'unknown';
-            })()
-          : 'unknown'
-      );
-
-      if (normalizedParamTypes.length) {
-        console.log(true);
-      }
-
-    return normalizedParamTypes.map((paramType, i) => ({
-      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
-      name: functionName(paramType) || paramType.toString(),
-      decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
-    }));
-
+    return dependenciesFromParameterTypesAndDecoratorsForParameters(
+      extractParameterTypesFromReflectMetadata(instance),
+      extractDecoratorsForParametersFromUnderscoredProperty(instance)
+    )
   };
 
 /**
@@ -44,7 +35,83 @@ export const extractDependenciesUsingUnstableMethod: ExtractDependenciesFunction
  */
 // Router and Component used as instance currently (at least)
 export const extractParameterTypesFromReflectMetadata: ExtractParameterTypesFunction
-  = (instance): Array<ParameterType> => {
+  = (instance): Array<ParameterType | undefined> => {
     return (Reflect.getOwnMetadata('design:paramtypes', instance.constructor) || [])
-      .map(param => typeof param !== 'function' || param.name === 'Object' ? null : param);
+      .map(param => typeof param !== 'function' || param.name === 'Object' ? undefined : param);
   };
+
+// --- helpers
+
+// precond: arrays same size
+const dependenciesFromParameterTypesAndDecoratorsForParameters
+  = ( parameterTypes: Array<ParameterType | undefined>,
+      decoratorsForParameters: DecoratorsForParameters | undefined ): Array<Dependency>  => {
+
+        const normalizedParamTypes: Array<ParameterType>
+          = (new Array(parameterTypes.length))
+              .fill(true)
+              .map((_, parameterIndex: number) => {
+
+                const paramType: ParameterType | undefined
+                  = parameterTypes[parameterIndex];
+
+                if (paramType) return paramType;
+
+                if (!decoratorsForParameters) { return UNKNOWN_PARAM_TYPE; }
+
+                const paramTypeFromDecorator: ParameterType | undefined
+                  = tryToGetParamTypeFromDecorator(decoratorsForParameters, parameterIndex);
+
+                if (!paramTypeFromDecorator) { return UNKNOWN_PARAM_TYPE; }
+
+                return paramTypeFromDecorator;
+
+              })
+
+        return normalizedParamTypes
+          .map((paramType, paramIndex) => {
+
+            let decoratorNames: Array<string> = [];
+
+            if (decoratorsForParameters) {
+
+              const paramDecorators = decoratorsForParameters[paramIndex]
+
+              if (paramDecorators) {
+                decoratorNames = paramDecorators
+                  .reduce((acc: Array<string>, cur: ParameterDecorator) =>
+                    cur ? acc.concat([ cur.toString() ]) : acc, [])
+              }
+
+            }
+
+            return {
+              name: paramType.name,
+              decorators: decoratorNames
+            }
+          })
+      }
+
+
+// --- helpers
+
+const tryToGetParamTypeFromDecorator
+  = (decoratorsForParameters: DecoratorsForParameters, parameterIndex: number): ParameterType | undefined => {
+    const parameterDecorators: ParameterDecorators | undefined
+      = decoratorsForParameters[parameterIndex];
+
+    if (!parameterDecorators) { return undefined; }
+
+    const injectDecorator = <InjectDecorator | undefined>
+      parameterDecorators.find(pd => !!isInject(pd))
+
+    if (!injectDecorator) { return undefined; }
+
+    const token = injectDecorator.token
+
+    if (isForwardRef(token)) {
+      return { name: token.toString() } }
+    else {
+      return { name: token.name } }
+
+  }
