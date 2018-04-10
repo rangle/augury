@@ -1,5 +1,4 @@
 {
-  "version": "1.6.2",
   "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
@@ -16,9 +15,7 @@
     "listFiles": false
   },
   "exclude": [
-       "node_modules",
-       "example-apps",
-       "build",
-       "typings"
-     ]
+    "node_modules",
+    "build"
+  ]
 }
