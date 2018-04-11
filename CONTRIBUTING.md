@@ -7,7 +7,7 @@ contribution standards. As you read it, it is important to remember that
 these are just __guidelines__ and not rules. Please use your best
 judgement when applying them.
 
-#### Table of Contents
+## Table of Contents
 
 1. [I'm new, anything I should know?](#im-new-anything-i-should-know)
 1. [Behaving yourself](#behaving-yourself)
@@ -16,7 +16,6 @@ judgement when applying them.
 1. [Making changes](#making-changes)
 1. [How do I get in touch?](#how-do-i-get-in-touch)
 1. [License](#license)
-
 
 ## I'm new, anything I should know?
 
@@ -52,16 +51,19 @@ Don't forget to squash your commits. [git-scm.com](https://git-scm.com/book/en/v
 
 ### Building and testing
 
-1. Run `yarn`.
+1. Run `npm install`.
 1. Run `npm run build` (errors related to typing files conflicts can be ignored for now).
-1. Navigate to chrome://extensions and enable Developer Mode.
-1. Choose "Load unpacked extension".
+1. Navigate to:
+    - For Chrome: `chrome://extensions` and enable Developer Mode
+    - For Firefox: `about:debugging#addons`
+1. Choose "Load unpacked extension" (Chrome) or "Load Temporary Add-On" (Firefox).
 1. In the dialog, open your augury directory.
 
 You can test out the extension with a quick example app. In a different terminal window:
 
-1. Navigate to augury/example-apps/kitchen-sink-example.
-1. Run `yarn`.
+1. Git clone the https://github.com/rangle/augury-examples project.
+1. Navigate to `kitchen-sink-demo` directory.
+1. Run `npm install`.
 1. Run `npm start` on the kitchen-sink-example root folder.
 
 ### Coding style
@@ -76,9 +78,9 @@ You can test out the extension with a quick example app. In a different terminal
 ### Recommendations
 
 * Augury `npm start` script sets up webpack to run with a watcher on your files, so when you make changes, you don't have to rebuild the extension (it'll do it for you).
-* If the app becomes unresponsive, or a change is not visible, you might need to close and reopen chrome's dev tools.
-* Failing the above, you might have to go to chrome://extensions and click on the Reload button.
-* You can ignore some chrome warnings for now.
+* If the app becomes unresponsive, or a change is not visible, you might need to close and reopen the dev tools.
+* Failing the above, you might have to go to `chrome://extensions` (Chrome) or `about:debugging#addons` (Firefox) and click on the Reload button.
+* You can ignore some warnings for now.
 
 ## Contributing workflow
 
@@ -91,7 +93,6 @@ Remember, no contribution is too small and no issue is too trivial. If you see a
 If you do find a new issue, the best way to get a bug fixed is to provide a test case with either one of the example apps bundled in the repo, or by making your own Angular application illustrating the reduced use case. Don't forget to include the version of Angular app you're using!
 
 At the moment, we offer limited backwards compatibility until Angular stabilizes. Please check [README](./README.md#supported-version) for the version Augury currently supports.
-
 
 ### Pull requests
 
@@ -155,5 +156,3 @@ We are using Slack for all of our communication. If you want to contribute or ne
 ## License
 
 [MIT](LICENSE)
-
-

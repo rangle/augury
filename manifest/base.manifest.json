@@ -1,9 +1,8 @@
 {
   "name": "Augury",
   "short_name": "Augury",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular applications.",
-  "update_url": "https://augury.angular.io/",
   "permissions": [
     "storage"
   ],
@@ -15,8 +14,7 @@
   "background": {
     "scripts": [
       "build/background.js"
-    ],
-    "persistent": false
+    ]
   },
   "content_scripts": [{
     "matches": [

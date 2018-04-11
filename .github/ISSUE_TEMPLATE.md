@@ -1,3 +1,5 @@
+-- please install the [Augury Canary Build](https://chrome.google.com/webstore/detail/augury-canary-build/leechohfifidanmkioncamdcibhmmcji?hl=en) Chrome extension, as this will be used to test any new features or bug fixes.
+
 Augury version (required):
 Angular version (required):
 Date:
