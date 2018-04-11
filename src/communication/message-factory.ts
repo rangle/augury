@@ -82,6 +82,14 @@ export abstract class MessageFactory {
     });
   }
 
+  static treeUnchanged(): Message<null> {
+    return create({
+      messageType: MessageType.TreeUnchanged,
+      content: null,
+      serialize: Serialize.None,
+    });
+  }
+
   static completeTree(tree: MutableTree): Message<Node[]> {
     return create({
       messageType: MessageType.CompleteTree,
