@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.16.0](https://github.com/rangle/tree/1.16.0)
+* Add extendible build configurations for different versions of the augury package (currently for firefox and canary builds).
+* Fix edge case bugs that crashed augury (commonly affecting PrimeNG users)
+* Fix Angular application detection bug
+* Angular 6 compatibility
+
 ## [1.15.0](https://github.com/rangle/tree/1.15.0)
 * Angular 5 does not work ([1255](https://github.com/rangle/augury/issues/1255)).
 * Angular 5 breaks augury ([1253](https://github.com/rangle/augury/issues/1253)).
