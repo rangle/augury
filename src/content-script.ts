@@ -2,6 +2,7 @@ import {
   Message,
   MessageFactory,
   MessageType,
+  DispatchHandler,
   messageJumpContext,
   browserSubscribeDispatch,
   browserSubscribeOnce,
@@ -44,7 +45,7 @@ export const injectSettings = (options: SimpleOptions) => {
 };
 
 browserSubscribeOnce(MessageType.FrameworkLoaded,
-  () => {
+  <DispatchHandler>(() => {
     loadOptions().then(options => {
       // We want to load the tree rendering options that the UI has saved
       // because that allows us to send the correct tree immediately upon
@@ -59,9 +60,9 @@ browserSubscribeOnce(MessageType.FrameworkLoaded,
     });
 
     return true;
-  });
+  }));
 
-browserSubscribeDispatch((message: any) => {
+browserSubscribeDispatch(<DispatchHandler>((message: any) => {
   if (message.messageType === MessageType.DispatchWrapper) {
     send(message.content)
       .then(response => {
@@ -71,7 +72,7 @@ browserSubscribeDispatch((message: any) => {
         messageJumpContext(MessageFactory.response(message, error, false));
       });
   }
-});
+}));
 
 subscribe((message: Message<any>) => messageJumpContext(message));
 

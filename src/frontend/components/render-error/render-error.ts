@@ -14,13 +14,13 @@ import {
 
 @Component({
   selector: 'render-error',
-  template: require('./render-error.html'),
+  templateUrl: './render-error.html',
   host: {
     '[class.dark]': 'isDevtoolsDarkTheme'
   }
 })
 export class RenderError {
-  @Input() private error: ApplicationError;
+  @Input() error: ApplicationError;
   @Output() private reportError: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   private isDevtoolsDarkTheme = this.setIsDarkTheme();

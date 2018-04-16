@@ -80,6 +80,8 @@
     "zone.js": "0.8.18"
   },
   "devDependencies": {
+    "@angular/compiler-cli": "5.1.2",
+    "@ngtools/webpack": "1.10.2",
     "@types/chrome": "0.0.38",
     "@types/clone": "0.1.30",
     "@types/d3": "4.4.1",
@@ -118,7 +120,7 @@
     "ts-loader": "4.2.0",
     "tslint": "5.4.3",
     "tslint-loader": "3.6.0",
-    "typescript": "2.3.4",
+    "typescript": "2.4.2",
     "url-loader": "1.0.1",
     "webpack": "4.5.0",
     "webpack-bundle-analyzer": "^2.11.1",

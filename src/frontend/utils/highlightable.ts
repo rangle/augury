@@ -9,7 +9,7 @@ import {highlightTime} from '../../utils/configuration';
 const initialTimespan = highlightTime;
 
 export abstract class Highlightable {
-  private isUpdated = false;
+  isUpdated = false;
 
   private timespan = initialTimespan; // scales down
 

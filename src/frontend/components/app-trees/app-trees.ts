@@ -24,7 +24,7 @@ type Node = any;
 
 @Component({
   selector: 'bt-app-trees',
-  template: require('./app-trees.html'),
+  templateUrl: './app-trees.html',
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   },
@@ -39,43 +39,43 @@ type Node = any;
 })
 export class AppTrees {
   private ComponentView = ComponentView;
-  private Tab = Tab;
+  Tab = Tab;
   private Theme = Theme;
   private AnalyticsConsent = AnalyticsConsent;
 
-  @Input() private ngVersion: String;
-  @Input() private componentState: ComponentInstanceState;
+  @Input() ngVersion: String;
+  @Input() componentState: ComponentInstanceState;
   @Input() private options: Options;
-  @Input() private routerTree: Array<Route>;
-  @Input() private tree: Array<Node>;
-  @Input() private ngModules: {[key: string]: any};
+  @Input() routerTree: Array<Route>;
+  @Input() tree: Array<Node>;
+  @Input() ngModules: {[key: string]: any};
 
-  @Input() private selectedNode: Node;
+  @Input() selectedNode: Node;
   @Input() private selectedRoute: Route;
-  @Input() private selectedTab: Tab;
-  @Input() private selectedComponentsSubTab: StateTab;
-  @Input() private domSelectionActive: boolean;
+  @Input() selectedTab: Tab;
+  @Input() selectedComponentsSubTab: StateTab;
+  @Input() domSelectionActive: boolean;
 
-  @Output() private collapseChildren = new EventEmitter<Node>();
-  @Output() private expandChildren = new EventEmitter<Node>();
-  @Output() private inspectElement = new EventEmitter<Node>();
-  @Output() private selectNode = new EventEmitter<Node>();
+  @Output() collapseChildren = new EventEmitter<Node>();
+  @Output() expandChildren = new EventEmitter<Node>();
+  @Output() inspectElement = new EventEmitter<Node>();
+  @Output() selectNode = new EventEmitter<Node>();
   @Output() private tabChange = new EventEmitter<Tab>();
-  @Output() private componentsSubTabMenuChange = new EventEmitter<StateTab>();
+  @Output() componentsSubTabMenuChange = new EventEmitter<StateTab>();
 
   @Output() private domSelectionActiveChange = new EventEmitter<boolean>();
 
-  @Output() private emitValue = new EventEmitter<{path: Path, data: any}>();
-  @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
+  @Output() emitValue = new EventEmitter<{path: Path, data: any}>();
+  @Output() updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
   @ViewChild('splitPane') private splitPane;
   @ViewChild('menuButtonElement') private menuButtonElement;
   @ViewChild('menuElement') private menuElement;
 
-  private settingOpened: boolean = false;
-  private showAnalyticsConsent: boolean = false;
+  settingOpened: boolean = false;
+  showAnalyticsConsent: boolean = false;
 
-  private tabs: Array<TabDescription> = [{
+  tabs: Array<TabDescription> = [{
     title: 'Component Tree',
     tab: Tab.ComponentTree,
   }, {
@@ -115,7 +115,7 @@ export class AppTrees {
     }
   }
 
-  private onOpenSettings = () => {
+  onOpenSettings = () => {
     this.settingOpened = !this.settingOpened;
   }
 

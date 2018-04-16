@@ -23,13 +23,13 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 
 @Component({
   selector: 'bt-components-tab-menu',
-  template: require('./components-tab-menu.html'),
+  templateUrl: './components-tab-menu.html',
 })
 export class ComponentsTabMenu {
   @Input() selectedStateTab;
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
 
-  private tabs: Array<StateTabDescription> = [{
+  tabs: Array<StateTabDescription> = [{
     title: 'Properties',
     tab: StateTab.Properties,
   }, {
