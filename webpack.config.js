@@ -42,7 +42,7 @@ module.exports = {
 
   entry: {
     'frontend': [
-      './webpack.vendor',
+      './src/frontend/imports',
       './src/frontend/module',
     ],
     'backend': ['./src/backend/backend'],
@@ -63,6 +63,25 @@ module.exports = {
     sourceMapFilename: '[name].js.map',
     chunkFilename: '[name].chunk.js',
   },
+
+  // Code splitting
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       common: {
+  //         test: /src/,
+  //         name: 'common',
+  //         chunks: 'initial',
+	// 				minChunks: 2,
+  //       },
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendor',
+  //         chunks: 'all',
+  //       },
+  //     },
+  //   },
+  // },
 
   resolve: {
     extensions: ['.ts', '.js', '.json'],

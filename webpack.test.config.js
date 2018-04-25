@@ -9,8 +9,8 @@ module.exports = {
 
   entry: {
     'test': [
-      path.join(__dirname, 'webpack.vendor.ts'),
-      path.join(__dirname, 'webpack.test.bootstrap.ts'),
+      path.join(__dirname, 'src/frontend/imports'),
+      path.join(__dirname, 'webpack.test.bootstrap'),
     ],
   },
 
@@ -57,12 +57,12 @@ module.exports = {
       },
     ],
 
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/,
-      /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/,
-    ],
+    // noParse: [
+    //   /rtts_assert\/src\/rtts_assert/,
+    //   /reflect-metadata/,
+    //   /.+zone\.js\/dist\/.+/,
+    //   /.+angular2\/bundles\/.+/,
+    // ],
   },
 
   resolve: {
@@ -71,7 +71,7 @@ module.exports = {
   },
 
   node: {
-    'fs': 'empty',
+    fs: 'empty',
   },
 
   plugins: [
