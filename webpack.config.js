@@ -64,25 +64,6 @@ module.exports = {
     chunkFilename: '[name].chunk.js',
   },
 
-  // Code splitting
-  // optimization: {
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       common: {
-  //         test: /src/,
-  //         name: 'common',
-  //         chunks: 'initial',
-	// 				minChunks: 2,
-  //       },
-  //       vendor: {
-  //         test: /[\\/]node_modules[\\/]/,
-  //         name: 'vendor',
-  //         chunks: 'all',
-  //       },
-  //     },
-  //   },
-  // },
-
   resolve: {
     extensions: ['.ts', '.js', '.json'],
     modules: ['./node_modules'],
@@ -117,13 +98,6 @@ module.exports = {
         test: /\.html$/,
         use: 'raw-loader',
       },
-    ],
-
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/,
-      /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/,
     ],
   },
 

@@ -9,7 +9,6 @@ module.exports = {
 
   entry: {
     'test': [
-      path.join(__dirname, 'src/frontend/imports'),
       path.join(__dirname, 'webpack.test.bootstrap'),
     ],
   },
@@ -56,13 +55,6 @@ module.exports = {
         use: 'raw-loader',
       },
     ],
-
-    // noParse: [
-    //   /rtts_assert\/src\/rtts_assert/,
-    //   /reflect-metadata/,
-    //   /.+zone\.js\/dist\/.+/,
-    //   /.+angular2\/bundles\/.+/,
-    // ],
   },
 
   resolve: {
