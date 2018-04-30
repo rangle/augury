@@ -52,7 +52,7 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
     }
   };
 
-  const subscription = browserSubscribe(messageHandler);
+  const subscription = browserSubscribe(<DispatchHandler>messageHandler);
 };
 
 export const browserSubscribeResponse = (messageId: string, handler: DispatchHandler) => {
@@ -70,7 +70,7 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
     }
   };
 
-  const subscription = browserSubscribe(messageHandler);
+  const subscription = browserSubscribe(<DispatchHandler>messageHandler);
 };
 
 export const browserUnsubscribe = (handler: DispatchHandler) =>
@@ -117,4 +117,3 @@ window.addEventListener('message',
       browserDispatch(event.data);
     }
   });
-

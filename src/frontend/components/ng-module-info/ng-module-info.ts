@@ -5,12 +5,11 @@ import {
 
 @Component({
   selector: 'ng-module-info',
-  template: require('./ng-module-info.html'),
-  styles: [require('to-string!./ng-module-info.css')],
+  templateUrl: './ng-module-info.html',
+  styleUrls: ['./ng-module-info.css'],
 })
 export class NgModuleInfo {
-  @Input() private ngModules: {[key: string]: any};
+  @Input() ngModules: {[key: string]: any};
 
   constructor() {}
-
 }

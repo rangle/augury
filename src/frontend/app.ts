@@ -41,6 +41,7 @@ import {
   Path,
   deserializeChangePath,
   serializePath,
+  InstanceWithMetadata,
 } from '../tree';
 
 import {createTree} from '../tree/mutable-tree-factory';
@@ -55,8 +56,8 @@ require('!style!css!postcss!../styles/app.css');
 
 @Component({
   selector: 'bt-app',
-  template: require('./app.html'),
-  styles: [require('to-string!./app.css')],
+  templateUrl: './app.html',
+  styleUrls: ['./app.css'],
 })
 export class App {
   private Theme = Theme;
@@ -110,7 +111,7 @@ export class App {
 
   }
 
-  private hasContent() {
+  hasContent() {
     return this.tree &&
       this.tree.roots &&
       this.tree.roots.length > 0;
@@ -286,7 +287,7 @@ export class App {
           componentMetadata,
         } = response;
 
-        return {
+        return <InstanceWithMetadata>{
           instance,
           providers,
           metadata: new Map(metadata),

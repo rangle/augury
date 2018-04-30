@@ -38,8 +38,8 @@ export enum EmitState {
 
 @Component({
   selector: 'bt-render-state',
-  template: require('./render-state.html'),
-  styles: [require('to-string!./render-state.css')],
+  templateUrl: './render-state.html',
+  styleUrls: ['./render-state.css'],
 })
 export class RenderState {
   @Input() id: string;

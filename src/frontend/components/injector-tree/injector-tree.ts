@@ -29,7 +29,7 @@ const MAX_LABEL_CHARS = 14;
 @Component({
   selector: 'bt-injector-tree',
   providers: [GraphUtils, ParseUtils],
-  template: require('./injector-tree.html')
+  templateUrl: './injector-tree.html'
 })
 export class InjectorTree implements OnChanges {
   @ViewChild('graphContainer') graphContainer;
@@ -43,7 +43,7 @@ export class InjectorTree implements OnChanges {
 
   private parentHierarchy;
   private svg: any;
-  private breadcrumbs: Array<any>;
+  breadcrumbs: Array<any>;
 
   constructor(
     private graphUtils: GraphUtils,
