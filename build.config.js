@@ -6,6 +6,7 @@
  */
 
 /**
+ * [types declared in src/build.config.ts]
  * Each build is defined with a set of boolean flags representing
  *   features that can be turned on and off. These configs are available to the
  *   source code as an injected global. (see src/build.config.ts)
