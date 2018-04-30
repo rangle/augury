@@ -1,28 +1,17 @@
-/*
- * Helpers
- */
-var sliceArgs = Function.prototype.call.bind(Array.prototype.slice);
-var toString = Function.prototype.call.bind(Object.prototype.toString);
-var NODE_ENV = process.env.NODE_ENV || 'production';
-var pkg = require('./package.json');
+const path = require('path');
+const webpack = require('webpack');
+const DefinePlugin = webpack.DefinePlugin;
+const ProgressPlugin = require('webpack/lib/ProgressPlugin');
+const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-// Polyfill
-Object.assign = require('object-assign');
+const pkg = require('./package.json');
 
-// Node
-var path = require('path');
-
-// NPM
-var webpack = require('webpack');
-
-// Webpack Plugins
-var OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-var DedupePlugin = webpack.optimize.DedupePlugin;
-var DefinePlugin = webpack.DefinePlugin;
-var BannerPlugin = webpack.BannerPlugin;
-var MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+// Environment config
+const NODE_ENV = process.env.NODE_ENV || 'production';
+const DIST_DIR = path.join(__dirname, 'build');
+const isProduction = NODE_ENV === 'production';
 
 /**
  * CROSS-BROWSER COMPATIBILITY (and other builds)
@@ -37,50 +26,23 @@ const BUILD = {
   CANARY: 'CANARY',
 }
 
-// browser/build-specific manifest file created during build.
-// `merge-jsons-webpack-plugin` needs relative paths from the build folder.
-const MANIFEST_OUTPUT = `../manifest.json`
-
-// manifest.json properties shared by all builds
-const BASE_MANIFEST = `manifest/base.manifest.json`
-
-// target BUILD parameter is case insensitive (default chrome)
-const interpretTargetBuild = (requested = '') => {
-  return Object.keys(BUILD)
-    .find(build => build == requested.toUpperCase())
-    || BUILD.CHROME
-}
-
-// each build can extend the base manifest with a file of this form
-const getManifestExtension = (targetBuild) =>
-  `manifest/${targetBuild.toLowerCase()}.manifest.json`
-
-// grab target build parameter (passed as command arg)
-const targetBuild = interpretTargetBuild(process.env.BUILD)
-
-// grab manifest extension
-const manifestExtension = getManifestExtension(targetBuild)
-
 /*
  * Config
  */
 module.exports = {
-  devtool: 'source-map',
-  debug: true,
+  mode: NODE_ENV,
+  devtool: isProduction ? false : ' source-map',
   cache: true,
-
-  verbose: true,
-  displayErrorDetails: true,
   context: __dirname,
   stats: {
     colors: true,
-    reasons: true
+    reasons: true,
   },
 
   entry: {
     'frontend': [
-      'webpack.vendor.ts',
-      './src/frontend/module'
+      './webpack.vendor',
+      './src/frontend/module',
     ],
     'backend': ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
@@ -89,90 +51,86 @@ module.exports = {
     'background': [
       './src/channel/channel',
       './src/sentry-connection/sentry-connection',
-      './src/gtm-connection/gtm-connection'
-    ]
+      './src/gtm-connection/gtm-connection',
+    ],
   },
 
   // Config for our build files
   output: {
-    path: root('build'),
+    path: DIST_DIR,
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: '[name].chunk.js',
   },
 
   resolve: {
-    root: __dirname,
-    extensions: ['', '.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json'],
+    modules: ['./node_modules'],
   },
+
+  // Opt-in to the old behavior with the resolveLoader.moduleExtensions
+  // - https://webpack.js.org/guides/migrating/#automatic-loader-module-name-extension-removed
+  resolveLoader: {
+    modules: ['./node_modules'],
+    moduleExtensions: ['-loader'],
+  },
+
   module: {
-    preLoaders: [{
-      test: /\.ts$/,
-      loader: 'tslint',
-      exclude: /node_modules/,
-    }],
-    loaders: [{
-      // Support for .ts files.
-      test: /\.ts$/,
-      loader: 'ts',
-      query: {
-        'ignoreDiagnostics': []
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: [
+          /\.spec\.ts$/,
+          /node_modules\/(?!(ng2-.+))/
+        ]
       },
-      exclude: [
-        /\.min\.js$/,
-        /\.spec\.ts$/,
-        /\.e2e\.ts$/,
-        /web_modules/,
-        /test/,
-        /node_modules\/(?!(ng2-.+))/
-      ]
-    }, {
-      test: /\.css$/,
-      loader: 'css!postcss'
-    }, {
-      test: /\.png$/,
-      loader: "url-loader?mimetype=image/png"
-    }, {
-      test: /\.html$/,
-      loader: 'raw'
-    }],
+      {
+        test: /\.css$/,
+        use: [
+          'to-string-loader',
+          'css-loader',
+          'postcss-loader',
+        ],
+      },
+      {
+        test: /\.png$/,
+        use: 'url-loader?mimetype=image/png',
+      },
+      {
+        test: /\.html$/,
+        use: 'raw-loader',
+      },
+    ],
+
     noParse: [
       /rtts_assert\/src\/rtts_assert/,
       /reflect-metadata/,
       /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/
-    ]
-  },
-
-  postcss: function () {
-    return [
-      require('postcss-import')({ addConfigTo: webpack }),
-      require('postcss-cssnext')
-    ];
+      /.+angular2\/bundles\/.+/,
+    ],
   },
 
   plugins: [
+    new ProgressPlugin(),
+    new CleanWebpackPlugin(DIST_DIR),
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
+      'PRODUCTION': JSON.stringify(isProduction),
       'VERSION': JSON.stringify(pkg.version),
       'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
     }),
-    new OccurenceOrderPlugin(),
-    new DedupePlugin(),
     new MergeJsonWebpackPlugin({
-        "files": [
-            BASE_MANIFEST,
-            manifestExtension,
-        ],
-        "output": {
-            "fileName": MANIFEST_OUTPUT
-        }
+      files: manifestFiles(),
+      output: {
+        fileName: '../manifest.json',
+      },
     }),
-  ].concat((NODE_ENV == 'production') ?  [
-    new UglifyJsPlugin()
+  ].concat((isProduction) ?  [
+    // ... prod-only plugins
   ] : [
     // ... dev-only plugins
+    // new BundleAnalyzerPlugin(),
   ]),
 
   /*
@@ -181,30 +139,31 @@ module.exports = {
    */
   node: {
     crypto: false,
-    __filename: true
-  }
+    __filename: true,
+  },
 };
 
 /**
  * Utils
  */
-function env(configEnv) {
-  if (configEnv === undefined) {
-    return configEnv;
+
+function targetBuild() {
+  // target BUILD parameter is case insensitive (default chrome)
+  const interpretTargetBuild = (requested = '') => {
+    return Object.keys(BUILD)
+      .find(build => build == requested.toUpperCase())
+      || BUILD.CHROME;
   }
-  switch (toString(configEnv[NODE_ENV])) {
-    case '[object Object]'    :
-      return Object.assign({}, configEnv.all || {}, configEnv[NODE_ENV]);
-    case '[object Array]'     :
-      return [].concat(configEnv.all || [], configEnv[NODE_ENV]);
-    case '[object Undefined]' :
-      return configEnv.all;
-    default                   :
-      return configEnv[NODE_ENV];
-  }
+
+  // grab target build parameter (passed as command arg)
+  return interpretTargetBuild(process.env.BUILD);
 }
 
-function root(args) {
-  args = sliceArgs(arguments, 0);
-  return path.join.apply(path, [__dirname].concat(args));
+function manifestFiles() {
+  return [
+    // base manifest file
+    'manifest/base.manifest.json',
+    // each build can extend the base manifest with a file of this form
+    `manifest/${targetBuild().toLowerCase()}.manifest.json`,
+  ];
 }
