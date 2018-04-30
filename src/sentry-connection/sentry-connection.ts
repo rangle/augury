@@ -6,8 +6,12 @@ import {
 
 import * as Raven from 'raven-js';
 
+import Build from '../build';
+
 declare const SENTRY_KEY: string;
-if (SENTRY_KEY && SENTRY_KEY.length > 0) {
+
+if ( Build().SENTRY && SENTRY_KEY && SENTRY_KEY.length > 0) {
+
   Raven
     .config(SENTRY_KEY, { release: chrome.runtime.getManifest().version })
     .install();
@@ -18,15 +22,16 @@ if (SENTRY_KEY && SENTRY_KEY.length > 0) {
       reportError(message.content);
     }
   });
-}
 
-const reportError = (errMsg) => {
-  const e = new Error(errMsg.error.message);
-  e.name = errMsg.error.name;
-  e.stack = errMsg.error.stack;
-  Raven.captureException(e, {
-    tags: {
-      ngVersion: errMsg.ngVersion,
-    },
-  });
-};
+  const reportError = (errMsg) => {
+    const e = new Error(errMsg.error.message);
+    e.name = errMsg.error.name;
+    e.stack = errMsg.error.stack;
+    Raven.captureException(e, {
+      tags: {
+        ngVersion: errMsg.ngVersion,
+      },
+    });
+  };
+
+}

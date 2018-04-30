@@ -24,42 +24,7 @@ var DefinePlugin = webpack.DefinePlugin;
 var BannerPlugin = webpack.BannerPlugin;
 var MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 
-/**
- * CROSS-BROWSER COMPATIBILITY (and other builds)
- * We use different build configurations depending on browser (or other builds, like canary).
- * For example, browsers have different support for properties on manifest.json
- */
-
-// versions we produce
-const BUILD = {
-  FIREFOX: 'FIREFOX',
-  CHROME: 'CHROME',
-  CANARY: 'CANARY',
-}
-
-// browser/build-specific manifest file created during build.
-// `merge-jsons-webpack-plugin` needs relative paths from the build folder.
-const MANIFEST_OUTPUT = `../manifest.json`
-
-// manifest.json properties shared by all builds
-const BASE_MANIFEST = `manifest/base.manifest.json`
-
-// target BUILD parameter is case insensitive (default chrome)
-const interpretTargetBuild = (requested = '') => {
-  return Object.keys(BUILD)
-    .find(build => build == requested.toUpperCase())
-    || BUILD.CHROME
-}
-
-// each build can extend the base manifest with a file of this form
-const getManifestExtension = (targetBuild) =>
-  `manifest/${targetBuild.toLowerCase()}.manifest.json`
-
-// grab target build parameter (passed as command arg)
-const targetBuild = interpretTargetBuild(process.env.BUILD)
-
-// grab manifest extension
-const manifestExtension = getManifestExtension(targetBuild)
+const BuildConfig = require('./build.config');
 
 /*
  * Config
@@ -157,17 +122,15 @@ module.exports = {
       'PRODUCTION': JSON.stringify(process.env.NODE_ENV !== 'development'),
       'VERSION': JSON.stringify(pkg.version),
       'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
+      'BUILD': BuildConfig.getTargetBuildConfig(),
     }),
     new OccurenceOrderPlugin(),
     new DedupePlugin(),
     new MergeJsonWebpackPlugin({
-        "files": [
-            BASE_MANIFEST,
-            manifestExtension,
-        ],
-        "output": {
-            "fileName": MANIFEST_OUTPUT
-        }
+      files: BuildConfig.getTargetBuildManifestFiles(),
+      output: {
+        fileName: '../manifest.json',
+      },
     }),
   ].concat((NODE_ENV == 'production') ?  [
     new UglifyJsPlugin()
