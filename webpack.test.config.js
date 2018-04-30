@@ -9,7 +9,7 @@ module.exports = {
 
   entry: {
     'test': [
-      path.join(__dirname, 'webpack.test.bootstrap'),
+      path.join(__dirname, 'webpack.test.bootstrap.ts'),
     ],
   },
 
@@ -63,7 +63,7 @@ module.exports = {
   },
 
   node: {
-    fs: 'empty',
+    'fs': 'empty',
   },
 
   plugins: [
