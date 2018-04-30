@@ -9,7 +9,6 @@ module.exports = {
 
   entry: {
     'test': [
-      path.join(__dirname, 'webpack.vendor.ts'),
       path.join(__dirname, 'webpack.test.bootstrap.ts'),
     ],
   },
@@ -55,13 +54,6 @@ module.exports = {
         test: /\.html$/,
         use: 'raw-loader',
       },
-    ],
-
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/,
-      /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/,
     ],
   },
 

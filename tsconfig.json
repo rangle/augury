@@ -2,17 +2,15 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
-    "lib": ["es6", "dom"],
+    "lib": ["es2015", "dom"],
     "target": "es5",
-    "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": false,
     "noImplicitAny": false,
     "removeComments": true,
-    "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "listFiles": false
+    "sourceMap": true
   },
   "exclude": [
     "node_modules",

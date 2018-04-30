@@ -20,31 +20,31 @@ export enum SearchState {
 
 @Component({
   selector: 'search',
-  template: require('./search.html'),
-  styles: [require('to-string!./search.css')],
+  templateUrl: './search.html',
+  styleUrls: ['./search.css'],
 })
 export class Search {
   /// A function that is capable of executing a search and returning results
   @Input() private handler: SearchHandler;
 
   /// A placeholder string that will be placed in an empty search field
-  @Input() private placeholder: string;
+  @Input() placeholder: string;
 
   /// Invoked when the user hits the next or previous buttons
   @Output() private selectedResult = new EventEmitter<SearchResult>();
 
-  private SearchState = SearchState;
+  SearchState = SearchState;
 
-  private state = SearchState.Idle;
+  state = SearchState.Idle;
 
-  private query: string;
+  query: string;
 
   private results: Array<SearchResult>;
 
   /// Index of the current search result that the user has selected
-  private current: number;
+  current: number;
 
-  private get total(): number {
+  get total(): number {
     switch (this.state) {
       case SearchState.Idle:
       case SearchState.Failure:
@@ -58,15 +58,15 @@ export class Search {
     }
   }
 
-  private enableNext(): boolean {
+  enableNext(): boolean {
     return this.current < this.total;
   }
 
-  private enablePrevious(): boolean {
+  enablePrevious(): boolean {
     return this.current > 0;
   }
 
-  private onKeypress(event: KeyboardEvent) {
+  onKeypress(event: KeyboardEvent) {
     if (this.state !== SearchState.Results) {
       return;
     }
@@ -80,7 +80,7 @@ export class Search {
     }
   }
 
-  private onSearchChanged(value: string) {
+  onSearchChanged(value: string) {
     this.query = value;
 
     const response = (state: SearchState, results: Array<SearchResult>) => {
@@ -115,7 +115,7 @@ export class Search {
     }
   }
 
-  private previous() {
+  previous() {
     if (--this.current < 0) { // wrap
       this.current = this.total - 1;
     }
@@ -123,7 +123,7 @@ export class Search {
     this.selectedResult.emit(this.results[this.current]);
   }
 
-  private next() {
+  next() {
     if (++this.current >= this.total) { // wrap
       this.current = 0;
     }

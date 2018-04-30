@@ -18,7 +18,7 @@ import {
 
 @Component({
   selector: 'bt-info-panel',
-  template: require('./info-panel.html'),
+  templateUrl: './info-panel.html',
 })
 export class InfoPanel {
   @Input() tree;
@@ -28,35 +28,35 @@ export class InfoPanel {
   @Input() loadingState: ComponentLoadState;
   @Input() selectedStateTab: StateTab;
 
-  @Output() private selectNode: EventEmitter<any> = new EventEmitter<any>();
-  @Output() private componentsSubTabMenuChange: EventEmitter<StateTab> = new EventEmitter<StateTab>();
-  @Output() private emitValue = new EventEmitter<{path: Path, data: any}>();
-  @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
+  @Output() selectNode: EventEmitter<any> = new EventEmitter<any>();
+  @Output() componentsSubTabMenuChange: EventEmitter<StateTab> = new EventEmitter<StateTab>();
+  @Output() emitValue = new EventEmitter<{path: Path, data: any}>();
+  @Output() updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
-  private StateTab = StateTab;
+  StateTab = StateTab;
 
   constructor(private userActions: UserActions) {}
 
-  private get state() {
+  get state() {
     if (this.instanceValue) {
       return this.instanceValue.instance;
     }
     return null;
   }
 
-  private get metadata(): Metadata {
+  get metadata(): Metadata {
     return this.instanceValue
       ? this.instanceValue.metadata
       : new Map<string, [ObjectType, any]>();
   }
 
-  private get providers(): {[token: string]: any} {
+  get providers(): {[token: string]: any} {
     return this.instanceValue
       ? this.instanceValue.providers
       : {};
   }
 
-  private get componentMetadata(): ComponentMetadata {
+  get componentMetadata(): ComponentMetadata {
     return this.instanceValue
       ? this.instanceValue.componentMetadata
       : new Map<string, [[string, ObjectType, any]]>();

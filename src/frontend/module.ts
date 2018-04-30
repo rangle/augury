@@ -115,7 +115,7 @@ import {App} from './app';
   ],
   bootstrap: [App]
 })
-class FrontendModule {
+export class FrontendModule {
   constructor(
     ngRedux: NgRedux<IAppState>,
     sendAnalytics: SendAnalytics) {

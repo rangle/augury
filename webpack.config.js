@@ -5,6 +5,7 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin
 
 const pkg = require('./package.json');
 
@@ -41,7 +42,7 @@ module.exports = {
 
   entry: {
     'frontend': [
-      './webpack.vendor',
+      './src/frontend/imports',
       './src/frontend/module',
     ],
     'backend': ['./src/backend/backend'],
@@ -78,12 +79,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: [
-          /\.spec\.ts$/,
-          /node_modules\/(?!(ng2-.+))/
-        ]
+        test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+        use: '@ngtools/webpack',
       },
       {
         test: /\.css$/,
@@ -102,13 +99,6 @@ module.exports = {
         use: 'raw-loader',
       },
     ],
-
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/,
-      /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/,
-    ],
   },
 
   plugins: [
@@ -119,6 +109,11 @@ module.exports = {
       'PRODUCTION': JSON.stringify(isProduction),
       'VERSION': JSON.stringify(pkg.version),
       'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
+    }),
+    new AngularCompilerPlugin({
+      tsConfigPath: 'tsconfig.json',
+      entryModule: './src/frontend/module#FrontendModule',
+      sourceMap: true,
     }),
     new MergeJsonWebpackPlugin({
       files: manifestFiles(),
