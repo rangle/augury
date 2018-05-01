@@ -2,6 +2,7 @@ import {
   Message,
   MessageFactory,
   MessageType,
+  DispatchHandler,
   messageJumpContext,
   browserSubscribeDispatch,
   browserSubscribeOnce,
@@ -45,7 +46,7 @@ export const injectSettings = (options: SimpleOptions) => {
 
 if (document instanceof HTMLDocument) {
   browserSubscribeOnce(MessageType.FrameworkLoaded,
-    () => {
+    <DispatchHandler>(() => {
       loadOptions().then(options => {
         // We want to load the tree rendering options that the UI has saved
         // because that allows us to send the correct tree immediately upon
@@ -60,9 +61,9 @@ if (document instanceof HTMLDocument) {
       });
 
       return true;
-    });
+    }));
 
-  browserSubscribeDispatch((message: any) => {
+  browserSubscribeDispatch(<DispatchHandler>((message: any) => {
     if (message.messageType === MessageType.DispatchWrapper) {
       send(message.content)
         .then(response => {
@@ -72,7 +73,7 @@ if (document instanceof HTMLDocument) {
           messageJumpContext(MessageFactory.response(message, error, false));
         });
     }
-  });
+  }));
 
   subscribe((message: Message<any>) => messageJumpContext(message));
 
@@ -86,9 +87,9 @@ if (document instanceof HTMLDocument) {
 
   const propertyKey = '$$el';
   const warningText = `$$el will only be set in the 'top' execution context, \
-which you can select via the dropdown in the console pane \
-(https://developers.google.com/web/tools/chrome-devtools/console/\
-#execution-context).`;
+    which you can select via the dropdown in the console pane \
+    (https://developers.google.com/web/tools/chrome-devtools/console/\
+    #execution-context).`;
 
   Object.defineProperty(window, propertyKey, {value: warningText});
 }

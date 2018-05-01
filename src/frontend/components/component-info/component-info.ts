@@ -24,10 +24,10 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 
 @Component({
   selector: 'bt-component-info',
-  template: require('./component-info.html'),
+  templateUrl: './component-info.html',
 })
 export class ComponentInfo {
-  @Input() private node: Node;
+  @Input() node: Node;
   @Input() private tree: MutableTree;
   @Input() private state;
   @Input() private providers: Array<any>;
@@ -53,7 +53,7 @@ export class ComponentInfo {
     }
   }
 
-  private get hasState() {
+  get hasState() {
     if (this.node == null || this.state == null) {
       return false;
     }
@@ -61,19 +61,19 @@ export class ComponentInfo {
     return Object.keys(this.state).length > 0;
   }
 
-  private get hasDirectives() {
+  get hasDirectives() {
     return this.node &&
       this.node.directives &&
       this.node.directives.length > 0;
   }
 
-  private get hasDependencies() {
+  get hasDependencies() {
     return this.node &&
       this.node.dependencies &&
       this.node.dependencies.length > 0;
   }
 
-  private get hasInstanceProviders() {
+  get hasInstanceProviders() {
     return this.providers && this.providers.length > 0;
   }
 

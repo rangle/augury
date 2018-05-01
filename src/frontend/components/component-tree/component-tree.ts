@@ -21,12 +21,12 @@ import {defaultExpansionDepth} from '../node-item/node-item';
 
 @Component({
   selector: 'component-tree',
-  template: require('./component-tree.html'),
-  styles: [require('to-string!./component-tree.css')],
+  templateUrl: './component-tree.html',
+  styleUrls: ['./component-tree.css'],
   host: { 'class': 'flex overflow-auto' },
 })
 export class ComponentTree {
-  @Input() private tree: MutableTree;
+  @Input() tree: MutableTree;
   @Input() private selectedNode: Node;
 
   @Output() private selectNode = new EventEmitter<Node>();

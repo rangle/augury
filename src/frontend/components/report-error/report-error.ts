@@ -12,10 +12,10 @@ import {
 
 @Component({
   selector: 'report-error',
-  template: require('./report-error.html'),
-  styles: [require('to-string!./report-error.css')],
+  templateUrl: './report-error.html',
+  styleUrls: ['./report-error.css'],
 })
 export class ReportError {
-  @Input() private error: ApplicationError;
+  @Input() error: ApplicationError;
   @Output() private reportError: EventEmitter<boolean> = new EventEmitter<boolean>();
 }

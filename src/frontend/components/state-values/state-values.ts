@@ -18,8 +18,8 @@ import {
 
 @Component({
   selector: 'bt-state-values',
-  template: require('./state-values.html'),
-  styles: [require('to-string!./state-values.css')],
+  templateUrl: './state-values.html',
+  styleUrls: ['./state-values.css'],
 })
 export class StateValues extends Highlightable {
   @Input() path: Path;
@@ -56,11 +56,11 @@ export class StateValues extends Highlightable {
     return oldValue !== newValue;
   }
 
-  private get key(): string | number {
+  get key(): string | number {
     return this.path[this.path.length - 1];
   }
 
-  private onValueChanged(newValue) {
+  onValueChanged(newValue) {
     if (newValue !== this.value) {
       const index = propertyIndex(this.path);
 

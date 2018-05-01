@@ -27,8 +27,8 @@ export enum State {
 
 @Component({
   selector: 'bt-property-editor',
-  template: require('./property-editor.html'),
-  styles: [require('to-string!./property-editor.css')],
+  templateUrl: './property-editor.html',
+  styleUrls: ['./property-editor.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyEditor {
@@ -41,8 +41,8 @@ export class PropertyEditor {
 
   @Output() private stateTransition = new EventEmitter<State>();
 
-  private State = State;
-  private state = State.Read;
+  State = State;
+  state = State.Read;
 
   private value;
 
@@ -185,7 +185,7 @@ export class PropertyEditor {
     }
   }
 
-  private onClick(event: MouseEvent) {
+  onClick(event: MouseEvent) {
     switch (this.state) {
       case State.Read:
         this.transition(State.Write);
