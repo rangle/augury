@@ -6,11 +6,11 @@ import {
 
 import * as Raven from 'raven-js';
 
-import Build from '../build';
+import { BUILD } from '../build';
 
 declare const SENTRY_KEY: string;
 
-if ( Build().SENTRY && SENTRY_KEY && SENTRY_KEY.length > 0) {
+if ( BUILD.SENTRY && SENTRY_KEY && SENTRY_KEY.length > 0) {
 
   Raven
     .config(SENTRY_KEY, { release: chrome.runtime.getManifest().version })

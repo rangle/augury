@@ -1,7 +1,7 @@
 import { MessageType } from '../communication';
-import Build from '../build';
+import { BUILD } from '../build';
 
-if ( Build().GTM ) {
+if ( BUILD.GTM ) {
 
   const initializeGTM = (w, d, s, l, i) => {
     w[l] = w[l] || [];

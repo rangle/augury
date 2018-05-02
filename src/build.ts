@@ -1,10 +1,10 @@
 
-declare const BUILD: any;
+declare const INJECTED_BUILD_CONFIG: any;
 
-interface Build {
-  _name: string;
+interface BuildConfig {
   GTM: boolean;
   SENTRY: boolean;
+  PROD_MODE: boolean;
 }
 
-export default (): Build => BUILD;
+export const BUILD: BuildConfig = INJECTED_BUILD_CONFIG

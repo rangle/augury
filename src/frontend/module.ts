@@ -64,6 +64,7 @@ import {
   Options,
 } from './state';
 
+import {BUILD} from '../build';
 import {App} from './app';
 
 @NgModule({
@@ -129,8 +130,7 @@ class FrontendModule {
   }
 }
 
-declare const PRODUCTION: boolean;
-if (PRODUCTION) {
+if (BUILD.PROD_MODE) {
   enableProdMode();
 }
 

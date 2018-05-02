@@ -1,3 +1,19 @@
+/**
+ *  BUILD MODE (prod / dev)
+ *  [process.env.NODE_ENV]
+ */
+
+const isDevelopment = () =>
+  process.env.NODE_ENV === 'development';
+
+const isProduction = () => !isDevelopment()
+
+// ------
+
+/**
+ * TARGET BUILD (these configs will turn features on/off, and produce different manifests)
+ * [process.env.BUILD]
+ */
 
 /**
  * CROSS-BROWSER COMPATIBILITY (and other builds)
@@ -16,6 +32,7 @@
  *   Otherwise, the injected value will be `chrome` as an identifier rather than as a
  *   string, causing a "chrome is not defined" error.
  */
+
 // versions we produce
 const BUILD = {
   FIREFOX: {
@@ -42,12 +59,27 @@ const getTargetBuildName = () =>
     .find(buildName => buildName == getBuildRequestRaw().toUpperCase())
   || 'CHROME'
 
-const getTargetBuildConfig = () =>
-  Object.assign({},
-    BUILD[getTargetBuildName()],
-    { _name: JSON.stringify(getTargetBuildName())})
+// ------
 
-const getTargetBuildManifestFiles = () =>
+/**
+ * INJECTABLES (config values accessible from src code)
+ */
+
+// these are what gets injected into the source code
+// should be simple primitives as values.
+// output should match type defined in `src/build.ts`
+const getInjectables = () =>
+  Object.assign({},
+    BUILD[getTargetBuildName()], // target build options
+    { PROD_MODE: isProduction() }) // prod flag
+
+// ------
+
+/**
+ *  MANIFEST FILES (these are merged together to generate final `manifest.json`
+ */
+
+const getManifestFiles = () =>
   [
     // base manifest file
     'manifest/base.manifest.json',
@@ -55,4 +87,4 @@ const getTargetBuildManifestFiles = () =>
     `manifest/${getTargetBuildName().toLowerCase()}.manifest.json`,
   ]
 
-module.exports = { getTargetBuildName, getTargetBuildConfig, getTargetBuildManifestFiles }
+module.exports = { isProduction, getInjectables, getManifestFiles, getTargetBuildName }
