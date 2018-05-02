@@ -1,27 +1,18 @@
-/*
- * Helpers
- */
-var sliceArgs = Function.prototype.call.bind(Array.prototype.slice);
-var toString = Function.prototype.call.bind(Object.prototype.toString);
-var pkg = require('./package.json');
+const path = require('path');
+const webpack = require('webpack');
+const DefinePlugin = webpack.DefinePlugin;
+const ProgressPlugin = require('webpack/lib/ProgressPlugin');
+const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin
 
-// Polyfill
-Object.assign = require('object-assign');
+const pkg = require('./package.json');
 
-// Node
-var path = require('path');
-
-// NPM
-var webpack = require('webpack');
-
-// Webpack Plugins
-var OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-var DedupePlugin = webpack.optimize.DedupePlugin;
-var DefinePlugin = webpack.DefinePlugin;
-var BannerPlugin = webpack.BannerPlugin;
-var MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+// Environment config
+const NODE_ENV = process.env.NODE_ENV || 'production';
+const DIST_DIR = path.join(__dirname, 'build');
+const isProduction = NODE_ENV === 'production';
 
 const BuildConfig = require('./build.config');
 
@@ -29,23 +20,19 @@ const BuildConfig = require('./build.config');
  * Config
  */
 module.exports = {
-
-  devtool: 'source-map',
-  debug: true,
+  mode: BuildConfig.getMode(),
+  devtool: BuildConfig.isProduction() ? false : ' source-map',
   cache: true,
-
-  verbose: true,
-  displayErrorDetails: true,
   context: __dirname,
   stats: {
     colors: true,
-    reasons: true
+    reasons: true,
   },
 
   entry: {
     'frontend': [
-      'webpack.vendor.ts',
-      './src/frontend/module'
+      './src/frontend/imports',
+      './src/frontend/module',
     ],
     'backend': ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
@@ -54,74 +41,66 @@ module.exports = {
     'background': [
       './src/channel/channel',
       './src/sentry-connection/sentry-connection',
-      './src/gtm-connection/gtm-connection'
-    ]
+      './src/gtm-connection/gtm-connection',
+    ],
   },
 
   // Config for our build files
   output: {
-    path: root('build'),
+    path: DIST_DIR,
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: '[name].chunk.js',
   },
 
   resolve: {
-    root: __dirname,
-    extensions: ['', '.ts', '.js', '.json']
-  },
-  module: {
-    preLoaders: [{
-      test: /\.ts$/,
-      loader: 'tslint',
-      exclude: /node_modules/,
-    }],
-    loaders: [{
-      // Support for .ts files.
-      test: /\.ts$/,
-      loader: 'ts',
-      query: {
-        'ignoreDiagnostics': []
-      },
-      exclude: [
-        /\.min\.js$/,
-        /\.spec\.ts$/,
-        /\.e2e\.ts$/,
-        /web_modules/,
-        /test/,
-        /node_modules\/(?!(ng2-.+))/
-      ]
-    }, {
-      test: /\.css$/,
-      loader: 'css!postcss'
-    }, {
-      test: /\.png$/,
-      loader: "url-loader?mimetype=image/png"
-    }, {
-      test: /\.html$/,
-      loader: 'raw'
-    }],
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/,
-      /.+zone\.js\/dist\/.+/,
-      /.+angular2\/bundles\/.+/
-    ]
+    extensions: ['.ts', '.js', '.json'],
+    modules: ['./node_modules'],
   },
 
-  postcss: function () {
-    return [
-      require('postcss-import')({ addConfigTo: webpack }),
-      require('postcss-cssnext')
-    ];
+  // Opt-in to the old behavior with the resolveLoader.moduleExtensions
+  // - https://webpack.js.org/guides/migrating/#automatic-loader-module-name-extension-removed
+  resolveLoader: {
+    modules: ['./node_modules'],
+    moduleExtensions: ['-loader'],
+  },
+
+  module: {
+    rules: [
+      {
+        test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+        use: '@ngtools/webpack',
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'to-string-loader',
+          'css-loader',
+          'postcss-loader',
+        ],
+      },
+      {
+        test: /\.png$/,
+        use: 'url-loader?mimetype=image/png',
+      },
+      {
+        test: /\.html$/,
+        use: 'raw-loader',
+      },
+    ],
   },
 
   plugins: [
+    new ProgressPlugin(),
+    new CleanWebpackPlugin(DIST_DIR),
     new DefinePlugin({
       'INJECTED_BUILD_CONFIG': BuildConfig.getInjectables(),
     }),
-    new OccurenceOrderPlugin(),
-    new DedupePlugin(),
+    new AngularCompilerPlugin({
+      tsConfigPath: 'tsconfig.json',
+      entryModule: './src/frontend/module#FrontendModule',
+      sourceMap: true,
+    }),
     new MergeJsonWebpackPlugin({
       files: BuildConfig.getManifestFiles(),
       output: {
@@ -129,10 +108,12 @@ module.exports = {
       },
     }),
   ].concat((BuildConfig.isProduction()) ?  [
-    new UglifyJsPlugin()
-  ] : [
-    // ... dev-only plugins
-  ]),
+    // ... prod-only pluginss
+    ] : [
+      // ... dev-only plugins
+      // new BundleAnalyzerPlugin(),
+    ]
+  ),
 
   /*
    * When using `templateUrl` and `styleUrls` please use `__filename`
@@ -140,11 +121,6 @@ module.exports = {
    */
   node: {
     crypto: false,
-    __filename: true
-  }
+    __filename: true,
+  },
 };
-
-function root(args) {
-  args = sliceArgs(arguments, 0);
-  return path.join.apply(path, [__dirname].concat(args));
-}

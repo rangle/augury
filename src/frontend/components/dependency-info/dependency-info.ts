@@ -18,7 +18,7 @@ import {Stack} from '../../../structures';
 
 @Component({
   selector: 'bt-dependency-info',
-  template: require('./dependency-info.html'),
+  templateUrl: './dependency-info.html',
 })
 export class DependencyInfo {
   @Input() selectedNode: Node;
@@ -26,7 +26,7 @@ export class DependencyInfo {
 
   @Output() private selectNode = new EventEmitter<Node>();
 
-  private selectedDependency: Dependency;
+  selectedDependency: Dependency;
 
   private dependentComponents: Array<any> = [];
 
@@ -41,7 +41,7 @@ export class DependencyInfo {
     return this.selectedNode.dependencies;
   }
 
-  private get hasDependencies() {
+  get hasDependencies() {
     return this.dependentComponents &&
            this.dependentComponents.length > 0;
   }

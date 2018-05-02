@@ -8,6 +8,8 @@ const isDevelopment = () =>
 
 const isProduction = () => !isDevelopment()
 
+const getMode = () => isProduction() ? 'production' : 'development'
+
 // ------
 
 /**
@@ -22,6 +24,7 @@ const isProduction = () => !isDevelopment()
  */
 
 /**
+ * [types declared in src/build.config.ts]
  * Each build is defined with a set of boolean flags representing
  *   features that can be turned on and off. These configs are available to the
  *   source code as an injected global. (see src/build.config.ts)
@@ -87,4 +90,12 @@ const getManifestFiles = () =>
     `manifest/${getTargetBuildName().toLowerCase()}.manifest.json`,
   ]
 
-module.exports = { isProduction, getInjectables, getManifestFiles, getTargetBuildName }
+// ------
+
+module.exports = {
+  getMode,
+  isProduction,
+  getInjectables,
+  getManifestFiles,
+  getTargetBuildName,
+}

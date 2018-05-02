@@ -21,7 +21,7 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 
 @Component({
   selector: 'bt-tab-menu',
-  template: require('./tab-menu.html'),
+  templateUrl: './tab-menu.html',
 })
 export class TabMenu {
   @Input() tabs: Array<TabDescription>;
@@ -34,7 +34,7 @@ export class TabMenu {
   constructor(private userActions: UserActions) {
   }
 
-  private selectElement() {
+  selectElement() {
     if (this.domSelectionActive) {
       this.userActions.cancelFindElement();
       this.domSelectionActiveChange.emit(false);

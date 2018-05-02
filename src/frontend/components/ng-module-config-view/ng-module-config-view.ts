@@ -5,13 +5,12 @@ import {
 
 @Component({
   selector: 'ng-module-config-view',
-  template: require('./ng-module-config-view.html'),
-  styles: [require('to-string!./ng-module-config-view.css')],
+  templateUrl: './ng-module-config-view.html',
+  styleUrls: ['./ng-module-config-view.css'],
 })
 export class NgModuleConfigView {
   @Input() private config: {[key: string]: Array<string>};
-  private keys: Array<string> = ['imports', 'exports', 'providers', 'declarations', 'providersInDeclarations'];
+  keys: Array<string> = ['imports', 'exports', 'providers', 'declarations', 'providersInDeclarations'];
 
   constructor() {}
-
 }

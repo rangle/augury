@@ -2,6 +2,7 @@ import {messageJumpContext, browserSubscribeOnce} from '../communication/message
 import {MessageFactory} from '../communication/message-factory';
 import {MessageType} from '../communication/message-type';
 import {Message} from '../communication/message';
+import {DispatchHandler} from '../communication/message-dispatch';
 import {send} from '../backend/indirect-connection';
 
 import {isAngular, isDebugMode} from '../backend/utils/app-check';
@@ -15,7 +16,7 @@ let unsubscribe: () => void;
 
 let errorToSend: Message<ApplicationError>;
 
-const sendError = () => {
+const sendError = <DispatchHandler>() => {
   if (errorToSend) {
     send(errorToSend);
   }
@@ -41,7 +42,7 @@ const handler = () => {
     errorToSend = MessageFactory.notNgApp();
   }
 
-  browserSubscribeOnce(MessageType.Initialize, sendError);
+  browserSubscribeOnce(MessageType.Initialize, <DispatchHandler>sendError);
 
   sendError();
 
