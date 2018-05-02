@@ -50,6 +50,7 @@ import {select} from '@angular-redux/store';
 import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
+import {DiagService, diagnosable} from 'diagnostic-tools/frontend';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -84,7 +85,9 @@ export class App {
               private userActions: UserActions,
               private viewState: ComponentViewState,
               private zone: NgZone,
-              private errorHandler: ErrorHandler) {
+              private errorHandler: ErrorHandler,
+              private diagService: DiagService,
+  ) {
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {
@@ -101,8 +104,6 @@ export class App {
     this.componentState = new ComponentInstanceState(changeDetector);
 
     this.options.changes.subscribe(() => this.requestTree());
-
-    this.options.load().then(() => this.changeDetector.detectChanges());
 
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
 
@@ -165,6 +166,9 @@ export class App {
     };
 
     switch (msg.messageType) {
+      case MessageType.Initialize:
+	      this.diagService.clear();
+        break;
       case MessageType.Ping:
         respond();
         break;
@@ -227,9 +231,33 @@ export class App {
         }
         respond();
         break;
+      case MessageType.DiagnosticPacket:
+        this.diagService.takePacket(msg.content);
+        respond();
+        break;
     }
   }
 
+
+  @diagnosable({
+    pre: s => (roots) => {
+      s.assert('has root', roots.length > 0);
+      s.assert('root is component', roots[0].isComponent);
+      s.inspect({
+        numRoots: roots.length,
+        rootNames: roots.map(r => r.name),
+        rootNumChildren: roots.map(r => r.children.length),
+      });
+    },
+    post: s => function (result) {
+      s.assert('tree exists', !!this.tree);
+      s.assert('tree has roots', this.tree.roots.length > 0);
+      s.inspect({
+        treeRoots: this.tree.roots.length,
+        treeChildren: this.tree.roots.map(r => r.children.length)
+      });
+    },
+  })
   private createTree(roots: Array<Node>) {
     this.componentState.reset();
 

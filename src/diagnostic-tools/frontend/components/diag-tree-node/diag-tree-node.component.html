@@ -1,0 +1,16 @@
+<div *ngIf="node.packet">
+  <bt-function-diagnostic
+    *ngIf="
+      node.packet
+      && (node.packet.type == DiagType.FUNCTION)
+      && (
+        opts.showPassed
+        || !node.packet.diagnostic.pass
+      )
+    "
+    [fd]="node.packet.diagnostic"
+  ></bt-function-diagnostic>
+</div>
+<div *ngFor="let child of node.children | async" [style.padding-left.em]="'2'">
+  <!-- <bt-diag-tree-node [node]="child"></bt-diag-tree-node> -->
+</div>

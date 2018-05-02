@@ -1,0 +1,6 @@
+<div class="flex-grow flex flex-row bg-base" *ngIf="presentationOptions | async as opts">
+  <div class="flex-grow flex flex-column bg-base">
+    <bt-diag-tree-node [node]="packetTree | async"></bt-diag-tree-node>
+  </div>
+  <bt-diag-sidebar></bt-diag-sidebar>
+</div>

@@ -1,0 +1,9 @@
+<div>
+  <label>SHOW SUCCESSFUL </label>
+  <input #showPassed
+    *ngIf="presentationOptions | async as opts"
+    type="checkbox"
+    [checked]="opts.showPassed"
+    (change)="setShowPassed(showPassed.checked)"
+  />
+<div>

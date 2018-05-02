@@ -84,6 +84,9 @@ export class AppTrees {
   }, {
     title: 'NgModules',
     tab: Tab.NgModules,
+  }, {
+    title: 'Diagnostic Tools',
+    tab: Tab.DiagnosticTools,
   }];
 
   private ngOnInit() {
@@ -131,6 +134,11 @@ export class AppTrees {
 
   private onAnalyticsConsentChange = (analyticsConsent: AnalyticsConsent) => {
     this.options.analyticsConsent = analyticsConsent;
+    this.reset();
+  }
+
+  private onDiagnosticToolsToggle = (value: boolean) => {
+    this.options.diagnosticToolsEnabled = value;
     this.reset();
   }
 

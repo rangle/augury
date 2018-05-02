@@ -54,6 +54,13 @@ import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
 import {IAppState} from './store/model';
 
 import {
+  DiagActions,
+  DiagService,
+  useServiceInstance,
+  DIAG_COMPONENTS,
+} from 'diagnostic-tools/frontend';
+
+import {
   Connection,
   DirectConnection,
 } from './channel';
@@ -66,72 +73,93 @@ import {
 
 import {App} from './app';
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    CommonModule,
-    FormsModule,
-    NgReduxModule,
-  ],
-  declarations: [
-    Accordion,
-    App,
-    AppTrees,
-    ComponentInfo,
-    ComponentTree,
-    DependencyInfo,
-    InfoPanel,
-    InjectorTree,
-    NodeAttributes,
-    NodeItem,
-    NodeOpenTag,
-    PropertyEditor,
-    PropertyValue,
-    RenderError,
-    ReportError,
-    RouterInfo,
-    RenderState,
-    RouterTree,
-    Search,
-    SplitPane,
-    StateValues,
-    TabMenu,
-    ComponentsTabMenu,
-    TreeView,
-    NgModuleInfo,
-    NgModuleConfigView,
-    AnalyticsPopup,
-  ],
-  providers: [
-    Connection,
-    DirectConnection,
-    Options,
-    UserActions,
-    MainActions,
-    ComponentViewState,
-    ComponentPropertyState,
-    SendAnalytics,
-    { provide: ErrorHandler, useClass: UncaughtErrorHandler },
-  ],
-  bootstrap: [App]
-})
-class FrontendModule {
-  constructor(
-    ngRedux: NgRedux<IAppState>,
-    sendAnalytics: SendAnalytics) {
-    const store = createStore(
-      rootReducer,
-      compose(applyMiddleware(reduxLogger),
-        applyMiddleware(createEpicMiddleware(rootEpic)),
-        applyMiddleware(sendAnalytics.middleware)));
-
-    ngRedux.provideStore(store as Store<IAppState>);
-  }
-}
-
 declare const PRODUCTION: boolean;
-if (PRODUCTION) {
-  enableProdMode();
-}
 
-platformBrowserDynamic().bootstrapModule(FrontendModule);
+//@todo: remove me
+declare const window: any;
+
+const storedOptionsService = new Options();
+
+storedOptionsService.load()
+.then((options) => {
+
+  const diagActions = new DiagActions();
+  const diagService = new DiagService(diagActions, storedOptionsService);
+  useServiceInstance(diagService);
+
+  @NgModule({
+    imports: [
+      BrowserModule,
+      CommonModule,
+      FormsModule,
+      NgReduxModule,
+    ],
+    declarations: [
+      Accordion,
+      App,
+      AppTrees,
+      ComponentInfo,
+      ComponentTree,
+      DependencyInfo,
+      InfoPanel,
+      InjectorTree,
+      NodeAttributes,
+      NodeItem,
+      NodeOpenTag,
+      PropertyEditor,
+      PropertyValue,
+      RenderError,
+      ReportError,
+      RouterInfo,
+      RenderState,
+      RouterTree,
+      Search,
+      SplitPane,
+      StateValues,
+      TabMenu,
+      ComponentsTabMenu,
+      TreeView,
+      NgModuleInfo,
+      NgModuleConfigView,
+      AnalyticsPopup,
+      ...DIAG_COMPONENTS,
+    ],
+    providers: [
+      Connection,
+      DirectConnection,
+      { provide: Options, useValue: storedOptionsService },
+      UserActions,
+      MainActions,
+      ComponentViewState,
+      ComponentPropertyState,
+      SendAnalytics,
+      { provide: ErrorHandler, useClass: UncaughtErrorHandler },
+      { provide: DiagActions, useValue: diagActions },
+      { provide: DiagService, useValue: diagService },
+    ],
+    bootstrap: [App]
+  })
+  class FrontendModule {
+    constructor(
+      ngRedux: NgRedux<IAppState>,
+      sendAnalytics: SendAnalytics) {
+      const store = createStore(
+        rootReducer,
+        compose(applyMiddleware(reduxLogger),
+          applyMiddleware(createEpicMiddleware(rootEpic)),
+          applyMiddleware(sendAnalytics.middleware)));
+
+      debugger
+      window.s = store
+
+      ngRedux.provideStore(store as Store<IAppState>);
+    }
+  }
+
+  if (PRODUCTION) {
+    enableProdMode();
+  }
+
+  platformBrowserDynamic().bootstrapModule(FrontendModule);
+
+});

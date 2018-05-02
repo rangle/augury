@@ -119,6 +119,20 @@
         </label>
       </li>
     </ul>
+    <ul class="p3 m0">
+      <label>
+        Enable Diagnostic Tools
+        <input
+          type="checkbox"
+          id="toggle-diagnostic-tools"
+          [checked]="options.diagnosticToolsEnabled"
+          (change)="onDiagnosticToolsToggle($event.target.checked)"
+          name="diagnostic-tools" />
+      </label>
+      <label class="descriptive-text mw3 block m1">
+        Enable tab with Augury debugging tools. This does not collect data.
+      </label>
+    </ul>
   </div>
 </form>
 
@@ -168,3 +182,8 @@
    [ngModules]="ngModules"
    class="flex-auto overflow-auto bg-darken-1">
 </ng-module-info>
+
+<bt-diag-tab *ngIf="options.diagnosticToolsEnabled"
+   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.DiagnosticTools, 'display-none': selectedTab !== Tab.DiagnosticTools }"
+   class="flex-auto overflow-auto">
+</bt-diag-tab>

@@ -16,9 +16,10 @@ export enum AnalyticsConsent {
 }
 
 export interface SimpleOptions {
-  theme?: Theme;
-  componentView?: ComponentView;
-  analyticsConsent?: AnalyticsConsent;
+  theme: Theme;
+  componentView: ComponentView;
+  analyticsConsent: AnalyticsConsent;
+  diagnosticToolsEnabled: boolean;
 }
 
 export const defaultOptions = (): SimpleOptions => {
@@ -26,6 +27,7 @@ export const defaultOptions = (): SimpleOptions => {
     theme: Theme.Light,
     componentView: ComponentView.Hybrid,
     analyticsConsent: AnalyticsConsent.NotSet,
+    diagnosticToolsEnabled: false,
   };
 };
 
@@ -50,9 +52,7 @@ export const loadOptions = (): Promise<SimpleOptions> => {
 
 const loadFromStorage = (): Promise<SimpleOptions> => {
   return new Promise(resolve => {
-    const keys = ['componentView', 'theme', 'analyticsConsent'];
-
-    chrome.storage.sync.get(keys, (result: SimpleOptions) => {
+    chrome.storage.sync.get(Object.keys(defaultOptions()), (result: SimpleOptions) => {
       resolve(result);
     });
   });

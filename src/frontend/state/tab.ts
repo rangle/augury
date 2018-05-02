@@ -7,6 +7,9 @@ export enum Tab {
 
   /// A list of loaded NgModules
   NgModules,
+
+  /// Testing tools for debugging Augury
+  DiagnosticTools
 }
 
 export enum StateTab {
@@ -16,4 +19,3 @@ export enum StateTab {
   /// Injector graph
   InjectorGraph
 }
-

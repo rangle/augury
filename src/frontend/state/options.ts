@@ -65,6 +65,15 @@ export class Options {
     this.publish();
   }
 
+  get diagnosticToolsEnabled(): boolean {
+    return this.cachedOptions.diagnosticToolsEnabled;
+  }
+
+  set diagnosticToolsEnabled(toggle: boolean) {
+    this.cachedOptions.diagnosticToolsEnabled = toggle;
+    this.publish();
+  }
+
   simpleOptions(): SimpleOptions {
     return this.cachedOptions;
   }

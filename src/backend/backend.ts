@@ -1,3 +1,11 @@
+import { diagnosable, enableDiagnosticBackend } from 'diagnostic-tools/backend';
+declare const treeRenderOptions: SimpleOptions;
+
+// @todo: rename 'treeRenderOptions', it has become more than that.
+// maybe 'auguryOptions'
+if (treeRenderOptions.diagnosticToolsEnabled)
+  enableDiagnosticBackend();
+
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
@@ -60,7 +68,6 @@ import {SimpleOptions} from '../options';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
-declare const treeRenderOptions: SimpleOptions;
 
 /// For tree deltas that contain more changes than {@link deltaThreshold},
 /// we simply send the entire tree again instead of trying to patch it
@@ -128,30 +135,43 @@ const parseInitialModules = () => {
   });
 };
 
-const updateComponentTree = (roots: Array<any>) => {
-  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+const updateComponentTree =
+  diagnosable({
+    name: 'updateComponentTree',
+    pre: s => (roots:Array<any>) => {
+      s.assert('roots is an array', Array.isArray(roots))
+      s.assert('roots is not empty', roots.length > 0);
+      s.remember({ number: 4 });
+    },
+    post: s => (result:any) => {
+      s.assert('we got number', s.old('number'))
+    }
+  })
+  ((roots: Array<any>) => {
 
-  if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
-    messageBuffer.enqueue(MessageFactory.completeTree(tree));
-  }
-  else {
-    const changes = previousTree.diff(tree);
-    if (changes.length > 0) {
-      messageBuffer.enqueue(MessageFactory.treeDiff(changes));
+    const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+
+    if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
+      messageBuffer.enqueue(MessageFactory.completeTree(tree));
     }
     else {
-      messageBuffer.enqueue(MessageFactory.treeUnchanged());
+      const changes = previousTree.diff(tree);
+      if (changes.length > 0) {
+        messageBuffer.enqueue(MessageFactory.treeDiff(changes));
+      }
+      else {
+        messageBuffer.enqueue(MessageFactory.treeUnchanged());
+      }
     }
-  }
 
-  /// Send a message through the normal channels to indicate to the frontend
-  /// that messages are waiting for it in {@link messageBuffer}
-  send(MessageFactory.push());
+    /// Send a message through the normal channels to indicate to the frontend
+    /// that messages are waiting for it in {@link messageBuffer}
+    send(MessageFactory.push());
 
-  previousTree = tree;
+    previousTree = tree;
 
-  previousCount = count;
-};
+    previousCount = count;
+  });
 
 const updateLazyLoadedNgModules = (routers) => {
 
