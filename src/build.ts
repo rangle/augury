@@ -17,7 +17,7 @@ const BUILD: BuildConfig = {
 };
 
 function parse(stringified) {
-  return JSON.parse(stringified || null)
+  return JSON.parse(stringified || null);
 }
 
 export default BUILD;
