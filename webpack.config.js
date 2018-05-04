@@ -100,7 +100,7 @@ module.exports = {
   plugins: [
     new ProgressPlugin(),
     new CleanWebpackPlugin(DIST_DIR),
-    new DefinePlugin(stringifyValues(env)),
+    new DefinePlugin(BuildConfig.stringifyValues(env)),
     new AngularCompilerPlugin({
       tsConfigPath: 'tsconfig.json',
       entryModule: './src/frontend/module#FrontendModule',
@@ -129,9 +129,3 @@ module.exports = {
     __filename: true,
   },
 };
-
-function stringifyValues(obj) {
-  return Object.keys(obj)
-    .reduce((out, k) =>
-      Object.assign({}, out, { [k]: JSON.stringify(obj[k]) }), {})
-}

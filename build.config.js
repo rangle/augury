@@ -13,6 +13,18 @@ const prodModeEntry = isProduction()
 // ------
 
 /**
+ * SENTRY KEY
+ *  defined by `circle.yml`
+ */
+
+const getSentryKey = () =>
+  process.env.SENTRY_KEY;
+
+const sentryKeyEntry = getSentryKey()
+
+// ------
+
+/**
  * TARGET BUILD (these configs will turn features on/off, and produce different manifests)
  * CROSS-BROWSER COMPATIBILITY (and other builds)
  * We use different build configurations depending on browser (or other builds, like canary).
@@ -24,16 +36,16 @@ const prodModeEntry = isProduction()
 // versions we produce
 const BUILD = {
   FIREFOX: {
-    GTM: false, // google tag manager
-    SENTRY: false, // remote error logging service
+    GTM_ENABLED: false, // google tag manager
+    SENTRY_ENABLED: false, // remote error logging service
   },
   CHROME: {
-    GTM: true,
-    SENTRY: true,
+    GTM_ENABLED: true,
+    SENTRY_ENABLED: true,
   },
   CANARY: {
-    GTM: false,
-    SENTRY: true,
+    GTM_ENABLED: false,
+    SENTRY_ENABLED: true,
   },
 }
 
@@ -63,6 +75,7 @@ const getTargetBuildName = () =>
  const entries = {
    PROD_MODE: prodModeEntry,
    TARGET: targetEntry,
+   SENTRY_KEY: sentryKeyEntry,
    ...buildEntries,
  };
 
@@ -84,7 +97,21 @@ const getManifestFiles = () =>
 
 // ------
 
+/**
+ * utils
+ */
+
+// general util for stringifying all values in an object.
+// this is used to inject env into code via DefinePlugin in webpack.config.js
+const stringifyValues = (obj) =>
+  Object.keys(obj)
+   .reduce((out, k) =>
+     Object.assign({}, out, { [k]: JSON.stringify(obj[k]) }), {})
+
+// ------
+
 module.exports = {
   entries: getEntries,
   manifestFiles: getManifestFiles,
+  stringifyValues: stringifyValues,
 }
