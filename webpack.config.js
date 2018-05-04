@@ -15,13 +15,20 @@ const DIST_DIR = path.join(__dirname, 'build');
 const isProduction = NODE_ENV === 'production';
 
 const BuildConfig = require('./build.config');
+const env = BuildConfig.entries();
+const manifestFiles = BuildConfig.manifestFiles();
+
+console.log(`
+  Building Augury with the following environment options:
+   ${Object.keys(env).map(k => `${k}: ${env[k]}`).join('\n   ')}
+`);
 
 /*
  * Config
  */
 module.exports = {
-  mode: BuildConfig.getMode(),
-  devtool: BuildConfig.isProduction() ? false : ' source-map',
+  mode: env.PROD_MODE ? 'production' : 'development',
+  devtool: env.PROD_MODE ? false : ' source-map',
   cache: true,
   context: __dirname,
   stats: {
@@ -93,21 +100,19 @@ module.exports = {
   plugins: [
     new ProgressPlugin(),
     new CleanWebpackPlugin(DIST_DIR),
-    new DefinePlugin({
-      'INJECTED_BUILD_CONFIG': BuildConfig.getInjectables(),
-    }),
+    new DefinePlugin(stringifyValues(env)),
     new AngularCompilerPlugin({
       tsConfigPath: 'tsconfig.json',
       entryModule: './src/frontend/module#FrontendModule',
       sourceMap: true,
     }),
     new MergeJsonWebpackPlugin({
-      files: BuildConfig.getManifestFiles(),
+      files: manifestFiles,
       output: {
         fileName: '../manifest.json',
       },
     }),
-  ].concat((BuildConfig.isProduction()) ?  [
+  ].concat((env.PROD_MODE) ?  [
     // ... prod-only pluginss
     ] : [
       // ... dev-only plugins
@@ -124,3 +129,9 @@ module.exports = {
     __filename: true,
   },
 };
+
+function stringifyValues(obj) {
+  return Object.keys(obj)
+    .reduce((out, k) =>
+      Object.assign({}, out, { [k]: JSON.stringify(obj[k]) }), {})
+}

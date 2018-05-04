@@ -1,6 +1,6 @@
 /**
  *  BUILD MODE (prod / dev)
- *  [process.env.NODE_ENV]
+ *  output: env.PROD_MODE
  */
 
 const isDevelopment = () =>
@@ -8,32 +8,17 @@ const isDevelopment = () =>
 
 const isProduction = () => !isDevelopment()
 
-const getMode = () => isProduction() ? 'production' : 'development'
+const prodModeEntry = isProduction()
 
 // ------
 
 /**
  * TARGET BUILD (these configs will turn features on/off, and produce different manifests)
- * [process.env.BUILD]
- */
-
-/**
  * CROSS-BROWSER COMPATIBILITY (and other builds)
  * We use different build configurations depending on browser (or other builds, like canary).
- * For example, browsers have different support for properties on manifest.json
- */
-
-/**
- * [types declared in src/build.config.ts]
- * Each build is defined with a set of boolean flags representing
- *   features that can be turned on and off. These configs are available to the
- *   source code as an injected global. (see src/build.config.ts)
- * Note that because DefinePlugin does a direct text replacement, in the case of strings,
- *   the value given to it must include actual quotes inside of the string itself.
- *   Typically, this is done either with either alternate quotes, such as '"production"',
- *   or by using JSON.stringify('production').
- *   Otherwise, the injected value will be `chrome` as an identifier rather than as a
- *   string, causing a "chrome is not defined" error.
+ *    For example, browsers have different support for properties on manifest.json
+ * We also inject environment variables into the code, to toggle feature support.
+ *    [see src/build.ts]
  */
 
 // versions we produce
@@ -62,19 +47,26 @@ const getTargetBuildName = () =>
     .find(buildName => buildName == getBuildRequestRaw().toUpperCase())
   || 'CHROME'
 
+ const targetEntry = getTargetBuildName()
+ const buildEntries = BUILD[getTargetBuildName()]
+
 // ------
 
 /**
- * INJECTABLES (config values accessible from src code)
+ * ENTRIES (environment values for build)
  */
 
-// these are what gets injected into the source code
-// should be simple primitives as values.
-// output should match type defined in `src/build.ts`
-const getInjectables = () =>
-  Object.assign({},
-    BUILD[getTargetBuildName()], // target build options
-    { PROD_MODE: isProduction() }) // prod flag
+ /**
+  * This is a map of strings to primitives
+  *   representing the environment variables for the build.
+  */
+ const entries = {
+   PROD_MODE: prodModeEntry,
+   TARGET: targetEntry,
+   ...buildEntries,
+ };
+
+const getEntries = () => entries
 
 // ------
 
@@ -93,9 +85,6 @@ const getManifestFiles = () =>
 // ------
 
 module.exports = {
-  getMode,
-  isProduction,
-  getInjectables,
-  getManifestFiles,
-  getTargetBuildName,
+  entries: getEntries,
+  manifestFiles: getManifestFiles,
 }

@@ -1,7 +1,7 @@
 import { MessageType } from '../communication';
-import { BUILD } from '../build';
+import BUILD from '../build';
 
-if ( BUILD.GTM ) {
+if ( BUILD.enableGoogleTagManager ) {
 
   const initializeGTM = (w, d, s, l, i) => {
     w[l] = w[l] || [];

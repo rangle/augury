@@ -1,3 +1,6 @@
+import BUILD from '../build';
+console.log(BUILD)
+
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';

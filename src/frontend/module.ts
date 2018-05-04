@@ -64,7 +64,7 @@ import {
   Options,
 } from './state';
 
-import {BUILD} from '../build';
+import BUILD from '../build';
 import {App} from './app';
 
 @NgModule({
