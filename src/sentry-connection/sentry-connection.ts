@@ -10,7 +10,7 @@ import { buildConfig } from '../build.config';
 
 declare const SENTRY_KEY: string;
 
-const sentryConfig = buildConfig.sentry
+const sentryConfig = buildConfig.sentry;
 
 if ( sentryConfig.enabled
   && sentryConfig.key
