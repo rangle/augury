@@ -14,25 +14,21 @@ const NODE_ENV = process.env.NODE_ENV || 'production';
 const DIST_DIR = path.join(__dirname, 'build');
 const isProduction = NODE_ENV === 'production';
 
-/**
- * CROSS-BROWSER COMPATIBILITY (and other builds)
- * We use different build configurations depending on browser (or other builds, like canary).
- * For example, browsers have different support for properties on manifest.json
- */
+const BuildConfig = require('./build.config');
+const env = BuildConfig.entries();
+const manifestFiles = BuildConfig.manifestFiles();
 
-// versions we produce
-const BUILD = {
-  FIREFOX: 'FIREFOX',
-  CHROME: 'CHROME',
-  CANARY: 'CANARY',
-}
+console.log(`
+  Building Augury with the following environment options:
+   ${Object.keys(env).map(k => `${k}: ${env[k]}`).join('\n   ')}
+`);
 
 /*
  * Config
  */
 module.exports = {
-  mode: NODE_ENV,
-  devtool: isProduction ? false : ' source-map',
+  mode: env.PROD_MODE ? 'production' : 'development',
+  devtool: env.PROD_MODE ? false : ' source-map',
   cache: true,
   context: __dirname,
   stats: {
@@ -104,29 +100,25 @@ module.exports = {
   plugins: [
     new ProgressPlugin(),
     new CleanWebpackPlugin(DIST_DIR),
-    new DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'PRODUCTION': JSON.stringify(isProduction),
-      'VERSION': JSON.stringify(pkg.version),
-      'SENTRY_KEY': JSON.stringify(process.env.SENTRY_KEY),
-    }),
+    new DefinePlugin(BuildConfig.stringifyValues(env)),
     new AngularCompilerPlugin({
       tsConfigPath: 'tsconfig.json',
       entryModule: './src/frontend/module#FrontendModule',
       sourceMap: true,
     }),
     new MergeJsonWebpackPlugin({
-      files: manifestFiles(),
+      files: manifestFiles,
       output: {
         fileName: '../manifest.json',
       },
     }),
-  ].concat((isProduction) ?  [
-    // ... prod-only plugins
-  ] : [
-    // ... dev-only plugins
-    // new BundleAnalyzerPlugin(),
-  ]),
+  ].concat((env.PROD_MODE) ?  [
+    // ... prod-only pluginss
+    ] : [
+      // ... dev-only plugins
+      // new BundleAnalyzerPlugin(),
+    ]
+  ),
 
   /*
    * When using `templateUrl` and `styleUrls` please use `__filename`
@@ -137,28 +129,3 @@ module.exports = {
     __filename: true,
   },
 };
-
-/**
- * Utils
- */
-
-function targetBuild() {
-  // target BUILD parameter is case insensitive (default chrome)
-  const interpretTargetBuild = (requested = '') => {
-    return Object.keys(BUILD)
-      .find(build => build == requested.toUpperCase())
-      || BUILD.CHROME;
-  }
-
-  // grab target build parameter (passed as command arg)
-  return interpretTargetBuild(process.env.BUILD);
-}
-
-function manifestFiles() {
-  return [
-    // base manifest file
-    'manifest/base.manifest.json',
-    // each build can extend the base manifest with a file of this form
-    `manifest/${targetBuild().toLowerCase()}.manifest.json`,
-  ];
-}
