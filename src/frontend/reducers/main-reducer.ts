@@ -1,4 +1,4 @@
-import assoc from 'ramda/src/assoc';
+import { assoc } from 'ramda';
 
 import {MainActions} from '../actions/main-actions';
 import {StateTab, Tab} from '../state/tab';
