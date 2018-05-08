@@ -1,3 +1,5 @@
+import * as JSON5 from 'json5';
+
 import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
@@ -74,11 +76,13 @@ export class PropertyEditor {
   }
 
   private parseValue(value): EditorResult {
-    try {
-      return new Function(`return ${value}`)();
-    }
-    catch (e) {
-      return value;
+    if (value === 'undefined') { return undefined; }
+    else {
+      try {
+        return JSON5.parse(value);
+      } catch (e) {
+        return "" + value;
+      }
     }
   }
 
