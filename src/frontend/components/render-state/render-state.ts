@@ -125,7 +125,7 @@ export class RenderState {
       try {
         return JSON5.parse(data);
       } catch (e) {
-        return "" + data;
+        return '' + data;
       }
     }
   }

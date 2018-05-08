@@ -81,7 +81,7 @@ export class PropertyEditor {
       try {
         return JSON5.parse(value);
       } catch (e) {
-        return "" + value;
+        return '' + value;
       }
     }
   }
