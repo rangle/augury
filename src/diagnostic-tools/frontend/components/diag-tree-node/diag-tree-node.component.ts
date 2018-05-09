@@ -2,7 +2,8 @@
 import { Component, Input } from '@angular/core';
 
 // same-module deps
-import { PacketTreeNode } from 'diagnostic-tools/frontend/state.model';
+import { PacketTreeNode, PresentationOptions } from 'diagnostic-tools/frontend/state.model';
+import { DiagType } from 'diagnostic-tools/shared/DiagPacket.class';
 
 @Component({
   selector: 'bt-diag-tree-node',
@@ -13,9 +14,16 @@ import { PacketTreeNode } from 'diagnostic-tools/frontend/state.model';
 })
 export class DiagTreeNodeComponent {
 
-  @Input('node') node: PacketTreeNode;
+  DiagType = DiagType;
+  objectKeys = Object.keys;
 
-  objectKeys = Object.keys; // use in template
+  @Input('expanded') expanded: boolean = false;
+  @Input('node') node: PacketTreeNode;
+  @Input('opts') opts: { showPassed: boolean };
+
+  public toggleExpanded() {
+    this.expanded = !this.expanded
+  }
 
   constructor() { }
 

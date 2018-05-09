@@ -16,15 +16,17 @@ import { DiagType } from 'diagnostic-tools/shared/DiagPacket.class';
 })
 export class DiagTabComponent {
 
+  DiagType = DiagType; // used in template
+
   @select(Selectors.packets) packets;
   @select(Selectors.packetTree) packetTree;
   @select(Selectors.presentationOptions) presentationOptions;
 
-  DiagType = DiagType; // used in template
-
   constructor(
     private diagActions: DiagActions,
   ) { }
+
+  log(e){console.log(e)}
 
   /* // @todo: currently not tracking (for *ngFor optimization)
   private trackLogEntry(index: number, entry: LogEntry): string {

@@ -1,4 +1,12 @@
-<div>
+<div *ngIf="!full">
+  <div>
+    <strong>{{fd.header}}</strong>
+    <span class="assertion-{{fd.pass ? 'pass' : 'fail'}}">
+      ({{ fd.pass ? "PASS" : "FAIL" }})
+    </span>
+  </div>
+</div>
+<div *ngIf="full">
   <div><strong>=================={{fd.header}}</strong></div>
   <div>---start time: {{fd.startTime}}</div>
   <div>---end: {{fd.end}}</div>

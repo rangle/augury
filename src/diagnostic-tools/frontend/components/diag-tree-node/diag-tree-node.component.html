@@ -9,8 +9,15 @@
       )
     "
     [fd]="node.packet.diagnostic"
+    [full]="expanded"
+    (click)="toggleExpanded()"
   ></bt-function-diagnostic>
 </div>
-<div *ngFor="let child of node.children | async" [style.padding-left.em]="'2'">
-  <!-- <bt-diag-tree-node [node]="child"></bt-diag-tree-node> -->
-</div>
+<ng-container *ngIf="expanded">
+  <div *ngFor="let child of node.children" [style.padding-left.em]="'2'">
+    <bt-diag-tree-node
+      [node]="child"
+      [opts]="opts"
+    ></bt-diag-tree-node>
+  </div>
+</ng-container>

@@ -1,6 +1,18 @@
 <div class="flex-grow flex flex-row bg-base" *ngIf="presentationOptions | async as opts">
-  <div class="flex-grow flex flex-column bg-base">
-    <bt-diag-tree-node [node]="packetTree | async"></bt-diag-tree-node>
+  <div style="width:57%">
+    <bt-generic-tabs
+      (change)="log($event)"
+      [tabs]="['tyy', 'kkk']"
+      [selected]="'kkk'"
+    ></bt-generic-tabs>
+    <bt-diag-tree-node
+      *ngIf="packetTree | async as pt"
+      [node]="pt"
+      [opts]="opts"
+      [expanded]="true"
+    ></bt-diag-tree-node>
   </div>
-  <bt-diag-sidebar></bt-diag-sidebar>
+  <div style="width:43%; height:100%; border-left: 1px solid grey;">
+    <bt-diag-sidebar></bt-diag-sidebar>
+  </div>
 </div>

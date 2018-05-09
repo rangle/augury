@@ -4,7 +4,7 @@ const stringifier = require('stringifier/build/stringifier');
 const stringify = stringifier({ indent: ' ' });
 
 // same-module deps
-import { Diagnostic, End } from './Diagnostic.class';
+import { Diagnostic, End, isValidDiagnostic } from './Diagnostic.class';
 
 /**
  *  a FunctionDiagnostic represents the diagnosis results
@@ -19,6 +19,18 @@ export class FunctionDiagnostic extends Diagnostic {
   diagError?: { section, error };
   exception?: any;
 }
+
+export const isValidFunctionDiagnostic = (fd: any): boolean => {
+  return (
+    isValidDiagnostic(fd) &&
+    typeof fd.header === 'string' &&
+    typeof fd.startTime === 'number' &&
+    typeof fd.endTime === 'number' &&
+    ( fd.pre ? isValidSectionResult(fd.pre) : true ) &&
+    ( fd.post ? isValidSectionResult(fd.post) : true )
+  );
+};
+
 
 /**
  *  SectionResults contain arrays of statements of the following types.
@@ -37,6 +49,14 @@ class SectionResult {
   statements: Array<Statement>;
   snapshots: { [name: string]: string }; // each snapshot is stringified
 }
+
+const isValidSectionResult = (sr: any): boolean => {
+  return (
+    typeof sr === 'object' &&
+    Array.isArray(sr.statements) &&
+    typeof sr.snapshots === 'object'
+  );
+};
 
 /**
  */

@@ -30,5 +30,11 @@ export class DiagActions {
     type: DiagActionType.SHOW_PASSED,
     payload: bool
   })
+  // 
+  // @dispatch()
+  // importDiagnostic = (bool: boolean) => ({
+  //   type: DiagActionType.SHOW_PASSED,
+  //   payload: bool
+  // })
 
 }

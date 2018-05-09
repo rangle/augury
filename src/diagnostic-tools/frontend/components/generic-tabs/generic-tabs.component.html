@@ -1,0 +1,9 @@
+<header class="flex flex-justify bg-panel border-bottom">
+  <div class="flex">
+    <div class="primary-color tab-menu-title px2 py2 border-transparent mt1"
+         [ngClass]="{'bg-base border-top border-right border-left selected': t === _selected}"
+         *ngFor="let t of tabs; let i = index" (click)="onSelect(t)">
+      {{t}}
+    </div>
+  </div>
+</header>

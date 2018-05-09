@@ -16,6 +16,7 @@ import { FunctionDiagnostic, STATEMENT_TYPE } from 'diagnostic-tools/shared/Func
 export class FunctionDiagnosticComponent {
 
   @Input('fd') fd: FunctionDiagnostic;
+  @Input('full') full: boolean;
 
   objectKeys = Object.keys; // use in template
   STATEMENT_TYPE = STATEMENT_TYPE; // use in template

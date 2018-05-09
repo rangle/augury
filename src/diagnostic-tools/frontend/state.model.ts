@@ -8,27 +8,26 @@ import { DiagPacket } from 'diagnostic-tools/shared';
 export const NAMESPACE = 'diag';
 const _getState = (store: any): DiagState => store[NAMESPACE];
 
-export interface PacketTreeNode extends PacketTree { // @todo: or PacketFrame?
-  packet: DiagPacket;
+export interface PacketTreeNode { // @todo: or PacketFrame?
+  packet: DiagPacket | null;
+  children: Array<PacketTreeNode>
 }
 
-export interface PacketTree {
-  children: Array<PacketTreeNode>;
-}
+export interface PresentationOptions {
+  showPassed: boolean
+};
 
 export interface DiagState {
   packets: Array<DiagPacket>; // @todo: get rid of this one?
   packetTree: PacketTreeNode;
-  presentationOptions: {
-    showPassed: boolean
-  };
+  presentationOptions: PresentationOptions;
 }
 
 export const INITIAL_STATE: DiagState = {
   packets: [],
-  packetTree: undefined,
+  packetTree: null,
   presentationOptions: {
-    showPassed: false
+    showPassed: true
   }
 };
 
@@ -63,9 +62,10 @@ const newFrame = (packet = null): PacketTreeNode => ({ //@todo: types types type
 });
 
 // @todo: rewrite, make this not so mutaty (dont use foreach) code looks like hell
-const insertPacketIntoTree = (packet: DiagPacket, tree = newFrame()) => {
-  const threadClone = clone(tree);
-  let frameCursor = threadClone;
+// TODO: language is messy, frame and node used interchangeably
+const insertPacketIntoTree = (packet: DiagPacket, tree: PacketTreeNode) => {
+  const treeClone = clone(tree || newFrame());
+  let frameCursor = treeClone;
   packet.diagnostic.logicalThread.stackTreePosition.forEach(i => {
     const arrOfNewLength = (new Array(Math.max(i + 1, frameCursor.children.length))).fill(true).map(_ => newFrame());
     frameCursor.children.forEach((_, j) => arrOfNewLength[j] = frameCursor.children[j]);
@@ -74,5 +74,5 @@ const insertPacketIntoTree = (packet: DiagPacket, tree = newFrame()) => {
   });
   // @todo: rewrite into nicer way of inserting new frame when we reach the correct spot
   frameCursor.packet = packet;
-  return threadClone;
+  return treeClone;
 };
