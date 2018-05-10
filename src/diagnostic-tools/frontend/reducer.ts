@@ -18,6 +18,10 @@ export function diagReducer(
       return Updaters.clear();
     case DiagActionType.SHOW_PASSED:
       return Updaters.setShowPassed(action.payload, state);
+    case DiagActionType.IMPORT:
+      return Updaters.addImport(action.payload, state);
+    case DiagActionType.DIAG_TAB:
+      return Updaters.selectTab(action.payload, state);
   }
 
   return state;

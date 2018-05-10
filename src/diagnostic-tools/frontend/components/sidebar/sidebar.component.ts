@@ -17,7 +17,7 @@ import { DiagType, DiagPacket, isValidDiagPacket } from 'diagnostic-tools/shared
 export class DiagSidebarComponent {
 
   @select(Selectors.presentationOptions) presentationOptions;
-  @select(Selectors.presentationOptions) packets;
+  @select(Selectors.packets) packets;
 
   diagnosticFileToImport: File;
   importError: string;
@@ -41,14 +41,15 @@ export class DiagSidebarComponent {
     reader.onload = () => {
       fileContent = reader.result;
       const importIsValid = (parsedImport:any): boolean =>
-        !Array.isArray(parsedImport)
-        && !parsedImport.every(isValidDiagPacket);
+        Array.isArray(parsedImport)
+        && parsedImport.every(isValidDiagPacket);
       try {
         parsedImport = JSON.parse(fileContent)
-        if (!importIsValid(parsedImport))
-          { this.importError = 'invalid import.'; }
-        else
-          { console.log('worked') }
+        if (!importIsValid(parsedImport)) {
+          this.importError = 'invalid import.';
+        } else {
+          this.diagService.import(<Array<DiagPacket>> parsedImport);
+        }
       }
       catch(e) { this.importError = 'invalid import.'; }
     }

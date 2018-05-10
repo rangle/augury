@@ -1,18 +1,28 @@
-<div class="flex-grow flex flex-row bg-base" *ngIf="presentationOptions | async as opts">
-  <div style="width:57%">
-    <bt-generic-tabs
-      (change)="log($event)"
-      [tabs]="['tyy', 'kkk']"
-      [selected]="'kkk'"
-    ></bt-generic-tabs>
-    <bt-diag-tree-node
-      *ngIf="packetTree | async as pt"
-      [node]="pt"
-      [opts]="opts"
-      [expanded]="true"
-    ></bt-diag-tree-node>
-  </div>
-  <div style="width:43%; height:100%; border-left: 1px solid grey;">
-    <bt-diag-sidebar></bt-diag-sidebar>
-  </div>
-</div>
+<ng-container *ngIf="presentationOptions | async as opts">
+  <ng-container *ngIf="imports | async as imp">
+    <ng-container *ngIf="packetTree | async as localTree">
+      <ng-container *ngIf="currentView | async as inView">
+
+        <div class="flex-grow flex flex-row bg-base">
+          <div style="width:57%">
+            <bt-generic-tabs
+              *ngIf="shouldShowTabs(imp)"
+              (change)="selectTab($event)"
+              [tabs]="getTabs(imp)"
+              [selected]="getActiveTab(inView)"
+            ></bt-generic-tabs>
+            <bt-diag-tree-node
+              [node]="getTreeInView(imp, localTree, inView)"
+              [opts]="opts"
+              [expanded]="true"
+            ></bt-diag-tree-node>
+          </div>
+          <div style="width:43%; height:100%; border-left: 1px solid grey;">
+            <bt-diag-sidebar></bt-diag-sidebar>
+          </div>
+        </div>
+
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>

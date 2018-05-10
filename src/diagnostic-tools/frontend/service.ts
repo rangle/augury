@@ -55,4 +55,8 @@ export class DiagService {
     return this.options.diagnosticToolsEnabled
   }
 
+  import(packets: Array<DiagPacket>) {
+    return this.diagActions.importDiagnostic(packets)
+  }
+
 }
