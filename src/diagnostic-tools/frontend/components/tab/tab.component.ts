@@ -13,9 +13,9 @@ const ACTIVE_TAB_FORMATTED = 'Active';
 
 @Component({
   selector: 'bt-diag-tab',
-  template: require('./tab.component.html'),
-  styles: [
-    require('to-string!./tab.component.css')
+  templateUrl: './tab.component.html',
+  styleUrls: [
+    './tab.component.css'
   ],
 })
 export class DiagTabComponent {

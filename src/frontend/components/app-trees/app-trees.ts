@@ -45,20 +45,21 @@ type Node = any;
   `]
 })
 export class AppTrees {
-  private ComponentView = ComponentView;
+
+  ComponentView = ComponentView;
   Tab = Tab;
-  private Theme = Theme;
-  private AnalyticsConsent = AnalyticsConsent;
+  Theme = Theme;
+  AnalyticsConsent = AnalyticsConsent;
 
   @Input() ngVersion: String;
   @Input() componentState: ComponentInstanceState;
-  @Input() private options: Options;
+  @Input() options: Options;
   @Input() routerTree: Array<Route>;
   @Input() tree: Array<Node>;
   @Input() ngModules: {[key: string]: any};
 
   @Input() selectedNode: Node;
-  @Input() private selectedRoute: Route;
+  @Input() selectedRoute: Route;
   @Input() selectedTab: Tab;
   @Input() selectedComponentsSubTab: StateTab;
   @Input() domSelectionActive: boolean;
@@ -67,10 +68,10 @@ export class AppTrees {
   @Output() expandChildren = new EventEmitter<Node>();
   @Output() inspectElement = new EventEmitter<Node>();
   @Output() selectNode = new EventEmitter<Node>();
-  @Output() private tabChange = new EventEmitter<Tab>();
+  @Output() tabChange = new EventEmitter<Tab>();
   @Output() componentsSubTabMenuChange = new EventEmitter<StateTab>();
 
-  @Output() private domSelectionActiveChange = new EventEmitter<boolean>();
+  @Output() domSelectionActiveChange = new EventEmitter<boolean>();
 
   @Output() emitValue = new EventEmitter<{path: Path, data: any}>();
   @Output() updateProperty = new EventEmitter<{path: Path, newValue: any}>();
@@ -82,7 +83,7 @@ export class AppTrees {
   settingOpened: boolean = false;
   showAnalyticsConsent: boolean = false;
 
-  private tabs = (): Array<TabDescription> => [{
+  tabs = (): Array<TabDescription> => [{
     title: 'Component Tree',
     tab: Tab.ComponentTree,
   }, {
@@ -100,8 +101,8 @@ export class AppTrees {
     : []
   );
 
-  private DEFAULT_TAB: Tab = Tab.ComponentTree;
-  private getActiveTab = (): Tab =>
+  DEFAULT_TAB: Tab = Tab.ComponentTree;
+  getActiveTab = (): Tab =>
     this.tabs()
       .find((td: TabDescription) => td.tab === this.selectedTab)
       ? this.selectedTab
@@ -165,7 +166,8 @@ export class AppTrees {
       this.onTabSelectionChanged(Tab.DiagnosticTools);
     } else {
       this.diagService.disable();
-      this.onTabSelectionChanged(Tab.ComponentTree);
+      if (this.getActiveTab() === Tab.DiagnosticTools) 
+        this.onTabSelectionChanged(Tab.ComponentTree);
     }
     this.reset();
   }

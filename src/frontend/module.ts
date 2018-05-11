@@ -74,99 +74,85 @@ import {
 import { buildConfig } from '../build.config';
 import {App} from './app';
 
-declare const PRODUCTION: boolean;
 
-//@todo: remove me
-declare const window: any;
+@NgModule({
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+    NgReduxModule,
+  ],
+  declarations: [
+    Accordion,
+    App,
+    AppTrees,
+    ComponentInfo,
+    ComponentTree,
+    DependencyInfo,
+    InfoPanel,
+    InjectorTree,
+    NodeAttributes,
+    NodeItem,
+    NodeOpenTag,
+    PropertyEditor,
+    PropertyValue,
+    RenderError,
+    ReportError,
+    RouterInfo,
+    RenderState,
+    RouterTree,
+    Search,
+    SplitPane,
+    StateValues,
+    TabMenu,
+    ComponentsTabMenu,
+    TreeView,
+    NgModuleInfo,
+    NgModuleConfigView,
+    AnalyticsPopup,
+    ...DIAG_COMPONENTS,
+  ],
+  providers: [
+    Connection,
+    DirectConnection,
+    Options,
+    UserActions,
+    MainActions,
+    ComponentViewState,
+    ComponentPropertyState,
+    SendAnalytics,
+    { provide: ErrorHandler, useClass: UncaughtErrorHandler },
+    DiagActions,
+    DiagService,
+  ],
+  bootstrap: [App]
+})
+export class FrontendModule {
+  constructor(
+    ngRedux: NgRedux<IAppState>,
+    sendAnalytics: SendAnalytics,
+    diagService: DiagService,
+  ) {
+    const store = createStore(
+      rootReducer,
+      compose(applyMiddleware(reduxLogger),
+        applyMiddleware(createEpicMiddleware(rootEpic)),
+        applyMiddleware(sendAnalytics.middleware)));
 
-const storedOptionsService = new Options();
+        console.log('testing inside')
 
-export const modulePromise = storedOptionsService.load()
-.then((options) => {
+    debugger
+    (<any> window).s = store
 
-  const frontendConnection = new Connection();
+    useServiceInstance(diagService);
 
-  const diagActions = new DiagActions();
-  const diagService = new DiagService(
-    diagActions,
-    storedOptionsService,
-    frontendConnection,
-  );
-
-  useServiceInstance(diagService);
-
-  @NgModule({
-    imports: [
-      BrowserModule,
-      CommonModule,
-      FormsModule,
-      NgReduxModule,
-    ],
-    declarations: [
-      Accordion,
-      App,
-      AppTrees,
-      ComponentInfo,
-      ComponentTree,
-      DependencyInfo,
-      InfoPanel,
-      InjectorTree,
-      NodeAttributes,
-      NodeItem,
-      NodeOpenTag,
-      PropertyEditor,
-      PropertyValue,
-      RenderError,
-      ReportError,
-      RouterInfo,
-      RenderState,
-      RouterTree,
-      Search,
-      SplitPane,
-      StateValues,
-      TabMenu,
-      ComponentsTabMenu,
-      TreeView,
-      NgModuleInfo,
-      NgModuleConfigView,
-      AnalyticsPopup,
-      ...DIAG_COMPONENTS,
-    ],
-    providers: [
-      { provide: Connection, useValue: frontendConnection },
-      DirectConnection,
-      { provide: Options, useValue: storedOptionsService },
-      UserActions,
-      MainActions,
-      ComponentViewState,
-      ComponentPropertyState,
-      SendAnalytics,
-      { provide: ErrorHandler, useClass: UncaughtErrorHandler },
-      { provide: DiagActions, useValue: diagActions },
-      { provide: DiagService, useValue: diagService },
-    ],
-    bootstrap: [App]
-  })
-  class FrontendModule {
-    constructor(
-      ngRedux: NgRedux<IAppState>,
-      sendAnalytics: SendAnalytics) {
-      const store = createStore(
-        rootReducer,
-        compose(applyMiddleware(reduxLogger),
-          applyMiddleware(createEpicMiddleware(rootEpic)),
-          applyMiddleware(sendAnalytics.middleware)));
-
-      debugger
-      window.s = store
-
-      ngRedux.provideStore(store as Store<IAppState>);
-    }
+    ngRedux.provideStore(store as Store<IAppState>);
   }
+}
+console.log('testing outside')
 
-  if (PRODUCTION) {
-    enableProdMode();
-  }
+if (buildConfig.prodMode) {
+  enableProdMode();
+}
 
-  return FrontendModule;
-});
+platformBrowserDynamic().bootstrapModule(FrontendModule);

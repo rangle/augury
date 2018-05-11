@@ -8,9 +8,9 @@ import { FunctionDiagnostic, STATEMENT_TYPE } from 'diagnostic-tools/shared/Func
 
 @Component({
   selector: 'bt-function-diagnostic',
-  template: require('./function-diagnostic.component.html'),
-  styles: [
-    require('to-string!./function-diagnostic.component.css'),
+  templateUrl: './function-diagnostic.component.html',
+  styleUrls: [
+    './function-diagnostic.component.css',
   ],
 })
 export class FunctionDiagnosticComponent {

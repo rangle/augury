@@ -9,9 +9,9 @@ import { DiagType, DiagPacket, isValidDiagPacket } from 'diagnostic-tools/shared
 
 @Component({
   selector: 'bt-diag-sidebar',
-  template: require('./sidebar.component.html'),
-  styles: [
-    require('to-string!./sidebar.component.css')
+  templateUrl: './sidebar.component.html',
+  styleUrls: [
+    './sidebar.component.css'
   ],
 })
 export class DiagSidebarComponent {

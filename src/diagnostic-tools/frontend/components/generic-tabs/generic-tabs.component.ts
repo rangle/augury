@@ -7,9 +7,9 @@ import {
 
 @Component({
   selector: 'bt-generic-tabs',
-  template: require('./generic-tabs.component.html'),
-  styles: [
-    require('to-string!./generic-tabs.component.css'),
+  templateUrl: './generic-tabs.component.html',
+  styleUrls: [
+    './generic-tabs.component.css',
   ],
 })
 export class GenericTabsComponent {

@@ -7,9 +7,9 @@ import { DiagType } from 'diagnostic-tools/shared/DiagPacket.class';
 
 @Component({
   selector: 'bt-diag-tree-node',
-  template: require('./diag-tree-node.component.html'),
-  styles: [
-    require('to-string!./diag-tree-node.component.css'),
+  templateUrl: './diag-tree-node.component.html',
+  styleUrls: [
+    './diag-tree-node.component.css',
   ],
 })
 export class DiagTreeNodeComponent {
