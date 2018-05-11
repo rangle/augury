@@ -35,7 +35,7 @@ export interface DiagState {
 
 export const INITIAL_STATE: DiagState = {
   packets: [],
-  packetTree: null,
+  packetTree: { packet: null, children:[] },
   imports: [],
   currentView: ACTIVE_TAB,
   presentationOptions: {
@@ -57,6 +57,7 @@ export class Selectors {
 }
 
 export class Updaters {
+
   static addPacket
     = (packet: DiagPacket, state: DiagState): DiagState =>
       m(state, {
@@ -64,12 +65,25 @@ export class Updaters {
           .concat(packet)
           .sort((a, b) => a.diagnostic.startTime - b.diagnostic.startTime),
         packetTree: insertPacketIntoTree(packet, state.packetTree) })
-  static clear
+
+  static clearEverything
     = (): DiagState => INITIAL_STATE
+
+  static clearActive
+    = (state: DiagState): DiagState => m(state, {
+      packets: INITIAL_STATE.packets,
+      packetTree: INITIAL_STATE.packetTree })
+
+  static clearImports
+    = (state: DiagState): DiagState => m(state, {
+      imports: INITIAL_STATE.imports,
+      currentView: INITIAL_STATE.currentView })
+
   static setShowPassed
     = (showPassed: Boolean, state: DiagState): DiagState =>
       m(state, {
         presentationOptions: m(state.presentationOptions, { showPassed }) })
+
   static addImport
     = (packets: Array<DiagPacket>, state: DiagState): DiagState => {
       const newName = `Import ${state.imports.length + 1}`;
@@ -79,10 +93,12 @@ export class Updaters {
             packets,
             packetTree: buildPacketTree(packets) }]),
         currentView: newName }) }
+
   static selectTab
     = (name: string, state: DiagState): DiagState =>
       m(state, {
         currentView: name })
+
 }
 
 const newFrame = (packet = null): PacketTreeNode => ({ //@todo: types types types

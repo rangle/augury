@@ -8,6 +8,8 @@ import { DiagPacket } from 'diagnostic-tools/shared';
 export enum DiagActionType {
   TAKE_PKT,
   CLEAR,
+  CLEAR_ACTIVE,
+  CLEAR_IMPORTS,
   SHOW_PASSED,
   IMPORT,
   DIAG_TAB,
@@ -25,6 +27,16 @@ export class DiagActions {
   @dispatch()
   clear = () => ({
     type: DiagActionType.CLEAR
+  })
+
+  @dispatch()
+  clearActive = () => ({
+    type: DiagActionType.CLEAR_ACTIVE
+  })
+
+  @dispatch()
+  clearImports = () => ({
+    type: DiagActionType.CLEAR_IMPORTS
   })
 
   @dispatch()

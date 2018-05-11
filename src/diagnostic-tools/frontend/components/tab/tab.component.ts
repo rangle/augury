@@ -32,8 +32,6 @@ export class DiagTabComponent {
     private diagActions: DiagActions,
   ) { }
 
-  log(e){console.log(e)}
-
   shouldShowTabs(imports: Array<Import>): boolean {
     return !!imports.length
   }

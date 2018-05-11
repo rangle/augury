@@ -1,13 +1,23 @@
 <bt-tab-menu
    showMainItems="true"
-   [tabs]="tabs"
+   [tabs]="tabs()"
    [domSelectionActive]="domSelectionActive"
-   [selectedTab]="selectedTab"
+   [selectedTab]="getActiveTab()"
    (tabChange)="onTabSelectionChanged($event)"
    (DOMSelectionActiveChange)="onDOMSelectionActiveChange($event)">
   <div postlude class="flex px3">
     <span *ngIf="ngVersion" class="ngVersion">
       Angular Version: {{ngVersion}}
+    </span>
+    <span class="enable-troubleshooting">
+      <span *ngIf="!options.diagnosticToolsEnabled">
+        Experiencing Issues?
+        <a (click)="onDiagnosticToolsToggle(true)" style="cursor:pointer"> Enable Troubleshooting Mode </a>
+      </span>
+      <span *ngIf="options.diagnosticToolsEnabled">
+        <span style="color:red"> Troubleshooting Mode </span> (performance impact)
+        <a (click)="onDiagnosticToolsToggle(false)" style="cursor:pointer"> Disable </a>
+      </span>
     </span>
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
@@ -142,7 +152,7 @@
   (hideComponent)="onHideAnalyticsPopup()">
 </bt-analytics-popup>
 
-<split-pane #splitPane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
+<split-pane #splitPane [ngClass]="{ 'flex-auto flex': getActiveTab() === Tab.ComponentTree, 'display-none': getActiveTab() !== Tab.ComponentTree }">
   <div split-pane-primary-content class="flex flex-column flex-auto">
     <bt-tree-view
        class="flex minheight-100pct"
@@ -172,18 +182,18 @@
 </split-pane>
 
 <bt-router-tree
-   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.RouterTree, 'display-none': selectedTab !== Tab.RouterTree }"
+   [ngClass]="{ 'flex-auto flex': getActiveTab() === Tab.RouterTree, 'display-none': getActiveTab() !== Tab.RouterTree }"
    [routerTree]="routerTree"
    class="flex-auto overflow-auto">
 </bt-router-tree>
 
 <ng-module-info
-   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.NgModules, 'display-none': selectedTab !== Tab.NgModules }"
+   [ngClass]="{ 'flex-auto flex': getActiveTab() === Tab.NgModules, 'display-none': getActiveTab() !== Tab.NgModules }"
    [ngModules]="ngModules"
    class="flex-auto overflow-auto bg-darken-1">
 </ng-module-info>
 
 <bt-diag-tab *ngIf="options.diagnosticToolsEnabled"
-   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.DiagnosticTools, 'display-none': selectedTab !== Tab.DiagnosticTools }"
+   [ngClass]="{ 'flex-auto flex': getActiveTab() === Tab.DiagnosticTools, 'display-none': getActiveTab() !== Tab.DiagnosticTools }"
    class="flex-auto overflow-auto">
 </bt-diag-tab>

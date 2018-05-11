@@ -2,12 +2,13 @@
 import { Injectable } from '@angular/core';
 
 // project deps
-import { Options } from 'diagnostic-tools/module-dependencies.barrel';
+import { Connection, Options } from 'diagnostic-tools/module-dependencies.barrel';
 
 // same-module deps
-import { DiagPacket, Diagnostic } from 'diagnostic-tools/shared';
+import { DiagPacket, Diagnostic, DiagnosticMessageFactory } from 'diagnostic-tools/shared';
 import { Selectors } from './state.model';
 import { DiagActions } from './actions';
+
 
 // @todo: using this?
 const ifEnabled = function (
@@ -28,35 +29,55 @@ export class DiagService {
   constructor(
     public diagActions: DiagActions,
     public options: Options,
+    private connection: Connection,
   ) { }
 
   /* actions */
 
-  // @ifEnabled
-  // @todo: are we using these decorators? having trouble accessing options from it.
   clear() {
-    if (this.options.diagnosticToolsEnabled)
-      this.diagActions.clear()
+    this.diagActions.clear()
   }
 
-  // @ifEnabled
   takePacket(packet: DiagPacket) {
     if (this.options.diagnosticToolsEnabled)
       this.diagActions.takePacket(packet)
   }
 
-  // @ifEnabled
   setShowPassed(bool: boolean) {
     if (this.options.diagnosticToolsEnabled)
       this.diagActions.setShowPassed(bool)
   }
 
+  enabled(): boolean {
+    return this.options.diagnosticToolsEnabled;
+  }
+
+  // deprecated, use enabled()
   diagEnabled():boolean {
-    return this.options.diagnosticToolsEnabled
+    return this.enabled();
+  }
+
+  enable(): void {
+    this.clear()
+    this.options.diagnosticToolsEnabled = true;
+    this._notifyBackendOfOptionsUpdate()
+  }
+
+  disable(): void {
+    this.clear()
+    this.options.diagnosticToolsEnabled = false;
+    this._notifyBackendOfOptionsUpdate()
   }
 
   import(packets: Array<DiagPacket>) {
     return this.diagActions.importDiagnostic(packets)
+  }
+
+  private _notifyBackendOfOptionsUpdate(): void {
+    this.connection.send(
+      DiagnosticMessageFactory.diagnosticOptionsUpdated({
+        diagnosticToolsEnabled: this.options.diagnosticToolsEnabled
+      }))
   }
 
 }

@@ -1,6 +1,14 @@
 <div class="flex flex-column flex-auto overflow-auto" style="height:100%">
   <div class="bg-darken-1 bg-panel border-bottom py3 px3 m0">
     <div class="h4 regular primary-color no-highlight">
+      <button (click)="clearActive()">
+        Clear Active Diagnostic
+      </button>
+      <button (click)="clearImports()">
+        Clear Imports
+      </button>
+    </div>
+    <div class="h4 regular primary-color no-highlight">
       <span> Show Successful: </span>
       <input #showPassed
         *ngIf="presentationOptions | async as opts"

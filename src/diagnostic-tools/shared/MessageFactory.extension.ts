@@ -15,4 +15,11 @@ export class DiagnosticMessageFactory extends MessageFactory {
     });
   }
 
+  static diagnosticOptionsUpdated(newOptions): Message<{ diagnosticToolsEnabled: boolean }> {
+    return create({
+      messageType: MessageType.DiagnosticOptionsUpdated,
+      content: newOptions
+    });
+  }
+
 }

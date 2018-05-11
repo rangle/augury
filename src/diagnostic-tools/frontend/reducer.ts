@@ -15,7 +15,11 @@ export function diagReducer(
     case DiagActionType.TAKE_PKT:
       return Updaters.addPacket(<DiagPacket> action.payload, state);
     case DiagActionType.CLEAR:
-      return Updaters.clear();
+      return Updaters.clearEverything();
+    case DiagActionType.CLEAR_ACTIVE:
+      return Updaters.clearActive(state);
+    case DiagActionType.CLEAR_IMPORTS:
+      return Updaters.clearImports(state);
     case DiagActionType.SHOW_PASSED:
       return Updaters.setShowPassed(action.payload, state);
     case DiagActionType.IMPORT:

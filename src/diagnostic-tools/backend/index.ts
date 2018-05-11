@@ -1,2 +1,4 @@
 export { diagnosable } from './diagnosable.wrapper';
-export { enableDiagnosticBackend } from './settings.global';
+import * as DiagnosticBackendSettings from './settings.global';
+
+export { DiagnosticBackendSettings }

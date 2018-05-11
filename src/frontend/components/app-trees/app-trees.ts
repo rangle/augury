@@ -19,6 +19,7 @@ import {
 } from '../../state';
 
 import {Path} from '../../../tree';
+import {DiagService} from 'diagnostic-tools/frontend';
 
 type Node = any;
 
@@ -33,6 +34,12 @@ type Node = any;
       line-height: 31px;
       font-weight: bold;
       color: #5128a5;
+      padding-right: 5px;
+    }
+    .enable-troubleshooting {
+      margin-left: 2em;
+      line-height: 31px;
+      font-weight: bold;
       padding-right: 5px;
     }
   `]
@@ -75,7 +82,7 @@ export class AppTrees {
   private settingOpened: boolean = false;
   private showAnalyticsConsent: boolean = false;
 
-  private tabs: Array<TabDescription> = [{
+  private tabs = (): Array<TabDescription> => [{
     title: 'Component Tree',
     tab: Tab.ComponentTree,
   }, {
@@ -84,10 +91,25 @@ export class AppTrees {
   }, {
     title: 'NgModules',
     tab: Tab.NgModules,
-  }, {
-    title: 'Diagnostic Tools',
-    tab: Tab.DiagnosticTools,
-  }];
+  }].concat(
+    this.diagService.enabled() ?
+      [{
+        title: 'Troubleshooting',
+        tab: Tab.DiagnosticTools,
+      }]
+    : []
+  );
+
+  private DEFAULT_TAB: Tab = Tab.ComponentTree;
+  private getActiveTab = (): Tab =>
+    this.tabs()
+      .find((td: TabDescription) => td.tab === this.selectedTab)
+      ? this.selectedTab
+      : this.DEFAULT_TAB;
+
+  constructor(
+    private diagService: DiagService
+  ){}
 
   private ngOnInit() {
     this.options.load().then((results) => {
@@ -99,7 +121,7 @@ export class AppTrees {
 
   onTabSelectionChanged(index: number) {
     this.splitPane.handleTabNavigation();
-    this.tabChange.emit(this.tabs[index].tab);
+    this.tabChange.emit(this.tabs()[index].tab);
   }
 
   onDOMSelectionActiveChange(state: boolean) {
@@ -138,7 +160,13 @@ export class AppTrees {
   }
 
   private onDiagnosticToolsToggle = (value: boolean) => {
-    this.options.diagnosticToolsEnabled = value;
+    if (value) {
+      this.diagService.enable();
+      this.onTabSelectionChanged(Tab.DiagnosticTools);
+    } else {
+      this.diagService.disable();
+      this.onTabSelectionChanged(Tab.ComponentTree);
+    }
     this.reset();
   }
 

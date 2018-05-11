@@ -83,8 +83,15 @@ const storedOptionsService = new Options();
 storedOptionsService.load()
 .then((options) => {
 
+  const frontendConnection = new Connection();
+
   const diagActions = new DiagActions();
-  const diagService = new DiagService(diagActions, storedOptionsService);
+  const diagService = new DiagService(
+    diagActions,
+    storedOptionsService,
+    frontendConnection,
+  );
+
   useServiceInstance(diagService);
 
   @NgModule({
@@ -125,7 +132,7 @@ storedOptionsService.load()
       ...DIAG_COMPONENTS,
     ],
     providers: [
-      Connection,
+      { provide: Connection, useValue: frontendConnection },
       DirectConnection,
       { provide: Options, useValue: storedOptionsService },
       UserActions,
