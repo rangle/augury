@@ -16,16 +16,16 @@ import {Search} from '../search/search';
 
 @Component({
   selector: 'bt-tree-view',
-  template: require('./tree-view.html'),
+  templateUrl: './tree-view.html',
 })
 export class TreeView {
-  @Input() private selectedNode: Node;
-  @Input() private tree: MutableTree;
+  @Input() selectedNode: Node;
+  @Input() tree: MutableTree;
 
-  @Output() private collapseChildren = new EventEmitter<Node>();
-  @Output() private expandChildren = new EventEmitter<Node>();
-  @Output() private inspectElement = new EventEmitter<Node>();
-  @Output() private selectNode = new EventEmitter<Node>();
+  @Output() collapseChildren = new EventEmitter<Node>();
+  @Output() expandChildren = new EventEmitter<Node>();
+  @Output() inspectElement = new EventEmitter<Node>();
+  @Output() selectNode = new EventEmitter<Node>();
 
   @ViewChild(Search) private search: Search;
 
@@ -44,11 +44,11 @@ export class TreeView {
     }
   }
 
-  private onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
+  onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
     return this.userActions.searchComponents(this.tree, query);
   }
 
-  private onSelectedSearchResultChanged(node: Node) {
+  onSelectedSearchResultChanged(node: Node) {
     this.searchNode = node;
     this.selectNode.emit(node);
   }

@@ -71,6 +71,7 @@ import {
   Options,
 } from './state';
 
+import { buildConfig } from '../build.config';
 import {App} from './app';
 
 declare const PRODUCTION: boolean;
@@ -80,7 +81,7 @@ declare const window: any;
 
 const storedOptionsService = new Options();
 
-storedOptionsService.load()
+export const modulePromise = storedOptionsService.load()
 .then((options) => {
 
   const frontendConnection = new Connection();
@@ -167,6 +168,5 @@ storedOptionsService.load()
     enableProdMode();
   }
 
-  platformBrowserDynamic().bootstrapModule(FrontendModule);
-
+  return FrontendModule;
 });

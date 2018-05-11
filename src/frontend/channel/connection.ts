@@ -23,7 +23,7 @@ const post = <T>(message: Message<T>) =>
       tabId: chrome.devtools.inspectedWindow.tabId,
     }));
 
-export const reconnect = (): Promise<void> => {
+export const reconnect = (): Promise<Response> => {
   if (connection) {
     return Promise.resolve(void 0);
   }
@@ -76,7 +76,7 @@ export const reconnect = (): Promise<void> => {
     catch (e) {}
   };
 
-  return new Promise<void>(resolve => {
+  return new Promise<Response>(resolve => {
     try {
       connect(resolve);
       return;
@@ -122,7 +122,7 @@ export const send = <Response, T>(message: Message<T>): Promise<Response> => {
 
 @Injectable()
 export class Connection {
-  reconnect(): Promise<void> {
+  reconnect(): Promise<Response> {
     if (connection == null) { // disconnected?
       return reconnect();
     }
@@ -134,11 +134,10 @@ export class Connection {
   }
 
   send<Response, T>(message: Message<T>): Promise<Response> {
-    return reconnect().then(() => send(message));
+    return reconnect().then(() => <Promise<Response>>send(message));
   }
 
   close() {
     subscriptions.clear();
   }
 }
-

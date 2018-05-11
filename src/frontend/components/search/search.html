@@ -17,14 +17,14 @@
     <div class="inline-block">
       <button class="outline border-none btn-primary primary-color bg-panel pointer py1"
           (click)="previous()"
-          [disabled]="enablePrevious === false">
+          [disabled]="!enablePrevious">
         <div class="expander rotate180"></div>
       </button>
     </div>
     <div class="border-left inline-block" style="margin-left: -4px">
       <button class="outline border-none border-left btn-primary primary-color bg-panel pointer py1"
           (click)="next()"
-          [disabled]="enableNext === false">
+          [disabled]="!enableNext">
         <div class="expander"></div>
       </button>
     </div>

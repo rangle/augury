@@ -19,8 +19,8 @@ export const defaultExpansionDepth = 3;
 
 @Component({
   selector: 'bt-node-item',
-  template: require('./node-item.html'),
-  styles: [require('to-string!./node-item.css')],
+  templateUrl: './node-item.html',
+  styleUrls: ['./node-item.css'],
 })
 export class NodeItem {
   @Input() node;
@@ -42,15 +42,15 @@ export class NodeItem {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private viewState: ComponentViewState,
+    public viewState: ComponentViewState,
     private userActions: UserActions
   ) {}
 
-  private get selected(): boolean {
+  get selected(): boolean {
     return this.viewState.selectionState(this.node);
   }
 
-  private get expanded(): boolean {
+  get expanded(): boolean {
     const state = this.viewState.expandState(this.node);
     if (state == null) { // user has not expanded or collapsed explicitly
       return this.defaultExpanded;
@@ -62,7 +62,7 @@ export class NodeItem {
     return this.level < defaultExpansionDepth;
   }
 
-  private get hasChildren(): boolean {
+  get hasChildren(): boolean {
     return this.node.children.length > 0;
   }
 
