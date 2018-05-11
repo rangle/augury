@@ -8,3 +8,5 @@ export { MessageType } from 'communication/message-type';
 export { Message, MessageResponse, Serialize } from 'communication/message';
 
 export { Connection } from 'frontend/channel'; // frontend sends some messages to backend
+
+export { buildConfig } from '../build.config';

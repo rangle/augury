@@ -4,9 +4,6 @@
       <button (click)="clearActive()">
         Clear Active Diagnostic
       </button>
-      <button (click)="clearImports()">
-        Clear Imports
-      </button>
     </div>
     <div class="h4 regular primary-color no-highlight">
       <span> Show Successful: </span>
@@ -22,10 +19,13 @@
     <div class="h4 regular primary-color no-highlight">
       <button (click)="exportDiagnostic()"> Export Diagnostic </button>
     </div>
-    <div class="h4 regular primary-color no-highlight">
+    <div class="h4 regular primary-color no-highlight" *ngIf="shouldShowImportControls()">
       <div>
         <input type="file" (change)="selectFile($event)"/>
         <button (click)="importSelectedFile()"> Import </button>
+        <button (click)="clearImports()">
+          Clear Imports
+        </button>
       </div>
       <div>{{ importError }}</div>
     </div>

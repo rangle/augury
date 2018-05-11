@@ -6,6 +6,7 @@ import { select } from '@angular-redux/store';
 import { Selectors } from 'diagnostic-tools/frontend/state.model';
 import { DiagActions } from 'diagnostic-tools/frontend/actions';
 import { DiagType, DiagPacket, isValidDiagPacket } from 'diagnostic-tools/shared/DiagPacket.class';
+import { buildConfig } from 'diagnostic-tools/module-dependencies.barrel';
 
 @Component({
   selector: 'bt-diag-sidebar',
@@ -25,6 +26,9 @@ export class DiagSidebarComponent {
   constructor(
     private diagActions: DiagActions,
   ) { }
+
+  shouldShowImportControls = (): boolean =>
+    !buildConfig.prodMode
 
   clearActive = () =>
     this.diagActions.clearActive()
@@ -60,7 +64,6 @@ export class DiagSidebarComponent {
       catch(e) { this.importError = 'invalid import.'; }
     }
     reader.readAsText(this.diagnosticFileToImport)
-    this.diagnosticFileToImport = undefined;
   }
 
   exportDiagnostic(filename = "diag.json") {
