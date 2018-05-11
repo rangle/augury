@@ -165,9 +165,10 @@ export class AppTrees {
       this.diagService.enable();
       this.onTabSelectionChanged(Tab.DiagnosticTools);
     } else {
-      this.diagService.disable();
-      if (this.getActiveTab() === Tab.DiagnosticTools) 
+      if (this.getActiveTab() === Tab.DiagnosticTools) {
         this.onTabSelectionChanged(Tab.ComponentTree);
+      }
+      this.diagService.disable();
     }
     this.reset();
   }
