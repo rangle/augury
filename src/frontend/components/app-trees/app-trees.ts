@@ -154,7 +154,7 @@ export class AppTrees {
     this.reset();
   }
 
-  private onDiagnosticToolsToggle = (value: boolean) => {
+  onDiagnosticToolsToggle = (value: boolean) => {
     if (value) {
       this.onTabSelectionChanged(Tab.DiagnosticTools);
     } else {

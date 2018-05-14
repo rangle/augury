@@ -17,7 +17,7 @@ export class EnableTroubleShootingMessageComponent {
   @Output('onToggle') onToggle = new EventEmitter<boolean>();
 
   constructor(
-    private diagService: DiagService
+    public diagService: DiagService
   ) { }
 
   private toggle = (value: boolean) => {
