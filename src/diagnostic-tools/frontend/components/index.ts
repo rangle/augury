@@ -3,6 +3,7 @@ import { FunctionDiagnosticComponent } from './function-diagnostic/function-diag
 import { DiagSidebarComponent } from './sidebar/sidebar.component';
 import { DiagTreeNodeComponent } from './diag-tree-node/diag-tree-node.component';
 import { GenericTabsComponent } from './generic-tabs/generic-tabs.component';
+import { EnableTroubleShootingMessageComponent } from './enable-troubleshooting-message/enable-troubleshooting-message.component';
 
 const DIAG_COMPONENTS = [
   DiagTabComponent,
@@ -10,6 +11,7 @@ const DIAG_COMPONENTS = [
   DiagSidebarComponent,
   DiagTreeNodeComponent,
   GenericTabsComponent,
+  EnableTroubleShootingMessageComponent,
 ];
 
 export {

@@ -6,7 +6,7 @@ import { select } from '@angular-redux/store';
 
 // same-module deps
 import { Selectors, Import, ACTIVE_TAB, PacketTreeNode } from 'diagnostic-tools/frontend/state.model';
-import { DiagActions } from 'diagnostic-tools/frontend/actions';
+import { DiagService } from 'diagnostic-tools/frontend/service';
 import { DiagType } from 'diagnostic-tools/shared/DiagPacket.class';
 
 const ACTIVE_TAB_FORMATTED = 'Active';
@@ -29,7 +29,7 @@ export class DiagTabComponent {
   @select(Selectors.currentView) currentView;
 
   constructor(
-    private diagActions: DiagActions,
+    private diagService: DiagService,
   ) { }
 
   shouldShowTabs(imports: Array<Import>): boolean {
@@ -46,7 +46,7 @@ export class DiagTabComponent {
   }
 
   selectTab(name: string) {
-    this.diagActions.setCurrentView(
+    this.diagService.setCurrentView(
       name === ACTIVE_TAB_FORMATTED ? ACTIVE_TAB : name
     );
   }

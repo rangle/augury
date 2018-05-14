@@ -9,16 +9,9 @@
     <span *ngIf="ngVersion" class="ngVersion">
       Angular Version: {{ngVersion}}
     </span>
-    <span class="enable-troubleshooting">
-      <span *ngIf="!options.diagnosticToolsEnabled">
-        Experiencing Issues?
-        <a (click)="onDiagnosticToolsToggle(true)" style="cursor:pointer"> Enable Troubleshooting Mode </a>
-      </span>
-      <span *ngIf="options.diagnosticToolsEnabled">
-        <span style="color:red"> Troubleshooting Mode </span> (performance impact)
-        <a (click)="onDiagnosticToolsToggle(false)" style="cursor:pointer"> Disable </a>
-      </span>
-    </span>
+    <bt-enable-troubleshooting-message
+      (onToggle)="onDiagnosticToolsToggle($event)"
+    ></bt-enable-troubleshooting-message>
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
 </bt-tab-menu>

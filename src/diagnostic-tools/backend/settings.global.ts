@@ -6,7 +6,7 @@ export const isEnabled = (): boolean => _enabled;
 export const enableDiagnosticBackend = () => _enabled = true;
 export const disableDiagnosticBackend = () => _enabled = false;
 
-export const receiveOptions = (opts: SimpleOptions) => {
+export const takeOptions = (opts: SimpleOptions) => {
   if (opts.diagnosticToolsEnabled) { enableDiagnosticBackend(); }
   else { disableDiagnosticBackend(); }
 }

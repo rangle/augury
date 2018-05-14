@@ -1,7 +1,7 @@
-import { diagnosable, DiagnosticBackendSettings } from 'diagnostic-tools/backend';
+import { diagnosable, DiagnosticBackendSettings, backendDiagnosticsMessageHandler } from 'diagnostic-tools/backend';
 declare const treeRenderOptions: SimpleOptions;
 
-DiagnosticBackendSettings.receiveOptions(treeRenderOptions);
+DiagnosticBackendSettings.takeOptions(treeRenderOptions);
 
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
@@ -257,13 +257,10 @@ Object.defineProperty(window, selectedComponentPropertyKey,
 
 const messageHandler = (message: Message<any>) => {
   return runAndHandleUncaughtExceptions(() => {
-    switch (message.messageType) {
 
-      // this should be part of the diagnostic-tools module directory.
-      // it is here since this is where message handling is centralized
-      case MessageType.DiagnosticOptionsUpdated:
-        DiagnosticBackendSettings.receiveOptions(message.content)
-        return true;
+    backendDiagnosticsMessageHandler(message);
+
+    switch (message.messageType) {
 
       case MessageType.Initialize:
         // Update our tree settings closure

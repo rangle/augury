@@ -1,14 +1,15 @@
 // third party deps
 import { Injectable } from '@angular/core';
+import { select } from '@angular-redux/store';
 
 // project deps
-import { Connection, Options } from 'diagnostic-tools/module-dependencies.barrel';
+import { Connection, Options, Message } from 'diagnostic-tools/module-dependencies.barrel';
 
 // same-module deps
 import { DiagPacket, Diagnostic, DiagnosticMessageFactory } from 'diagnostic-tools/shared';
-import { Selectors } from './state.model';
+import { Selectors, Import, ACTIVE_TAB } from './state.model';
 import { DiagActions } from './actions';
-
+import { createFrontendDiagnosticsMessageHandler } from './messageHandler.function';
 
 // @todo: using this?
 const ifEnabled = function (
@@ -26,16 +27,28 @@ const ifEnabled = function (
 @Injectable()
 export class DiagService {
 
+  @select(Selectors.imports) imports;
+
+  private _messageHandler
+    : (message: Message<any>, respond: () => void ) => void
+    = createFrontendDiagnosticsMessageHandler(this);
+
   constructor(
     public diagActions: DiagActions,
     public options: Options,
     private connection: Connection,
-  ) { }
+  ) {}
 
-  /* actions */
+  handleMessage(message: Message<any>, respond: () => void) {
+    this._messageHandler(message, respond)
+  }
 
   clear() {
     this.diagActions.clear()
+  }
+
+  clearImports() {
+    this.diagActions.clearImports()
   }
 
   takePacket(packet: DiagPacket) {
@@ -46,6 +59,17 @@ export class DiagService {
   setShowPassed(bool: boolean) {
     if (this.options.diagnosticToolsEnabled)
       this.diagActions.setShowPassed(bool)
+  }
+
+  importDiagnostic(parsedImport: Array<DiagPacket>) {
+    this.diagActions.importDiagnostic(parsedImport);
+  }
+
+  setCurrentView(tab: string): Promise<boolean> {
+    return Promise.resolve()
+      .then(() =>
+        this.imports.first().subscribe((imps: Array<Import>) =>
+          this.diagActions.setCurrentView( imps.find(imp => imp.name === tab) ? tab : ACTIVE_TAB )));
   }
 
   enabled(): boolean {

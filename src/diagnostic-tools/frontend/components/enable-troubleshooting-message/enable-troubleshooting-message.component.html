@@ -1,0 +1,10 @@
+<span class="enable-troubleshooting">
+  <span *ngIf="!diagService.enabled()">
+    Experiencing Issues?
+    <a (click)="toggle(true)"> Enable Troubleshooting Mode </a>
+  </span>
+  <span *ngIf="diagService.enabled()">
+    <span style="color:red"> Troubleshooting Mode </span> (performance impact)
+    <a (click)="toggle(false)"> Disable </a>
+  </span>
+</span>

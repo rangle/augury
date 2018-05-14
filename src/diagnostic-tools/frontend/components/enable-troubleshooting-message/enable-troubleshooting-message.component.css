@@ -1,0 +1,10 @@
+.enable-troubleshooting {
+  margin-left: 2em;
+  line-height: 31px;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.enable-troubleshooting a {
+  cursor:pointer
+}

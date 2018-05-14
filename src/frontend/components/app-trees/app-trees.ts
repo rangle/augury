@@ -36,12 +36,6 @@ type Node = any;
       color: #5128a5;
       padding-right: 5px;
     }
-    .enable-troubleshooting {
-      margin-left: 2em;
-      line-height: 31px;
-      font-weight: bold;
-      padding-right: 5px;
-    }
   `]
 })
 export class AppTrees {
@@ -162,13 +156,11 @@ export class AppTrees {
 
   private onDiagnosticToolsToggle = (value: boolean) => {
     if (value) {
-      this.diagService.enable();
       this.onTabSelectionChanged(Tab.DiagnosticTools);
     } else {
       if (this.getActiveTab() === Tab.DiagnosticTools) {
         this.onTabSelectionChanged(Tab.ComponentTree);
       }
-      this.diagService.disable();
     }
     this.reset();
   }

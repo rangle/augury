@@ -166,10 +166,9 @@ export class App {
       sendResponse(MessageFactory.response(msg, {processed: true}, false));
     };
 
+    this.diagService.handleMessage(msg, respond);
+
     switch (msg.messageType) {
-      case MessageType.Initialize:
-	      this.diagService.clear();
-        break;
       case MessageType.Ping:
         respond();
         break;
@@ -230,10 +229,6 @@ export class App {
         if (msg.content.errorTypes.includes(this.error.errorType)) {
           this.error = null;
         }
-        respond();
-        break;
-      case MessageType.DiagnosticPacket:
-        this.diagService.takePacket(msg.content);
         respond();
         break;
     }

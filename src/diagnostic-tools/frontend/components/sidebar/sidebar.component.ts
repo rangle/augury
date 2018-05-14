@@ -4,7 +4,7 @@ import { select } from '@angular-redux/store';
 
 // same-module deps
 import { Selectors } from 'diagnostic-tools/frontend/state.model';
-import { DiagActions } from 'diagnostic-tools/frontend/actions';
+import { DiagService } from 'diagnostic-tools/frontend/service';
 import { DiagType, DiagPacket, isValidDiagPacket } from 'diagnostic-tools/shared/DiagPacket.class';
 import { buildConfig } from 'diagnostic-tools/module-dependencies.barrel';
 
@@ -24,20 +24,20 @@ export class DiagSidebarComponent {
   importError: string;
 
   constructor(
-    private diagActions: DiagActions,
+    private diagService: DiagService,
   ) { }
 
   shouldShowImportControls = (): boolean =>
     !buildConfig.prodMode
 
   clearActive = () =>
-    this.diagActions.clearActive()
+    this.diagService.clear()
 
   clearImports = () =>
-    this.diagActions.clearImports()
+    this.diagService.clearImports()
 
   setShowPassed = (bool: boolean) =>
-    this.diagActions.setShowPassed(bool)
+    this.diagService.setShowPassed(bool)
 
   selectFile = (event) =>
     this.diagnosticFileToImport = event.target.files[0];
@@ -58,7 +58,7 @@ export class DiagSidebarComponent {
         if (!importIsValid(parsedImport)) {
           this.importError = 'invalid import.';
         } else {
-          this.diagActions.importDiagnostic(<Array<DiagPacket>> parsedImport);
+          this.diagService.importDiagnostic(<Array<DiagPacket>> parsedImport);
         }
       }
       catch(e) { this.importError = 'invalid import.'; }
