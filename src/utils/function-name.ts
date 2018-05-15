@@ -10,7 +10,7 @@ export const functionName = (fn: Function): string => {
     if (match != null && match.length > 1) {
       return match[1];
     }
-    return fn.toString();
+    return 'anonymous';
   }
   return name;
 };
