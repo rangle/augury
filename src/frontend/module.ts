@@ -64,6 +64,7 @@ import {
   Options,
 } from './state';
 
+import { buildConfig } from '../build.config';
 import {App} from './app';
 
 @NgModule({
@@ -115,7 +116,7 @@ import {App} from './app';
   ],
   bootstrap: [App]
 })
-class FrontendModule {
+export class FrontendModule {
   constructor(
     ngRedux: NgRedux<IAppState>,
     sendAnalytics: SendAnalytics) {
@@ -129,8 +130,7 @@ class FrontendModule {
   }
 }
 
-declare const PRODUCTION: boolean;
-if (PRODUCTION) {
+if (buildConfig.prodMode) {
   enableProdMode();
 }
 

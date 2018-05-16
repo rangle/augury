@@ -1,3 +1,5 @@
+import * as JSON5 from 'json5';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -38,8 +40,8 @@ export enum EmitState {
 
 @Component({
   selector: 'bt-render-state',
-  template: require('./render-state.html'),
-  styles: [require('to-string!./render-state.css')],
+  templateUrl: './render-state.html',
+  styleUrls: ['./render-state.css'],
 })
 export class RenderState {
   @Input() id: string;
@@ -118,11 +120,13 @@ export class RenderState {
   }
 
   private evaluate(data: string) {
-    try {
-      return (new Function(`return ${data}`))();
-    }
-    catch (e) {
-      return data;
+    if (data === 'undefined') { return undefined; }
+    else {
+      try {
+        return JSON5.parse(data);
+      } catch (e) {
+        return '' + data;
+      }
     }
   }
 

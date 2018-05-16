@@ -1,3 +1,5 @@
+import * as JSON5 from 'json5';
+
 import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
@@ -27,8 +29,8 @@ export enum State {
 
 @Component({
   selector: 'bt-property-editor',
-  template: require('./property-editor.html'),
-  styles: [require('to-string!./property-editor.css')],
+  templateUrl: './property-editor.html',
+  styleUrls: ['./property-editor.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyEditor {
@@ -41,8 +43,8 @@ export class PropertyEditor {
 
   @Output() private stateTransition = new EventEmitter<State>();
 
-  private State = State;
-  private state = State.Read;
+  State = State;
+  state = State.Read;
 
   private value;
 
@@ -74,11 +76,13 @@ export class PropertyEditor {
   }
 
   private parseValue(value): EditorResult {
-    try {
-      return new Function(`return ${value}`)();
-    }
-    catch (e) {
-      return value;
+    if (value === 'undefined') { return undefined; }
+    else {
+      try {
+        return JSON5.parse(value);
+      } catch (e) {
+        return '' + value;
+      }
     }
   }
 
@@ -185,7 +189,7 @@ export class PropertyEditor {
     }
   }
 
-  private onClick(event: MouseEvent) {
+  onClick(event: MouseEvent) {
     switch (this.state) {
       case State.Read:
         this.transition(State.Write);

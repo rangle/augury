@@ -4,11 +4,10 @@ import {Route} from '../../../backend/utils';
 
 @Component({
   selector: 'bt-router-info',
-  template: require('./router-info.html'),
+  templateUrl: './router-info.html',
 })
-
 export class RouterInfo {
-  @Input() private selectedRoute: Route | any;
+  @Input() selectedRoute: Route | any;
 
   private hasSelection() {
     return this.selectedRoute.data &&

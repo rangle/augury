@@ -1,5 +1,18 @@
 # Change Log
 
+## [1.16.2](https://github.com/rangle/tree/1.16.2)
+* Fix bug: component states dont show up sometimes.
+   - ([1254](https://github.com/rangle/augury/issues/1254))
+   - ([1114](https://github.com/rangle/augury/issues/1114))
+   - ([1300](https://github.com/rangle/augury/issues/1300))
+   - ([1301](https://github.com/rangle/augury/issues/1301))
+* Angular AOT compilation (for the front end)
+* Webpack 4 upgrade
+* Local fonts
+* Different builds for Firefox / Chrome
+* Remove unnecessary uses of eval() and new Function()
+* Angular 6 compatibility
+
 ## [1.16.0](https://github.com/rangle/tree/1.16.0)
 * Add extendible build configurations for different versions of the augury package (currently for firefox and canary builds).
 * Fix edge case bugs that crashed augury (commonly affecting PrimeNG users)

@@ -1,27 +1,36 @@
 import { MessageType } from '../communication';
+import { buildConfig } from '../build.config';
 
-const initializeGTM = (w, d, s, l, i) => {
-  w[l] = w[l] || [];
-  w[l].push({
-    'gtm.start': new Date().getTime(),
-    'event': 'gtm.js'
-  });
+if ( buildConfig.googleTagManager.enabled ) {
 
-  let f = d.getElementsByTagName(s)[0],
-    j = d.createElement(s),
-    dl = l !== 'dataLayer' ? '&l=' + l : '';
+  const initializeGTM = (w, d, s, l, i) => {
+    w[l] = w[l] || [];
+    w[l].push({
+      'gtm.start': new Date().getTime(),
+      'event': 'gtm.js'
+    });
 
-  j.async = true;
-  j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-  f.parentNode.insertBefore(j, f);
+    let f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l !== 'dataLayer' ? '&l=' + l : '';
 
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message && message.messageType === MessageType.GoogleTagManagerSend) {
-      pushTag(message.content);
-    }
-  });
-};
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
 
-const pushTag = (tag) => (window as any).dataLayer.push(tag);
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message && message.messageType === MessageType.GoogleTagManagerSend) {
+        pushTag(message.content);
+      }
+    });
+  };
 
-initializeGTM(window, document, 'script', 'dataLayer', 'GTM-NTK59FH');
+  const pushTag = (tag) => (window as any).dataLayer.push(tag);
+
+  initializeGTM(window, document, 'script', 'dataLayer', 'GTM-NTK59FH');
+
+} else {
+
+  (window as any).dataLayer = [];
+
+}

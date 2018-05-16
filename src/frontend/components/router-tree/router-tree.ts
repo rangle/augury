@@ -8,6 +8,12 @@ import {
 
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/audit';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/takeUntil';
 
 import {Route} from '../../../backend/utils';
 import {UserActions} from '../../actions/user-actions/user-actions';
@@ -16,16 +22,16 @@ import * as d3 from 'd3';
 
 @Component({
   selector: 'bt-router-tree',
-  template: require('./router-tree.html'),
-  styles: [require('to-string!./router-tree.css')],
+  templateUrl: './router-tree.html',
+  styleUrls: ['./router-tree.css'],
 })
 export class RouterTree {
   @ViewChild('routeTree') private routeTreeComponent;
   @ViewChild('resizer') private resizerElement;
   @ViewChild('svgContainer') private svg: ElementRef;
   @ViewChild('mainGroup') private g: ElementRef;
-  @Input() private routerTree: Array<Route>;
-  private selectedRoute: Route | any;
+  @Input() routerTree: Array<Route>;
+  selectedRoute: Route | any;
   private tree: d3.TreeLayout<{}>;
   private sub: Subscription;
   private routerTreeBaseHeight: number = 120; // init size of element
@@ -159,11 +165,11 @@ export class RouterTree {
     this.render();
   }
 
-  private onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
+  onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
     return this.userActions.searchRouter(this.routerTree, query);
   }
 
-  private onSelectedSearchResultChanged(route: Route) {
+  onSelectedSearchResultChanged(route: Route) {
     this.selectedRoute = route;
     this.render();
   }

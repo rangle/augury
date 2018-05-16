@@ -3,5 +3,6 @@
     "gecko": {
       "id": "augury@rangle.io"
     }
-  }
+  },
+  "content_security_policy": "script-src 'self'; object-src 'self'"
 }

@@ -47,7 +47,6 @@ function grab_files_and_zip {
   rm -rf $dir
   mkdir $dir
   cp -R $files $dir/
-  rm $dir/build/*.map
 
   # zip up the crx dir
   cwd=$(pwd -P)
