@@ -98,6 +98,7 @@
     "clone": "2.1.0",
     "cross-env": "3.1.4",
     "css-loader": "0.28.11",
+    "copy-webpack-plugin": "4.3.1",
     "d3-hierarchy": "1.1.1",
     "d3-selection": "1.0.3",
     "d3-shape": "1.0.4",
