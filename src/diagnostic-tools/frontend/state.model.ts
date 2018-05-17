@@ -59,12 +59,14 @@ export class Selectors {
 export class Updaters {
 
   static addPacket
-    = (packet: DiagPacket, state: DiagState): DiagState =>
-      m(state, {
+    = (packet: DiagPacket, state: DiagState): DiagState => {
+      debugger
+      return m(state, {
         packets: state.packets
           .concat(packet)
-          .sort((a, b) => a.diagnostic.startTime - b.diagnostic.startTime),
+          .sort((a, b) => a.diagnostic.timestamp - b.diagnostic.timestamp),
         packetTree: insertPacketIntoTree(packet, state.packetTree) })
+    }
 
   static clearEverything
     = (): DiagState => INITIAL_STATE

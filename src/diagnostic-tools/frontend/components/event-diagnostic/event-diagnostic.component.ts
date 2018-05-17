@@ -4,18 +4,18 @@ import { Component, Input } from '@angular/core';
 // same-module deps
 import { Selectors } from 'diagnostic-tools/frontend/state.model';
 import { DiagActions } from 'diagnostic-tools/frontend/actions';
-import { FunctionDiagnostic, STATEMENT_TYPE } from 'diagnostic-tools/shared';
+import { EventDiagnostic, STATEMENT_TYPE } from 'diagnostic-tools/shared';
 
 @Component({
-  selector: 'bt-function-diagnostic',
-  templateUrl: './function-diagnostic.component.html',
+  selector: 'bt-event-diagnostic',
+  templateUrl: './event-diagnostic.component.html',
   styleUrls: [
-    './function-diagnostic.component.css',
+    './event-diagnostic.component.css',
   ],
 })
-export class FunctionDiagnosticComponent {
+export class EventDiagnosticComponent {
 
-  @Input('fd') fd: FunctionDiagnostic;
+  @Input('ed') fd: EventDiagnostic;
   @Input('full') full: boolean;
 
   objectKeys = Object.keys; // use in template

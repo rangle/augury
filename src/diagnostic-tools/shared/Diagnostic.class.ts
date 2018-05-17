@@ -4,7 +4,7 @@
  */
 export class Diagnostic {
   end: End;
-  startTime: number;
+  timestamp: number;
   pass: boolean;
   logicalThread: {
     stackTreePosition: Array<number>;

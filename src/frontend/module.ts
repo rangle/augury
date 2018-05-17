@@ -74,6 +74,7 @@ import {
 import { buildConfig } from '../build.config';
 import {App} from './app';
 
+const options = new Options();
 
 @NgModule({
   imports: [
@@ -115,7 +116,7 @@ import {App} from './app';
   providers: [
     Connection,
     DirectConnection,
-    Options,
+    { provide: Options, useValue: options },
     UserActions,
     MainActions,
     ComponentViewState,
@@ -155,4 +156,4 @@ if (buildConfig.prodMode) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(FrontendModule);
+options.load().then(() => platformBrowserDynamic().bootstrapModule(FrontendModule));

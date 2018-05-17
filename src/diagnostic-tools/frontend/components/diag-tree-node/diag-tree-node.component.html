@@ -12,6 +12,19 @@
     [full]="expanded"
     (click)="toggleExpanded()"
   ></bt-function-diagnostic>
+  <bt-event-diagnostic
+    *ngIf="
+      node.packet
+      && (node.packet.type == DiagType.EVENT)
+      && (
+        opts.showPassed
+        || !node.packet.diagnostic.pass
+      )
+    "
+    [fd]="node.packet.diagnostic"
+    [full]="expanded"
+    (click)="toggleExpanded()"
+  ></bt-event-diagnostic>
 </div>
 <ng-container *ngIf="expanded">
   <div *ngFor="let child of node.children" [style.padding-left.em]="'2'">

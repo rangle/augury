@@ -5,6 +5,7 @@ const stringify = stringifier({ indent: ' ' });
 
 // same-module deps
 import { Diagnostic, End, isValidDiagnostic } from './Diagnostic.class';
+import { Statement, Plaintext, Assertion } from './Statement.class';
 
 /**
  *  a FunctionDiagnostic represents the diagnosis results
@@ -31,16 +32,6 @@ export const isValidFunctionDiagnostic = (fd: any): boolean => {
   );
 };
 
-
-/**
- *  SectionResults contain arrays of statements of the following types.
- *    full type definitions below (Statement, Assertion, Plaintext, ..).
- */
-export enum STATEMENT_TYPE {
-    ASSERTION,
-    PLAIN_TEXT
-}
-
 /**
  *  a diagnostic section represents the result of the execution of a section of diagnostic code.
  *    sections like 'pre' and 'post' execute before and after the target function respectively.
@@ -59,34 +50,9 @@ const isValidSectionResult = (sr: any): boolean => {
 };
 
 /**
- */
-abstract class Statement {
-  type: STATEMENT_TYPE;
-}
-
-/**
- */
-class Assertion extends Statement {
-  type = STATEMENT_TYPE.ASSERTION;
-  constructor(
-    public label: string,
-    public pass: boolean
-  ) { super(); }
-}
-
-/**
- */
-class Plaintext extends Statement {
-  type = STATEMENT_TYPE.PLAIN_TEXT;
-  constructor(
-    public text: string
-  ) { super(); }
-}
-
-/**
  *  this exists to facilitate the correct creation of FunctionDiagnostics.
  *  after all the data has been supplied, the `finish()` method will return
- *    a serializable DiagPacket. at this point the DiagPacketConstructor
+ *    a serializable FunctionDiagnostic. At this point the FunctionDiagnosticConstructor
  *    instance can be thrown out.
  */
 export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
@@ -96,6 +62,7 @@ export class FunctionDiagnosticConstructor extends FunctionDiagnostic {
     header: this.header,
     startTime: this.startTime,
     endTime: this.endTime,
+    timestamp: this.startTime,
     pre: this.pre,
     post: this.post,
     exception: this.exception,

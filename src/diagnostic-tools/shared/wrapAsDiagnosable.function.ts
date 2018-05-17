@@ -8,20 +8,28 @@ declare const Zone:any; //@todo: check if not there, and import. angular may act
 import { FunctionDiagnostic, FunctionDiagnosticConstructor } from './FunctionDiagnostic.class';
 import { FunctionDiagPacket } from './DiagPacket.class';
 
+/**
+ */
 interface DiagHelpersGeneral {
   say: (txt: string) => void;
   assert: (label: string, expression: boolean, ops?: { fail: () => void }) => boolean; // returns expression
   inspect: (serializable: any) => void;
 }
 
+/**
+ */
 export interface DiagHelpersPre extends DiagHelpersGeneral {
   remember: (things: { [name: string]: any }) => void;
 }
 
+/**
+ */
 export interface DiagHelpersPost extends DiagHelpersGeneral {
   old: (name: string) => any;
 }
 
+/**
+ */
 export function wrapAsDiagnosable <TargetReturnType> (
   end: 'backend' | 'frontend',
   name: string,
@@ -100,6 +108,7 @@ export function wrapAsDiagnosable <TargetReturnType> (
       logicalThread.stackTreePosition.push( nextSibling );
 
       return retVal;
+      
     })();
 
     if (!error) {

@@ -9,7 +9,11 @@ export const createFrontendDiagnosticsMessageHandler = (diagService: DiagService
         diagService.clear();
         break;
       case MessageType.DiagnosticPacket:
-        this.diagService.takePacket(message.content);
+        diagService.takePacket(message.content);
+        respond && respond();
+        break;
+      case MessageType.DiagnosticEvent:
+        diagService.takePacket(message.content);
         respond && respond();
         break;
     }

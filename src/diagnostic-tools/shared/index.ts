@@ -1,8 +1,8 @@
-export { DiagPacket, DiagType } from './DiagPacket.class';
-export { Diagnostic } from './Diagnostic.class';
-export { DiagnosticMessageFactory } from './MessageFactory.extension';
-export {
-  wrapAsDiagnosable,
-  DiagHelpersPre,
-  DiagHelpersPost,
-} from './wrapAsDiagnosable.function';
+export * from './Statement.class';
+export * from './DiagPacket.class';
+export * from './Diagnostic.class';
+export * from './FunctionDiagnostic.class';
+export * from './EventDiagnostic.class';
+export * from './MessageFactory.extension';
+export * from './wrapAsDiagnosable.function';
+export * from './diagnoseEvent.function';

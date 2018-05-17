@@ -110,6 +110,13 @@ export class App {
 
     this.mainActions.initializeAugury();
 
+    // @todo remove this
+    this.diagService.diagnoseEvent('app loaded')
+      (s => {
+        s.say('hello hello');
+        s.assert('two equals two', 2 == 2);
+      })
+
   }
 
   hasContent() {

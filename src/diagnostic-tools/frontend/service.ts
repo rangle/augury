@@ -6,7 +6,7 @@ import { select } from '@angular-redux/store';
 import { Connection, Options, Message } from 'diagnostic-tools/module-dependencies.barrel';
 
 // same-module deps
-import { DiagPacket, Diagnostic, DiagnosticMessageFactory } from 'diagnostic-tools/shared';
+import { DiagPacket, Diagnostic, DiagnosticMessageFactory, diagnoseEvent } from 'diagnostic-tools/shared';
 import { Selectors, Import, ACTIVE_TAB } from './state.model';
 import { DiagActions } from './actions';
 import { createFrontendDiagnosticsMessageHandler } from './messageHandler.function';
@@ -41,6 +41,18 @@ export class DiagService {
 
   handleMessage(message: Message<any>, respond: () => void) {
     this._messageHandler(message, respond)
+  }
+
+  diagnoseEvent(eventName: string) {
+    return (diagnoser: (serviceForDiagnoser: { //// TODO: move diagnoser definition somewhere (duplicate)
+      assert: (label:string, expression:boolean, { fail }?) => boolean;
+      say: (txt:string) => void;
+      inspect: (serializable: any) => void;
+    }) => void) => {
+      debugger
+      const packet = diagnoseEvent('frontend', eventName)(diagnoser)
+      this.takePacket(packet)
+    };
   }
 
   clear() {

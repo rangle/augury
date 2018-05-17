@@ -85,6 +85,7 @@ export enum MessageType {
   ///   (should be declared in 'diagnostic-tools' module directory)
   /// Diagnostic info collected on the backend gets sent to the front end for display
   DiagnosticPacket,
+  DiagnosticEvent,
   /// Options related to Diagnostic updated on frontend, backend should read again
   DiagnosticOptionsUpdated,
 }
