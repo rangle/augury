@@ -38,7 +38,7 @@ module.exports = {
 
   entry: {
     'frontend': [
-      './src/frontend/imports',
+      './src/frontend/vendor',
       './src/frontend/module',
     ],
     'backend': ['./src/backend/backend'],

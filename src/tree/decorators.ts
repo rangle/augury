@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+// NOTE: See ./src/index.d.ts for notes on Reflect usage
 
 import {
   InputProperty,
