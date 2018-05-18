@@ -1,5 +1,15 @@
 # Change Log
 
+## [1.17.0](https://github.com/rangle/tree/1.17.0)
+* Remove reflect-metadata from bundle to avoid runtime conflicts.
+  - ([1306](https://github.com/rangle/augury/issues/1306))
+  - ([1307](https://github.com/rangle/augury/issues/1307))
+
+## [1.16.3](https://github.com/rangle/tree/1.16.3)
+* Hotfix to address issue with reflect-metadata.
+  - ([1306](https://github.com/rangle/augury/issues/1306))
+  - ([1307](https://github.com/rangle/augury/issues/1307))
+
 ## [1.16.2](https://github.com/rangle/tree/1.16.2)
 * Fix bug: component states dont show up sometimes.
    - ([1254](https://github.com/rangle/augury/issues/1254))
