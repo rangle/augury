@@ -252,7 +252,7 @@ const canSerializeRegexp = (regexp) => {
   try {
     const result = deserialize(serialize({ regexp }));
     return result.regexp.toString() === regexp.toString();
-  } catch(e) {
+  } catch (e) {
     return false;
   }
 };
