@@ -259,7 +259,7 @@ const canSerializeRegexp = (regexp) => {
 
 const getPropVal = (obj, propName) => {
   try {
-    return obj[propName]
+    return obj[propName];
   } catch (e) {
     return '[inaccessible]';
   }
