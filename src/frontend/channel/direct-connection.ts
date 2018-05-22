@@ -20,7 +20,8 @@ import {
 export class DirectConnection {
   handleImmediate<T>(message: Message<T>): Promise<any> {
     return this.remoteExecute(`inspectedApplication.handleImmediate(${JSON.stringify(message)})`)
-      .then(response => deserialize(response));
+      .then(response => deserialize(response))
+      .catch(e => console.error(e));
   }
 
   readQueue(processor: (message: Message<any>, respond: (response: MessageResponse<any>) => void) => void) {
