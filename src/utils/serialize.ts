@@ -250,9 +250,9 @@ const nonstandardType = (type: string) => {
 
 const canSerializeRegexp = (regexp) => {
   try {
-    const result = deserialize(serialize({ regexp }))
-    return result.regexp.toString() === regexp.toString()
+    const result = deserialize(serialize({ regexp }));
+    return result.regexp.toString() === regexp.toString();
   } catch(e) {
-    return false
+    return false;
   }
 }
