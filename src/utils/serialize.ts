@@ -117,7 +117,7 @@ function map(operation: Operation, value) {
 
       switch (objectType) {
         case '[object RegExp]':
-          return value.toString();
+          return canSerializeRegexp(value) ? value.toString() : JSON.stringify('[regexp]');
         case '[object Date]':
           return `new Date(${value.valueOf()})`;
         default:
@@ -247,3 +247,12 @@ const nonstandardType = (type: string) => {
       return true;
   }
 };
+
+const canSerializeRegexp = (regexp) => {
+  try {
+    const result = deserialize(serialize({ regexp }))
+    return result.regexp.toString() === regexp.toString()
+  } catch(e) {
+    return false
+  }
+}
