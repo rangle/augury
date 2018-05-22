@@ -204,7 +204,7 @@ function map(operation: Operation, value) {
                 const ctor = functionName(constructor) || '';
 
                 const mapProps = (key: string) => {
-                  const mapped = map(operation, value[key]);
+                  const mapped = map(operation, getPropVal(value, key));
                     if (mapped instanceof Reference) {
                       mapped.source = index;
                       mapped.key = key;
@@ -254,5 +254,13 @@ const canSerializeRegexp = (regexp) => {
     return result.regexp.toString() === regexp.toString();
   } catch (e) {
     return false;
+  }
+};
+
+const getPropVal = (obj, propName) => {
+  try {
+    return obj[propName]
+  } catch (e) {
+    return '[inaccessible]';
   }
 };
