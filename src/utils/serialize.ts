@@ -255,4 +255,4 @@ const canSerializeRegexp = (regexp) => {
   } catch(e) {
     return false;
   }
-}
+};
