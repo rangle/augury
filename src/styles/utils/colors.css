@@ -280,7 +280,7 @@ bt-injector-tree {
 
   & .node-item-selected,
   & .node-item-selected:hover {
-    background-color: #A28AD0;
+    background-color: #564d66;
   }
 
   & .node-item-name,
