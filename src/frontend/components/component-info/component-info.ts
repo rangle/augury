@@ -28,22 +28,22 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 })
 export class ComponentInfo {
   @Input() node: Node;
-  @Input() private tree: MutableTree;
-  @Input() private state;
-  @Input() private providers: Array<any>;
-  @Input() private metadata: Metadata;
-  @Input() private componentMetadata: ComponentMetadata;
-  @Input() private loadingState: ComponentLoadState;
+  @Input() tree: MutableTree;
+  @Input() state;
+  @Input() providers: Array<any>;
+  @Input() metadata: Metadata;
+  @Input() componentMetadata: ComponentMetadata;
+  @Input() loadingState: ComponentLoadState;
 
-  @Output() private selectNode = new EventEmitter<Node>();
-  @Output() private emitValue = new EventEmitter<{path: Path, data: any}>();
-  @Output() private updateProperty = new EventEmitter<{path: Path, newValue: any}>();
+  @Output() selectNode = new EventEmitter<Node>();
+  @Output() emitValue = new EventEmitter<{path: Path, data: any}>();
+  @Output() updateProperty = new EventEmitter<{path: Path, newValue: any}>();
 
-  private changeDetectionStrategies = ChangeDetectionStrategy;
+  changeDetectionStrategies = ChangeDetectionStrategy;
 
-  private ComponentLoadState = ComponentLoadState;
+  ComponentLoadState = ComponentLoadState;
 
-  private path: Path;
+  path: Path;
 
   constructor(private actions: UserActions) {}
 
@@ -77,14 +77,14 @@ export class ComponentInfo {
     return this.providers && this.providers.length > 0;
   }
 
-  private get instanceProvidersObject() {
+  get instanceProvidersObject() {
     if (this.hasInstanceProviders === false) {
       return {};
     }
     return this.providers.reduce((p, c) => Object.assign(p, {[c[0]]: c[1]}), {});
   }
 
-  private onViewComponentSource() {
+  onViewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
       var root = ng.probe(inspectedApplication.nodeFromPath('${this.node.id}'));
       if (root) {
@@ -97,11 +97,11 @@ export class ComponentInfo {
       }`);
   }
 
-  private onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
+  onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
     this.actions.updateProperty(event.path.concat(event.propertyKey), event.newValue);
   }
 
-  private onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
+  onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
     this.actions.updateProvider(event.path, event.propertyKey, event.newValue);
   }
 }
