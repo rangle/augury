@@ -64,10 +64,10 @@
             </bt-render-state>
           </ng-template>
           <ng-template [ngSwitchCase]="ComponentLoadState.Failed">
-            Failed to load component state
+            <span class="primary-color"> Failed to load component state </span>
           </ng-template>
-          <ng-template [ngSwitchCase]="ComponentLoadState.Loading">
-            Loading component state...
+          <ng-template class="primary-color" [ngSwitchCase]="ComponentLoadState.Loading">
+            <span class="primary-color"> Loading component state... </span>
           </ng-template>
         </div>
       </div>
