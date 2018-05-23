@@ -1,6 +1,7 @@
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 import {compare} from '../utils/patch';
 import {isAngular, isDebugMode} from './utils/app-check';
 
@@ -195,7 +196,7 @@ const bind = (root) => {
 
   // parse components and routes each time
   subscriptions.push(
-    subject.debounceTime(0).subscribe(() => {
+    subject.distinctUntilChanged().debounceTime(0).subscribe(() => {
       updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
       updateRouterTree();
     }));
