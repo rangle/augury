@@ -10,13 +10,14 @@ import {
 export enum ComponentLoadState {
   Idle,
   Received,
+  Loading,
   Failed
 }
 
 class CachedValue {
   constructor(
     public state: ComponentLoadState,
-    public value: InstanceWithMetadata
+    public value: InstanceWithMetadata | null
   ) {}
 }
 
@@ -65,12 +66,18 @@ export class ComponentInstanceState {
         return null;
       case ComponentLoadState.Received:
         return existing.value;
+      case ComponentLoadState.Loading:
+        return existing.value; // could be null
       default:
         throw new Error(`Unknown state: ${existing.state}`);
     }
   }
 
   wait(node: Node, promise: Promise<InstanceWithMetadata>) {
+
+    const previouslyCached = this.componentInstance(node); // null if first time
+    this.map.set(node.id, new CachedValue(ComponentLoadState.Loading, previouslyCached));
+
     promise.then(response => {
       this.map.set(node.id, new CachedValue(ComponentLoadState.Received, response));
 

@@ -117,7 +117,7 @@ function map(operation: Operation, value) {
 
       switch (objectType) {
         case '[object RegExp]':
-          return value.toString();
+          return canSerializeRegexp(value) ? value.toString() : JSON.stringify('[regexp]');
         case '[object Date]':
           return `new Date(${value.valueOf()})`;
         default:
@@ -204,7 +204,7 @@ function map(operation: Operation, value) {
                 const ctor = functionName(constructor) || '';
 
                 const mapProps = (key: string) => {
-                  const mapped = map(operation, value[key]);
+                  const mapped = map(operation, getPropVal(value, key));
                     if (mapped instanceof Reference) {
                       mapped.source = index;
                       mapped.key = key;
@@ -245,5 +245,22 @@ const nonstandardType = (type: string) => {
       return false;
     default:
       return true;
+  }
+};
+
+const canSerializeRegexp = (regexp) => {
+  try {
+    const result = deserialize(serialize({ regexp }));
+    return result.regexp.toString() === regexp.toString();
+  } catch (e) {
+    return false;
+  }
+};
+
+const getPropVal = (obj, propName) => {
+  try {
+    return obj[propName];
+  } catch (e) {
+    return '[inaccessible]';
   }
 };

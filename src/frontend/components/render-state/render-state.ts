@@ -63,7 +63,7 @@ export class RenderState {
   constructor(
     private userActions: UserActions,
     private propertyState: ComponentPropertyState
-  ) {}
+  ) { }
 
   keys(obj): string[] {
     return (obj instanceof Object) ? Object.keys(obj) : [];
@@ -75,7 +75,7 @@ export class RenderState {
     }
   }
 
-  private get none() {
+  get none() {
     return this.state == null || Object.keys(this.state).length === 0;
   }
 
