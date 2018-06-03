@@ -4,7 +4,7 @@ import { Message, MessageType } from '../module-dependencies.barrel';
 //module deps
 import { getComponentTree } from './component-tree-access.singleton';
 
-export const backendMessageHandler = (message: Message<any>) => {
+export const handleBackendMessage = (message: Message<any>) => {
 
   const tree = getComponentTree();
 

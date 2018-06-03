@@ -59,6 +59,8 @@ import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
 
+import * as highlighterFeature from 'feature-modules/highlighter/backend/index';
+
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
 declare const treeRenderOptions: SimpleOptions;
@@ -240,6 +242,9 @@ Object.defineProperty(window, selectedComponentPropertyKey,
   {value: noSelectedComponentWarningText});
 
 const messageHandler = (message: Message<any>) => {
+
+  highlighterFeature.handleBackendMessage(message);
+
   return runAndHandleUncaughtExceptions(() => {
     switch (message.messageType) {
       case MessageType.Initialize:
