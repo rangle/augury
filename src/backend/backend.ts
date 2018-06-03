@@ -59,7 +59,7 @@ import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
 
-import * as highlighterFeature from 'feature-modules/highlighter/backend/index';
+import { highlighter } from 'feature-modules/highlighter/backend/index';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -93,6 +93,9 @@ const parsedModulesData: NgModulesRegistry = {
   configs: {},
   tokenIdMap: {},
 };
+
+highlighter.useComponentTreeInstance(previousTree)
+highlighter.useDocumentInstance(document)
 
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {
@@ -152,6 +155,7 @@ const updateComponentTree = (roots: Array<any>) => {
   send(MessageFactory.push());
 
   previousTree = tree;
+  highlighter.useComponentTreeInstance(previousTree)
 
   previousCount = count;
 };
@@ -243,7 +247,7 @@ Object.defineProperty(window, selectedComponentPropertyKey,
 
 const messageHandler = (message: Message<any>) => {
 
-  highlighterFeature.handleBackendMessage(message);
+  highlighter.handleMessage(message);
 
   return runAndHandleUncaughtExceptions(() => {
     switch (message.messageType) {

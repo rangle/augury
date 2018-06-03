@@ -63,6 +63,13 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.json'],
     modules: ['./node_modules'],
+    alias: {
+      'backend': path.resolve('./src/backend'),
+      'frontend': path.resolve('./src/frontend'),
+      'communication': path.resolve('./src/communication'),
+      'feature-modules': path.resolve('./src/feature-modules'),
+      'tree': path.resolve('./src/tree')
+    }
   },
 
   // Opt-in to the old behavior with the resolveLoader.moduleExtensions
