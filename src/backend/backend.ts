@@ -295,18 +295,6 @@ const messageHandler = (message: Message<any>) => {
           message.content.path,
           message.content.value);
 
-      case MessageType.Highlight:
-        if (previousTree == null) {
-          return;
-        }
-        highlight(message.content.nodes.map(id => previousTree.lookup(id)));
-
-      case MessageType.FindElement:
-        if (previousTree == null) {
-          return;
-        }
-
-        findElement(message);
     }
     return undefined;
   });
