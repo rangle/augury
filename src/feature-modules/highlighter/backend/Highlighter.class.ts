@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs'
+
 // project deps
 import { MessagePipeBackend, MessageType, Message } from 'feature-modules/.lib';
 
@@ -24,6 +26,7 @@ export class Highlighter {
   // injectables
   private _dom: Document;
   private _componentTree: MutableTree;
+  private _onUpdateNotifier: Observable<void>;
   private _pipe: MessagePipeBackend;
 
   // internals
@@ -35,7 +38,7 @@ export class Highlighter {
     };
     target: {
       domElement: HTMLElement;
-      angularNode: Node;
+      auguryNode: Node;
     };
   };
 
@@ -55,6 +58,15 @@ export class Highlighter {
     this._componentTree = componentTree;
   }
 
+  public useOnUpdateNotifier(notifier: Observable<void>) {
+    this._onUpdateNotifier = notifier;
+    this._onUpdateNotifier.subscribe(() => {
+      if (!this._currentHighlight) { return; }
+      if (!this._dom.contains(this._currentHighlight.target.domElement)) { this.clear(); }
+      this.highlightAuguryNode(this._currentHighlight.target.auguryNode);
+    });
+  }
+
   /**
    */
   public useMessagePipe(pipe: MessagePipeBackend) {
@@ -67,7 +79,7 @@ export class Highlighter {
           const id: string = message.content.nodes[0];
           if (!id) { return; }
           const node: Node = this._componentTree.lookup(id);
-          this.highlightAngularNode(node);
+          this.highlightAuguryNode(node);
           break;
 
         case MessageType.FindElement:
@@ -97,14 +109,15 @@ export class Highlighter {
 
   /**
    */
-  private highlightAngularNode(node: Node) {
+  private highlightAuguryNode(node: Node) {
     this.clear();
+    console.log(node.nativeElement())
     this._currentHighlight = {
       overlay: {
-        element: this.paintOverlay(this.getAngularNodeOffsets(node), node.name)
+        element: this.paintOverlay(this.getAuguryNodeOffsets(node), node.name)
       },
       target: {
-        angularNode: node,
+        auguryNode: node,
         domElement: node.nativeElement()
       }
     };
@@ -163,7 +176,7 @@ export class Highlighter {
   /**
    */
   private selectNodeFromElement(element) {
-    const node: Node = this.findNearestAngularParent(element);
+    const node: Node = this.findNearestAuguryParent(element);
     this._pipe.sendQueuedMessage(
       this._pipe.createMessage(
         MessageType.FindElement, { node, stop: true }
@@ -174,13 +187,13 @@ export class Highlighter {
    */
   private highlightNodeFromElement(element) {
     this.clear();
-    const ngNode = this.findNearestAngularParent(element);
-    if (ngNode) { this.highlightAngularNode(ngNode); }
+    const ngNode = this.findNearestAuguryParent(element);
+    if (ngNode) { this.highlightAuguryNode(ngNode); }
   }
 
   /**
    */
-  private findNearestAngularParent(element): Node {
+  private findNearestAuguryParent(element): Node {
 
     const ne = (n: Node): Element => n.nativeElement();
 
@@ -200,7 +213,7 @@ export class Highlighter {
 
   /**
    */
-  private getAngularNodeOffsets(node: Node): Offsets {
+  private getAuguryNodeOffsets(node: Node): Offsets {
     return addUpElementAndChildrenOffsets(node.nativeElement());
   }
 

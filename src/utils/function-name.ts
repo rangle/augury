@@ -5,7 +5,7 @@ export const functionName = (fn: Function): string => {
   const extract = (value: string) => value.match(/^function ([^\(]*)\(/);
 
   let name: string = (<any>fn).name;
-  if (name == null || name.length === 0) {
+  if (!name || name.length === 0) {
     const match = extract(fn.toString());
     if (match != null && match.length > 1) {
       name = match[1];

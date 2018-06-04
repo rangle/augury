@@ -102,8 +102,11 @@ const featureModulesPipe = new MessagePipeBackend({
   createQueueAlertMessage: () => MessageFactory.push()
 })
 
+const onUpdateNotifier = new Subject<void>()
+
 highlighter.useComponentTreeInstance(previousTree);
 highlighter.useDocumentInstance(document);
+highlighter.useOnUpdateNotifier(onUpdateNotifier.asObservable());
 highlighter.useMessagePipe(featureModulesPipe);
 
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
@@ -133,73 +136,86 @@ const sendNgModulesMessage = () => {
   send(MessageFactory.push());
 };
 
-const parseInitialModules = () => {
-  runAndHandleUncaughtExceptions(() => {
-    const roots = getAllAngularRootElements().map(r => ng.probe(r));
-    if (roots.length) {
-      parseModulesFromRootElement(roots[0], parsedModulesData);
-      sendNgModulesMessage();
-    }
+const parseInitialModules = (): Promise<void> => {
+  return Promise.resolve().then(() => {
+    runAndHandleUncaughtExceptions(() => {
+      const roots = getAllAngularRootElements().map(r => ng.probe(r));
+      if (roots.length) {
+        parseModulesFromRootElement(roots[0], parsedModulesData);
+        sendNgModulesMessage();
+      }
+    });
   });
 };
 
-const updateComponentTree = (roots: Array<any>) => {
-  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+const updateComponentTree = (roots: Array<any>): Promise<void> => {
+  return Promise.resolve().then(() => {
 
-  if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
-    messageBuffer.enqueue(MessageFactory.completeTree(tree));
-  }
-  else {
-    const changes = previousTree.diff(tree);
-    if (changes.length > 0) {
-      lastTreeMessage = 'diff';
-      messageBuffer.enqueue(MessageFactory.treeDiff(changes));
+    const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+
+    if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
+      messageBuffer.enqueue(MessageFactory.completeTree(tree));
     }
     else {
-      if (lastTreeMessage === 'no-diff') { return; }
-      lastTreeMessage = 'no-diff';
-      messageBuffer.enqueue(MessageFactory.treeUnchanged());
+      const changes = previousTree.diff(tree);
+      if (changes.length > 0) {
+        lastTreeMessage = 'diff';
+        messageBuffer.enqueue(MessageFactory.treeDiff(changes));
+      }
+      else {
+        if (lastTreeMessage === 'no-diff') { return; }
+        lastTreeMessage = 'no-diff';
+        messageBuffer.enqueue(MessageFactory.treeUnchanged());
+      }
     }
-  }
 
-  /// Send a message through the normal channels to indicate to the frontend
-  /// that messages are waiting for it in {@link messageBuffer}
-  send(MessageFactory.push());
+    /// Send a message through the normal channels to indicate to the frontend
+    /// that messages are waiting for it in {@link messageBuffer}
+    send(MessageFactory.push());
 
-  previousTree = tree;
-  highlighter.useComponentTreeInstance(previousTree);
+    previousTree = tree;
+    highlighter.useComponentTreeInstance(previousTree);
 
-  previousCount = count;
-};
+    previousCount = count;
 
-const updateLazyLoadedNgModules = (routers) => {
-
-  routers.forEach(router => {
-    parseModulesFromRouter(router, parsedModulesData);
   });
-
-  sendNgModulesMessage();
 };
 
-const updateRouterTree = () => {
-  const routers: Array<any> = routerTree();
-  const parsedRoutes = routers.map(parseRoutes);
+const updateLazyLoadedNgModules = (routers): Promise<void> => {
+  return Promise.resolve().then(() => {
 
-  let routesChanged = !previousRoutes ? true : false;
+    routers.forEach(router => {
+      parseModulesFromRouter(router, parsedModulesData);
+    });
 
-  if (previousRoutes) {
-    const changes = compare(previousRoutes, parsedRoutes);
-    if (changes.length > 0) {
-      routesChanged = true;
+    sendNgModulesMessage();
+
+  });
+};
+
+const updateRouterTree = (): Promise<void> => {
+  return Promise.resolve().then(() => {
+
+    const routers: Array<any> = routerTree();
+    const parsedRoutes = routers.map(parseRoutes);
+
+    let routesChanged = !previousRoutes ? true : false;
+
+    if (previousRoutes) {
+      const changes = compare(previousRoutes, parsedRoutes);
+      if (changes.length > 0) {
+        routesChanged = true;
+      }
     }
-  }
 
-  previousRoutes = parsedRoutes;
+    previousRoutes = parsedRoutes;
 
-  if (routesChanged) {
-    updateLazyLoadedNgModules(routers);
-    messageBuffer.enqueue(MessageFactory.routerTree(parsedRoutes));
-  }
+    if (routesChanged) {
+      updateLazyLoadedNgModules(routers);
+      messageBuffer.enqueue(MessageFactory.routerTree(parsedRoutes));
+    }
+
+  });
 };
 
 const subject = new Subject<void>();
@@ -215,8 +231,10 @@ const bind = (root) => {
   // parse components and routes each time
   subscriptions.push(
     subject.debounceTime(0).subscribe(() => {
-      updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
-      updateRouterTree();
+      Promise.all([
+        updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r))),
+        updateRouterTree()
+      ]).then(() => onUpdateNotifier.next())
     }));
 
   // initial load
@@ -237,10 +255,10 @@ const resubscribe = () => {
 
     getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
 
-    setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules()));
+    setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules().then(() => onUpdateNotifier.next())));
 
     previousRoutes = null;
-    setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree()));
+    setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree().then(() => onUpdateNotifier.next())));
   });
 };
 
