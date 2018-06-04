@@ -327,6 +327,7 @@ export class App {
   }
 
   private onDOMSelectionActiveChange(state: boolean) {
+    console.log('setting to: ', state);
     this.mainActions.setDOMSelectionActive(state);
   }
 

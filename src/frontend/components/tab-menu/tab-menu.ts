@@ -37,10 +37,10 @@ export class TabMenu {
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() domSelectionActiveChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private userActions: UserActions) {
-  }
+  constructor(private userActions: UserActions) {}
 
   selectElement() {
+    console.log("first reaction");
     if (this.domSelectionActive) {
       this.userActions.cancelFindElement();
       this.domSelectionActiveChange.emit(false);
