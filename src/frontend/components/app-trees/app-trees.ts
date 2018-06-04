@@ -100,7 +100,6 @@ export class AppTrees {
   }
 
   onDOMSelectionActiveChange(state: boolean) {
-    console.log('second reaction')
     this.domSelectionActiveChange.emit(state);
   }
 

@@ -25,14 +25,10 @@ import {UserActions} from '../../actions/user-actions/user-actions';
 })
 export class TabMenu {
 
-  public domSelectionActive;
+
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
-  @Input('domSelectionActive') set _domSelectionActive(e) {
-    // TODO: this is for debug, clean up
-    console.log(e);
-    this.domSelectionActive = e;
-  }
+  @Input() domSelectionActive;
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() domSelectionActiveChange: EventEmitter<any> = new EventEmitter<any>();
@@ -40,7 +36,6 @@ export class TabMenu {
   constructor(private userActions: UserActions) {}
 
   selectElement() {
-    console.log("first reaction");
     if (this.domSelectionActive) {
       this.userActions.cancelFindElement();
       this.domSelectionActiveChange.emit(false);
