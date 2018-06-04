@@ -85,7 +85,8 @@ let previousTree: MutableTree,
   previousRoutes: Array<Route>,
   previousCount: number,
   onMouseOver,
-  onMouseDown;
+  onMouseDown,
+  lastTreeMessage;
 
 const parsedModulesData: NgModulesRegistry = {
   modules: {},
@@ -144,9 +145,12 @@ const updateComponentTree = (roots: Array<any>) => {
   else {
     const changes = previousTree.diff(tree);
     if (changes.length > 0) {
+      lastTreeMessage = 'diff'
       messageBuffer.enqueue(MessageFactory.treeDiff(changes));
     }
     else {
+      if (lastTreeMessage == 'no-diff') return;
+      lastTreeMessage = 'no-diff'
       messageBuffer.enqueue(MessageFactory.treeUnchanged());
     }
   }
@@ -203,7 +207,7 @@ const bind = (root) => {
 
   // parse components and routes each time
   subscriptions.push(
-    subject.distinctUntilChanged().debounceTime(0).subscribe(() => {
+    subject.debounceTime(0).subscribe(() => {
       updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r)));
       updateRouterTree();
     }));
