@@ -11,7 +11,9 @@ interface Offsets {
   left: number;
   top: number;
   width: number;
+  marginWidth?: number;
   height: number;
+  marginHeight?: number;
 }
 
 // ----
@@ -181,7 +183,7 @@ export class Highlighter {
   /**
    */
   private getAngularNodeOffsets(node: Node): Offsets {
-    return addUpElementChildrenOffsets(node.nativeElement());
+    return addUpElementAndChildrenOffsets(node.nativeElement());
   }
 
   /**
@@ -206,7 +208,7 @@ export class Highlighter {
 
 // ----
 
-function addUpElementChildrenOffsets(domElement): Offsets {
+function addUpElementAndChildrenOffsets(domElement): Offsets {
 
   let offsets = getElementOffsets(domElement);
 
@@ -215,11 +217,11 @@ function addUpElementChildrenOffsets(domElement): Offsets {
 
   let child;
   while (child = children.pop()) {
-    const childOffsets = getElementOffsets(child);
-    offsets.top = Math.max(offsets.top, childOffsets.top);
-    offsets.left = Math.max(offsets.left, childOffsets.left);
-    offsets.height = Math.max(offsets.height, childOffsets.height);
-    offsets.width = Math.max(offsets.width, childOffsets.width);
+    const childOffsets = addUpElementAndChildrenOffsets(child);
+    // offsets.top = Math.max(offsets.top, childOffsets.top);
+    // offsets.left = Math.max(offsets.left, childOffsets.left);
+    offsets.height = Math.max(offsets.height, childOffsets.height + (childOffsets.marginHeight || 0));
+    offsets.width = Math.max(offsets.width, childOffsets.width + (childOffsets.marginWidth || 0));
   }
 
   return offsets;
@@ -228,11 +230,15 @@ function addUpElementChildrenOffsets(domElement): Offsets {
 
 function getElementOffsets(domElement): Offsets {
 
+  const computedStyle = getComputedStyle(domElement);
+
   let offsets = {
     left: domElement.offsetLeft,
     top: domElement.offsetTop,
     width: domElement.offsetWidth,
-    height: domElement.offsetHeight
+    marginWidth: parseInt(computedStyle.marginLeft, 10) + parseInt(computedStyle.marginRight, 10),
+    height: domElement.offsetHeight,
+    marginHeight: parseInt(computedStyle.marginTop, 10) + parseInt(computedStyle.marginBottom, 10)
   };
 
   while (domElement = <HTMLElement> domElement.offsetParent) {
