@@ -100,9 +100,9 @@ const featureModulesPipe = new MessagePipeBackend({
   messageQueue: messageBuffer,
   sendMessage: send,
   createQueueAlertMessage: () => MessageFactory.push()
-})
+});
 
-const onUpdateNotifier = new Subject<void>()
+const onUpdateNotifier = new Subject<void>();
 
 highlighter.useComponentTreeInstance(previousTree);
 highlighter.useDocumentInstance(document);
@@ -234,7 +234,7 @@ const bind = (root) => {
       Promise.all([
         updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r))),
         updateRouterTree()
-      ]).then(() => onUpdateNotifier.next())
+      ]).then(() => onUpdateNotifier.next());
     }));
 
   // initial load

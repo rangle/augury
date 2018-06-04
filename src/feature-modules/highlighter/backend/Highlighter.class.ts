@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs';
 
 // project deps
 import { MessagePipeBackend, MessageType, Message } from 'feature-modules/.lib';
@@ -36,6 +36,7 @@ export class Highlighter {
     overlay: {
       element: HTMLElement;
     };
+    watcher: any;
     target: {
       domElement: HTMLElement;
       auguryNode: Node;
@@ -61,8 +62,7 @@ export class Highlighter {
   public useOnUpdateNotifier(notifier: Observable<void>) {
     this._onUpdateNotifier = notifier;
     this._onUpdateNotifier.subscribe(() => {
-      if (!this._currentHighlight) { return; }
-      if (!this._dom.contains(this._currentHighlight.target.domElement)) { this.clear(); }
+      if (!this.targetIsStillThere()) { return; }
       this.highlightAuguryNode(this._currentHighlight.target.auguryNode);
     });
   }
@@ -70,7 +70,7 @@ export class Highlighter {
   /**
    */
   public useMessagePipe(pipe: MessagePipeBackend) {
-    this._pipe = pipe
+    this._pipe = pipe;
     this._pipe.addHandler((message: Message<any>) => {
       switch (message.messageType) {
 
@@ -89,7 +89,7 @@ export class Highlighter {
           break;
 
       }
-    })
+    });
   }
 
   // --- Public Methods ---
@@ -111,11 +111,11 @@ export class Highlighter {
    */
   private highlightAuguryNode(node: Node) {
     this.clear();
-    console.log(node.nativeElement())
     this._currentHighlight = {
       overlay: {
         element: this.paintOverlay(this.getAuguryNodeOffsets(node), node.name)
       },
+      watcher: setTimeout(() => this.repaintOverlay(), 500),
       target: {
         auguryNode: node,
         domElement: node.nativeElement()
@@ -130,22 +130,32 @@ export class Highlighter {
     const overlay = this._currentHighlight.overlay.element;
     try { overlay.remove(); }
     catch (e) { console.error('error removing highlight', overlay, e); }
+    clearInterval(this._currentHighlight.watcher);
     this._currentHighlight = null;
   }
 
   /**
    */
   private startFinding() {
+
+    const detainEvent = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+
     this.stopFinding();
-    this._onHoverListener = (event) => {
+    this._onHoverListener = (event: Event) => {
       this.highlightNodeFromElement(event.target);
+      detainEvent(event);
     };
-    this._onSelectListener = (event) => {
-      console.log('found thing');
+    this._onSelectListener = (event: Event) => {
       this.selectNodeFromElement(event.target);
       this.clear();
-      this.stopFinding();
+      setTimeout(() => this.stopFinding(), 0);
+      detainEvent(event);
     };
+
     window.addEventListener(
       'mouseover',
       this._onHoverListener,
@@ -156,6 +166,7 @@ export class Highlighter {
       this._onSelectListener,
       false
     );
+
   }
 
   /**
@@ -188,7 +199,9 @@ export class Highlighter {
   private highlightNodeFromElement(element) {
     this.clear();
     const ngNode = this.findNearestAuguryParent(element);
-    if (ngNode) { this.highlightAuguryNode(ngNode); }
+    if (ngNode) {
+      this.highlightAuguryNode(ngNode);
+    }
   }
 
   /**
@@ -213,8 +226,26 @@ export class Highlighter {
 
   /**
    */
+  private targetIsStillThere() {
+    if (!this._currentHighlight) { return false; }
+    if (!this._dom.contains(this._currentHighlight.target.domElement)) {
+      this.clear();
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   */
   private getAuguryNodeOffsets(node: Node): Offsets {
     return addUpElementAndChildrenOffsets(node.nativeElement());
+  }
+
+  /**
+   */
+  private repaintOverlay() {
+    if (!this.targetIsStillThere()) { return; }
+    this.highlightAuguryNode(this._currentHighlight.target.auguryNode);
   }
 
   /**

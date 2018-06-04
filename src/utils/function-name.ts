@@ -12,11 +12,11 @@ export const functionName = (fn: Function): string => {
     }
   }
 
-  name = name.replace(/[^\w]/gi, '');
-
   if (typeof name !== 'string' || name === '') {
     name = 'anonymous';
   }
+
+  name = name.replace(/[^\w]/gi, '');
 
   if (!isNaN(parseInt(name[0], 10))) {
     name = '__num_' + name[0];
