@@ -94,9 +94,9 @@ const parsedModulesData: NgModulesRegistry = {
   tokenIdMap: {},
 };
 
-highlighter.useComponentTreeInstance(previousTree)
-highlighter.useDocumentInstance(document)
-highlighter.useMessageQueueInstance(messageBuffer)
+highlighter.useComponentTreeInstance(previousTree);
+highlighter.useDocumentInstance(document);
+highlighter.useMessageQueueInstance(messageBuffer);
 
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {
@@ -156,7 +156,7 @@ const updateComponentTree = (roots: Array<any>) => {
   send(MessageFactory.push());
 
   previousTree = tree;
-  highlighter.useComponentTreeInstance(previousTree)
+  highlighter.useComponentTreeInstance(previousTree);
 
   previousCount = count;
 };

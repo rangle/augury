@@ -1,3 +1,3 @@
-import { Highlighter } from './Highlighter.class'
+import { Highlighter } from './Highlighter.class';
 
-export const highlighter = new Highlighter()
+export const highlighter = new Highlighter();

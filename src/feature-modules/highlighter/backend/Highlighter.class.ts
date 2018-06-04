@@ -1,7 +1,9 @@
-//project deps
+// project deps
 import { Message, MessageType, Node, MutableTree, MessageFactory } from '../module-dependencies.barrel';
-import {MessageQueue} from '../../../structures'; // TODO: add to module dependencies
-import {send} from '../../../backend/indirect-connection'; // TODO: add to module deps (should be a module on its own?)
+// TODO: add to module dependencies
+import { MessageQueue } from '../../../structures';
+// TODO: add to module deps (should be a module on its own?)
+import { send } from '../../../backend/indirect-connection';
 
 // ----
 
@@ -72,7 +74,7 @@ export class Highlighter {
   /**
    */
   public highlightAngularNode(node: Node) {
-    this.clear()
+    this.clear();
     this._currentHighlight = {
       overlay: {
         element: this.paintOverlay(this.getAngularNodeOffsets(node), node.name)
@@ -81,18 +83,18 @@ export class Highlighter {
         angularNode: node,
         domElement: node.nativeElement()
       }
-    }
+    };
   }
 
   /**
    */
   public clear() {
-    if (!this._currentHighlight) return;
+    if (!this._currentHighlight) { return; }
     const overlay = this._currentHighlight.overlay.element;
     try { overlay.remove(); }
     catch (e) { console.error('error removing highlight', overlay, e); }
     this._currentHighlight = null;
-  };
+  }
 
   /**
    */
@@ -109,8 +111,8 @@ export class Highlighter {
 
       case MessageType.FindElement:
         if (this._componentTree == null) { return; }
-        if (message.content.start) { this.startFinding() }
-        if (message.content.stop) { this.stopFinding() }
+        if (message.content.start) { this.startFinding(); }
+        if (message.content.stop) { this.stopFinding(); }
         break;
 
     }
@@ -157,7 +159,7 @@ export class Highlighter {
   private highlightNodeFromElement(element) {
     this.clear();
     const ngNode = this.findNearestAngularParent(element);
-    if (ngNode) this.highlightAngularNode(ngNode);
+    if (ngNode) { this.highlightAngularNode(ngNode); }
   }
 
   /**
@@ -202,7 +204,7 @@ export class Highlighter {
     document.body.appendChild(overlay);
 
     return overlay;
-  };
+  }
 
 }
 
@@ -213,7 +215,7 @@ function addUpElementAndChildrenOffsets(domElement): Offsets {
   let offsets = getElementOffsets(domElement);
 
   const children = Array.from(domElement.children);
-  if (!children.length) return offsets;
+  if (!children.length) { return offsets; }
 
   let child;
   while (child = children.pop()) {

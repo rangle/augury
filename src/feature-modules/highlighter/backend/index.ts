@@ -1,1 +1,1 @@
-export { highlighter } from './Highlighter.singleton'
+export { highlighter } from './Highlighter.singleton';
