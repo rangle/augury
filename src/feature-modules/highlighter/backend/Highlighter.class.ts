@@ -142,7 +142,7 @@ export class Highlighter {
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-    }
+    };
 
     this.stopFinding();
     this._onHoverListener = (event: Event) => {
