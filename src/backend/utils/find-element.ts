@@ -1,3 +1,5 @@
+// TODO: scrap
+
 import {
   highlight,
   clear as clearHighlights

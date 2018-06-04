@@ -96,6 +96,7 @@ const parsedModulesData: NgModulesRegistry = {
 
 highlighter.useComponentTreeInstance(previousTree)
 highlighter.useDocumentInstance(document)
+highlighter.useMessageQueueInstance(messageBuffer)
 
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {

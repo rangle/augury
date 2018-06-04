@@ -24,9 +24,15 @@ import {UserActions} from '../../actions/user-actions/user-actions';
   templateUrl: './tab-menu.html',
 })
 export class TabMenu {
+
+  public domSelectionActive;
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
-  @Input() domSelectionActive;
+  @Input('domSelectionActive') set _domSelectionActive(e) {
+    // TODO: this is for debug, clean up
+    console.log(e);
+    this.domSelectionActive = e;
+  }
 
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() domSelectionActiveChange: EventEmitter<any> = new EventEmitter<any>();
