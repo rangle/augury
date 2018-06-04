@@ -59,6 +59,7 @@ import {serialize} from '../utils';
 import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
 
+import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend/index';
 
 declare const ng;
@@ -95,9 +96,15 @@ const parsedModulesData: NgModulesRegistry = {
   tokenIdMap: {},
 };
 
+const featureModulesPipe = new MessagePipeBackend({
+  messageQueue: messageBuffer,
+  sendMessage: send,
+  createQueueAlertMessage: () => MessageFactory.push()
+})
+
 highlighter.useComponentTreeInstance(previousTree);
 highlighter.useDocumentInstance(document);
-highlighter.useMessageQueueInstance(messageBuffer);
+highlighter.useMessagePipe(featureModulesPipe);
 
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {
@@ -252,7 +259,7 @@ Object.defineProperty(window, selectedComponentPropertyKey,
 
 const messageHandler = (message: Message<any>) => {
 
-  highlighter.handleMessage(message);
+  featureModulesPipe.handleIncomingMessage(message);
 
   return runAndHandleUncaughtExceptions(() => {
     switch (message.messageType) {

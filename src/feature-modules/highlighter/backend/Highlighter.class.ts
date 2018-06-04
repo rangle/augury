@@ -1,9 +1,8 @@
 // project deps
-import { Message, MessageType, Node, MutableTree, MessageFactory } from '../module-dependencies.barrel';
-// TODO: add to module dependencies
-import { MessageQueue } from '../../../structures';
-// TODO: add to module deps (should be a module on its own?)
-import { send } from '../../../backend/indirect-connection';
+import { MessagePipeBackend, MessageType, Message } from 'feature-modules/.lib';
+
+// module deps
+import { MutableTree, Node } from '../module-dependencies.barrel';
 
 // ----
 
@@ -25,7 +24,7 @@ export class Highlighter {
   // injectables
   private _dom: Document;
   private _componentTree: MutableTree;
-  private _messageQueue: MessageQueue<Message<any>>;
+  private _pipe: MessagePipeBackend;
 
   // internals
   private _onHoverListener;
@@ -42,6 +41,8 @@ export class Highlighter {
 
   constructor() { }
 
+  // --- Injectables ---
+
   /**
    */
   public useDocumentInstance(dom: Document) {
@@ -56,9 +57,30 @@ export class Highlighter {
 
   /**
    */
-  public useMessageQueueInstance(mq: MessageQueue<Message<any>>) {
-    this._messageQueue = mq;
+  public useMessagePipe(pipe: MessagePipeBackend) {
+    this._pipe = pipe
+    this._pipe.addHandler((message: Message<any>) => {
+      switch (message.messageType) {
+
+        case MessageType.Highlight:
+          if (this._componentTree == null) { return; }
+          const id: string = message.content.nodes[0];
+          if (!id) { return; }
+          const node: Node = this._componentTree.lookup(id);
+          this.highlightAngularNode(node);
+          break;
+
+        case MessageType.FindElement:
+          if (this._componentTree == null) { return; }
+          if (message.content.start) { this.startFinding(); }
+          if (message.content.stop) { this.stopFinding(); }
+          break;
+
+      }
+    })
   }
+
+  // --- Public Methods ---
 
   /**
    * @returns boolean
@@ -67,13 +89,15 @@ export class Highlighter {
     return (
       this._dom &&
       this._componentTree &&
-      this._messageQueue
+      this._pipe
     );
   }
 
+  // --- Private Methods ---
+
   /**
    */
-  public highlightAngularNode(node: Node) {
+  private highlightAngularNode(node: Node) {
     this.clear();
     this._currentHighlight = {
       overlay: {
@@ -88,34 +112,12 @@ export class Highlighter {
 
   /**
    */
-  public clear() {
+  private clear() {
     if (!this._currentHighlight) { return; }
     const overlay = this._currentHighlight.overlay.element;
     try { overlay.remove(); }
     catch (e) { console.error('error removing highlight', overlay, e); }
     this._currentHighlight = null;
-  }
-
-  /**
-   */
-  public handleMessage(message) {
-    switch (message.messageType) {
-
-      case MessageType.Highlight:
-        if (this._componentTree == null) { return; }
-        const id: string = message.content.nodes[0];
-        if (!id) { return; }
-        const node: Node = this._componentTree.lookup(id);
-        this.highlightAngularNode(node);
-        break;
-
-      case MessageType.FindElement:
-        if (this._componentTree == null) { return; }
-        if (message.content.start) { this.startFinding(); }
-        if (message.content.stop) { this.stopFinding(); }
-        break;
-
-    }
   }
 
   /**
@@ -126,12 +128,19 @@ export class Highlighter {
       this.highlightNodeFromElement(event.target);
     };
     this._onSelectListener = (event) => {
+      console.log('found thing');
       this.selectNodeFromElement(event.target);
       this.clear();
+      this.stopFinding();
     };
     window.addEventListener(
       'mouseover',
       this._onHoverListener,
+      false
+    );
+    window.addEventListener(
+      'mousedown',
+      this._onSelectListener,
       false
     );
   }
@@ -144,14 +153,21 @@ export class Highlighter {
       this._onHoverListener,
       false
     );
+    window.removeEventListener(
+      'mousedown',
+      this._onSelectListener,
+      false
+    );
   }
 
   /**
    */
   private selectNodeFromElement(element) {
     const node: Node = this.findNearestAngularParent(element);
-    this._messageQueue.enqueue(MessageFactory.foundDOMElement(node));
-    send(MessageFactory.push());
+    this._pipe.sendQueuedMessage(
+      this._pipe.createMessage(
+        MessageType.FindElement, { node, stop: true }
+      ));
   }
 
   /**
