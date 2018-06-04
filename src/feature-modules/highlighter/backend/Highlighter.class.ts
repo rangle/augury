@@ -3,7 +3,7 @@ import { Message, MessageType, Node, MutableTree } from '../module-dependencies.
 
 // ----
 
-const HIGHLIGHT_STYLES = require('to-string!raw!./highlighter.raw');
+const HIGHLIGHT_STYLES = require('to-string!raw!./highlightOverlayStyle.raw');
 
 interface Offsets {
   left: number;
@@ -20,8 +20,13 @@ export class Highlighter {
   private _componentTree: MutableTree;
 
   private _currentHighlight: {
-    domElement: HTMLElement;
-    angularNode: Node;
+    overlay: {
+      element: HTMLElement;
+    };
+    target: {
+      domElement: HTMLElement;
+      angularNode: Node;
+    };
   };
 
   constructor() { }
@@ -35,18 +40,26 @@ export class Highlighter {
 
   /**
    */
-  public selectAngularNode(node:) {
+  public highlightAngularNode(node: Node) {
     this.clear()
-
+    this._currentHighlight = {
+      overlay: {
+        element: this.paintOverlay(this.getDOMElementOffsets(node.nativeElement()), node.name)
+      },
+      target: {
+        angularNode: node,
+        domElement: node.nativeElement()
+      }
+    }
   }
 
   /**
    */
   public clear() {
     if (!this._currentHighlight) return;
-    const el = this._currentHighlight.domElement;
-    try { el.remove(); }
-    catch (e) { console.error('error removing highlight', el); }
+    const overlay = this._currentHighlight.overlay.element;
+    try { overlay.remove(); }
+    catch (e) { console.error('error removing highlight', overlay); }
     this._currentHighlight = null;
   };
 
@@ -69,8 +82,10 @@ export class Highlighter {
 
       case MessageType.Highlight:
         if (this._componentTree == null) { return; }
-        console.log('got highlight message');
-        // highlight(message.content.nodes.map(id => previousTree.lookup(id)));
+        const id: string = message.content.nodes[0];
+        if (!id) { return; }
+        const node: Node = this._componentTree.lookup(id);
+        this.highlightAngularNode(node)
 
       case MessageType.FindElement:
         if (this._componentTree == null) { return; }
@@ -82,17 +97,17 @@ export class Highlighter {
 
   /**
    */
-  private getNodeOffsets(node): Offsets {
+  private getDOMElementOffsets(domElement): Offsets {
     const offsets = {
-      left: node.offsetLeft,
-      top: node.offsetTop,
-      width: node.offsetWidth,
-      height: node.offsetHeight
+      left: domElement.offsetLeft,
+      top: domElement.offsetTop,
+      width: domElement.offsetWidth,
+      height: domElement.offsetHeight
     };
 
-    while (node = node.offsetParent) {
-      offsets.left += node.offsetLeft;
-      offsets.top += node.offsetTop;
+    while (domElement = domElement.offsetParent) {
+      offsets.left += domElement.offsetLeft;
+      offsets.top += domElement.offsetTop;
     }
 
     return offsets;
