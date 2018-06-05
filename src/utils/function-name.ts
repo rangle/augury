@@ -16,7 +16,7 @@ export const functionName = (fn: Function): string => {
     name = 'anonymous';
   }
 
-  name = name.replace(/[^\w]/gi, '');
+  name = name.replace(/[^\w]/gi, '_');
 
   if (!isNaN(parseInt(name[0], 10))) {
     name = '__num_' + name[0];
