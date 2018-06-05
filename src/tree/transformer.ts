@@ -194,9 +194,11 @@ const getDependencies = (instance): Array<Dependency> => {
         : 'unknown'
     );
 
-  return normalizedParamTypes.map((paramType, i) => ({
-    id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
-    name: functionName(paramType) || paramType.toString(),
-    decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
-  }));
+  return normalizedParamTypes
+    .filter(paramType => typeof paramType === 'function')
+    .map((paramType, i) => ({
+      id: Reflect.getMetadata(AUGURY_TOKEN_ID_METADATA_KEY, paramType),
+      name: functionName(paramType) || paramType.toString(),
+      decorators: parameterDecorators[i] ? parameterDecorators[i].map(d => d.toString()) : [],
+    }));
 };
