@@ -52,6 +52,8 @@ import {NgRedux} from '@angular-redux/store';
 import {IAppState} from './store/model';
 import {MainActions} from './actions/main-actions';
 
+import { NodeInspectService, NodeInspectActions } from 'feature-modules/node-inspect/frontend';
+
 require('!style!css!postcss!../styles/app.css');
 
 @Component({
@@ -85,7 +87,12 @@ export class App {
               private userActions: UserActions,
               private viewState: ComponentViewState,
               private zone: NgZone,
-              private errorHandler: ErrorHandler) {
+              private errorHandler: ErrorHandler,
+              private s: NodeInspectActions,
+              private nodeInspectService: NodeInspectService
+            ) {
+
+    this.nodeInspectService.addExample()
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {

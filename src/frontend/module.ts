@@ -67,6 +67,8 @@ import {
 import { buildConfig } from '../build.config';
 import {App} from './app';
 
+import { NodeInspectActions, NodeInspectService, NI_COMPONENTS } from 'feature-modules/node-inspect/frontend';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -113,6 +115,8 @@ import {App} from './app';
     ComponentPropertyState,
     SendAnalytics,
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
+    NodeInspectActions,
+    NodeInspectService,
   ],
   bootstrap: [App]
 })
