@@ -1,15 +1,45 @@
 <div [ngClass]="{'property-editor': true, editing: state === State.Write}" (click)="onClick($event)">
   <span [ngSwitch]="state" class="state-container">
     <span *ngSwitchCase="State.Read">
-      <span class="editable">
-        <span *ngIf="isUndefined()">undefined</span>
-        <span *ngIf="isNull()">null</span>
-        <span *ngIf="isEmptyString()">&quot;&quot;</span>
-        <span *ngIf="isRenderable()">{{value}}</span>
+      <span *ngIf="isNull()" style="color:blue">
+        null
+      </span>
+      <span *ngIf="isUndefined()" style="color:blue">
+        undefined
+      </span>
+      <span *ngIf="isBoolean()" style="color:blue">
+        {{value}}
+      </span>
+      <span *ngIf="isNumber()">
+        <span class="editable editable-number">
+          {{value}}
+        </span>
+      </span>
+      <span *ngIf="isFunction()">
+        function
+        <span style="margin-right:-0.6em">
+          {{value.name}}
+        </span>()
+      </span>
+      <span *ngIf="isString()">
+        <span class="editable editable-string">
+          <span *ngIf="isUndefined()">undefined</span>
+          <span *ngIf="isNull()">null</span>
+          <span *ngIf="isEmptyString()">&quot;&quot;</span>
+          <span *ngIf="isRenderable()">{{value}}</span>
+        </span>
       </span>
     </span>
     <span *ngSwitchDefault>
-      <input type="text"
+      <input type="text" *ngIf="isString()"
+        [ngClass]="{
+          editable: true,
+          invalid: state === State.Unparseable
+        }"
+        [(ngModel)]="value"
+        (keypress)="onKeypress($event)"
+        (blur)="onBlur($event)" />
+      <input type="number" *ngIf="isNumber()"
         [ngClass]="{
           editable: true,
           invalid: state === State.Unparseable

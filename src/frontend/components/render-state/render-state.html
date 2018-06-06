@@ -45,8 +45,11 @@
     <span *ngIf="!isEmittable(k) && nest(k)" class="info-value">
       {{displayType(k)}}
     </span>
+    <span *ngIf="isFunction(k)" class="info-value">
+      function {{functionName(k)}}()
+    </span>
     <bt-state-values
-      *ngIf="!isEmittable(k) && !nest(k)"
+      *ngIf="!isEmittable(k) && !nest(k) && !isFunction(k)"
       [id]="id"
       [metadata]="metadata"
       [path]="path.concat(k)"

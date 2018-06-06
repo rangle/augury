@@ -97,8 +97,24 @@ export class PropertyEditor {
     return this.value === undefined;
   }
 
+  private isFunction(): boolean {
+    return typeof this.value === 'function';
+  }
+
+  private isNumber(): boolean {
+    return typeof this.value === 'number';
+  }
+
   private isNull(): boolean {
     return this.value === null;
+  }
+
+  private isString(): boolean {
+    return typeof this.value === 'string';
+  }
+
+  private isBoolean(): boolean {
+    return typeof this.value === 'boolean';
   }
 
   private isEmptyString(): boolean {

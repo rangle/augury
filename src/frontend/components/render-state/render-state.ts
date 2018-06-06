@@ -130,6 +130,15 @@ export class RenderState {
     }
   }
 
+  private isFunction(key: string) {
+    return typeof this.state[key] === 'function'
+  }
+
+  private functionName(key: string) {
+    if (!this.isFunction(key)) return '';
+    return this.state[key].name
+  }
+
   private getComponentMetadata(key: string): [ObjectType, any] {
     const properties = this.componentMetadata.get(this.state);
     if (properties) {

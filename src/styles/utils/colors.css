@@ -6,10 +6,6 @@
   background-color: rgba(255, 11, 0, 0.15);
 }
 
-.changed {
-  background-color: #E7B4E4;
-}
-
 bt-router-tree .link {
   stroke: #9B9B9B;
 }
@@ -77,6 +73,16 @@ bt-injector-tree {
     background-color: #EBF2FC;
     border-bottom-color: blue;
     color: #2828AB;
+  }
+
+  & .editable-number {
+    background-color: #fcebeb !important;
+    color: #ff0000 !important;
+  }
+
+  & .editable-string {
+    background-color: #EBF2FC !important;
+    color: #2828AB !important;
   }
 
   & [split-pane-secondary-content] {
@@ -217,7 +223,17 @@ bt-injector-tree {
   & .editable {
     background-color: #242424;
     border-bottom-color: #BDC6CF;
-    color: #BDC6CF;
+    color: #2828AB;
+  }
+
+  & .editable-number {
+    background-color: #fcebeb !important;
+    color: #ff0000 !important;
+  }
+
+  & .editable-string {
+    background-color: #fcebeb !important;
+    color: #2828AB !important;
   }
 
   & [split-pane-secondary-content] {
