@@ -35,7 +35,7 @@ import {
 
 import {SimpleOptions} from '../options';
 
-const create = <T>(properties: T) =>
+export const create = <T>(properties: T) =>
   Object.assign({
     messageSource,
     messageId: getRandomHash(),

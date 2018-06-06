@@ -92,19 +92,11 @@ bt-injector-tree {
     background-color: #E5E5E5;
   }
 
-  & .select-element-active > svg * > polygon {
-     fill: #5A5A5A;
-  }
-
-  & .select-element-active > svg * > path {
-    stroke: #5A5A5A;
-  }
-
-  & .select-element-active > svg * > polygon {
+  & .select-element-active svg * polygon {
     fill: #4280EC;
   }
 
-  & .select-element-active > svg * > path {
+  & .select-element-active svg * path {
     stroke: #4280EC;
   }
 
@@ -241,6 +233,14 @@ bt-injector-tree {
     background-color: #313131;
   }
 
+  & .select-element-active > svg * > polygon {
+    fill: #03f4ff;
+  }
+
+  & .select-element-active > svg * > path {
+    stroke: #03f4ff;
+  }
+
   & .select-element > svg * > polygon {
     fill: #FFCC33;
   }
@@ -248,15 +248,6 @@ bt-injector-tree {
   & .select-element > svg * > path {
     stroke: #FFCC33;
   }
-
-  & .select-element-active > svg * > polygon {
-    fill: #A28AD0;
-  }
-
-  & .select-element-active > svg * > path {
-    stroke: #A28AD0;
-  }
-
 
   & .node-item:hover {
     background-color: #3D3D3D;

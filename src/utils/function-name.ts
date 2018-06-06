@@ -5,12 +5,22 @@ export const functionName = (fn: Function): string => {
   const extract = (value: string) => value.match(/^function ([^\(]*)\(/);
 
   let name: string = (<any>fn).name;
-  if (name == null || name.length === 0) {
+  if (!name || name.length === 0) {
     const match = extract(fn.toString());
     if (match != null && match.length > 1) {
-      return match[1];
+      name = match[1];
     }
-    return 'anonymous';
   }
+
+  if (typeof name !== 'string' || name === '') {
+    name = 'anonymous';
+  }
+
+  name = name.replace(/[^\w]/gi, '_');
+
+  if (!isNaN(parseInt(name[0], 10))) {
+    name = '__num_' + name[0];
+  }
+
   return name;
 };

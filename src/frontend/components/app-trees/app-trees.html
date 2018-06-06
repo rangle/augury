@@ -4,7 +4,7 @@
    [domSelectionActive]="domSelectionActive"
    [selectedTab]="selectedTab"
    (tabChange)="onTabSelectionChanged($event)"
-   (DOMSelectionActiveChange)="onDOMSelectionActiveChange($event)">
+   (domSelectionActiveChange)="onDOMSelectionActiveChange($event)">
   <div postlude class="flex px3">
     <span *ngIf="ngVersion" class="ngVersion">
       Angular Version: {{ngVersion}}

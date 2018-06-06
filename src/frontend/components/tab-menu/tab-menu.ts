@@ -24,6 +24,8 @@ import {UserActions} from '../../actions/user-actions/user-actions';
   templateUrl: './tab-menu.html',
 })
 export class TabMenu {
+
+
   @Input() tabs: Array<TabDescription>;
   @Input() selectedTab;
   @Input() domSelectionActive;
@@ -31,8 +33,7 @@ export class TabMenu {
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() domSelectionActiveChange: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private userActions: UserActions) {
-  }
+  constructor(private userActions: UserActions) {}
 
   selectElement() {
     if (this.domSelectionActive) {
