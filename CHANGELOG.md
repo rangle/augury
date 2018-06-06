@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.18.0](https://github.com/rangle/tree/1.17.0)
+## [1.19.0](https://github.com/rangle/tree/1.17.0)
 * Bug fixes (angularJS hybrid app compatibility, component tree refreshing, and more state panel issues)
 * Highlighter/selection tool improvements
 
