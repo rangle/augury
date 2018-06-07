@@ -67,7 +67,7 @@ import {
 import { buildConfig } from '../build.config';
 import {App} from './app';
 
-import { NodeInspectActions, NodeInspectService, NI_COMPONENTS } from 'feature-modules/node-inspect/frontend';
+import { NodeInspectActions, NodeInspectService, NODE_INSPECT_COMPONENTS } from 'feature-modules/node-inspect/frontend';
 
 @NgModule({
   imports: [
@@ -104,6 +104,7 @@ import { NodeInspectActions, NodeInspectService, NI_COMPONENTS } from 'feature-m
     NgModuleInfo,
     NgModuleConfigView,
     AnalyticsPopup,
+    ...NODE_INSPECT_COMPONENTS,
   ],
   providers: [
     Connection,
