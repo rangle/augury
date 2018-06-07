@@ -92,4 +92,9 @@ export enum MessageType {
 
   /// Find a corresponding mutable tree node based on a DOM node
   FindElement,
+
+  /* node-inspect */
+  NI_InspectNode,
+  NI_SubscribeToObservable,
+  NI_ObservableEmission,
 }

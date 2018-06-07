@@ -67,6 +67,7 @@ import {
 import { buildConfig } from '../build.config';
 import {App} from './app';
 
+import { MessagePipeFrontend } from 'feature-modules/.lib';
 import { NodeInspectActions, NodeInspectService, NODE_INSPECT_COMPONENTS } from 'feature-modules/node-inspect/frontend';
 
 @NgModule({
@@ -118,13 +119,15 @@ import { NodeInspectActions, NodeInspectService, NODE_INSPECT_COMPONENTS } from 
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
     NodeInspectActions,
     NodeInspectService,
+    MessagePipeFrontend,
   ],
   bootstrap: [App]
 })
 export class FrontendModule {
   constructor(
     ngRedux: NgRedux<IAppState>,
-    sendAnalytics: SendAnalytics) {
+    sendAnalytics: SendAnalytics,
+  ) {
     const store = createStore(
       rootReducer,
       compose(applyMiddleware(reduxLogger),

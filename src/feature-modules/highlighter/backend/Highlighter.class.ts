@@ -45,53 +45,6 @@ export class Highlighter {
 
   constructor() { }
 
-  // --- Injectables ---
-
-  /**
-   */
-  public useDocumentInstance(dom: Document) {
-    this._dom = dom;
-  }
-
-  /**
-   */
-  public useComponentTreeInstance(componentTree: MutableTree) {
-    this._componentTree = componentTree;
-  }
-
-  public useOnUpdateNotifier(notifier: Observable<void>) {
-    this._onUpdateNotifier = notifier;
-    this._onUpdateNotifier.subscribe(() => {
-      if (!this.targetIsStillThere()) { return; }
-      this.highlightAuguryNode(this._currentHighlight.target.auguryNode);
-    });
-  }
-
-  /**
-   */
-  public useMessagePipe(pipe: MessagePipeBackend) {
-    this._pipe = pipe;
-    this._pipe.addHandler((message: Message<any>) => {
-      switch (message.messageType) {
-
-        case MessageType.Highlight:
-          if (this._componentTree == null) { return; }
-          const id: string = message.content.nodes[0];
-          if (!id) { return; }
-          const node: Node = this._componentTree.lookup(id);
-          this.highlightAuguryNode(node);
-          break;
-
-        case MessageType.FindElement:
-          if (this._componentTree == null) { return; }
-          if (message.content.start) { this.startFinding(); }
-          if (message.content.stop) { this.stopFinding(); }
-          break;
-
-      }
-    });
-  }
-
   // --- Public Methods ---
 
   /**
@@ -265,6 +218,57 @@ export class Highlighter {
 
     return overlay;
   }
+
+  // --- Injectables ---
+
+  /**
+   */
+  public useDocumentInstance(dom: Document) {
+    this._dom = dom;
+  }
+
+  /**
+   */
+  public useComponentTreeInstance(componentTree: MutableTree) {
+    this._componentTree = componentTree;
+  }
+
+
+  /**
+   */
+  public useOnUpdateNotifier(notifier: Observable<void>) {
+    this._onUpdateNotifier = notifier;
+    this._onUpdateNotifier.subscribe(() => {
+      if (!this.targetIsStillThere()) { return; }
+      this.highlightAuguryNode(this._currentHighlight.target.auguryNode);
+    });
+  }
+
+  /**
+   */
+  public useMessagePipe(pipe: MessagePipeBackend) {
+    this._pipe = pipe;
+    this._pipe.addHandler((message: Message<any>) => {
+      switch (message.messageType) {
+
+        case MessageType.Highlight:
+          if (this._componentTree == null) { return; }
+          const id: string = message.content.nodes[0];
+          if (!id) { return; }
+          const node: Node = this._componentTree.lookup(id);
+          this.highlightAuguryNode(node);
+          break;
+
+        case MessageType.FindElement:
+          if (this._componentTree == null) { return; }
+          if (message.content.start) { this.startFinding(); }
+          if (message.content.stop) { this.stopFinding(); }
+          break;
+
+      }
+    });
+  }
+
 
 }
 

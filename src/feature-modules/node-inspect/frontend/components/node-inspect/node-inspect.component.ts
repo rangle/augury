@@ -19,7 +19,10 @@ export class NodeInspectComponent {
   @Input() selectedNode: Node;
 
   constructor(
-    private nodeStateService: NodeInspectService
+    private _nodeStateService: NodeInspectService
   ) {}
 
+  doThing(){
+    this._nodeStateService.inspectNode([0, 4, 0, 0])
+  }
 }

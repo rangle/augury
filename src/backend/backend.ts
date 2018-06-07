@@ -60,7 +60,8 @@ import {MessageQueue} from '../structures';
 import {SimpleOptions} from '../options';
 
 import { MessagePipeBackend } from 'feature-modules/.lib';
-import { highlighter } from 'feature-modules/highlighter/backend/index';
+import { highlighter } from 'feature-modules/highlighter/backend';
+import { nodeInspect } from 'feature-modules/node-inspect/backend';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -104,10 +105,17 @@ const featureModulesPipe = new MessagePipeBackend({
 
 const onUpdateNotifier = new Subject<void>();
 
+// --- provision feature modules ---
+
 highlighter.useComponentTreeInstance(previousTree);
 highlighter.useDocumentInstance(document);
 highlighter.useOnUpdateNotifier(onUpdateNotifier.asObservable());
 highlighter.useMessagePipe(featureModulesPipe);
+
+nodeInspect.useComponentTreeInstance(previousTree);
+nodeInspect.useMessagePipe(featureModulesPipe);
+
+// --- end ---
 
 const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {
@@ -173,8 +181,11 @@ const updateComponentTree = (roots: Array<any>): Promise<void> => {
     /// that messages are waiting for it in {@link messageBuffer}
     send(MessageFactory.push());
 
+    // TODO: have a service that keeps updated tree for feature modules
+    highlighter.useComponentTreeInstance(tree);
+    nodeInspect.useComponentTreeInstance(tree);
+
     previousTree = tree;
-    highlighter.useComponentTreeInstance(previousTree);
 
     previousCount = count;
 
