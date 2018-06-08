@@ -37,4 +37,13 @@ export class NodeInspectComponent {
   selectProp(key){
     this._nodeStateService.getPropsAtPath(key)
   }
+
+  subscribeTo(prop) {
+    this._nodeStateService.subscribeToObservableAtPath(prop.prop) // TODO: prop.prop
+  }
+
+  isArray(thing) {
+    return Array.isArray(thing)
+  }
+
 }

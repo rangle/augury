@@ -5,8 +5,14 @@
       <button type="button" (click)="addExample()"> add example </button>
     </div>
     <div>
-      <div *ngFor="let example of exs" (click)="selectProp(example)">
-        {{example.prop}}: {{example.type}} 
+      <div *ngIf="isArray(exs)">
+        <div *ngFor="let example of exs">
+          <span (click)="selectProp(example)"> {{example.prop}}: {{example.type}} </span>
+          <button *ngIf="example.type == 'Subject'" (click)="subscribeTo(example)"> subscribe </button>
+        </div>
+      </div>
+      <div *ngIf="!isArray(exs)">
+        {{exs}}
       </div>
     </div>
   </div>

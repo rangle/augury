@@ -100,7 +100,19 @@ export class NodeInspect {
           break
 
         case MessageType.NI_SubscribeToObservable:
-          console.log('NI_SubscribeToObservable')
+
+          const x: string = message.content.path; // TODO: path should be an array
+          const obs: any = this._inspected.componentInstance[x]
+
+          // TODO: observable subscriptions, as well as inspected nodes,
+          //       should have ids, so that we have inspect/sub to multiple simultaneously
+          obs.subscribe(val => {
+            this._pipe.sendSimple({
+              messageType: MessageType.NI_ObservableEmission,
+              content: { value: val }
+            })
+          })
+
           break
 
         case MessageType.NI_ObservableEmission:

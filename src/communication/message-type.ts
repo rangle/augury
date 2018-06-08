@@ -98,6 +98,7 @@ export enum MessageType {
   NI_GetPropsAtPath, // frontend
   NI_PropsAtPath, // backend
   NI_ShallowProps, // backend
-  NI_SubscribeToObservable,
-  NI_ObservableEmission,
+  NI_SubscribeToObservable, // frontend
+  NI_SubscribedToObservable, // backend
+  NI_ObservableEmission, // backend // TODO: should be ObservableValue ???
 }

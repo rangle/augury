@@ -33,6 +33,9 @@ export class NodeInspectService {
           this._actions.genericUpdate(state => merge(state, { examples: message.content.props }))
           break;
 
+        case MessageType.NI_ObservableEmission:
+          this._actions.genericUpdate(state => merge(state, { examples: message.content.value }))
+          break;
 
       }
     })
@@ -46,6 +49,13 @@ export class NodeInspectService {
     this._pipe.send({
       messageType: MessageType.NI_InspectNode,
       content: { path: path, requestInstance: true }
+    })
+  }
+
+  subscribeToObservableAtPath(path) {
+    this._pipe.send({
+      messageType: MessageType.NI_SubscribeToObservable,
+      content: { path }
     })
   }
 
