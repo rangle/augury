@@ -1,5 +1,5 @@
 import { getRandomHash } from './utils.functions'
-import { Message, MessageQueue, MessageType, messageSource } from './messaging.definitions'
+import { Message, MessageQueue, MessageType, messageSource, Serialize } from './messaging.definitions'
 
 export class MessagePipeBackend {
 
@@ -21,13 +21,16 @@ export class MessagePipeBackend {
     this._createQueueAlertMessage = injectables.createQueueAlertMessage;
   }
 
-  public createMessage<T>(type: MessageType, content:T): Message<T> {
-    return {
+  public createMessage<T>(opts: {
+    messageType: MessageType,
+    content: T,
+    serialize?: Serialize,
+  }): Message<T> {
+    return Object.assign({
       messageSource,
       messageId: getRandomHash(),
-      messageType: type,
-      content: content
-    }
+      serialize: Serialize.None,
+    }, opts)
   }
 
   public addHandler(handler: (message: Message<any>) => void) {
@@ -38,8 +41,28 @@ export class MessagePipeBackend {
     this._handlers.forEach(handler => handler(message))
   }
 
+  public sendSimple(opts: {
+    messageType: MessageType,
+    content: any,
+    serialize?: Serialize,
+  }) {
+    return this.sendSimpleMessage(
+      this.createMessage(opts)
+    );
+  }
+
   public sendSimpleMessage(message: Message<any>): Promise<any> {
     return this._sendMessage(message);
+  }
+
+  public sendQueued(opts: {
+    messageType: MessageType,
+    content: any,
+    serialize?: Serialize,
+  }) {
+    return this.sendQueuedMessage(
+      this.createMessage(opts)
+    );
   }
 
   public sendQueuedMessage(message: Message<any>): Promise<any> {

@@ -94,7 +94,10 @@ export enum MessageType {
   FindElement,
 
   /* node-inspect */
-  NI_InspectNode,
+  NI_InspectNode, // frontend
+  NI_GetPropsAtPath, // frontend
+  NI_PropsAtPath, // backend
+  NI_ShallowProps, // backend
   NI_SubscribeToObservable,
   NI_ObservableEmission,
 }

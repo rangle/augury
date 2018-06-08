@@ -1,3 +1,13 @@
-hello from node inspect
-<button type="button" (click)="doThing()">
-</button>
+<ng-container *ngIf="examples | async as exs">
+  <div>
+    <div>
+      <button type="button" (click)="inspect()"> inspect </button>
+      <button type="button" (click)="addExample()"> add example </button>
+    </div>
+    <div>
+      <div *ngFor="let example of exs" (click)="selectProp(example)">
+        {{example}}
+      </div>
+    </div>
+  </div>
+</ng-container>

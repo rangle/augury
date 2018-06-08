@@ -85,6 +85,12 @@ export const transform = (path: Path,
     properties: clone(element.properties),
     dependencies: isDebugElementComponent(element) ? getDependencies(element.componentInstance) : [],
   };
+
+  Object.defineProperty(node, 'angularNode', {
+    value: () => element.componentInstance,
+    enumerable: false,
+    configurable: false
+  })
   /// Set before we search for children so that the value is cached and the
   /// reference will be correct when transform runs on the child
   cache.set(serializedPath, node);

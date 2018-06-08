@@ -13,6 +13,7 @@ export interface InputProperty {
 export interface OutputProperty extends InputProperty {} // outputs can be aliased too
 
 export interface Node {
+  angularNode?: () => any,
   id: string;
   augury_token_id: string;
   name: string;

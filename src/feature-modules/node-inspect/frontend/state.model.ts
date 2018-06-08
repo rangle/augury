@@ -11,7 +11,10 @@ export const INITIAL_STATE: NodeInspectState = {
 
 export class NodeInspectSelectors {
   static examples
-    = (store) => _getState(store).examples
+    = (store) => {
+      debugger
+      _getState(store).examples
+    }
 }
 
 export class NodeInspectUpdaters {

@@ -14,6 +14,7 @@ export function nodeInspectReducer(
     case NodeInspectActionType.NI_GENERIC_UPDATE:
       const updater = action.payload.updater;
       return updater(state);
+
   }
 
   return state;

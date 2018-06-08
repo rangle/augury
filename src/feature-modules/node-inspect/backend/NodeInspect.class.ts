@@ -9,6 +9,13 @@ export class NodeInspect {
   private _pipe: MessagePipeBackend;
   private _componentTree: MutableTree;
 
+  // internals
+  private _inspected: {
+    node: Node;
+    element: Element;
+    componentInstance: any;
+  }
+
   constructor() { }
 
 
@@ -40,11 +47,37 @@ export class NodeInspect {
       switch (message.messageType) {
 
         case MessageType.NI_InspectNode:
+
           const path: Path = message.content.path;
           const node = this._componentTree.traverse(path);
+
+          this._inspected = {
+            node,
+            element: node.nativeElement(),
+            componentInstance: node.angularNode(),
+          };
+
+          this._pipe.sendSimpleMessage(
+            this._pipe.createMessage({
+              messageType: MessageType.NI_ShallowProps,
+              content: { keys: Object.keys(this._inspected.componentInstance) }
+            })
+          )
+
           // TODO: this.consoleReference(node);
           // TODO:   return getComponentInstance(previousTree, node);
-          console.log('NI_InspectNode', node)
+          console.log('NI_InspectNode', this._inspected)
+          break
+
+        case MessageType.NI_GetPropsAtPath:
+
+          const key: string = message.content.path; // TODO: path should be an array
+
+          this._pipe.sendSimple({
+            messageType: MessageType.NI_ShallowProps,
+            content: { keys: Object.keys(this._inspected.componentInstance[key]) }
+          })
+
           break
 
         case MessageType.NI_SubscribeToObservable:

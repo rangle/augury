@@ -141,10 +141,10 @@ export class Highlighter {
    */
   private selectNodeFromElement(element) {
     const node: Node = this.findNearestAuguryParent(element);
-    this._pipe.sendQueuedMessage(
-      this._pipe.createMessage(
-        MessageType.FindElement, { node, stop: true }
-      ));
+    this._pipe.sendQueued({
+      messageType: MessageType.FindElement,
+      content: { node, stop: true }
+    });
   }
 
   /**

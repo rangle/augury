@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { select } from '@angular-redux/store';
 
 import {
-  MessagePipeFrontend, MessageType, Message } from 'feature-modules/.lib';
+  MessagePipeFrontend, MessageType, Message, merge } from 'feature-modules/.lib';
 import {
   NodeInspectUpdaters as Updaters,
   NodeInspectSelectors as Selectors } from './state.model';
@@ -25,6 +25,15 @@ export class NodeInspectService {
           console.log('NI_SubscribeToObservable');
           break;
 
+        case MessageType.NI_ShallowProps:
+          this._actions.genericUpdate(state => merge(state, { examples: message.content.keys }))
+          break;
+
+        case MessageType.NI_PropsAtPath:
+          this._actions.genericUpdate(state => merge(state, { examples: message.content.keys }))
+          break;
+
+
       }
     })
   }
@@ -35,8 +44,23 @@ export class NodeInspectService {
 
   inspectNode(path: Array<number>){
     this._pipe.send({
-        messageType: MessageType.NI_InspectNode,
-        content: { path: path, requestInstance: true }
+      messageType: MessageType.NI_InspectNode,
+      content: { path: path, requestInstance: true }
+    })
+  }
+
+  getPropsAtPath(key){
+    /*
+    this._pipe.handleImmediate({
+      messageType: MessageType.NI_GetPropsAtPath,
+      content: { path: key }
+    }).then(children => {
+      this._actions.genericUpdate(state => merge(state, { examples: children }))
+    })
+    */
+    this._pipe.send({
+      messageType: MessageType.NI_GetPropsAtPath,
+      content: { path: key }
     })
   }
 

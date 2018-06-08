@@ -161,25 +161,28 @@ const updateComponentTree = (roots: Array<any>): Promise<void> => {
 
     const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
 
-    if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
-      messageBuffer.enqueue(MessageFactory.completeTree(tree));
-    }
-    else {
-      const changes = previousTree.diff(tree);
-      if (changes.length > 0) {
-        lastTreeMessage = 'diff';
-        messageBuffer.enqueue(MessageFactory.treeDiff(changes));
+    (<any> window).x = true
+    if ((<any> window).x) {
+      if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
+        messageBuffer.enqueue(MessageFactory.completeTree(tree));
       }
       else {
-        if (lastTreeMessage === 'no-diff') { return; }
-        lastTreeMessage = 'no-diff';
-        messageBuffer.enqueue(MessageFactory.treeUnchanged());
+        const changes = previousTree.diff(tree);
+        if (changes.length > 0) {
+          lastTreeMessage = 'diff';
+          messageBuffer.enqueue(MessageFactory.treeDiff(changes));
+        }
+        else {
+          if (lastTreeMessage === 'no-diff') { return; }
+          lastTreeMessage = 'no-diff';
+          messageBuffer.enqueue(MessageFactory.treeUnchanged());
+        }
       }
-    }
 
-    /// Send a message through the normal channels to indicate to the frontend
-    /// that messages are waiting for it in {@link messageBuffer}
-    send(MessageFactory.push());
+      /// Send a message through the normal channels to indicate to the frontend
+      /// that messages are waiting for it in {@link messageBuffer}
+      send(MessageFactory.push());
+    }
 
     // TODO: have a service that keeps updated tree for feature modules
     highlighter.useComponentTreeInstance(tree);
