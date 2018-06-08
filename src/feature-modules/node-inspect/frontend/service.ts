@@ -26,11 +26,11 @@ export class NodeInspectService {
           break;
 
         case MessageType.NI_ShallowProps:
-          this._actions.genericUpdate(state => merge(state, { examples: message.content.keys }))
+          this._actions.genericUpdate(state => merge(state, { examples: message.content.props }))
           break;
 
         case MessageType.NI_PropsAtPath:
-          this._actions.genericUpdate(state => merge(state, { examples: message.content.keys }))
+          this._actions.genericUpdate(state => merge(state, { examples: message.content.props }))
           break;
 
 
@@ -49,7 +49,7 @@ export class NodeInspectService {
     })
   }
 
-  getPropsAtPath(key){
+  getPropsAtPath(prop) {
     /*
     this._pipe.handleImmediate({
       messageType: MessageType.NI_GetPropsAtPath,
@@ -60,7 +60,7 @@ export class NodeInspectService {
     */
     this._pipe.send({
       messageType: MessageType.NI_GetPropsAtPath,
-      content: { path: key }
+      content: { path: prop.prop } // TODO: ... prop.prop....
     })
   }
 

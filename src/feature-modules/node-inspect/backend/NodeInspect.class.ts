@@ -44,6 +44,18 @@ export class NodeInspect {
   public useMessagePipe(pipe: MessagePipeBackend) {
     this._pipe = pipe;
     this._pipe.addHandler((message: Message<any>) => {
+
+      // TODO: get these out of here..
+
+      let props;
+
+      const getType = (thing) => {
+        if ( typeof thing === 'object' && thing !== null ) {
+          return thing.__proto__.constructor.name
+        }
+        else return typeof thing
+      }
+
       switch (message.messageType) {
 
         case MessageType.NI_InspectNode:
@@ -57,10 +69,13 @@ export class NodeInspect {
             componentInstance: node.angularNode(),
           };
 
+          props = Object.keys(this._inspected.componentInstance) // TODO: this assumes every val at path is an object (only for demo)
+            .map( prop => ({ prop, type: getType(this._inspected.componentInstance[prop]) }) )
+
           this._pipe.sendSimpleMessage(
             this._pipe.createMessage({
               messageType: MessageType.NI_ShallowProps,
-              content: { keys: Object.keys(this._inspected.componentInstance) }
+              content: { props }
             })
           )
 
@@ -72,10 +87,14 @@ export class NodeInspect {
         case MessageType.NI_GetPropsAtPath:
 
           const key: string = message.content.path; // TODO: path should be an array
+          const valAtPath: any = this._inspected.componentInstance[key]
+
+          props = Object.keys(valAtPath) // TODO: this assumes every val at path is an object (only for demo)
+            .map( prop => ({ prop, type: getType(valAtPath[prop]) }) )
 
           this._pipe.sendSimple({
             messageType: MessageType.NI_ShallowProps,
-            content: { keys: Object.keys(this._inspected.componentInstance[key]) }
+            content: { props }
           })
 
           break

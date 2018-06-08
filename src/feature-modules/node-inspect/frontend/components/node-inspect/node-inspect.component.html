@@ -6,7 +6,7 @@
     </div>
     <div>
       <div *ngFor="let example of exs" (click)="selectProp(example)">
-        {{example}}
+        {{example.prop}}: {{example.type}} 
       </div>
     </div>
   </div>

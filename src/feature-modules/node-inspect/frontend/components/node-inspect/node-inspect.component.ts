@@ -20,7 +20,7 @@ export class NodeInspectComponent {
 
   @Input() selectedNode: Node;
 
-  @select(Selectors.examples) examples;
+  @select(Selectors.examples) examples; // TODO: rename to "props"
 
   constructor(
     private _nodeStateService: NodeInspectService
