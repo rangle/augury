@@ -11,19 +11,14 @@ export const INITIAL_STATE: NodeInspectState = {
 
 export class NodeInspectSelectors {
   static examples
-    = (store) => {
-      debugger
-      _getState(store).examples
-    }
+    = (store) => _getState(store).examples
 }
 
 export class NodeInspectUpdaters {
 
   static addExample = () =>
-    (state: NodeInspectState): NodeInspectState => {
-      return merge(state, {
-        examples: state.examples.concat([ 'example' ]) })
-    }
+    (state: NodeInspectState): NodeInspectState =>
+      merge(state, { examples: state.examples.concat([ 'example' ]) })
 
 }
 
