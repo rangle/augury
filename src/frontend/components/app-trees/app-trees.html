@@ -129,7 +129,8 @@
 </bt-analytics-popup>
 
 <split-pane #splitPane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
-  <div split-pane-primary-content class="flex flex-column flex-auto">
+  <div split-pane-primary-content class="flex flex-row flex-auto">
+    <bt-global-cd-sidebar></bt-global-cd-sidebar>
     <bt-tree-view
        class="flex minheight-100pct"
        [tree]="tree"

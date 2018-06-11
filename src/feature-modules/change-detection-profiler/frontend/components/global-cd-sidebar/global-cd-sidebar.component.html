@@ -1,0 +1,9 @@
+<div>
+  <div> cycles per second: {{ cycles_per_second | async }}</div>
+  <div *ngFor="let tick of ticks | async">
+    <div> ------- </div>
+    <div> start time: {{ tick.start_time }} </div>
+    <div> running time: {{ tick.running_time }} </div>
+    <div> change detection time: {{ tick.change_detection_time }} </div>
+  </div>
+</div>

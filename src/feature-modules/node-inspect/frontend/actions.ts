@@ -4,7 +4,7 @@ import { dispatch } from '@angular-redux/store';
 import { NodeInspectState } from './state.model'
 
 export enum NodeInspectActionType {
-  NI_GENERIC_UPDATE, /* generic action that carries its own update function */
+  NI_GENERIC_UPDATE = 'NI_GENERIC_UPDATE', /* generic action that carries its own update function */
 }
 
 @Injectable()

@@ -101,4 +101,9 @@ export enum MessageType {
   NI_SubscribeToObservable, // frontend
   NI_SubscribedToObservable, // backend
   NI_ObservableEmission, // backend // TODO: should be ObservableValue ???
+
+  /* change-detection-profiler */
+  CDP_Tick, // backend
+  CDP_MetricsPerSecond, // backend
+
 }

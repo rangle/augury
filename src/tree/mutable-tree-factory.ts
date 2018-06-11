@@ -4,10 +4,10 @@ import {Node} from './node';
 import {SimpleOptions} from '../options';
 
 export const transformToTree =
-    (root, index: number, options: SimpleOptions, increment: (n: number) => void) => {
+    (root, index: number, options: SimpleOptions, increment: (n: number) => void, { forEachNode }) => {
   const map = new Map<string, Node>();
   try {
-    return transform([index], root, options, map, increment);
+    return transform([index], root, options, map, increment, { forEachNode });
   }
   finally {
     map.clear(); // release references
@@ -29,13 +29,14 @@ export interface ElementTransformResult {
 }
 
 export const createTreeFromElements =
-    (roots: Array<any>, options: SimpleOptions): ElementTransformResult => {
+    (roots: Array<any>, options: SimpleOptions, { forEachNode }): ElementTransformResult => {
   const tree = new MutableTree();
 
   /// Keep track of the number of nodes that we process as part of this transformation
   let count = 0;
 
-  tree.roots = roots.map((r, index) => transformToTree(r, index, options, n => count += n));
+  tree.roots = roots.map((r, index) => transformToTree(r, index, options, n => count += n,
+    { forEachNode }));
 
   return {tree, count};
 };

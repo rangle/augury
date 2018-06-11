@@ -62,6 +62,7 @@ import {SimpleOptions} from '../options';
 import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend';
 import { nodeInspect } from 'feature-modules/node-inspect/backend';
+import { changeDetectionProfiler } from 'feature-modules/change-detection-profiler/backend';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -104,6 +105,7 @@ const featureModulesPipe = new MessagePipeBackend({
 });
 
 const onUpdateNotifier = new Subject<void>();
+const applicationRef = ng.probe(getAllAngularRootElements()[0]).injector.get(ng.coreTokens.ApplicationRef);
 
 // --- provision feature modules ---
 
@@ -114,6 +116,10 @@ highlighter.useMessagePipe(featureModulesPipe);
 
 nodeInspect.useComponentTreeInstance(previousTree);
 nodeInspect.useMessagePipe(featureModulesPipe);
+
+nodeInspect.useComponentTreeInstance(previousTree);
+changeDetectionProfiler.useApplicationRef(applicationRef);
+changeDetectionProfiler.useMessagePipe(featureModulesPipe);
 
 // --- end ---
 
@@ -159,7 +165,9 @@ const parseInitialModules = (): Promise<void> => {
 const updateComponentTree = (roots: Array<any>): Promise<void> => {
   return Promise.resolve().then(() => {
 
-    const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+    const {tree, count} = createTreeFromElements(roots, treeRenderOptions, {
+      forEachNode: changeDetectionProfiler.watchNode
+    });
 
     (<any> window).x = true
     if ((<any> window).x) {
@@ -187,6 +195,7 @@ const updateComponentTree = (roots: Array<any>): Promise<void> => {
     // TODO: have a service that keeps updated tree for feature modules
     highlighter.useComponentTreeInstance(tree);
     nodeInspect.useComponentTreeInstance(tree);
+    changeDetectionProfiler.useComponentTreeInstance(tree);
 
     previousTree = tree;
 

@@ -39,7 +39,8 @@ export const transform = (path: Path,
                           element,
                           options: SimpleOptions,
                           cache: Map<string, Node>,
-                          count: (n: number) => void): Node => {
+                          count: (n: number) => void,
+                          { forEachNode }): Node => {
   if (element == null) {
     return null;
   }
@@ -102,7 +103,7 @@ export const transform = (path: Path,
 
     children.forEach(c =>
       node.children.push(
-        transform(path.concat([subindex++]), c, options, cache, count)));
+        transform(path.concat([subindex++]), c, options, cache, count, {forEachNode})));
   };
 
   const getChildren = (test: (compareElement) => boolean): Array<any> => {
@@ -132,6 +133,8 @@ export const transform = (path: Path,
   }
 
   count(1 + node.children.length);
+
+  forEachNode(node);
 
   return node;
 };

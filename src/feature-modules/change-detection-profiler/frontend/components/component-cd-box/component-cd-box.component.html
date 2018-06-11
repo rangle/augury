@@ -1,0 +1,10 @@
+<div>
+  <div *ngFor="let tick of ticks | async">
+    <div *ngIf="componentCheckedThisTick(tick)">
+      <div> ------- </div>
+      <div> props changed: {{ metricsForThisComponent(tick).propsChanged }} </div>
+      <div *ngIf="metricsForThisComponent(tick).propsChanged"> prop changes: {{ metricsForThisComponent(tick).changes }} </div>
+      <div> total check time: {{ metricsForThisComponent(tick).totalCheckTime }} </div>
+    </div>
+  </div>
+</div>

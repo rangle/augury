@@ -68,7 +68,14 @@ import { buildConfig } from '../build.config';
 import {App} from './app';
 
 import { MessagePipeFrontend } from 'feature-modules/.lib';
-import { NodeInspectActions, NodeInspectService, NODE_INSPECT_COMPONENTS } from 'feature-modules/node-inspect/frontend';
+import {
+  NodeInspectService,
+  NodeInspectActions,
+  NODE_INSPECT_COMPONENTS } from 'feature-modules/node-inspect/frontend';
+import {
+  ChangeDetectionProfilerService,
+  ChangeDetectionProfilerActions,
+  CHANGE_DETECTION_PROFILER_COMPONENTS } from 'feature-modules/change-detection-profiler/frontend';
 
 @NgModule({
   imports: [
@@ -106,6 +113,7 @@ import { NodeInspectActions, NodeInspectService, NODE_INSPECT_COMPONENTS } from 
     NgModuleConfigView,
     AnalyticsPopup,
     ...NODE_INSPECT_COMPONENTS,
+    ...CHANGE_DETECTION_PROFILER_COMPONENTS,
   ],
   providers: [
     Connection,
@@ -117,9 +125,11 @@ import { NodeInspectActions, NodeInspectService, NODE_INSPECT_COMPONENTS } from 
     ComponentPropertyState,
     SendAnalytics,
     { provide: ErrorHandler, useClass: UncaughtErrorHandler },
+    MessagePipeFrontend,
     NodeInspectActions,
     NodeInspectService,
-    MessagePipeFrontend,
+    ChangeDetectionProfilerActions,
+    ChangeDetectionProfilerService,
   ],
   bootstrap: [App]
 })
