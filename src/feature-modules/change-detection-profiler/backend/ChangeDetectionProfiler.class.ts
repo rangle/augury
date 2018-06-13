@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { MessagePipeBackend, MessageType, Message } from 'feature-modules/.lib';
 
 // module deps
@@ -9,12 +11,17 @@ export class ChangeDetectionProfiler {
   private _pipe: MessagePipeBackend;
   private _componentTree: MutableTree;
   private _appRef: any;
+  private _nodeTree$: Observable<MutableTree>;
 
   // internals
+  private _ngZone: any;
+  private _innerZoneFork: any;
   private _topComponent: any;
   private _cyclesThisSecond: number = 0;
   private _metricsPerSecondInterval;
   private _nodesCheckedThisCycle = {};
+  private _trigger:any = undefined;
+  private _inCycle: boolean = false;
 
   constructor() {
     (<any> window).n = this._nodesCheckedThisCycle
@@ -81,16 +88,21 @@ export class ChangeDetectionProfiler {
   // TODO: clean this out, shouldnt be in the injection function
   public useApplicationRef(appRef){
     this._appRef = appRef;
-    let running_start,
+    this._ngZone = this._appRef._zone;
+    let cause,
+        running_start,
         running_time,
         change_detection_start,
         change_detection_time;
-    this._appRef._zone.onUnstable.subscribe(() => {
+    this._ngZone.augury_onInvokeTask.subscribe((task) => {
+      console.log(task)
+    })
+    this._ngZone.onUnstable.subscribe(() => {
       running_time = 0
       running_start = Date.now()
       console.log('unstable')
     })
-    this._appRef._zone.onStable.subscribe(() => {
+    this._ngZone.onStable.subscribe(() => {
       change_detection_time = Date.now() - change_detection_start
       console.log('stable, change detection time: ' + change_detection_time)
       this._pipe.sendSimple({
@@ -114,7 +126,12 @@ export class ChangeDetectionProfiler {
       running_time = Date.now() - running_start
       console.log('start change detection, running time: ' + running_time);
     };
-    (<any> window).t = this._topComponent
+  }
+
+  /**
+   */
+  public useNodeTree(nodeTree$: Observable<MutableTree>) {
+    this._nodeTree$ = nodeTree$;
   }
 
   /**

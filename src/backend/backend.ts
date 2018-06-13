@@ -1,6 +1,7 @@
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/distinctUntilChanged';
 import {compare} from '../utils/patch';
 import {isAngular, isDebugMode} from './utils/app-check';
@@ -104,7 +105,8 @@ const featureModulesPipe = new MessagePipeBackend({
   createQueueAlertMessage: () => MessageFactory.push()
 });
 
-const onUpdateNotifier = new Subject<void>();
+const onUpdateNotifier = new Subject<void>(); // TODO: highlighter only needs tree notifier. this shouldnt exist.
+const nodeTree = new Subject<MutableTree>();
 const applicationRef = ng.probe(getAllAngularRootElements()[0]).injector.get(ng.coreTokens.ApplicationRef);
 
 // --- provision feature modules ---
@@ -116,10 +118,11 @@ highlighter.useMessagePipe(featureModulesPipe);
 
 nodeInspect.useComponentTreeInstance(previousTree);
 nodeInspect.useMessagePipe(featureModulesPipe);
-
 nodeInspect.useComponentTreeInstance(previousTree);
+
 changeDetectionProfiler.useApplicationRef(applicationRef);
 changeDetectionProfiler.useMessagePipe(featureModulesPipe);
+changeDetectionProfiler.useNodeTree(nodeTree.asObservable());
 
 // --- end ---
 
@@ -257,7 +260,10 @@ const bind = (root) => {
       Promise.all([
         updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r))),
         updateRouterTree()
-      ]).then(() => onUpdateNotifier.next());
+      ]).then(() => {
+        onUpdateNotifier.next()
+        nodeTree.next(previousTree) // TODO: this is confusing, since "previousTree" is the updated tree
+      });
     }));
 
   // initial load
