@@ -120,9 +120,9 @@ nodeInspect.useComponentTreeInstance(previousTree);
 nodeInspect.useMessagePipe(featureModulesPipe);
 nodeInspect.useComponentTreeInstance(previousTree);
 
-changeDetectionProfiler.useApplicationRef(applicationRef);
-changeDetectionProfiler.useMessagePipe(featureModulesPipe);
 changeDetectionProfiler.useNodeTree(nodeTree.asObservable());
+changeDetectionProfiler.useApplicationRef(applicationRef); // TODO: order matters here, which should be fixed. there should be ready()? -> initialize()
+changeDetectionProfiler.useMessagePipe(featureModulesPipe);
 
 // --- end ---
 

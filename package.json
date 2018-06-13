@@ -64,6 +64,7 @@
     "@angular/platform-browser": "5.1.2",
     "@angular/platform-browser-dynamic": "5.1.2",
     "@angular/router": "5.1.2",
+    "angular-split": "^1.0.0-rc.3",
     "basscss": "7.1.1",
     "basscss-border-colors": "2.1.0",
     "basscss-type-scale": "1.0.5",

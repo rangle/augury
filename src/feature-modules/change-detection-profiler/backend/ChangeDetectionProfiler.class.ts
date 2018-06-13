@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
 
+import { serialize } from '../../../utils/serialize'
+
 import { MessagePipeBackend, MessageType, Message } from 'feature-modules/.lib';
 
 // module deps
@@ -90,6 +92,7 @@ export class ChangeDetectionProfiler {
     this._appRef = appRef;
     this._ngZone = this._appRef._zone;
     let cause,
+        tree_snap,
         running_start,
         running_time,
         change_detection_start,
@@ -110,6 +113,7 @@ export class ChangeDetectionProfiler {
         content: {
           tick: {
             id: running_start,
+            tree_snap: serialize(tree_snap),
             start_time: running_start,
             running_time,
             change_detection_time,
@@ -126,6 +130,9 @@ export class ChangeDetectionProfiler {
       running_time = Date.now() - running_start
       console.log('start change detection, running time: ' + running_time);
     };
+    this._nodeTree$.subscribe(treeSnapshot => {
+      tree_snap = treeSnapshot
+    })
   }
 
   /**

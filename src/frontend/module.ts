@@ -77,12 +77,15 @@ import {
   ChangeDetectionProfilerActions,
   CHANGE_DETECTION_PROFILER_COMPONENTS } from 'feature-modules/change-detection-profiler/frontend';
 
+import { AngularSplitModule } from 'angular-split';
+
 @NgModule({
   imports: [
     BrowserModule,
     CommonModule,
     FormsModule,
     NgReduxModule,
+    AngularSplitModule,
   ],
   declarations: [
     Accordion,
