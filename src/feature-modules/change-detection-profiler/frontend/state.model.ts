@@ -3,11 +3,13 @@ const _getState = (store: any): ChangeDetectionProfilerState => store[NAMESPACE]
 
 export interface ChangeDetectionProfilerState {
   ticks: Array<any>;
-  cyclesPerSecond: number
+  taskQueue: Array<any>;
+  cyclesPerSecond: number;
 }
 
 export const INITIAL_STATE: ChangeDetectionProfilerState = {
   ticks: [],
+  taskQueue: [],
   cyclesPerSecond: 0
 };
 
@@ -16,6 +18,8 @@ export class ChangeDetectionProfilerSelectors {
     = (store) => _getState(store).ticks
   static cyclesPerSecond
     = (store) => _getState(store).cyclesPerSecond
+  static taskQueue
+    = (store) => _getState(store).taskQueue
 }
 
 export class ChangeDetectionProfilerUpdaters {
@@ -28,6 +32,10 @@ export class ChangeDetectionProfilerUpdaters {
   static updateCyclesPerSecond = (cyclesPerSecond) =>
     (state: ChangeDetectionProfilerState): ChangeDetectionProfilerState =>
       merge(state, { cyclesPerSecond })
+
+  static updateTaskQueue = (queue) =>
+    (state: ChangeDetectionProfilerState): ChangeDetectionProfilerState =>
+      merge(state, { taskQueue: queue })
 
 }
 

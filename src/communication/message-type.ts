@@ -105,5 +105,9 @@ export enum MessageType {
   /* change-detection-profiler */
   CDP_Tick, // backend
   CDP_MetricsPerSecond, // backend
+  CDP_Pause, // frontend
+  CDP_Unpause, // fronend
+  CDP_QueuedTask, // backend
+  CDP_DequeuedTask, // backend
 
 }

@@ -97,6 +97,29 @@ export class ChangeDetectionProfiler {
         running_time,
         change_detection_start,
         change_detection_time;
+    this._ngZone.augury_onQueueTask.subscribe((queue) => {
+      console.log('queued task', queue)
+      this._pipe.sendSimple({
+        messageType: MessageType.CDP_QueuedTask,
+        content: { queue: queue.map(task => ({
+          type: task.type,
+          eventName: task.eventName,
+          source: task.source,
+          callbackFnName: task.callback.name,
+          targetType: task.target.constructor.name,
+          targetClasses: Array.from(task.target.classList),
+          targetAttributes: task.target.getAttributeNames(),
+          _id: task._id
+        })) }
+      })
+    })
+    this._ngZone.augury_onDequeueTask.subscribe((queue) => {
+      console.log('dequeued task', queue)
+      this._pipe.sendSimple({
+        messageType: MessageType.CDP_DequeuedTask,
+        content: { queue: queue.map(task => task.type) }
+      })
+    })
     this._ngZone.augury_onInvokeTask.subscribe((task) => {
       console.log(task)
     })

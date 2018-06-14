@@ -17,13 +17,14 @@ import { ChangeDetectionProfilerSelectors as Selectors } from '../../state.model
 })
 export class POCComponent {
 
-  @select(Selectors.ticks) ticks;
+  @select(Selectors.ticks) cycles;
+  @select(Selectors.taskQueue) taskQueue;
   @select(Selectors.cyclesPerSecond) cycles_per_second;
 
   constructor(
     private _nodeStateService: ChangeDetectionProfilerService
   ) {
-    this.ticks.subscribe((...args) => console.log(args))
+    this.cycles.subscribe((...args) => console.log(args))
   }
 
 }

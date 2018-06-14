@@ -17,6 +17,7 @@ export class ChangeDetectionProfilerService {
     private _pipe: MessagePipeFrontend,
   ) {
     this._pipe.addHandler((message: Message<any>) => {
+      console.log(message);
       switch(message.messageType) {
 
         case MessageType.CDP_Tick:
@@ -25,6 +26,14 @@ export class ChangeDetectionProfilerService {
 
         case MessageType.CDP_MetricsPerSecond:
           this._actions.genericUpdate(Updaters.updateCyclesPerSecond(message.content.cycles))
+          break;
+
+        case MessageType.CDP_QueuedTask:
+          this._actions.genericUpdate(Updaters.updateTaskQueue(message.content.queue))
+          break;
+
+        case MessageType.CDP_DequeuedTask:
+          this._actions.genericUpdate(Updaters.updateTaskQueue(message.content.queue))
           break;
 
       }
