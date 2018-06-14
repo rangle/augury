@@ -20,7 +20,7 @@ export class ChangeDetectionProfiler {
   private _innerZoneFork: any;
   private _topComponent: any;
   private _cyclesThisSecond: number = 0;
-  private _metricsPerSecondInterval;
+  // private _metricsPerSecondInterval;
   private _nodesCheckedThisCycle = {};
   private _trigger:any = undefined;
   private _inCycle: boolean = false;
@@ -152,7 +152,7 @@ export class ChangeDetectionProfiler {
       }
     });
 
-    this._metricsPerSecondInterval = setInterval(() => {
+    /* this._metricsPerSecondInterval = setInterval(() => {
       this._pipe.sendSimple({
         messageType: MessageType.CDP_MetricsPerSecond,
         content: {
@@ -161,7 +161,7 @@ export class ChangeDetectionProfiler {
       })
       this._cyclesThisSecond = 0;
     }, 1000);
-
+   */
   }
 
 }
