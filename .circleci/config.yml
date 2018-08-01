@@ -19,6 +19,15 @@ jobs:
     steps:
       - checkout
 
+      # An old method to create the CRX file for Chrome has a dependency on xxd
+      # this library is available by installing VIM
+      # there are better solutions available, but this is the least change to the current build process
+      - run:
+          name: "Install xxd"
+          command: |
+            sudo apt-get update
+            sudo apt-get -y install vim
+
       # Download and cache dependencies
       - restore_cache:
           keys:
