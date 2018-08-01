@@ -11,6 +11,7 @@ dir="temp"
 key="key.pem"
 name="augury"
 files="manifest.json build images index.html frontend.html popup.html popup.js"
+s3bucket="batarangle.io"
 
 pub="$name.pub"
 sig="$name.sig"
@@ -89,7 +90,7 @@ sig_len_hex=$(byte_swap $(printf '%08x\n' $(ls -l "$sig" | awk '{print $5}')))
 ) > "$chrome_crx"
 
 echo "Wrote $chrome_crx"
-echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
+echo "<script>window.location.href = 'https://s3.amazonaws.com/$s3bucket/$crx';</script>" > download.html
 echo "Wrote file"
 
 # move files to artifacts folder in circleci
