@@ -1,0 +1,56 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:10.7
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/work
+
+    steps:
+      - checkout
+
+      # An old method to create the CRX file for Chrome has a dependency on xxd
+      # this library is available by installing VIM
+      # there are better solutions available, but this is the least change to the current build process
+      - run:
+          name: "Install xxd"
+          command: |
+            sudo apt-get update
+            sudo apt-get -y install vim
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      # - run: yarn test
+      - run :
+          name: "make an Artifacts directory"
+          command: |
+            echo 'export ARTIFACTS_PATH="./artifacts"' >> $BASH_ENV
+            mkdir -p ~/work/artifacts
+
+      - run: npm run pack
+
+      - store_artifacts:
+          path: ~/work/artifacts

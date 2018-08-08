@@ -7,6 +7,8 @@
 node -v
 npm -v
 
+echo "ARTIFACTS_PATH: $ARTIFACTS_PATH"
+
 dir="temp"
 key="key.pem"
 name="augury"
@@ -22,7 +24,7 @@ xpi="$name.xpi"
 #sentry_key=${SENTRY_KEY:?"The environment variable 'SENTRY_KEY' must be set and non-empty"}
 
 # assign build name to zip and crx file in circleci env
-if [ $CIRCLE_BUILD_NUM ] || [ $CIRCLE_ARTIFACTS ]; then
+if [ $CIRCLE_BUILD_NUM ]; then
   chrome_canary_zip="$name-$CIRCLE_BUILD_NUM.chrome.canary.zip"
   chrome_zip="$name-$CIRCLE_BUILD_NUM.chrome.zip"
   chrome_crx="$name-$CIRCLE_BUILD_NUM.chrome.crx"
@@ -92,10 +94,13 @@ echo "Wrote $chrome_crx"
 echo "<script>window.location.href = 'https://s3.amazonaws.com/batarangle.io/$crx';</script>" > download.html
 echo "Wrote file"
 
+# moving files to CircleCI Artifacts is now handled in config.yml
 # move files to artifacts folder in circleci
-if [ $CIRCLE_ARTIFACTS ]; then
-  mv $chrome_zip $CIRCLE_ARTIFACTS
-  mv $chrome_crx $CIRCLE_ARTIFACTS
+if [ $ARTIFACTS_PATH ]; then
+  mv $chrome_zip $ARTIFACTS_PATH
+  mv $chrome_crx $ARTIFACTS_PATH
+else
+  echo "CIRCLE_ARTIFACTS is not defined"
 fi
 
 # ---------------------------------------------------------
@@ -109,9 +114,9 @@ grab_files_and_zip
 cp $zip $firefox_zip
 cp $zip $firefox_xpi
 
-if [ $CIRCLE_ARTIFACTS ]; then
-  mv $firefox_zip $CIRCLE_ARTIFACTS
-  mv $firefox_xpi $CIRCLE_ARTIFACTS
+if [ $ARTIFACTS_PATH ]; then
+  mv $firefox_zip $ARTIFACTS_PATH
+  mv $firefox_xpi $ARTIFACTS_PATH
 fi
 
 # ---------------------------------------------------------
@@ -123,8 +128,8 @@ grab_files_and_zip
 
 cp $zip $chrome_canary_zip
 
-if [ $CIRCLE_ARTIFACTS ]; then
-  mv $chrome_canary_zip $CIRCLE_ARTIFACTS
+if [ $ARTIFACTS_PATH ]; then
+  mv $chrome_canary_zip $ARTIFACTS_PATH
 fi
 
 # ---------------------------------------------------------
