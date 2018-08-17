@@ -1,7 +1,7 @@
 {
   "name": "Augury",
   "short_name": "Augury",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "description": "Extends the Developer Tools, adding tools for debugging and profiling Angular applications.",
   "permissions": [
     "storage"

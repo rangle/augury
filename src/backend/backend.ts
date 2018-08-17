@@ -416,7 +416,7 @@ export const routersFromRoots = () => {
 
   for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
     const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
-      prev ? prev : p[idx].name === 'Router' ? p[idx] : null, null);
+      prev ? prev : p[idx] !== null && p[idx].name === 'Router' ? p[idx] : null, null);
     if (routerFn &&
         element.componentInstance.router &&
         element.componentInstance.router instanceof routerFn) {

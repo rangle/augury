@@ -1,6 +1,6 @@
 {
   "name": "augury",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "description": "Developer Tools Extension for inspecting Angular 2+ applications",
   "license": "MIT",
   "repository": {
