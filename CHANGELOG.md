@@ -1,9 +1,12 @@
 # Change Log
 
-## [1.19.2](https://github.com/rangle/tree/1.19.2)
+## [1.19.3](https://github.com/rangle/tree/1.19.3)
 * Bug fixes
+  - Firefox component state not showing due to CSP issue
   - Check for null before checking .name property ([1322](https://github.com/rangle/augury/issues/1322))
   - possible duplicate of 1322 ([1319](https://github.com/rangle/augury/issues/1319))
+
+## [1.19.2](https://github.com/rangle/tree/1.19.2)
 * Dependency updates
   - Update to CircleCI V2
 
