@@ -1,5 +1,5 @@
 import * as test from 'tape';
-import {serialize, deserialize} from './serialize';
+import { serialize, deserialize, deserializationFailures } from './serialize';
 
 test('utils/serialize: Serialize Array', t => {
   t.plan(1);
