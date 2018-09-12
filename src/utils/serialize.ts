@@ -90,8 +90,19 @@ const serializer = object => {
 /// Serialize a complex object into a function that can recreate the object.
 export const serialize = value => `return ${serializer(value)}`;
 
+// Log for deserialization errors
+export const deserializationFailures = [];
+
 /// Deserialize a function string and invoke the resulting object recreator.
-export const deserialize = value => (new Function(value))();
+export const deserialize = value => {
+  try {
+    const f = new Function(value);
+    return f();
+  } catch (err) {
+    deserializationFailures.push({ value, err });
+    throw err;
+  }
+};
 
 function Reference(to: number = null, value = undefined) {
   this.source = null;

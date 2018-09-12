@@ -79,5 +79,15 @@ test('utils/serialize: Serialize Map Object (number key & value)', t => {
     t.deepEqual(mapKey, k, 'Serialize/deserialize key');
     t.deepEqual(mapVal, v, 'Serialize/deserialize value');
   });
+});
 
+test('utils/serialize: log deserialization failure', t => {
+  t.plan(1);
+
+  try {
+    deserialize('bogus object');
+    t.fail();
+  } catch (err) {
+    t.deepEqual('bogus object', deserializationFailures[0].value);
+  }
 });
