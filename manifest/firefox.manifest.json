@@ -1,5 +1,4 @@
 {
-  "name": "Augury (beta)",
   "applications": {
     "gecko": {
       "id": "augury@rangle.io"

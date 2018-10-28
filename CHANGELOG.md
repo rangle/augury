@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.20.0](https://github.com/rangle/tree/1.20.0)
+* Angular 7 support
+* Bump npm package versions
+* Remove beta from Firefox
+
 ## [1.19.3](https://github.com/rangle/tree/1.19.3)
 * Bug fixes
   - Firefox component state not showing due to CSP issue
