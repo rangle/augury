@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.21.0](https://github.com/rangle/tree/1.21.0)
+* Fix state now showing issues
+  - ([1340](https://github.com/rangle/augury/issues/1340))
+
 ## [1.20.0](https://github.com/rangle/tree/1.20.0)
 * Angular 7 support
 * Bump npm package versions
