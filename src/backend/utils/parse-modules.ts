@@ -68,7 +68,8 @@ export const parseModulesFromRouter = (router, existingModules: NgModulesRegistr
 
 export const parseModulesFromRootElement = (firstRootDebugElement: any, registry: NgModulesRegistry) => {
   // TODO(steven.kampen): This uses a private API. Can it be improved?
-  const bootstrappedModule = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef)._injector.instance;
+  const appRef = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef);
+  const bootstrappedModule = appRef._injector.instance;
 
   if (bootstrappedModule) {
     _parseModule(
@@ -79,7 +80,7 @@ export const parseModulesFromRootElement = (firstRootDebugElement: any, registry
 
     updateRegistryConfigs(registry);
   }
-
+  return appRef;
 };
 
 const updateRegistryConfigs = (registry: NgModulesRegistry) => {
