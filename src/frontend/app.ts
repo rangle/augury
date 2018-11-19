@@ -167,7 +167,7 @@ export class App {
 
     switch (msg.messageType) {
       case MessageType.Ping:
-        respond();
+        this.restoreSelection();
         break;
       case MessageType.NotNgApp:
         this.error = new ApplicationError(ApplicationErrorType.NotNgApp);
@@ -223,7 +223,7 @@ export class App {
         respond();
         break;
       case MessageType.ErrorCleared:
-        if (msg.content.errorTypes.includes(this.error.errorType)) {
+        if (this.error && msg.content.errorTypes.includes(this.error.errorType)) {
           this.error = null;
         }
         respond();
