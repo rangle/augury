@@ -1,6 +1,4 @@
-import {classDecorators, componentMetadata} from '../../tree/decorators';
-import {functionName} from '../../utils/function-name';
-import {Route} from '../utils/parse-router';
+import { componentMetadata} from '../../tree/decorators';
 
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
