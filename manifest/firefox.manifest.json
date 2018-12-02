@@ -1,9 +1,8 @@
 {
-  "name": "Augury (beta)",
   "applications": {
     "gecko": {
       "id": "augury@rangle.io"
     }
   },
-  "content_security_policy": "script-src 'self'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

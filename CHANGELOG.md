@@ -1,14 +1,33 @@
 # Change Log
 
-## [1.19.0](https://github.com/rangle/tree/1.17.0)
+## [1.21.0](https://github.com/rangle/tree/1.21.0)
+* Fix state now showing issues
+  - ([1340](https://github.com/rangle/augury/issues/1340))
+
+## [1.20.0](https://github.com/rangle/tree/1.20.0)
+* Angular 7 support
+* Bump npm package versions
+* Remove beta from Firefox
+
+## [1.19.3](https://github.com/rangle/tree/1.19.3)
+* Bug fixes
+  - Firefox component state not showing due to CSP issue
+  - Check for null before checking .name property ([1322](https://github.com/rangle/augury/issues/1322))
+  - possible duplicate of 1322 ([1319](https://github.com/rangle/augury/issues/1319))
+
+## [1.19.2](https://github.com/rangle/tree/1.19.2)
+* Dependency updates
+  - Update to CircleCI V2
+
+## [1.19.0](https://github.com/rangle/tree/1.19.0)
 * Bug fixes (angularJS hybrid app compatibility, component tree refreshing, and more state panel issues)
 * Highlighter/selection tool improvements
 
-## [1.18.0](https://github.com/rangle/tree/1.17.0)
+## [1.18.0](https://github.com/rangle/tree/1.18.0)
 * Bug fixes (angularJS hybrid app compatibility, component tree refreshing, and more state panel issues)
 * Highlighter/selection tool improvements
 
-## [1.18.0](https://github.com/rangle/tree/1.17.0)
+## [1.18.0](https://github.com/rangle/tree/1.18.0)
 * Bug fixes:
   - ([1306](https://github.com/rangle/augury/issues/1306))
   - ([1307](https://github.com/rangle/augury/issues/1307))

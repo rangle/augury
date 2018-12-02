@@ -1,6 +1,6 @@
 {
   "name": "augury",
-  "version": "1.19.1",
+  "version": "1.21.0",
   "description": "Developer Tools Extension for inspecting Angular 2+ applications",
   "license": "MIT",
   "repository": {
@@ -15,8 +15,8 @@
     "extension"
   ],
   "engines": {
-    "node": ">= 6.9.0 < 9.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">= 10.0.0 < 11.0.0",
+    "npm": ">= 6.0.0"
   },
   "bugs": {
     "url": "https://github.com/rangle/augury/issues"
@@ -37,7 +37,7 @@
     "build:dev:chrome": "cross-env BUILD=chrome npm run build:dev",
     "build:dev:firefox": "cross-env BUILD=firefox npm run build:dev",
     "build:dev:canary": "cross-env BUILD=canary npm run build:dev",
-    "watch": "webpack --watch",
+    "watch": "cross-env NODE_ENV=development webpack --watch",
     "watch:chrome": "cross-env BUILD=chrome npm run watch",
     "watch:firefox": "cross-env BUILD=firefox npm run watch",
     "watch:canary": "cross-env BUILD=canary npm run watch",
@@ -71,6 +71,7 @@
     "core-js": "2.2.2",
     "crypto": "0.0.3",
     "d3": "4.5.0",
+    "flatted": "^2.0.0",
     "immutable": "3.7.6",
     "ramda": "0.25.0",
     "redux": "3.7.2",
@@ -96,22 +97,22 @@
     "basscss-layout": "3.1.0",
     "clean-webpack-plugin": "^0.1.19",
     "clone": "2.1.0",
+    "copy-webpack-plugin": "4.3.1",
     "cross-env": "3.1.4",
     "css-loader": "0.28.11",
-    "copy-webpack-plugin": "4.3.1",
     "d3-hierarchy": "1.1.1",
     "d3-selection": "1.0.3",
     "d3-shape": "1.0.4",
     "es6-promise": "4.0.5",
     "es6-shim": "0.35.0",
     "file-loader": "1.1.11",
+    "json5": "1.0.1",
     "merge-jsons-webpack-plugin": "1.0.14",
     "msgpack-lite": "0.1.20",
     "postcss-cssnext": "2.5.2",
     "postcss-import": "9.1.0",
     "postcss-loader": "2.1.3",
     "raven-js": "3.14.2",
-    "json5": "^1.0.1",
     "raw-loader": "0.5.1",
     "reflect-metadata": "0.1.9",
     "rimraf": "2.5.4",
@@ -126,8 +127,8 @@
     "typescript": "2.4.2",
     "url-loader": "1.0.1",
     "webpack": "4.5.0",
-    "webpack-bundle-analyzer": "^2.11.1",
-    "webpack-cli": "^2.0.14",
-    "webpack-dev-server": "3.1.3"
+    "webpack-bundle-analyzer": "2.11.1",
+    "webpack-cli": "2.0.14",
+    "webpack-dev-server": "3.1.10"
   }
 }

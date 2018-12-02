@@ -61,6 +61,8 @@ import {SimpleOptions} from '../options';
 
 import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend/index';
+import { ApplicationRef, NgModuleRef } from '@angular/core';
+import { Observable } from 'rxjs';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -71,6 +73,10 @@ declare const treeRenderOptions: SimpleOptions;
 /// since it will be faster than trying to apply hundreds or thousands of
 /// changes to an existing tree.
 const deltaThreshold = 512;
+
+/// ms inbetween checks for newly created ng module after onDestroy called on previous one.
+/// This is to support HMR.
+const CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS = 50;
 
 /// For large messages, we do not send them through the normal pipe (which
 /// is backend > content script > backround channel > frontend), we add them
@@ -136,23 +142,9 @@ const sendNgModulesMessage = () => {
   send(MessageFactory.push());
 };
 
-const parseInitialModules = (): Promise<void> => {
-  return Promise.resolve().then(() => {
-    runAndHandleUncaughtExceptions(() => {
-      const roots = getAllAngularRootElements().map(r => ng.probe(r));
-      if (roots.length) {
-        parseModulesFromRootElement(roots[0], parsedModulesData);
-        sendNgModulesMessage();
-      }
-    });
-  });
-};
-
-const updateComponentTree = (roots: Array<any>): Promise<void> => {
-  return Promise.resolve().then(() => {
-
-    const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
-
+const updateComponentTree = async (roots: Array<any>, sendUpdates: boolean = true) => {
+  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+  if (sendUpdates) {
     if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
       messageBuffer.enqueue(MessageFactory.completeTree(tree));
     }
@@ -172,13 +164,13 @@ const updateComponentTree = (roots: Array<any>): Promise<void> => {
     /// Send a message through the normal channels to indicate to the frontend
     /// that messages are waiting for it in {@link messageBuffer}
     send(MessageFactory.push());
+  }
 
-    previousTree = tree;
-    highlighter.useComponentTreeInstance(previousTree);
+  previousTree = tree;
+  highlighter.useComponentTreeInstance(previousTree);
 
-    previousCount = count;
+  previousCount = count;
 
-  });
 };
 
 const updateLazyLoadedNgModules = (routers): Promise<void> => {
@@ -193,9 +185,8 @@ const updateLazyLoadedNgModules = (routers): Promise<void> => {
   });
 };
 
-const updateRouterTree = (): Promise<void> => {
+const updateRouterTree = () => {
   return Promise.resolve().then(() => {
-
     const routers: Array<any> = routerTree();
     const parsedRoutes = routers.map(parseRoutes);
 
@@ -214,31 +205,20 @@ const updateRouterTree = (): Promise<void> => {
       updateLazyLoadedNgModules(routers);
       messageBuffer.enqueue(MessageFactory.routerTree(parsedRoutes));
     }
-
   });
 };
 
-const subject = new Subject<void>();
+let ngModuleRef: NgModuleRef<any>;
+let isStableSubscription: Subscription;
 
-const subscriptions = new Array<Subscription>();
+const collectRoots = () => getAllAngularRootElements().map(r => ng.probe(r)).filter(x => x !== null);
 
-const bind = (root) => {
-  const ngZone = root.injector.get(ng.coreTokens.NgZone);
-  if (ngZone) {
-    subscriptions.push(ngZone.onStable.subscribe(() => subject.next(void 0)));
-  }
-
-  // parse components and routes each time
-  subscriptions.push(
-    subject.debounceTime(0).subscribe(() => {
-      Promise.all([
-        updateComponentTree(getAllAngularRootElements().map(r => ng.probe(r))),
-        updateRouterTree()
-      ]).then(() => onUpdateNotifier.next());
-    }));
-
-  // initial load
-  subject.next(void 0);
+const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
+  Observable.timer(CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS, CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS)
+    .takeWhile((_, i) => !ngModuleRef && i < 100)
+    .forEach(() => {
+      resubscribe();
+    });
 };
 
 const resubscribe = () => {
@@ -247,26 +227,43 @@ const resubscribe = () => {
 
     messageBuffer.clear();
 
-    for (const subscription of subscriptions) {
-      subscription.unsubscribe();
-    }
+    ngModuleRef = undefined;
+    parsedModulesData.modules = {};
+    parsedModulesData.names = [];
+    parsedModulesData.configs = {};
+    parsedModulesData.tokenIdMap = {};
 
-    subscriptions.splice(0, subscriptions.length);
-
-    getAllAngularRootElements().forEach(root => bind(ng.probe(root)));
-
-    setTimeout(() => runAndHandleUncaughtExceptions(() => parseInitialModules().then(() => onUpdateNotifier.next())));
-
-    previousRoutes = null;
-    setTimeout(() => runAndHandleUncaughtExceptions(() => updateRouterTree().then(() => onUpdateNotifier.next())));
+    setTimeout(() => {
+      Promise.resolve().then(() => {
+        runAndHandleUncaughtExceptions(() => {
+          const roots = collectRoots();
+          if (roots.length) {
+            const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
+            if (isStableSubscription) { isStableSubscription.unsubscribe(); }
+            isStableSubscription = appRef.isStable.subscribe((e) => {
+              updateComponentTree(collectRoots());
+              updateRouterTree();
+              send(MessageFactory.ping());
+            });
+            ngModuleRef = (appRef as any)._injector;
+            ngModuleRef.onDestroy(() => {
+              ngModuleRef = undefined;
+              listenForSomeTimeAndMaybeResubscribe(1000);
+            });
+            sendNgModulesMessage();
+          }
+        });
+      })
+      .then(() =>
+        runAndHandleUncaughtExceptions(() => {
+          previousRoutes = null;
+          updateRouterTree();
+        })
+      )
+      .then(() => onUpdateNotifier.next());
+    });
   });
 };
-
-// Check to see if the Augury tab is open and active before we start
-// subscribing to Angular state changes. Our internal state management
-// can cause a slight drag on performance which is unnecessary if
-// the Augury UI / frontend is not even open.
-send(MessageFactory.ping()).then(resubscribe);
 
 const selectedComponentPropertyKey = '$$el';
 
@@ -303,7 +300,7 @@ const messageHandler = (message: Message<any>) => {
 
       case MessageType.SelectComponent:
         const path: Path = message.content.path;
-
+        updateComponentTree(collectRoots(), false);
         if (previousTree) {
           const node = previousTree.traverse(path);
           this.consoleReference(node);
@@ -313,7 +310,7 @@ const messageHandler = (message: Message<any>) => {
           // properties of each node on the tree that would be a performance
           // killer, so we only send the componentInstance values for the
           // node that has been selected.
-          return getComponentInstance(previousTree, node);
+          return getComponentInstance(node);
         }
         return;
 
@@ -345,7 +342,7 @@ browserSubscribe(messageHandler);
 // We do not store component instance properties on the node itself because
 // we do not want to have to serialize them across backend-frontend boundaries.
 // So we look them up using ng.probe, and only when the node is selected.
-const getComponentInstance = (tree: MutableTree, node: Node) => {
+const getComponentInstance = (node: Node) => {
   if (node) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
@@ -414,9 +411,9 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
 export const routersFromRoots = () => {
   const routers = [];
 
-  for (const element of getAllAngularRootElements().map(e => ng.probe(e))) {
+  for (const element of collectRoots()) {
     const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
-      prev ? prev : p[idx].name === 'Router' ? p[idx] : null, null);
+      prev ? prev : p[idx] !== null && p[idx].name === 'Router' ? p[idx] : null, null);
     if (routerFn &&
         element.componentInstance.router &&
         element.componentInstance.router instanceof routerFn) {
@@ -431,8 +428,8 @@ export const routerTree = (): Array<any> => {
   let routers = new Array<any>();
 
   if (ng.coreTokens.Router) {
-    for (const rootElement of getAllAngularRootElements()) {
-      routers = routers.concat(ng.probe(rootElement).injector.get(ng.coreTokens.Router));
+    for (const rootElement of collectRoots()) {
+      routers = routers.concat(rootElement.injector.get(ng.coreTokens.Router));
     }
   } else {
     for (const router of routersFromRoots()) {
@@ -497,7 +494,7 @@ export const applicationOperations = {
     if (result) {
       return serialize(result);
     }
-    return null;
+    return 'null';
   },
   /// Read all messages in the buffer and remove them
   readMessageQueue: (): Array<Message<any>> => {
