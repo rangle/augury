@@ -37,6 +37,16 @@ chrome.runtime.onMessage.addListener(
         sendResponse({ // note that this is separate from our message response system
           extensionId: chrome.runtime.id
         });
+    } else if (message.messageType === MessageType.NgApp) {
+      // if angular was detected, show colourful icon
+      chrome.browserAction.setIcon({
+        path: {
+          '16': 'images/icon16.png',
+          '48': 'images/icon48.png',
+          '128': 'images/icon128.png',
+        },
+        tabId: sender.tab.id,
+      });
     }
 
     if (sender.tab) {

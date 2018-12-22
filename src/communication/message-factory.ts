@@ -63,6 +63,10 @@ export abstract class MessageFactory {
     });
   }
 
+  static angularDetected(): Message<void> {
+    return create({ messageType: MessageType.NgApp });
+  }
+
   static notNgApp(): Message<ApplicationError> {
     return create({
       messageType: MessageType.NotNgApp,
