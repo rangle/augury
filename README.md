@@ -8,8 +8,6 @@
 1. [Supported version](#supported-version)
 1. [Working on Augury](#working-on-augury)
 1. [Building and installing locally](#building-and-installing-locally)
-1. [Supported version](#supported-version)
-1. [Working on Augury](#working-on-augury)
 1. [Running tests](#running-tests)
 1. [Reporting issues](#reporting-issues)
 1. [Contributing](#contributing)
@@ -52,7 +50,7 @@ To develop the Augury extension, the following environment is used:
 git clone git://github.com/rangle/augury
 cd augury
 npm install
-npm run dev-build
+npm run build:dev
 ```
 
 Try out the extension with one of the example app from the [Guide](https://augury.angular.io/pages/guides/).
