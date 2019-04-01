@@ -8,8 +8,6 @@
 1. [Supported version](#supported-version)
 1. [Working on Augury](#working-on-augury)
 1. [Building and installing locally](#building-and-installing-locally)
-1. [Supported version](#supported-version)
-1. [Working on Augury](#working-on-augury)
 1. [Running tests](#running-tests)
 1. [Reporting issues](#reporting-issues)
 1. [Contributing](#contributing)
