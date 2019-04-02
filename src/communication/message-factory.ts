@@ -212,7 +212,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static errorCleared(errorTypes: [ApplicationErrorType]): Message<{ errorTypes: [ApplicationErrorType] }> {
+  static errorCleared(errorTypes: ApplicationErrorType[]): Message<{ errorTypes: ApplicationErrorType[] }> {
     return create({
       messageType: MessageType.ErrorCleared,
       content: { errorTypes },

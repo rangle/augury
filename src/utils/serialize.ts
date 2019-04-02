@@ -18,5 +18,5 @@ export const serialize = value => {
 
 /// Deserialize a function string and invoke the resulting object recreator.
 export const deserialize = value => {
-  return parse(value);
+  return value === 'null' || value === null ? null : parse(value);
 };
