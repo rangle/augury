@@ -17,7 +17,7 @@
   </div>
 
   <div
-    *ngIf="node && node.changeDetection"
+    *ngIf="node && (node.changeDetection !== null && node.changeDetection !== undefined)"
     class="section-title bg-darken-1 bg-panel primary-color pointer border-bottom py2 px3">
     <span class="info-key">Change Detection: </span>{{changeDetectionStrategies[node.changeDetection]}}
   </div>

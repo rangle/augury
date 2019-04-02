@@ -7,8 +7,7 @@ import {
 
 import {functionName} from '../utils';
 
-export const classDecorators = (token): Array<any> =>
-  Reflect.getOwnMetadata('annotations', token) || [];
+const ANNOTATIONS_PROP_KEY = '__annotations__';
 
 export const propertyDecorators = (instance): Array<any> =>
   Reflect.getOwnMetadata('propMetadata', instance.constructor) || [];
@@ -42,7 +41,14 @@ export const componentMetadata = (token) => {
     return null;
   }
 
-  return classDecorators(token).find(d => d.toString() === '@Component');
+  // since angular v5 this should work
+  const metadata = (token[ANNOTATIONS_PROP_KEY] || [])
+    .find(d => Object.getPrototypeOf(d).ngMetadataName === 'Component');
+
+  return metadata ? metadata :
+    // Otherwise we fall back to the old way
+    (Reflect.getOwnMetadata('annotations', token) || []).find(d => d.toString() === '@Component');
+
 };
 
 export const componentInputs = (metadata, instance): Array<InputProperty> => {

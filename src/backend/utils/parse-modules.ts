@@ -1,6 +1,4 @@
-import {classDecorators, componentMetadata} from '../../tree/decorators';
-import {functionName} from '../../utils/function-name';
-import {Route} from '../utils/parse-router';
+import { componentMetadata} from '../../tree/decorators';
 
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
@@ -68,7 +66,8 @@ export const parseModulesFromRouter = (router, existingModules: NgModulesRegistr
 
 export const parseModulesFromRootElement = (firstRootDebugElement: any, registry: NgModulesRegistry) => {
   // TODO(steven.kampen): This uses a private API. Can it be improved?
-  const bootstrappedModule = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef)._injector.instance;
+  const appRef = firstRootDebugElement.injector.get(ng.coreTokens.ApplicationRef);
+  const bootstrappedModule = appRef._injector.instance;
 
   if (bootstrappedModule) {
     _parseModule(
@@ -79,7 +78,7 @@ export const parseModulesFromRootElement = (firstRootDebugElement: any, registry
 
     updateRegistryConfigs(registry);
   }
-
+  return appRef;
 };
 
 const updateRegistryConfigs = (registry: NgModulesRegistry) => {
