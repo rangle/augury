@@ -18,12 +18,10 @@ import {Path, serializePath} from './path';
 import {functionName, serialize} from '../utils';
 
 import {
-  classDecorators,
   componentMetadata,
   componentInputs,
   componentOutputs,
   parameterTypes,
-  propertyDecorators,
   injectedParameterDecorators,
 } from './decorators';
 

@@ -77,8 +77,8 @@ if (document instanceof HTMLDocument) {
 
   subscribe((message: Message<any>) => messageJumpContext(message));
 
-  send(MessageFactory.initialize())
-    .then((response: { extensionId: string }) => {
+  Promise.resolve()
+    .then(() => {
       injectScript('build/ng-validate.js');
     })
     .catch(error => {
