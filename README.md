@@ -65,7 +65,7 @@ Try out the extension with one of the example app from the [Guide](https://augur
 
 1. Navigate to `about:debugging#addons` to load add-on.
 1. Click Load Temporary Add-on
-1. In the dialog, open the directory you just cloned.
+1. In the dialog, open the directory you just cloned, and select the `manifest.json` file.
 
 ### Running tests
 

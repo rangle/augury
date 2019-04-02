@@ -8,7 +8,9 @@ export enum MessageType {
   /// Check to see if the other side (frontend or backend) is open and responsive
   Ping,
 
+  /// did not detect current page as containing an angular app
   NotNgApp,
+  NgApp,
 
   /// Response to a previous message
   Response,
