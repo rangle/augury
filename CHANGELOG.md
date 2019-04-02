@@ -1,4 +1,10 @@
 # Change Log
+
+## [1.23.0](https://github.com/rangle/tree/1.23.0)
+* Fix component info scrolling firefox ([1360](https://github.com/rangle/augury/pull/1360) & [1376](https://github.com/rangle/augury/pull/1376))
+* Handle string provider type in Description.getProviderDescription ([1367](https://github.com/rangle/augury/pull/1367))
+* Remove from README duplicate at table of contents ([1371](https://github.com/rangle/augury/pull/1371))
+
 ## [1.22.0](https://github.com/rangle/tree/1.22.0)
 * Fix HMR issue.
 * Fix change-detection parsing issue ([1344](https://github.com/rangle/augury/issues/1344))
