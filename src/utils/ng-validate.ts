@@ -24,6 +24,8 @@ const sendError = <DispatchHandler>() => {
 
 const handler = () => {
   if (isAngular()) {
+    // tell backend to update extension icon to show that the current page contains angular
+    send(MessageFactory.angularDetected());
     if (isDebugMode()) {
       messageJumpContext(MessageFactory.frameworkLoaded());
       if (unsubscribe) {

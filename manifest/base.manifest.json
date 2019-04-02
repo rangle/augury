@@ -7,7 +7,11 @@
     "storage"
   ],
   "browser_action": {
-    "default_icon": "images/augury.png",
+    "default_icon": {
+      "16": "images/icon16-disabled.png",
+      "48": "images/icon48-disabled.png",
+      "128": "images/icon128-disabled.png"
+    },
     "default_popup": "popup.html"
   },
   "devtools_page": "index.html",
