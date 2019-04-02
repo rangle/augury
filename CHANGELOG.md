@@ -1,4 +1,7 @@
 # Change Log
+## [1.22.0](https://github.com/rangle/tree/1.22.0)
+* Fix HMR issue.
+* Fix change-detection parsing issue ([1344](https://github.com/rangle/augury/issues/1344))
 
 ## [1.21.0](https://github.com/rangle/tree/1.21.0)
 * Fix state now showing issues

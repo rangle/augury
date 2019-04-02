@@ -68,8 +68,8 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      chrome: '{runtime: {connect: function() {}}}'
+      chrome: '({runtime: {connect: (function () {})}})'
     }),
-    new CleanWebpackPlugin(buildDir),
-  ],
+    new CleanWebpackPlugin(buildDir)
+  ]
 };
