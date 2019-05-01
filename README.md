@@ -2,6 +2,8 @@
 
 [![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://augury-slack.herokuapp.com/badge.svg)](https://augury-slack.herokuapp.com)
 
+> Check out the [Augury Labs](https://github.com/rangle/augury-labs) project for new experimental Angular developer tools.
+
 ## Table of content
 
 1. [Introduction](#introduction)
