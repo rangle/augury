@@ -10,6 +10,10 @@ bt-router-tree {
   & .node {
     cursor: pointer;
   }
+  
+  svg {
+    max-height: none;
+  }
 }
 
 .node-route {
