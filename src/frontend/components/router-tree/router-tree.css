@@ -5,3 +5,7 @@ pre {
 .no-routes {
   color: #b0b0b0;
 }
+
+.svg-container {
+  max-height: inherit;
+}

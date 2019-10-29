@@ -2,6 +2,8 @@
 
 [![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://augury-slack.herokuapp.com/badge.svg)](https://augury-slack.herokuapp.com)
 
+> Check out the [Augury Labs](https://github.com/rangle/augury-labs) project for new experimental Angular developer tools.
+
 ## Table of content
 
 1. [Introduction](#introduction)
@@ -45,6 +47,9 @@ To develop the Augury extension, the following environment is used:
 * TypeScript
 
 ### Building and installing locally
+If you currently have the Augury extension installed from the Chrome Web Store or Firefox Add-ons, you will need to remove it from your browser's extensions before adding the dev version of the extension to your browser from your local machine.
+
+To install Augury locally, perform the following steps:
 
 ```bash
 git clone git://github.com/rangle/augury
