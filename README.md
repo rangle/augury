@@ -47,7 +47,7 @@ To develop the Augury extension, the following environment is used:
 * TypeScript
 
 ### Building and installing locally
-If you've previously added the Augury extension using the Chrome Web Store or Firefox Add-ons, you will need to remove it from your browser's extensions before adding the dev version of the extension to your browser from your local machine.
+If you currently have the Augury extension installed from the Chrome Web Store or Firefox Add-ons, you will need to remove it from your browser's extensions before adding the dev version of the extension to your browser from your local machine.
 
 To install Augury locally, perform the following steps:
 
