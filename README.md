@@ -157,5 +157,9 @@ To learn more about AoT compilation, visit [this section of Angular documentatio
 
 Prior to [Angular 2.2.0](https://github.com/angular/angular/blob/master/CHANGELOG.md#220-upgrade-firebooster-2016-11-14), `enableDebugTools()` would clobber `ng.probe`, which breaks Augury. Prior to that version, [this workaround](https://github.com/AngularClass/angular2-webpack-starter/blob/dbb7d10e6e84b8e88116d957f0047b422ab807c1/src/app/environment.ts#L28...L36) will circumvent the issue.
 
+## `No state` for some components
+
+The date polyfill `core-js/es6/date` can throw an exception when stringifying a component. To workaround this issue, exclude this polyfill in your development environment.
+
 ### License
 [MIT](LICENSE)
