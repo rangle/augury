@@ -70,7 +70,7 @@
     "core-js": "3.4.0",
     "crypto": "1.0.1",
     "d3": "5.12.0",
-    "flatted": "^2.0.1",
+    "flatted": "2.0.0",
     "immutable": "4.0.0-rc.12",
     "ramda": "0.26.1",
     "redux": "4.0.1",
@@ -78,7 +78,7 @@
     "redux-logger": "3.0.6",
     "redux-observable": "1.2.0",
     "rxjs": "6.5.3",
-    "zone.js": "0.10.2"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular/compiler-cli": "8.2.13",

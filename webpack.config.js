@@ -40,7 +40,7 @@ module.exports = {
   },
 
   entry: {
-    frontend: ["./src/frontend/vendor", "./src/frontend/module"],
+    frontend: ["./src/frontend/vendor", "./src/frontend/main"],
     backend: ["./src/backend/backend"],
     "ng-validate": ["./src/utils/ng-validate"],
     devtools: ["./src/devtools/devtools"],
@@ -106,6 +106,7 @@ module.exports = {
     new DefinePlugin(BuildConfig.stringifyValues(env)),
     new AngularCompilerPlugin({
       tsConfigPath: "tsconfig.json",
+      mainPath: "./src/frontend/main",
       entryModule: "./src/frontend/module#FrontendModule",
       sourceMap: true
     }),

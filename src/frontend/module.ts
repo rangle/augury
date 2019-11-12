@@ -1,8 +1,7 @@
-import { NgModule, ErrorHandler, enableProdMode } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { Accordion } from './components/accordion/accordion';
 import { AppTrees } from './components/app-trees/app-trees';
@@ -63,7 +62,6 @@ import {
   Options,
 } from './state';
 
-import { buildConfig } from '../build.config';
 import { App } from './app';
 
 @NgModule({
@@ -134,9 +132,3 @@ export class FrontendModule {
     ngRedux.provideStore(store);
   }
 }
-
-if (buildConfig.prodMode) {
-  enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(FrontendModule);
