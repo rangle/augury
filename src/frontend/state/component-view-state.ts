@@ -1,7 +1,6 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Subject, Observable } from 'rxjs';
 
 import {
   MutableTree,
@@ -9,11 +8,11 @@ import {
   deserializePath,
 } from '../../tree';
 
-import {highlightTime} from '../../utils';
+import { highlightTime } from '../../utils';
 
-import {ParseUtils} from '../utils/parse-utils';
+import { ParseUtils } from '../utils/parse-utils';
 
-import {ExpandState} from './expand-state';
+import { ExpandState } from './expand-state';
 
 const checkReferenceId = (node: Node) => {
   if (node == null) {

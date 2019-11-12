@@ -5,8 +5,8 @@ import {
   ErrorHandler,
 } from '@angular/core';
 
-import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
-import {reportUncaughtError} from '../utils/error-handling';
+import { UncaughtErrorHandler } from './utils/uncaught-error-handler';
+import { reportUncaughtError } from '../utils/error-handling';
 
 import {
   Connection,
@@ -44,13 +44,13 @@ import {
   InstanceWithMetadata,
 } from '../tree';
 
-import {createTree} from '../tree/mutable-tree-factory';
-import {UserActions} from './actions/user-actions/user-actions';
-import {Route} from '../backend/utils';
-import {select} from '@angular-redux/store';
-import {NgRedux} from '@angular-redux/store';
-import {IAppState} from './store/model';
-import {MainActions} from './actions/main-actions';
+import { createTree } from '../tree/mutable-tree-factory';
+import { UserActions } from './actions/user-actions/user-actions';
+import { Route } from '../backend/utils';
+import { select } from '@angular-redux/store';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from './store/model';
+import { MainActions } from './actions/main-actions';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -77,15 +77,15 @@ export class App {
   @select(store => store.main.DOMSelectionActive) domSelectionActive;
 
   constructor(private ngRedux: NgRedux<IAppState>,
-              private mainActions: MainActions,
-              private changeDetector: ChangeDetectorRef,
-              private connection: Connection,
-              private directConnection: DirectConnection,
-              private options: Options,
-              private userActions: UserActions,
-              private viewState: ComponentViewState,
-              private zone: NgZone,
-              private errorHandler: ErrorHandler) {
+    private mainActions: MainActions,
+    private changeDetector: ChangeDetectorRef,
+    private connection: Connection,
+    private directConnection: DirectConnection,
+    private options: Options,
+    private userActions: UserActions,
+    private viewState: ComponentViewState,
+    private zone: NgZone,
+    private errorHandler: ErrorHandler) {
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {
@@ -160,9 +160,9 @@ export class App {
   }
 
   private processMessage(msg: Message<any>,
-                         sendResponse: (response: MessageResponse<any>) => void) {
+    sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
-      sendResponse(MessageFactory.response(msg, {processed: true}, false));
+      sendResponse(MessageFactory.response(msg, { processed: true }, false));
     };
 
     switch (msg.messageType) {
@@ -253,7 +253,7 @@ export class App {
   }
 
   private onReceiveMessage(msg: Message<any>,
-                           sendResponse: (response: MessageResponse<any>) => void) {
+    sendResponse: (response: MessageResponse<any>) => void) {
 
     this.zone.run(() => this.processMessage(msg, sendResponse));
   }

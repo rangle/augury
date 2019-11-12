@@ -1,12 +1,7 @@
-import {Subscriber} from 'rxjs/Subscriber';
-import {Observable} from 'rxjs/Observable';
-import {Subject, AnonymousSubject, SubjectSubscriber} from 'rxjs/Subject';
-import {AsyncSubject} from 'rxjs/AsyncSubject';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {GroupedObservable} from 'rxjs/operator/groupBy';
+import { Subscriber, Observable, Subject, AsyncSubject, BehaviorSubject, ReplaySubject, GroupedObservable } from 'rxjs';
+import { AnonymousSubject, SubjectSubscriber } from 'rxjs/internal/Subject';
 
-import {Node} from './node';
+import { Node } from './node';
 
 import {
   componentInputs,
@@ -21,7 +16,7 @@ import {
   recurse,
 } from '../utils';
 
-import {isDebugElementComponent} from '../backend/utils/description';
+import { isDebugElementComponent } from '../backend/utils/description';
 
 export enum ObjectType {
   Input = 0x1,
@@ -42,7 +37,7 @@ export type ComponentMetadata = Map<any, [[string, ObjectType, any]]>;
 export interface InstanceWithMetadata {
   instance: any;
   metadata: Metadata;
-  providers: {[token: string]: any};
+  providers: { [token: string]: any };
   componentMetadata: ComponentMetadata;
 }
 
@@ -95,15 +90,15 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
       const component = obj ? componentMetadata(obj.constructor) : null;
       if (component) {
         for (const input of componentInputs(component, obj)) {
-          update(input.propertyKey, ObjectType.Input, {alias: input.bindingPropertyName});
+          update(input.propertyKey, ObjectType.Input, { alias: input.bindingPropertyName });
         }
         for (const output of componentOutputs(component, obj)) {
-          update(output.propertyKey, ObjectType.Output, {alias: output.bindingPropertyName});
+          update(output.propertyKey, ObjectType.Output, { alias: output.bindingPropertyName });
         }
 
-        const addQuery = (decoratorType: string, objectType: ObjectType) => {
+        const addQuery = (decoratorType: string, objType: ObjectType) => {
           for (const vc of componentQueryChildren(decoratorType, component, obj)) {
-            update(vc.propertyKey, objectType, {selector: vc.selector});
+            update(vc.propertyKey, objType, { selector: vc.selector });
           }
         };
 
@@ -126,8 +121,8 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
     });
 
   // set result to actual values
-  result.metadata = Array.from(<any> objectMetadata);
-  result.componentMetadata = Array.from(<any> components);
+  result.metadata = Array.from(<any>objectMetadata);
+  result.componentMetadata = Array.from(<any>components);
 
   return result;
 };

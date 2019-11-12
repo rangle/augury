@@ -1,11 +1,7 @@
-import {Subscription} from 'rxjs/Subscription';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import {compare} from '../utils/patch';
-import {isAngular, isDebugMode} from './utils/app-check';
+import { compare } from '../utils/patch';
+import { isAngular, isDebugMode } from './utils/app-check';
 
-import {SerializeableError} from '../utils/error-handling';
+import { SerializeableError } from '../utils/error-handling';
 
 import {
   MutableTree,
@@ -15,7 +11,7 @@ import {
   serializePath,
 } from '../tree';
 
-import {onElementFound, onFindElement} from './utils/find-element';
+import { onElementFound, onFindElement } from './utils/find-element';
 
 import {
   parseModulesFromRootElement,
@@ -27,7 +23,7 @@ import {
   parseNgVersion,
 } from './utils/parse-ng-version';
 
-import {createTreeFromElements} from '../tree/mutable-tree-factory';
+import { createTreeFromElements } from '../tree/mutable-tree-factory';
 
 import {
   ApplicationError,
@@ -43,7 +39,7 @@ import {
   parameterTypes,
 } from '../tree/decorators';
 
-import {send} from './indirect-connection';
+import { send } from './indirect-connection';
 
 import {
   Route,
@@ -55,14 +51,15 @@ import {
   getNodeProvider,
 } from './utils';
 
-import {serialize} from '../utils';
-import {MessageQueue} from '../structures';
-import {SimpleOptions} from '../options';
+import { serialize } from '../utils';
+import { MessageQueue } from '../structures';
+import { SimpleOptions } from '../options';
 
 import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend/index';
 import { ApplicationRef, NgModuleRef } from '@angular/core';
-import { Observable } from 'rxjs';
+import { timer, Subscription, Subject } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -143,7 +140,7 @@ const sendNgModulesMessage = () => {
 };
 
 const updateComponentTree = async (roots: Array<any>, sendUpdates: boolean = true) => {
-  const {tree, count} = createTreeFromElements(roots, treeRenderOptions);
+  const { tree, count } = createTreeFromElements(roots, treeRenderOptions);
   if (sendUpdates) {
     if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
       messageBuffer.enqueue(MessageFactory.completeTree(tree));
@@ -214,11 +211,11 @@ let isStableSubscription: Subscription;
 const collectRoots = () => getAllAngularRootElements().map(r => ng.probe(r)).filter(x => x !== null);
 
 const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
-  Observable.timer(CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS, CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS)
-    .takeWhile((_, i) => !ngModuleRef && i < 100)
-    .forEach(() => {
-      resubscribe();
-    });
+  timer(CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS, CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS).pipe(
+    takeWhile((_, i) => !ngModuleRef && i < 100)
+  ).forEach(() => {
+    resubscribe();
+  });
 };
 
 const resubscribe = () => {
@@ -254,13 +251,13 @@ const resubscribe = () => {
           }
         });
       })
-      .then(() =>
-        runAndHandleUncaughtExceptions(() => {
-          previousRoutes = null;
-          updateRouterTree();
-        })
-      )
-      .then(() => onUpdateNotifier.next());
+        .then(() =>
+          runAndHandleUncaughtExceptions(() => {
+            previousRoutes = null;
+            updateRouterTree();
+          })
+        )
+        .then(() => onUpdateNotifier.next());
     });
   });
 };
@@ -270,7 +267,7 @@ const selectedComponentPropertyKey = '$$el';
 const noSelectedComponentWarningText = 'There is no component selected.';
 
 Object.defineProperty(window, selectedComponentPropertyKey,
-  {value: noSelectedComponentWarningText});
+  { value: noSelectedComponentWarningText });
 
 const messageHandler = (message: Message<any>) => {
 
@@ -415,8 +412,8 @@ export const routersFromRoots = () => {
     const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
       prev ? prev : p[idx] !== null && p[idx].name === 'Router' ? p[idx] : null, null);
     if (routerFn &&
-        element.componentInstance.router &&
-        element.componentInstance.router instanceof routerFn) {
+      element.componentInstance.router &&
+      element.componentInstance.router instanceof routerFn) {
       routers.push(element.componentInstance.router);
     }
   }
@@ -545,4 +542,4 @@ const findElement = (message) => {
 
 
 // add custom operations
-extendWindowOperations(window || global || this, {inspectedApplication: applicationOperations});
+extendWindowOperations(window || global || this, { inspectedApplication: applicationOperations });

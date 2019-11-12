@@ -6,8 +6,8 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import {Route} from '../../../backend/utils';
-import {TabDescription} from '../tab-menu/tab-menu';
+import { Route } from '../../../backend/utils';
+import { TabDescription } from '../tab-menu/tab-menu';
 import {
   ComponentInstanceState,
   ComponentView,
@@ -18,7 +18,7 @@ import {
   AnalyticsConsent,
 } from '../../state';
 
-import {Path} from '../../../tree';
+import { Path } from '../../../tree';
 
 type Node = any;
 
@@ -48,7 +48,7 @@ export class AppTrees {
   @Input() private options: Options;
   @Input() routerTree: Array<Route>;
   @Input() tree: Array<Node>;
-  @Input() ngModules: {[key: string]: any};
+  @Input() ngModules: { [key: string]: any };
 
   @Input() selectedNode: Node;
   @Input() private selectedRoute: Route;
@@ -65,12 +65,12 @@ export class AppTrees {
 
   @Output() private domSelectionActiveChange = new EventEmitter<boolean>();
 
-  @Output() emitValue = new EventEmitter<{path: Path, data: any}>();
-  @Output() updateProperty = new EventEmitter<{path: Path, newValue: any}>();
+  @Output() emitValue = new EventEmitter<{ path: Path, data: any }>();
+  @Output() updateProperty = new EventEmitter<{ path: Path, newValue: any }>();
 
-  @ViewChild('splitPane') private splitPane;
-  @ViewChild('menuButtonElement') private menuButtonElement;
-  @ViewChild('menuElement') private menuElement;
+  @ViewChild('splitPane', { static: true }) private splitPane;
+  @ViewChild('menuButtonElement', { static: true }) private menuButtonElement;
+  @ViewChild('menuElement', { static: true }) private menuElement;
 
   settingOpened: boolean = false;
   showAnalyticsConsent: boolean = false;
@@ -109,8 +109,8 @@ export class AppTrees {
 
   resetIfSettingOpened(event) {
     if (this.menuElement && this.menuButtonElement &&
-        !(this.menuElement.nativeElement.contains(event.target) ||
-          this.menuButtonElement.nativeElement.contains(event.target))) {
+      !(this.menuElement.nativeElement.contains(event.target) ||
+        this.menuButtonElement.nativeElement.contains(event.target))) {
       this.reset();
     }
   }

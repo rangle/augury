@@ -9,9 +9,9 @@ import {
 
 import * as d3 from 'd3';
 
-import {GraphUtils} from '../../utils/graph-utils';
+import { GraphUtils } from '../../utils/graph-utils';
 
-import {ParseUtils} from '../../utils/parse-utils';
+import { ParseUtils } from '../../utils/parse-utils';
 
 import {
   MutableTree,
@@ -32,10 +32,10 @@ const MAX_LABEL_CHARS = 14;
   templateUrl: './injector-tree.html'
 })
 export class InjectorTree implements OnChanges {
-  @ViewChild('graphContainer') graphContainer;
+  @ViewChild('graphContainer', { static: true }) graphContainer;
 
   @Input() tree: MutableTree;
-  @Input() ngModules: {[key: string]: any};
+  @Input() ngModules: { [key: string]: any };
   @Input() selectedNode: Node;
   @Input() selectNode: EventEmitter<any>;
   focusedComponent: number = -1;
@@ -97,7 +97,7 @@ export class InjectorTree implements OnChanges {
   }
 
   private addNodeAndText(posX: number, posY: number, title: any, clazz: string, maxChars: number = 0,
-      mouseOverFn: () => void, mouseOutFn: () => void) {
+    mouseOverFn: () => void, mouseOutFn: () => void) {
     this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz, mouseOverFn, mouseOutFn);
     this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars);
   }

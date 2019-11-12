@@ -6,19 +6,12 @@ import {
   ElementRef
 } from '@angular/core';
 
-import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Subscription';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/audit';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/takeUntil';
-
-import {Route} from '../../../backend/utils';
-import {UserActions} from '../../actions/user-actions/user-actions';
+import { Route } from '../../../backend/utils';
+import { UserActions } from '../../actions/user-actions/user-actions';
 
 import * as d3 from 'd3';
+import { Subscription, fromEvent } from 'rxjs';
+import { takeUntil, map, mergeMap, audit, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'bt-router-tree',
@@ -26,39 +19,42 @@ import * as d3 from 'd3';
   styleUrls: ['./router-tree.css'],
 })
 export class RouterTree {
-  @ViewChild('routeTree') private routeTreeComponent;
-  @ViewChild('resizer') private resizerElement;
-  @ViewChild('svgContainer') private svg: ElementRef;
-  @ViewChild('mainGroup') private g: ElementRef;
+  @ViewChild('routeTree', { static: true }) private routeTreeComponent;
+  @ViewChild('resizer', { static: true }) private resizerElement;
+  @ViewChild('svgContainer', { static: true }) private svg: ElementRef;
+  @ViewChild('mainGroup', { static: true }) private g: ElementRef;
   @Input() routerTree: Array<Route>;
   selectedRoute: Route | any;
   private tree: d3.TreeLayout<{}>;
   private sub: Subscription;
   private routerTreeBaseHeight: number = 120; // init size of element
 
-  constructor(private userActions: UserActions, private element: ElementRef) {}
+  constructor(private userActions: UserActions, private element: ElementRef) { }
 
   ngAfterViewInit() {
     // On drag, get delta of mouse Y and apply it to base height. Then, update
     // base height.
-    this.sub = this._dragEvent()
-      .do(delta => this.resizeElement(delta + this.routerTreeBaseHeight))
-      .audit(() => Observable.fromEvent(document, 'mouseup'))
+    this.sub = this._dragEvent().pipe(
+      tap(delta => this.resizeElement(delta + this.routerTreeBaseHeight)),
+      audit(() => fromEvent(document, 'mouseup'))
+    )
       .subscribe(delta => {
         this.routerTreeBaseHeight += delta;
       });
   }
 
   _dragEvent() {
-    return Observable.fromEvent(this.resizerElement.nativeElement, 'mousedown')
-      .map((e: any) => e.clientY)
-      .mergeMap(yPos => this._mouseUpEvent(yPos));
+    return fromEvent(this.resizerElement.nativeElement, 'mousedown').pipe(
+      map((e: any) => e.clientY),
+      mergeMap(yPos => this._mouseUpEvent(yPos))
+    );
   }
 
   _mouseUpEvent(yPos) {
-    return Observable.fromEvent(document, 'mousemove')
-      .takeUntil(Observable.fromEvent(document, 'mouseup'))
-      .map((e: any) => e.clientY - yPos);
+    return fromEvent(document, 'mousemove').pipe(
+      takeUntil(fromEvent(document, 'mouseup')),
+      map((e: any) => e.clientY - yPos)
+    );
   }
 
 
@@ -104,8 +100,8 @@ export class RouterTree {
     g.selectAll('.link')
       .data(nodes.descendants().slice(1))
       .enter().append('path')
-        .attr('class', 'link')
-        .attr('d', d => `
+      .attr('class', 'link')
+      .attr('d', d => `
             M${d.y},${d.x}
             C${(d.y + d.parent.y) / 2},
               ${d.x} ${(d.y + d.parent.y) / 2},

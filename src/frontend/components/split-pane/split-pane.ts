@@ -20,25 +20,25 @@ const DEFAULT_SECONDARY_WIDTH = 384;
   templateUrl: './split-pane.html'
 })
 export class SplitPane {
-  @ViewChild('wrapper') wrapperElement : ElementRef;
-  @ViewChild('resizer') resizerElement : ElementRef;
-  @ViewChild('overlay') overlayElement : ElementRef;
-  @ViewChild('primary') primaryElement : ElementRef;
-  @ViewChild('secondary') secondaryElement : ElementRef;
+  @ViewChild('wrapper', { static: true }) wrapperElement: ElementRef;
+  @ViewChild('resizer', { static: true }) resizerElement: ElementRef;
+  @ViewChild('overlay', { static: true }) overlayElement: ElementRef;
+  @ViewChild('primary', { static: true }) primaryElement: ElementRef;
+  @ViewChild('secondary', { static: true }) secondaryElement: ElementRef;
 
   // TODO: store the initial secondary pane width in a preference.
   secondaryWidth = DEFAULT_SECONDARY_WIDTH;
 
   // State for resizing
-  mouseX : number;
-  bounds : ClientRect;
+  mouseX: number;
+  bounds: ClientRect;
   guardMouseMoved;
   guardMouseUp;
 
   /**
    * Clamp the secondary panel width value to prevent layout issues.
    */
-  clampSecondaryWidth () {
+  clampSecondaryWidth() {
     const minSecondaryWidth = this.secondaryWidth < MIN_PANE_WIDTH ?
       MIN_PANE_WIDTH :
       this.secondaryWidth;
@@ -63,7 +63,7 @@ export class SplitPane {
   /**
    * Automatically resize window panes after tab change
    */
-  handleTabNavigation () {
+  handleTabNavigation() {
     setTimeout(this.windowResized.bind(this));
   }
 
@@ -71,13 +71,13 @@ export class SplitPane {
    * Capture the starting mouse position, and set up
    * the mouse move capture div for a resize drag.
    */
-  resizerMouseDown ($event) {
+  resizerMouseDown($event) {
     this.secondaryWidth = this.clampSecondaryWidth();
 
     this.mouseX = $event.clientX;
 
     // Required to convince TypeScript that there is a WebkitUserSelect CSS property.
-    const bodyStyle : any = window.document.body.style;
+    const bodyStyle: any = window.document.body.style;
     bodyStyle.WebkitUserSelect = 'none';
 
     this.overlayElement.nativeElement.style.display = 'block';
@@ -89,7 +89,7 @@ export class SplitPane {
   /**
    * Handle mouse move events on window.
    */
-  mouseMoved (e) {
+  mouseMoved(e) {
     this.secondaryWidth = (this.mouseX - e.clientX) + this.secondaryWidth;
     this.mouseX = e.clientX;
 
@@ -100,9 +100,9 @@ export class SplitPane {
    * Finalize a resize drag, and set secondaryWidth
    * to reflect what is currently rendered.
    */
-  mouseUp (e) {
+  mouseUp(e) {
     // Required to convince TypeScript that there is a WebkitUserSelect CSS property.
-    const bodyStyle : any = window.document.body.style;
+    const bodyStyle: any = window.document.body.style;
     bodyStyle.WebkitUserSelect = '';
 
     this.overlayElement.nativeElement.style.display = 'none';
@@ -138,7 +138,7 @@ export class SplitPane {
    * No event is fired when an individual element's size changes, so
    * the best we can do for now is reshape when window is resized.
    */
-  windowResized () {
+  windowResized() {
     this.bounds = this.wrapperElement.nativeElement.getBoundingClientRect();
 
     this.reshape();

@@ -6,8 +6,8 @@ import {
   deserializeMessage,
 } from './message';
 
-import {MessageFactory} from './message-factory';
-import {MessageType} from './message-type';
+import { MessageFactory } from './message-factory';
+import { MessageType } from './message-type';
 
 import {
   deserialize,
@@ -58,7 +58,7 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
 export const browserSubscribeResponse = (messageId: string, handler: DispatchHandler) => {
   const messageHandler = <T>(response: MessageResponse<T>) => {
     if (response.messageType === MessageType.Response &&
-        response.messageResponseId === messageId) {
+      response.messageResponseId === messageId) {
       try {
         deserializeMessage(response);
 
@@ -77,7 +77,21 @@ export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
 export const messageJumpContext = <T>(message: Message<T>) => {
-  window.postMessage(message, '*');
+  try {
+    const msg = JSON.parse(JSON.stringify(message));
+    window.postMessage(msg, '*');
+  } catch (err) {
+    // if (err && err.code && err.code === 25) {
+    // See https://stackoverflow.com/a/42376465
+    //   try {
+    //     window.postMessage(msg, '*');
+    //   } catch (er) {
+    //     console.error(er);
+    //   }
+    // } else {
+    console.error(err);
+    // }
+  }
 };
 
 export const browserDispatch = <T>(message: Message<T>) => {
@@ -116,4 +130,4 @@ window.addEventListener('message',
     if (event.source === window) {
       browserDispatch(event.data);
     }
-  });
+  }, false);
