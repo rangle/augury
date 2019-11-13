@@ -20,11 +20,11 @@ const DEFAULT_SECONDARY_WIDTH = 384;
   templateUrl: './split-pane.html'
 })
 export class SplitPane {
-  @ViewChild('wrapper', { static: true }) wrapperElement: ElementRef;
-  @ViewChild('resizer', { static: true }) resizerElement: ElementRef;
-  @ViewChild('overlay', { static: true }) overlayElement: ElementRef;
-  @ViewChild('primary', { static: true }) primaryElement: ElementRef;
-  @ViewChild('secondary', { static: true }) secondaryElement: ElementRef;
+  @ViewChild('wrapper', { static: false }) wrapperElement: ElementRef;
+  @ViewChild('resizer', { static: false }) resizerElement: ElementRef;
+  @ViewChild('overlay', { static: false }) overlayElement: ElementRef;
+  @ViewChild('primary', { static: false }) primaryElement: ElementRef;
+  @ViewChild('secondary', { static: false }) secondaryElement: ElementRef;
 
   // TODO: store the initial secondary pane width in a preference.
   secondaryWidth = DEFAULT_SECONDARY_WIDTH;

@@ -32,7 +32,7 @@ const MAX_LABEL_CHARS = 14;
   templateUrl: './injector-tree.html'
 })
 export class InjectorTree implements OnChanges {
-  @ViewChild('graphContainer', { static: true }) graphContainer;
+  @ViewChild('graphContainer', { static: false }) graphContainer;
 
   @Input() tree: MutableTree;
   @Input() ngModules: { [key: string]: any };

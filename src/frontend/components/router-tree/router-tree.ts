@@ -19,10 +19,10 @@ import { takeUntil, map, mergeMap, audit, tap } from 'rxjs/operators';
   styleUrls: ['./router-tree.css'],
 })
 export class RouterTree {
-  @ViewChild('routeTree', { static: true }) private routeTreeComponent;
-  @ViewChild('resizer', { static: true }) private resizerElement;
-  @ViewChild('svgContainer', { static: true }) private svg: ElementRef;
-  @ViewChild('mainGroup', { static: true }) private g: ElementRef;
+  @ViewChild('routeTree', { static: false }) private routeTreeComponent;
+  @ViewChild('resizer', { static: false }) private resizerElement;
+  @ViewChild('svgContainer', { static: false }) private svg: ElementRef;
+  @ViewChild('mainGroup', { static: false }) private g: ElementRef;
   @Input() routerTree: Array<Route>;
   selectedRoute: Route | any;
   private tree: d3.TreeLayout<{}>;

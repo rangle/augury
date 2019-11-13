@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   ViewChild,
+  OnInit,
 } from '@angular/core';
 
 import { Route } from '../../../backend/utils';
@@ -37,7 +38,7 @@ type Node = any;
     }
   `]
 })
-export class AppTrees {
+export class AppTrees implements OnInit {
   private ComponentView = ComponentView;
   Tab = Tab;
   private Theme = Theme;
@@ -68,9 +69,9 @@ export class AppTrees {
   @Output() emitValue = new EventEmitter<{ path: Path, data: any }>();
   @Output() updateProperty = new EventEmitter<{ path: Path, newValue: any }>();
 
-  @ViewChild('splitPane', { static: true }) private splitPane;
-  @ViewChild('menuButtonElement', { static: true }) private menuButtonElement;
-  @ViewChild('menuElement', { static: true }) private menuElement;
+  @ViewChild('splitPane', { static: false }) private splitPane;
+  @ViewChild('menuButtonElement', { static: false }) private menuButtonElement;
+  @ViewChild('menuElement', { static: false }) private menuElement;
 
   settingOpened: boolean = false;
   showAnalyticsConsent: boolean = false;
@@ -86,7 +87,7 @@ export class AppTrees {
     tab: Tab.NgModules,
   }];
 
-  private ngOnInit() {
+  ngOnInit() {
     this.options.load().then((results) => {
       if (results.analyticsConsent === AnalyticsConsent.NotSet) {
         this.showAnalyticsConsent = true;

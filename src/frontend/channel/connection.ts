@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import {
   Message,
@@ -10,8 +10,6 @@ import {
   deserializeMessage,
   testResponse,
 } from '../../communication';
-
-import {deserialize} from '../../utils';
 
 const subscriptions = new Set<MessageHandler>();
 
@@ -64,7 +62,7 @@ export const reconnect = (): Promise<Response> => {
             });
 
             if (responded === false) {
-              sendResponse(MessageFactory.response(message, {processed: false}, false));
+              sendResponse(MessageFactory.response(message, { processed: false }, false));
             }
           }
         });
@@ -73,7 +71,7 @@ export const reconnect = (): Promise<Response> => {
 
       resolver();
     }
-    catch (e) {}
+    catch (e) { }
   };
 
   return new Promise<Response>(resolve => {
@@ -81,7 +79,7 @@ export const reconnect = (): Promise<Response> => {
       connect(resolve);
       return;
     }
-    catch (e) {}
+    catch (e) { }
 
     interval = setInterval(() => connect(resolve), 250);
   });
@@ -103,7 +101,7 @@ export const send = <Response, T>(message: Message<T>): Promise<Response> => {
   return new Promise((resolve, reject) => {
     const responseHandler = (response: MessageResponse<any>) => {
       if (testResponse(message, response)) {
-        connection.onMessage.removeListener(<any> responseHandler);
+        connection.onMessage.removeListener(<any>responseHandler);
 
         if (response.error) {
           reject(response.error);

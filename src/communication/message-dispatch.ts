@@ -77,21 +77,7 @@ export const browserUnsubscribe = (handler: DispatchHandler) =>
   subscriptions.delete(handler);
 
 export const messageJumpContext = <T>(message: Message<T>) => {
-  try {
-    const msg = JSON.parse(JSON.stringify(message));
-    window.postMessage(msg, '*');
-  } catch (err) {
-    // if (err && err.code && err.code === 25) {
-    // See https://stackoverflow.com/a/42376465
-    //   try {
-    //     window.postMessage(msg, '*');
-    //   } catch (er) {
-    //     console.error(er);
-    //   }
-    // } else {
-    console.error(err);
-    // }
-  }
+  window.postMessage(message, '*');
 };
 
 export const browserDispatch = <T>(message: Message<T>) => {

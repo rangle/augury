@@ -1,8 +1,6 @@
 import { compare } from '../utils/patch';
 import { isAngular, isDebugMode } from './utils/app-check';
 
-import { SerializeableError } from '../utils/error-handling';
-
 import {
   MutableTree,
   Node,
