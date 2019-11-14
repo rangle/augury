@@ -1,12 +1,12 @@
-import {messageJumpContext, browserSubscribeOnce} from '../communication/message-dispatch';
-import {MessageFactory} from '../communication/message-factory';
-import {MessageType} from '../communication/message-type';
-import {Message} from '../communication/message';
-import {DispatchHandler} from '../communication/message-dispatch';
-import {send} from '../backend/indirect-connection';
+import { messageJumpContext, browserSubscribeOnce } from '../communication/message-dispatch';
+import { MessageFactory } from '../communication/message-factory';
+import { MessageType } from '../communication/message-type';
+import { Message } from '../communication/message';
+import { DispatchHandler } from '../communication/message-dispatch';
+import { send } from '../backend/indirect-connection';
 
-import {isAngular, isDebugMode} from '../backend/utils/app-check';
-import {ApplicationError, ApplicationErrorType} from '../communication';
+import { isAngular, isDebugMode } from '../backend/utils/app-check';
+import { ApplicationError, ApplicationErrorType } from '../communication';
 
 declare const getAllAngularTestabilities: Function;
 declare const getAllAngularRootElements: Function;
@@ -16,6 +16,7 @@ let unsubscribe: () => void;
 
 let errorToSend: Message<ApplicationError>;
 
+// tslint:disable-next-line: no-shadowed-variable
 const sendError = <DispatchHandler>() => {
   if (errorToSend) {
     send(errorToSend);
@@ -32,14 +33,10 @@ const handler = () => {
         unsubscribe();
       }
       errorToSend = null;
-      send(MessageFactory.errorCleared([
-        ApplicationErrorType.NotNgApp,
-        ApplicationErrorType.ProductionMode
-      ]));
+      send(MessageFactory.errorCleared([ApplicationErrorType.NotNgApp, ApplicationErrorType.ProductionMode]));
       return true;
     }
-    errorToSend = MessageFactory.applicationError(
-      new ApplicationError(ApplicationErrorType.ProductionMode));
+    errorToSend = MessageFactory.applicationError(new ApplicationError(ApplicationErrorType.ProductionMode));
   } else {
     errorToSend = MessageFactory.notNgApp();
   }
