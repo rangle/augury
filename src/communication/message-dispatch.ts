@@ -6,8 +6,8 @@ import {
   deserializeMessage,
 } from './message';
 
-import {MessageFactory} from './message-factory';
-import {MessageType} from './message-type';
+import { MessageFactory } from './message-factory';
+import { MessageType } from './message-type';
 
 import {
   deserialize,
@@ -58,7 +58,7 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
 export const browserSubscribeResponse = (messageId: string, handler: DispatchHandler) => {
   const messageHandler = <T>(response: MessageResponse<T>) => {
     if (response.messageType === MessageType.Response &&
-        response.messageResponseId === messageId) {
+      response.messageResponseId === messageId) {
       try {
         deserializeMessage(response);
 
@@ -116,4 +116,4 @@ window.addEventListener('message',
     if (event.source === window) {
       browserDispatch(event.data);
     }
-  });
+  }, false);

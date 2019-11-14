@@ -5,20 +5,20 @@ import {
   messageSource,
 } from './message';
 
-import {SerializeableError} from '../utils/error-handling';
+import { SerializeableError } from '../utils/error-handling';
 
 import {
   Route,
 } from '../backend/utils';
 
-import {MessageType} from './message-type';
+import { MessageType } from './message-type';
 
 import {
   ApplicationError,
   ApplicationErrorType,
 } from './application-error';
 
-import {getRandomHash} from './hash';
+import { getRandomHash } from './hash';
 
 import {
   Path,
@@ -30,10 +30,9 @@ import { Node } from '../tree/node';
 
 import {
   serialize,
-  serializeBinary,
 } from '../utils';
 
-import {SimpleOptions} from '../options';
+import { SimpleOptions } from '../options';
 
 export const create = <T>(properties: T) =>
   Object.assign({
@@ -41,7 +40,7 @@ export const create = <T>(properties: T) =>
     messageId: getRandomHash(),
     serialize: Serialize.None,
   },
-  properties);
+    properties);
 
 export abstract class MessageFactory {
   static initialize(options?: SimpleOptions): Message<SimpleOptions> {
@@ -110,7 +109,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static selectComponent(node: Node, requestInstance?: boolean): Message<{path: Path, requestInstance: boolean}> {
+  static selectComponent(node: Node, requestInstance?: boolean): Message<{ path: Path, requestInstance: boolean }> {
     return create({
       messageType: MessageType.SelectComponent,
       content: {
@@ -120,7 +119,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static updateProperty(path: Path, newValue): Message<{path: Path, newValue}> {
+  static updateProperty(path: Path, newValue): Message<{ path: Path, newValue }> {
     return create({
       messageType: MessageType.UpdateProperty,
       content: {
@@ -131,7 +130,7 @@ export abstract class MessageFactory {
   }
 
   static updateProviderProperty(path: Path, token: number | string, propertyPath: Path, newValue):
-      Message<{path: Path, token: (number | string), propertyPath: Path, newValue}> {
+    Message<{ path: Path, token: (number | string), propertyPath: Path, newValue }> {
     return create({
       messageType: MessageType.UpdateProviderProperty,
       content: {
@@ -153,7 +152,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static ngModules(content: {[key: string]: any}): Message<{[key: string]: any}> {
+  static ngModules(content: { [key: string]: any }): Message<{ [key: string]: any }> {
     return create({
       messageType: MessageType.NgModules,
       content: content,
@@ -167,7 +166,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static highlight(nodes: Array<Node>): Message<{nodes: string[]}> {
+  static highlight(nodes: Array<Node>): Message<{ nodes: string[] }> {
     return create({
       messageType: MessageType.Highlight,
       content: {
@@ -176,7 +175,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static findDOMElement(): Message<{start: boolean}> {
+  static findDOMElement(): Message<{ start: boolean }> {
     return create({
       messageType: MessageType.FindElement,
       content: {
@@ -185,7 +184,7 @@ export abstract class MessageFactory {
     });
   }
 
-  static foundDOMElement(node: Node): Message<{node: Node, stop: boolean}> {
+  static foundDOMElement(node: Node): Message<{ node: Node, stop: boolean }> {
     return create({
       messageType: MessageType.FindElement,
       content: {
@@ -247,7 +246,7 @@ export abstract class MessageFactory {
   }
 
   static response<Response, T>(message: Message<T>, response: Response,
-      serializeResponse: boolean): MessageResponse<Response> {
+    serializeResponse: boolean): MessageResponse<Response> {
     const prepare = (): any => {
       if (serializeResponse) {
         return serialize(response);
@@ -255,7 +254,7 @@ export abstract class MessageFactory {
       return response;
     };
 
-    const prepareError = r => ({name: r.name, message: r.message, stack: r.stack});
+    const prepareError = r => ({ name: r.name, message: r.message, stack: r.stack });
 
     const serialization = serializeResponse
       ? Serialize.Recreator

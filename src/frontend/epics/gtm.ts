@@ -1,4 +1,5 @@
-import {MainActions} from '../actions/main-actions';
+import { MainActions } from '../actions/main-actions';
+import { mapTo, filter, map } from 'rxjs/operators';
 
 const DOM_SELECTION_GTM = 'auguryDOMSelection';
 const TAB_CHANGE_GTM = 'auguryTabChange';
@@ -18,33 +19,37 @@ const SUB_TAB_TYPES = [
   'Injector Graph',
 ];
 
+interface Action {
+  payload?: any;
+}
 
 export const domSelectionGtmEpic = action$ =>
-  action$.ofType(MainActions.DOM_SELECTION_ACTIVE_CHANGE)
-         .filter(action => action.payload)
-         .mapTo({
-           type: MainActions.SEND_ANALYTICS,
-           payload: {
-             event: DOM_SELECTION_GTM,
-             desc: 'DOM Selection Active'
-           }
-         });
+  action$.ofType(MainActions.DOM_SELECTION_ACTIVE_CHANGE).pipe(
+    filter((action: Action) => action.payload),
+    mapTo({
+      type: MainActions.SEND_ANALYTICS,
+      payload: {
+        event: DOM_SELECTION_GTM,
+        desc: 'DOM Selection Active'
+      }
+    })
+  );
 
 export const tabChangeGtmEpic = actions$ =>
-  actions$.ofType(MainActions.SELECT_TAB)
-          .map(action => {
-            return {
-              type: MainActions.SEND_ANALYTICS,
-              payload: {
-                event: TAB_CHANGE_GTM,
-                desc: TAB_TYPES[action.payload]
-              }
-            };
-          });
+  actions$.ofType(MainActions.SELECT_TAB).pipe(
+    map((action: Action) => {
+      return {
+        type: MainActions.SEND_ANALYTICS,
+        payload: {
+          event: TAB_CHANGE_GTM,
+          desc: TAB_TYPES[action.payload]
+        }
+      };
+    }));
 
 export const subTabChangeGtmEpic = actions$ =>
-  actions$.ofType(MainActions.SELECT_COMPONENTS_SUB_TAB)
-    .map(action => {
+  actions$.ofType(MainActions.SELECT_COMPONENTS_SUB_TAB).pipe(
+    map((action: Action) => {
       return {
         type: MainActions.SEND_ANALYTICS,
         payload: {
@@ -52,34 +57,34 @@ export const subTabChangeGtmEpic = actions$ =>
           desc: SUB_TAB_TYPES[action.payload]
         }
       };
-    });
+    }));
 
 export const emitValueGtmEpic = actions$ =>
-  actions$.ofType(MainActions.EMIT_VALUE)
-    .mapTo({
+  actions$.ofType(MainActions.EMIT_VALUE).pipe(
+    mapTo({
       type: MainActions.SEND_ANALYTICS,
       payload: {
         event: EMIT_VALUE_GTM,
         desc: 'Emit Clicked'
       }
-    });
+    }));
 
 export const updatePropertyGtmEpic = actions$ =>
-  actions$.ofType(MainActions.UPDATE_PROPERTY)
-    .mapTo({
+  actions$.ofType(MainActions.UPDATE_PROPERTY).pipe(
+    mapTo({
       type: MainActions.SEND_ANALYTICS,
       payload: {
         event: UPDATE_PROPERTY_GTM,
         desc: 'Update property'
       }
-    });
+    }));
 
 export const initializeAuguryGtmEpic = actions$ =>
-  actions$.ofType(MainActions.INITIALIZE_AUGURY)
-    .mapTo({
+  actions$.ofType(MainActions.INITIALIZE_AUGURY).pipe(
+    mapTo({
       type: MainActions.SEND_ANALYTICS,
       payload: {
         event: INITIALIZE_AUGURY_GTM,
         desc: 'Initialize Augury'
       }
-    });
+    }));

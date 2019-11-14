@@ -1,5 +1,5 @@
-import { getRandomHash } from './utils.functions'
-import { Message, MessageQueue, MessageType, messageSource } from './messaging.definitions'
+import { getRandomHash } from './utils.functions';
+import { Message, MessageQueue, MessageType, messageSource } from './messaging.definitions';
 
 export class MessagePipeBackend {
 
@@ -13,7 +13,7 @@ export class MessagePipeBackend {
 
   constructor(injectables: {
     messageQueue: MessageQueue<Message<any>>,
-    sendMessage: (message:Message<any>) => Promise<any>,
+    sendMessage: (message: Message<any>) => Promise<any>,
     createQueueAlertMessage: () => Message<void>,
   }) {
     this._messageQueue = injectables.messageQueue;
@@ -21,21 +21,21 @@ export class MessagePipeBackend {
     this._createQueueAlertMessage = injectables.createQueueAlertMessage;
   }
 
-  public createMessage<T>(type: MessageType, content:T): Message<T> {
+  public createMessage<T>(type: MessageType, content: T): Message<T> {
     return {
       messageSource,
       messageId: getRandomHash(),
       messageType: type,
       content: content
-    }
+    };
   }
 
   public addHandler(handler: (message: Message<any>) => void) {
-    this._handlers.push(handler)
+    this._handlers.push(handler);
   }
 
   public handleIncomingMessage(message: Message<any>) {
-    this._handlers.forEach(handler => handler(message))
+    this._handlers.forEach(handler => handler(message));
   }
 
   public sendSimpleMessage(message: Message<any>): Promise<any> {

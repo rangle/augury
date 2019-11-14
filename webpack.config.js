@@ -2,10 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const DefinePlugin = webpack.DefinePlugin;
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
-const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 
 const pkg = require('./package.json');
 
@@ -20,7 +20,9 @@ const manifestFiles = BuildConfig.manifestFiles();
 
 console.log(`
   Building Augury with the following environment options:
-   ${Object.keys(env).map(k => `${k}: ${env[k]}`).join('\n   ')}
+   ${Object.keys(env)
+     .map(k => `${k}: ${env[k]}`)
+     .join('\n   ')}
 `);
 
 /*
@@ -33,23 +35,20 @@ module.exports = {
   context: __dirname,
   stats: {
     colors: true,
-    reasons: true,
+    reasons: true
   },
 
   entry: {
-    'frontend': [
-      './src/frontend/vendor',
-      './src/frontend/module',
-    ],
-    'backend': ['./src/backend/backend'],
+    frontend: ['./src/frontend/vendor', './src/frontend/main'],
+    backend: ['./src/backend/backend'],
     'ng-validate': ['./src/utils/ng-validate'],
-    'devtools': ['./src/devtools/devtools'],
+    devtools: ['./src/devtools/devtools'],
     'content-script': ['./src/content-script'],
-    'background': [
+    background: [
       './src/channel/channel',
       './src/sentry-connection/sentry-connection',
-      './src/gtm-connection/gtm-connection',
-    ],
+      './src/gtm-connection/gtm-connection'
+    ]
   },
 
   // Config for our build files
@@ -57,18 +56,18 @@ module.exports = {
     path: DIST_DIR,
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
-    chunkFilename: '[name].chunk.js',
+    chunkFilename: '[name].chunk.js'
   },
 
   resolve: {
     extensions: ['.ts', '.js', '.json'],
     modules: ['./node_modules'],
     alias: {
-      'backend': path.resolve('./src/backend'),
-      'frontend': path.resolve('./src/frontend'),
-      'communication': path.resolve('./src/communication'),
+      backend: path.resolve('./src/backend'),
+      frontend: path.resolve('./src/frontend'),
+      communication: path.resolve('./src/communication'),
       'feature-modules': path.resolve('./src/feature-modules'),
-      'tree': path.resolve('./src/tree')
+      tree: path.resolve('./src/tree')
     }
   },
 
@@ -76,55 +75,55 @@ module.exports = {
   // - https://webpack.js.org/guides/migrating/#automatic-loader-module-name-extension-removed
   resolveLoader: {
     modules: ['./node_modules'],
-    moduleExtensions: ['-loader'],
+    moduleExtensions: ['-loader']
   },
 
   module: {
     rules: [
       {
         test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-        use: '@ngtools/webpack',
+        use: '@ngtools/webpack'
       },
       {
         test: /\.css$/,
-        use: [
-          'to-string-loader',
-          'css-loader',
-          'postcss-loader',
-        ],
+        use: ['to-string-loader', 'css-loader', 'postcss-loader']
       },
       {
         test: /\.png$/,
-        use: 'url-loader?mimetype=image/png',
+        use: 'url-loader?mimetype=image/png'
       },
       {
         test: /\.html$/,
-        use: 'raw-loader',
-      },
-    ],
+        use: 'raw-loader'
+      }
+    ]
   },
 
   plugins: [
     new ProgressPlugin(),
-    new CleanWebpackPlugin(DIST_DIR),
+    new CleanWebpackPlugin(),
     new DefinePlugin(BuildConfig.stringifyValues(env)),
     new AngularCompilerPlugin({
       tsConfigPath: 'tsconfig.json',
+      mainPath: './src/frontend/main',
       entryModule: './src/frontend/module#FrontendModule',
-      sourceMap: true,
+      sourceMap: true
     }),
     new MergeJsonWebpackPlugin({
       files: manifestFiles,
       output: {
-        fileName: '../manifest.json',
-      },
-    }),
-  ].concat((env.PROD_MODE) ?  [
-    // ... prod-only pluginss
-    ] : [
-      // ... dev-only plugins
-      // new BundleAnalyzerPlugin(),
-    ]
+        fileName: '../manifest.json'
+      }
+    })
+  ].concat(
+    env.PROD_MODE
+      ? [
+          // ... prod-only pluginss
+        ]
+      : [
+          // ... dev-only plugins
+          // new BundleAnalyzerPlugin(),
+        ]
   ),
 
   /*
@@ -133,6 +132,6 @@ module.exports = {
    */
   node: {
     crypto: false,
-    __filename: true,
-  },
+    __filename: true
+  }
 };
