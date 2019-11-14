@@ -57,7 +57,7 @@ import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend/index';
 import { ApplicationRef, NgModuleRef } from '@angular/core';
 import { timer, Subscription, Subject } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, filter } from 'rxjs/operators';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -233,9 +233,14 @@ const resubscribe = () => {
         runAndHandleUncaughtExceptions(() => {
           const roots = collectRoots();
           if (roots.length) {
+            let sanity;
+            const sanityThreshold = 0.5 * 1000; // 0.5 seconds
             const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
             if (isStableSubscription) { isStableSubscription.unsubscribe(); }
-            isStableSubscription = appRef.isStable.subscribe((e) => {
+            isStableSubscription = appRef.isStable.pipe(
+              filter(d => !sanity || (new Date().getTime() - sanity) > sanityThreshold)
+            ).subscribe((e) => {
+              sanity = new Date().getTime();
               updateComponentTree(collectRoots());
               updateRouterTree();
               send(MessageFactory.ping());
