@@ -3,10 +3,13 @@ import {
   Component,
   NgZone,
   ErrorHandler,
+  OnDestroy,
+  DoCheck,
+  OnInit,
 } from '@angular/core';
 
-import {UncaughtErrorHandler} from './utils/uncaught-error-handler';
-import {reportUncaughtError} from '../utils/error-handling';
+import { UncaughtErrorHandler } from './utils/uncaught-error-handler';
+import { reportUncaughtError } from '../utils/error-handling';
 
 import {
   Connection,
@@ -44,13 +47,13 @@ import {
   InstanceWithMetadata,
 } from '../tree';
 
-import {createTree} from '../tree/mutable-tree-factory';
-import {UserActions} from './actions/user-actions/user-actions';
-import {Route} from '../backend/utils';
-import {select} from '@angular-redux/store';
-import {NgRedux} from '@angular-redux/store';
-import {IAppState} from './store/model';
-import {MainActions} from './actions/main-actions';
+import { createTree } from '../tree/mutable-tree-factory';
+import { UserActions } from './actions/user-actions/user-actions';
+import { Route } from '../backend/utils';
+import { select } from '@angular-redux/store';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from './store/model';
+import { MainActions } from './actions/main-actions';
 
 require('!style!css!postcss!../styles/app.css');
 
@@ -59,7 +62,7 @@ require('!style!css!postcss!../styles/app.css');
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })
-export class App {
+export class App implements OnInit, DoCheck, OnDestroy {
   private Theme = Theme;
   private AnalyticsConsent = AnalyticsConsent;
 
@@ -77,15 +80,15 @@ export class App {
   @select(store => store.main.DOMSelectionActive) domSelectionActive;
 
   constructor(private ngRedux: NgRedux<IAppState>,
-              private mainActions: MainActions,
-              private changeDetector: ChangeDetectorRef,
-              private connection: Connection,
-              private directConnection: DirectConnection,
-              private options: Options,
-              private userActions: UserActions,
-              private viewState: ComponentViewState,
-              private zone: NgZone,
-              private errorHandler: ErrorHandler) {
+    private mainActions: MainActions,
+    private changeDetector: ChangeDetectorRef,
+    private connection: Connection,
+    private directConnection: DirectConnection,
+    private options: Options,
+    private userActions: UserActions,
+    private viewState: ComponentViewState,
+    private zone: NgZone,
+    private errorHandler: ErrorHandler) {
 
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {
@@ -117,18 +120,18 @@ export class App {
       this.tree.roots.length > 0;
   }
 
-  private ngDoCheck() {
+  ngDoCheck() {
     this.selectedNode = this.viewState.selectedTreeNode(this.tree);
     this.changeDetector.detectChanges();
   }
 
-  private ngOnInit() {
+  ngOnInit() {
     this.subscription = this.connection.subscribe(this.onReceiveMessage.bind(this));
 
     this.connection.reconnect().then(() => this.requestTree());
   }
 
-  private ngOnDestroy() {
+  ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -138,6 +141,85 @@ export class App {
     }
 
     this.connection.close();
+  }
+
+  onSelectNode(node: Node, beforeLoad?: () => void) {
+    this.selectedNode = node;
+
+    if (node == null) {
+      this.viewState.unselect();
+      return;
+    }
+
+    this.viewState.select(node);
+
+    const m = MessageFactory.selectComponent(node, node.isComponent);
+    const promise = this.directConnection.handleImmediate(m)
+      .then(response => {
+        if (!response) {
+          return;
+        }
+
+        if (typeof beforeLoad === 'function') {
+          beforeLoad();
+        }
+
+        const {
+          instance,
+          metadata,
+          providers,
+          componentMetadata,
+        } = response;
+
+        return <InstanceWithMetadata>{
+          instance,
+          providers,
+          metadata: new Map(metadata),
+          componentMetadata: new Map(componentMetadata),
+        };
+      });
+
+    this.componentState.wait(node, promise);
+  }
+
+  onInspectElement(node: Node) {
+    chrome.devtools.inspectedWindow.eval(`inspect(inspectedApplication.nodeFromPath('${node.id}'))`);
+  }
+
+  onCollapseChildren(node: Node) {
+    this.recursiveExpansionState(node, ExpandState.Collapsed);
+  }
+
+  onExpandChildren(node: Node) {
+    this.recursiveExpansionState(node, ExpandState.Expanded);
+  }
+
+  onReportError() {
+    if (this.error && this.error.errorType === ApplicationErrorType.UncaughtException) {
+      reportUncaughtError(this.error.error, this.ngVersion);
+      this.error = null;
+    }
+  }
+
+  onSelectedTabChange(tab: Tab) {
+    this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
+    this.mainActions.selectTab(tab);
+  }
+
+  onSelectedComponentsSubTabMenuChange(tab: StateTab) {
+    this.mainActions.selectComponentsSubTab(tab);
+  }
+
+  onDOMSelectionActiveChange(state: boolean) {
+    this.mainActions.setDOMSelectionActive(state);
+  }
+
+  onEmitValue(data) {
+    this.mainActions.emitValue(data.path, data.data);
+  }
+
+  onUpdateProperty(data) {
+    this.mainActions.updateProperty(data.path, data.data);
   }
 
   private requestTree() {
@@ -160,9 +242,9 @@ export class App {
   }
 
   private processMessage(msg: Message<any>,
-                         sendResponse: (response: MessageResponse<any>) => void) {
+    sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
-      sendResponse(MessageFactory.response(msg, {processed: true}, false));
+      sendResponse(MessageFactory.response(msg, { processed: true }, false));
     };
 
     switch (msg.messageType) {
@@ -235,7 +317,6 @@ export class App {
     this.componentState.reset();
 
     this.tree = createTree(roots);
-
     this.restoreSelection();
   }
 
@@ -253,89 +334,8 @@ export class App {
   }
 
   private onReceiveMessage(msg: Message<any>,
-                           sendResponse: (response: MessageResponse<any>) => void) {
-
+    sendResponse: (response: MessageResponse<any>) => void) {
     this.zone.run(() => this.processMessage(msg, sendResponse));
-  }
-
-  private onSelectNode(node: Node, beforeLoad?: () => void) {
-    this.selectedNode = node;
-
-    if (node == null) {
-      this.viewState.unselect();
-      return;
-    }
-
-    this.viewState.select(node);
-
-    const m = MessageFactory.selectComponent(node, node.isComponent);
-
-    const promise = this.directConnection.handleImmediate(m)
-      .then(response => {
-        if (!response) {
-          return;
-        }
-
-        if (typeof beforeLoad === 'function') {
-          beforeLoad();
-        }
-
-        const {
-          instance,
-          metadata,
-          providers,
-          componentMetadata,
-        } = response;
-
-        return <InstanceWithMetadata>{
-          instance,
-          providers,
-          metadata: new Map(metadata),
-          componentMetadata: new Map(componentMetadata),
-        };
-      });
-
-    this.componentState.wait(node, promise);
-  }
-
-  private onInspectElement(node: Node) {
-    chrome.devtools.inspectedWindow.eval(`inspect(inspectedApplication.nodeFromPath('${node.id}'))`);
-  }
-
-  private onCollapseChildren(node: Node) {
-    this.recursiveExpansionState(node, ExpandState.Collapsed);
-  }
-
-  private onExpandChildren(node: Node) {
-    this.recursiveExpansionState(node, ExpandState.Expanded);
-  }
-
-  private onReportError() {
-    if (this.error && this.error.errorType === ApplicationErrorType.UncaughtException) {
-      reportUncaughtError(this.error.error, this.ngVersion);
-      this.error = null;
-    }
-  }
-
-  private onSelectedTabChange(tab: Tab) {
-    this.routerTree = this.routerTree ? [].concat(this.routerTree) : null;
-    this.mainActions.selectTab(tab);
-  }
-
-  private onSelectedComponentsSubTabMenuChange(tab: StateTab) {
-    this.mainActions.selectComponentsSubTab(tab);
-  }
-
-  private onDOMSelectionActiveChange(state: boolean) {
-    this.mainActions.setDOMSelectionActive(state);
-  }
-
-  private onEmitValue(data) {
-    this.mainActions.emitValue(data.path, data.data);
-  }
-
-  private onUpdateProperty(data) {
-    this.mainActions.updateProperty(data.path, data.data);
   }
 
   private extractIdentifiersFromChanges(changes: Array<Change>): string[] {

@@ -1,7 +1,6 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 
 import {
   ComponentView,
@@ -13,10 +12,10 @@ import {
   AnalyticsConsent,
 } from '../../options';
 
-export {ComponentView};
-export {SimpleOptions};
-export {Theme};
-export {AnalyticsConsent};
+export { ComponentView };
+export { SimpleOptions };
+export { Theme };
+export { AnalyticsConsent };
 
 @Injectable()
 export class Options {

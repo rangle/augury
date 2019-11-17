@@ -34,9 +34,9 @@ const drainQueue = (port: chrome.runtime.Port, buffer: Array<any>) => {
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
     if (message.messageType === MessageType.Initialize) {
-        sendResponse({ // note that this is separate from our message response system
-          extensionId: chrome.runtime.id
-        });
+      sendResponse({ // note that this is separate from our message response system
+        extensionId: chrome.runtime.id
+      });
     } else if (message.messageType === MessageType.NgApp) {
       // if angular was detected, show colourful icon
       chrome.browserAction.setIcon({
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener(
           connection.postMessage(message);
           sent = true;
         }
-        catch (err) {}
+        catch (err) { }
       }
 
       if (sent === false) {
@@ -88,7 +88,7 @@ chrome.runtime.onConnect.addListener(port => {
   port.onMessage.addListener(listener);
 
   port.onDisconnect.addListener(() => {
-    port.onMessage.removeListener(<any> listener);
+    port.onMessage.removeListener(<any>listener);
 
     connections.forEach((value, key, map) => {
       if (value === port) {

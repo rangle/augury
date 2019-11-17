@@ -11,8 +11,8 @@ import {
   Node,
 } from '../../../tree';
 
-import {UserActions} from '../../actions/user-actions/user-actions';
-import {Search} from '../search/search';
+import { UserActions } from '../../actions/user-actions/user-actions';
+import { Search } from '../search/search';
 
 @Component({
   selector: 'bt-tree-view',
@@ -27,11 +27,11 @@ export class TreeView {
   @Output() inspectElement = new EventEmitter<Node>();
   @Output() selectNode = new EventEmitter<Node>();
 
-  @ViewChild(Search) private search: Search;
+  @ViewChild(Search, { static: true }) private search: Search;
 
   private searchNode: Node;
 
-  constructor(private userActions: UserActions) {}
+  constructor(private userActions: UserActions) { }
 
   ngOnChanges(changes) {
     if (this.search === null) {
