@@ -1,10 +1,10 @@
-
 /* Base */
 
 html,
 body {
   /* Override basscss default white background to prevent a white flash during load. */
   background-color: inherit !important;
+  margin: 0px;
 
   font-size: 11px;
   font-family: '.SFNSDisplay-Regular', 'Helvetica Neue', 'Lucida Grande', sans-serif;
