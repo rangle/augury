@@ -264,8 +264,13 @@ const selectedComponentPropertyKey = '$$el';
 
 const noSelectedComponentWarningText = 'There is no component selected.';
 
-Object.defineProperty(window, selectedComponentPropertyKey,
-  { value: noSelectedComponentWarningText });
+Object.defineProperty(
+  window, selectedComponentPropertyKey,
+  {
+    value: noSelectedComponentWarningText,
+    configurable: true
+  }
+);
 
 const messageHandler = (message: Message<any>) => {
 
@@ -442,7 +447,8 @@ export const consoleReference = (node: Node) => {
         return ng.probe(node.nativeElement());
       }
       return null;
-    }
+    },
+    configurable: true
   });
 };
 
