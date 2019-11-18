@@ -1,18 +1,9 @@
-import {
-  Message,
-  MessageResponse,
-  Subscription,
-  checkSource,
-  deserializeMessage,
-} from './message';
+import { Message, MessageResponse, Subscription, checkSource, deserializeMessage } from './message';
 
 import { MessageFactory } from './message-factory';
 import { MessageType } from './message-type';
 
-import {
-  deserialize,
-  serialize,
-} from '../utils/serialize';
+import { deserialize, serialize } from '../utils/serialize';
 
 export interface DispatchHandler {
   <T, Response>(message: Message<T>): Response;
@@ -45,8 +36,7 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
         deserializeMessage(message);
 
         return handler(message);
-      }
-      finally {
+      } finally {
         subscription.unsubscribe();
       }
     }
@@ -57,14 +47,12 @@ export const browserSubscribeOnce = (messageType: MessageType, handler: Dispatch
 
 export const browserSubscribeResponse = (messageId: string, handler: DispatchHandler) => {
   const messageHandler = <T>(response: MessageResponse<T>) => {
-    if (response.messageType === MessageType.Response &&
-      response.messageResponseId === messageId) {
+    if (response.messageType === MessageType.Response && response.messageResponseId === messageId) {
       try {
         deserializeMessage(response);
 
         return handler(response);
-      }
-      finally {
+      } finally {
         subscription.unsubscribe();
       }
     }
@@ -73,11 +61,16 @@ export const browserSubscribeResponse = (messageId: string, handler: DispatchHan
   const subscription = browserSubscribe(<DispatchHandler>messageHandler);
 };
 
-export const browserUnsubscribe = (handler: DispatchHandler) =>
-  subscriptions.delete(handler);
+export const browserUnsubscribe = (handler: DispatchHandler) => subscriptions.delete(handler);
 
 export const messageJumpContext = <T>(message: Message<T>) => {
-  window.postMessage(message, '*');
+  try {
+    window.postMessage(message, '*');
+  } catch (e) {
+    // See https://stackoverflow.com/a/42376465
+    const msg = JSON.parse(JSON.stringify(message));
+    window.postMessage(msg, '*');
+  }
 };
 
 export const browserDispatch = <T>(message: Message<T>) => {
@@ -87,33 +80,31 @@ export const browserDispatch = <T>(message: Message<T>) => {
 
   if (message.messageType === MessageType.DispatchWrapper) {
     dispatchers.forEach(handler => handler(message));
-  }
-  else if (message.messageType !== MessageType.Response) {
+  } else if (message.messageType !== MessageType.Response) {
     let dispatchResult;
     subscriptions.forEach(handler => {
       if (dispatchResult == null) {
         dispatchResult = handler(message);
-      }
-      else {
+      } else {
         handler(message);
       }
     });
 
     if (dispatchResult !== undefined) {
-      const response =
-        MessageFactory.dispatchWrapper(
-          MessageFactory.response(message, dispatchResult, false));
+      const response = MessageFactory.dispatchWrapper(MessageFactory.response(message, dispatchResult, false));
       messageJumpContext(response);
     }
-  }
-  else {
+  } else {
     subscriptions.forEach(handler => handler(message));
   }
 };
 
-window.addEventListener('message',
+window.addEventListener(
+  'message',
   (event: MessageEvent) => {
     if (event.source === window) {
       browserDispatch(event.data);
     }
-  }, false);
+  },
+  false
+);
