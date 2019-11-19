@@ -223,13 +223,18 @@ const resubscribe = () => {
             const roots = collectRoots();
             if (roots.length) {
               let sanity;
+              // Adding sanity threshold to make sure
+              // larger app's doesn't get flooded
               const sanityThreshold = 0.5 * 1000; // 0.5 seconds
               const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
               if (isStableSubscription) {
                 isStableSubscription.unsubscribe();
               }
               isStableSubscription = appRef.isStable
-                .pipe(filter(d => sanity === undefined || new Date().getTime() - sanity > sanityThreshold))
+                .pipe(
+                  // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
+                  filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
+                )
                 .subscribe(e => {
                   sanity = new Date().getTime();
                   updateComponentTree(collectRoots());
@@ -260,13 +265,10 @@ const selectedComponentPropertyKey = '$$el';
 
 const noSelectedComponentWarningText = 'There is no component selected.';
 
-Object.defineProperty(
-  window, selectedComponentPropertyKey,
-  {
-    value: noSelectedComponentWarningText,
-    configurable: true
-  }
-);
+Object.defineProperty(window, selectedComponentPropertyKey, {
+  value: noSelectedComponentWarningText,
+  configurable: true
+});
 
 const messageHandler = (message: Message<any>) => {
   featureModulesPipe.handleIncomingMessage(message);
