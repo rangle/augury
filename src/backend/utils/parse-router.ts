@@ -22,14 +22,14 @@ export function parseRoutes(router: any): Route {
     isAux: false,
     specificity: null,
     data: null,
-    hash: null,
+    hash: null
   };
 
   return root;
 }
 
 function assignChildrenToParent(parentPath, children): [any] {
-  return children.map((child) => {
+  return children.map(child => {
     const childName = childRouteName(child);
     const childDescendents: [any] = child._loadedConfig ? child._loadedConfig.routes : child.children;
 
@@ -46,7 +46,7 @@ function assignChildrenToParent(parentPath, children): [any] {
       name: childName,
       path: `${parentPath ? parentPath : ''}/${pathFragment}`.split('//').join('/'),
       isAux: isAuxRoute,
-      children: [],
+      children: []
     };
 
     if (childDescendents) {
@@ -58,7 +58,7 @@ function assignChildrenToParent(parentPath, children): [any] {
         if (child.data.hasOwnProperty(el)) {
           routeConfig.data.push({
             key: el,
-            value: child.data[el],
+            value: child.data[el]
           });
         }
       }
@@ -71,11 +71,11 @@ function assignChildrenToParent(parentPath, children): [any] {
 function childRouteName(child): string {
   if (child.component) {
     return child.component.name;
-  }
-  else if (child.loadChildren) {
+  } else if (child.loadChildren) {
     return `${child.path} [Lazy]`;
-  }
-  else {
+  } else if (child.redirectTo) {
+    return `${child.path} -> redirecting to -> "${child.redirectTo}"`;
+  } else {
     return 'no-name-route';
   }
 }
