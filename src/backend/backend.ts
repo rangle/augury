@@ -1,25 +1,13 @@
 import { compare } from '../utils/patch';
 import { isAngular, isDebugMode } from './utils/app-check';
 
-import {
-  MutableTree,
-  Node,
-  Path,
-  instanceWithMetadata,
-  serializePath,
-} from '../tree';
+import { MutableTree, Node, Path, instanceWithMetadata, serializePath } from '../tree';
 
 import { onElementFound, onFindElement } from './utils/find-element';
 
-import {
-  parseModulesFromRootElement,
-  parseModulesFromRouter,
-  NgModulesRegistry,
-} from './utils/parse-modules';
+import { parseModulesFromRootElement, parseModulesFromRouter, NgModulesRegistry } from './utils/parse-modules';
 
-import {
-  parseNgVersion,
-} from './utils/parse-ng-version';
+import { parseNgVersion } from './utils/parse-ng-version';
 
 import { createTreeFromElements } from '../tree/mutable-tree-factory';
 
@@ -30,12 +18,10 @@ import {
   MessageFactory,
   MessageType,
   browserDispatch,
-  browserSubscribe,
+  browserSubscribe
 } from '../communication';
 
-import {
-  parameterTypes,
-} from '../tree/decorators';
+import { parameterTypes } from '../tree/decorators';
 
 import { send } from './indirect-connection';
 
@@ -46,7 +32,7 @@ import {
   parseRoutes,
   getNodeFromPartialPath,
   getNodeInstanceParent,
-  getNodeProvider,
+  getNodeProvider
 } from './utils';
 
 import { serialize } from '../utils';
@@ -57,7 +43,7 @@ import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend/index';
 import { ApplicationRef, NgModuleRef } from '@angular/core';
 import { timer, Subscription, Subject } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, filter } from 'rxjs/operators';
 
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
@@ -94,7 +80,7 @@ const parsedModulesData: NgModulesRegistry = {
   modules: {},
   names: [],
   configs: {},
-  tokenIdMap: {},
+  tokenIdMap: {}
 };
 
 const featureModulesPipe = new MessagePipeBackend({
@@ -114,11 +100,13 @@ const runAndHandleUncaughtExceptions = (fn: () => any) => {
   try {
     return fn();
   } catch (e) {
-    send(MessageFactory.uncaughtApplicationError({
-      name: e.name,
-      stack: e.stack,
-      message: e.message,
-    }));
+    send(
+      MessageFactory.uncaughtApplicationError({
+        name: e.name,
+        stack: e.stack,
+        message: e.message
+      })
+    );
   }
 };
 
@@ -131,7 +119,7 @@ const sendNgModulesMessage = () => {
   const ngModulesMessage = {
     names: parsedModulesData.names,
     tokenIdMap: parsedModulesData.tokenIdMap,
-    configs: parsedModulesData.configs,
+    configs: parsedModulesData.configs
   };
   messageBuffer.enqueue(MessageFactory.ngModules(ngModulesMessage));
   send(MessageFactory.push());
@@ -142,15 +130,15 @@ const updateComponentTree = async (roots: Array<any>, sendUpdates: boolean = tru
   if (sendUpdates) {
     if (previousTree == null || Math.abs(previousCount - count) > deltaThreshold) {
       messageBuffer.enqueue(MessageFactory.completeTree(tree));
-    }
-    else {
+    } else {
       const changes = previousTree.diff(tree);
       if (changes.length > 0) {
         lastTreeMessage = 'diff';
         messageBuffer.enqueue(MessageFactory.treeDiff(changes));
-      }
-      else {
-        if (lastTreeMessage === 'no-diff') { return; }
+      } else {
+        if (lastTreeMessage === 'no-diff') {
+          return;
+        }
         lastTreeMessage = 'no-diff';
         messageBuffer.enqueue(MessageFactory.treeUnchanged());
       }
@@ -165,18 +153,15 @@ const updateComponentTree = async (roots: Array<any>, sendUpdates: boolean = tru
   highlighter.useComponentTreeInstance(previousTree);
 
   previousCount = count;
-
 };
 
 const updateLazyLoadedNgModules = (routers): Promise<void> => {
   return Promise.resolve().then(() => {
-
     routers.forEach(router => {
       parseModulesFromRouter(router, parsedModulesData);
     });
 
     sendNgModulesMessage();
-
   });
 };
 
@@ -206,14 +191,17 @@ const updateRouterTree = () => {
 let ngModuleRef: NgModuleRef<any>;
 let isStableSubscription: Subscription;
 
-const collectRoots = () => getAllAngularRootElements().map(r => ng.probe(r)).filter(x => x !== null);
+const collectRoots = () =>
+  getAllAngularRootElements()
+    .map(r => ng.probe(r))
+    .filter(x => x !== null);
 
 const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
-  timer(CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS, CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS).pipe(
-    takeWhile((_, i) => !ngModuleRef && i < 100)
-  ).forEach(() => {
-    resubscribe();
-  });
+  timer(CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS, CHECK_AFTER_NG_MODULE_DESTROY_RATE_MS)
+    .pipe(takeWhile((_, i) => !ngModuleRef && i < 100))
+    .forEach(() => {
+      resubscribe();
+    });
 };
 
 const resubscribe = () => {
@@ -229,26 +217,39 @@ const resubscribe = () => {
     parsedModulesData.tokenIdMap = {};
 
     setTimeout(() => {
-      Promise.resolve().then(() => {
-        runAndHandleUncaughtExceptions(() => {
-          const roots = collectRoots();
-          if (roots.length) {
-            const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
-            if (isStableSubscription) { isStableSubscription.unsubscribe(); }
-            isStableSubscription = appRef.isStable.subscribe((e) => {
-              updateComponentTree(collectRoots());
-              updateRouterTree();
-              send(MessageFactory.ping());
-            });
-            ngModuleRef = (appRef as any)._injector;
-            ngModuleRef.onDestroy(() => {
-              ngModuleRef = undefined;
-              listenForSomeTimeAndMaybeResubscribe(1000);
-            });
-            sendNgModulesMessage();
-          }
-        });
-      })
+      Promise.resolve()
+        .then(() => {
+          runAndHandleUncaughtExceptions(() => {
+            const roots = collectRoots();
+            if (roots.length) {
+              let sanity;
+              // Adding sanity threshold to make sure
+              // larger app's doesn't get flooded
+              const sanityThreshold = 0.5 * 1000; // 0.5 seconds
+              const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
+              if (isStableSubscription) {
+                isStableSubscription.unsubscribe();
+              }
+              isStableSubscription = appRef.isStable
+                .pipe(
+                  // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
+                  filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
+                )
+                .subscribe(e => {
+                  sanity = new Date().getTime();
+                  updateComponentTree(collectRoots());
+                  updateRouterTree();
+                  send(MessageFactory.ping());
+                });
+              ngModuleRef = (appRef as any)._injector;
+              ngModuleRef.onDestroy(() => {
+                ngModuleRef = undefined;
+                listenForSomeTimeAndMaybeResubscribe(1000);
+              });
+              sendNgModulesMessage();
+            }
+          });
+        })
         .then(() =>
           runAndHandleUncaughtExceptions(() => {
             previousRoutes = null;
@@ -264,16 +265,12 @@ const selectedComponentPropertyKey = '$$el';
 
 const noSelectedComponentWarningText = 'There is no component selected.';
 
-Object.defineProperty(
-  window, selectedComponentPropertyKey,
-  {
-    value: noSelectedComponentWarningText,
-    configurable: true
-  }
-);
+Object.defineProperty(window, selectedComponentPropertyKey, {
+  value: noSelectedComponentWarningText,
+  configurable: true
+});
 
 const messageHandler = (message: Message<any>) => {
-
   featureModulesPipe.handleIncomingMessage(message);
 
   return runAndHandleUncaughtExceptions(() => {
@@ -289,10 +286,8 @@ const messageHandler = (message: Message<any>) => {
         if (!isAngular()) {
           send(MessageFactory.notNgApp());
         } else if (!isDebugMode()) {
-          send(MessageFactory.applicationError(
-            new ApplicationError(ApplicationErrorType.ProductionMode)));
-        }
-        else {
+          send(MessageFactory.applicationError(new ApplicationError(ApplicationErrorType.ProductionMode)));
+        } else {
           resubscribe();
         }
 
@@ -315,27 +310,23 @@ const messageHandler = (message: Message<any>) => {
         return;
 
       case MessageType.UpdateProperty:
-        return updateProperty(previousTree,
-          message.content.path,
-          message.content.newValue);
+        return updateProperty(previousTree, message.content.path, message.content.newValue);
 
       case MessageType.UpdateProviderProperty:
-        return updateProviderProperty(previousTree,
+        return updateProviderProperty(
+          previousTree,
           message.content.path,
           message.content.token,
           message.content.propertyPath,
-          message.content.newValue);
+          message.content.newValue
+        );
 
       case MessageType.EmitValue:
-        return emitValue(previousTree,
-          message.content.path,
-          message.content.value);
-
+        return emitValue(previousTree, message.content.path, message.content.value);
     }
     return undefined;
   });
 };
-
 
 browserSubscribe(messageHandler);
 
@@ -394,11 +385,9 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
             const emittable = instanceParent[path[path.length - 1]];
             if (typeof emittable.emit === 'function') {
               emittable.emit(newValue);
-            }
-            else if (typeof emittable.next === 'function') {
+            } else if (typeof emittable.next === 'function') {
               emittable.next(newValue);
-            }
-            else {
+            } else {
               throw new Error(`Cannot emit value for ${serializePath(path)}`);
             }
           });
@@ -412,11 +401,11 @@ export const routersFromRoots = () => {
   const routers = [];
 
   for (const element of collectRoots()) {
-    const routerFn = parameterTypes(element.componentInstance).reduce((prev, curr, idx, p) =>
-      prev ? prev : p[idx] !== null && p[idx].name === 'Router' ? p[idx] : null, null);
-    if (routerFn &&
-      element.componentInstance.router &&
-      element.componentInstance.router instanceof routerFn) {
+    const routerFn = parameterTypes(element.componentInstance).reduce(
+      (prev, curr, idx, p) => (prev ? prev : p[idx] !== null && p[idx].name === 'Router' ? p[idx] : null),
+      null
+    );
+    if (routerFn && element.componentInstance.router && element.componentInstance.router instanceof routerFn) {
       routers.push(element.componentInstance.router);
     }
   }
@@ -512,12 +501,11 @@ export const applicationOperations = {
  * The function references of the event handlers are stored on the global scope of backend.ts
  * so we can remove them by reference.
  */
-const findElement = (message) => {
-  let currentNode: Node,
-    currentHighlights: any;
+const findElement = message => {
+  let currentNode: Node, currentHighlights: any;
 
   if (message.content.start) {
-    onMouseOver = (e) => {
+    onMouseOver = e => {
       if (currentHighlights) {
         clearHighlights(currentHighlights.map);
       }
@@ -543,7 +531,6 @@ const findElement = (message) => {
     window.removeEventListener('mousedown', onMouseDown, false);
   }
 };
-
 
 // add custom operations
 extendWindowOperations(window || global || this, { inspectedApplication: applicationOperations });
