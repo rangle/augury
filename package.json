@@ -61,6 +61,7 @@
     }
   },
   "dependencies": {
+    "@angular-devkit/core": "^8.3.19",
     "@angular-redux/store": "10.0.0",
     "@angular/common": "8.2.13",
     "@angular/compiler": "8.2.13",
