@@ -32,7 +32,7 @@ Augury only works with Angular 2+ applications. A hard requirement is that the A
 
 ## Supported version
 
-Augury works with application built starting with Angular 2+.
+Augury works with application built starting with Angular 2+. Augury currently does not have support for Angular Ivy as of `Augury v1.23.0`.
 
 ---
 
@@ -42,12 +42,11 @@ Augury works with application built starting with Angular 2+.
 
 To develop the Augury extension, the following environment is used:
 
-* Node
-* NPM
-* TypeScript
+- Node
+- NPM
+- TypeScript
 
 ### Building and installing locally
-If you currently have the Augury extension installed from the Chrome Web Store or Firefox Add-ons, you will need to remove it from your browser's extensions before adding the dev version of the extension to your browser from your local machine.
 
 To install Augury locally, perform the following steps:
 
@@ -74,21 +73,27 @@ Try out the extension with one of the example app from the [Guide](https://augur
 
 ### Running tests
 
+#### Automated testing
+
 To execute all unit tests, run `npm test`. It bundles up all files that match `*.test.ts` into `build/test.js`, then runs it through tape-run in a headless Electron browser.
+
+#### Manual Testing
+
+If you currently have the Augury extension installed from the Chrome Web Store or Firefox Add-ons, you can manually test your change by switching between your local dev production and production version of Augury in the extension window of your browser. Only one version of the tool should be active at a time.
 
 ### Available NPM scripts
 
 To see all available script type `npm run` in the terminal. The following command are the ones you will mostly be working with.
 
-Command   | Description
-----------|----------------------------------------------------------
-`start`   | Clean build and run webpack in watch mode
-`webpack` | Runs webpack in watch mode
-`build`   | Builds the extension
-`clean`   | Clean the `build` directory,
-`test`    | Bundle all *.test.ts and run it through a headless browser
-`lint`    | Run `tslint` on all source code
-`pack`    | Packages the extension for browser specific builds
+| Command   | Description                                                 |
+| --------- | ----------------------------------------------------------- |
+| `start`   | Clean build and run webpack in watch mode                   |
+| `webpack` | Runs webpack in watch mode                                  |
+| `build`   | Builds the extension                                        |
+| `clean`   | Clean the `build` directory,                                |
+| `test`    | Bundle all \*.test.ts and run it through a headless browser |
+| `lint`    | Run `tslint` on all source code                             |
+| `pack`    | Packages the extension for browser specific builds          |
 
 ## Reporting issues
 
@@ -126,7 +131,6 @@ Angular Router v3.3.0
 Augury v1.2.8
 ```
 
-
 To be able to view the router graph, you will need to inject the Router in the application _Root_ component as shown below (it must be named `router` exactly).
 
 ```js
@@ -162,4 +166,5 @@ Prior to [Angular 2.2.0](https://github.com/angular/angular/blob/master/CHANGELO
 The date polyfill `core-js/es6/date` can throw an exception when stringifying a component. To workaround this issue, exclude this polyfill in your development environment.
 
 ### License
+
 [MIT](LICENSE)
