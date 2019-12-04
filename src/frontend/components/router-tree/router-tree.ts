@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  ViewChild,
-  SimpleChanges,
-  ElementRef
-} from '@angular/core';
+import { Component, Input, ViewChild, SimpleChanges, ElementRef, OnChanges, AfterViewInit } from '@angular/core';
 
 import { Route } from '../../../backend/utils';
 import { UserActions } from '../../actions/user-actions/user-actions';
@@ -16,28 +10,29 @@ import { takeUntil, map, mergeMap, audit, tap } from 'rxjs/operators';
 @Component({
   selector: 'bt-router-tree',
   templateUrl: './router-tree.html',
-  styleUrls: ['./router-tree.css'],
+  styleUrls: ['./router-tree.css']
 })
-export class RouterTree {
-  @ViewChild('routeTree', { static: false }) private routeTreeComponent;
-  @ViewChild('resizer', { static: false }) private resizerElement;
-  @ViewChild('svgContainer', { static: false }) private svg: ElementRef;
-  @ViewChild('mainGroup', { static: false }) private g: ElementRef;
+export class RouterTree implements OnChanges, AfterViewInit {
+  @ViewChild('routeTree', { static: true }) private routeTreeComponent;
+  @ViewChild('resizer', { static: true }) private resizerElement;
+  @ViewChild('svgContainer', { static: true }) private svg: ElementRef;
+  @ViewChild('mainGroup', { static: true }) private g: ElementRef;
   @Input() routerTree: Array<Route>;
   selectedRoute: Route | any;
   private tree: d3.TreeLayout<{}>;
   private sub: Subscription;
   private routerTreeBaseHeight: number = 120; // init size of element
 
-  constructor(private userActions: UserActions, private element: ElementRef) { }
+  constructor(private userActions: UserActions, private element: ElementRef) {}
 
   ngAfterViewInit() {
     // On drag, get delta of mouse Y and apply it to base height. Then, update
     // base height.
-    this.sub = this._dragEvent().pipe(
-      tap(delta => this.resizeElement(delta + this.routerTreeBaseHeight)),
-      audit(() => fromEvent(document, 'mouseup'))
-    )
+    this.sub = this._dragEvent()
+      .pipe(
+        tap(delta => this.resizeElement(delta + this.routerTreeBaseHeight)),
+        audit(() => fromEvent(document, 'mouseup'))
+      )
       .subscribe(delta => {
         this.routerTreeBaseHeight += delta;
       });
@@ -56,7 +51,6 @@ export class RouterTree {
       map((e: any) => e.clientY - yPos)
     );
   }
-
 
   ngOnDestroy() {
     if (this.sub) {
@@ -91,40 +85,49 @@ export class RouterTree {
       specificity: null,
       handler: null,
       data: {},
-      isAux: false,
+      isAux: false
     };
 
-    const nodes = this.tree(d3.hierarchy(
-      (root.children.length === 0 || root.children.length > 1) ? root : root.children[0], d => d.children));
+    const nodes = this.tree(
+      d3.hierarchy(root.children.length === 0 || root.children.length > 1 ? root : root.children[0], d => d.children)
+    );
 
     g.selectAll('.link')
       .data(nodes.descendants().slice(1))
-      .enter().append('path')
+      .enter()
+      .append('path')
       .attr('class', 'link')
-      .attr('d', d => `
+      .attr(
+        'd',
+        d => `
             M${d.y},${d.x}
             C${(d.y + d.parent.y) / 2},
               ${d.x} ${(d.y + d.parent.y) / 2},
               ${d.parent.x} ${d.parent.y},
-              ${d.parent.x}`);
+              ${d.parent.x}`
+      );
 
     // Declare the nodes
-    const node = g.selectAll('g.node')
+    const node = g
+      .selectAll('g.node')
       .data(nodes.descendants())
-      .enter().append('g')
+      .enter()
+      .append('g')
       .attr('class', 'node')
       .on('mouseover', n => this.onRollover(n.data))
       .on('mouseout', n => this.onRollover(n.data))
       .attr('transform', d => `translate(${d.y},${d.x})`);
 
-    node.append('circle')
-      .attr('class', d => (<any>d.data).isAux ? 'node-aux-route' : 'node-route')
+    node
+      .append('circle')
+      .attr('class', d => ((<any>d.data).isAux ? 'node-aux-route' : 'node-route'))
       .attr('r', 6);
 
-    node.append('text')
-      .attr('x', (d) => d.children ? -13 : 13)
+    node
+      .append('text')
+      .attr('x', d => (d.children ? -13 : 13))
       .attr('dy', '.35em')
-      .attr('text-anchor', (d) => d.children ? 'end' : 'start')
+      .attr('text-anchor', d => (d.children ? 'end' : 'start'))
       .text(d => (<any>d.data).name)
       .attr('class', 'monospace');
 
@@ -134,20 +137,22 @@ export class RouterTree {
     const svgRect = this.svg.nativeElement.getBoundingClientRect();
     const gElRect = this.g.nativeElement.getBoundingClientRect();
 
-    g.attr('transform', `translate(
+    g.attr(
+      'transform',
+      `translate(
       ${svgRect.left - gElRect.left + svgPadding},
       ${svgRect.top - gElRect.top + svgPadding}
-    )`);
+    )`
+    );
 
-    svg
-      .attr('height', gElRect.height + svgPadding * 2)
-      .attr('width', gElRect.width + svgPadding * 2);
-
+    svg.attr('height', gElRect.height + svgPadding * 2).attr('width', gElRect.width + svgPadding * 2);
   }
 
-  private ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     if ((<any>changes).routerTree && this.g) {
-      d3.select(this.g.nativeElement).selectAll('*').remove();
+      d3.select(this.g.nativeElement)
+        .selectAll('*')
+        .remove();
     }
     this.render();
   }
@@ -163,7 +168,7 @@ export class RouterTree {
 
   onRetrieveSearchResults = (query: string): Promise<Array<any>> => {
     return this.userActions.searchRouter(this.routerTree, query);
-  }
+  };
 
   onSelectedSearchResultChanged(route: Route) {
     this.selectedRoute = route;
@@ -173,5 +178,4 @@ export class RouterTree {
   showReadme() {
     window.open('https://github.com/rangle/augury#known-issues');
   }
-
 }
