@@ -32,7 +32,7 @@ Augury only works with Angular 2+ applications. A hard requirement is that the A
 
 ## Supported version
 
-Augury works with application built starting with Angular 2+. Augury currently does not have support for Angular Ivy as of `Augury v1.23.0`.
+Augury works with application built starting with Angular 2+. Augury currently does not have support for Angular Ivy as of `Augury v1.24.0`.
 
 ---
 
