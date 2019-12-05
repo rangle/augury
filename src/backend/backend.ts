@@ -45,6 +45,8 @@ import { ApplicationRef, NgModuleRef } from '@angular/core';
 import { timer, Subscription, Subject } from 'rxjs';
 import { takeWhile, filter } from 'rxjs/operators';
 
+import 'reflect-metadata';
+
 declare const ng;
 declare const getAllAngularRootElements: () => Element[];
 declare const treeRenderOptions: SimpleOptions;
