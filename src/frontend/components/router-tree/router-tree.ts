@@ -75,7 +75,7 @@ export class RouterTree implements OnChanges, AfterViewInit {
     const svgPadding = 20;
 
     // Compute the new tree layout.
-    this.tree.nodeSize([20, 150]);
+    this.tree.nodeSize([45, 200]);
 
     const root: Route = {
       name: 'root',
