@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.24.1](https://github.com/rangle/tree/1.24.1)
+
+- Fixing AOT issues ([1432](https://github.com/rangle/augury/pull/1432))
+
 ## [1.24.0](https://github.com/rangle/tree/1.24.0)
 
 - Cannot read property 'nativeElement' of undefined ([1430](https://github.com/rangle/augury/pull/1430))
