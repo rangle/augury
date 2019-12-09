@@ -1,4 +1,4 @@
-import { componentMetadata} from '../../tree/decorators';
+import { componentMetadata } from '../../tree/decorators';
 
 export const AUGURY_TOKEN_ID_METADATA_KEY = '__augury_token_id';
 
@@ -11,37 +11,36 @@ export interface NgModulesRegistry {
   tokenIdMap: { [key: string]: any };
 }
 
-const resolveNgModuleDecoratorConfig = (m) => {
+const resolveNgModuleDecoratorConfig = m => {
   if (m.decorators) {
-    return m.decorators.reduce((prev, curr, idx, decorators) =>
-      prev ?
-        prev :
-        (
-          (decorators[idx].type.prototype.ngMetadataName === 'NgModule') ||
-          (decorators[idx].type.prototype.toString() === '@NgModule')
-        ) ?
-          (decorators[idx].args || [])[0] : null
-    , null);
+    return m.decorators.reduce(
+      (prev, curr, idx, decorators) =>
+        prev
+          ? prev
+          : decorators[idx].type.prototype.ngMetadataName === 'NgModule' ||
+            decorators[idx].type.prototype.toString() === '@NgModule'
+          ? (decorators[idx].args || [])[0]
+          : null,
+      null
+    );
   }
 
   if (m.__annotations__) {
-    return m.__annotations__
-      .find(decorator => decorator.ngMetadataName === 'NgModule');
+    return m.__annotations__.find(decorator => decorator.ngMetadataName === 'NgModule');
   }
 
-  return (Reflect.getMetadata('annotations', m) || [])
-    .find(decorator => decorator.toString() === '@NgModule');
+  return (Reflect.getMetadata('annotations', m) || []).find(decorator => decorator.toString() === '@NgModule');
 };
 
 export const parseModulesFromRouter = (router, existingModules: NgModulesRegistry) => {
   const foundModules = [];
 
-  const _parse = (config) => {
+  const _parse = config => {
     config.forEach(route => {
       if (route._loadedConfig) {
-        foundModules.push(route._loadedConfig.module ?
-          route._loadedConfig.module.instance :
-          route._loadedConfig.injector.instance);
+        foundModules.push(
+          route._loadedConfig.module ? route._loadedConfig.module.instance : route._loadedConfig.injector.instance
+        );
         _parse(route._loadedConfig.routes || []);
       }
       _parse(route.children || []);
@@ -51,18 +50,11 @@ export const parseModulesFromRouter = (router, existingModules: NgModulesRegistr
   _parse(router.config);
 
   foundModules.forEach(module => {
-
-    _parseModule(
-      module.constructor,
-      existingModules.modules,
-      existingModules.names,
-      existingModules.tokenIdMap);
+    _parseModule(module.constructor, existingModules.modules, existingModules.names, existingModules.tokenIdMap);
 
     updateRegistryConfigs(existingModules);
-
   });
 };
-
 
 export const parseModulesFromRootElement = (firstRootDebugElement: any, registry: NgModulesRegistry) => {
   // TODO(steven.kampen): This uses a private API. Can it be improved?
@@ -70,11 +62,7 @@ export const parseModulesFromRootElement = (firstRootDebugElement: any, registry
   const bootstrappedModule = appRef._injector.instance;
 
   if (bootstrappedModule) {
-    _parseModule(
-      bootstrappedModule.constructor,
-      registry.modules,
-      registry.names,
-      registry.tokenIdMap);
+    _parseModule(bootstrappedModule.constructor, registry.modules, registry.names, registry.tokenIdMap);
 
     updateRegistryConfigs(registry);
   }
@@ -89,12 +77,14 @@ const updateRegistryConfigs = (registry: NgModulesRegistry) => {
   }
 };
 
-const parseModuleName = (m) => {
+const parseModuleName = m => {
   return m.ngModule ? m.ngModule.name : m.name || (m.constructor ? m.constructor.name : null);
 };
 
 const randomId = () => {
-  return Math.random().toString(36).substring(7);
+  return Math.random()
+    .toString(36)
+    .substring(7);
 };
 
 const resolveTokenIdMetaData = (token, tokenIdMap: { [key: string]: any }) => {
@@ -132,8 +122,8 @@ const buildModuleDescription = (module, config) => {
     imports: flatten(config.imports || []).map(im => parseModuleName(im)),
     exports: flatten(config.exports || []).map(ex => parseModuleName(ex)),
     declarations: flattenedDeclarations.map(d => d.name),
-    providers: flatten((config.providers || [])).map(parseProviderName),
-    providersInDeclarations: flattenedProvidersFromDeclarations.map(parseProviderName),
+    providers: flatten(config.providers || []).map(parseProviderName),
+    providersInDeclarations: flattenedProvidersFromDeclarations.map(parseProviderName)
   };
 };
 
@@ -167,13 +157,8 @@ const flatten = (l: Array<any>) => {
   return flatArray;
 };
 
-const _parseModule = (
-  module: any,
-  modules: {} = {},
-  moduleNames: Array<string> = [],
-  tokenIdMap: {} = {}) => {
-
-  const { 'augury_token_id' : auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
+const _parseModule = (module: any, modules: {} = {}, moduleNames: Array<string> = [], tokenIdMap: {} = {}) => {
+  const { augury_token_id: auguryModuleId } = resolveTokenIdMetaData(module, tokenIdMap);
 
   if (!modules[auguryModuleId]) {
     const ngModuleDecoratorConfig = resolveNgModuleDecoratorConfig(module) || {};
@@ -181,11 +166,14 @@ const _parseModule = (
     modules[auguryModuleId] = buildModuleDescription(module, ngModuleDecoratorConfig);
 
     // collect all providers from this module
-    const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || [])
-      .filter(declaration => componentMetadata(declaration));
+    const moduleComponents = flatten(ngModuleDecoratorConfig.declarations || []).filter(declaration =>
+      componentMetadata(declaration)
+    );
 
-    const moduleComponentProviders = moduleComponents.reduce((prev, curr, i, components) =>
-      prev.concat(flattenProviders(componentMetadata(components[i]).providers || [])), []);
+    const moduleComponentProviders = moduleComponents.reduce(
+      (prev, curr, i, components) => prev.concat(flattenProviders(componentMetadata(components[i]).providers || [])),
+      []
+    );
 
     const providersFromModuleImports = [];
 
@@ -213,11 +201,11 @@ const _parseModule = (
       .concat(moduleComponents)
       .map(t => resolveTokenIdMetaData(t, tokenIdMap))
       .map(tokenAndId => {
-        const isString = (typeof tokenAndId.token) === 'string';
+        const isString = typeof tokenAndId.token === 'string';
         tokenIdMap[tokenAndId.augury_token_id] = {
           name: !isString ? tokenAndId.token.name : tokenAndId.token,
           type: !isString && componentMetadata(tokenAndId.token) ? 'Component' : 'Injectable',
-          module: module.name,
+          module: module.name
         };
       });
   }

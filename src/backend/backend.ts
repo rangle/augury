@@ -48,6 +48,7 @@ import { takeWhile, filter } from 'rxjs/operators';
 import 'reflect-metadata';
 
 declare const ng;
+declare const ngCore;
 declare const getAllAngularRootElements: () => Element[];
 declare const treeRenderOptions: SimpleOptions;
 
@@ -195,7 +196,7 @@ let isStableSubscription: Subscription;
 
 const collectRoots = () =>
   getAllAngularRootElements()
-    .map(r => ng.probe(r))
+    .map(r => ngCore.getDebugNode(r))
     .filter(x => x !== null);
 
 const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
