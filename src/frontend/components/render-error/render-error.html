@@ -1,13 +1,13 @@
 <div class="vh-100" *ngIf="error">
+  <div class="fixed top-0 right-0 m3 p3">
+    <button (click)="onRefresh()">Refresh</button>
+  </div>
   <div [ngSwitch]="error.errorType" style="font-size: 1.25em">
     <div class="vh-100" *ngSwitchCase="ApplicationErrorType.UncaughtException">
-      <report-error
-        [error]="error"
-        (reportError)="reportError.emit(true)">
-      </report-error>
+      <report-error [error]="error" (reportError)="reportError.emit(true)"> </report-error>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.NotNgApp">
-      <div class="p3 m3">
+      <div class="p3 m3 pt0">
         <p class="legible-color h1 message-gray">
           This application is not an Angular application.
         </p>
@@ -17,14 +17,13 @@
       </div>
     </div>
     <div *ngSwitchCase="ApplicationErrorType.ProductionMode">
-      <div class="p3 m3">
+      <div class="p3 m3 pt0">
         <p class="legible-color">
-          This application is running in production mode
-          and therefore cannot be inspected using Augury.
+          This application is running in production mode and therefore cannot be inspected using Augury.
         </p>
         <p class="legible-color pt3">
-          If this is an Angular application, please rebuild your application in debug mode or remove the
-          call to <span class="monospace">enableProdMode()</span>.
+          If this is an Angular application, please rebuild your application in debug mode or remove the call to
+          <span class="monospace">enableProdMode()</span>.
         </p>
       </div>
     </div>

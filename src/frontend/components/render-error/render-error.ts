@@ -1,16 +1,8 @@
-import {
-  EventEmitter,
-  Component,
-  Input,
-  Output,
-} from '@angular/core';
+import { EventEmitter, Component, Input, Output } from '@angular/core';
 
-import {Options, Theme} from '../../state';
+import { Options, Theme } from '../../state';
 
-import {
-  ApplicationErrorType,
-  ApplicationError,
-} from '../../../communication';
+import { ApplicationErrorType, ApplicationError } from '../../../communication';
 
 @Component({
   selector: 'render-error',
@@ -21,16 +13,19 @@ import {
 })
 export class RenderError {
   @Input() error: ApplicationError;
+  @Output() refresh: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() private reportError: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   private isDevtoolsDarkTheme = this.setIsDarkTheme();
   private ApplicationErrorType = ApplicationErrorType;
 
-  constructor(private options: Options) {
-  }
+  constructor(private options: Options) {}
 
   setIsDarkTheme() {
-    return (<any>chrome.devtools.panels).themeName === 'dark' &&
-      this.options.theme === Theme.Dark;
+    return (<any>chrome.devtools.panels).themeName === 'dark' && this.options.theme === Theme.Dark;
+  }
+
+  onRefresh() {
+    this.refresh.emit(true);
   }
 }
