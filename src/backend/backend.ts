@@ -117,6 +117,17 @@ const sendNgVersionMessage = () => {
   send(MessageFactory.ngVersion(ngVersion));
 };
 
+const logAuguryDetected = () => {
+  const ngVersion = parseNgVersion();
+  console.log(
+    `%c Augury %c Detected Angular %c v${ngVersion} %c`,
+    'background:#3e5975 ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff; font-size: 14px;',
+    'background:#DD0031 ; padding: 1px; color: #fff; font-size: 14px;',
+    'background:#C3002F ; padding: 1px; border-radius: 0px 3px 3px 0;  color: #fff; font-size: 14px;',
+    'background:transparent'
+  );
+};
+
 const sendNgModulesMessage = () => {
   const ngModulesMessage = {
     names: parsedModulesData.names,
@@ -208,6 +219,7 @@ const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
 
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
+    logAuguryDetected();
     sendNgVersionMessage();
 
     messageBuffer.clear();
