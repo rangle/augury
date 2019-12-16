@@ -1,6 +1,6 @@
 <div class="vh-100" *ngIf="error">
   <div class="fixed top-0 right-0 m3 p3">
-    <button (click)="onRefresh()">Refresh</button>
+    <button class="refresh-icon" (click)="onRefresh()"></button>
   </div>
   <div [ngSwitch]="error.errorType" style="font-size: 1.25em">
     <div class="vh-100" *ngSwitchCase="ApplicationErrorType.UncaughtException">
