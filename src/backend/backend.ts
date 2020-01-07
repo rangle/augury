@@ -307,6 +307,10 @@ const messageHandler = (message: Message<any>) => {
 
         return true;
 
+      case MessageType.Refresh:
+        resubscribe();
+        return true;
+
       case MessageType.SelectComponent:
         const path: Path = message.content.path;
         updateComponentTree(collectRoots(), false);

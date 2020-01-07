@@ -1,40 +1,49 @@
 <bt-tab-menu
-   showMainItems="true"
-   [tabs]="tabs"
-   [domSelectionActive]="domSelectionActive"
-   [selectedTab]="selectedTab"
-   (tabChange)="onTabSelectionChanged($event)"
-   (domSelectionActiveChange)="onDOMSelectionActiveChange($event)">
+  showMainItems="true"
+  [tabs]="tabs"
+  [domSelectionActive]="domSelectionActive"
+  [selectedTab]="selectedTab"
+  (tabChange)="onTabSelectionChanged($event)"
+  (domSelectionActiveChange)="onDOMSelectionActiveChange($event)"
+>
   <div postlude class="flex px3">
     <span *ngIf="ngVersion" class="ngVersion">
       Angular Version: {{ngVersion}}
     </span>
+
+    <span class="flex flex-column justify-center"><button class="refresh-icon" (click)="onRefresh()"></button></span>
+
     <div #menuButtonElement class="icon setting bg-primary" (click)="onOpenSettings()"></div>
   </div>
 </bt-tab-menu>
 
 <form *ngIf="settingOpened">
-  <div #menuElement class="bg-base primary-color list-style-none list-reset border rounded right-0 absolute setting-dropdown">
+  <div
+    #menuElement
+    class="bg-base primary-color list-style-none list-reset border rounded right-0 absolute setting-dropdown"
+  >
     <ul class="p3 m0">
       <label>Theme</label>
       <li class="list-style-none p3">
         <input
-           type="radio"
-           id="light-theme"
-           [checked]="options.theme === Theme.Light"
-           [value]="Theme.Light"
-           (change)="onThemeChange(Theme.Light)"
-           name="theme" />
+          type="radio"
+          id="light-theme"
+          [checked]="options.theme === Theme.Light"
+          [value]="Theme.Light"
+          (change)="onThemeChange(Theme.Light)"
+          name="theme"
+        />
         <label for="light-theme">Light mode</label>
       </li>
       <li class="list-style-none p3">
         <input
-           type="radio"
-           id="dark-theme"
-           [checked]="options.theme === Theme.Dark"
-           [value]="Theme.Dark"
-           (change)="onThemeChange(Theme.Dark)"
-           name="theme" />
+          type="radio"
+          id="dark-theme"
+          [checked]="options.theme === Theme.Dark"
+          [value]="Theme.Dark"
+          (change)="onThemeChange(Theme.Dark)"
+          name="theme"
+        />
         <label for="dark-theme">Dark mode</label>
       </li>
     </ul>
@@ -42,28 +51,29 @@
       <label>Component rendering mode</label>
       <li class="list-style-none p3">
         <input
-           type="radio"
-           id="hybrid"
-           [checked]="options.componentView === ComponentView.Hybrid"
-           [value]="ComponentView.Hybrid"
-           (click)="onComponentViewChanged(ComponentView.Hybrid)"
-           name="component-view" />
+          type="radio"
+          id="hybrid"
+          [checked]="options.componentView === ComponentView.Hybrid"
+          [value]="ComponentView.Hybrid"
+          (click)="onComponentViewChanged(ComponentView.Hybrid)"
+          name="component-view"
+        />
         <label for="hybrid">
           Hybrid view
           <label class="descriptive-text mw3 block m1">
-            Elements are included in the tree view only if they
-            have properties set in Angular
+            Elements are included in the tree view only if they have properties set in Angular
           </label>
         </label>
       </li>
       <li class="list-style-none p3">
         <input
-           type="radio"
-           id="all-elements"
-           [checked]="options.componentView === ComponentView.All"
-           [value]="ComponentView.All"
-           (click)="onComponentViewChanged(ComponentView.All)"
-           name="component-view" />
+          type="radio"
+          id="all-elements"
+          [checked]="options.componentView === ComponentView.All"
+          [value]="ComponentView.All"
+          (click)="onComponentViewChanged(ComponentView.All)"
+          name="component-view"
+        />
         <label for="all-elements">
           All components and elements
           <label class="descriptive-text mw3 block m1">
@@ -73,12 +83,13 @@
       </li>
       <li class="list-style-none p3">
         <input
-           type="radio"
-           id="components"
-           [checked]="options.componentView === ComponentView.Components"
-           [value]="ComponentView.Components"
-           (click)="onComponentViewChanged(ComponentView.Components)"
-           name="component-view" />
+          type="radio"
+          id="components"
+          [checked]="options.componentView === ComponentView.Components"
+          [value]="ComponentView.Components"
+          (click)="onComponentViewChanged(ComponentView.Components)"
+          name="component-view"
+        />
         <label for="components">
           Components only
           <label class="descriptive-text mw3 block m1">
@@ -101,7 +112,8 @@
           [checked]="options.analyticsConsent === AnalyticsConsent.Yes"
           [value]="AnalyticsConsent.Yes"
           (click)="onAnalyticsConsentChange(AnalyticsConsent.Yes)"
-          name="analytics" />
+          name="analytics"
+        />
         <label for="analytics">
           Yes
         </label>
@@ -113,7 +125,8 @@
           [checked]="options.analyticsConsent === AnalyticsConsent.No"
           [value]="AnalyticsConsent.No"
           (click)="onAnalyticsConsentChange(AnalyticsConsent.No)"
-          name="analytics" />
+          name="analytics"
+        />
         <label for="analytics">
           No
         </label>
@@ -122,49 +135,53 @@
   </div>
 </form>
 
-<bt-analytics-popup
-  *ngIf="showAnalyticsConsent"
-  [options]="options"
-  (hideComponent)="onHideAnalyticsPopup()">
+<bt-analytics-popup *ngIf="showAnalyticsConsent" [options]="options" (hideComponent)="onHideAnalyticsPopup()">
 </bt-analytics-popup>
 
-<split-pane #splitPane [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }">
+<split-pane
+  #splitPane
+  [ngClass]="{ 'flex-auto flex': selectedTab === Tab.ComponentTree, 'display-none': selectedTab !== Tab.ComponentTree }"
+>
   <div split-pane-primary-content class="flex flex-column flex-auto">
     <bt-tree-view
-       class="flex minheight-100pct"
-       [tree]="tree"
-       [selectedNode]="selectedNode"
-       (selectNode)="selectNode.emit($event)"
-       (inspectElement)="inspectElement.emit($event)"
-       (collapseChildren)="collapseChildren.emit($event)"
-       (expandChildren)="expandChildren.emit($event)">
+      class="flex minheight-100pct"
+      [tree]="tree"
+      [selectedNode]="selectedNode"
+      (selectNode)="selectNode.emit($event)"
+      (inspectElement)="inspectElement.emit($event)"
+      (collapseChildren)="collapseChildren.emit($event)"
+      (expandChildren)="expandChildren.emit($event)"
+    >
     </bt-tree-view>
   </div>
   <div split-pane-secondary-content class="flex flex-column flex-auto">
     <bt-info-panel
-       class="flex flex-column flex-auto bg-base"
-       [tree]="tree"
-       [ngModules]="ngModules"
-       [node]="selectedNode"
-       [selectedStateTab]="selectedComponentsSubTab"
-       [loadingState]="componentState.loadingState(selectedNode)"
-       [instanceValue]="componentState.componentInstance(selectedNode)"
-       (selectNode)="selectNode.emit($event)"
-       (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)"
-       (emitValue)="emitValue.emit($event)"
-       (updateProperty)="updateProperty.emit($event)">
+      class="flex flex-column flex-auto bg-base"
+      [tree]="tree"
+      [ngModules]="ngModules"
+      [node]="selectedNode"
+      [selectedStateTab]="selectedComponentsSubTab"
+      [loadingState]="componentState.loadingState(selectedNode)"
+      [instanceValue]="componentState.componentInstance(selectedNode)"
+      (selectNode)="selectNode.emit($event)"
+      (componentsSubTabMenuChange)="componentsSubTabMenuChange.emit($event)"
+      (emitValue)="emitValue.emit($event)"
+      (updateProperty)="updateProperty.emit($event)"
+    >
     </bt-info-panel>
   </div>
 </split-pane>
 
 <bt-router-tree
-   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.RouterTree, 'display-none': selectedTab !== Tab.RouterTree }"
-   [routerTree]="routerTree"
-   class="flex-auto overflow-auto">
+  [ngClass]="{ 'flex-auto flex': selectedTab === Tab.RouterTree, 'display-none': selectedTab !== Tab.RouterTree }"
+  [routerTree]="routerTree"
+  class="flex-auto overflow-auto"
+>
 </bt-router-tree>
 
 <ng-module-info
-   [ngClass]="{ 'flex-auto flex': selectedTab === Tab.NgModules, 'display-none': selectedTab !== Tab.NgModules }"
-   [ngModules]="ngModules"
-   class="flex-auto overflow-auto bg-darken-1">
+  [ngClass]="{ 'flex-auto flex': selectedTab === Tab.NgModules, 'display-none': selectedTab !== Tab.NgModules }"
+  [ngModules]="ngModules"
+  class="flex-auto overflow-auto bg-darken-1"
+>
 </ng-module-info>

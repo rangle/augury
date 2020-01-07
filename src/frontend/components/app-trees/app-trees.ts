@@ -1,23 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-  OnInit,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, OnInit } from '@angular/core';
 
 import { Route } from '../../../backend/utils';
 import { TabDescription } from '../tab-menu/tab-menu';
-import {
-  ComponentInstanceState,
-  ComponentView,
-  Options,
-  Tab,
-  StateTab,
-  Theme,
-  AnalyticsConsent,
-} from '../../state';
+import { ComponentInstanceState, ComponentView, Options, Tab, StateTab, Theme, AnalyticsConsent } from '../../state';
 
 import { Path } from '../../../tree';
 
@@ -29,14 +14,16 @@ type Node = any;
   host: {
     '(document:click)': 'resetIfSettingOpened($event)'
   },
-  styles: [`
-    .ngVersion {
-      line-height: 31px;
-      font-weight: bold;
-      color: #5128a5;
-      padding-right: 5px;
-    }
-  `]
+  styles: [
+    `
+      .ngVersion {
+        line-height: 31px;
+        font-weight: bold;
+        color: #5128a5;
+        padding-right: 5px;
+      }
+    `
+  ]
 })
 export class AppTrees implements OnInit {
   private ComponentView = ComponentView;
@@ -66,8 +53,9 @@ export class AppTrees implements OnInit {
 
   @Output() private domSelectionActiveChange = new EventEmitter<boolean>();
 
-  @Output() emitValue = new EventEmitter<{ path: Path, data: any }>();
-  @Output() updateProperty = new EventEmitter<{ path: Path, newValue: any }>();
+  @Output() emitValue = new EventEmitter<{ path: Path; data: any }>();
+  @Output() updateProperty = new EventEmitter<{ path: Path; newValue: any }>();
+  @Output() refresh = new EventEmitter<boolean>();
 
   @ViewChild('splitPane', { static: false }) private splitPane;
   @ViewChild('menuButtonElement', { static: false }) private menuButtonElement;
@@ -76,19 +64,23 @@ export class AppTrees implements OnInit {
   settingOpened: boolean = false;
   showAnalyticsConsent: boolean = false;
 
-  tabs: Array<TabDescription> = [{
-    title: 'Component Tree',
-    tab: Tab.ComponentTree,
-  }, {
-    title: 'Router Tree',
-    tab: Tab.RouterTree,
-  }, {
-    title: 'NgModules',
-    tab: Tab.NgModules,
-  }];
+  tabs: Array<TabDescription> = [
+    {
+      title: 'Component Tree',
+      tab: Tab.ComponentTree
+    },
+    {
+      title: 'Router Tree',
+      tab: Tab.RouterTree
+    },
+    {
+      title: 'NgModules',
+      tab: Tab.NgModules
+    }
+  ];
 
   ngOnInit() {
-    this.options.load().then((results) => {
+    this.options.load().then(results => {
       if (results.analyticsConsent === AnalyticsConsent.NotSet) {
         this.showAnalyticsConsent = true;
       }
@@ -109,33 +101,42 @@ export class AppTrees implements OnInit {
   }
 
   resetIfSettingOpened(event) {
-    if (this.menuElement && this.menuButtonElement &&
-      !(this.menuElement.nativeElement.contains(event.target) ||
-        this.menuButtonElement.nativeElement.contains(event.target))) {
+    if (
+      this.menuElement &&
+      this.menuButtonElement &&
+      !(
+        this.menuElement.nativeElement.contains(event.target) ||
+        this.menuButtonElement.nativeElement.contains(event.target)
+      )
+    ) {
       this.reset();
     }
   }
 
   onOpenSettings = () => {
     this.settingOpened = !this.settingOpened;
+  };
+
+  onRefresh() {
+    this.refresh.emit(true);
   }
 
   private onThemeChange = (theme: Theme) => {
     this.options.theme = theme;
     this.reset();
-  }
+  };
 
   private onComponentViewChanged = (view: ComponentView) => {
     this.options.componentView = view;
     this.reset();
-  }
+  };
 
   private onAnalyticsConsentChange = (analyticsConsent: AnalyticsConsent) => {
     this.options.analyticsConsent = analyticsConsent;
     this.reset();
-  }
+  };
 
   private onHideAnalyticsPopup = () => {
     this.showAnalyticsConsent = false;
-  }
+  };
 }

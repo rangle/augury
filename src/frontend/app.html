@@ -1,12 +1,14 @@
-<div *ngIf="hasContent"
+<div
+  *ngIf="hasContent"
   class="clearfix vh-100 overflow-hidden flex flex-column"
-  [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'">
+  [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'"
+>
   <div class="vh-100" *ngIf="error">
-    <render-error
-      (reportError)="onReportError()"
-      [error]="error"></render-error>
+    <render-error (reportError)="onReportError()" (refresh)="onRefresh()" [error]="error"></render-error>
   </div>
-  <bt-app-trees #trees *ngIf="error === null"
+  <bt-app-trees
+    #trees
+    *ngIf="error === null"
     class="flex flex-column flex-auto"
     [ngVersion]="ngVersion"
     [componentState]="componentState"
@@ -27,7 +29,9 @@
     (collapseChildren)="onCollapseChildren($event)"
     (expandChildren)="onExpandChildren($event)"
     (emitValue)="onEmitValue($event)"
-    (updateProperty)="onUpdateProperty($event)">
+    (updateProperty)="onUpdateProperty($event)"
+    (refresh)="onRefresh()"
+  >
   </bt-app-trees>
 </div>
 <ng-template [ngIf]="!hasContent">

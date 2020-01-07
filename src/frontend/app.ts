@@ -1,20 +1,9 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  NgZone,
-  ErrorHandler,
-  OnDestroy,
-  DoCheck,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, ErrorHandler, OnDestroy, DoCheck, OnInit } from '@angular/core';
 
 import { UncaughtErrorHandler } from './utils/uncaught-error-handler';
 import { reportUncaughtError } from '../utils/error-handling';
 
-import {
-  Connection,
-  DirectConnection,
-} from './channel';
+import { Connection, DirectConnection } from './channel';
 
 import {
   ApplicationError,
@@ -23,7 +12,7 @@ import {
   MessageFactory,
   MessageResponse,
   MessageType,
-  Subscription,
+  Subscription
 } from '../communication';
 
 import {
@@ -34,18 +23,10 @@ import {
   StateTab,
   Theme,
   ComponentViewState,
-  AnalyticsConsent,
+  AnalyticsConsent
 } from './state';
 
-import {
-  Change,
-  MutableTree,
-  Node,
-  Path,
-  deserializeChangePath,
-  serializePath,
-  InstanceWithMetadata,
-} from '../tree';
+import { Change, MutableTree, Node, Path, deserializeChangePath, serializePath, InstanceWithMetadata } from '../tree';
 
 import { createTree } from '../tree/mutable-tree-factory';
 import { UserActions } from './actions/user-actions/user-actions';
@@ -60,7 +41,7 @@ require('!style!css!postcss!../styles/app.css');
 @Component({
   selector: 'bt-app',
   templateUrl: './app.html',
-  styleUrls: ['./app.css'],
+  styleUrls: ['./app.css']
 })
 export class App implements OnInit, DoCheck, OnDestroy {
   private Theme = Theme;
@@ -79,7 +60,8 @@ export class App implements OnInit, DoCheck, OnDestroy {
   @select(store => store.main.selectedComponentsSubTab) selectedComponentsSubTab;
   @select(store => store.main.DOMSelectionActive) domSelectionActive;
 
-  constructor(private ngRedux: NgRedux<IAppState>,
+  constructor(
+    private ngRedux: NgRedux<IAppState>,
     private mainActions: MainActions,
     private changeDetector: ChangeDetectorRef,
     private connection: Connection,
@@ -88,18 +70,17 @@ export class App implements OnInit, DoCheck, OnDestroy {
     private userActions: UserActions,
     private viewState: ComponentViewState,
     private zone: NgZone,
-    private errorHandler: ErrorHandler) {
-
+    private errorHandler: ErrorHandler
+  ) {
     // this should be our special ErrorHandler subclass which we can listen to
     if (this.errorHandler instanceof UncaughtErrorHandler) {
-      this.unsubscribeUncaughtErrorListener = (<UncaughtErrorHandler>this.errorHandler)
-        .addListener((err: Error) => {
-          this.error = new ApplicationError(ApplicationErrorType.UncaughtException, {
-            name: err.name,
-            message: err.message,
-            stack: err.stack,
-          });
+      this.unsubscribeUncaughtErrorListener = (<UncaughtErrorHandler>this.errorHandler).addListener((err: Error) => {
+        this.error = new ApplicationError(ApplicationErrorType.UncaughtException, {
+          name: err.name,
+          message: err.message,
+          stack: err.stack
         });
+      });
     }
 
     this.componentState = new ComponentInstanceState(changeDetector);
@@ -111,13 +92,10 @@ export class App implements OnInit, DoCheck, OnDestroy {
     this.viewState.changes.subscribe(() => this.changeDetector.detectChanges());
 
     this.mainActions.initializeAugury();
-
   }
 
   hasContent() {
-    return this.tree &&
-      this.tree.roots &&
-      this.tree.roots.length > 0;
+    return this.tree && this.tree.roots && this.tree.roots.length > 0;
   }
 
   ngDoCheck() {
@@ -154,30 +132,24 @@ export class App implements OnInit, DoCheck, OnDestroy {
     this.viewState.select(node);
 
     const m = MessageFactory.selectComponent(node, node.isComponent);
-    const promise = this.directConnection.handleImmediate(m)
-      .then(response => {
-        if (!response) {
-          return;
-        }
+    const promise = this.directConnection.handleImmediate(m).then(response => {
+      if (!response) {
+        return;
+      }
 
-        if (typeof beforeLoad === 'function') {
-          beforeLoad();
-        }
+      if (typeof beforeLoad === 'function') {
+        beforeLoad();
+      }
 
-        const {
-          instance,
-          metadata,
-          providers,
-          componentMetadata,
-        } = response;
+      const { instance, metadata, providers, componentMetadata } = response;
 
-        return <InstanceWithMetadata>{
-          instance,
-          providers,
-          metadata: new Map(metadata),
-          componentMetadata: new Map(componentMetadata),
-        };
-      });
+      return <InstanceWithMetadata>{
+        instance,
+        providers,
+        metadata: new Map(metadata),
+        componentMetadata: new Map(componentMetadata)
+      };
+    });
 
     this.componentState.wait(node, promise);
   }
@@ -225,14 +197,20 @@ export class App implements OnInit, DoCheck, OnDestroy {
   private requestTree() {
     const options = this.options.simpleOptions();
 
-    this.connection.send(MessageFactory.initialize(options))
-      .catch(error => {
-        this.error = new ApplicationError(
-          ApplicationErrorType.UncaughtException,
-          error);
+    this.connection.send(MessageFactory.initialize(options)).catch(error => {
+      this.error = new ApplicationError(ApplicationErrorType.UncaughtException, error);
 
-        this.changeDetector.detectChanges();
-      });
+      this.changeDetector.detectChanges();
+    });
+  }
+
+  private refresh() {
+    this.connection.send(MessageFactory.refresh());
+  }
+
+  onRefresh() {
+    this.error = null;
+    this.refresh();
   }
 
   private restoreSelection() {
@@ -241,8 +219,7 @@ export class App implements OnInit, DoCheck, OnDestroy {
     this.onSelectNode(this.selectedNode, () => this.componentState.reset());
   }
 
-  private processMessage(msg: Message<any>,
-    sendResponse: (response: MessageResponse<any>) => void) {
+  private processMessage(msg: Message<any>, sendResponse: (response: MessageResponse<any>) => void) {
     const respond = () => {
       sendResponse(MessageFactory.response(msg, { processed: true }, false));
     };
@@ -256,8 +233,9 @@ export class App implements OnInit, DoCheck, OnDestroy {
         respond();
         break;
       case MessageType.Push:
-        this.directConnection.readQueue(
-          (innerMessage, innerRespond) => this.processMessage(innerMessage, innerRespond));
+        this.directConnection.readQueue((innerMessage, innerRespond) =>
+          this.processMessage(innerMessage, innerRespond)
+        );
         break;
       case MessageType.CompleteTree:
         this.createTree(msg.content);
@@ -266,8 +244,7 @@ export class App implements OnInit, DoCheck, OnDestroy {
       case MessageType.TreeDiff:
         if (this.tree == null) {
           this.connection.send(MessageFactory.initialize(this.options.simpleOptions())); // request tree
-        }
-        else {
+        } else {
           this.updateTree(msg.content);
         }
         respond();
@@ -333,8 +310,7 @@ export class App implements OnInit, DoCheck, OnDestroy {
     this.restoreSelection();
   }
 
-  private onReceiveMessage(msg: Message<any>,
-    sendResponse: (response: MessageResponse<any>) => void) {
+  private onReceiveMessage(msg: Message<any>, sendResponse: (response: MessageResponse<any>) => void) {
     this.zone.run(() => this.processMessage(msg, sendResponse));
   }
 
