@@ -1,11 +1,12 @@
 :host .icon {
   display: inline-block;
-  width: 20px;
+  width: 10%;
+  min-width: 16px;
   height: 20px;
   background: transparent url('/images/search.png') center center;
-  background-size: contain;
+  background-size: cover;
   -webkit-mask-image: initial;
-  margin-left: 3px;
+  margin: auto 3px;
   padding: 0;
   opacity: 0.7;
 }
