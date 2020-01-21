@@ -96,11 +96,13 @@ export const transformIvy = (
   const transformChildren = (children: Array<any>) => {
     let subindex = 0;
 
-    children.forEach(c => node.children.push(transformIvy(path.concat([subindex++]), c, options, cache, count)));
+    Array.from(children).forEach(c =>
+      node.children.push(transformIvy(path.concat([subindex++]), c, options, cache, count))
+    );
   };
 
   const getChildren = (test: (compareElement) => boolean): Array<any> => {
-    const children = Array.from(ng.getHostElement(element).children).map(c => matchingChildren(c, test));
+    const children = Array.from(element.children).map(c => matchingChildren(c, test));
 
     return children.reduce((previous, current) => previous.concat(current), []);
   };
@@ -113,6 +115,7 @@ export const transformIvy = (
     return getChildren(e => !!ng.getComponent(e) || ng.getDirectives(e).length > 0);
   };
 
+  console.log(element);
   switch (options.componentView) {
     case ComponentView.Hybrid:
       transformChildren(childHybridComponents());

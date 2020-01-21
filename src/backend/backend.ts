@@ -115,7 +115,8 @@ const runAndHandleUncaughtExceptions = (fn: () => any) => {
 
 const sendNgVersionMessage = () => {
   const ngVersion = parseNgVersion();
-  send(MessageFactory.ngVersion(ngVersion));
+  const isIvy = isIvyVersion();
+  send(MessageFactory.ngVersion(ngVersion, isIvy));
 };
 
 const sendNgModulesMessage = () => {
@@ -200,7 +201,7 @@ const collectRoots = () =>
       if (typeof ngCore !== 'undefined') {
         return ngCore.getDebugNode(r);
       } else {
-        return ng.getDebugNode(r);
+        return r;
       }
     })
     .filter(x => x !== null);
@@ -262,7 +263,7 @@ const resubscribe = () => {
         .then(() =>
           runAndHandleUncaughtExceptions(() => {
             previousRoutes = null;
-            updateRouterTree();
+            // updateRouterTree();
           })
         )
         .then(() => onUpdateNotifier.next());
@@ -344,9 +345,15 @@ browserSubscribe(messageHandler);
 // So we look them up using ng.probe, and only when the node is selected.
 const getComponentInstance = (node: Node) => {
   if (node) {
-    const probed = ng.probe(node.nativeElement());
-    if (probed) {
-      return instanceWithMetadata(probed, node, probed.componentInstance);
+    if (isIvyVersion()) {
+      const component = ng.getComponent(node.nativeElement());
+      const host = ng.getHostElement(node.nativeElement());
+      return instanceWithMetadata(host, node, component);
+    } else {
+      const probed = ng.probe(node.nativeElement());
+      if (probed) {
+        return instanceWithMetadata(probed, node, probed.componentInstance);
+      }
     }
   }
   return null;

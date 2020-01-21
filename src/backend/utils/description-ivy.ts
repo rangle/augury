@@ -20,8 +20,8 @@ export const isDebugElementComponentIvy = element => !!element.component;
 export const getComponentName = (element): string => {
   if (element.__ngContext__ && element.__ngContext__.component) {
     return element.__ngContext__.component.constructor.name;
-  } else if (element.__ngContext__ && element.__ngContext__.native) {
-    return element.__ngContext__.native.tagName.toLowerCase();
+  } else {
+    return element.tagName.toLowerCase();
   }
   return 'no-name';
 };

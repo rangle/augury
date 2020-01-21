@@ -3,18 +3,9 @@ import { AnonymousSubject, SubjectSubscriber } from 'rxjs/internal/Subject';
 
 import { Node } from './node';
 
-import {
-  componentInputs,
-  componentOutputs,
-  componentMetadata,
-  componentQueryChildren,
-} from './decorators';
+import { componentInputs, componentOutputs, componentMetadata, componentQueryChildren } from './decorators';
 
-import {
-  isScalar,
-  functionName,
-  recurse,
-} from '../utils';
+import { isScalar, functionName, recurse } from '../utils';
 
 import { isDebugElementComponent } from '../backend/utils/description';
 
@@ -27,7 +18,7 @@ export enum ObjectType {
   ViewChild = 0x20,
   ViewChildren = 0x40,
   ContentChild = 0x80,
-  ContentChildren = 0x100,
+  ContentChildren = 0x100
 }
 
 export type Metadata = Map<any, [ObjectType, any]>;
@@ -59,66 +50,62 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
 
   const components = new Map<any, [[string, ObjectType, any]]>();
 
-  const providers =
-    debugElement.providerTokens
-      .map(t => [tokenName(t), debugElement.injector.get(t)])
-      .filter(provider => provider[1] !== instance);
+  const providers = (debugElement.providerTokens || [])
+    .map(t => [tokenName(t), debugElement.injector.get(t)])
+    .filter(provider => provider[1] !== instance);
 
   const result: any = {
     instance: isComponent ? instance : null,
     providers,
     metadata: objectMetadata,
-    componentMetadata: components,
+    componentMetadata: components
   };
 
   if (!isComponent) {
     return result;
   }
 
-  recurse(instance,
-    obj => {
-      const update = (key: string, flag: ObjectType, additionalProps) => {
-        const existing = components.get(obj);
-        if (existing) {
-          existing.push([key, flag, additionalProps]);
-        }
-        else {
-          components.set(obj, [[key, flag, additionalProps]]);
+  recurse(instance, obj => {
+    const update = (key: string, flag: ObjectType, additionalProps) => {
+      const existing = components.get(obj);
+      if (existing) {
+        existing.push([key, flag, additionalProps]);
+      } else {
+        components.set(obj, [[key, flag, additionalProps]]);
+      }
+    };
+
+    const component = obj ? componentMetadata(obj.constructor) : null;
+    if (component) {
+      for (const input of componentInputs(component, obj)) {
+        update(input.propertyKey, ObjectType.Input, { alias: input.bindingPropertyName });
+      }
+      for (const output of componentOutputs(component, obj)) {
+        update(output.propertyKey, ObjectType.Output, { alias: output.bindingPropertyName });
+      }
+
+      const addQuery = (decoratorType: string, objType: ObjectType) => {
+        for (const vc of componentQueryChildren(decoratorType, component, obj)) {
+          update(vc.propertyKey, objType, { selector: vc.selector });
         }
       };
 
-      const component = obj ? componentMetadata(obj.constructor) : null;
-      if (component) {
-        for (const input of componentInputs(component, obj)) {
-          update(input.propertyKey, ObjectType.Input, { alias: input.bindingPropertyName });
-        }
-        for (const output of componentOutputs(component, obj)) {
-          update(output.propertyKey, ObjectType.Output, { alias: output.bindingPropertyName });
-        }
+      addQuery('@ViewChild', ObjectType.ViewChild);
+      addQuery('@ViewChildren', ObjectType.ViewChildren);
+      addQuery('@ContentChild', ObjectType.ContentChild);
+      addQuery('@ContentChildren', ObjectType.ContentChildren);
+    }
 
-        const addQuery = (decoratorType: string, objType: ObjectType) => {
-          for (const vc of componentQueryChildren(decoratorType, component, obj)) {
-            update(vc.propertyKey, objType, { selector: vc.selector });
-          }
-        };
-
-        addQuery('@ViewChild', ObjectType.ViewChild);
-        addQuery('@ViewChildren', ObjectType.ViewChildren);
-        addQuery('@ContentChild', ObjectType.ContentChild);
-        addQuery('@ContentChildren', ObjectType.ContentChildren);
+    const type = objectType(obj);
+    if (type !== 0) {
+      const existing = objectMetadata.get(obj);
+      if (existing) {
+        objectMetadata.set(obj, [existing[0] | type, existing[1]]);
+      } else {
+        objectMetadata.set(obj, [type, null]);
       }
-
-      const type = objectType(obj);
-      if (type !== 0) {
-        const existing = objectMetadata.get(obj);
-        if (existing) {
-          objectMetadata.set(obj, [existing[0] | type, existing[1]]);
-        }
-        else {
-          objectMetadata.set(obj, [type, null]);
-        }
-      }
-    });
+    }
+  });
 
   // set result to actual values
   result.metadata = Array.from(<any>objectMetadata);
@@ -131,8 +118,7 @@ export const tokenName = (token): string => functionName(token) || token.toStrin
 
 const objectType = (object): ObjectType => {
   if (object != null && !isScalar(object)) {
-    const constructor = object && object.constructor ?
-      object.constructor : ({}).constructor;
+    const constructor = object && object.constructor ? object.constructor : {}.constructor;
     switch (functionName(constructor)) {
       case 'EventEmitter':
         return ObjectType.EventEmitter;
