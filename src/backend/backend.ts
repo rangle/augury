@@ -1,5 +1,5 @@
 import { compare } from '../utils/patch';
-import { isAngular, isDebugMode } from './utils/app-check';
+import { isAngular, isDebugMode, isIvyVersion } from './utils/app-check';
 
 import { MutableTree, Node, Path, instanceWithMetadata, serializePath } from '../tree';
 
@@ -196,7 +196,13 @@ let isStableSubscription: Subscription;
 
 const collectRoots = () =>
   getAllAngularRootElements()
-    .map(r => ngCore.getDebugNode(r))
+    .map(r => {
+      if (typeof ngCore !== 'undefined') {
+        return ngCore.getDebugNode(r);
+      } else {
+        return ng.getDebugNode(r);
+      }
+    })
     .filter(x => x !== null);
 
 const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
@@ -225,31 +231,31 @@ const resubscribe = () => {
           runAndHandleUncaughtExceptions(() => {
             const roots = collectRoots();
             if (roots.length) {
-              let sanity;
-              // Adding sanity threshold to make sure
-              // larger app's doesn't get flooded
-              const sanityThreshold = 0.5 * 1000; // 0.5 seconds
-              const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
-              if (isStableSubscription) {
-                isStableSubscription.unsubscribe();
-              }
-              isStableSubscription = appRef.isStable
-                .pipe(
-                  // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
-                  filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
-                )
-                .subscribe(e => {
-                  sanity = new Date().getTime();
-                  updateComponentTree(collectRoots());
-                  updateRouterTree();
-                  send(MessageFactory.ping());
-                });
-              ngModuleRef = (appRef as any)._injector;
-              ngModuleRef.onDestroy(() => {
-                ngModuleRef = undefined;
-                listenForSomeTimeAndMaybeResubscribe(1000);
-              });
-              sendNgModulesMessage();
+              // let sanity;
+              // // Adding sanity threshold to make sure
+              // // larger app's doesn't get flooded
+              // const sanityThreshold = 0.5 * 1000; // 0.5 seconds
+              // const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
+              // if (isStableSubscription) {
+              //   isStableSubscription.unsubscribe();
+              // }
+              // isStableSubscription = appRef.isStable
+              //   .pipe(
+              //     // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
+              //     filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
+              //   )
+              //   .subscribe(e => {
+              //     sanity = new Date().getTime();
+              updateComponentTree(collectRoots());
+              //   updateRouterTree();
+              //   send(MessageFactory.ping());
+              // });
+              // ngModuleRef = (appRef as any)._injector;
+              // ngModuleRef.onDestroy(() => {
+              //   ngModuleRef = undefined;
+              //   listenForSomeTimeAndMaybeResubscribe(1000);
+              // });
+              // sendNgModulesMessage();
             }
           });
         })
@@ -348,7 +354,7 @@ const getComponentInstance = (node: Node) => {
 
 const updateNode = (tree: MutableTree, path: Path, fn: (element) => void) => {
   const node = getNodeFromPartialPath(tree, path);
-  if (node) {
+  if (node && !isIvyVersion()) {
     const probed = ng.probe(node.nativeElement());
     if (probed) {
       const ngZone = probed.injector.get(ng.coreTokens.NgZone);
@@ -419,7 +425,7 @@ export const routersFromRoots = () => {
 export const routerTree = (): Array<any> => {
   let routers = new Array<any>();
 
-  if (ng.coreTokens.Router) {
+  if (ng.coreTokens && ng.coreTokens.Router) {
     for (const rootElement of collectRoots()) {
       routers = routers.concat(rootElement.injector.get(ng.coreTokens.Router));
     }
