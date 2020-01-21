@@ -69,15 +69,25 @@ export class ComponentInfo {
 
   onViewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
-      var root = ng.probe(inspectedApplication.nodeFromPath('${this.node.id}'));
-      if (root) {
-        if (root.componentInstance) {
+      const node = inspectedApplication.nodeFromPath('${this.node.id}');
+      if (ng.probe) {
+        const root = ng.probe(node);
+        if (root && root.componentInstance) {
           inspect(root.componentInstance.constructor);
         }
         else {
           throw new Error('This component has no instance and therefore no constructor');
         }
-      }`);
+      } else {
+        const root = ng.getComponent(node);
+        if (root) {
+          inspect(root.constructor);
+        }
+        else {
+          throw new Error('This component has no instance and therefore no constructor');
+        }
+      }
+    `);
   }
 
   onUpdateProperty(event: { path: Path; propertyKey: Path; newValue }) {

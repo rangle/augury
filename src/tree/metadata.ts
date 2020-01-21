@@ -8,6 +8,7 @@ import { componentInputs, componentOutputs, componentMetadata, componentQueryChi
 import { isScalar, functionName, recurse } from '../utils';
 
 import { isDebugElementComponent } from '../backend/utils/description';
+import { isDebugElementComponentIvy } from '../backend/utils/description-ivy';
 
 export enum ObjectType {
   Input = 0x1,
@@ -44,8 +45,7 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
     return null;
   }
 
-  const isComponent = isDebugElementComponent(debugElement);
-
+  const isComponent = isDebugElementComponent(debugElement) || isDebugElementComponentIvy(debugElement);
   const objectMetadata = new Map<any, [ObjectType, any]>();
 
   const components = new Map<any, [[string, ObjectType, any]]>();
@@ -53,6 +53,10 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
   const providers = (debugElement.providerTokens || [])
     .map(t => [tokenName(t), debugElement.injector.get(t)])
     .filter(provider => provider[1] !== instance);
+
+  if (instance) {
+    delete instance.__ngContext__;
+  }
 
   const result: any = {
     instance: isComponent ? instance : null,
