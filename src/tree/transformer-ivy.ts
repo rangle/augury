@@ -115,7 +115,6 @@ export const transformIvy = (
     return getChildren(e => !!ng.getComponent(e) || ng.getDirectives(e).length > 0);
   };
 
-  console.log(element);
   switch (options.componentView) {
     case ComponentView.Hybrid:
       transformChildren(childHybridComponents());

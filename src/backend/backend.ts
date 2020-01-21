@@ -449,9 +449,13 @@ export const consoleReference = (node: Node) => {
   Object.defineProperty(window, selectedComponentPropertyKey, {
     get: () => {
       if (node) {
-        return ng.probe(node.nativeElement());
+        if (ng.probe) {
+          return ng.probe(node.nativeElement());
+        } else {
+          return ng.getComponent(node.nativeElement()) || ng.getDebugNode(node.nativeElement());
+        }
       }
-      return null;
+      return node.nativeElement();
     },
     configurable: true
   });
