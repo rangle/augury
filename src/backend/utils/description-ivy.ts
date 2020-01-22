@@ -78,7 +78,8 @@ export abstract class Description {
     }
 
     let componentName: any;
-    const element: any = pathExists(debugElement, 'nativeElement') ? debugElement.nativeElement : null;
+    // const element: any = pathExists(debugElement, 'nativeElement') ? debugElement.nativeElement : null;
+    const element: any = debugElement;
 
     if (debugElement.componentInstance && !componentInstanceExistsInParentChain(debugElement)) {
       componentName = pathExists(debugElement, 'componentInstance', 'constructor', 'name')
@@ -98,11 +99,15 @@ export abstract class Description {
       case 'input':
         return getPropsIfTheyExist(element, [['id'], ['name'], ['type'], ['required']]);
       case 'router-outlet':
-        const routerOutletProvider = debugElement.providerTokens.reduce(
+        const routerOutletProvider = (debugElement.providerTokens || []).reduce(
           (prev, curr) => (prev ? prev : curr.name === 'RouterOutlet' ? curr : null),
           null
         );
-        return getPropsIfTheyExist(debugElement.injector.get(routerOutletProvider), [['name']]);
+        if (debugElement.injector) {
+          return getPropsIfTheyExist(debugElement.injector.get(routerOutletProvider), [['name']]);
+        } else {
+          return undefined;
+        }
       case 'NgSelectOption':
         return element ? Description._getSelectOptionDesc(element) : [];
       case 'NgIf':

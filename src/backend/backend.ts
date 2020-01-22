@@ -361,11 +361,15 @@ const getComponentInstance = (node: Node) => {
 
 const updateNode = (tree: MutableTree, path: Path, fn: (element) => void) => {
   const node = getNodeFromPartialPath(tree, path);
-  if (node && !isIvyVersion()) {
-    const probed = ng.probe(node.nativeElement());
-    if (probed) {
-      const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-      setTimeout(() => ngZone.run(() => fn(probed)));
+  if (node) {
+    if (isIvyVersion()) {
+      //TODO: implement for ivy
+    } else {
+      const probed = ng.probe(node.nativeElement());
+      if (probed) {
+        const ngZone = probed.injector.get(ng.coreTokens.NgZone);
+        setTimeout(() => ngZone.run(() => fn(probed)));
+      }
     }
   }
 };

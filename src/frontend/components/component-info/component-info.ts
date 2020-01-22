@@ -69,9 +69,9 @@ export class ComponentInfo {
 
   onViewComponentSource() {
     chrome.devtools.inspectedWindow.eval(`
-      const node = inspectedApplication.nodeFromPath('${this.node.id}');
+      var node = inspectedApplication.nodeFromPath('${this.node.id}');
       if (ng.probe) {
-        const root = ng.probe(node);
+        var root = ng.probe(node);
         if (root && root.componentInstance) {
           inspect(root.componentInstance.constructor);
         }
@@ -79,7 +79,7 @@ export class ComponentInfo {
           throw new Error('This component has no instance and therefore no constructor');
         }
       } else {
-        const root = ng.getComponent(node);
+        var root = ng.getComponent(node);
         if (root) {
           inspect(root.constructor);
         }
