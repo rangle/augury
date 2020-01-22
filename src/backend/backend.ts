@@ -1,5 +1,5 @@
 import { compare } from '../utils/patch';
-import { isAngular, isDebugMode, isIvyVersion } from './utils/app-check';
+import { appIsStable, isAngular, isDebugMode, isIvyVersion } from './utils/app-check';
 
 import { MutableTree, Node, Path, instanceWithMetadata, serializePath } from '../tree';
 
@@ -232,31 +232,24 @@ const resubscribe = () => {
           runAndHandleUncaughtExceptions(() => {
             const roots = collectRoots();
             if (roots.length) {
-              // let sanity;
+              let sanity;
               // // Adding sanity threshold to make sure
               // // larger app's doesn't get flooded
-              // const sanityThreshold = 0.5 * 1000; // 0.5 seconds
-              // const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
-              // if (isStableSubscription) {
-              //   isStableSubscription.unsubscribe();
-              // }
-              // isStableSubscription = appRef.isStable
-              //   .pipe(
-              //     // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
-              //     filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
-              //   )
-              //   .subscribe(e => {
-              //     sanity = new Date().getTime();
-              updateComponentTree(collectRoots());
-              //   updateRouterTree();
-              //   send(MessageFactory.ping());
-              // });
-              // ngModuleRef = (appRef as any)._injector;
-              // ngModuleRef.onDestroy(() => {
-              //   ngModuleRef = undefined;
-              //   listenForSomeTimeAndMaybeResubscribe(1000);
-              // });
-              // sendNgModulesMessage();
+              const sanityThreshold = 0.25 * 1000; // 0.5 seconds
+              if (isStableSubscription) {
+                isStableSubscription.unsubscribe();
+              }
+              isStableSubscription = appIsStable({ roots, parsedModulesData })
+                .pipe(
+                  // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
+                  filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
+                )
+                .subscribe(e => {
+                  sanity = new Date().getTime();
+                  updateComponentTree(collectRoots());
+                  // updateRouterTree();
+                  send(MessageFactory.ping());
+                });
             }
           });
         })
@@ -271,12 +264,12 @@ const resubscribe = () => {
   });
 };
 
-const selectedComponentPropertyKey = '$$el';
+const SELECTED_COMPONENT_PROPERTY_KEY = '$$el';
 
-const noSelectedComponentWarningText = 'There is no component selected.';
+const NO_SELECTED_COMPONENT_WARNING_TEXT = 'There is no component selected.';
 
-Object.defineProperty(window, selectedComponentPropertyKey, {
-  value: noSelectedComponentWarningText,
+Object.defineProperty(window, SELECTED_COMPONENT_PROPERTY_KEY, {
+  value: NO_SELECTED_COMPONENT_WARNING_TEXT,
   configurable: true
 });
 
@@ -450,7 +443,7 @@ export const routerTree = (): Array<any> => {
 };
 
 export const consoleReference = (node: Node) => {
-  Object.defineProperty(window, selectedComponentPropertyKey, {
+  Object.defineProperty(window, SELECTED_COMPONENT_PROPERTY_KEY, {
     get: () => {
       if (node) {
         if (ng.probe) {

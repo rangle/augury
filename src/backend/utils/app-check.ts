@@ -1,3 +1,6 @@
+import { BehaviorSubject, Observable } from 'rxjs';
+import { parseModulesFromRootElement } from './parse-modules';
+
 declare const getAllAngularTestabilities: Function;
 declare const getAllAngularRootElements: Function;
 declare const ngCore: any;
@@ -22,4 +25,45 @@ export const isDebugMode = () => {
 
 export const isIvyVersion = () => {
   return typeof ng !== 'undefined' && typeof ng.getComponent === 'function';
+};
+
+export const ivySubject: BehaviorSubject<void> = new BehaviorSubject(null);
+
+let originalTemplateFunction: Function;
+
+// Use this function sparingly. Overuse will result in bloat
+export const runInCompatibilityMode = (options: {
+  ivy: { callback: Function; args?: Array<any> };
+  fallback: { callback: Function; args?: Array<any> };
+}) => {
+  let { callback, args } = isIvyVersion() ? options.ivy : options.fallback;
+  return callback.apply(this, args || []);
+};
+
+export const appIsStable = stabilityObject => {
+  return runInCompatibilityMode({
+    ivy: {
+      callback: () => {
+        const app = ng.getComponent(getAllAngularRootElements()[0]);
+        // Unsure if this is the correct way to get the tView that has App.template
+        const appTemplateView = app.__ngContext__.debug.childHead.tView;
+        originalTemplateFunction = originalTemplateFunction || appTemplateView.template;
+        appTemplateView.template = (...args) => {
+          originalTemplateFunction.apply(this, [...args]);
+          ivySubject.next();
+        };
+        return ivySubject as Observable<null>;
+      }
+    },
+    fallback: {
+      callback: moduleParserHelperObject => {
+        let appRef = parseModulesFromRootElement(
+          moduleParserHelperObject.roots[0],
+          moduleParserHelperObject.parsedModulesData
+        );
+        return appRef.isStable;
+      },
+      args: [stabilityObject]
+    }
+  });
 };
