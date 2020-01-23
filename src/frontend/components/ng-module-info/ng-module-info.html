@@ -1,12 +1,17 @@
 <div *ngIf="ngModules" class="flex flex-column bg-panel minwidth-100pct">
-  <div *ngFor="let moduleName of ngModules.names" class="flex flex-column flex-none border-bottom">
-    <div class="border-bottom py3 px3 m0">
-      <h4 class="primary-color col pt1 pb2 m0">{{moduleName}}</h4>
-    </div>
-    <div class="bg-base py3 px3 m0">
-      <ng-module-config-view
-        [config]="ngModules.configs[moduleName]">
-      </ng-module-config-view>
-    </div>
+  <div class="flex flex-row flex-none border-bottom py3 px3 m0 module-row">
+    <input
+      type="checkbox"
+      id="toggle-angular-modules"
+      [checked]="!hideAngularModules"
+      (change)="hideAngularModules = !hideAngularModules"
+    />
+    <label for="toggle-angular-modules">Show Angular Library Modules</label>
+  </div>
+  <div
+    *ngFor="let moduleName of moduleList(hideAngularModules)"
+    class="flex flex-column flex-none border-bottom module-row"
+  >
+    <ng-module-config-view [moduleName]="moduleName" [config]="ngModules.configs[moduleName]"> </ng-module-config-view>
   </div>
 </div>

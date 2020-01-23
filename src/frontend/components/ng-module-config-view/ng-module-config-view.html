@@ -1,19 +1,32 @@
-<table class="minwidth-100pct">
-  <thead>
-    <tr>
-      <th *ngFor="let key of keys" class="config-label primary-color pt1 pb2 m0">
-        {{key}}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td *ngFor="let key of keys">
-        <div class="list-container">
-          <div class="label-wrapper info-value" *ngFor="let item of config[key]">{{item}}</div>
-          <span *ngIf="!config[key].length" class="descriptive-text"><em>None</em></span>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-<table>
+<div class="border-bottom py3 px3 m0">
+  <h4 class="primary-color col pt1 pb2 m0">{{ moduleName }}</h4>
+  <input
+    [checked]="!hideAngularApis"
+    (change)="hideAngularApis = !hideAngularApis"
+    type="checkbox"
+    [id]="'toggle-child-angular-apis-' + moduleName"
+  />
+  <label [for]="'toggle-child-angular-apis-' + moduleName">Show Angular Library APIs</label>
+</div>
+<div class="bg-base py3 px3 m0">
+  <table class="minwidth-100pct">
+    <thead>
+      <tr>
+        <th *ngFor="let key of keys" class="config-label primary-color pt1 pb2 m0">
+          {{key}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let key of keys">
+          <div class="list-container">
+            <ng-module-config-view-list
+              [configList]="keysList(hideAngularApis, config[key])"
+            ></ng-module-config-view-list>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
