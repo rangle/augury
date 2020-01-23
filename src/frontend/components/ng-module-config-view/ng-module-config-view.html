@@ -1,12 +1,14 @@
 <div class="border-bottom py3 px3 m0">
   <h4 class="primary-color col pt1 pb2 m0">{{ moduleName }}</h4>
-  <input
-    [checked]="!hideAngularApis"
-    (change)="hideAngularApis = !hideAngularApis"
-    type="checkbox"
-    [id]="'toggle-child-angular-apis-' + moduleName"
-  />
-  <label [for]="'toggle-child-angular-apis-' + moduleName">Show Angular Library APIs</label>
+  <div class="checkbox-label-wrapper">
+    <input
+      [checked]="!hideAngularApis"
+      (change)="hideAngularApis = !hideAngularApis"
+      type="checkbox"
+      [id]="'toggle-child-angular-apis-' + moduleName"
+    />
+    <label [for]="'toggle-child-angular-apis-' + moduleName">Show Angular Library APIs</label>
+  </div>
 </div>
 <div class="bg-base py3 px3 m0">
   <table class="minwidth-100pct">
