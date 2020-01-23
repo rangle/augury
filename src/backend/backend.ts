@@ -48,7 +48,6 @@ import { takeWhile, filter } from 'rxjs/operators';
 import 'reflect-metadata';
 
 declare const ng;
-declare const ngCore;
 declare const getAllAngularRootElements: () => Element[];
 declare const treeRenderOptions: SimpleOptions;
 
@@ -198,8 +197,8 @@ let isStableSubscription: Subscription;
 const collectRoots = () =>
   getAllAngularRootElements()
     .map(r => {
-      if (typeof ngCore !== 'undefined') {
-        return ngCore.getDebugNode(r);
+      if (typeof ng.probe !== 'undefined') {
+        return ng.probe(r);
       } else {
         return r;
       }

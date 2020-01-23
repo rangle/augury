@@ -10,6 +10,8 @@ import { isScalar, functionName, recurse } from '../utils';
 import { isDebugElementComponent } from '../backend/utils/description';
 import { isDebugElementComponentIvy } from '../backend/utils/description-ivy';
 
+declare const ng;
+
 export enum ObjectType {
   Input = 0x1,
   Output = 0x2,
@@ -50,9 +52,14 @@ export const instanceWithMetadata = (debugElement, node: Node, instance) => {
 
   const components = new Map<any, [[string, ObjectType, any]]>();
 
-  const providers = (debugElement.providerTokens || [])
-    .map(t => [tokenName(t), debugElement.injector.get(t)])
-    .filter(provider => provider[1] !== instance);
+  let providers = debugElement.providerTokens || [];
+  if (ng.getDirectives) {
+    providers = ng.getDirectives(debugElement).map(t => [t.constructor.name, t]);
+  } else {
+    providers = (debugElement.providerTokens || [])
+      .map(t => [tokenName(t), debugElement.injector.get(t)])
+      .filter(provider => provider[1] !== instance);
+  }
 
   if (instance) {
     delete instance.__ngContext__;
