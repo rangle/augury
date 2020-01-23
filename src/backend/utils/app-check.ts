@@ -3,7 +3,6 @@ import { parseModulesFromRootElement } from './parse-modules';
 
 declare const getAllAngularTestabilities: Function;
 declare const getAllAngularRootElements: Function;
-declare const ngCore: any;
 declare const ng: any;
 
 export const isAngular = () => {
@@ -11,9 +10,9 @@ export const isAngular = () => {
 };
 
 export const isDebugMode = () => {
-  if (typeof getAllAngularRootElements === 'function' && typeof ngCore !== 'undefined') {
+  if (typeof getAllAngularRootElements === 'function' && typeof ng.probe !== 'undefined') {
     const rootElements = getAllAngularRootElements();
-    const firstRootDebugElement = rootElements && rootElements.length ? ngCore.getDebugNode(rootElements[0]) : null;
+    const firstRootDebugElement = rootElements && rootElements.length ? ng.probe(rootElements[0]) : null;
 
     return firstRootDebugElement !== null && firstRootDebugElement !== void 0 && firstRootDebugElement.injector;
   } else if (typeof getAllAngularRootElements === 'function') {
