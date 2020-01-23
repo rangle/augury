@@ -559,7 +559,7 @@ const _API_BLACKLIST = [
 
 // Only contains exposed Angular ngModules, used for performance purposes
 // when we only want to filter modules
-export const _MODULE_BLACKLIST = [
+const _MODULE_BLACKLIST = [
   'HttpClientJsonpModule',
   'HttpClientModule',
   'HttpClientXsrfModule',
