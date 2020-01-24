@@ -1,0 +1,6 @@
+<ng-container *ngIf="configList.length > 0; else emptyState">
+  <div class="label-wrapper info-value" *ngFor="let item of configList">{{item}}</div>
+</ng-container>
+<ng-template #emptyState>
+  <span class="descriptive-text"><em>None</em></span>
+</ng-template>

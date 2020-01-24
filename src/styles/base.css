@@ -83,3 +83,13 @@ split-pane-secondary-content {
 .message-gray {
   color: #b0b0b0;
 }
+
+.checkbox-label-wrapper input {
+  margin: 3px;
+}
+
+.checkbox-label-wrapper label {
+  margin: auto 3px;
+  position: relative;
+  bottom: 1px;
+}

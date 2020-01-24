@@ -49,7 +49,7 @@ export class App implements OnInit, DoCheck, OnDestroy {
 
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
-  private ngModules: Array<any> = null;
+  private ngModules: { [key: string]: any };
   private ngVersion: string;
   private selectedNode: Node;
   private subscription: Subscription;
