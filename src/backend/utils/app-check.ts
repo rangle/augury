@@ -30,13 +30,35 @@ export const ivySubject: BehaviorSubject<void> = new BehaviorSubject(null);
 
 let originalTemplateFunction: Function;
 
-// Use this function sparingly. Overuse will result in bloat
+// Use this function sparingly. The use case for this is in situations
+// where there is functionality that does not work for pre-R3 and post-R3.
+//
+// In those cases it is best to create an api that calls this method
+// on application load to determine functionality, and have all other
+// application code call on that API instead of calling this method
+// directly.
+//
+// In cases where there is code that we only want to run for pre-R3 or
+// post-R3 use the isIvyVersion() function directly in an if statement or
+// pass code in as a callback to the runForPreR3() / runForPostR3() function
 export const runInCompatibilityMode = (options: {
   ivy: { callback: Function; args?: Array<any> };
   fallback: { callback: Function; args?: Array<any> };
 }) => {
   let { callback, args } = isIvyVersion() ? options.ivy : options.fallback;
   return callback.apply(this, args || []);
+};
+
+export const runForPreR3 = callback => {
+  if (!isIvyVersion()) {
+    callback();
+  }
+};
+
+export const runForPostR3 = callback => {
+  if (isIvyVersion()) {
+    callback();
+  }
 };
 
 export const appIsStable = stabilityObject => {
@@ -56,11 +78,12 @@ export const appIsStable = stabilityObject => {
     },
     fallback: {
       callback: moduleParserHelperObject => {
-        let appRef = parseModulesFromRootElement(
+        // side effect
+        moduleParserHelperObject.appRef = parseModulesFromRootElement(
           moduleParserHelperObject.roots[0],
           moduleParserHelperObject.parsedModulesData
         );
-        return appRef.isStable;
+        return moduleParserHelperObject.appRef.isStable;
       },
       args: [stabilityObject]
     }

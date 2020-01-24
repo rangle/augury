@@ -1,5 +1,5 @@
 import { compare } from '../utils/patch';
-import { appIsStable, isAngular, isDebugMode, isIvyVersion } from './utils/app-check';
+import { appIsStable, isAngular, isDebugMode, isIvyVersion, runForPreR3 } from './utils/app-check';
 
 import { MutableTree, Node, Path, instanceWithMetadata, serializePath } from '../tree';
 
@@ -234,21 +234,32 @@ const resubscribe = () => {
               let sanity;
               // // Adding sanity threshold to make sure
               // // larger app's doesn't get flooded
-              const sanityThreshold = 0.25 * 1000; // 0.5 seconds
+              const sanityThreshold = 0.2 * 1000; // 0.2 seconds
               if (isStableSubscription) {
                 isStableSubscription.unsubscribe();
               }
-              isStableSubscription = appIsStable({ roots, parsedModulesData })
+              const stabilityObject = { appRef: undefined, roots, parsedModulesData };
+              isStableSubscription = appIsStable(stabilityObject)
                 .pipe(
                   // Make sure sanity is undefined (initial run) or that sanitythreshold is passed
                   filter(() => sanity === undefined || new Date().getTime() - sanity > sanityThreshold)
                 )
                 .subscribe(e => {
-                  sanity = new Date().getTime();
-                  updateComponentTree(collectRoots());
-                  // updateRouterTree();
-                  send(MessageFactory.ping());
+                  setTimeout(() => {
+                    sanity = new Date().getTime();
+                    updateComponentTree(collectRoots());
+                    runForPreR3(updateRouterTree);
+                    send(MessageFactory.ping());
+                  });
                 });
+              runForPreR3(() => {
+                ngModuleRef = (stabilityObject.appRef as any)._injector;
+                ngModuleRef.onDestroy(() => {
+                  ngModuleRef = undefined;
+                  listenForSomeTimeAndMaybeResubscribe(1000);
+                });
+                sendNgModulesMessage();
+              });
             }
           });
         })
