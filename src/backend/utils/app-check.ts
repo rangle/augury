@@ -68,8 +68,8 @@ export const appIsStable = stabilityObject => {
     ivy: {
       callback: () => {
         const app = ng.getComponent(getAllAngularRootElements()[0]);
-        // Unsure if this is the correct way to get the tView that has App.template
-        const appTemplateView = app.__ngContext__.debug.childHead.tView;
+        // Uses private api ɵcmp
+        const appTemplateView = app.constructor.ɵcmp.tView;
         originalTemplateFunction = originalTemplateFunction || appTemplateView.template;
         appTemplateView.template = (...args) => {
           originalTemplateFunction.apply(this, [...args]);
