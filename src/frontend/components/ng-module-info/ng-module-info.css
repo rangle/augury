@@ -2,3 +2,7 @@
 }
 :host > main > span.module-title {
 }
+
+.module-row {
+  background-color: #f3f3f3;
+}

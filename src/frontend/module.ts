@@ -30,17 +30,13 @@ import { UserActions } from './actions/user-actions/user-actions';
 import { MainActions } from './actions/main-actions';
 import { NgModuleInfo } from './components/ng-module-info/ng-module-info';
 import { NgModuleConfigView } from './components/ng-module-config-view/ng-module-config-view';
+import { NgModuleConfigViewList } from './components/ng-module-config-view-list/ng-module-config-view-list';
 
 import reduxLogger from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 import { SendAnalytics } from './middleware/send-analytics';
 
-import {
-  applyMiddleware,
-  compose,
-  createStore,
-  Store,
-} from 'redux';
+import { applyMiddleware, compose, createStore, Store } from 'redux';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 import { rootReducer } from './store/reducers';
@@ -51,26 +47,14 @@ import { AnalyticsPopup } from './components/analytics-popup/analytics-popup';
 import { UncaughtErrorHandler } from './utils/uncaught-error-handler';
 import { IAppState } from './store/model';
 
-import {
-  Connection,
-  DirectConnection,
-} from './channel';
+import { Connection, DirectConnection } from './channel';
 
-import {
-  ComponentViewState,
-  ComponentPropertyState,
-  Options,
-} from './state';
+import { ComponentViewState, ComponentPropertyState, Options } from './state';
 
 import { App } from './app';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    CommonModule,
-    FormsModule,
-    NgReduxModule,
-  ],
+  imports: [BrowserModule, CommonModule, FormsModule, NgReduxModule],
   declarations: [
     Accordion,
     App,
@@ -99,6 +83,7 @@ import { App } from './app';
     NgModuleInfo,
     NgModuleConfigView,
     AnalyticsPopup,
+    NgModuleConfigViewList
   ],
   providers: [
     Connection,
@@ -109,22 +94,16 @@ import { App } from './app';
     ComponentViewState,
     ComponentPropertyState,
     SendAnalytics,
-    { provide: ErrorHandler, useClass: UncaughtErrorHandler },
+    { provide: ErrorHandler, useClass: UncaughtErrorHandler }
   ],
   bootstrap: [App]
 })
 export class FrontendModule {
-  constructor(
-    ngRedux: NgRedux<IAppState>,
-    sendAnalytics: SendAnalytics) {
+  constructor(ngRedux: NgRedux<IAppState>, sendAnalytics: SendAnalytics) {
     const epicMiddleware = createEpicMiddleware();
     const store: Store<IAppState> = createStore(
       rootReducer,
-      compose(
-        applyMiddleware(reduxLogger),
-        applyMiddleware(epicMiddleware),
-        applyMiddleware(sendAnalytics.middleware)
-      )
+      compose(applyMiddleware(reduxLogger), applyMiddleware(epicMiddleware), applyMiddleware(sendAnalytics.middleware))
     );
 
     epicMiddleware.run(rootEpic);
