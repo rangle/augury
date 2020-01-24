@@ -1,29 +1,15 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Connection} from '../../channel/connection';
-import {MessageFactory} from '../../../communication';
-import {Route} from '../../../backend/utils';
-import {
-  matchNode,
-  matchRoute,
-  matchString,
-} from '../../utils';
-import {
-  ExpandState,
-  ComponentViewState,
-} from '../../state';
-import {
-  MutableTree,
-  Node,
-  Path,
-} from '../../../tree';
+import { Connection } from '../../channel/connection';
+import { MessageFactory } from '../../../communication';
+import { Route } from '../../../backend/utils';
+import { matchNode, matchRoute, matchString } from '../../utils';
+import { ExpandState, ComponentViewState } from '../../state';
+import { MutableTree, Node, Path } from '../../../tree';
 
 @Injectable()
 export class UserActions {
-  constructor(
-    private connection: Connection,
-    private viewState: ComponentViewState
-  ) {}
+  constructor(private connection: Connection, private viewState: ComponentViewState) {}
 
   /// Toggle the expansion state of a node
   toggle(node: Node, defaultState: ExpandState) {
@@ -65,8 +51,7 @@ export class UserActions {
       const results = tree.filter(node => matchNode(node, query));
       if (results.length > 0) {
         resolve(results);
-      }
-      else {
+      } else {
         reject(new Error('No results found'));
       }
     });
@@ -85,19 +70,17 @@ export class UserActions {
 
       const matches = new Array<Route>();
 
-      routerTree.forEach(
-        root => recurse(root,
-          node => {
-            if (matchString(query, node.name) ||
-                matchString(query, node.path)) {
-              matches.push(node);
-            }
-          }));
+      routerTree.forEach(root =>
+        recurse(root, node => {
+          if (matchString(query, node.name) || matchString(query, node.path)) {
+            matches.push(node);
+          }
+        })
+      );
 
       if (matches.length > 0) {
         resolve(matches);
-      }
-      else {
+      } else {
         reject(new Error('No matching routes were found'));
       }
     });
@@ -119,4 +102,3 @@ export class UserActions {
     return this.connection.send(MessageFactory.foundDOMElement(null));
   }
 }
-
