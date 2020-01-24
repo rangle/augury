@@ -31,16 +31,18 @@ export const ivySubject: BehaviorSubject<void> = new BehaviorSubject(null);
 let originalTemplateFunction: Function;
 
 // Use this function sparingly. The use case for this is in situations
-// where there is functionality that does not work for pre-R3 and post-R3.
+// where there is large pieces of functionality that must be implemented
+// differently in post-R3 than it is currently in pre-R3. See isAppStable()
+// for an example.
 //
-// In those cases it is best to create an api that calls this method
-// on application load to determine functionality, and have all other
+// It is best to create an api that calls this method
+// on application load to determine functionality, and then have all other
 // application code call on that API instead of calling this method
 // directly.
 //
 // In cases where there is code that we only want to run for pre-R3 or
 // post-R3 use the isIvyVersion() function directly in an if statement or
-// pass code in as a callback to the runForPreR3() / runForPostR3() function
+// pass code in as a callback to the runForPreR3() / runForPostR3() functions
 export const runInCompatibilityMode = (options: {
   ivy: { callback: Function; args?: Array<any> };
   fallback: { callback: Function; args?: Array<any> };
