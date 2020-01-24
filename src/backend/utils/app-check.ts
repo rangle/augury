@@ -32,7 +32,7 @@ let originalTemplateFunction: Function;
 
 // Use this function sparingly. The use case for this is in situations
 // where there is large pieces of functionality that must be implemented
-// differently in post-R3 than it is currently in pre-R3. See isAppStable()
+// differently in post-R3 than it is currently in pre-R3. See appIsStable()
 // for an example.
 //
 // It is best to create an api that calls this method
