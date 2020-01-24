@@ -73,7 +73,11 @@ export const appIsStable = stabilityObject => {
         originalTemplateFunction = originalTemplateFunction || appTemplateView.template;
         appTemplateView.template = (...args) => {
           originalTemplateFunction.apply(this, [...args]);
-          ivySubject.next();
+          runOutsideAngular(() => {
+            setTimeout(() => {
+              ivySubject.next();
+            });
+          });
         };
         return ivySubject as Observable<null>;
       }
@@ -90,4 +94,12 @@ export const appIsStable = stabilityObject => {
       args: [stabilityObject]
     }
   });
+};
+
+export const runOutsideAngular = (f: () => any) => {
+  const w = window as any;
+  if (!w.Zone || w.Zone.current._name !== 'angular') {
+    return;
+  }
+  w.Zone.current._parent.run(f);
 };
