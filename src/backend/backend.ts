@@ -361,25 +361,28 @@ const getComponentInstance = (node: Node) => {
 const updateNode = (tree: MutableTree, path: Path, fn: (element) => void) => {
   const node = getNodeFromPartialPath(tree, path);
   if (node) {
-    if (isIvyVersion()) {
-      //TODO: implement for ivy
-    } else {
-      const probed = ng.probe(node.nativeElement());
-      if (probed) {
-        const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-        setTimeout(() => ngZone.run(() => fn(probed)));
-      }
+    const probed = ng.probe(node.nativeElement());
+    if (probed) {
+      const ngZone = probed.injector.get(ng.coreTokens.NgZone);
+      setTimeout(() => ngZone.run(() => fn(probed)));
     }
   }
 };
 
 const updateProperty = (tree: MutableTree, path: Path, newValue) => {
-  updateNode(tree, path, probed => {
-    const instanceParent = getNodeInstanceParent(probed, path);
-    if (instanceParent) {
-      instanceParent[path[path.length - 1]] = newValue;
-    }
-  });
+  if (isIvyVersion()) {
+    const node = getNodeFromPartialPath(tree, path);
+    const comp = ng.getComponent(node.nativeElement());
+    comp[path[path.length - 1]] = newValue;
+    ng.markDirty(node.nativeElement());
+  } else {
+    updateNode(tree, path, probed => {
+      const instanceParent = getNodeInstanceParent(probed, path);
+      if (instanceParent) {
+        instanceParent[path[path.length - 1]] = newValue;
+      }
+    });
+  }
 };
 
 const updateProviderProperty = (tree: MutableTree, path: Path, token: string, propertyPath: Path, newValue) => {
@@ -391,26 +394,37 @@ const updateProviderProperty = (tree: MutableTree, path: Path, token: string, pr
   });
 };
 
+const callEmit = (emittable, path, newValue) => {
+  if (typeof emittable.emit === 'function') {
+    emittable.emit(newValue);
+  } else if (typeof emittable.next === 'function') {
+    emittable.next(newValue);
+  } else {
+    throw new Error(`Cannot emit value for ${serializePath(path)}`);
+  }
+};
+
 const emitValue = (tree: MutableTree, path: Path, newValue) => {
   const node = getNodeFromPartialPath(tree, path);
   if (node) {
-    const probed = ng.probe(node.nativeElement());
-    if (probed) {
-      const instanceParent = getNodeInstanceParent(probed, path);
-      if (instanceParent) {
-        const ngZone = probed.injector.get(ng.coreTokens.NgZone);
-        setTimeout(() => {
-          ngZone.run(() => {
-            const emittable = instanceParent[path[path.length - 1]];
-            if (typeof emittable.emit === 'function') {
-              emittable.emit(newValue);
-            } else if (typeof emittable.next === 'function') {
-              emittable.next(newValue);
-            } else {
-              throw new Error(`Cannot emit value for ${serializePath(path)}`);
-            }
+    if (isIvyVersion()) {
+      const comp = ng.getComponent(node.nativeElement());
+      const emittable = comp[path[path.length - 1]];
+      callEmit(emittable, path, newValue);
+      setTimeout(() => ng.markDirty(node.nativeElement()));
+    } else {
+      const probed = ng.probe(node.nativeElement());
+      if (probed) {
+        const instanceParent = getNodeInstanceParent(probed, path);
+        if (instanceParent) {
+          const ngZone = probed.injector.get(ng.coreTokens.NgZone);
+          setTimeout(() => {
+            ngZone.run(() => {
+              const emittable = instanceParent[path[path.length - 1]];
+              callEmit(emittable, path, newValue);
+            });
           });
-        });
+        }
       }
     }
   }

@@ -6,7 +6,7 @@ import {
   Property,
   Dependency,
   getComponentName,
-  isDebugElementComponent
+  isDebugElementComponentIvy
 } from '../backend/utils/description-ivy';
 
 import { ComponentView, SimpleOptions } from '../options';
@@ -54,11 +54,11 @@ export const transformIvy = (
 
   const listeners = element.listeners ? element.listeners.map(l => clone(l)) : [];
   const name = getComponentName(element);
-  const isComponent = isDebugElementComponent(element);
+  const isComponent = isDebugElementComponentIvy(element);
 
   const metadata = element.componentInstance ? componentMetadata(element.componentInstance.constructor) : null;
 
-  const changeDetection = null;
+  const changeDetection = isComponent ? getChangeDetection(metadata) : null;
 
   const node: Node = {
     id: serializedPath,

@@ -14,7 +14,6 @@ export interface Property {
   value;
 }
 
-export const isDebugElementComponent = element => !!(element.__ngContext__ && element.__ngContext__.component);
 export const isDebugElementComponentIvy = element => !!(element.__ngContext__ && element.__ngContext__.component);
 
 export const getComponentName = (element): string => {
