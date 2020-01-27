@@ -1,20 +1,10 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  SimpleChanges,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import {
-  Options,
-  AnalyticsConsent,
-} from '../../state';
+import { Options, AnalyticsConsent } from '../../state';
 
 @Component({
   selector: 'bt-analytics-popup',
-  templateUrl: './analytics-popup.html',
+  templateUrl: './analytics-popup.html'
 })
 export class AnalyticsPopup {
   AnalyticsConsent = AnalyticsConsent;
@@ -25,5 +15,5 @@ export class AnalyticsPopup {
   onAnalyticsConsentChange = (analyticsConsent: AnalyticsConsent) => {
     this.options.analyticsConsent = analyticsConsent;
     this.hideComponent.emit();
-  }
+  };
 }

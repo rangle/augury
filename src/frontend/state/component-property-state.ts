@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Path, serializePath} from '../../tree';
+import { Path, serializePath } from '../../tree';
 
-import {ExpandState} from './expand-state';
+import { ExpandState } from './expand-state';
 
 @Injectable()
 export class ComponentPropertyState {
@@ -13,15 +13,12 @@ export class ComponentPropertyState {
 
     if (this.expanded.has(serializedPath)) {
       this.expanded.delete(serializedPath);
-    }
-    else {
+    } else {
       this.expanded.add(serializedPath);
     }
   }
 
   expansionState(path: Path): ExpandState {
-    return this.expanded.has(serializePath(path))
-      ? ExpandState.Expanded
-      : ExpandState.Collapsed;
+    return this.expanded.has(serializePath(path)) ? ExpandState.Expanded : ExpandState.Collapsed;
   }
 }
