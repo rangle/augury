@@ -1,13 +1,8 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {
-  Message,
-  MessageResponse,
-} from '../../communication';
+import { Message, MessageResponse } from '../../communication';
 
-import {
-  deserialize
-} from '../../utils';
+import { deserialize } from '../../utils';
 
 /// For large messages, we use a strategy of pulling the data directly from the
 /// backend code using inspectedWindow instead of sending the data through the
@@ -56,16 +51,13 @@ export class DirectConnection {
       type ExceptionInfo = chrome.devtools.inspectedWindow.EvaluationExceptionInfo;
 
       const handler = (result, exceptionInfo: ExceptionInfo) => {
-        if (exceptionInfo &&
-            (exceptionInfo.isError ||
-             exceptionInfo.isException)) {
+        if (exceptionInfo && (exceptionInfo.isError || exceptionInfo.isException)) {
           const e = new Error('Code evaluation failed');
           if (exceptionInfo.isException) {
             e.stack = exceptionInfo.value;
           }
           reject(e);
-        }
-        else {
+        } else {
           resolve(result);
         }
       };

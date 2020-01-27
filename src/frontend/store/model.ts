@@ -1,4 +1,4 @@
-import {StateTab, Tab} from '../state/tab';
+import { StateTab, Tab } from '../state/tab';
 
 export interface IAppState {
   main: IAuguryState;

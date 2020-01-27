@@ -1,31 +1,15 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  SimpleChanges,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
-import {ComponentLoadState} from '../../state';
+import { ComponentLoadState } from '../../state';
 
-import {
-  ComponentMetadata,
-  Metadata,
-  MutableTree,
-  Node,
-  Path,
-  deserializePath,
-} from '../../../tree';
+import { ComponentMetadata, Metadata, MutableTree, Node, Path, deserializePath } from '../../../tree';
 
-import {functionName} from '../../../utils';
-
-import {UserActions} from '../../actions/user-actions/user-actions';
+import { UserActions } from '../../actions/user-actions/user-actions';
 
 @Component({
   selector: 'bt-component-info',
   templateUrl: './component-info.html',
-  styleUrls: ['./component-info.css'],
+  styleUrls: ['./component-info.css']
 })
 export class ComponentInfo {
   @Input() node: Node;
@@ -37,8 +21,8 @@ export class ComponentInfo {
   @Input() loadingState: ComponentLoadState;
 
   @Output() selectNode = new EventEmitter<Node>();
-  @Output() emitValue = new EventEmitter<{path: Path, data: any}>();
-  @Output() updateProperty = new EventEmitter<{path: Path, newValue: any}>();
+  @Output() emitValue = new EventEmitter<{ path: Path; data: any }>();
+  @Output() updateProperty = new EventEmitter<{ path: Path; newValue: any }>();
 
   changeDetectionStrategies = ChangeDetectionStrategy;
 
@@ -63,15 +47,11 @@ export class ComponentInfo {
   }
 
   get hasDirectives() {
-    return this.node &&
-      this.node.directives &&
-      this.node.directives.length > 0;
+    return this.node && this.node.directives && this.node.directives.length > 0;
   }
 
   get hasDependencies() {
-    return this.node &&
-      this.node.dependencies &&
-      this.node.dependencies.length > 0;
+    return this.node && this.node.dependencies && this.node.dependencies.length > 0;
   }
 
   get hasInstanceProviders() {
@@ -82,7 +62,7 @@ export class ComponentInfo {
     if (this.hasInstanceProviders === false) {
       return {};
     }
-    return this.providers.reduce((p, c) => Object.assign(p, {[c[0]]: c[1]}), {});
+    return this.providers.reduce((p, c) => Object.assign(p, { [c[0]]: c[1] }), {});
   }
 
   onViewComponentSource() {
@@ -98,11 +78,11 @@ export class ComponentInfo {
       }`);
   }
 
-  onUpdateProperty(event: {path: Path, propertyKey: Path, newValue}) {
+  onUpdateProperty(event: { path: Path; propertyKey: Path; newValue }) {
     this.actions.updateProperty(event.path.concat(event.propertyKey), event.newValue);
   }
 
-  onUpdateProvider(event: {path: Path, propertyKey: Path, newValue}) {
+  onUpdateProvider(event: { path: Path; propertyKey: Path; newValue }) {
     this.actions.updateProvider(event.path, event.propertyKey, event.newValue);
   }
 }
