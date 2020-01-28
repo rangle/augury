@@ -262,7 +262,6 @@ const resubscribe = () => {
                     sanity = new Date().getTime();
                     updateComponentTree(collectRoots());
                     runForPreR3(updateRouterTree);
-                    updateRouterTree();
                     send(MessageFactory.ping());
                   });
                 });

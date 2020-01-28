@@ -1,14 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  OnInit,
-  AfterContentInit,
-  AfterViewInit,
-  OnChanges
-} from '@angular/core';
-import { InstanceWithMetadata, Metadata, Node, ObjectType, Path } from '../../../tree';
+import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
 
 import { StateTab } from '../../state';
 
@@ -41,10 +31,9 @@ export class ComponentsTabMenu implements OnChanges {
 
   constructor(private userActions: UserActions) {}
 
-  ngOnChanges(changes: import('@angular/core').SimpleChanges): void {
-    //remove injector graph tab from applications that use Angular Ivy
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.isIvy) {
-      this.tabs.pop();
+      this.tabs[1].title = 'Component Hierarchy';
     }
   }
 

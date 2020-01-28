@@ -4,29 +4,23 @@
       No component selected
     </h4>
   </div>
-  <div class="flex-column monospace pt2"
-    [hidden]="!selectedNode"
-    [ngClass]="{flex: selectedNode}">
+  <div class="flex-column monospace pt2" [hidden]="!selectedNode" [ngClass]="{flex: selectedNode}">
     <div *ngIf="breadcrumbs?.length > 0" class="flex flex-none flex-column border-bottom pl4 pb3">
       <h3 class="monospace primary-color">
         Component Hierarchy
       </h3>
       <div>
         <span *ngFor="let node of breadcrumbs; let i = index">
-          <a href="#"
-            class="node-item-property"
-            (click)="onSelectComponent(node)">
+          <a href="#" class="node-item-property" (click)="onSelectComponent(node)">
             {{node.name}}
           </a>
-          <span class="primary-color"
-            style="font-size: 14px;font-weight: bold;"
-            *ngIf="i < breadcrumbs.length - 1">
+          <span class="primary-color" style="font-size: 14px;font-weight: bold;" *ngIf="i < breadcrumbs.length - 1">
             &#187;
           </span>
         </span>
       </div>
     </div>
-    <div [hidden]="!selectedNode" class="flex flex-column pl4">
+    <div *ngIf="!isIvy" [hidden]="!selectedNode" class="flex flex-column pl4">
       <h3 class="monospace primary-color">
         Injector Graph
       </h3>
@@ -35,8 +29,10 @@
       </div>
     </div>
   </div>
-  <div *ngIf="selectedNode && focusedComponent > 0 && focusedDependency < 0"
-    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-column focused-node-info-panel">
+  <div
+    *ngIf="selectedNode && focusedComponent > 0 && focusedDependency < 0"
+    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-column focused-node-info-panel"
+  >
     <span class="node-item-property">
       {{parentHierarchy[focusedComponent].name}}
     </span>
@@ -44,15 +40,20 @@
     <ul class="list-reset m0">
       <li>
         <span class="info-key">NgModule:</span>
-        <span class="info-value" *ngIf="ngModules && ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id]">
+        <span
+          class="info-value"
+          *ngIf="ngModules && ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id]"
+        >
           {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].augury_token_id].module}}
         </span>
       </li>
     </ul>
   </div>
 
-  <div *ngIf="selectedNode && focusedDependency >= 0"
-    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-column focused-node-info-panel">
+  <div
+    *ngIf="selectedNode && focusedDependency >= 0"
+    class="bg-panel border-bottom pl4 py3 px3 m0 flex flex-column focused-node-info-panel"
+  >
     <span class="node-item-property">
       {{parentHierarchy[focusedComponent].dependencies[focusedDependency].name}}
     </span>
@@ -64,7 +65,10 @@
       </li>
       <li>
         <span class="info-key">NgModule:</span>
-        <span *ngIf="ngModules && ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id]" class="info-value">
+        <span
+          *ngIf="ngModules && ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id]"
+          class="info-value"
+        >
           {{ngModules.tokenIdMap[parentHierarchy[focusedComponent].dependencies[focusedDependency].id].module}}
         </span>
       </li>

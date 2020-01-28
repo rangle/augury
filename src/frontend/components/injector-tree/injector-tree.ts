@@ -27,6 +27,8 @@ export class InjectorTree implements OnChanges {
   @Input() ngModules: { [key: string]: any };
   @Input() selectedNode: Node;
   @Input() selectNode: EventEmitter<any>;
+  @Input() isIvy: boolean;
+
   focusedComponent: number = -1;
   focusedDependency: number = -1;
 
@@ -72,18 +74,20 @@ export class InjectorTree implements OnChanges {
 
     this.breadcrumbs = this.parentHierarchy.slice(1);
 
-    let firstChild: Element;
-    while ((firstChild = this.graphContainer.nativeElement.firstChild)) {
-      this.graphContainer.nativeElement.removeChild(firstChild);
+    if (!this.isIvy) {
+      let firstChild: Element;
+      while ((firstChild = this.graphContainer.nativeElement.firstChild)) {
+        this.graphContainer.nativeElement.removeChild(firstChild);
+      }
+
+      this.svg = d3
+        .select(this.graphContainer.nativeElement)
+        .append('svg')
+        .attr('height', this.parentHierarchy.length * NODE_INCREMENT_Y + 50)
+        .attr('width', 1500);
+
+      this.render();
     }
-
-    this.svg = d3
-      .select(this.graphContainer.nativeElement)
-      .append('svg')
-      .attr('height', this.parentHierarchy.length * NODE_INCREMENT_Y + 50)
-      .attr('width', 1500);
-
-    this.render();
   }
 
   private addNodeAndText(
