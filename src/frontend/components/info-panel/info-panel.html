@@ -1,6 +1,8 @@
 <bt-components-tab-menu
   [selectedStateTab]="selectedStateTab"
-  (tabChange)="componentsSubTabMenuChange.emit($event)">
+  [isIvy]="isIvy"
+  (tabChange)="componentsSubTabMenuChange.emit($event)"
+>
 </bt-components-tab-menu>
 
 <bt-component-info
@@ -15,7 +17,8 @@
   [ngClass]="{flex: selectedStateTab === StateTab.Properties}"
   (selectNode)="selectNode.emit($event)"
   (updateProperty)="updateProperty.emit($event)"
-  (emitValue)="emitValue.emit($event)">
+  (emitValue)="emitValue.emit($event)"
+>
 </bt-component-info>
 
 <bt-injector-tree
@@ -25,5 +28,6 @@
   [ngModules]="ngModules"
   [selectedNode]="node"
   [selectNode]="selectNode"
-  [ngClass]="{'flex flex-auto': selectedStateTab === StateTab.InjectorGraph}">
+  [ngClass]="{'flex flex-auto': selectedStateTab === StateTab.InjectorGraph}"
+>
 </bt-injector-tree>
