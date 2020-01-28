@@ -1,10 +1,12 @@
-<main class="flex-grow monospace p1" *ngIf="tree" (keydown)="onKeypress($event)" tabindex="0">
-  <bt-node-item *ngFor="let node of tree.roots; trackBy: trackById"
+<main class="flex-grow monospace p1" *ngIf="tree" (keydown)="onKeypress($event)" tabindex="0" style="width: 100%;">
+  <bt-node-item
+    *ngFor="let node of tree.roots; trackBy: trackById"
     [node]="node"
     [level]="0"
     (selectNode)="selectNode.emit($event)"
     (inspectElement)="inspectElement.emit($event)"
     (collapseChildren)="collapseChildren.emit($event)"
-    (expandChildren)="expandChildren.emit($event)">
+    (expandChildren)="expandChildren.emit($event)"
+  >
   </bt-node-item>
 </main>

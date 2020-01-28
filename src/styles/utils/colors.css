@@ -7,347 +7,332 @@
 }
 
 .changed {
-  background-color: #E7B4E4;
+  background-color: #e7b4e4;
 }
 
 bt-router-tree .link {
-  stroke: #9B9B9B;
+  stroke: #9b9b9b;
 }
 
-bt-injector-tree {
-  & .stroke- {
-    &root {
-      stroke: var(--lmode-igraph-component-primary);
-    }
+bt-injector-tree .stroke-root {
+  stroke: var(--lmode-igraph-component-primary);
+}
 
-    &component {
-      stroke: var(--lmode-igraph-component-primary);
-    }
+bt-injector-tree .stroke-component {
+  stroke: var(--lmode-igraph-component-primary);
+}
 
-    &dependency {
-      stroke: var(--lmode-igraph-dependency-primary);
-    }
-  }
-  & .stroke-dependency.origin {
-    stroke: var(--lmode-igraph-dependency-legend-origin);
-  }
-  & .fill- {
-    &root {
-      fill: var(--lmode-igraph-component-primary);
-    }
+bt-injector-tree .stroke-dependency {
+  stroke: var(--lmode-igraph-dependency-primary);
+}
 
-    &component {
-      fill: #EBF2FC;
-    }
+bt-injector-tree .stroke-dependency.origin {
+  stroke: var(--lmode-igraph-dependency-legend-origin);
+}
 
-    &dependency {
-      fill: #FFF0F0;
-    }
-  }
-  & .fill-dependency.provided-here {
-    fill: var(--lmode-igraph-dependency-legend-provided);
-  }
+bt-injector-tree .fill-root {
+  fill: var(--lmode-igraph-component-primary);
+}
+
+bt-injector-tree .fill-component {
+  fill: #ebf2fc;
+}
+
+bt-injector-tree .fill-dependency {
+  fill: #fff0f0;
+}
+
+bt-injector-tree .fill-dependency.provided-here {
+  fill: var(--lmode-igraph-dependency-legend-provided);
 }
 
 .light {
   background-color: white;
-
-  & .bg-base {
-    background-color: white;
-  }
-
-  & .bg-panel {
-    background-color: #F3F3F3;
-  }
-
-  & .primary-color,
-  & .toggler {
-    color: #5A5A5A;
-  }
-
-  & .legible-color {
-    color: #333;
-  }
-
-  & .bg-primary {
-    background-color: #5A5A5A;
-  }
-
-  & .editable {
-    background-color: #EBF2FC;
-    border-bottom-color: blue;
-    color: #2828AB;
-  }
-
-  & [split-pane-secondary-content] {
-    border-left-color: #A3A3A3;
-  }
-
-  & .tab-menu-title.selected {
-    color: #333;
-  }
-
-  & .tab-menu-title:hover {
-    color: #333;
-    background-color: #E5E5E5;
-  }
-
-  & .select-element-active svg * polygon {
-    fill: #4280EC;
-  }
-
-  & .select-element-active svg * path {
-    stroke: #4280EC;
-  }
-
-  & .node-item:hover {
-    background-color: #EBF2FC;
-  }
-
-  & .node-item-selected,
-  & .node-item-selected:hover {
-    background-color: #A28AD0;
-  }
-
-  & .node-item-name {
-    color: #881280;
-  }
-
-  & .node-item-property {
-    color: #994500;
-  }
-
-  & .node-item-value {
-    color: #1A1AA6;
-  }
-
-  & .node-item-selected * > .node-item-value {
-    color: white;
-  }
-
-  & .info-key {
-    color: #8F1F87;
-  }
-
-  & .info-value {
-    color: black;
-  }
-
-  & .border {
-    border-color: #CCC;
-  }
-
-  & .border-bottom {
-    border-bottom-color: #CCC;
-  }
-
-  & .border-right {
-    border-right-color: #CCC;
-  }
-
-  & .border-top {
-    border-top-color: #CCC;
-  }
-
-  & .border-left {
-    border-left-color: #CCC;
-  }
-
-  & .descriptive-text {
-    color: #777;
-  }
-
-  & bt-router-tree {
-    & .node-route {
-      stroke: var(--lmode-rtree-node-primary);
-      fill: var(--lmode-rtree-node-secondary);
-    }
-
-    & .node-route:hover,
-    & .node-route.selected {
-      fill: var(--lmode-rtree-node-primary);
-    }
-
-    & .node-aux-route {
-      stroke: var(--lmode-rtree-aux-node-primary);
-      fill: var(--lmode-rtree-aux-node-secondary);
-    }
-
-    & .node-aux-route:hover,
-    & .node-aux-route.selected {
-      fill: var(--lmode-rtree-aux-node-primary);
-    }
-
-    & text {
-      fill: black;
-    }
-  }
-
-  & bt-injector-tree text {
-    fill: black;
-  }
-
-  & bt-injector-tree #suit > path {
-    stroke: var(--lmode-igraph-component-primary) !important;
-  }
 }
 
-.dark {
-  & .bg-base {
-    background-color: #242424;
-  }
+.light .bg-base {
+  background-color: white;
+}
 
-  & .bg-panel {
-    background-color: #2A2A2A;
-  }
+.light .bg-panel {
+  background-color: #f3f3f3;
+}
 
-  & .primary-color,
-  & .toggler {
-    color: #A5A5A5;
-  }
+.light .primary-color,
+.light .toggler {
+  color: #5a5a5a;
+}
 
-  & .legible-color {
-    color: #CCCCCC;
-  }
+.light .legible-color {
+  color: #333;
+}
 
-  & .bg-primary {
-    background-color: #A5A5A5;
-  }
+.light .bg-primary {
+  background-color: #5a5a5a;
+}
 
-  & .editable {
-    background-color: #242424;
-    border-bottom-color: #BDC6CF;
-    color: #BDC6CF;
-  }
+.light .editable {
+  background-color: #ebf2fc;
+  border-bottom-color: blue;
+  color: #2828ab;
+}
 
-  & [split-pane-secondary-content] {
-    border-left-color: #5C5C5C;
-  }
+.light [split-pane-secondary-content] {
+  border-left-color: #a3a3a3;
+}
 
-  & .tab-menu-title.selected {
-    color: #CCCCCC;
-  }
+.light .tab-menu-title.selected {
+  color: #333;
+}
 
-  & .tab-menu-title:hover {
-    color: #CCCCCC;
-    background-color: #313131;
-  }
+.light .tab-menu-title:hover {
+  color: #333;
+  background-color: #e5e5e5;
+}
 
-  & .select-element-active > svg * > polygon {
-    fill: #03f4ff;
-  }
+.light .select-element-active svg * polygon {
+  fill: #4280ec;
+}
 
-  & .select-element-active > svg * > path {
-    stroke: #03f4ff;
-  }
+.light .select-element-active svg * path {
+  stroke: #4280ec;
+}
 
-  & .select-element > svg * > polygon {
-    fill: #FFCC33;
-  }
+.light .node-item:hover {
+  background-color: #ebf2fc;
+}
 
-  & .select-element > svg * > path {
-    stroke: #FFCC33;
-  }
+.light .node-item-selected,
+.light .node-item-selected:hover {
+  background-color: #a28ad0;
+}
 
-  & .node-item:hover {
-    background-color: #3D3D3D;
-  }
+.light .node-item-name {
+  color: #881280;
+}
 
-  & .node-item-selected {
-    & .node-item-name,
-    & .node-item-property,
-    & .node-item-value {
-      color: #242424;
-    }
-  }
-  & .node-item-property {
-    color: #BDC6CF;
-  }
+.light .node-item-property {
+  color: #994500;
+}
 
-  & .info-value,
-  & .node-item-value {
-    color: #FFCC33;
-  }
+.light .node-item-value {
+  color: #1a1aa6;
+}
 
-  & .node-item-selected,
-  & .node-item-selected:hover {
-    background-color: #564d66;
-  }
+.light .node-item-selected * > .node-item-value {
+  color: white;
+}
 
-  & .node-item-name,
-  & .info-key {
-    color: #A28AD0;
-  }
+.light .info-key {
+  color: #8f1f87;
+}
 
-  & .border {
-    border-color: #3D3D3D;
-  }
+.light .info-value {
+  color: black;
+}
 
-  & .border-bottom {
-    border-bottom-color: #3D3D3D;
-  }
+.light .border {
+  border-color: #ccc;
+}
 
-  & .border-right {
-    border-right-color: #3D3D3D;
-  }
+.light .border-bottom {
+  border-bottom-color: #ccc;
+}
 
-  & .border-top {
-    border-top-color: #3D3D3D;
-  }
+.light .border-right {
+  border-right-color: #ccc;
+}
 
-  & .border-left {
-    border-left-color: #3D3D3D;
-  }
+.light .border-top {
+  border-top-color: #ccc;
+}
 
-  & .descriptive-text {
-    color: #aaa;
-  }
+.light .border-left {
+  border-left-color: #ccc;
+}
 
-  & bt-router-tree {
-    & .node-route {
-      stroke: var(--dmode-rtree-node-primary);
-      fill: var(--dmode-rtree-node-secondary);
-    }
+.light .descriptive-text {
+  color: #777;
+}
 
-    & .node-route:hover,
-    & .node-route.selected {
-      fill: var(--dmode-rtree-node-primary);
-    }
+.light bt-router-tree .node-route {
+  stroke: var(--lmode-rtree-node-primary);
+  fill: var(--lmode-rtree-node-secondary);
+}
 
-    & .node-aux-route {
-      stroke: var(--dmode-rtree-aux-node-primary);
-      fill: var(--dmode-rtree-aux-node-secondary);
-    }
+.light bt-router-tree .node-route:hover,
+.light bt-router-tree .node-route.selected {
+  fill: var(--lmode-rtree-node-primary);
+}
 
-    & .node-aux-route:hover,
-    & .node-aux-route.selected {
-      fill: var(--dmode-rtree-aux-node-primary);
-    }
+.light bt-router-tree .node-aux-route {
+  stroke: var(--lmode-rtree-aux-node-primary);
+  fill: var(--lmode-rtree-aux-node-secondary);
+}
 
-    & text {
-      fill: #A5A5A5;
-    }
-  }
+.light bt-router-tree .node-aux-route:hover,
+.light bt-router-tree .node-aux-route.selected {
+  fill: var(--lmode-rtree-aux-node-primary);
+}
 
+.light bt-router-tree text {
+  fill: black;
+}
 
-  & bt-injector-tree text {
-    fill: #A5A5A5;
-  }
+.light bt-injector-tree text {
+  fill: black;
+}
 
-  & bt-injector-tree {
-    & .stroke- {
-      &root, &component {
-        stroke: var(--dmode-igraph-component-primary);
-      }
-    }
+.light bt-injector-tree #suit > path {
+  stroke: var(--lmode-igraph-component-primary) !important;
+}
 
-    & .fill-root {
-        fill: var(--dmode-igraph-component-primary);
-    }
-  }
+.dark .bg-base {
+  background-color: #242424;
+}
 
-  & bt-injector-tree #suit > path {
-    stroke: var(--dmode-igraph-component-primary) !important;
-  }
+.dark .bg-panel {
+  background-color: #2a2a2a;
+}
 
+.dark .primary-color,
+.dark .toggler {
+  color: #a5a5a5;
+}
+
+.dark .legible-color {
+  color: #ccc;
+}
+
+.dark .bg-primary {
+  background-color: #a5a5a5;
+}
+
+.dark .editable {
+  background-color: #242424;
+  border-bottom-color: #bdc6cf;
+  color: #bdc6cf;
+}
+
+.dark [split-pane-secondary-content] {
+  border-left-color: #5c5c5c;
+}
+
+.dark .tab-menu-title.selected {
+  color: #ccc;
+}
+
+.dark .tab-menu-title:hover {
+  color: #ccc;
+  background-color: #313131;
+}
+
+.dark .select-element-active > svg * > polygon {
+  fill: #03f4ff;
+}
+
+.dark .select-element-active > svg * > path {
+  stroke: #03f4ff;
+}
+
+.dark .select-element > svg * > polygon {
+  fill: #fc3;
+}
+
+.dark .select-element > svg * > path {
+  stroke: #fc3;
+}
+
+.dark .node-item:hover {
+  background-color: #3d3d3d;
+}
+
+.dark .node-item-selected .node-item-name,
+.dark .node-item-selected .node-item-property,
+.dark .node-item-selected .node-item-value {
+  color: #242424;
+}
+
+.dark .node-item-property {
+  color: #bdc6cf;
+}
+
+.dark .info-value,
+.dark .node-item-value {
+  color: #fc3;
+}
+
+.dark .node-item-selected,
+.dark .node-item-selected:hover {
+  background-color: #564d66;
+}
+
+.dark .node-item-name,
+.dark .info-key {
+  color: #a28ad0;
+}
+
+.dark .border {
+  border-color: #3d3d3d;
+}
+
+.dark .border-bottom {
+  border-bottom-color: #3d3d3d;
+}
+
+.dark .border-right {
+  border-right-color: #3d3d3d;
+}
+
+.dark .border-top {
+  border-top-color: #3d3d3d;
+}
+
+.dark .border-left {
+  border-left-color: #3d3d3d;
+}
+
+.dark .descriptive-text {
+  color: #aaa;
+}
+
+.dark bt-router-tree .node-route {
+  stroke: var(--dmode-rtree-node-primary);
+  fill: var(--dmode-rtree-node-secondary);
+}
+
+.dark bt-router-tree .node-route:hover,
+.dark bt-router-tree .node-route.selected {
+  fill: var(--dmode-rtree-node-primary);
+}
+
+.dark bt-router-tree .node-aux-route {
+  stroke: var(--dmode-rtree-aux-node-primary);
+  fill: var(--dmode-rtree-aux-node-secondary);
+}
+
+.dark bt-router-tree .node-aux-route:hover,
+.dark bt-router-tree .node-aux-route.selected {
+  fill: var(--dmode-rtree-aux-node-primary);
+}
+
+.dark bt-router-tree text {
+  fill: #a5a5a5;
+}
+
+.dark bt-injector-tree text {
+  fill: #a5a5a5;
+}
+
+.dark bt-injector-tree .stroke-root,
+.dark bt-injector-tree .stroke-component {
+  stroke: var(--dmode-igraph-component-primary);
+}
+
+.dark bt-injector-tree .fill-root {
+  fill: var(--dmode-igraph-component-primary);
+}
+
+.dark bt-injector-tree #suit > path {
+  stroke: var(--dmode-igraph-component-primary) !important;
 }

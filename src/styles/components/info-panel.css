@@ -1,4 +1,3 @@
-
 /* Info Panel */
 
 .editable {
@@ -6,10 +5,10 @@
   border: 0;
   display: inline-block;
   padding: 0 5px;
+}
 
-  &:focus {
-    border-bottom: 0 !important;
-  }
+.editable:focus {
+  border-bottom: 0 !important;
 }
 
 bt-component-info a,

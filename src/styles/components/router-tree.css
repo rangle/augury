@@ -1,15 +1,11 @@
-
 /* Router Tree */
+bt-router-tree .link {
+  stroke-width: 1px;
+  fill: none;
+}
 
-bt-router-tree {
-  & .link {
-    stroke-width: 1px;
-    fill: none;
-  }
-
-  & .node {
-    cursor: pointer;
-  }
+bt-router-tree .node {
+  cursor: pointer;
 }
 
 .node-route {
@@ -21,10 +17,9 @@ bt-router-tree {
 }
 
 /* Router Info Modal */
-
 bt-router-info {
   background: white;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.10), 0 3px 6px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.1);
   min-width: 200px;
   position: absolute;
   right: 20px;

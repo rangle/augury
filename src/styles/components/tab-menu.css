@@ -3,6 +3,7 @@
   cursor: pointer;
   font-size: 11.5px;
   white-space: nowrap;
+  line-height: 25px;
 }
 
 .select-element {
