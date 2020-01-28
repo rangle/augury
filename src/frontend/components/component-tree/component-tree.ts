@@ -1,29 +1,16 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
-import {
-  MutableTree,
-  Node,
-  deserializePath,
-} from '../../../tree';
+import { MutableTree, Node, deserializePath } from '../../../tree';
 
-import {
-  ComponentViewState,
-  ExpandState,
-} from '../../state';
+import { ComponentViewState, ExpandState } from '../../state';
 
-import {defaultExpansionDepth} from '../node-item/node-item';
+import { defaultExpansionDepth } from '../node-item/node-item';
 
 @Component({
   selector: 'component-tree',
   templateUrl: './component-tree.html',
   styleUrls: ['./component-tree.css'],
-  host: { 'class': 'flex overflow-auto' },
+  host: { class: 'flex overflow-auto' }
 })
 export class ComponentTree {
   @Input() tree: MutableTree;
@@ -36,10 +23,7 @@ export class ComponentTree {
 
   private lastSelection: Element;
 
-  constructor(
-    private viewState: ComponentViewState,
-    private el: ElementRef
-  ) {}
+  constructor(private viewState: ComponentViewState, private el: ElementRef) {}
 
   private scrollToViewIfNeeded() {
     const view = this.el.nativeElement;
@@ -106,7 +90,8 @@ export class ComponentTree {
   }
 
   private select(node: Node) {
-    if (node == null) { // first keyboard action when nothing is selected
+    if (node == null) {
+      // first keyboard action when nothing is selected
       if (this.tree.roots.length === 0) {
         return;
       }
@@ -155,8 +140,7 @@ export class ComponentTree {
   }
 
   private nextSibling(): Node {
-    const choices =
-      this.visible([this.childNode()].concat(this.ancestors(this.selectedNode, 1)));
+    const choices = this.visible([this.childNode()].concat(this.ancestors(this.selectedNode, 1)));
 
     if (choices.length > 0) {
       return choices[0];
@@ -208,10 +192,7 @@ export class ComponentTree {
       // NOTE(cbond): parent must be expanded for this node to be visible
       let expansionState = this.viewState.expandState(this.getParent(n));
       if (expansionState == null) {
-        expansionState =
-          this.level(n) <= defaultExpansionDepth
-            ? ExpandState.Expanded
-            : ExpandState.Collapsed;
+        expansionState = this.level(n) <= defaultExpansionDepth ? ExpandState.Expanded : ExpandState.Collapsed;
       }
       return expansionState === ExpandState.Expanded;
     });

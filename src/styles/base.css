@@ -84,6 +84,10 @@ split-pane-secondary-content {
   color: #b0b0b0;
 }
 
+.dark .checkbox-label-wrapper {
+  color: #fff;
+}
+
 .checkbox-label-wrapper input {
   margin: 3px;
 }

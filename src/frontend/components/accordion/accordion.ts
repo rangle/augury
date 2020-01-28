@@ -1,8 +1,8 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'accordion',
-  templateUrl: './accordion.html',
+  templateUrl: './accordion.html'
 })
 export class Accordion {
   @Input() sectionTitle: string;
