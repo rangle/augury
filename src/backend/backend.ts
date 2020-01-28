@@ -1,11 +1,11 @@
 import { compare } from '../utils/patch';
 import { appIsStable, isAngular, isDebugMode, isIvyVersion, runForPreR3 } from './utils/app-check';
 
-import { MutableTree, Node, Path, instanceWithMetadata, serializePath } from '../tree';
+import { instanceWithMetadata, MutableTree, Node, Path, serializePath } from '../tree';
 
 import { onElementFound, onFindElement } from './utils/find-element';
 
-import { parseModulesFromRootElement, parseModulesFromRouter, NgModulesRegistry } from './utils/parse-modules';
+import { NgModulesRegistry, parseModulesFromRootElement, parseModulesFromRouter } from './utils/parse-modules';
 
 import { parseNgVersion } from './utils/parse-ng-version';
 
@@ -14,11 +14,11 @@ import { createTreeFromElements } from '../tree/mutable-tree-factory';
 import {
   ApplicationError,
   ApplicationErrorType,
+  browserDispatch,
+  browserSubscribe,
   Message,
   MessageFactory,
-  MessageType,
-  browserDispatch,
-  browserSubscribe
+  MessageType
 } from '../communication';
 
 import { parameterTypes } from '../tree/decorators';
@@ -26,13 +26,13 @@ import { parameterTypes } from '../tree/decorators';
 import { send } from './indirect-connection';
 
 import {
-  Route,
-  highlight,
   clear as clearHighlights,
-  parseRoutes,
   getNodeFromPartialPath,
   getNodeInstanceParent,
-  getNodeProvider
+  getNodeProvider,
+  highlight,
+  parseRoutes,
+  Route
 } from './utils';
 
 import { serialize } from '../utils';
@@ -42,8 +42,8 @@ import { SimpleOptions } from '../options';
 import { MessagePipeBackend } from 'feature-modules/.lib';
 import { highlighter } from 'feature-modules/highlighter/backend/index';
 import { ApplicationRef, NgModuleRef } from '@angular/core';
-import { timer, Subscription, Subject } from 'rxjs';
-import { takeWhile, filter } from 'rxjs/operators';
+import { Subject, Subscription, timer } from 'rxjs';
+import { filter, takeWhile } from 'rxjs/operators';
 
 import 'reflect-metadata';
 
@@ -116,6 +116,17 @@ const sendNgVersionMessage = () => {
   const ngVersion = parseNgVersion();
   const isIvy = isIvyVersion();
   send(MessageFactory.ngVersion(ngVersion, isIvy));
+};
+
+const logAuguryDetected = () => {
+  const ngVersion = parseNgVersion();
+  console.log(
+    `%c Augury %c Detected Angular %c v${ngVersion} %c`,
+    'background:#3e5975 ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff; font-size: 14px;',
+    'background:#DD0031 ; padding: 1px; color: #fff; font-size: 14px;',
+    'background:#C3002F ; padding: 1px; border-radius: 0px 3px 3px 0;  color: #fff; font-size: 14px;',
+    'background:transparent'
+  );
 };
 
 const sendNgModulesMessage = () => {
@@ -215,6 +226,7 @@ const listenForSomeTimeAndMaybeResubscribe = (timeMs: number) => {
 
 const resubscribe = () => {
   runAndHandleUncaughtExceptions(() => {
+    logAuguryDetected();
     sendNgVersionMessage();
 
     messageBuffer.clear();
@@ -232,9 +244,10 @@ const resubscribe = () => {
             const roots = collectRoots();
             if (roots.length) {
               let sanity;
-              // // Adding sanity threshold to make sure
-              // // larger app's doesn't get flooded
+              // Adding sanity threshold to make sure
+              // larger app's doesn't get flooded
               const sanityThreshold = 0.2 * 1000; // 0.2 seconds
+              // const appRef: ApplicationRef = parseModulesFromRootElement(roots[0], parsedModulesData);
               if (isStableSubscription) {
                 isStableSubscription.unsubscribe();
               }
@@ -249,6 +262,7 @@ const resubscribe = () => {
                     sanity = new Date().getTime();
                     updateComponentTree(collectRoots());
                     runForPreR3(updateRouterTree);
+                    updateRouterTree();
                     send(MessageFactory.ping());
                   });
                 });
@@ -304,6 +318,10 @@ const messageHandler = (message: Message<any>) => {
           resubscribe();
         }
 
+        return true;
+
+      case MessageType.Refresh:
+        resubscribe();
         return true;
 
       case MessageType.SelectComponent:

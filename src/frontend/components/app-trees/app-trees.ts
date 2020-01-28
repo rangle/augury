@@ -56,6 +56,7 @@ export class AppTrees implements OnInit {
 
   @Output() emitValue = new EventEmitter<{ path: Path; data: any }>();
   @Output() updateProperty = new EventEmitter<{ path: Path; newValue: any }>();
+  @Output() refresh = new EventEmitter<boolean>();
 
   @ViewChild('splitPane', { static: false }) private splitPane;
   @ViewChild('menuButtonElement', { static: false }) private menuButtonElement;
@@ -123,6 +124,10 @@ export class AppTrees implements OnInit {
   onOpenSettings = () => {
     this.settingOpened = !this.settingOpened;
   };
+
+  onRefresh() {
+    this.refresh.emit(true);
+  }
 
   private onThemeChange = (theme: Theme) => {
     this.options.theme = theme;

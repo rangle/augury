@@ -1,11 +1,6 @@
-import {ChangeDetectorRef} from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 
-import {
-  InstanceWithMetadata,
-  Metadata,
-  ObjectType,
-  Node,
-} from '../../tree';
+import { InstanceWithMetadata, Node } from '../../tree';
 
 export enum ComponentLoadState {
   Idle,
@@ -15,10 +10,7 @@ export enum ComponentLoadState {
 }
 
 class CachedValue {
-  constructor(
-    public state: ComponentLoadState,
-    public value: InstanceWithMetadata | null
-  ) {}
+  constructor(public state: ComponentLoadState, public value: InstanceWithMetadata | null) {}
 }
 
 class LookupError {
@@ -45,7 +37,7 @@ export class ComponentInstanceState {
       return ComponentLoadState.Failed;
     }
 
-    return (<CachedValue> cache).state;
+    return (<CachedValue>cache).state;
   }
 
   componentInstance(node: Node): InstanceWithMetadata {
@@ -59,7 +51,7 @@ export class ComponentInstanceState {
       return null;
     }
 
-    const existing = <CachedValue> cache;
+    const existing = <CachedValue>cache;
 
     switch (existing.state) {
       case ComponentLoadState.Failed:
@@ -74,27 +66,26 @@ export class ComponentInstanceState {
   }
 
   wait(node: Node, promise: Promise<InstanceWithMetadata>) {
-
     const previouslyCached = this.componentInstance(node); // null if first time
     this.map.set(node.id, new CachedValue(ComponentLoadState.Loading, previouslyCached));
 
-    promise.then(response => {
-      this.map.set(node.id, new CachedValue(ComponentLoadState.Received, response));
+    promise
+      .then(response => {
+        this.map.set(node.id, new CachedValue(ComponentLoadState.Received, response));
 
-      this.changeDetector.detectChanges();
-    })
-    .catch(error => {
-      this.map.set(node.id, new LookupError(error));
+        this.changeDetector.detectChanges();
+      })
+      .catch(error => {
+        this.map.set(node.id, new LookupError(error));
 
-      this.changeDetector.detectChanges();
-    });
+        this.changeDetector.detectChanges();
+      });
   }
 
   reset(identifiers?: Array<string>) {
     if (identifiers == null || identifiers.length === 0) {
       this.map.clear();
-    }
-    else {
+    } else {
       for (const id of identifiers) {
         this.map.delete(id);
       }

@@ -1,0 +1,17 @@
+button.refresh-icon {
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+}
+
+.refresh-icon:before {
+  display: inline-block;
+  content: '';
+  background-repeat: no-repeat;
+  background-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin: auto;
+  background-image: url(/images/refresh.svg);
+}

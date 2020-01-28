@@ -1,7 +1,6 @@
-import {combineReducers} from 'redux';
-import {mainReducer} from '../reducers/main-reducer';
-import {IAppState} from './model';
+import { combineReducers } from 'redux';
+import { mainReducer } from '../reducers/main-reducer';
 
 export const rootReducer = combineReducers({
-  main: mainReducer,
+  main: mainReducer
 });

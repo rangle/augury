@@ -49,7 +49,7 @@ export class App implements OnInit, DoCheck, OnDestroy {
 
   private componentState: ComponentInstanceState;
   private routerTree: Array<Route>;
-  private ngModules: Array<any> = null;
+  private ngModules: { [key: string]: any };
   private ngVersion: string;
   private isIvy: boolean;
   private selectedNode: Node;
@@ -203,6 +203,15 @@ export class App implements OnInit, DoCheck, OnDestroy {
 
       this.changeDetector.detectChanges();
     });
+  }
+
+  private refresh() {
+    this.connection.send(MessageFactory.refresh());
+  }
+
+  onRefresh() {
+    this.error = null;
+    this.refresh();
   }
 
   private restoreSelection() {

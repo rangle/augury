@@ -236,6 +236,14 @@ export abstract class MessageFactory {
     });
   }
 
+  static refresh(): Message<any> {
+    return create({
+      messageType: MessageType.Refresh,
+      content: null,
+      serialize: Serialize.None
+    });
+  }
+
   static response<Response, T>(
     message: Message<T>,
     response: Response,

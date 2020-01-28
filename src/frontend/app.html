@@ -4,7 +4,7 @@
   [ngClass]="options.theme === Theme.Dark ? 'dark' : 'light'"
 >
   <div class="vh-100" *ngIf="error">
-    <render-error (reportError)="onReportError()" [error]="error"> </render-error>
+    <render-error (reportError)="onReportError()" (refresh)="onRefresh()" [error]="error"></render-error>
   </div>
   <bt-app-trees
     #trees
@@ -21,7 +21,6 @@
     [ngModules]="ngModules"
     [options]="options"
     [tree]="tree"
-    [ngModules]="ngModules"
     (tabChange)="onSelectedTabChange($event)"
     (componentsSubTabMenuChange)="onSelectedComponentsSubTabMenuChange($event)"
     (domSelectionActiveChange)="onDOMSelectionActiveChange($event)"
@@ -31,6 +30,7 @@
     (expandChildren)="onExpandChildren($event)"
     (emitValue)="onEmitValue($event)"
     (updateProperty)="onUpdateProperty($event)"
+    (refresh)="onRefresh()"
   >
   </bt-app-trees>
 </div>

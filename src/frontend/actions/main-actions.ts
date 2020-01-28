@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
-import {dispatch} from '@angular-redux/store';
-import {Tab, StateTab} from '../state';
-import {IAppState} from '../store/model';
-import {Path} from '../../tree';
+import { Injectable } from '@angular/core';
+import { dispatch } from '@angular-redux/store';
+import { Tab, StateTab } from '../state';
+import { Path } from '../../tree';
 
 @Injectable()
 export class MainActions {
@@ -17,20 +16,20 @@ export class MainActions {
   @dispatch()
   selectTab = (tab: Tab) => ({
     type: MainActions.SELECT_TAB,
-    payload: tab,
-  })
+    payload: tab
+  });
 
   @dispatch()
   selectComponentsSubTab = (tab: StateTab) => ({
     type: MainActions.SELECT_COMPONENTS_SUB_TAB,
-    payload: tab,
-  })
+    payload: tab
+  });
 
   @dispatch()
   setDOMSelectionActive = (state: boolean) => ({
     type: MainActions.DOM_SELECTION_ACTIVE_CHANGE,
-    payload: state,
-  })
+    payload: state
+  });
 
   @dispatch()
   emitValue = (path: Path, data: any) => ({
@@ -39,7 +38,7 @@ export class MainActions {
       path,
       data
     }
-  })
+  });
 
   @dispatch()
   updateProperty = (path: Path, data: any) => ({
@@ -48,12 +47,12 @@ export class MainActions {
       path,
       data
     }
-  })
+  });
 
   @dispatch()
   initializeAugury = () => ({
-    type: MainActions.INITIALIZE_AUGURY,
-  })
+    type: MainActions.INITIALIZE_AUGURY
+  });
 
   @dispatch()
   sendAnalytics = (event: string, desc: string) => ({
@@ -62,6 +61,5 @@ export class MainActions {
       event,
       desc
     }
-  })
-
+  });
 }
