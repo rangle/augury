@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 
 import * as d3 from 'd3';
 
@@ -13,11 +6,7 @@ import { GraphUtils } from '../../utils/graph-utils';
 
 import { ParseUtils } from '../../utils/parse-utils';
 
-import {
-  MutableTree,
-  Node,
-  deserializePath,
-} from '../../../tree';
+import { MutableTree, Node, deserializePath } from '../../../tree';
 
 const START_X: number = 20;
 const START_Y: number = 70;
@@ -45,10 +34,7 @@ export class InjectorTree implements OnChanges {
   private svg: any;
   breadcrumbs: Array<any>;
 
-  constructor(
-    private graphUtils: GraphUtils,
-    private parseUtils: ParseUtils
-  ) { }
+  constructor(private graphUtils: GraphUtils, private parseUtils: ParseUtils) {}
 
   private onFocusNode(componentIndex: number, dependecyIndex: number) {
     this.focusedComponent = componentIndex;
@@ -63,7 +49,7 @@ export class InjectorTree implements OnChanges {
   private unFocusNode = () => {
     this.focusedComponent = -1;
     this.focusedDependency = -1;
-  }
+  };
 
   private onSelectComponent(component: any): void {
     this.selectNode.emit(component);
@@ -76,19 +62,23 @@ export class InjectorTree implements OnChanges {
   }
 
   private displayTree() {
-    const mainHierarchy = this.parseUtils.getParentHierarchy(this.tree, this.selectedNode, node =>
-      node.isComponent === true);
+    const mainHierarchy = this.parseUtils.getParentHierarchy(
+      this.tree,
+      this.selectedNode,
+      node => node.isComponent === true
+    );
 
     this.parentHierarchy = [{ name: 'root', dependencies: [] }].concat(mainHierarchy).concat([this.selectedNode]);
 
     this.breadcrumbs = this.parentHierarchy.slice(1);
 
     let firstChild: Element;
-    while (firstChild = this.graphContainer.nativeElement.firstChild) {
+    while ((firstChild = this.graphContainer.nativeElement.firstChild)) {
       this.graphContainer.nativeElement.removeChild(firstChild);
     }
 
-    this.svg = d3.select(this.graphContainer.nativeElement)
+    this.svg = d3
+      .select(this.graphContainer.nativeElement)
       .append('svg')
       .attr('height', this.parentHierarchy.length * NODE_INCREMENT_Y + 50)
       .attr('width', 1500);
@@ -96,8 +86,15 @@ export class InjectorTree implements OnChanges {
     this.render();
   }
 
-  private addNodeAndText(posX: number, posY: number, title: any, clazz: string, maxChars: number = 0,
-    mouseOverFn: () => void, mouseOutFn: () => void) {
+  private addNodeAndText(
+    posX: number,
+    posY: number,
+    title: any,
+    clazz: string,
+    maxChars: number = 0,
+    mouseOverFn: () => void,
+    mouseOutFn: () => void
+  ) {
     this.graphUtils.addCircle(this.svg, posX, posY, NODE_RADIUS, clazz, mouseOverFn, mouseOutFn);
     this.graphUtils.addText(this.svg, posX - 6, posY - 15, title, maxChars);
   }
@@ -134,8 +131,12 @@ export class InjectorTree implements OnChanges {
         const selfProvides = parent === node;
         // draw dependency links (if injectable was provided higher than current node)
         if (!selfProvides) {
-          const parentIdx = !parent ? 0 : this.parentHierarchy.reduce((prev, curr, idx, p) =>
-            prev >= 0 ? prev : p[idx].name === parent.name ? idx : prev, -1);
+          const parentIdx = !parent
+            ? 0
+            : this.parentHierarchy.reduce(
+                (prev, curr, idx, p) => (prev >= 0 ? prev : p[idx].name === parent.name ? idx : prev),
+                -1
+              );
 
           x1 = START_X + NODE_INCREMENT_X * (depIndex + 1);
           y1 = START_Y + hierarchyIdx * NODE_INCREMENT_Y;
@@ -147,11 +148,15 @@ export class InjectorTree implements OnChanges {
         }
 
         // draw injected dependency name and node circle
-        nodesToDraw.push([injectorX, nodeY, dependency.name || 'no-name',
+        nodesToDraw.push([
+          injectorX,
+          nodeY,
+          dependency.name || 'no-name',
           `node-circle fill-dependency stroke-dependency ${selfProvides ? 'provided-here' : ''}`,
           depIndex === node.dependencies.length - 1 ? 0 : MAX_LABEL_CHARS,
           () => this.onFocusNode(hierarchyIdx, depIndex),
-          () => this.onUnFocusNode()]);
+          () => this.onUnFocusNode()
+        ]);
       });
 
       if (hierarchyIdx > 0) {
@@ -164,19 +169,28 @@ export class InjectorTree implements OnChanges {
       }
 
       // draw component name and node circle
-      nodesToDraw.push([nodeX, nodeY, node.name || 'no-name', 'node-circle fill-component stroke-component',
+      nodesToDraw.push([
+        nodeX,
+        nodeY,
+        node.name || 'no-name',
+        'node-circle fill-component stroke-component',
         hierarchyIdx === 0 || !node.dependencies.length ? 0 : MAX_LABEL_CHARS,
-        () => this.onFocusNode(hierarchyIdx, -1), () => this.onUnFocusNode()]);
+        () => this.onFocusNode(hierarchyIdx, -1),
+        () => this.onUnFocusNode()
+      ]);
     });
 
-    nodesToDraw.forEach((params) => {
+    nodesToDraw.forEach(params => {
       this.addNodeAndText(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
     });
 
-    this.svg.append('defs').selectAll('marker')
+    this.svg
+      .append('defs')
+      .selectAll('marker')
       .data(['suit', 'licensing', 'resolved'])
-      .enter().append('marker')
-      .attr('id', (d) => d)
+      .enter()
+      .append('marker')
+      .attr('id', d => d)
       .attr('viewBox', '0 -5 10 10')
       .attr('refX', 10)
       .attr('refY', 0)
