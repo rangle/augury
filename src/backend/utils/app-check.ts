@@ -6,11 +6,15 @@ declare const getAllAngularRootElements: Function;
 declare const ng: any;
 
 export const isAngular = () => {
-  return typeof getAllAngularTestabilities === 'function' && typeof getAllAngularRootElements === 'function';
+  return (
+    typeof getAllAngularTestabilities === 'function' &&
+    typeof getAllAngularRootElements === 'function' &&
+    typeof ng !== 'undefined'
+  );
 };
 
 export const isDebugMode = () => {
-  if (typeof getAllAngularRootElements === 'function' && typeof ng.probe !== 'undefined') {
+  if (typeof getAllAngularRootElements === 'function' && typeof ng !== 'undefined' && typeof ng.probe !== 'undefined') {
     const rootElements = getAllAngularRootElements();
     const firstRootDebugElement = rootElements && rootElements.length ? ng.probe(rootElements[0]) : null;
 

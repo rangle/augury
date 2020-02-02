@@ -29,6 +29,7 @@ import {
   clear as clearHighlights,
   getNodeFromPartialPath,
   getNodeInstanceParent,
+  getNodeInstanceParentIvy,
   getNodeProvider,
   highlight,
   parseRoutes,
@@ -394,8 +395,12 @@ const updateProperty = (tree: MutableTree, path: Path, newValue) => {
   if (isIvyVersion()) {
     const node = getNodeFromPartialPath(tree, path);
     const comp = ng.getComponent(node.nativeElement());
-    comp[path[path.length - 1]] = newValue;
-    ng.markDirty(node.nativeElement());
+    const parentComp = ng.getOwningComponent(node.nativeElement());
+    const instanceParent = getNodeInstanceParentIvy(comp, path);
+    if (instanceParent) {
+      instanceParent[path[path.length - 1]] = newValue;
+    }
+    ng.applyChanges(parentComp);
   } else {
     updateNode(tree, path, probed => {
       const instanceParent = getNodeInstanceParent(probed, path);
@@ -430,9 +435,10 @@ const emitValue = (tree: MutableTree, path: Path, newValue) => {
   if (node) {
     if (isIvyVersion()) {
       const comp = ng.getComponent(node.nativeElement());
+      const parentComp = ng.getOwningComponent(node.nativeElement());
       const emittable = comp[path[path.length - 1]];
       callEmit(emittable, path, newValue);
-      setTimeout(() => ng.markDirty(node.nativeElement()));
+      setTimeout(ng.applyChanges, 0, parentComp);
     } else {
       const probed = ng.probe(node.nativeElement());
       if (probed) {
