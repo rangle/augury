@@ -79,7 +79,7 @@
     "flatted": "2.0.0",
     "immutable": "4.0.0-rc.12",
     "ramda": "0.26.1",
-    "redux": "4.0.1",
+    "redux": "4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "3.0.6",
     "redux-observable": "1.2.0",
