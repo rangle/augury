@@ -32,7 +32,7 @@ Augury only works with Angular 2+ applications. A hard requirement is that the A
 
 ## Supported version
 
-Augury works with application built starting with Angular 2+. Augury currently does not have support for Angular Ivy as of `Augury v1`.
+Augury works with application built starting with Angular 2+. Augury currently [does not have support for Angular Ivy](#support-for-ivy-in-angular-9) as of `Augury v1`.
 
 ---
 
@@ -160,6 +160,18 @@ To learn more about AoT compilation, visit [this section of Angular documentatio
 ## Support for `enableDebugTools()`
 
 Prior to [Angular 2.2.0](https://github.com/angular/angular/blob/master/CHANGELOG.md#220-upgrade-firebooster-2016-11-14), `enableDebugTools()` would clobber `ng.probe`, which breaks Augury. Prior to that version, [this workaround](https://github.com/AngularClass/angular2-webpack-starter/blob/dbb7d10e6e84b8e88116d957f0047b422ab807c1/src/app/environment.ts#L28...L36) will circumvent the issue.
+
+## Support for Ivy in Angular 9
+
+Augury doesn't support ngModule and router tree parsing for Angular 9 applications that are using Ivy. As a workaround, disable ivy to be able to see ngModule and router tree tabs by adding this config to your project's `tsconfig.app.json` file :
+
+```json
+"angularCompilerOptions": {
+  "enableIvy": false
+}
+```
+
+Note that disabling Ivy is not recommended, it's only a workaround for this particular problem.
 
 ## `No state` for some components
 
