@@ -11,7 +11,7 @@ judgement when applying them.
 
 1. [I'm new, anything I should know?](#im-new-anything-i-should-know)
 1. [Behaving yourself](#behaving-yourself)
-1. [Environmnet setup](#environment-setup)
+1. [Environment setup](#environment-setup)
 1. [Contributing workflow](#contributing-workflow)
 1. [Making changes](#making-changes)
 1. [How do I get in touch?](#how-do-i-get-in-touch)
