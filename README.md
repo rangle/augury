@@ -1,4 +1,12 @@
-# Augury
+# Angular DevTools
+With the release of Angular DevTools, Augury is not being maintained. Please download Angular DevTools from [Chrome Web Store](https://chrome.google.com/webstore/detail/angular-developer-tools/ienfalfjdbdpebioblfackkekamfmbnh) and use [rangle/angular-devtools](https://github.com/rangle/angular-devtools) repo to log any issues.
+
+Read More about the release:
+* [Introducing Angular DevTools](https://blog.angular.io/introducing-angular-devtools-2d59ff4cf62f)
+* [Introducing the New Angular DevTools](https://rangle.io/blog/angular-devtools)
+
+
+## Augury
 
 [![Circle CI](https://circleci.com/gh/rangle/augury.svg?style=svg)](https://circleci.com/gh/rangle/augury) [![Slack Status](https://augury-slack.herokuapp.com/badge.svg)](https://augury-slack.herokuapp.com)
 
