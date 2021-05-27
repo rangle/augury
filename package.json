@@ -75,7 +75,7 @@
     "basscss-typography": "3.0.4",
     "core-js": "3.4.0",
     "crypto": "1.0.1",
-    "d3": "5.12.0",
+    "d3": "5.15.0",
     "flatted": "2.0.0",
     "immutable": "4.0.0-rc.12",
     "ramda": "0.26.1",
