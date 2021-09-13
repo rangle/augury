@@ -58,15 +58,20 @@
       opacity: 0.4;
     }
 
+    .flex.guide a::before {
+      transform: scale(0.8);
+    }
+
     .icon {
-      display: inline-block;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
       position: relative;
     }
 
     .icon:before {
       content: "";
       display: inline-block;
-      margin-right: 8px;
       vertical-align: middle;
       background-repeat: no-repeat;
       background-size: 33px 33px;
